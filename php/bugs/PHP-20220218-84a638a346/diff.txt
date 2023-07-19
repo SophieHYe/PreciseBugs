@@ -1,0 +1,35 @@
+diff --git a/Zend/tests/generators/errors/resume_running_generator_error_002.phpt b/Zend/tests/generators/errors/resume_running_generator_error_002.phpt
+new file mode 100644
+index 0000000000..e71e32a886
+--- /dev/null
++++ b/Zend/tests/generators/errors/resume_running_generator_error_002.phpt
+@@ -0,0 +1,17 @@
++--TEST--
++Memory leak when resume an already running generator
++--FILE--
++<?php
++function gen() {
++    $g = yield;
++    $g->send($g);
++}
++$gen = gen();
++try {
++    $gen->send($gen);
++} catch (Throwable $e) {
++    echo $e->getMessage() . "\n";	
++}
++?>
++--EXPECT--
++Cannot resume an already running generator
+diff --git a/Zend/zend_generators.c b/Zend/zend_generators.c
+index 68c1865c00..2e6e22effa 100644
+--- a/Zend/zend_generators.c
++++ b/Zend/zend_generators.c
+@@ -924,6 +924,7 @@ ZEND_METHOD(Generator, send)
+ 	root = zend_generator_get_current(generator);
+ 	/* Put sent value in the target VAR slot, if it is used */
+ 	if (root->send_target) {
++		zval_ptr_dtor(root->send_target);
+ 		ZVAL_COPY(root->send_target, value);
+ 	}
+ 

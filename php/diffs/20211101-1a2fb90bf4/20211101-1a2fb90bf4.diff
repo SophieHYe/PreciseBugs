@@ -1,0 +1,54 @@
+diff --git a/Zend/tests/try/try_finally_recursive_previous.phpt b/Zend/tests/try/try_finally_recursive_previous.phpt
+new file mode 100644
+index 0000000000..85d90d44d5
+--- /dev/null
++++ b/Zend/tests/try/try_finally_recursive_previous.phpt
+@@ -0,0 +1,18 @@
++--TEST--
++Test case where the implicit previous finally exception would result in recursion
++--FILE--
++<?php
++try {
++    $e = new Exception("M1");
++    try {
++        throw new Exception("M2", 0, $e);
++    } finally {
++        throw $e;
++    }
++} finally {}
++?>
++--EXPECTF--
++Fatal error: Uncaught Exception: M1 in %s:%d
++Stack trace:
++#0 {main}
++  thrown in %s on line %d
+diff --git a/Zend/zend_vm_def.h b/Zend/zend_vm_def.h
+index c39cbdbf1b..786a8f2db4 100644
+--- a/Zend/zend_vm_def.h
++++ b/Zend/zend_vm_def.h
+@@ -7714,9 +7714,8 @@ ZEND_VM_HELPER(zend_dispatch_try_catch_finally_helper, ANY, ANY, uint32_t try_ca
+ 				if (ex) {
+ 					zend_exception_set_previous(ex, Z_OBJ_P(fast_call));
+ 				} else {
+-					EG(exception) = Z_OBJ_P(fast_call);
++					ex = EG(exception) = Z_OBJ_P(fast_call);
+ 				}
+-				ex = Z_OBJ_P(fast_call);
+ 			}
+ 		}
+ 	}
+diff --git a/Zend/zend_vm_execute.h b/Zend/zend_vm_execute.h
+index 0e12ede5bd..90551512ef 100644
+--- a/Zend/zend_vm_execute.h
++++ b/Zend/zend_vm_execute.h
+@@ -2905,9 +2905,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_dispatch_try
+ 				if (ex) {
+ 					zend_exception_set_previous(ex, Z_OBJ_P(fast_call));
+ 				} else {
+-					EG(exception) = Z_OBJ_P(fast_call);
++					ex = EG(exception) = Z_OBJ_P(fast_call);
+ 				}
+-				ex = Z_OBJ_P(fast_call);
+ 			}
+ 		}
+ 	}

@@ -1,0 +1,177 @@
+diff --git a/Zend/tests/gc_044.phpt b/Zend/tests/gc_044.phpt
+new file mode 100644
+index 0000000000..e94dd795cd
+--- /dev/null
++++ b/Zend/tests/gc_044.phpt
+@@ -0,0 +1,16 @@
++--TEST--
++GC of object property table (order variation)
++--FILE--
++<?php
++function test() {
++    $o1 = new stdClass;
++    $o2 = new stdClass;
++    $a = ['prop' => $o2];
++    $o = $o1;
++    $o2->a = (object) $a;
++}
++test();
++?>
++===DONE===
++--EXPECT--
++===DONE===
+diff --git a/Zend/zend_gc.c b/Zend/zend_gc.c
+index 4315de5845..2146784ab8 100644
+--- a/Zend/zend_gc.c
++++ b/Zend/zend_gc.c
+@@ -705,15 +705,21 @@ tail_call:
+ 			zval *zv, *end;
+ 
+ 			ht = obj->handlers->get_gc(obj, &zv, &n);
+-			if (EXPECTED(!ht) || UNEXPECTED(GC_REF_CHECK_COLOR(ht, GC_BLACK))) {
+-				ht = NULL;
++			if (UNEXPECTED(ht)) {
++				GC_ADDREF(ht);
++				if (!GC_REF_CHECK_COLOR(ht, GC_BLACK)) {
++					GC_REF_SET_BLACK(ht);
++				} else {
++					ht = NULL;
++				}
++			}
++			if (EXPECTED(!ht)) {
+ 				if (!n) goto next;
+ 				end = zv + n;
+ 				while (!Z_REFCOUNTED_P(--end)) {
+ 					if (zv == end) goto next;
+ 				}
+ 			} else {
+-				GC_REF_SET_BLACK(ht);
+ 				if (!n) goto handle_ht;
+ 				end = zv + n;
+ 			}
+@@ -823,15 +829,21 @@ static void gc_mark_grey(zend_refcounted *ref, gc_stack *stack)
+ 				zval *zv, *end;
+ 
+ 				ht = obj->handlers->get_gc(obj, &zv, &n);
+-				if (EXPECTED(!ht) || UNEXPECTED(GC_REF_CHECK_COLOR(ht, GC_GREY))) {
+-					ht = NULL;
++				if (UNEXPECTED(ht)) {
++					GC_DELREF(ht);
++					if (!GC_REF_CHECK_COLOR(ht, GC_GREY)) {
++						GC_REF_SET_COLOR(ht, GC_GREY);
++					} else {
++						ht = NULL;
++					}
++				}
++				if (EXPECTED(!ht)) {
+ 					if (!n) goto next;
+ 					end = zv + n;
+ 					while (!Z_REFCOUNTED_P(--end)) {
+ 						if (zv == end) goto next;
+ 					}
+ 				} else {
+-					GC_REF_SET_COLOR(ht, GC_GREY);
+ 					if (!n) goto handle_ht;
+ 					end = zv + n;
+ 				}
+@@ -1006,17 +1018,18 @@ tail_call:
+ 					zval *zv, *end;
+ 
+ 					ht = obj->handlers->get_gc(obj, &zv, &n);
+-					if (EXPECTED(!ht) || UNEXPECTED(!GC_REF_CHECK_COLOR(ht, GC_GREY))) {
+-						ht = NULL;
+-						if (!n) goto next;
+-						end = zv + n;
+-						while (!Z_REFCOUNTED_P(--end)) {
+-							if (zv == end) goto next;
++					if (UNEXPECTED(ht)) {
++						if (GC_REF_CHECK_COLOR(ht, GC_GREY)) {
++							GC_REF_SET_COLOR(ht, GC_WHITE);
++							GC_STACK_PUSH((zend_refcounted *) ht);
+ 						}
+-					} else {
+-						GC_REF_SET_COLOR(ht, GC_WHITE);
+-						if (!n) goto handle_ht;
+-						end = zv + n;
++						ht = NULL;
++					}
++
++					if (!n) goto next;
++					end = zv + n;
++					while (!Z_REFCOUNTED_P(--end)) {
++						if (zv == end) goto next;
+ 					}
+ 					while (zv != end) {
+ 						if (Z_REFCOUNTED_P(zv)) {
+@@ -1028,17 +1041,13 @@ tail_call:
+ 						}
+ 						zv++;
+ 					}
+-					if (EXPECTED(!ht)) {
+-						ref = Z_COUNTED_P(zv);
+-						if (GC_REF_CHECK_COLOR(ref, GC_GREY)) {
+-							GC_REF_SET_COLOR(ref, GC_WHITE);
+-							goto tail_call;
+-						}
+-						goto next;
++					ref = Z_COUNTED_P(zv);
++					if (GC_REF_CHECK_COLOR(ref, GC_GREY)) {
++						GC_REF_SET_COLOR(ref, GC_WHITE);
++						goto tail_call;
+ 					}
+-				} else {
+-					goto next;
+ 				}
++				goto next;
+ 			} else if (GC_TYPE(ref) == IS_ARRAY) {
+ 				ZEND_ASSERT((zend_array*)ref != &EG(symbol_table));
+ 				ht = (zend_array*)ref;
+@@ -1055,7 +1064,6 @@ tail_call:
+ 				goto next;
+ 			}
+ 
+-handle_ht:
+ 			if (!ht->nNumUsed) goto next;
+ 			p = ht->arData;
+ 			end = p + ht->nNumUsed;
+@@ -1175,15 +1183,21 @@ static int gc_collect_white(zend_refcounted *ref, uint32_t *flags, gc_stack *sta
+ 					*flags |= GC_HAS_DESTRUCTORS;
+ 				}
+ 				ht = obj->handlers->get_gc(obj, &zv, &n);
+-				if (EXPECTED(!ht) || UNEXPECTED(GC_REF_CHECK_COLOR(ht, GC_BLACK))) {
+-					ht = NULL;
++				if (UNEXPECTED(ht)) {
++					GC_ADDREF(ht);
++					if (GC_REF_CHECK_COLOR(ht, GC_WHITE)) {
++						GC_REF_SET_BLACK(ht);
++					} else {
++						ht = NULL;
++					}
++				}
++				if (EXPECTED(!ht)) {
+ 					if (!n) goto next;
+ 					end = zv + n;
+ 					while (!Z_REFCOUNTED_P(--end)) {
+ 						if (zv == end) goto next;
+ 					}
+ 				} else {
+-					GC_REF_SET_BLACK(ht);
+ 					if (!n) goto handle_ht;
+ 					end = zv + n;
+ 				}
+diff --git a/Zend/zend_object_handlers.c b/Zend/zend_object_handlers.c
+index c348152d6a..60bfeb0f2a 100644
+--- a/Zend/zend_object_handlers.c
++++ b/Zend/zend_object_handlers.c
+@@ -138,11 +138,6 @@ ZEND_API HashTable *zend_std_get_gc(zend_object *zobj, zval **table, int *n) /*
+ 		if (zobj->properties) {
+ 			*table = NULL;
+ 			*n = 0;
+-			if (UNEXPECTED(GC_REFCOUNT(zobj->properties) > 1)
+-			 && EXPECTED(!(GC_FLAGS(zobj->properties) & IS_ARRAY_IMMUTABLE))) {
+-				GC_DELREF(zobj->properties);
+-				zobj->properties = zend_array_dup(zobj->properties);
+-			}
+ 			return zobj->properties;
+ 		} else {
+ 			*table = zobj->properties_table;

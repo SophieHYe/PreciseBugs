@@ -1,0 +1,33 @@
+diff --git a/ext/opcache/Optimizer/dce.c b/ext/opcache/Optimizer/dce.c
+index 47f5f27106..f945856dfb 100644
+--- a/ext/opcache/Optimizer/dce.c
++++ b/ext/opcache/Optimizer/dce.c
+@@ -391,7 +391,9 @@ static zend_bool dce_instr(context *ctx, zend_op *opline, zend_ssa_op *ssa_op) {
+ 	}
+ 
+ 	/* We mark FREEs as dead, but they're only really dead if the destroyed var is dead */
+-	if (opline->opcode == ZEND_FREE && may_be_refcounted(ssa->var_info[ssa_op->op1_use].type)
++	if (opline->opcode == ZEND_FREE
++			&& ((ssa->var_info[ssa_op->op1_use].type & (MAY_BE_REF|MAY_BE_ANY|MAY_BE_UNDEF)) == 0
++				|| may_be_refcounted(ssa->var_info[ssa_op->op1_use].type))
+ 			&& !is_var_dead(ctx, ssa_op->op1_use)) {
+ 		return 0;
+ 	}
+diff --git a/ext/opcache/tests/opt/dce_013.phpt b/ext/opcache/tests/opt/dce_013.phpt
+new file mode 100644
+index 0000000000..ac5211498f
+--- /dev/null
++++ b/ext/opcache/tests/opt/dce_013.phpt
+@@ -0,0 +1,12 @@
++--TEST--
++Incorrect DCE of FREE
++--FILE--
++<?php
++function foo() {
++  $a = $r[] = $r = []&$y;
++  list(&$y)=$a;
++}
++?>
++DONE
++--EXPECT--
++DONE

@@ -1,0 +1,42 @@
+diff --git a/Zend/Optimizer/zend_inference.c b/Zend/Optimizer/zend_inference.c
+index 0b1b2c350e..ffaed45b4a 100644
+--- a/Zend/Optimizer/zend_inference.c
++++ b/Zend/Optimizer/zend_inference.c
+@@ -2534,8 +2534,8 @@ static zend_always_inline int _zend_update_type_info(
+ 				}
+ 				if (t1 & MAY_BE_OBJECT) {
+ 					tmp |= MAY_BE_ARRAY_KEY_ANY | MAY_BE_ARRAY_OF_ANY | MAY_BE_ARRAY_OF_REF;
+-				} else {
+-					tmp |= ((t1 & (MAY_BE_ANY - MAY_BE_NULL)) << MAY_BE_ARRAY_SHIFT) | ((t1 & (MAY_BE_ANY - MAY_BE_NULL)) ? MAY_BE_ARRAY_PACKED : 0);
++				} else if (t1 & (MAY_BE_ANY - MAY_BE_NULL)) {
++					tmp |= ((t1 & (MAY_BE_ANY - MAY_BE_NULL)) << MAY_BE_ARRAY_SHIFT) | ((t1 & MAY_BE_NULL) ? MAY_BE_ARRAY_KEY_LONG : MAY_BE_ARRAY_PACKED);
+ 				}
+ 			}
+ 			UPDATE_SSA_TYPE(tmp, ssa_op->result_def);
+diff --git a/ext/opcache/tests/jit/cast_002.phpt b/ext/opcache/tests/jit/cast_002.phpt
+new file mode 100644
+index 0000000000..a1b8d48bd2
+--- /dev/null
++++ b/ext/opcache/tests/jit/cast_002.phpt
+@@ -0,0 +1,21 @@
++--TEST--
++JIT CAST: 002
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function test(?int $i) {
++    $a = (array) $i;
++    $a[-1] = 1;
++    var_dump($a);
++}
++test(null);
++?>
++--EXPECT--
++array(1) {
++  [-1]=>
++  int(1)
++}

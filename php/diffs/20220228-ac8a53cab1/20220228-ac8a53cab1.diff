@@ -1,0 +1,78 @@
+diff --git a/ext/opcache/jit/zend_jit_trace.c b/ext/opcache/jit/zend_jit_trace.c
+index 223792e2ea..5244b1eaa3 100644
+--- a/ext/opcache/jit/zend_jit_trace.c
++++ b/ext/opcache/jit/zend_jit_trace.c
+@@ -6389,6 +6389,22 @@ done:
+ 	if (p->stop == ZEND_JIT_TRACE_STOP_LOOP
+ 	 || p->stop == ZEND_JIT_TRACE_STOP_RECURSIVE_CALL
+ 	 || p->stop == ZEND_JIT_TRACE_STOP_RECURSIVE_RET) {
++		if (ra) {
++			zend_ssa_phi *phi = ssa->blocks[1].phis;
++
++			while (phi) {
++				if (ra[phi->ssa_var]
++				 && ra[phi->sources[1]]
++				 && STACK_MEM_TYPE(stack, phi->var) != STACK_TYPE(stack, phi->var)
++				 && (ra[phi->ssa_var]->flags & (ZREG_LOAD|ZREG_STORE)) == 0
++				 && (ra[phi->sources[1]]->flags & (ZREG_LOAD|ZREG_STORE)) == 0) {
++					/* Store actual type to memory to avoid deoptimization mistakes */
++					/* TODO: Alternatively, we may try to update alredy generated deoptimization info */
++					zend_jit_store_var_type(&dasm_state, phi->var, STACK_TYPE(stack, phi->var));
++				}
++				phi = phi->next;
++			}
++		}
+ 		if (p->stop != ZEND_JIT_TRACE_STOP_RECURSIVE_RET) {
+ 			if ((t->flags & ZEND_JIT_TRACE_USES_INITIAL_IP)
+ 			 && !zend_jit_set_ip(&dasm_state, p->opline)) {
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index 462ba36168..0539165687 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -3867,6 +3867,14 @@ static int zend_jit_store_var(dasm_State **Dst, uint32_t info, int var, zend_reg
+ 	return zend_jit_spill_store(Dst, src, dst, info, set_type);
+ }
+ 
++static int zend_jit_store_var_type(dasm_State **Dst, int var, uint8_t type)
++{
++	zend_jit_addr dst = ZEND_ADDR_MEM_ZVAL(ZREG_FP, EX_NUM_TO_VAR(var));
++
++	|	SET_ZVAL_TYPE_INFO dst, type
++	return 1;
++}
++
+ static int zend_jit_store_var_if_necessary(dasm_State **Dst, int var, zend_jit_addr src, uint32_t info)
+ {
+ 	if (Z_MODE(src) == IS_REG && Z_STORE(src)) {
+diff --git a/ext/opcache/tests/jit/reg_alloc_011.phpt b/ext/opcache/tests/jit/reg_alloc_011.phpt
+new file mode 100644
+index 0000000000..f628adf779
+--- /dev/null
++++ b/ext/opcache/tests/jit/reg_alloc_011.phpt
+@@ -0,0 +1,25 @@
++--TEST--
++Register Alloction 011: Missed type store
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function foo($y) {
++    for ($cnt=0;$cnt<6;$cnt++) {
++        $i = $y;
++        for ($i=0;$i<1;)
++            for(;$i<1;)
++                for(;$i<1;$i++)
++                    for(;$y;);
++                for($i=0;$i< 1;$i++)
++                    for(;$y;);
++    }
++}
++foo(null);
++?>
++DONE
++--EXPECTF--
++DONE
+\ No newline at end of file

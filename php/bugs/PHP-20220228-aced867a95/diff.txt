@@ -1,0 +1,45 @@
+diff --git a/Zend/Optimizer/zend_inference.c b/Zend/Optimizer/zend_inference.c
+index 99e037829e..6c5d96bd83 100644
+--- a/Zend/Optimizer/zend_inference.c
++++ b/Zend/Optimizer/zend_inference.c
+@@ -2661,6 +2661,7 @@ static zend_always_inline int _zend_update_type_info(
+ 		case ZEND_ASSIGN_DIM:
+ 			if (opline->op1_type == IS_CV) {
+ 				tmp = assign_dim_result_type(t1, t2, OP1_DATA_INFO(), opline->op2_type);
++				tmp |= ssa->var_info[ssa_op->op1_def].type & (MAY_BE_ARRAY_PACKED|MAY_BE_ARRAY_NUMERIC_HASH|MAY_BE_ARRAY_STRING_HASH);
+ 				UPDATE_SSA_TYPE(tmp, ssa_op->op1_def);
+ 				COPY_SSA_OBJ_TYPE(ssa_op->op1_use, ssa_op->op1_def);
+ 			}
+diff --git a/ext/opcache/tests/jit/assign_dim_013.phpt b/ext/opcache/tests/jit/assign_dim_013.phpt
+new file mode 100644
+index 0000000000..49907b358a
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_dim_013.phpt
+@@ -0,0 +1,26 @@
++--TEST--
++JIT ASSIGN_DIM: 013
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function test() {
++    for(;;) {
++        $arr[] = $obj = new stdClass;
++        $obj->y = set_error_handler(function(){});
++        foreach($obj as $y) {
++        }
++        $arr = ['' => y];
++    }
++}
++test();
++?>
++--EXPECTF--
++Fatal error: Uncaught Error: Undefined constant "y" in %sassign_dim_013.php:8
++Stack trace:
++#0 %sassign_dim_013.php(11): test()
++#1 {main}
++  thrown in %sassign_dim_013.php on line 8
+\ No newline at end of file

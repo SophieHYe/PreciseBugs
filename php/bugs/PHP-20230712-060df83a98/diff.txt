@@ -1,0 +1,42 @@
+diff --git a/NEWS b/NEWS
+index b76b8d1b60..72a89e88bf 100644
+--- a/NEWS
++++ b/NEWS
+@@ -14,6 +14,7 @@ PHP                                                                        NEWS
+     (ilutov)
+   . Fixed line number of JMP instruction over else block. (ilutov)
+   . Fixed use-of-uninitialized-value with ??= on assert. (ilutov)
++  . Fixed oss-fuzz #60411 (Fix double-compilation of arrow-functions). (ilutov)
+ 
+ - Curl:
+   . Fix crash when an invalid callback function is passed to
+diff --git a/Zend/tests/oss_fuzz_60441.phpt b/Zend/tests/oss_fuzz_60441.phpt
+new file mode 100644
+index 0000000000..7492a754ba
+--- /dev/null
++++ b/Zend/tests/oss_fuzz_60441.phpt
+@@ -0,0 +1,11 @@
++--TEST--
++oss-fuzz #60441 (Double compilation of arrow function)
++--FILE--
++<?php
++assert(fn()=>y)[y]??=y;
++?>
++--EXPECTF--
++Fatal error: Uncaught Error: Undefined constant "y" in %s:%d
++Stack trace:
++#0 {main}
++  thrown in %s on line %d
+diff --git a/Zend/zend_compile.c b/Zend/zend_compile.c
+index 2b43fc9b38..8508b1d230 100644
+--- a/Zend/zend_compile.c
++++ b/Zend/zend_compile.c
+@@ -7425,7 +7425,7 @@ static void zend_compile_func_decl(znode *result, zend_ast *ast, bool toplevel)
+ 		zend_compile_closure_uses(uses_ast);
+ 	}
+ 
+-	if (ast->kind == ZEND_AST_ARROW_FUNC) {
++	if (ast->kind == ZEND_AST_ARROW_FUNC && decl->child[2]->kind != ZEND_AST_RETURN) {
+ 		bool needs_return = true;
+ 		if (op_array->fn_flags & ZEND_ACC_HAS_RETURN_TYPE) {
+ 			zend_arg_info *return_info = CG(active_op_array)->arg_info - 1;

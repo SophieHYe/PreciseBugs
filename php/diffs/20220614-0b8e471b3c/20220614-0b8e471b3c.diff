@@ -1,0 +1,35 @@
+diff --git a/ext/standard/tests/streams/user_streams_context_001.phpt b/ext/standard/tests/streams/user_streams_context_001.phpt
+new file mode 100644
+index 0000000000..c59905cf4b
+--- /dev/null
++++ b/ext/standard/tests/streams/user_streams_context_001.phpt
+@@ -0,0 +1,15 @@
++--TEST--
++User streams and incrrectly typed context
++--FILE--
++<?php
++class Wrapper {
++    public Foo $context;
++}
++if (stream_wrapper_register('foo', Wrapper::class)) dir('foo://');
++?>
++--EXPECTF--
++Fatal error: Uncaught TypeError: Cannot assign resource to property Wrapper::$context of type Foo in %suser_streams_context_001.php:5
++Stack trace:
++#0 %suser_streams_context_001.php(5): dir('foo://')
++#1 {main}
++  thrown in %suser_streams_context_001.php on line 5
+diff --git a/main/streams/userspace.c b/main/streams/userspace.c
+index 271d0cdffb..5f9a5c4221 100644
+--- a/main/streams/userspace.c
++++ b/main/streams/userspace.c
+@@ -289,8 +289,8 @@ static void user_stream_create_object(struct php_user_stream_wrapper *uwrap, php
+ 	}
+ 
+ 	if (context) {
+-		add_property_resource(object, "context", context->res);
+ 		GC_ADDREF(context->res);
++		add_property_resource(object, "context", context->res);
+ 	} else {
+ 		add_property_null(object, "context");
+ 	}

@@ -1,0 +1,40 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index d4873aaa13..65b13507e8 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -2402,7 +2402,7 @@ static zend_always_inline int _zend_update_type_info(
+ 		case ZEND_BW_NOT:
+ 			tmp = 0;
+ 			if (t1 & MAY_BE_STRING) {
+-				tmp |= MAY_BE_STRING | MAY_BE_RC1;
++				tmp |= MAY_BE_STRING | MAY_BE_RC1 | MAY_BE_RCN;
+ 			}
+ 			if (t1 & (MAY_BE_ANY-MAY_BE_STRING)) {
+ 				tmp |= MAY_BE_LONG;
+diff --git a/ext/opcache/tests/jit/bw_not_001.phpt b/ext/opcache/tests/jit/bw_not_001.phpt
+new file mode 100644
+index 0000000000..a36ab8bf41
+--- /dev/null
++++ b/ext/opcache/tests/jit/bw_not_001.phpt
+@@ -0,0 +1,20 @@
++--TEST--
++JIT BW_NOT: 001 Incorrect refcounting inference
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--FILE--
++<?php
++$x[~"$x"]*=1;
++?>
++DONE
++--EXPECTF--
++Warning: Undefined variable $x in %sbw_not_001.php on line 2
++
++Warning: Undefined variable $x in %sbw_not_001.php on line 2
++
++Warning: Undefined array key "" in %sbw_not_001.php on line 2
++DONE
+\ No newline at end of file

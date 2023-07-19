@@ -1,0 +1,187 @@
+diff --git a/Zend/tests/incdec_undef.phpt b/Zend/tests/incdec_undef.phpt
+new file mode 100644
+index 0000000000..c3a18cb535
+--- /dev/null
++++ b/Zend/tests/incdec_undef.phpt
+@@ -0,0 +1,25 @@
++--TEST--
++Inc/dec undef var with error handler
++--FILE--
++<?php
++set_error_handler(function($_, $m) {
++    echo "$m\n";
++    unset($GLOBALS['x']);
++});
++var_dump($x--);
++unset($x);
++var_dump($x++);
++unset($x);
++var_dump(--$x);
++unset($x);
++var_dump(++$x);
++?>
++--EXPECT--
++Undefined variable $x
++NULL
++Undefined variable $x
++NULL
++Undefined variable $x
++NULL
++Undefined variable $x
++int(1)
+diff --git a/Zend/zend_vm_def.h b/Zend/zend_vm_def.h
+index e8001bd564..0848564dd1 100644
+--- a/Zend/zend_vm_def.h
++++ b/Zend/zend_vm_def.h
+@@ -1470,8 +1470,8 @@ ZEND_VM_HELPER(zend_pre_inc_helper, VAR|CV, ANY)
+ 
+ 	SAVE_OPLINE();
+ 	if (OP1_TYPE == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -1521,8 +1521,8 @@ ZEND_VM_HELPER(zend_pre_dec_helper, VAR|CV, ANY)
+ 
+ 	SAVE_OPLINE();
+ 	if (OP1_TYPE == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -1573,8 +1573,8 @@ ZEND_VM_HELPER(zend_post_inc_helper, VAR|CV, ANY)
+ 
+ 	SAVE_OPLINE();
+ 	if (OP1_TYPE == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -1621,8 +1621,8 @@ ZEND_VM_HELPER(zend_post_dec_helper, VAR|CV, ANY)
+ 
+ 	SAVE_OPLINE();
+ 	if (OP1_TYPE == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+diff --git a/Zend/zend_vm_execute.h b/Zend/zend_vm_execute.h
+index 2a22a3b77f..ba943850a2 100644
+--- a/Zend/zend_vm_execute.h
++++ b/Zend/zend_vm_execute.h
+@@ -21156,8 +21156,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_pre_inc_help
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_VAR == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -21225,8 +21225,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_pre_dec_help
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_VAR == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -21295,8 +21295,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_post_inc_hel
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_VAR == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -21343,8 +21343,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_post_dec_hel
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_VAR == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -37222,8 +37222,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_pre_inc_help
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_CV == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -37290,8 +37290,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_pre_dec_help
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_CV == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -37359,8 +37359,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_post_inc_hel
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_CV == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+@@ -37406,8 +37406,8 @@ static zend_never_inline ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_post_dec_hel
+ 
+ 	SAVE_OPLINE();
+ 	if (IS_CV == IS_CV && UNEXPECTED(Z_TYPE_P(var_ptr) == IS_UNDEF)) {
+-		ZVAL_NULL(var_ptr);
+ 		ZVAL_UNDEFINED_OP1();
++		ZVAL_NULL(var_ptr);
+ 	}
+ 
+ 	do {
+diff --git a/ext/opcache/jit/zend_jit_arm64.dasc b/ext/opcache/jit/zend_jit_arm64.dasc
+index 2f61f01198..eb612a734b 100644
+--- a/ext/opcache/jit/zend_jit_arm64.dasc
++++ b/ext/opcache/jit/zend_jit_arm64.dasc
+@@ -3757,8 +3757,8 @@ static int zend_jit_inc_dec(dasm_State **Dst, const zend_op *opline, uint32_t op
+ 				|	IF_NOT_ZVAL_TYPE op1_addr, IS_UNDEF, >2, ZREG_TMP1
+ 				|	// zend_error(E_WARNING, "Undefined variable $%s", ZSTR_VAL(CV_DEF_OF(EX_VAR_TO_NUM(opline->op1.var))));
+ 				|	LOAD_32BIT_VAL FCARG1w, opline->op1.var
+-				|	SET_ZVAL_TYPE_INFO op1_addr, IS_NULL, TMP1w, TMP2
+ 				|	EXT_CALL zend_jit_undefined_op_helper, REG0
++				|	SET_ZVAL_TYPE_INFO op1_addr, IS_NULL, TMP1w, TMP2
+ 				op1_info |= MAY_BE_NULL;
+ 			}
+ 			|2:
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index 8680f91615..ca23bcd8d5 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -4125,8 +4125,8 @@ static int zend_jit_inc_dec(dasm_State **Dst, const zend_op *opline, uint32_t op
+ 				|	IF_NOT_ZVAL_TYPE op1_addr, IS_UNDEF, >2
+ 				|	// zend_error(E_WARNING, "Undefined variable $%s", ZSTR_VAL(CV_DEF_OF(EX_VAR_TO_NUM(opline->op1.var))));
+ 				|	mov FCARG1d, opline->op1.var
+-				|	SET_ZVAL_TYPE_INFO op1_addr, IS_NULL
+ 				|	EXT_CALL zend_jit_undefined_op_helper, r0
++				|	SET_ZVAL_TYPE_INFO op1_addr, IS_NULL
+ 				op1_info |= MAY_BE_NULL;
+ 			}
+ 			|2:

@@ -1,0 +1,49 @@
+diff --git a/NEWS b/NEWS
+index d54187dadf..204f3e375d 100644
+--- a/NEWS
++++ b/NEWS
+@@ -65,6 +65,8 @@ PHP                                                                        NEWS
+   . Fixed bug GH-10885 (stream_socket_server context leaks). (ilutov)
+   . Fixed bug GH-10052 (Browscap crashes PHP 8.1.12 on request shutdown
+     (apache2)). (nielsdos)
++  . Fixed oss-fuzz #57392 (Buffer-overflow in php_fgetcsv() with \0 delimiter
++    and enclosure). (ilutov)
+ 
+ 16 Mar 2023, PHP 8.1.17
+ 
+diff --git a/ext/standard/file.c b/ext/standard/file.c
+index 4c31ee0eae..548bcc7a37 100644
+--- a/ext/standard/file.c
++++ b/ext/standard/file.c
+@@ -2088,7 +2088,7 @@ PHPAPI void php_fgetcsv(php_stream *stream, char delimiter, char enclosure, int
+ 			while ((*tmp != delimiter) && isspace((int)*(unsigned char *)tmp)) {
+ 				tmp++;
+ 			}
+-			if (*tmp == enclosure) {
++			if (*tmp == enclosure && tmp < limit) {
+ 				bptr = tmp;
+ 			}
+ 		}
+diff --git a/ext/standard/tests/oss_fuzz_57392.phpt b/ext/standard/tests/oss_fuzz_57392.phpt
+new file mode 100644
+index 0000000000..5a7e5b28d1
+--- /dev/null
++++ b/ext/standard/tests/oss_fuzz_57392.phpt
+@@ -0,0 +1,17 @@
++--TEST--
++oss-fuzz #57392: Buffer-overflow in php_fgetcsv() with \0 delimiter and enclosure
++--FILE--
++<?php
++var_dump(str_getcsv(
++    "aaaaaaaaaaaa\0  ",
++    "\0",
++    "\0",
++));
++?>
++--EXPECT--
++array(2) {
++  [0]=>
++  string(12) "aaaaaaaaaaaa"
++  [1]=>
++  string(2) "  "
++}

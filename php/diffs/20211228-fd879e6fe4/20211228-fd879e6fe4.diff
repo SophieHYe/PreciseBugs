@@ -1,0 +1,131 @@
+diff --git a/ext/opcache/jit/zend_jit_helpers.c b/ext/opcache/jit/zend_jit_helpers.c
+index 4595afdc17..2eb3bb3cc1 100644
+--- a/ext/opcache/jit/zend_jit_helpers.c
++++ b/ext/opcache/jit/zend_jit_helpers.c
+@@ -456,6 +456,8 @@ static void ZEND_FASTCALL zend_jit_fetch_dim_r_helper(zend_array *ht, zval *dim,
+ 	zend_ulong hval;
+ 	zend_string *offset_key;
+ 	zval *retval;
++	zend_execute_data *execute_data;
++	const zend_op *opline;
+ 
+ 	if (Z_TYPE_P(dim) == IS_REFERENCE) {
+ 		dim = Z_REFVAL_P(dim);
+@@ -469,7 +471,31 @@ static void ZEND_FASTCALL zend_jit_fetch_dim_r_helper(zend_array *ht, zval *dim,
+ 			offset_key = Z_STR_P(dim);
+ 			goto str_index;
+ 		case IS_UNDEF:
++			/* The array may be destroyed while throwing the notice.
++			 * Temporarily increase the refcount to detect this situation. */
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE)) {
++				GC_ADDREF(ht);
++			}
++			execute_data = EG(current_execute_data);
++			opline = EX(opline);
+ 			zend_jit_undefined_op_helper(EG(current_execute_data)->opline->op2.var);
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE) && !GC_DELREF(ht)) {
++				zend_array_destroy(ht);
++				if (opline->result_type & (IS_VAR | IS_TMP_VAR)) {
++					if (EG(exception)) {
++						ZVAL_UNDEF(EX_VAR(opline->result.var));
++					} else {
++						ZVAL_NULL(EX_VAR(opline->result.var));
++					}
++				}
++				return;
++			}
++			if (EG(exception)) {
++				if (opline->result_type & (IS_VAR | IS_TMP_VAR)) {
++					ZVAL_UNDEF(EX_VAR(opline->result.var));
++				}
++				return;
++			}
+ 			/* break missing intentionally */
+ 		case IS_NULL:
+ 			offset_key = ZSTR_EMPTY_ALLOC();
+@@ -531,6 +557,8 @@ static void ZEND_FASTCALL zend_jit_fetch_dim_is_helper(zend_array *ht, zval *dim
+ 	zend_ulong hval;
+ 	zend_string *offset_key;
+ 	zval *retval;
++	zend_execute_data *execute_data;
++	const zend_op *opline;
+ 
+ 	if (Z_TYPE_P(dim) == IS_REFERENCE) {
+ 		dim = Z_REFVAL_P(dim);
+@@ -544,7 +572,31 @@ static void ZEND_FASTCALL zend_jit_fetch_dim_is_helper(zend_array *ht, zval *dim
+ 			offset_key = Z_STR_P(dim);
+ 			goto str_index;
+ 		case IS_UNDEF:
++			/* The array may be destroyed while throwing the notice.
++			 * Temporarily increase the refcount to detect this situation. */
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE)) {
++				GC_ADDREF(ht);
++			}
++			execute_data = EG(current_execute_data);
++			opline = EX(opline);
+ 			zend_jit_undefined_op_helper(EG(current_execute_data)->opline->op2.var);
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE) && !GC_DELREF(ht)) {
++				zend_array_destroy(ht);
++				if (opline->result_type & (IS_VAR | IS_TMP_VAR)) {
++					if (EG(exception)) {
++						ZVAL_UNDEF(EX_VAR(opline->result.var));
++					} else {
++						ZVAL_NULL(EX_VAR(opline->result.var));
++					}
++				}
++				return;
++			}
++			if (EG(exception)) {
++				if (opline->result_type & (IS_VAR | IS_TMP_VAR)) {
++					ZVAL_UNDEF(EX_VAR(opline->result.var));
++				}
++				return;
++			}
+ 			/* break missing intentionally */
+ 		case IS_NULL:
+ 			offset_key = ZSTR_EMPTY_ALLOC();
+@@ -616,7 +668,19 @@ static int ZEND_FASTCALL zend_jit_fetch_dim_isset_helper(zend_array *ht, zval *d
+ 			offset_key = Z_STR_P(dim);
+ 			goto str_index;
+ 		case IS_UNDEF:
++			/* The array may be destroyed while throwing the notice.
++			 * Temporarily increase the refcount to detect this situation. */
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE)) {
++				GC_ADDREF(ht);
++			}
+ 			zend_jit_undefined_op_helper(EG(current_execute_data)->opline->op2.var);
++			if (!(GC_FLAGS(ht) & IS_ARRAY_IMMUTABLE) && !GC_DELREF(ht)) {
++				zend_array_destroy(ht);
++				return 0;
++			}
++			if (EG(exception)) {
++				return 0;
++			}
+ 			/* break missing intentionally */
+ 		case IS_NULL:
+ 			offset_key = ZSTR_EMPTY_ALLOC();
+diff --git a/ext/opcache/tests/jit/fetch_dim_r_010.phpt b/ext/opcache/tests/jit/fetch_dim_r_010.phpt
+new file mode 100644
+index 0000000000..201d0b40f5
+--- /dev/null
++++ b/ext/opcache/tests/jit/fetch_dim_r_010.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++JIT FETCH_DIM_R: 010
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++set_error_handler(function() {
++    $GLOBALS['a'] = 0;
++});
++$a = [$y];
++($a[$b]);
++($a[17604692317316877817]);
++?>
++DONE
++--EXPECT--
++DONE

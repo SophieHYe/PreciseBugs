@@ -1,0 +1,41 @@
+diff --git a/Zend/Optimizer/zend_inference.c b/Zend/Optimizer/zend_inference.c
+index 271d9d1811..257a4324c7 100644
+--- a/Zend/Optimizer/zend_inference.c
++++ b/Zend/Optimizer/zend_inference.c
+@@ -2322,9 +2322,9 @@ static zend_always_inline zend_result _zend_update_type_info(
+ 		if (ssa_op->op2_def >= 0 && !(ssa_var_info[ssa_op->op2_def].type & MAY_BE_REF)) {
+ 			UPDATE_SSA_TYPE(tmp, ssa_op->op2_def);
+ 		}
+-		if (opline->opcode == ZEND_ASSIGN_OP
+-		 || opline->opcode == ZEND_ASSIGN_DIM_OP
++		if (opline->opcode == ZEND_ASSIGN_DIM_OP
+ 		 || opline->opcode == ZEND_ASSIGN_OBJ_OP
++		 || opline->opcode == ZEND_ASSIGN_STATIC_PROP_OP
+ 		 || opline->opcode == ZEND_ASSIGN_DIM
+ 		 || opline->opcode == ZEND_ASSIGN_OBJ) {
+ 			if ((ssa_op+1)->op1_def >= 0 && !(ssa_var_info[(ssa_op+1)->op1_def].type & MAY_BE_REF)) {
+diff --git a/ext/opcache/tests/opt/inference_021.phpt b/ext/opcache/tests/opt/inference_021.phpt
+new file mode 100644
+index 0000000000..1c4d4fd940
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_021.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++Type inference 021;
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function foo() {
++    for(;;){
++        $b->y++;
++        $b *= $a;
++        $a++;
++    }
++}
++?>
++DONE
++--EXPECT--
++DONE

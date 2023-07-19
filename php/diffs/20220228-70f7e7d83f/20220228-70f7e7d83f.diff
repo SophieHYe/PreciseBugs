@@ -1,0 +1,134 @@
+diff --git a/ext/opcache/jit/zend_jit_disasm_x86.c b/ext/opcache/jit/zend_jit_disasm_x86.c
+index 1258165815..504c2efaec 100644
+--- a/ext/opcache/jit/zend_jit_disasm_x86.c
++++ b/ext/opcache/jit/zend_jit_disasm_x86.c
+@@ -461,6 +461,7 @@ static int zend_jit_disasm_init(void)
+ 	REGISTER_HELPER(zend_jit_post_inc_typed_ref);
+ 	REGISTER_HELPER(zend_jit_post_dec_typed_ref);
+ 	REGISTER_HELPER(zend_jit_assign_op_to_typed_ref);
++	REGISTER_HELPER(zend_jit_assign_op_to_typed_ref_tmp);
+ 	REGISTER_HELPER(zend_jit_only_vars_by_reference);
+ 	REGISTER_HELPER(zend_jit_invalid_array_access);
+ 	REGISTER_HELPER(zend_jit_invalid_property_read);
+diff --git a/ext/opcache/jit/zend_jit_helpers.c b/ext/opcache/jit/zend_jit_helpers.c
+index 2eb3bb3cc1..dd01532b5b 100644
+--- a/ext/opcache/jit/zend_jit_helpers.c
++++ b/ext/opcache/jit/zend_jit_helpers.c
+@@ -2259,6 +2259,20 @@ static void ZEND_FASTCALL zend_jit_assign_op_to_typed_ref(zend_reference *ref, z
+ 	}
+ }
+ 
++static void ZEND_FASTCALL zend_jit_assign_op_to_typed_ref_tmp(zend_reference *ref, zval *val, binary_op_type binary_op)
++{
++	zval z_copy;
++
++	binary_op(&z_copy, &ref->val, val);
++	if (EXPECTED(zend_verify_ref_assignable_zval(ref, &z_copy, ZEND_CALL_USES_STRICT_TYPES(EG(current_execute_data))))) {
++		zval_ptr_dtor(&ref->val);
++		ZVAL_COPY_VALUE(&ref->val, &z_copy);
++	} else {
++		zval_ptr_dtor(&z_copy);
++	}
++	zval_ptr_dtor_nogc(val);
++}
++
+ static void ZEND_FASTCALL zend_jit_only_vars_by_reference(zval *arg)
+ {
+ 	ZVAL_NEW_REF(arg, arg);
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index 0539165687..b0635a7702 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -6776,7 +6776,12 @@ static int zend_jit_assign_dim_op(dasm_State **Dst, const zend_op *opline, uint3
+ 					|	PUSH_ADDR binary_op, r0
+ 				|.endif
+ 				|	SET_EX_OPLINE opline, r0
+-				|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++				if (((opline+1)->op1_type & (IS_TMP_VAR|IS_VAR))
++				 && (op1_data_info & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE))) {
++					|	EXT_CALL zend_jit_assign_op_to_typed_ref_tmp, r0
++				} else {
++					|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++				}
+ 				|.if not(X64)
+ 				|	add r4, 12
+ 				|.endif
+@@ -6900,7 +6905,12 @@ static int zend_jit_assign_op(dasm_State **Dst, const zend_op *opline, uint32_t
+ 			|	PUSH_ADDR binary_op, r0
+ 		|.endif
+ 		|	SET_EX_OPLINE opline, r0
+-		|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++		if ((opline->op2_type & (IS_TMP_VAR|IS_VAR))
++		 && (op2_info & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE))) {
++			|	EXT_CALL zend_jit_assign_op_to_typed_ref_tmp, r0
++		} else {
++			|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++		}
+ 		|.if not(X64)
+ 		|	add r4, 12
+ 		|.endif
+@@ -13974,7 +13984,12 @@ static int zend_jit_assign_obj_op(dasm_State          **Dst,
+ 				|	sub r4, 12
+ 				|	PUSH_ADDR binary_op, r0
+ 			|.endif
+-			|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++			if (((opline+1)->op1_type & (IS_TMP_VAR|IS_VAR))
++			 && (val_info & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE))) {
++				|	EXT_CALL zend_jit_assign_op_to_typed_ref_tmp, r0
++			} else {
++				|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++			}
+ 			|.if not(X64)
+ 				|	add r4, 12
+ 			|.endif
+@@ -14044,7 +14059,12 @@ static int zend_jit_assign_obj_op(dasm_State          **Dst,
+ 			|	sub r4, 12
+ 			|	PUSH_ADDR binary_op, r0
+ 		|.endif
+-		|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++		if (((opline+1)->op1_type & (IS_TMP_VAR|IS_VAR))
++		 && (val_info & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE))) {
++			|	EXT_CALL zend_jit_assign_op_to_typed_ref_tmp, r0
++		} else {
++			|	EXT_CALL zend_jit_assign_op_to_typed_ref, r0
++		}
+ 		|.if not(X64)
+ 			|	add r4, 12
+ 		|.endif
+diff --git a/ext/opcache/tests/jit/assign_obj_op_002.phpt b/ext/opcache/tests/jit/assign_obj_op_002.phpt
+new file mode 100644
+index 0000000000..3d6ac3f897
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_obj_op_002.phpt
+@@ -0,0 +1,31 @@
++--TEST--
++JIT ASSIGN_OBJ_OP: memory leak
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++class A {
++    public string $prop = "222";
++}
++
++class B {
++    public function __toString() {
++        global $a;
++        $a->prop .=  $a->prop . "leak";
++        return "test";
++    }
++}
++
++$a = new A;
++$prop = &$a->prop;
++$a->prop = new B;
++var_dump($a);
++?>
++--EXPECT--
++object(A)#1 (1) {
++  ["prop"]=>
++  &string(4) "test"
++}

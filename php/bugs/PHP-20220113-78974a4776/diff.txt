@@ -1,0 +1,42 @@
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index ff272256c3..20d76010c2 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -6135,7 +6135,7 @@ static int zend_jit_simple_assign(dasm_State    **Dst,
+ 				if (tmp_reg == ZREG_R0) {
+ 					|	IF_NOT_REFCOUNTED ah, >3
+ 				} else {
+-					|	IF_NOT_FLAGS Rd(tmp_reg), IS_TYPE_REFCOUNTED, >3
++					|	IF_NOT_FLAGS Rd(tmp_reg), (IS_TYPE_REFCOUNTED << Z_TYPE_FLAGS_SHIFT), >3
+ 				}
+ 				|	GET_ZVAL_PTR Ra(tmp_reg), var_addr
+ 
+@@ -6150,7 +6150,7 @@ static int zend_jit_simple_assign(dasm_State    **Dst,
+ 					if (tmp_reg == ZREG_R0) {
+ 						|	IF_NOT_REFCOUNTED ah, >2
+ 					} else {
+-						|	IF_NOT_FLAGS Rd(tmp_reg), IS_TYPE_REFCOUNTED, >2
++						|	IF_NOT_FLAGS Rd(tmp_reg), (IS_TYPE_REFCOUNTED << Z_TYPE_FLAGS_SHIFT), >2
+ 					}
+ 					|	GET_ZVAL_PTR Ra(tmp_reg), var_addr
+ 					|	GC_ADDREF Ra(tmp_reg)
+diff --git a/ext/opcache/tests/jit/assign_dim_009.phpt b/ext/opcache/tests/jit/assign_dim_009.phpt
+new file mode 100644
+index 0000000000..bea28098a5
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_dim_009.phpt
+@@ -0,0 +1,14 @@
++--TEST--
++JIT ASSIGN_DIM: 009
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++$y[] = $r = &$G;
++?>
++DONE
++--EXPECT--
++DONE

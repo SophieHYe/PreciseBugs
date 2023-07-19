@@ -1,0 +1,48 @@
+diff --git a/Zend/zend_execute.c b/Zend/zend_execute.c
+index fb35b8a116..cb6e63c515 100644
+--- a/Zend/zend_execute.c
++++ b/Zend/zend_execute.c
+@@ -3262,6 +3262,7 @@ ZEND_API void ZEND_FASTCALL zend_ref_del_type_source(zend_property_info_source_l
+ 	zend_property_info_list *list = ZEND_PROPERTY_INFO_SOURCE_TO_LIST(source_list->list);
+ 	zend_property_info **ptr, **end;
+ 
++	ZEND_ASSERT(prop);
+ 	if (!ZEND_PROPERTY_INFO_SOURCE_IS_LIST(source_list->list)) {
+ 		ZEND_ASSERT(source_list->ptr == prop);
+ 		source_list->ptr = NULL;
+diff --git a/ext/standard/tests/serialize/overwrite_untyped_ref.phpt b/ext/standard/tests/serialize/overwrite_untyped_ref.phpt
+new file mode 100644
+index 0000000000..d6f3b78bfb
+--- /dev/null
++++ b/ext/standard/tests/serialize/overwrite_untyped_ref.phpt
+@@ -0,0 +1,17 @@
++--TEST--
++Overwrite reference in untyped property
++--FILE--
++<?php
++class Test {
++    public $prop;
++}
++$s = <<<'STR'
++O:4:"Test":2:{s:4:"prop";R:1;s:4:"prop";i:0;}
++STR;
++var_dump(unserialize($s));
++?>
++--EXPECT--
++object(Test)#1 (1) {
++  ["prop"]=>
++  int(0)
++}
+diff --git a/ext/standard/var_unserializer.re b/ext/standard/var_unserializer.re
+index 04f02cd762..1c787034dd 100644
+--- a/ext/standard/var_unserializer.re
++++ b/ext/standard/var_unserializer.re
+@@ -556,7 +556,7 @@ string_key:
+ 						/* This is a property with a declaration */
+ 						old_data = Z_INDIRECT_P(old_data);
+ 						info = zend_get_typed_property_info_for_slot(obj, old_data);
+-						if (Z_ISREF_P(old_data)) {
++						if (info && Z_ISREF_P(old_data)) {
+ 							/* If the value is overwritten, remove old type source from ref. */
+ 							ZEND_REF_DEL_TYPE_SOURCE(Z_REF_P(old_data), info);
+ 						}

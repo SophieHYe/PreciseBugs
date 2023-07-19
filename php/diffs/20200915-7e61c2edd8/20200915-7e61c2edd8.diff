@@ -1,0 +1,38 @@
+diff --git a/Zend/tests/named_params/runtime_cache_init.phpt b/Zend/tests/named_params/runtime_cache_init.phpt
+new file mode 100644
+index 0000000000..e55db1a72d
+--- /dev/null
++++ b/Zend/tests/named_params/runtime_cache_init.phpt
+@@ -0,0 +1,17 @@
++--TEST--
++Uninitialized run-time cache when resolving default values
++--FILE--
++<?php
++
++class Test {
++    public static function method($a = FOO, $b = 1) {
++        echo "a = $a, b = $b\n";
++    }
++}
++
++define('FOO', 42);
++call_user_func(['Test', 'method'], b: 0);
++
++?>
++--EXPECT--
++a = 42, b = 0
+diff --git a/Zend/zend_execute.c b/Zend/zend_execute.c
+index b54caeeccf..3c19311094 100644
+--- a/Zend/zend_execute.c
++++ b/Zend/zend_execute.c
+@@ -4464,6 +4464,10 @@ ZEND_API zend_result ZEND_FASTCALL zend_handle_undef_args(zend_execute_data *cal
+ 			if (EXPECTED(opline->opcode == ZEND_RECV_INIT)) {
+ 				zval *default_value = RT_CONSTANT(opline, opline->op2);
+ 				if (Z_OPT_TYPE_P(default_value) == IS_CONSTANT_AST) {
++					if (UNEXPECTED(!RUN_TIME_CACHE(op_array))) {
++						init_func_run_time_cache(op_array);
++					}
++
+ 					void *run_time_cache = RUN_TIME_CACHE(op_array);
+ 					zval *cache_val =
+ 						(zval *) ((char *) run_time_cache + Z_CACHE_SLOT_P(default_value));

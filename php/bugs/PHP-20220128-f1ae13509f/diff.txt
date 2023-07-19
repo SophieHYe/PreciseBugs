@@ -1,0 +1,67 @@
+diff --git a/Zend/tests/dynamic_prop_deprecation_002.phpt b/Zend/tests/dynamic_prop_deprecation_002.phpt
+new file mode 100644
+index 0000000000..2ab7452fed
+--- /dev/null
++++ b/Zend/tests/dynamic_prop_deprecation_002.phpt
+@@ -0,0 +1,13 @@
++--TEST--
++Dynamic properties deprecation 002 (memory leak)
++--FILE--
++<?php
++set_error_handler(function($code, $msg){
++	echo "Err: $msg\n";
++    $GLOBALS['a']=null;
++});
++$a = new class{};
++[&$a->y];
++?>
++--EXPECT--
++Err: Creation of dynamic property class@anonymous::$y is deprecated
+\ No newline at end of file
+diff --git a/Zend/zend_object_handlers.c b/Zend/zend_object_handlers.c
+index e75ff8318c..721abe4699 100644
+--- a/Zend/zend_object_handlers.c
++++ b/Zend/zend_object_handlers.c
+@@ -277,10 +277,16 @@ static ZEND_COLD zend_never_inline void zend_forbidden_dynamic_property(
+ 		ZSTR_VAL(ce->name), ZSTR_VAL(member));
+ }
+ 
+-static ZEND_COLD zend_never_inline void zend_deprecated_dynamic_property(
+-		zend_class_entry *ce, zend_string *member) {
++static ZEND_COLD zend_never_inline bool zend_deprecated_dynamic_property(
++		zend_object *obj, zend_string *member) {
++	GC_ADDREF(obj);
+ 	zend_error(E_DEPRECATED, "Creation of dynamic property %s::$%s is deprecated",
+-		ZSTR_VAL(ce->name), ZSTR_VAL(member));
++		ZSTR_VAL(obj->ce->name), ZSTR_VAL(member));
++	if (UNEXPECTED(GC_DELREF(obj) == 0)) {
++		zend_objects_store_del(obj);
++		return 0;
++	}
++	return 1;
+ }
+ 
+ static ZEND_COLD zend_never_inline void zend_readonly_property_modification_scope_error(
+@@ -880,7 +886,10 @@ write_std_property:
+ 				goto exit;
+ 			}
+ 			if (UNEXPECTED(!(zobj->ce->ce_flags & ZEND_ACC_ALLOW_DYNAMIC_PROPERTIES))) {
+-				zend_deprecated_dynamic_property(zobj->ce, name);
++				if (UNEXPECTED(!zend_deprecated_dynamic_property(zobj, name))) {
++					variable_ptr = &EG(error_zval);
++					goto exit;
++				}
+ 			}
+ 
+ 			Z_TRY_ADDREF_P(value);
+@@ -1063,7 +1072,9 @@ ZEND_API zval *zend_std_get_property_ptr_ptr(zend_object *zobj, zend_string *nam
+ 				return &EG(error_zval);
+ 			}
+ 			if (UNEXPECTED(!(zobj->ce->ce_flags & ZEND_ACC_ALLOW_DYNAMIC_PROPERTIES))) {
+-				zend_deprecated_dynamic_property(zobj->ce, name);
++				if (UNEXPECTED(!zend_deprecated_dynamic_property(zobj, name))) {
++					return &EG(error_zval);
++				}
+ 			}
+ 			if (UNEXPECTED(!zobj->properties)) {
+ 				rebuild_object_properties(zobj);

@@ -1,0 +1,38 @@
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index bcf5459ba4..78552b5eee 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -15982,6 +15982,7 @@ static zend_regset zend_jit_get_scratch_regset(const zend_op *opline, const zend
+ 			    !(op2_info & ((MAY_BE_ANY|MAY_BE_REF|MAY_BE_UNDEF)-MAY_BE_LONG))) {
+ 				regset = ZEND_REGSET_EMPTY;
+ 				if (opline->op2_type == IS_CONST &&
++				    opline->op1_type != IS_CONST &&
+ 				    Z_TYPE_P(RT_CONSTANT(opline, opline->op2)) == IS_LONG &&
+ 				    zend_long_is_power_of_two(Z_LVAL_P(RT_CONSTANT(opline, opline->op2))) &&
+ 				    OP1_HAS_RANGE() &&
+diff --git a/ext/opcache/tests/jit/reg_alloc_013.phpt b/ext/opcache/tests/jit/reg_alloc_013.phpt
+new file mode 100644
+index 0000000000..01d4640ddc
+--- /dev/null
++++ b/ext/opcache/tests/jit/reg_alloc_013.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++Register Alloction 013: Division by zero
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function foo() {
++    $j++;
++    $j++ % $j -= $a % $a = $j;
++}
++foo();
++?>
++DONE
++--EXPECTF--
++Warning: Undefined variable $j in %sreg_alloc_013.php on line 3
++DONE
+\ No newline at end of file

@@ -1,0 +1,32 @@
+diff --git a/Zend/tests/nullsafe_operator/029.phpt b/Zend/tests/nullsafe_operator/029.phpt
+index 2aee652140..92a17ef7c0 100644
+--- a/Zend/tests/nullsafe_operator/029.phpt
++++ b/Zend/tests/nullsafe_operator/029.phpt
+@@ -3,6 +3,9 @@ Refcount of constant LHS with nullsafe operator
+ --FILE--
+ <?php
+ ['']?->a;
++__DIR__?->a;
+ ?>
+ --EXPECTF--
+ Warning: Attempt to read property "a" on array in %s on line %d
++
++Warning: Attempt to read property "a" on string in %s on line %d
+diff --git a/Zend/zend_compile.c b/Zend/zend_compile.c
+index ac9d549756..a2ec221a01 100644
+--- a/Zend/zend_compile.c
++++ b/Zend/zend_compile.c
+@@ -2308,10 +2308,10 @@ static void zend_short_circuiting_commit(uint32_t checkpoint, znode *result, zen
+ static void zend_emit_jmp_null(znode *obj_node)
+ {
+ 	uint32_t jmp_null_opnum = get_next_op_number();
+-	if (obj_node->op_type == IS_CONST) {
+-		Z_TRY_ADDREF(obj_node->u.constant);
++	zend_op *opline = zend_emit_op(NULL, ZEND_JMP_NULL, obj_node, NULL);
++	if (opline->op1_type == IS_CONST) {
++		Z_TRY_ADDREF_P(CT_CONSTANT(opline->op1));
+ 	}
+-	zend_emit_op(NULL, ZEND_JMP_NULL, obj_node, NULL);
+ 	zend_stack_push(&CG(short_circuiting_opnums), &jmp_null_opnum);
+ }
+ 

@@ -1,0 +1,69 @@
+diff --git a/ext/opcache/jit/zend_jit.c b/ext/opcache/jit/zend_jit.c
+index c4d2fdc4ce..48d3d55d32 100644
+--- a/ext/opcache/jit/zend_jit.c
++++ b/ext/opcache/jit/zend_jit.c
+@@ -2341,7 +2341,9 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 						if (opline->result_type != IS_UNUSED) {
+ 							res_use_info = -1;
+ 
+-							if (opline->result_type == IS_CV) {
++							if (opline->result_type == IS_CV
++							 && ssa_op->result_use >= 0
++							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+ 
+ 								if (Z_MODE(res_use_addr) != IS_REG
+@@ -2403,7 +2405,9 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 						} else {
+ 							res_use_info = -1;
+ 
+-							if (opline->result_type == IS_CV) {
++							if (opline->result_type == IS_CV
++							 && ssa_op->result_use >= 0
++							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+ 
+ 								if (Z_MODE(res_use_addr) != IS_REG
+@@ -2458,7 +2462,9 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 						} else {
+ 							res_use_info = -1;
+ 
+-							if (opline->result_type == IS_CV) {
++							if (opline->result_type == IS_CV
++							 && ssa_op->result_use >= 0
++							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+ 
+ 								if (Z_MODE(res_use_addr) != IS_REG
+diff --git a/ext/opcache/tests/jit/mul_008.phpt b/ext/opcache/tests/jit/mul_008.phpt
+new file mode 100644
+index 0000000000..d890a86c8f
+--- /dev/null
++++ b/ext/opcache/tests/jit/mul_008.phpt
+@@ -0,0 +1,26 @@
++--TEST--
++JIT MUL: 008 incorrect elimination of type store
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--SKIPIF--
++<?php if (PHP_INT_SIZE != 8) die("skip: 64-bit only"); ?>
++--FILE--
++<?php
++function foo(int $a){
++    $a=$a%10;
++    $a=$f=$a*(6158978401740);
++    $a=$f=$a*(261740);
++    $a%0;
++}
++foo(3);
++?>
++--EXPECTF--
++Fatal error: Uncaught DivisionByZeroError: Modulo by zero in %smul_008.php:6
++Stack trace:
++#0 %smul_008.php(8): foo(%d)
++#1 {main}
++  thrown in %smul_008.php on line 6

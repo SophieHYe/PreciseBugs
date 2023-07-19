@@ -1,0 +1,45 @@
+diff --git a/Zend/Optimizer/block_pass.c b/Zend/Optimizer/block_pass.c
+index 18f5a98cc1..00454d5d96 100644
+--- a/Zend/Optimizer/block_pass.c
++++ b/Zend/Optimizer/block_pass.c
+@@ -166,7 +166,13 @@ static void zend_optimize_block(zend_basic_block *block, zend_op_array *op_array
+ 				} else {
+ 					zval c;
+ 					ZVAL_COPY(&c, &ZEND_OP1_LITERAL(src));
+-					if (zend_optimizer_update_op1_const(op_array, opline, &c)) {
++					if (opline->opcode != ZEND_CASE
++					 && opline->opcode != ZEND_CASE_STRICT
++					 && opline->opcode != ZEND_FETCH_LIST_R
++					 && opline->opcode != ZEND_SWITCH_LONG
++					 && opline->opcode != ZEND_SWITCH_STRING
++					 && opline->opcode != ZEND_MATCH
++					 && zend_optimizer_update_op1_const(op_array, opline, &c)) {
+ 						VAR_SOURCE(op1) = NULL;
+ 						literal_dtor(&ZEND_OP1_LITERAL(src));
+ 						MAKE_NOP(src);
+diff --git a/ext/opcache/tests/opt/block_pass_003.phpt b/ext/opcache/tests/opt/block_pass_003.phpt
+new file mode 100644
+index 0000000000..25d32e1e4d
+--- /dev/null
++++ b/ext/opcache/tests/opt/block_pass_003.phpt
+@@ -0,0 +1,20 @@
++--TEST--
++Block Pass 003: Inorrect constant substitution in FETCH_LIST_R
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--EXTENSIONS--
++opcache
++--FILE--
++<?php
++function test() {
++    for ($i = 0; $i < 10; $i++) {
++        list($a, $b) = 1 ? 1 : 2;
++    }
++}
++test();
++?>
++DONE
++--EXPECT--
++DONE

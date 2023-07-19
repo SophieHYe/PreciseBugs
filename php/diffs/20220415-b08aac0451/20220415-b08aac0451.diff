@@ -1,0 +1,44 @@
+diff --git a/Zend/tests/assign_obj_to_ref_inference.phpt b/Zend/tests/assign_obj_to_ref_inference.phpt
+new file mode 100644
+index 0000000000..3ed788715a
+--- /dev/null
++++ b/Zend/tests/assign_obj_to_ref_inference.phpt
+@@ -0,0 +1,21 @@
++--TEST--
++Assigning an object of known type to a reference variable
++--FILE--
++<?php
++
++class Test {
++    public int $x = 42;
++}
++
++function test() {
++    $r =& $o;
++    $o = new Test;
++    $r = new stdClass;
++    $r->x = 3.141;
++    var_dump(is_float($o->x));
++}
++test();
++
++?>
++--EXPECT--
++bool(true)
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index ca3b7dc240..9e17e132e3 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -2740,7 +2740,11 @@ static zend_always_inline int _zend_update_type_info(
+ 					tmp |= MAY_BE_DOUBLE;
+ 				}
+ 				UPDATE_SSA_TYPE(tmp, ssa_op->op1_def);
+-				COPY_SSA_OBJ_TYPE(ssa_op->op2_use, ssa_op->op1_def);
++				if (tmp & MAY_BE_REF) {
++					UPDATE_SSA_OBJ_TYPE(NULL, 0, ssa_op->op1_def);
++				} else {
++					COPY_SSA_OBJ_TYPE(ssa_op->op2_use, ssa_op->op1_def);
++				}
+ 			}
+ 			if (ssa_op->result_def >= 0) {
+ 				if (tmp & MAY_BE_REF) {

@@ -1,0 +1,48 @@
+diff --git a/ext/opcache/Optimizer/dce.c b/ext/opcache/Optimizer/dce.c
+index f0f67055df..47f5f27106 100644
+--- a/ext/opcache/Optimizer/dce.c
++++ b/ext/opcache/Optimizer/dce.c
+@@ -592,7 +592,10 @@ int dce_optimize_op_array(zend_op_array *op_array, zend_ssa *ssa, zend_bool reor
+ 		while ((i = zend_bitset_pop_first(ctx.instr_worklist, ctx.instr_worklist_len)) >= 0) {
+ 			zend_bitset_excl(ctx.instr_dead, i);
+ 			add_operands_to_worklists(&ctx, &op_array->opcodes[i], &ssa->ops[i], ssa, 1);
+-			if (i < op_array->last && op_array->opcodes[i+1].opcode == ZEND_OP_DATA) {
++			if (i < op_array->last
++			 && (op_array->opcodes[i+1].opcode == ZEND_OP_DATA
++			  || (op_array->opcodes[i].opcode == ZEND_NEW
++			   && op_array->opcodes[i+1].opcode == ZEND_DO_FCALL))) {
+ 				zend_bitset_excl(ctx.instr_dead, i+1);
+ 				add_operands_to_worklists(&ctx, &op_array->opcodes[i+1], &ssa->ops[i+1], ssa, 1);
+ 			}
+diff --git a/ext/opcache/tests/opt/dce_012.phpt b/ext/opcache/tests/opt/dce_012.phpt
+new file mode 100644
+index 0000000000..49cde14b33
+--- /dev/null
++++ b/ext/opcache/tests/opt/dce_012.phpt
+@@ -0,0 +1,26 @@
++--TEST--
++Incorrect DCE of constructor DO_FCALL
++--FILE--
++<?php
++function test() {
++	$a = null;
++    for ($i = 0; $i < 10; $i++) {
++        $obj = $a = $a;
++        $obj = new stdClass;
++        $obj->orop1 = 'abc';
++    }
++
++    foreach (range(0, 6) as $levels) {
++        print "$levels level" . ($levels == C ? "" : "s") . "aaa";
++    }
++
++    $obj->prop1 = null;
++}
++test();
++?>
++--EXPECTF--
++Fatal error: Uncaught Error: Undefined constant "C" in %sdce_012.php:11
++Stack trace:
++#0 %sdce_012.php(16): test()
++#1 {main}
++  thrown in %sdce_012.php on line 11

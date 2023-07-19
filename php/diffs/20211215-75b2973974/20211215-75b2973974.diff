@@ -1,0 +1,102 @@
+diff --git a/Zend/tests/falsetoarray_003.phpt b/Zend/tests/falsetoarray_003.phpt
+new file mode 100644
+index 0000000000..11b32771e1
+--- /dev/null
++++ b/Zend/tests/falsetoarray_003.phpt
+@@ -0,0 +1,16 @@
++--TEST--
++Autovivification of false to array with data clobbering by error handler
++--FILE--
++<?php
++set_error_handler(function($code, $msg) {
++    echo "Err: $msg\n";
++    $GLOBALS['a']=9;
++});
++$a=[];
++($a[PHP_INT_MAX+1]);
++?>
++DONE
++--EXPECTF--
++Err: Implicit conversion from float %f to int loses precision
++Err: Undefined array key %i
++DONE
+diff --git a/Zend/zend_vm_def.h b/Zend/zend_vm_def.h
+index 856091fcd5..6920bc7632 100644
+--- a/Zend/zend_vm_def.h
++++ b/Zend/zend_vm_def.h
+@@ -9670,7 +9670,10 @@ ZEND_VM_C_LABEL(fetch_dim_r_index_array):
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, OP2_TYPE OPLINE_CC EXECUTE_DATA_CC);
++			FREE_OP1();
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, ZEND_VM_C_LABEL(fetch_dim_r_index_undef));
+diff --git a/Zend/zend_vm_execute.h b/Zend/zend_vm_execute.h
+index 362cd8436a..42f5310cd0 100644
+--- a/Zend/zend_vm_execute.h
++++ b/Zend/zend_vm_execute.h
+@@ -8318,7 +8318,10 @@ fetch_dim_r_index_array:
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, (IS_TMP_VAR|IS_VAR|IS_CV) OPLINE_CC EXECUTE_DATA_CC);
++
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, fetch_dim_r_index_undef);
+@@ -16126,7 +16129,10 @@ fetch_dim_r_index_array:
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, IS_CONST OPLINE_CC EXECUTE_DATA_CC);
++			zval_ptr_dtor_nogc(EX_VAR(opline->op1.var));
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, fetch_dim_r_index_undef);
+@@ -16178,7 +16184,10 @@ fetch_dim_r_index_array:
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, (IS_TMP_VAR|IS_VAR|IS_CV) OPLINE_CC EXECUTE_DATA_CC);
++			zval_ptr_dtor_nogc(EX_VAR(opline->op1.var));
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, fetch_dim_r_index_undef);
+@@ -42928,7 +42937,10 @@ fetch_dim_r_index_array:
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, IS_CONST OPLINE_CC EXECUTE_DATA_CC);
++
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, fetch_dim_r_index_undef);
+@@ -42980,7 +42992,10 @@ fetch_dim_r_index_array:
+ 		if (EXPECTED(Z_TYPE_P(dim) == IS_LONG)) {
+ 			offset = Z_LVAL_P(dim);
+ 		} else {
+-			offset = zval_get_long_ex(dim, /* is_strict */ true);
++			SAVE_OPLINE();
++			zend_fetch_dimension_address_read_R(container, dim, (IS_TMP_VAR|IS_VAR|IS_CV) OPLINE_CC EXECUTE_DATA_CC);
++
++			ZEND_VM_NEXT_OPCODE_CHECK_EXCEPTION();
+ 		}
+ 		ht = Z_ARRVAL_P(container);
+ 		ZEND_HASH_INDEX_FIND(ht, offset, value, fetch_dim_r_index_undef);

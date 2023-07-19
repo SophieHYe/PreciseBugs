@@ -1,0 +1,44 @@
+diff --git a/ext/opcache/jit/zend_jit.c b/ext/opcache/jit/zend_jit.c
+index fa7953e20f..bec0146afe 100644
+--- a/ext/opcache/jit/zend_jit.c
++++ b/ext/opcache/jit/zend_jit.c
+@@ -2732,6 +2732,9 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 							op2_def_addr = op2_addr;
+ 						}
+ 						op1_info = OP1_INFO();
++						if (ra && ssa->vars[ssa_op->op1_use].no_val) {
++							op1_info |= MAY_BE_UNDEF; // requres type assignment
++						}
+ 						if (opline->result_type == IS_UNUSED) {
+ 							res_addr = 0;
+ 							res_info = -1;
+diff --git a/ext/opcache/tests/jit/reg_alloc_009.phpt b/ext/opcache/tests/jit/reg_alloc_009.phpt
+new file mode 100644
+index 0000000000..dfcbfc086f
+--- /dev/null
++++ b/ext/opcache/tests/jit/reg_alloc_009.phpt
+@@ -0,0 +1,24 @@
++--TEST--
++Register Alloction 009: Missing type store
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function test() {
++    for(;; $a + $y[4][] = $y < $a + $a = $b = $a = + $y[] = 0.1) {
++        4 >> - $j++;
++    }
++}
++test();
++?>
++--EXPECTF--
++Warning: Undefined variable $j in %sreg_alloc_009.php on line 4
++
++Fatal error: Uncaught ArithmeticError: Bit shift by negative number in %sreg_alloc_009.php:4
++Stack trace:
++#0 %sreg_alloc_009.php(7): test()
++#1 {main}
++  thrown in %sreg_alloc_009.php on line 4

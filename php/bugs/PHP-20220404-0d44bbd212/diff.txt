@@ -1,0 +1,77 @@
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index b30a9952ca..3430baf0a0 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -14186,6 +14186,7 @@ static int zend_jit_assign_obj(dasm_State          **Dst,
+ 	zend_jit_addr this_addr = ZEND_ADDR_MEM_ZVAL(ZREG_FP, offsetof(zend_execute_data, This));
+ 	zend_jit_addr prop_addr;
+ 	zend_bool needs_slow_path = 0;
++	zend_bool needs_val_dtor = 0;
+ 
+ 	if (RETURN_VALUE_USED(opline)) {
+ 		res_addr = ZEND_ADDR_MEM_ZVAL(ZREG_FP, opline->result.var);
+@@ -14242,6 +14243,7 @@ static int zend_jit_assign_obj(dasm_State          **Dst,
+ 				}
+ 				if (((opline+1)->op1_type & (IS_VAR|IS_TMP_VAR))
+ 				 && (val_info & (MAY_BE_REF|MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE))) {
++				 	needs_val_dtor = 1;
+ 					|	jmp >7
+ 				} else {
+ 					|	jmp >9
+@@ -14459,6 +14461,13 @@ static int zend_jit_assign_obj(dasm_State          **Dst,
+ 			val_info |= MAY_BE_RC1|MAY_BE_RCN;
+ 		}
+ 
++		|7:
++		|	// FREE_OP_DATA();
++		|	FREE_OP (opline+1)->op1_type, (opline+1)->op1, val_info, 0, opline
++		|	jmp >9
++		|.code
++	} else if (needs_val_dtor) {
++		|.cold_code
+ 		|7:
+ 		|	// FREE_OP_DATA();
+ 		|	FREE_OP (opline+1)->op1_type, (opline+1)->op1, val_info, 0, opline
+diff --git a/ext/opcache/tests/jit/assign_obj_003.phpt b/ext/opcache/tests/jit/assign_obj_003.phpt
+new file mode 100644
+index 0000000000..61159d6218
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_obj_003.phpt
+@@ -0,0 +1,37 @@
++--TEST--
++JIT ASSIGN_OBJ: Assign undefined vatiable to property
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++class Node {
++    public $previous;
++    public $next;
++}
++
++function xxx() {
++    $firstNode = new Node();
++//    $firstNode->previous = $firstNode;
++    $firstNode->next = $firstNode;
++    $circularDoublyLinkedList = null;
++    for ($i = 0; $i < 2; $i++) {
++        $currentNode = $circularDoublyLinkedList;
++        $nextNode = $circularDoublyLinkedList->next;
++        $newNode->next = $undef1->next; // <- ???
++        $newNode = new Node();
++        $currentNode->undef2 = new Node();
++        $circularDoublyLinkedList = $nextNode;
++    }
++}
++
++try {
++	@xxx();
++} catch (Throwable $e) {
++	echo "Exception: " . $e->getMessage() . "\n";
++}
++?>
++--EXPECT--
++Exception: Attempt to assign property "next" on null

@@ -1,0 +1,37 @@
+diff --git a/ext/opcache/tests/type_001.phpt b/ext/opcache/tests/type_001.phpt
+new file mode 100644
+index 0000000000..a9122b3451
+--- /dev/null
++++ b/ext/opcache/tests/type_001.phpt
+@@ -0,0 +1,18 @@
++--TEST--
++Type persistene 001
++--EXTENSIONS--
++opcache
++--FILE--
++<?php
++function foo() {
++  class Foo {
++  }
++  class y extends Foo {
++      public (y&A)|X $y;
++  }
++}
++foo();
++?>
++DONE
++--EXPECT--
++DONE
+diff --git a/ext/opcache/zend_persist.c b/ext/opcache/zend_persist.c
+index 8913b68d7f..6b0ee9770e 100644
+--- a/ext/opcache/zend_persist.c
++++ b/ext/opcache/zend_persist.c
+@@ -339,7 +339,7 @@ uint32_t zend_accel_get_class_name_map_ptr(zend_string *type_name)
+ static void zend_persist_type(zend_type *type) {
+ 	if (ZEND_TYPE_HAS_LIST(*type)) {
+ 		zend_type_list *list = ZEND_TYPE_LIST(*type);
+-		if (ZEND_TYPE_USES_ARENA(*type)) {
++		if (ZEND_TYPE_USES_ARENA(*type) || zend_accel_in_shm(type)) {
+ 			list = zend_shared_memdup_put(list, ZEND_TYPE_LIST_SIZE(list->num_types));
+ 			ZEND_TYPE_FULL_MASK(*type) &= ~_ZEND_TYPE_ARENA_BIT;
+ 		} else {

@@ -1,0 +1,39 @@
+diff --git a/ext/opcache/jit/zend_jit_helpers.c b/ext/opcache/jit/zend_jit_helpers.c
+index 713ee5ff64..6e62231af5 100644
+--- a/ext/opcache/jit/zend_jit_helpers.c
++++ b/ext/opcache/jit/zend_jit_helpers.c
+@@ -2316,6 +2316,9 @@ static void ZEND_FASTCALL zend_jit_invalid_property_incdec(zval *container, cons
+ 	zend_throw_error(NULL,
+ 		"Attempt to increment/decrement property \"%s\" on %s",
+ 		property_name, zend_zval_type_name(container));
++	if (opline->op1_type == IS_VAR) {
++		zval_ptr_dtor_nogc(EX_VAR(opline->op1.var));
++	}
+ }
+ 
+ static void ZEND_FASTCALL zend_jit_invalid_property_assign(zval *container, const char *property_name)
+diff --git a/ext/opcache/tests/jit/inc_obj_005.phpt b/ext/opcache/tests/jit/inc_obj_005.phpt
+new file mode 100644
+index 0000000000..fe55921887
+--- /dev/null
++++ b/ext/opcache/tests/jit/inc_obj_005.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++PRE_INC_OBJ: 005
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--FILE--
++<?php
++json_encode($y)->y++;
++?>
++--EXPECTF--
++Warning: Undefined variable $y in %sinc_obj_005.php on line 2
++
++Fatal error: Uncaught Error: Attempt to increment/decrement property "y" on string in %sinc_obj_005.php:2
++Stack trace:
++#0 {main}
++  thrown in %sinc_obj_005.php on line 2

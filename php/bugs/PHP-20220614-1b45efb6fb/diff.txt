@@ -1,0 +1,37 @@
+diff --git a/Zend/Optimizer/zend_inference.c b/Zend/Optimizer/zend_inference.c
+index d27e5fd0f0..4d29b65325 100644
+--- a/Zend/Optimizer/zend_inference.c
++++ b/Zend/Optimizer/zend_inference.c
+@@ -3227,7 +3227,7 @@ static zend_always_inline int _zend_update_type_info(
+ 						tmp |= t1 & (MAY_BE_RC1|MAY_BE_RCN);
+ 					}
+ 					if (opline->op2_type == IS_UNUSED) {
+-						if (t1 & (MAY_BE_UNDEF|MAY_BE_NULL)) {
++						if (t1 & (MAY_BE_UNDEF|MAY_BE_NULL|MAY_BE_FALSE)) {
+ 							key_type |= MAY_BE_ARRAY_PACKED;
+ 						}
+ 						if (t1 & MAY_BE_ARRAY) {
+diff --git a/ext/opcache/tests/opt/inference_010.phpt b/ext/opcache/tests/opt/inference_010.phpt
+new file mode 100644
+index 0000000000..b07362ccfe
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_010.phpt
+@@ -0,0 +1,18 @@
++--TEST--
++Type inference 010: FRTCH_DIM_W
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function foo() {
++    $x = false;
++    $x[] = &$y;
++}
++foo();
++?>
++DONE
++--EXPECTF--
++Deprecated: Automatic conversion of false to array is deprecated in %sinference_010.php on line 4
++DONE

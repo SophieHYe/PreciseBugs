@@ -1,0 +1,40 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index aa9521a023..a5a34d577b 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -3219,10 +3219,11 @@ static zend_always_inline int _zend_update_type_info(
+ 						tmp |= t1 & (MAY_BE_RC1|MAY_BE_RCN);
+ 					}
+ 				}
+-				if (opline->opcode == ZEND_FETCH_DIM_RW
++				if ((key_type & (MAY_BE_ARRAY_KEY_LONG|MAY_BE_ARRAY_KEY_STRING))
++						&& (opline->opcode == ZEND_FETCH_DIM_RW
+ 						|| opline->opcode == ZEND_FETCH_DIM_W
+ 						|| opline->opcode == ZEND_FETCH_DIM_FUNC_ARG
+-						|| opline->opcode == ZEND_FETCH_LIST_W) {
++						|| opline->opcode == ZEND_FETCH_LIST_W)) {
+ 					j = ssa_vars[ssa_op->result_def].use_chain;
+ 					if (j < 0) {
+ 						/* no uses */
+diff --git a/ext/opcache/tests/opt/inference_006.phpt b/ext/opcache/tests/opt/inference_006.phpt
+new file mode 100644
+index 0000000000..245b1f6c6d
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_006.phpt
+@@ -0,0 +1,16 @@
++--TEST--
++Type inference 006: FETCH_DIM_W with invalid key type
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function y() {
++    $obj=new y;
++    u($y[$obj]);
++}
++?>
++DONE
++--EXPECT--
++DONE

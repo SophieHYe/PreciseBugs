@@ -1,0 +1,34 @@
+diff --git a/Zend/Optimizer/block_pass.c b/Zend/Optimizer/block_pass.c
+index b3f2099fb1..0186dde313 100644
+--- a/Zend/Optimizer/block_pass.c
++++ b/Zend/Optimizer/block_pass.c
+@@ -257,7 +257,7 @@ static void zend_optimize_block(zend_basic_block *block, zend_op_array *op_array
+ 				break;
+ 
+ 			case ZEND_MATCH_ERROR:
+-				if (opline->op1_type == IS_TMP_VAR) {
++				if (opline->op1_type & (IS_TMP_VAR|IS_VAR)) {
+ 					src = VAR_SOURCE(opline->op1);
+ 					VAR_SOURCE(opline->op1) = NULL;
+ 				}
+diff --git a/ext/opcache/tests/opt/match_003.phpt b/ext/opcache/tests/opt/match_003.phpt
+new file mode 100644
+index 0000000000..1d55d01b62
+--- /dev/null
++++ b/ext/opcache/tests/opt/match_003.phpt
+@@ -0,0 +1,15 @@
++--TEST--
++Match 003: SSA integrity verification failed because of incorrect optimization
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++match(y()){};
++?>
++--EXPECTF--
++Fatal error: Uncaught Error: Call to undefined function y() in %smatch_003.php:2
++Stack trace:
++#0 {main}
++  thrown in %smatch_003.php on line 2

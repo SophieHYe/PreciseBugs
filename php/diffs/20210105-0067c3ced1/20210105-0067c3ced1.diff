@@ -1,0 +1,30 @@
+diff --git a/Zend/tests/oct_whitespace.phpt b/Zend/tests/oct_whitespace.phpt
+new file mode 100644
+index 0000000000..cb0bf4ad7a
+--- /dev/null
++++ b/Zend/tests/oct_whitespace.phpt
+@@ -0,0 +1,8 @@
++--TEST--
++Octal literal followed by whitespace and another number
++--FILE--
++<?php
++var_dump(0o0 2);
++?>
++--EXPECTF--
++Parse error: syntax error, unexpected integer "2", expecting ")" in %s on line %d
+diff --git a/Zend/zend_language_scanner.l b/Zend/zend_language_scanner.l
+index d82f67d0c7..96f36736d3 100644
+--- a/Zend/zend_language_scanner.l
++++ b/Zend/zend_language_scanner.l
+@@ -1963,6 +1963,11 @@ NEWLINE ("\r"|"\n"|"\r\n")
+ 		--len;
+ 	}
+ 
++	if (len == 0) {
++		ZVAL_LONG(zendlval, 0);
++		RETURN_TOKEN_WITH_VAL(T_LNUMBER);
++	}
++
+ 	if (contains_underscores) {
+ 		octal = estrndup(octal, len);
+ 		strip_underscores(octal, &len);

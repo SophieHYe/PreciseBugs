@@ -1,0 +1,36 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index 36b63b8a1c..aa9521a023 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -2639,6 +2639,9 @@ static zend_always_inline int _zend_update_type_info(
+ 						tmp |= MAY_BE_NULL|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_STRING;
+ 					}
+ 				}
++				if (!tmp) {
++					tmp = MAY_BE_NULL;
++				}
+ 				tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+ 				UPDATE_SSA_TYPE(tmp, ssa_op->result_def);
+ 			}
+diff --git a/ext/opcache/tests/opt/inference_005.phpt b/ext/opcache/tests/opt/inference_005.phpt
+new file mode 100644
+index 0000000000..35d9c7b1a6
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_005.phpt
+@@ -0,0 +1,16 @@
++--TEST--
++Type inference 005: Use MAY_BE_NULL result (insted of empty) for ASSIGN_DIM with invalid arguments
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function foo() {
++    $a = $r[] = $r = [] & $y;
++    +list(&$y) = $a;
++}
++?>
++DONE
++--EXPECT--
++DONE

@@ -1,0 +1,56 @@
+diff --git a/ext/date/php_date.c b/ext/date/php_date.c
+index 3ba577c7b2..886dd3ee97 100644
+--- a/ext/date/php_date.c
++++ b/ext/date/php_date.c
+@@ -568,7 +568,7 @@ PHPAPI timelib_tzinfo *get_timezone_info(void)
+ 
+ static void update_property(zend_object *object, zend_string *key, zval *prop_val)
+ {
+-	if (ZSTR_VAL(key)[0] == '\0') { // not public
++	if (ZSTR_LEN(key) > 0 && ZSTR_VAL(key)[0] == '\0') { // not public
+ 		const char *class_name, *prop_name;
+ 		size_t prop_name_len;
+ 
+diff --git a/ext/date/tests/ossfuzz-56931.txt b/ext/date/tests/ossfuzz-56931.txt
+new file mode 100644
+index 0000000000..57c0ee791d
+Binary files /dev/null and b/ext/date/tests/ossfuzz-56931.txt differ
+diff --git a/ext/date/tests/unserialize-test.phpt b/ext/date/tests/unserialize-test.phpt
+index b88ef0a1fc..95a3758020 100644
+--- a/ext/date/tests/unserialize-test.phpt
++++ b/ext/date/tests/unserialize-test.phpt
+@@ -6,6 +6,7 @@
+ 	'ossfuzz-55589.txt',
+ 	'ossfuzz-55599.txt',
+ 	'ossfuzz-55727.txt',
++	'ossfuzz-56931.txt',
+ ];
+ 
+ foreach ($files as $file) {
+@@ -24,16 +25,23 @@
+ ?>
+ --EXPECTF--
+ ossfuzz-55589.txt: 
+-%s: unserialize(): Error at offset 39 of 39 bytes in %sunserialize-test.php on line 14
++%s: unserialize(): Error at offset 39 of 39 bytes in %sunserialize-test.php on line %d
+ bool(false)
+ 
+ 
+ ossfuzz-55599.txt: 
+-%s: unserialize(): Error at offset 26 of 26 bytes in %sunserialize-test.php on line 14
++%s: unserialize(): Error at offset 26 of 26 bytes in %sunserialize-test.php on line %d
+ Error: Invalid serialization data for DateTime object
+ bool(false)
+ 
+ 
+ ossfuzz-55727.txt: 
+-%s: unserialize(): Error at offset 230 of 509 bytes in %sunserialize-test.php on line 14
++%s: unserialize(): Error at offset 230 of 509 bytes in %sunserialize-test.php on line %d
++bool(false)
++
++
++ossfuzz-56931.txt: 
++Notice: unserialize(): Error at offset 39 of 39 bytes in %sunserialize-test.php on line %d
++
++Deprecated: Creation of dynamic property DateInterval::$ is deprecated in %s on line %d
+ bool(false)

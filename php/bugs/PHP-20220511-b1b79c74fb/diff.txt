@@ -1,0 +1,81 @@
+diff --git a/Zend/tests/class_constants_006.phpt b/Zend/tests/class_constants_006.phpt
+new file mode 100644
+index 0000000000..aed8d831b7
+--- /dev/null
++++ b/Zend/tests/class_constants_006.phpt
+@@ -0,0 +1,13 @@
++--TEST--
++Ownership of constant expression inhereted from interface should be transfered to class
++--FILE--
++<?php
++interface I {
++    const X2 = 'X' . self::Y2;
++    const Y2 = 'Y';
++}
++eval('class B implements I{}');
++var_dump(B::X2);
++?>
++--EXPECT--
++string(2) "XY"
+diff --git a/Zend/zend_constants.h b/Zend/zend_constants.h
+index 77e8fa1450..736dbb0091 100644
+--- a/Zend/zend_constants.h
++++ b/Zend/zend_constants.h
+@@ -26,6 +26,7 @@
+ #define CONST_PERSISTENT		(1<<0)				/* Persistent */
+ #define CONST_NO_FILE_CACHE		(1<<1)				/* Can't be saved in file cache */
+ #define CONST_DEPRECATED		(1<<2)				/* Deprecated */
++#define CONST_OWNED				(1<<3)				/* constant should be destroyed together with class */
+ 
+ #define	PHP_USER_CONSTANT   0x7fffff /* a constant defined in user space */
+ 
+diff --git a/Zend/zend_inheritance.c b/Zend/zend_inheritance.c
+index 45b284d023..acff1da179 100644
+--- a/Zend/zend_inheritance.c
++++ b/Zend/zend_inheritance.c
+@@ -28,6 +28,7 @@
+ #include "zend_exceptions.h"
+ #include "zend_enum.h"
+ #include "zend_attributes.h"
++#include "zend_constants.h"
+ 
+ ZEND_API zend_class_entry* (*zend_inheritance_cache_get)(zend_class_entry *ce, zend_class_entry *parent, zend_class_entry **traits_and_interfaces) = NULL;
+ ZEND_API zend_class_entry* (*zend_inheritance_cache_add)(zend_class_entry *ce, zend_class_entry *proto, zend_class_entry *parent, zend_class_entry **traits_and_interfaces, HashTable *dependencies) = NULL;
+@@ -1635,6 +1636,7 @@ static void do_inherit_iface_constant(zend_string *name, zend_class_constant *c,
+ 				ct = zend_arena_alloc(&CG(arena), sizeof(zend_class_constant));
+ 				memcpy(ct, c, sizeof(zend_class_constant));
+ 				c = ct;
++				Z_CONSTANT_FLAGS(c->value) |= CONST_OWNED;
+ 			}
+ 		}
+ 		if (ce->type & ZEND_INTERNAL_CLASS) {
+diff --git a/Zend/zend_opcode.c b/Zend/zend_opcode.c
+index 87fd7db5c0..15056f2355 100644
+--- a/Zend/zend_opcode.c
++++ b/Zend/zend_opcode.c
+@@ -26,6 +26,7 @@
+ #include "zend_extensions.h"
+ #include "zend_API.h"
+ #include "zend_sort.h"
++#include "zend_constants.h"
+ 
+ #include "zend_vm.h"
+ 
+@@ -255,7 +256,7 @@ ZEND_API void zend_cleanup_mutable_class_data(zend_class_entry *ce)
+ 			zend_class_constant *c;
+ 
+ 			ZEND_HASH_FOREACH_PTR(constants_table, c) {
+-				if (c->ce == ce) {
++				if (c->ce == ce || (Z_CONSTANT_FLAGS(c->value) & CONST_OWNED)) {
+ 					zval_ptr_dtor_nogc(&c->value);
+ 				}
+ 			} ZEND_HASH_FOREACH_END();
+@@ -387,7 +388,7 @@ ZEND_API void destroy_zend_class(zval *zv)
+ 				zend_class_constant *c;
+ 
+ 				ZEND_HASH_FOREACH_PTR(&ce->constants_table, c) {
+-					if (c->ce == ce) {
++					if (c->ce == ce || (Z_CONSTANT_FLAGS(c->value) & CONST_OWNED)) {
+ 						zval_ptr_dtor_nogc(&c->value);
+ 						if (c->doc_comment) {
+ 							zend_string_release_ex(c->doc_comment, 0);

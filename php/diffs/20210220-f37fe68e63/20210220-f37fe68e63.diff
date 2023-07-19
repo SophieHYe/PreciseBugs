@@ -1,0 +1,49 @@
+diff --git a/Zend/tests/closures/closure_from_callable_gc.phpt b/Zend/tests/closures/closure_from_callable_gc.phpt
+new file mode 100644
+index 0000000000..c7c3c049c6
+--- /dev/null
++++ b/Zend/tests/closures/closure_from_callable_gc.phpt
+@@ -0,0 +1,27 @@
++--TEST--
++Closure::fromCallabl() and GC
++--FILE--
++<?php
++
++class Test {
++    public function method() {}
++
++    public function method2($y) {
++        static $x;
++        $x = $y;
++    }
++}
++
++$fn = Closure::fromCallable([new Test, 'method2']);
++$fn($fn);
++unset($fn); // Still referenced from static var.
++gc_collect_cycles();
++
++$fn = Closure::fromCallable([new Test, 'method']);
++$fn2 = $fn; unset($fn2); // Add to root buffer.
++gc_collect_cycles();
++
++?>
++===DONE===
++--EXPECT--
++===DONE===
+diff --git a/Zend/zend_closures.c b/Zend/zend_closures.c
+index 2eda4f8f5c..8e5b599e39 100644
+--- a/Zend/zend_closures.c
++++ b/Zend/zend_closures.c
+@@ -620,8 +620,9 @@ static HashTable *zend_closure_get_gc(zend_object *obj, zval **table, int *n) /*
+ 
+ 	*table = Z_TYPE(closure->this_ptr) != IS_NULL ? &closure->this_ptr : NULL;
+ 	*n = Z_TYPE(closure->this_ptr) != IS_NULL ? 1 : 0;
+-	return (closure->func.type == ZEND_USER_FUNCTION &&
+-		closure->func.op_array.static_variables) ?
++	/* Fake closures don't own the static variables they reference. */
++	return (closure->func.type == ZEND_USER_FUNCTION
++			&& !(closure->func.op_array.fn_flags & ZEND_ACC_FAKE_CLOSURE)) ?
+ 		ZEND_MAP_PTR_GET(closure->func.op_array.static_variables_ptr) : NULL;
+ }
+ /* }}} */

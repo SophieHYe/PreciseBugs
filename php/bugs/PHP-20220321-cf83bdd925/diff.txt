@@ -1,0 +1,42 @@
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index 78552b5eee..b30a9952ca 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -15877,6 +15877,9 @@ static zend_regset zend_jit_get_scratch_regset(const zend_op *opline, const zend
+ 				if (op1_info & MAY_BE_DOUBLE) {
+ 					regset = ZEND_REGSET(ZREG_XMM0);
+ 				}
++				if (opline->result_type != IS_UNUSED && (op1_info & MAY_BE_LONG)) {
++					ZEND_REGSET_INCL(regset, ZREG_R1);
++				}
+ 			}
+ 			break;
+ 		case ZEND_ADD:
+diff --git a/ext/opcache/tests/jit/reg_alloc_014.phpt b/ext/opcache/tests/jit/reg_alloc_014.phpt
+new file mode 100644
+index 0000000000..03b7ae0667
+--- /dev/null
++++ b/ext/opcache/tests/jit/reg_alloc_014.phpt
+@@ -0,0 +1,21 @@
++--TEST--
++Register Alloction 014: Register clobbering
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function foo() {
++    for($cnt = 0; $cnt < 6; $cnt++) {
++        $e = $a-- + $a-- + $a *= $a;
++        for ($i = 0; $i <= .1; $i++);
++    }
++}
++foo();
++?>
++DONE
++--EXPECTF--
++Warning: Undefined variable $a in %sreg_alloc_014.php on line 4
++DONE
+\ No newline at end of file

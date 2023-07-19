@@ -1,0 +1,69 @@
+diff --git a/Zend/Optimizer/zend_cfg.c b/Zend/Optimizer/zend_cfg.c
+index cc946c1b9e..6d538f7131 100644
+--- a/Zend/Optimizer/zend_cfg.c
++++ b/Zend/Optimizer/zend_cfg.c
+@@ -297,12 +297,12 @@ ZEND_API void zend_build_cfg(zend_arena **arena, const zend_op_array *op_array,
+ 			case ZEND_RETURN:
+ 			case ZEND_RETURN_BY_REF:
+ 			case ZEND_GENERATOR_RETURN:
+-			case ZEND_MATCH_ERROR:
+ 			case ZEND_VERIFY_NEVER_TYPE:
+ 				if (i + 1 < op_array->last) {
+ 					BB_START(i + 1);
+ 				}
+ 				break;
++			case ZEND_MATCH_ERROR:
+ 			case ZEND_EXIT:
+ 			case ZEND_THROW:
+ 				/* Don't treat THROW as terminator if it's used in expression context,
+@@ -428,7 +428,9 @@ ZEND_API void zend_build_cfg(zend_arena **arena, const zend_op_array *op_array,
+ 				break;
+ 			case ZEND_FREE:
+ 			case ZEND_FE_FREE:
+-				if (zend_optimizer_is_loop_var_free(opline)) {
++				if (zend_optimizer_is_loop_var_free(opline)
++				 && ((opline-1)->opcode != ZEND_MATCH_ERROR
++				  || (opline-1)->extended_value != ZEND_THROW_IS_EXPR)) {
+ 					BB_START(i);
+ 					flags |= ZEND_FUNC_FREE_LOOP_VAR;
+ 				}
+diff --git a/Zend/zend_compile.c b/Zend/zend_compile.c
+index 94991adce8..395a8a5e98 100644
+--- a/Zend/zend_compile.c
++++ b/Zend/zend_compile.c
+@@ -5776,6 +5776,10 @@ static void zend_compile_match(znode *result, zend_ast *ast)
+ 		if (opline->op1_type == IS_CONST) {
+ 			Z_TRY_ADDREF_P(CT_CONSTANT(opline->op1));
+ 		}
++		if (arms->children == 0) {
++			/* Mark this as an "expression throw" for opcache. */
++			opline->extended_value = ZEND_THROW_IS_EXPR;
++		}
+ 	}
+ 
+ 	for (uint32_t i = 0; i < arms->children; ++i) {
+diff --git a/ext/opcache/tests/opt/match_001.phpt b/ext/opcache/tests/opt/match_001.phpt
+new file mode 100644
+index 0000000000..f244f26245
+--- /dev/null
++++ b/ext/opcache/tests/opt/match_001.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++Match 001: memory leak because of live range lose
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
+++$y . +$y . match(y) {}
++?>
++--EXPECTF--
++Warning: Undefined variable $y in %smatch_001.php on line 2
++
++Warning: Undefined variable $y in %smatch_001.php on line 2
++
++Fatal error: Uncaught Error: Undefined constant "y" in %smatch_001.php:2
++Stack trace:
++#0 {main}
++  thrown in %smatch_001.php on line 2

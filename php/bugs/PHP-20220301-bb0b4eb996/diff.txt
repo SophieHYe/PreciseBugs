@@ -1,0 +1,55 @@
+diff --git a/ext/standard/tests/serialize/serialization_objects_016.phpt b/ext/standard/tests/serialize/serialization_objects_016.phpt
+new file mode 100644
+index 0000000000..92b83f5f3c
+--- /dev/null
++++ b/ext/standard/tests/serialize/serialization_objects_016.phpt
+@@ -0,0 +1,32 @@
++--TEST--
++Object serialization / unserialization: circular object with rc=1
++--FILE--
++<?php
++$t=new stdClass;
++$t->y=$t;
++$y=(array)$t;
++unset($t);
++var_dump($y);
++$s=serialize($y);
++var_dump($s);
++$x=unserialize($s);
++var_dump($x);
++vaR_dump(serialize($x));
++?>
++--EXPECTF--
++array(1) {
++  ["y"]=>
++  object(stdClass)#%d (1) {
++    ["y"]=>
++    *RECURSION*
++  }
++}
++string(45) "a:1:{s:1:"y";O:8:"stdClass":1:{s:1:"y";r:2;}}"
++array(1) {
++  ["y"]=>
++  object(stdClass)#%d (1) {
++    ["y"]=>
++    *RECURSION*
++  }
++}
++string(45) "a:1:{s:1:"y";O:8:"stdClass":1:{s:1:"y";r:2;}}"
+diff --git a/ext/standard/var.c b/ext/standard/var.c
+index ef4b019fb6..c429763eb9 100644
+--- a/ext/standard/var.c
++++ b/ext/standard/var.c
+@@ -662,7 +662,11 @@ static inline zend_long php_add_var_hash(php_serialize_data_t data, zval *var) /
+ 
+ 	data->n += 1;
+ 
+-	if (!is_ref && (Z_TYPE_P(var) != IS_OBJECT || Z_REFCOUNT_P(var) == 1)) {
++	if (is_ref) {
++		/* pass */
++	} else if (Z_TYPE_P(var) != IS_OBJECT) {
++		return 0;
++	} else if (Z_REFCOUNT_P(var) == 1 && (Z_OBJ_P(var)->properties == NULL || GC_REFCOUNT(Z_OBJ_P(var)->properties) == 1)) {
+ 		return 0;
+ 	}
+ 
