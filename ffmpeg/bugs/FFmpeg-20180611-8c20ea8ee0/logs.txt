@@ -1,0 +1,11 @@
+commit 8c20ea8ee0f3f0b27aca0204c6dfaa4ac137e34e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jun 8 19:07:22 2018 +0200
+
+    avcodec/h264_slice: Fix overflow in recovery_frame computation
+    
+    Fixes: signed integer overflow: 15 + 2147483646 cannot be represented in type 'int'
+    Fixes: 8381/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_H264_fuzzer-6225533137321984
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

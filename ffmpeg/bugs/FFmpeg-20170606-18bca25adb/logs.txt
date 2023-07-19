@@ -1,0 +1,10 @@
+commit 18bca25adbae9d010d75f9fc197c0af656af758d
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 6 16:28:57 2017 +0200
+
+    avcodec/mpeg4videodec: Fix runtime error: signed integer overflow: 53098 * 40448 cannot be represented in type 'int'
+    
+    Fixes: 2106/clusterfuzz-testcase-minimized-6136503639998464
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

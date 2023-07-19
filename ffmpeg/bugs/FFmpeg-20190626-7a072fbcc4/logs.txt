@@ -1,0 +1,13 @@
+commit 7a072fbcc4c6f8ddbf37b131c2d141589118abcd
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 18 14:28:17 2019 +0200
+
+    avcodec/binkdsp: Fix integer overflows in idct
+    
+    Fixes: signed integer overflow: 3784 * 682038 cannot be represented in type 'int'
+    Fixes: 15265/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_BINK_fuzzer-5088311799971840
+    Fixes: 15268/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_BINK_fuzzer-5666502344179712
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Reviewed-by: Peter Ross <pross@xvid.org>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

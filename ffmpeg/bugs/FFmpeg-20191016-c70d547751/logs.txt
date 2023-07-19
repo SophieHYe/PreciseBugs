@@ -1,0 +1,11 @@
+commit c70d547751cb3b536f9bca8b060d94f527695b71
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 27 18:44:44 2019 +0200
+
+    avcodec/sbcdec: Fix integer overflows in sbc_synthesize_eight()
+    
+    Fixes: signed integer overflow: 518484152 + 1868182638 cannot be represented in type 'int'
+    Fixes: 17732/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SBC_fuzzer-5663738132168704
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

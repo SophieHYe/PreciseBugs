@@ -1,0 +1,16 @@
+diff --git a/libavcodec/aacdec_fixed.c b/libavcodec/aacdec_fixed.c
+index 9b2145c729..daaf765e0c 100644
+--- a/libavcodec/aacdec_fixed.c
++++ b/libavcodec/aacdec_fixed.c
+@@ -155,9 +155,9 @@ static void vector_pow43(int *coefs, int len)
+     for (i=0; i<len; i++) {
+         coef = coefs[i];
+         if (coef < 0)
+-            coef = -(int)ff_cbrt_tab_fixed[-coef];
++            coef = -(int)ff_cbrt_tab_fixed[(-coef) & 8191];
+         else
+-            coef = (int)ff_cbrt_tab_fixed[coef];
++            coef =  (int)ff_cbrt_tab_fixed[  coef  & 8191];
+         coefs[i] = coef;
+     }
+ }

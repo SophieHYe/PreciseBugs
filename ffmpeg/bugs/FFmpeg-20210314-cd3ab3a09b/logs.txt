@@ -1,0 +1,11 @@
+commit cd3ab3a09b7ea19ffef559efd4aae6292e196b42
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Feb 17 00:02:04 2021 +0100
+
+    avcodec/cfhd: Fix negative shift in cfhd_decode()
+    
+    Fixes: left shift of negative value -1
+    Fixes: 30714/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_CFHD_fuzzer-4867823371419648
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

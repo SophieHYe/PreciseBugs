@@ -1,0 +1,15 @@
+commit 49487045dde6f69194332aac51fd4e598e19c7b6
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jan 11 20:42:23 2023 +0100
+
+    avcodec/bink: Fix off by 1 error in ref end
+    
+    Fixes: out of array access
+    Fixes: 48567/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_BINK_fuzzer-6657932926517248
+    
+    Alterantivly to this it is possibly to allocate a bigger array
+    
+    Note: oss-fuzz assigned this issue to a unrelated theora bug so the bug number matches that
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

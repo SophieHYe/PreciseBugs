@@ -1,0 +1,13 @@
+diff --git a/libavcodec/mlpdsp.c b/libavcodec/mlpdsp.c
+index 32a4503b64..12bef3a721 100644
+--- a/libavcodec/mlpdsp.c
++++ b/libavcodec/mlpdsp.c
+@@ -79,7 +79,7 @@ void ff_mlp_rematrix_channel(int32_t *samples,
+ 
+         if (matrix_noise_shift) {
+             index &= access_unit_size_pow2 - 1;
+-            accum += noise_buffer[index] << (matrix_noise_shift + 7);
++            accum += noise_buffer[index] * (1 << (matrix_noise_shift + 7));
+             index += index2;
+         }
+ 

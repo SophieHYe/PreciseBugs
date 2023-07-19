@@ -1,0 +1,12 @@
+commit 7dc0943d4aa014e616e2f2a4802cb3da829f9420
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Sep 25 16:48:46 2019 +0200
+
+    avcodec/dstdec: Fix integer overflow in samples_per_frame computation
+    
+    Fixes: Timeout (? -> 2ms)
+    Fixes: 17616/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DST_fuzzer-5198057947267072
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

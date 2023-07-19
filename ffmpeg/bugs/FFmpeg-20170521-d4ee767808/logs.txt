@@ -1,0 +1,11 @@
+commit d4ee76780869c659a5d3b0815c56024ab260a81d
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 21 02:12:21 2017 +0200
+
+    avcodec/vp9block: fix runtime error: signed integer overflow: 196675 * 20670 cannot be represented in type 'int'
+    
+    Fixes: 1710/clusterfuzz-testcase-minimized-4837032931098624
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: "Ronald S. Bultje" <rsbultje@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

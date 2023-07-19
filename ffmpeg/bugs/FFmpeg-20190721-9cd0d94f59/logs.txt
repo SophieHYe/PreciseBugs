@@ -1,0 +1,11 @@
+commit 9cd0d94f59d05e7bfaae9690e827752e7717eda3
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 6 23:20:30 2019 +0200
+
+    avcodec/alsdec: Fix 2 integer overflows
+    
+    Fixes: signed integer overflow: 1270564968 + 904828220 cannot be represented in type 'int'
+    Fixes: 15402/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5755426823471104
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

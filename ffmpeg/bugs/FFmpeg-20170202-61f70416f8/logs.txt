@@ -1,0 +1,11 @@
+commit 61f70416f8542cc86c84ae6e0342ba10a35d7cba
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Feb 2 15:23:31 2017 +0100
+
+    avcodec/dca_lbr: Fix off by 1 error in freq check
+    
+    Fixes out of array read
+    Fixes: 510/clusterfuzz-testcase-5737865715646464
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

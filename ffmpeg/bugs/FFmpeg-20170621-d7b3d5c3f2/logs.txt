@@ -1,0 +1,12 @@
+commit d7b3d5c3f2e2ff1994762b5e09c05fbc33790b5b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 20 14:38:34 2017 +0200
+
+    avcodec/hevc_filter: Fix invalid shift
+    
+    Fixes: runtime error: left shift of negative value -1
+    
+    Fixes: 2299/clusterfuzz-testcase-minimized-4843509351710720
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

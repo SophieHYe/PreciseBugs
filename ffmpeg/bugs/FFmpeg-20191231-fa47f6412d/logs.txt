@@ -1,0 +1,11 @@
+commit fa47f6412dbf93b4865adf8c66618906a3274330
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Nov 25 21:50:57 2019 +0100
+
+    avcodec/ffwavesynth: Fix undefined overflow in wavesynth_synth_sample()
+    
+    Fixes: signed integer overflow: 2147464192 + 21176 cannot be represented in type 'int'
+    Fixes: 19042/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FFWAVESYNTH_fuzzer-5719828090585088
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

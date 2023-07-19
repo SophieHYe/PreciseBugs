@@ -1,0 +1,11 @@
+commit b946bd8ef2c7aeee09469a4901182a44f9b67189
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu May 25 16:35:40 2017 +0200
+
+    avcodec/diracdec: Fix off by 1 error in quant check
+    
+    Fixes: out of array read
+    Fixes: 1781/clusterfuzz-testcase-minimized-4617176877105152
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

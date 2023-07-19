@@ -1,0 +1,11 @@
+commit a3bd4b260eb9f0d5817f9b3d672844f127c51a0b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jun 19 23:27:21 2019 +0200
+
+    avcodec/alsdec: Fix integer overflow with shifting samples
+    
+    Fixes: signed integer overflow: -346039050 * 8 cannot be represented in type 'int'
+    Fixes: 15283/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5692700268953600
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

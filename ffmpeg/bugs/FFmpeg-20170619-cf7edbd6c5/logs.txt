@@ -1,0 +1,11 @@
+commit cf7edbd6c5d48d7302877352f7b60092d5b65243
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jun 19 14:04:32 2017 +0200
+
+    avcodec/aacdec_fixed: Check s for being too small
+    
+    Fixes: runtime error: shift exponent -8 is negative
+    Fixes: 2286/clusterfuzz-testcase-minimized-5711764169687040
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

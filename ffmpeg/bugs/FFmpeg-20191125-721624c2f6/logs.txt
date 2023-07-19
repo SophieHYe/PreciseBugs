@@ -1,0 +1,11 @@
+commit 721624c2f67545989626ba4413f7b8dbd7dff678
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Nov 5 22:27:04 2019 +0100
+
+    avcodec/ralf: Fix integer overflows with the filter coefficient in decode_channel()
+    
+    Fixes: signed integer overflow: 1145975808 - -1146173210 cannot be represented in type 'int'
+    Fixes: 18616/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RALF_fuzzer-5121296757424128
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

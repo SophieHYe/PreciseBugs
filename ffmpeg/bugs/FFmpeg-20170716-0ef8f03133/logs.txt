@@ -1,0 +1,11 @@
+commit 0ef8f03133a0bd83c74200a8cf30982c0f574016
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jul 14 00:45:29 2017 +0200
+
+    avcodec/aacdec_template: Fix undefined integer overflow in apply_tns()
+    
+    Fixes: runtime error: signed integer overflow: -2147483648 - 1202286525 cannot be represented in type 'int'
+    Fixes: 2071/clusterfuzz-testcase-minimized-6036414271586304
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,12 @@
+commit 9a9034958aec8c30ee898db23cb691863801ea1f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Oct 2 03:04:51 2018 +0200
+
+    avcodec/rasc: Fix off by 1 error in vertical coordinate
+    
+    Fixes: out of array read
+    Fixes: 10311/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RASC_fuzzer-4856330905452544
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

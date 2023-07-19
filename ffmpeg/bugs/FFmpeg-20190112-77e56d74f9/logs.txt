@@ -1,0 +1,11 @@
+commit 77e56d74f972537aecd5bc2c5c4111e1d6ad0963
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jan 4 20:00:38 2019 +0100
+
+    avcodec/h264_slice: Fix integer overflow in implicit_weight_table()
+    
+    Fixes: signed integer overflow: 2 * 2132811760 cannot be represented in type 'int'
+    Fixes: 11156/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_H264_fuzzer-6237685933408256
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

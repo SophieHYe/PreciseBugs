@@ -1,0 +1,11 @@
+commit 2b6964f764382742bb052a1ee3b7167cac35332f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Nov 25 03:15:16 2017 +0100
+
+    avcodec/dirac_dwt: Fix integer overflow in COMPOSE_FIDELITYi*
+    
+    Fixes: runtime error: signed integer overflow: -2143827186 - 7404944 cannot be represented in type 'int'
+    Fixes: 4354/clusterfuzz-testcase-minimized-4671122764201984
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,13 @@
+diff --git a/libavcodec/hevc_filter.c b/libavcodec/hevc_filter.c
+index 14e7c8dd50..b53f4cc721 100644
+--- a/libavcodec/hevc_filter.c
++++ b/libavcodec/hevc_filter.c
+@@ -470,7 +470,7 @@ static int get_pcm(HEVCContext *s, int x, int y)
+ 
+ #define TC_CALC(qp, bs)                                                 \
+     tctable[av_clip((qp) + DEFAULT_INTRA_TC_OFFSET * ((bs) - 1) +       \
+-                    (tc_offset >> 1 << 1),                              \
++                    (tc_offset & -2),                                   \
+                     0, MAX_QP + DEFAULT_INTRA_TC_OFFSET)]
+ 
+ static void deblocking_filter_CTB(HEVCContext *s, int x0, int y0)

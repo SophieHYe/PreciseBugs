@@ -1,0 +1,13 @@
+commit 182d7a74276ea70aec6d3d7bd9a1da3d327358f2
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Oct 7 23:22:59 2020 +0200
+
+    avcodec/h264_slice: fix undefined integer overflow with POC in error concealment
+    
+    Alternatively the POC could be changed to 64bit. the large values seem to be within what is allowed.
+    
+    Fixes: signed integer overflow: 2147483646 + 2 cannot be represented in type 'int'
+    Fixes: 26076/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_H264_fuzzer-5711127201447936
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

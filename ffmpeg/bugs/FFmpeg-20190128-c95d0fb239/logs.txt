@@ -1,0 +1,13 @@
+commit c95d0fb23917c35886f3b62daa05af20d2700a1e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jan 15 00:02:25 2019 +0100
+
+    avcodec/ilbcdec: Fix integer overflow in construct_vector()
+    
+    webrtc contains explicit code to ignore the undefined behavior (RTC_NO_SANITIZE / OverflowingAddS32S32ToS32())
+    
+    Probably fixes: Integer overflow (unreproducable here)
+    Probably fixes: 12215/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ILBC_fuzzer-5767142427852800
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

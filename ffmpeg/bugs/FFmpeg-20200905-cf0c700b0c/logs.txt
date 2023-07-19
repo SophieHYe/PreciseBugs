@@ -1,0 +1,11 @@
+commit cf0c700b0c25f5d9fe50dd27086a06812822f11a
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jun 22 00:09:05 2020 +0200
+
+    avformat/avidec: Fix io_fsize overflow
+    
+    Fixes: signed integer overflow: 7958120835074169528 * 9 cannot be represented in type 'long long'
+    Fixes: 23382/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-6230683226996736
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

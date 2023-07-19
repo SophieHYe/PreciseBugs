@@ -1,0 +1,11 @@
+commit 732f9764561558a388c05483ed6a722a5c67b05c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Aug 28 00:30:33 2017 +0200
+
+    avcodec/snowdec: Fix integer overflow in decode_subband_slice_buffered()
+    
+    Fixes: runtime error: signed integer overflow: 267 * 8388608 cannot be represented in type 'int'
+    Fixes: 2743/clusterfuzz-testcase-minimized-5820652076400640
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

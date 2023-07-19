@@ -1,0 +1,11 @@
+commit 0c61661a2cbe1b8b284c80ada1c2fdddf4992cad
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 27 17:01:38 2019 +0200
+
+    avcodec/g729postfilter: Fix undefined intermediate pointers
+    
+    Fixes: index -49 out of bounds for type 'int16_t [192]'
+    Fixes: 17689/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ACELP_KELVIN_fuzzer-5756275014500352
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

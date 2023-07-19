@@ -1,0 +1,12 @@
+commit 051d11f659455f38be7ce40e2dc9d03b082dcd4d
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Feb 20 22:26:18 2020 +0100
+
+    avcodec/pcm: Fix invalid shift in AV_CODEC_ID_PCM_LXF
+    
+    Fixes: left shift of 233 by 24 places cannot be represented in type 'int'
+    Fixes: 20736/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_PCM_LXF_fuzzer-4829212685107200
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

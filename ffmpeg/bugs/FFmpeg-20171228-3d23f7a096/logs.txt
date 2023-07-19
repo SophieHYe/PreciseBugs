@@ -1,0 +1,11 @@
+commit 3d23f7a0969bf76ad6dcdc2c4a5cd3ae884745a8
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Dec 26 23:24:44 2017 +0100
+
+    avcodec/flacdec: Fix overflow in multiplication in decode_subframe_fixed()
+    
+    Fixes: signed integer overflow: 2 * 1629495328 cannot be represented in type 'int'
+    Fixes: 4716/clusterfuzz-testcase-minimized-5835915940331520
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

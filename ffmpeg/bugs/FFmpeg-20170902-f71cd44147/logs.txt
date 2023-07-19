@@ -1,0 +1,11 @@
+commit f71cd44147e7a914f80fcfacca46c9e7b0374362
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 1 19:56:11 2017 +0200
+
+    avcodec/dirac_dwt: Fix multiple overflows in 9/7 lifting
+    
+    Fixes: runtime error: signed integer overflow: 1073901567 + 1073901567 cannot be represented in type 'int'
+    Fixes: 3124/clusterfuzz-testcase-minimized-454643435752652
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

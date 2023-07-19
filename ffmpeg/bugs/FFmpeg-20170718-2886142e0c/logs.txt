@@ -1,0 +1,11 @@
+commit 2886142e0c3b5f4304c6e2a2bd282770a8a47f93
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 15 22:22:52 2017 +0200
+
+    avcodec/aacdec_template (fixed point): Check gain in decode_cce() to avoid undefined shifts later
+    
+    Fixes: runtime error: shift exponent 47 is too large for 32-bit type 'int'
+    Fixes: 2581/clusterfuzz-testcase-minimized-4681474395602944
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

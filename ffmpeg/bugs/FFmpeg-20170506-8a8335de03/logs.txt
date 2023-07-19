@@ -1,0 +1,10 @@
+commit 8a8335de030aa6cb6356bb16c7d3aefc5a80e362
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat May 6 22:31:23 2017 +0200
+
+    avcodec/dds: Fix runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+    
+    Fixes: 1380/clusterfuzz-testcase-minimized-650122545122508
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

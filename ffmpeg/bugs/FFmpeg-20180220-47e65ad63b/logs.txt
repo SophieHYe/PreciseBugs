@@ -1,0 +1,11 @@
+commit 47e65ad63b3d067445c4de41a7718b83fc07767c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Feb 18 21:51:38 2018 +0100
+
+    avcodec/diracdec: Fix integer overflow in mv computation
+    
+    Fixes: signed integer overflow: -2072 + -2147483646 cannot be represented in type 'int'
+    Fixes: 6097/clusterfuzz-testcase-minimized-5034145253163008
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

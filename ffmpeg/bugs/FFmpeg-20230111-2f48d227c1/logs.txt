@@ -1,0 +1,11 @@
+commit 2f48d227c153fa6f0a2156f3e8d18ea1bfedf18d
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jan 6 23:36:12 2023 +0100
+
+    avcodec/eac3dec: avoid float noise in fixed mode addition to overflow
+    
+    Fixes: 2.28595e+09 is outside the range of representable values of type 'int'
+    Fixes: 54644/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_AC3_FIXED_fuzzer-4816961584627712
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

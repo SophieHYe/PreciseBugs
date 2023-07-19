@@ -1,0 +1,11 @@
+commit b1aecad9eae900b9c3054392994d150d5ae572c5
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jan 22 23:11:47 2020 +0100
+
+    avcodec/dpcm: Fix integer overflow in AV_CODEC_ID_GREMLIN_DPCM
+    
+    Fixes: signed integer overflow: -2147479324 + -32568 cannot be represented in type 'int'
+    Fixes: 20103/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_GREMLIN_DPCM_fuzzer-5667667579240448
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

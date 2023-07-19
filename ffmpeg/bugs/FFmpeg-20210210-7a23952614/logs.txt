@@ -1,0 +1,11 @@
+commit 7a239526146934a50c1cebd25e079a1027db545c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jan 31 15:51:40 2021 +0100
+
+    avutil/mathematics: Fix undefined negation in av_compare_ts()
+    
+    Fixes: negation of -9223372036854775808 cannot be represented in type 'int64_t' (aka 'long'); cast to an unsigned type to negate this value to itself
+    Fixes: 29437/clusterfuzz-testcase-minimized-ffmpeg_dem_MOV_fuzzer-4748510022991872
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

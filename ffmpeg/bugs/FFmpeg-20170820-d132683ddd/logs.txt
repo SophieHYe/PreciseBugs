@@ -1,0 +1,11 @@
+commit d132683ddd4050d3fe103ca88c73258c3442dc34
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Aug 17 20:32:03 2017 +0200
+
+    avcodec/snowdec: Fix off by 1 error
+    
+    Fixes: runtime error: index 4 out of bounds for type 'int8_t [4]'
+    Fixes: 3023/clusterfuzz-testcase-minimized-6421736130084864
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

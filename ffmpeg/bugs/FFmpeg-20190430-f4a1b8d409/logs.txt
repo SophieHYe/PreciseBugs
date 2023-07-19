@@ -1,0 +1,11 @@
+commit f4a1b8d409639b2394589efe20ad55410cce391c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Apr 20 01:05:44 2019 +0200
+
+    avcodec/truemotion2: Fix 2 integer overflows in tm2_update_block()
+    
+    Fixes: signed integer overflow: -2147483648 + -1 cannot be represented in type 'int'
+    Fixes: 14107/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_TRUEMOTION2_fuzzer-5694078680825856
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

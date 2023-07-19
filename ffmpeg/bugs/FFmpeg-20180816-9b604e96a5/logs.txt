@@ -1,0 +1,11 @@
+commit 9b604e96a51a1fca92bbabfe4f7ac53f0470ee41
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Aug 12 23:06:55 2018 +0200
+
+    avcodec/shorten: Fix signed 32bit overflow in shift in shorten_decode_frame()
+    
+    Fixes: runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+    Fixes: 9480/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SHORTEN_fuzzer-6647324284551168 -rss_limit_mb=2000
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

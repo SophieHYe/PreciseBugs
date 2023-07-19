@@ -1,0 +1,16 @@
+commit ae3d6a337ad25527bcd3172e3885e45fadf9908c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Aug 8 19:48:19 2019 +0200
+
+    avcodec/alac: Fix multiple integer overflows in lpc_prediction()
+    
+    Fixes: signed integer overflow: 2088795537 + 2147254401 cannot be represented in type 'int'
+    Fixes: signed integer overflow: -1500363496 + -1295351808 cannot be represented in type 'int'
+    Fixes: signed integer overflow: -79560 * 32640 cannot be represented in type 'int'
+    Fixes: signed integer overflow: 2088910005 + 2088796058 cannot be represented in type 'int'
+    Fixes: signed integer overflow: -117258064 - 2088725225 cannot be represented in type 'int'
+    Fixes: signed integer overflow: 2088725225 - -117258064 cannot be represented in type 'int'
+    Fixes: 15739/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALAC_fuzzer-5630664122040320
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

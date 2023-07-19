@@ -1,0 +1,11 @@
+commit 3935c891e96c0819439da43d1b862652bbbdf065
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Feb 1 22:52:13 2020 +0100
+
+    avcodec/flacdsp_template: Fix invalid shifts in decorrelate
+    
+    Fixes: left shift of negative value -2
+    Fixes: 20303/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FLAC_fuzzer-5096829297623040
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

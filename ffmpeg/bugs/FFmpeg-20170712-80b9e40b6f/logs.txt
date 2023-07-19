@@ -1,0 +1,11 @@
+commit 80b9e40b6f1e15db9f36c195e7375e65f6b4924f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jul 9 15:19:18 2017 +0200
+
+    avcodec/aacps (fixed point): Fix multiple signed integer overflows
+    
+    Fixes: runtime error: signed integer overflow: 1421978265 - -1810326882 cannot be represented in type 'int'
+    Fixes: 2527/clusterfuzz-testcase-minimized-5260915396050944
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

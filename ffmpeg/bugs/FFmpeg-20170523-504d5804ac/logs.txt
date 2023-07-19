@@ -1,0 +1,11 @@
+commit 504d5804ac5337f35d16aacbef5f7eb5348434e9
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue May 23 03:43:51 2017 +0200
+
+    avcodec/g723_1: Fix runtime error: signed integer overflow: -1013481472 + -1139123755 cannot be represented in type 'int'
+    
+    See: LsptoA() and L_add()
+    Fixes: 1758/clusterfuzz-testcase-minimized-6054857184116736
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,13 @@
+commit ae021c1239ec3bc0a30dc5a4720569071599ece4
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jun 24 01:01:02 2019 +0200
+
+    avcodec/qdm2: Do not read out of array in fix_coding_method_array()
+    
+    Instead we ask for a sample, its unclear what to do in this case.
+    
+    Fixes: index 30 out of bounds for type 'int8_t [30][64]'
+    Fixes: 15339/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_QDM2_fuzzer-5749441484554240
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

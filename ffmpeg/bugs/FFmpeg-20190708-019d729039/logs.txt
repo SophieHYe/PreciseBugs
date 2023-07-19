@@ -1,0 +1,11 @@
+commit 019d729039aaa164152035864d65d77e53df1c98
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 30 23:28:13 2019 +0200
+
+    avcodec/ilbcdec: Simplify use of unsigned and fix more undefined overflows
+    
+    Fixes: signed integer overflow: 2147475672 + 8192 cannot be represented in type 'int'
+    Fixes: 15415/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ILBC_fuzzer-5712074128228352
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

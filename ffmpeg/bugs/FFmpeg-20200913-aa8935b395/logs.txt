@@ -1,0 +1,11 @@
+commit aa8935b395162f8438d1f055e671e92685ed1586
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jul 19 16:54:28 2020 +0200
+
+    avformat/cdg: Fix integer overflow in duration computation
+    
+    Fixes: signed integer overflow: 8398407 * 300 cannot be represented in type 'int'
+    Fixes: 23914/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-4702539290509312
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

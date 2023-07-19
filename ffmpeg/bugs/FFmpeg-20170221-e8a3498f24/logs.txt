@@ -1,0 +1,10 @@
+commit e8a3498f2452ba2be605b1ffb5974143095aacf1
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Feb 21 00:11:19 2017 +0100
+
+    avcodec/dca_xll: Fix runtime error: signed integer overflow: -1073741824 * 32768 cannot be represented in type 'int'
+    
+    Fixes: 629/clusterfuzz-testcase-6697457381539840
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

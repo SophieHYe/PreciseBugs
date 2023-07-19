@@ -1,0 +1,13 @@
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 3fc5a1e8ab..139bcb4b5c 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -5098,7 +5098,7 @@ static int mov_read_sidx(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+         if (frag_stream_info)
+             frag_stream_info->sidx_pts = timestamp;
+ 
+-        if (av_sat_add64(offset, size) != offset + size ||
++        if (av_sat_add64(offset, size) != offset + (uint64_t)size ||
+             av_sat_add64(pts, duration) != pts + (uint64_t)duration
+         )
+             return AVERROR_INVALIDDATA;

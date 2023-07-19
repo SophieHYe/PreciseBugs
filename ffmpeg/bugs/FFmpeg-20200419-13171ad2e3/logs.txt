@@ -1,0 +1,11 @@
+commit 13171ad2e304b2a7d959429527b98c68ec5ea320
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Feb 2 21:01:12 2020 +0100
+
+    avcodec/rv40dsp: Fix integer overflows in rv40_weight_func_*()
+    
+    Fixes: signed integer overflow: 40550400 * 128 cannot be represented in type 'int'
+    Fixes: 20331/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RV40_fuzzer-5676685725007872
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

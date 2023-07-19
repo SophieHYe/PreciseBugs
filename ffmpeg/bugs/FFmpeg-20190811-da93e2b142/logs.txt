@@ -1,0 +1,11 @@
+commit da93e2b14218c4ab0fda60e21882a4633aac5748
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jul 10 00:04:02 2019 +0200
+
+    avcodec/aacdec_template: fix integer overflow in imdct_and_windowing()
+    
+    Fixes: signed integer overflow: 2147483645 + 4 cannot be represented in type 'int'
+    Fixes: 15418/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_AAC_FIXED_fuzzer-5685269069561856
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 606c7148231404544005c0827b83c165dd6b39a8
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 5 13:15:34 2018 +0200
+
+    avcodec/shorten: Fix undefined shift in fix_bitshift()
+    
+    Fixes: left shift of negative value -9
+    Fixes: 8571/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SHORTEN_fuzzer-5715966875926528
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

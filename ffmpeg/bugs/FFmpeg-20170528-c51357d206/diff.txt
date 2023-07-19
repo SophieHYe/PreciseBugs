@@ -1,0 +1,13 @@
+diff --git a/libavcodec/wavpack.c b/libavcodec/wavpack.c
+index 3b3c6b2d16..8c621500b7 100644
+--- a/libavcodec/wavpack.c
++++ b/libavcodec/wavpack.c
+@@ -310,7 +310,7 @@ static float wv_get_value_float(WavpackFrameContext *s, uint32_t *crc, int S)
+     }
+ 
+     if (S) {
+-        S  *= 1 << s->float_shift;
++        S  *= 1U << s->float_shift;
+         sign = S < 0;
+         if (sign)
+             S = -S;

@@ -1,0 +1,12 @@
+commit 37708cbae8d6887b80f58a70a1dfa01af6ea2c85
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jun 21 23:45:36 2019 +0200
+
+    avcodec/flicvideo: Fix off by 1 error in flic_decode_frame_24BPP()
+    
+    Fixes: out of array access
+    Fixes: 15360/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FLIC_fuzzer-5653837190266880
+    Fixes: 15412/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FLIC_fuzzer-5740537648250880
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

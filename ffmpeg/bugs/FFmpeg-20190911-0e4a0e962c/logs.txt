@@ -1,0 +1,12 @@
+commit 0e4a0e962cb0e422d2a350b875fc1e38d7b842a3
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Aug 23 00:23:52 2019 +0200
+
+    avcodec/mpeg4videodec: Fix integer overflow in mpeg4_decode_studio_block()
+    
+    Fixes: signed integer overflow: 24023040 * 112 cannot be represented in type 'int'
+    Fixes: 16570/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_MPEG4_fuzzer-5173275211071488
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Kieran Kunhya <kierank@obe.tv>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

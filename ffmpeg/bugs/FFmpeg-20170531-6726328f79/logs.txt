@@ -1,0 +1,10 @@
+commit 6726328f7940a76c43b4d97ac37ababf363d042f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed May 31 22:02:07 2017 +0200
+
+    avcodec/hevc_ps: Fix runtime error: signed integer overflow: 2147483628 + 256 cannot be represented in type 'int'
+    
+    Fixes: 1909/clusterfuzz-testcase-minimized-6732072662073344
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

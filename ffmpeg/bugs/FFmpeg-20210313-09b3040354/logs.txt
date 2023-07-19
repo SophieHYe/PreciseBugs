@@ -1,0 +1,11 @@
+commit 09b304035423409ce18d731995fa3b921d54f9b5
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jan 31 22:42:54 2021 +0100
+
+    avformat/cinedec: Fix index_entries size check
+    
+    Fixes: out of array access
+    Fixes: 29868/clusterfuzz-testcase-minimized-ffmpeg_dem_CINE_fuzzer-5692001957445632
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 0181b202cc42133eacd74bad33745cf1ba699e6b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Aug 26 14:08:51 2017 +0200
+
+    avcodec/aacpsdsp_template: Fix undefined integer overflow in ps_add_squares_c()
+    
+    Fixes runtime error: signed integer overflow: 1997494407 + 613252359 cannot be represented in type 'int'
+    Fixes: 2014/clusterfuzz-testcase-minimized-5186337030275072
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

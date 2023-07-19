@@ -1,0 +1,11 @@
+commit b085b400becb93ccc68d786ab738b1fc50408b89
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Mar 28 00:12:17 2022 +0200
+
+    avcodec/apedec: fix a integer overflow in long_filter_high_3800()
+    
+    Fixes: signed integer overflow: -2146549696 - 3923884 cannot be represented in type 'int'
+    Fixes: 45907/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-5992380584558592
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

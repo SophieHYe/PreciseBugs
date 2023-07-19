@@ -1,0 +1,11 @@
+commit 74c1c22d7f0d25f527ed2ebf62493be5ad52c972
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jul 24 15:48:37 2017 +0200
+
+    avcodec/hevc_ps: fix integer overflow in log2_parallel_merge_level_minus2
+    
+    Fixes: runtime error: signed integer overflow: -2147483647 - 2 cannot be represented in type 'int'
+    Fixes: 2702/clusterfuzz-testcase-minimized-4511932591636480
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

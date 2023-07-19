@@ -1,0 +1,13 @@
+diff --git a/libavcodec/mlpdsp.c b/libavcodec/mlpdsp.c
+index 4e3a16c781..32a4503b64 100644
+--- a/libavcodec/mlpdsp.c
++++ b/libavcodec/mlpdsp.c
+@@ -117,7 +117,7 @@ int32_t ff_mlp_pack_output(int32_t lossless_check_data,
+                           (1U << output_shift[mat_ch]);
+             lossless_check_data ^= (sample & 0xffffff) << mat_ch;
+             if (is32)
+-                *data_32++ = sample * 256;
++                *data_32++ = sample * 256U;
+             else
+                 *data_16++ = sample >> 8;
+         }

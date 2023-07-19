@@ -1,0 +1,10 @@
+commit 40fa6a2fa2c255293a780a194eecae5df52644a1
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 21 21:49:54 2017 +0200
+
+    avcodec/mjpegdec: Fix runtime error: signed integer overflow: -32767 * 130560 cannot be represented in type 'int'
+    
+    Fixes: 1724/clusterfuzz-testcase-minimized-4842395432648704
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

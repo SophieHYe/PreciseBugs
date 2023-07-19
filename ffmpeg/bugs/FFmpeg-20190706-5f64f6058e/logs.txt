@@ -1,0 +1,11 @@
+commit 5f64f6058e0c23641a68ce7dfe47b1f55efd401c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jun 21 00:47:17 2019 +0200
+
+    avcodec/alsdec: Fix integer overflow with buffer number
+    
+    Fixes: signed integer overflow: 65313 * 65313 cannot be represented in type 'int'
+    Fixes: 15290/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5738074249625600
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

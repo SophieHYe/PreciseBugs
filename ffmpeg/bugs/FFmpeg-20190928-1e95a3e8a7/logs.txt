@@ -1,0 +1,14 @@
+commit 1e95a3e8a7250060befd9a5fba69151bb2a6690c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Sep 2 22:59:55 2019 +0200
+
+    avcodec/apedec: Fix several integer overflows in predictor_update_filter() and do_apply_filter()
+    
+    Fixes: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    Fixes: signed integer overflow: -14527961 - 2147483425 cannot be represented in type 'int'
+    Fixes: 16380/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-5645957131141120
+    Fixes: 16968/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-5716169901735936
+    Fixes: 17074/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-5198710497083392
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 53a502206a9ea698926694d7252526fe00d1ea44
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed May 17 15:51:46 2017 +0200
+
+    avcodec/aacdec_template: Fix fixed point scale in decode_cce()
+    
+    Fixes: runtime error: shift exponent 1073741824 is too large for 32-bit type 'int'
+    Fixes: 1654/clusterfuzz-testcase-minimized-5151903795118080
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

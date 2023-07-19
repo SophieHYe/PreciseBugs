@@ -1,0 +1,10 @@
+commit d1992448d37f7cfa2acda5cc729dc0ff1b019390
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 13 16:25:59 2017 +0200
+
+    avcodec/aacsbr_fixed: Check shift in sbr_hf_assemble()
+    
+    Fixes: runtime error: shift exponent -10 is negative
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

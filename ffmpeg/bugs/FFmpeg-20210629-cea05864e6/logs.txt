@@ -1,0 +1,11 @@
+commit cea05864e65db9a2dc8af82b2c63fb8f03c5f876
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jun 21 22:59:04 2021 +0200
+
+    avcodec/cpia: Fix missing src_size update
+    
+    Fixes: out of array read
+    Fixes: 35210/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_CPIA_fuzzer-5669199688105984
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

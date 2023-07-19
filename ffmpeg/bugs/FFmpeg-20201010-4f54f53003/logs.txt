@@ -1,0 +1,11 @@
+commit 4f54f530039db149808478796e8389c14eb73095
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Sep 24 21:59:04 2020 +0200
+
+    avcodec/takdsp: Fix negative shift in decorrelate_sf()
+    
+    Fixes: left shift of negative value -4
+    Fixes: 25723/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_TAK_fuzzer-6250580752990208
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

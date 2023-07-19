@@ -1,0 +1,10 @@
+commit e66488252335d3e7870c72d1ac7040e8c1853f07
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat May 13 01:12:35 2017 +0200
+
+    avcodec/hq_hqadsp: Fix runtime error: signed integer overflow: 80359 * 30274 cannot be represented in type 'int'
+    
+    Fixes: 1507/clusterfuzz-testcase-minimized-4955228300378112
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

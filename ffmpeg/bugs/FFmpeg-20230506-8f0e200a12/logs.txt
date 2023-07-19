@@ -1,0 +1,11 @@
+commit 8f0e200a12c25e288acd31eff0a5000bc74aa34e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Apr 16 17:45:41 2023 +0200
+
+    avcodec/dpcm: fix undefined interger overflow in wady
+    
+    Fixes: signed integer overflow: -2147375930 + -133875 cannot be represented in type 'int'
+    Fixes: 45982/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_WADY_DPCM_fuzzer-6703727013920768
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,14 @@
+commit cca0436efc4ea662087690f5d1b0834fd39b1559
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Apr 24 22:55:55 2020 +0200
+
+    avcodec/dirac_vlc: Fix integer overflow in ff_dirac_golomb_read_32/16bit()
+    
+    Fixes: left shift of 1073741824 by 1 places cannot be represented in type 'int32_t' (aka 'int')
+    Fixes: 21245/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DIRAC_fuzzer-5683334274613248
+    
+    Change to int16_t suggested by Lynne
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Lynne <dev@lynne.ee>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 0a87be404ab7e3f47e67e79160dcc9623e36835b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jun 14 23:49:23 2017 +0200
+
+    avcodec/mpeg4videodec: Fix integer overflow in num_sprite_warping_points=2 case
+    
+    Fixes: runtime error: signed integer overflow: 131072 + 2147352576 cannot be represented in type 'int'
+    Fixes: 2192/clusterfuzz-testcase-minimized-5370387988742144
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

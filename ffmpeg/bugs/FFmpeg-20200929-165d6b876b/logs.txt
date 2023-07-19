@@ -1,0 +1,11 @@
+commit 165d6b876b602ec0f6122867b281b8dd6a5f8a5f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 25 23:14:10 2020 +0200
+
+    avcodec/pgxdec: Fix invalid shift in write_frame_*
+    
+    Fixes: left shift of negative value -121
+    Fixes: 23911/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_PGX_fuzzer-4986800258154496
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

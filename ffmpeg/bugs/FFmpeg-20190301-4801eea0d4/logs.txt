@@ -1,0 +1,11 @@
+commit 4801eea0d465cd54670e7c19322705544e3e7524
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Feb 19 00:05:51 2019 +0100
+
+    avcodec/jpeg2000dwt: Fix integer overflow in dwt_decode97_int()
+    
+    Fixes: runtime error: signed integer overflow: 2147483598 + 128 cannot be represented in type 'int'
+    Fixes: 12926/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_JPEG2000_fuzzer-5705100733972480
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit f30be1ec9856551d96f3876eec5f8b8abf456b81
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jun 20 19:09:11 2019 +0200
+
+    avcodec/alsdec: Fix invalid shift in multiply()
+    
+    Fixes: shift exponent -24 is negative
+    Fixes: 15292/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5768533318828032
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

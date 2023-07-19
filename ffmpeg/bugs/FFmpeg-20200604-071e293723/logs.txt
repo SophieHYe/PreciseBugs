@@ -1,0 +1,11 @@
+commit 071e2937236945c168ab99d3e3b01539194466dd
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 24 00:24:40 2020 +0200
+
+    avcodec/vp9dsp_template: Fix integer overflow(s) in iadst16_1d()
+    
+    Fixes: signed integer overflow: 1080285923 - -1130879337 cannot be represented in type 'int'
+    Fixes: 22002/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_VP9_fuzzer-6260237310099456
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

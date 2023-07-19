@@ -1,0 +1,11 @@
+commit 5e9a13a5a33bf7566591216e335f2529612100bb
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Dec 2 21:48:04 2017 +0100
+
+    avcodec/dirac_dwt: Fix integer overflows in COMPOSE_DAUB97*
+    
+    Fixes: 4478/clusterfuzz-testcase-minimized-4752113767809024
+    Fixes: runtime error: signed integer overflow: -2147483626 + -319489 cannot be represented in type 'int'
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

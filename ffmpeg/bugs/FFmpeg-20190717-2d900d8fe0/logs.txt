@@ -1,0 +1,11 @@
+commit 2d900d8fe0aaf9c984e024956eb537ecdfe2c949
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 6 11:51:09 2019 +0200
+
+    avcodec/dnxhd_parser: Fix parser when input does not have nicely sized packets
+    
+    Fixes: out of array access
+    Fixes: 15522/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DNXHD_fuzzer-5747756078989312
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

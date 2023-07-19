@@ -1,0 +1,11 @@
+commit 2f888771cd1ce8d68d4b18a1009650c1f260aaf2
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Nov 9 19:59:27 2018 +0100
+
+    avcodec/shorten: Fix integer overflow with offset
+    
+    Fixes: signed integer overflow: -1625810908 - 582229060 cannot be represented in type 'int'
+    Fixes: 10977/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SHORTEN_fuzzer-5732602018267136
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

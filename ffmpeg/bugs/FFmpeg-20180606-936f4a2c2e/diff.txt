@@ -1,0 +1,13 @@
+diff --git a/libavcodec/mjpegdec.c b/libavcodec/mjpegdec.c
+index 22ca69f841..d1dca84d36 100644
+--- a/libavcodec/mjpegdec.c
++++ b/libavcodec/mjpegdec.c
+@@ -1078,7 +1078,7 @@ static int ljpeg_decode_rgb_scan(MJpegDecodeContext *s, int nb_components, int p
+                     return -1;
+ 
+                 left[i] = buffer[mb_x][i] =
+-                    mask & (pred + (dc * (1 << point_transform)));
++                    mask & (pred + (unsigned)(dc * (1 << point_transform)));
+             }
+ 
+             if (s->restart_interval && !--s->restart_count) {

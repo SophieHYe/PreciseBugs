@@ -1,0 +1,11 @@
+commit 8e50bd61e4ff97bd7fc6cbd7ec4ca514e17a70c4
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jan 31 02:50:18 2018 +0100
+
+    avcodec/wavpack: Fix integer overflow in FFABS
+    
+    Fixes: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    Fixes: 5396/clusterfuzz-testcase-minimized-6558555529281536
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

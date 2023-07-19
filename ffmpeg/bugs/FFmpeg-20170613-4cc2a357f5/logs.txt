@@ -1,0 +1,11 @@
+commit 4cc2a357f5dce9bad36b59fb31ba5cf61cc56272
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 13 17:10:30 2017 +0200
+
+    avcodec/aacsbr_fixed: Fix signed integer overflow in sbr_hf_inverse_filter()
+    
+    Fixes: runtime error: signed integer overflow: 2147483584 + 128 cannot be represented in type 'int'
+    Fixes: 2164/clusterfuzz-testcase-minimized-4715936172998656
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

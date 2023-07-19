@@ -1,0 +1,12 @@
+commit 66f0c958bfd5475658b432d1af4d2e174b2dfcda
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Nov 4 01:19:19 2017 +0100
+
+    avcodec/exr: fix undefined shift in pxr24_uncompress()
+    
+    Fixes: runtime error: left shift of 255 by 24 places cannot be represented in type 'int'
+    Fixes: 3787/clusterfuzz-testcase-minimized-5728764920070144
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

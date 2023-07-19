@@ -1,0 +1,11 @@
+commit 6ca82975b7a8eaf676a52738ec8e7e36732327cc
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Apr 27 02:27:16 2017 +0200
+
+    avcodec/mdec: Fix runtime error: left shift of negative value -127
+    
+    Fixes undefined behavior
+    Fixes: 1275/clusterfuzz-testcase-minimized-6718162017976320
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit c7ccbf40edb81d40727cca3a7ffd1848d3ed880a
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Sep 5 20:47:04 2019 +0200
+
+    avcodec/ffwavesynth: Fix integer overflow in timestamps
+    
+    Fixes: signed integer overflow: 9223371075321077760 * 2 cannot be represented in type 'long'
+    Fixes: 16447/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FFWAVESYNTH_fuzzer-5698937431785472
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

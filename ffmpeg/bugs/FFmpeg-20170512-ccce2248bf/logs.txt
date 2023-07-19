@@ -1,0 +1,10 @@
+commit ccce2248bf56692fc7bd436ca2c9acca772d486a
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed May 10 14:50:40 2017 +0200
+
+    avcodec/vp8dsp: vp7_luma_dc_wht_c: Fix multiple runtime error: signed integer overflow: -1366381240 + -1262413604 cannot be represented in type 'int'
+    
+    Fixes: 1440/clusterfuzz-testcase-minimized-5785716111966208
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

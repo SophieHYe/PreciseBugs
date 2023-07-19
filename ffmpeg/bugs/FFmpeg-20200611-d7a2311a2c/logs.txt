@@ -1,0 +1,11 @@
+commit d7a2311a2c5be1e861c3df618d295e7eced8e84b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jun 5 18:22:51 2020 +0200
+
+    avcodec/movtextdec: Fix shift overflows in mov_text_init()
+    
+    Fixes: left shift of 243 by 24 places cannot be represented in type 'int'
+    Fixes: 22716/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_MOVTEXT_fuzzer-5704263425851392
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

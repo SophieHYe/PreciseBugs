@@ -1,0 +1,11 @@
+commit 3b10bb8772c76177cc47b8d15a6970f19dd11039
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jul 2 19:11:46 2018 +0200
+
+    avcodec/shorten: Fix undefined addition in shorten_decode_frame()
+    
+    Fixes: signed integer overflow: 1139785606 + 1454196085 cannot be represented in type 'int'
+    Fixes: 8937/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SHORTEN_fuzzer-6202943597445120
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

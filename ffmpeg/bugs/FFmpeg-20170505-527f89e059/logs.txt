@@ -1,0 +1,12 @@
+commit 527f89e05922e840083ac6d49eeb838b1e350dd4
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri May 5 13:16:07 2017 +0200
+
+    avcodec/aacps: Fix undefined behavior
+    
+    Fixes: 1337/clusterfuzz-testcase-minimized-5212314171080704
+    
+    Fixes the existence of a potentially invalid pointer intermediate
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

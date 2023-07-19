@@ -1,0 +1,11 @@
+commit c6282141cba20934d9801f31134872fabbd6ba3e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Oct 10 04:25:50 2018 +0200
+
+    avcodec/ra144: Fix integer overflow in add_wav()
+    
+    Fixes: signed integer overflow: -2144033225 + -5208934 cannot be represented in type 'int'
+    Fixes: 10633/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RA_144_fuzzer-5679133791617024
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

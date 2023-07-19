@@ -1,0 +1,11 @@
+commit 75d520e33704447f1b29ac47fd9e40994a6bc659
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Feb 20 19:56:39 2020 +0100
+
+    avcodec/sonic: Fix several integer overflows
+    
+    Fixes: signed integer overflow: 2129689466 + 2129689466 cannot be represented in type 'int'
+    Fixes: 20715/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_SONIC_fuzzer-5155263109922816
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 62c5949beca2c95d6af5c74985467438d2295a66
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue May 9 19:38:46 2017 +0200
+
+    avcodec/cllc: Check prefix
+    
+    Fixes: runtime error: left shift of 1610706944 by 1 places cannot be represented in type 'int'
+    Fixes: 1421/clusterfuzz-testcase-minimized-6239947507892224
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

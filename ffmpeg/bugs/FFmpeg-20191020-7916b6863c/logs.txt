@@ -1,0 +1,11 @@
+commit 7916b6863caec55d7e64758a1bfe436834f2faf6
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Sep 30 00:35:15 2019 +0200
+
+    avcodec/ffwavesynth: Fix integer overflows in pink noise addition
+    
+    Fixes: signed integer overflow: -1795675744 + -1926578528 cannot be represented in type 'int'
+    Fixes: 17741/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FFWAVESYNTH_fuzzer-5131336402075648
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

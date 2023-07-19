@@ -1,0 +1,12 @@
+commit 62ad08cef993f7a103b6d3a5498f6fa49190e085
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 18 14:28:17 2019 +0200
+
+    avcodec/bink: Fix integer overflow in unquantize_dct_coeffs()
+    
+    Fixes: signed integer overflow: -3447 * 2883584 cannot be represented in type 'int'
+    Fixes: 15265/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_BINK_fuzzer-5088311799971840
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Peter Ross <pross@xvid.org>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

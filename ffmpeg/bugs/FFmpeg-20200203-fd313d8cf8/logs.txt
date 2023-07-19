@@ -1,0 +1,12 @@
+commit fd313d8cf8368918882b6de0880e44ae25cc7394
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Dec 8 13:48:45 2019 +0100
+
+    avcodec/ralf: Fix integer overflow in apply_lpc()
+    
+    Fixes: signed integer overflow: 2147482897 + 2048 cannot be represented in type 'int'
+    Fixes: 19240/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RALF_fuzzer-5743240326414336
+    Fixes: 19869/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_RALF_fuzzer-5150136636538880
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

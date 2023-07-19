@@ -1,0 +1,11 @@
+commit 7686ba1f149a94c3bac235589de8aa8db92be4e5
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Nov 8 20:40:46 2019 +0100
+
+    avcodec/alac: Fix integer overflow in lpc_prediction() with sign
+    
+    Fixes: signed integer overflow: -2147483648 * -1 cannot be represented in type 'int'
+    Fixes: 18643/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALAC_fuzzer-5672182449700864
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

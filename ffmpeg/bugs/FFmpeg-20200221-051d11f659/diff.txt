@@ -1,0 +1,13 @@
+diff --git a/libavcodec/pcm.c b/libavcodec/pcm.c
+index 6346510de0..96a68f7fe8 100644
+--- a/libavcodec/pcm.c
++++ b/libavcodec/pcm.c
+@@ -513,7 +513,7 @@ static int pcm_decode_frame(AVCodecContext *avctx, void *data,
+                                  ((src[2] & 0x0F) <<  8) |
+                                    src[1];
+                 // extract high 20 bits and expand to 32 bits
+-                *dst_int32_t++ =  (src[4]         << 24) |
++                *dst_int32_t++ =  ((uint32_t)src[4]<<24) |
+                                   (src[3]         << 16) |
+                                  ((src[2] & 0xF0) <<  8) |
+                                   (src[4]         <<  4) |

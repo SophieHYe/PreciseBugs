@@ -1,0 +1,11 @@
+commit 3c41d0bfd6041890b394a3e6eb2f8da92b83416b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Dec 18 23:13:58 2020 +0100
+
+    avformat/rmdec: Fix codecdata_length overflow check
+    
+    Fixes: signed integer overflow: 2147483647 + 64 cannot be represented in type 'int'
+    Fixes: 28509/clusterfuzz-testcase-minimized-ffmpeg_dem_IVR_fuzzer-6310969680723968
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

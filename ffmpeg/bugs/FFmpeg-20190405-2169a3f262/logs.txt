@@ -1,0 +1,12 @@
+commit 2169a3f262beedcb06fdb0e0e5277a680570df13
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Apr 5 00:20:33 2019 +0200
+
+    avcodec/agm: Fix integer overflow with w/h
+    
+    Fixes: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    Fixes: 13999/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_AGM_fuzzer-5644405991538688
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,36 @@
+diff --git a/libavcodec/vp5.c b/libavcodec/vp5.c
+index aba177c89f..54db620bde 100644
+--- a/libavcodec/vp5.c
++++ b/libavcodec/vp5.c
+@@ -180,7 +180,7 @@ static int vp5_parse_coeff(VP56Context *s)
+     int b, i, cg, idx, ctx, ctx_last;
+     int pt = 0;    /* plane type (0 for Y, 1 for U or V) */
+ 
+-    if (c->end >= c->buffer && c->bits >= 0) {
++    if (c->end <= c->buffer && c->bits >= 0) {
+         av_log(s->avctx, AV_LOG_ERROR, "End of AC stream reached in vp5_parse_coeff\n");
+         return AVERROR_INVALIDDATA;
+     }
+diff --git a/libavcodec/vp6.c b/libavcodec/vp6.c
+index 7f0a9b7d5d..662126ca70 100644
+--- a/libavcodec/vp6.c
++++ b/libavcodec/vp6.c
+@@ -450,7 +450,7 @@ static int vp6_parse_coeff(VP56Context *s)
+     int b, i, cg, idx, ctx;
+     int pt = 0;    /* plane type (0 for Y, 1 for U or V) */
+ 
+-    if (c->end >= c->buffer && c->bits >= 0) {
++    if (c->end <= c->buffer && c->bits >= 0) {
+         av_log(s->avctx, AV_LOG_ERROR, "End of AC stream reached in vp6_parse_coeff\n");
+         return AVERROR_INVALIDDATA;
+     }
+diff --git a/tests/ref/fate/vp5 b/tests/ref/fate/vp5
+index 2116fb9b81..da510fc995 100644
+--- a/tests/ref/fate/vp5
++++ b/tests/ref/fate/vp5
+@@ -249,4 +249,4 @@
+ 0,        243,        243,        1,   233472, 0x6f530ac6
+ 0,        244,        244,        1,   233472, 0x94f7466c
+ 0,        245,        245,        1,   233472, 0xa8c1d365
+-0,        246,        246,        1,   233472, 0xedcff050
++0,        246,        246,        1,   233472, 0x8843293b

@@ -1,0 +1,11 @@
+commit a8a98ba9eeedc0c4b5d95e3b61840174cd254bca
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Sep 25 02:01:58 2018 +0200
+
+    avcodec/wcmv: Fix integer overflows
+    
+    Fixes: signed integer overflow: 262140 * 65535 cannot be represented in type 'int'
+    Fixes: 10090/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_WCMV_fuzzer-5691269368512512
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

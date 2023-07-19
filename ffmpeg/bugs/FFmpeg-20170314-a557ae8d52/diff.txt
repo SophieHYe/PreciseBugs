@@ -1,0 +1,18 @@
+diff --git a/libavcodec/h264_direct.c b/libavcodec/h264_direct.c
+index cbb84665b3..66e54479d1 100644
+--- a/libavcodec/h264_direct.c
++++ b/libavcodec/h264_direct.c
+@@ -39,7 +39,12 @@ static int get_scale_factor(H264SliceContext *sl,
+                             int poc, int poc1, int i)
+ {
+     int poc0 = sl->ref_list[0][i].poc;
+-    int td = av_clip_int8(poc1 - poc0);
++    int64_t pocdiff = poc1 - (int64_t)poc0;
++    int td = av_clip_int8(pocdiff);
++
++    if (pocdiff != (int)pocdiff)
++        avpriv_request_sample(sl->h264->avctx, "pocdiff overflow\n");
++
+     if (td == 0 || sl->ref_list[0][i].parent->long_ref) {
+         return 256;
+     } else {

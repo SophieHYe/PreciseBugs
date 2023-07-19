@@ -1,0 +1,13 @@
+commit 97c00edaa043043c29d985653e7e1687b56dfa23
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Nov 20 18:45:45 2017 +0100
+
+    avcodec/mlpdsp: Fix signed integer overflow, 2nd try
+    
+    The outputted bits should match what is used in the lossless check
+    
+    Fixes: runtime error: signed integer overflow: -538697856 * 256 cannot be represented in type 'int'
+    Fixes: 4326/clusterfuzz-testcase-minimized-5689449645080576
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

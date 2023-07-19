@@ -1,0 +1,11 @@
+commit 2be51d14f278c1c207becafed0db20cbc4e89f55
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Oct 16 09:30:39 2020 +0200
+
+    avformat/av1dec: Fix padding in obu_get_packet()
+    
+    Fixes: stack buffer overflow (read)
+    Fixes: 26369/clusterfuzz-testcase-minimized-ffmpeg_dem_VIVIDAS_fuzzer-5721057325219840
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,12 @@
+commit fe9242204d33db070b8a9d907d93c9ead8a6f3ee
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 8 22:51:57 2017 +0200
+
+    avcodec/ylc: Fix vlc of 31 bits
+    
+    Fixes: runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+    Fixes: 2515/clusterfuzz-testcase-minimized-6197200012967936
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

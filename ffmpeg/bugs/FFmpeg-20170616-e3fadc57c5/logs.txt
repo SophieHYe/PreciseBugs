@@ -1,0 +1,11 @@
+commit e3fadc57c5c170f31455abacbcbd67115d7321d7
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jun 15 23:26:18 2017 +0200
+
+    avcodec/jpeg2000: Fixes integer overflow in ff_jpeg2000_ceildivpow2()
+    
+    Fixes: runtime error: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    Fixes: 2231/clusterfuzz-testcase-minimized-4565181982048256
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

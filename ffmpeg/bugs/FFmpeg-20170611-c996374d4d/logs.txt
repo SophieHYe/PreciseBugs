@@ -1,0 +1,10 @@
+commit c996374d4d86e0efbef71812448b4c65656bc667
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 11 20:19:59 2017 +0200
+
+    avcodec/wavpack: Fix runtime error: signed integer overflow: 1886191616 + 277872640 cannot be represented in type 'int'
+    
+    Fixes: 2181/clusterfuzz-testcase-minimized-6314784322486272
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

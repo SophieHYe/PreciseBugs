@@ -1,0 +1,13 @@
+diff --git a/libavcodec/fastaudio.c b/libavcodec/fastaudio.c
+index 1dda310612..e50678cd3d 100644
+--- a/libavcodec/fastaudio.c
++++ b/libavcodec/fastaudio.c
+@@ -89,7 +89,7 @@ static int read_bits(int bits, int *ppos, unsigned *src)
+ 
+     pos = *ppos;
+     pos += bits;
+-    r = src[(pos - 1) / 32] >> (32 - pos % 32);
++    r = src[(pos - 1) / 32] >> ((-pos) & 31);
+     *ppos = pos;
+ 
+     return r & ((1 << bits) - 1);

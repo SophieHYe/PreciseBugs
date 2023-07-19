@@ -1,0 +1,11 @@
+commit c42ed06695848617350a94543823e850f190b3ab
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat May 23 22:02:56 2020 +0200
+
+    avcodec/wmalosslessdec: Fix integer overflow in mclms_predict()
+    
+    Fixes: signed integer overflow: 2147483636 + 2048 cannot be represented in type 'int'
+    Fixes: 22016/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_WMALOSSLESS_fuzzer-5109395618004992
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

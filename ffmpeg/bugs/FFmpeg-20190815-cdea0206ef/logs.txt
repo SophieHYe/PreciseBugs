@@ -1,0 +1,12 @@
+commit cdea0206efeca83a0a9b57d0764b177b2e11ab7c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Aug 10 23:09:45 2019 +0200
+
+    avcodec/ffwavesynth: Fixes invalid shift with pink noise seeking
+    
+    Fixes: left shift of negative value -961533698048
+    Fixes: 16242/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FFWAVESYNTH_fuzzer-5738550670131200
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Nicolas George <george@nsup.org>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

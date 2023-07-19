@@ -1,0 +1,13 @@
+diff --git a/libavcodec/shorten.c b/libavcodec/shorten.c
+index 18a12d0b97..79656e7757 100644
+--- a/libavcodec/shorten.c
++++ b/libavcodec/shorten.c
+@@ -177,7 +177,7 @@ static void fix_bitshift(ShortenContext *s, int32_t *buffer)
+             buffer[i] = 0;
+     } else if (s->bitshift != 0) {
+         for (i = 0; i < s->blocksize; i++)
+-            buffer[i] *= 1 << s->bitshift;
++            buffer[i] *= 1U << s->bitshift;
+     }
+ }
+ 

@@ -1,0 +1,11 @@
+commit 647fa49495c39a48b7ccb92acd8fb975b1575456
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Feb 17 21:47:09 2018 +0100
+
+    avcodec/dirac_dwt_template: Fix Integer overflow in horizontal_compose_dd137i()
+    
+    Fixes: 5894/clusterfuzz-testcase-minimized-5315325420634112
+    Fixes: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

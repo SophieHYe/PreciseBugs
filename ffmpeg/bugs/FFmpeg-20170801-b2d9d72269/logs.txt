@@ -1,0 +1,11 @@
+commit b2d9d7226943d6229a17e31714ce5162bdf88b33
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jul 29 15:55:36 2017 +0200
+
+    avcodec/diracdsp: fix integer overflow
+    
+    Fixes: runtime error: signed integer overflow: 11 * 225726413 cannot be represented in type 'int'
+    Fixes: 2764/clusterfuzz-testcase-minimized-5382561922547712
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

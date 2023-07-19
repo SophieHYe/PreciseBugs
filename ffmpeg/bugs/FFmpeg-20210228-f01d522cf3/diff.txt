@@ -1,0 +1,15 @@
+diff --git a/libavcodec/dxtory.c b/libavcodec/dxtory.c
+index 7143a11e2e..f314bcec75 100644
+--- a/libavcodec/dxtory.c
++++ b/libavcodec/dxtory.c
+@@ -264,8 +264,8 @@ static int dxtory_decode_v1_420(AVCodecContext *avctx, AVFrame *pic,
+             V[huvborder] = src[3] + 0x80;
+             src += 4;
+         }
+-        Y1 += pic->linesize[0] << 1;
+-        Y2 += pic->linesize[0] << 1;
++        Y1 += pic->linesize[0] * 2;
++        Y2 += pic->linesize[0] * 2;
+         U  += pic->linesize[1];
+         V  += pic->linesize[2];
+     }

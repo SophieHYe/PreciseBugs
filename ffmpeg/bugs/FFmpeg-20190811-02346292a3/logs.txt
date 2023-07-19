@@ -1,0 +1,11 @@
+commit 02346292a334a51f6da802146b782bdb01ae9b4e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jul 26 17:07:01 2019 +0200
+
+    avcodec/alsdec: fix mantisse shift
+    
+    Fixes: shift exponent -1 is negative
+    Fixes: 16039/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5656825657032704
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

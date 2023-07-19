@@ -1,0 +1,11 @@
+commit 73ea2a028e12a7d779834f78dc496c8c4b08361f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 25 00:13:53 2017 +0200
+
+    avcodec/wavpack: Fix integer overflow in wv_unpack_stereo()
+    
+    Fixes: runtime error: signed integer overflow: 2080374785 + 2080374784 cannot be represented in type 'int'
+    Fixes: 2351/clusterfuzz-testcase-minimized-5359403240783872
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

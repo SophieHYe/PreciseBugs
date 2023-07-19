@@ -1,0 +1,12 @@
+commit f01d522cf36d5f6810887bb70d24036778b6ea07
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Feb 22 17:51:56 2021 +0100
+
+    avcodec/dxtory: Fix undefined shift with negative linesize
+    
+    Fixes: left shift of negative value -128
+    Fixes: 30746/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DXTORY_fuzzer-5906271469436928
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

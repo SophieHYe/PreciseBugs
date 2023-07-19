@@ -1,0 +1,12 @@
+commit 2f588ccfb70cba54a7ea8e740110953da604c0e6
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Oct 2 19:53:44 2019 +0200
+
+    avcodec/vc1_block: Fix invalid left shift in vc1_decode_p_mb()
+    
+    Fixes: left shift of negative value -6
+    Fixes: 17810/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_VC1_fuzzer-5638541240958976
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

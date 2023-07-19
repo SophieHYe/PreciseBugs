@@ -1,0 +1,11 @@
+commit ce652324062a2c72f92e40699797630ef7f1ec5a
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jul 26 14:33:14 2019 +0200
+
+    avcodec/alsdec: Fix integer overflow of raw_samples in decode_blocks()
+    
+    Fixes: signed integer overflow: 2147483424 - -1772303236 cannot be represented in type 'int'
+    Fixes: 15708/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5067890362941440
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

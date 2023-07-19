@@ -1,0 +1,11 @@
+commit 112eb17a2bbf6d02f81fdf0743b353a6b010aedc
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jun 8 09:27:49 2019 +0200
+
+    avformat/wsddec: Fix undefined shift
+    
+    Fixes: left shift of 1 by 31 places cannot be represented in type 'int'
+    Fixes: 15123/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-5738039235575808
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,13 @@
+commit 1197c04896423c6c7db65f69da8bc3865b26bb50
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat May 27 12:21:25 2017 +0200
+
+    avcodec/fft_template: Fix multiple runtime error: signed integer overflow: -1943918714 - 1935113003 cannot be represented in type 'int'
+    
+    Fixes: 1735/clusterfuzz-testcase-minimized-5350472347025408
+    
+    This uses unsigned instead of SUINT because the later was rejected by multiple developers
+    See: [FFmpeg-devel] [PATCH] avcodec/fft_template: Fix multiple runtime error: signed integer overflow: -1943918714 - 1935113003 cannot be represented in type 'int'
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

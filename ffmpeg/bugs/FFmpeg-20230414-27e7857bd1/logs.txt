@@ -1,0 +1,11 @@
+commit 27e7857bd1127974ffe1512293abee83b1035194
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Apr 9 13:18:42 2023 +0200
+
+    avcodec/huffyuvdec: Fix undefined behavior with shift
+    
+    Fixes: left shift of negative value -1
+    Fixes: 57554/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_FFVHUFF_fuzzer-4853603839115264
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

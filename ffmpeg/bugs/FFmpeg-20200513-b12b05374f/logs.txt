@@ -1,0 +1,13 @@
+commit b12b05374f7025167e2c43449ceb8ba3f0a6083f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Feb 12 21:30:08 2020 +0100
+
+    avcodec/adpcm: Fix integer overflow in ADPCM THP
+    
+    The reference (thp.txt) uses floats so wrap around would seem incorrect.
+    
+    Fixes: signed integer overflow: 1073741824 + 1073741824 cannot be represented in type 'int'
+    Fixes: 20658/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ADPCM_THP_fuzzer-5646302555930624
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

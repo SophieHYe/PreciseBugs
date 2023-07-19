@@ -1,0 +1,11 @@
+commit 0c9c9bbd01bd82c35b6a908592d9dd6d9f4bd4a0
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jan 3 19:15:18 2022 +0100
+
+    avcodec/apedec: Fix integer overflows in predictor_update_3930()
+    
+    Fixes: signed integer overflow: 1074134419 - -1075212485 cannot be represented in type 'int'
+    Fixes: 43273/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-4706880883130368
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

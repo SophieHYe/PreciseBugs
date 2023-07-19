@@ -1,0 +1,10 @@
+commit e92fb2bea1800b987ebc3cbeef9d48cfe4bcd191
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 7 03:27:17 2017 +0200
+
+    avcodec/texturedsp: Fix multiple runtime error: left shift of 255 by 24 places cannot be represented in type 'int'
+    
+    Fixes: 1386/clusterfuzz-testcase-minimized-5323086394032128
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

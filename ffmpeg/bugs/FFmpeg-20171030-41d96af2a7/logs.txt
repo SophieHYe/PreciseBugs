@@ -1,0 +1,11 @@
+commit 41d96af2a74cb5df50346b160067facd43149667
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Oct 27 02:23:21 2017 +0200
+
+    avcodec/aacdec_fixed: Fix integer overflow in apply_dependent_coupling_fixed()
+    
+    Fixes: runtime error: signed integer overflow: 623487 * 536870912 cannot be represented in type 'int'
+    Fixes: 3594/clusterfuzz-testcase-minimized-4650622935629824
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

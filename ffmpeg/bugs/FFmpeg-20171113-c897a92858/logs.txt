@@ -1,0 +1,11 @@
+commit c897a9285846b6a072b9650976afd4f091b7a71f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Nov 5 21:20:05 2017 +0100
+
+    avcodec/snowdec: Fix integer overflow in header parsing
+    
+    Fixes: 3984/clusterfuzz-testcase-minimized-5265759929368576
+    Fixes: runtime error: signed integer overflow: -1085585801 + -1094995529 cannot be represented in type 'int'
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

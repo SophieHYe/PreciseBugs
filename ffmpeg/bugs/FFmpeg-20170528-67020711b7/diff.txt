@@ -1,0 +1,14 @@
+diff --git a/libavcodec/webp.c b/libavcodec/webp.c
+index 50a8da1000..a0d4d1812d 100644
+--- a/libavcodec/webp.c
++++ b/libavcodec/webp.c
+@@ -1351,6 +1351,9 @@ static int vp8_lossy_decode_frame(AVCodecContext *avctx, AVFrame *p,
+     if (ret < 0)
+         return ret;
+ 
++    if (!*got_frame)
++        return AVERROR_INVALIDDATA;
++
+     update_canvas_size(avctx, avctx->width, avctx->height);
+ 
+     if (s->has_alpha) {

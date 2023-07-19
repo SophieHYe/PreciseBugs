@@ -1,0 +1,10 @@
+commit 384508b2ff69bc3fad1e1c2e7de0dcd0913c6208
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 21 01:43:04 2017 +0200
+
+    avcodec/sbrdsp_fixed: fix runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+    
+    Fixes: part of 1709/clusterfuzz-testcase-minimized-4513580554649600
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

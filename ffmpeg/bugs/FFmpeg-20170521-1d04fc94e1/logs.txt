@@ -1,0 +1,10 @@
+commit 1d04fc94e1021b70e542dc01a48b8398c6fc6325
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 21 02:42:12 2017 +0200
+
+    avcodec/mlpdsp: Fix runtime error: signed integer overflow: -24419392 * 128 cannot be represented in type 'int'
+    
+    Fixes: 1711/clusterfuzz-testcase-minimized-5248503515185152
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

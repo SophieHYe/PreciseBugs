@@ -1,0 +1,10 @@
+commit e5f92f3fbadb29e54ac3ab82cd24d78e95bc286d
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jun 1 16:44:46 2019 +0200
+
+    avcodec/v4l2_m2m_dec: Fix memleak on ff_v4l2_m2m_codec_init() failure
+    
+    Fixes: 13579/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_MPEG1_V4L2M2M_fuzzer-5753560726241280
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

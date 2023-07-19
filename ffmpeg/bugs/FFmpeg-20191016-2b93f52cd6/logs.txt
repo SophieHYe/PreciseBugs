@@ -1,0 +1,11 @@
+commit 2b93f52cd635f372b7b22396939e840c63e8edf3
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 27 17:01:38 2019 +0200
+
+    avcodec/lsp: Fix undefined shifts in lsp2poly()
+    
+    Fixes: left shift of negative value -30635
+    Fixes: 17689/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ACELP_KELVIN_fuzzer-5756275014500352
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

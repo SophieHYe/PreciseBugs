@@ -1,0 +1,11 @@
+commit 6ebbfb377f7b6dcbf6a5c85b10109e838bd6e675
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 30 19:45:29 2019 +0200
+
+    avcodec/agm: Fix overflow of signed shift
+    
+    Fixes: left shift of 1 by 31 places cannot be represented in type 'int'
+    Fixes: 15328/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_AGM_fuzzer-5637545171353600
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

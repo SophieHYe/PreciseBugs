@@ -1,0 +1,14 @@
+commit 46b865ea9f86cbd12e1bf701913263c7932cccb0
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 4 21:37:47 2017 +0200
+
+    avcodec/qdrw: Fix null pointer dereference
+    
+    The RGB555 PACKBITSRGN case tries to read a palette, if such
+    palette is actually stored then it accesses a null pointer.
+    All 16bit samples i could find use DIRECTBITSRGN.
+    
+    Fixes: 2065/clusterfuzz-testcase-minimized-6298930457346048
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

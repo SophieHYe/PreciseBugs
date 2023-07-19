@@ -1,0 +1,11 @@
+commit c07af720984acaafaa273369080b458d73975775
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Tue Jun 27 13:47:32 2017 +0200
+
+    avcodec/wavpack: Fix invalid shift
+    
+    Fixes: runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+    Fixes: 2377/clusterfuzz-testcase-minimized-6108505935183872
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,12 @@
+commit d05bdba2428dd0c1c5cd3426d69c712b127f996c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu May 11 23:06:50 2017 +0200
+
+    avcodec/mss3: Fix runtime error: signed integer overflow: -2146318336 - 2139696256 cannot be represented in type 'int'
+    
+    Fix is similar to rac_get_model_sym()
+    Fixes: 1483/clusterfuzz-testcase-minimized-6386507814273024
+    Fixes: 1485/clusterfuzz-testcase-minimized-6639880215986176
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

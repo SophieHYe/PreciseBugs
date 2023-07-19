@@ -1,0 +1,11 @@
+commit 7786f6c30e77a393b72ded01baa4250738925509
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Oct 25 11:12:02 2019 +0200
+
+    avcodec/adpcm: Fix undefined behavior with negative predictions in IMA OKI
+    
+    Fixes: left shift of negative value -30
+    Fixes: 18392/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ADPCM_IMA_OKI_fuzzer-5631771831435264
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

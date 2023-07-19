@@ -1,0 +1,12 @@
+commit c8140fe7324f264faacf7395b27e12531d1f13f7
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Mar 15 17:26:51 2020 +0100
+
+    avformat/asfdec_f: Fix overflow check in get_tag()
+    
+    Fixes: signed integer overflow: 2 * 1210064928 cannot be represented in type 'int'
+    Fixes: 20873/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-5761116909338624
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Anton Khirnov <anton@khirnov.net>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

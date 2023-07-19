@@ -1,0 +1,11 @@
+commit aa41d322be71106ce147445f2b42bb763f1eff86
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jun 14 15:41:33 2018 +0200
+
+    avutil/common: Fix undefined behavior in av_clip_uintp2_c()
+    
+    Fixes: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    Fixes: 8521/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DIRAC_fuzzer-5639024952737792
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

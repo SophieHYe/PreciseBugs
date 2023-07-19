@@ -1,0 +1,11 @@
+commit 10eabb8e40df0ad84470d750f903917f4a05cb1f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Oct 25 12:44:45 2019 +0200
+
+    avcodec/interplayacm: Fix overflow of last unused value
+    
+    Fixes: signed integer overflow: -2147450880 - 65535 cannot be represented in type 'int'
+    Fixes: 18393/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_INTERPLAY_ACM_fuzzer-5667520110919680
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

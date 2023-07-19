@@ -1,0 +1,15 @@
+diff --git a/libavcodec/aacdec_fixed.c b/libavcodec/aacdec_fixed.c
+index 53a971c8d3..950ce20f80 100644
+--- a/libavcodec/aacdec_fixed.c
++++ b/libavcodec/aacdec_fixed.c
+@@ -370,7 +370,9 @@ static void apply_dependent_coupling_fixed(AACContext *ac,
+                     shift = (gain-1024) >> 3;
+                 }
+ 
+-                if (shift < 0) {
++                if (shift < -31) {
++                    // Nothing to do
++                } else if (shift < 0) {
+                     shift = -shift;
+                     round = 1 << (shift - 1);
+ 

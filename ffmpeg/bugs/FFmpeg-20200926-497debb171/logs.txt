@@ -1,0 +1,12 @@
+commit 497debb171b866500ef428479139a112ee7e50d8
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 25 17:07:24 2020 +0200
+
+    avcodec/dxtory: Fix get_raw_size() for YUV
+    
+    Fixes: out of array read
+    Fixes: 25455/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DXTORY_fuzzer-6327985731534848
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 63e7bfe78e6d764097e845248f6d77b28b2b235c
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun Jun 25 00:00:13 2017 +0200
+
+    avcodec/hevc_ps: Fix max_dec_buffer check
+    
+    Fixes: runtime error: signed integer overflow: -2147483648 - 1 cannot be represented in type 'int'
+    Fixes: 2339/clusterfuzz-testcase-minimized-6663164320022528
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

@@ -1,0 +1,11 @@
+commit 0c9ab5ef9c1ee852c80c859c9e07efe8730b57ed
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Dec 22 03:12:03 2017 +0100
+
+    avcodec/hevcdsp_template.c: Fix undefined shift in FUNC(dequant)
+    
+    Fixes: runtime error: left shift of negative value -180
+    Fixes: 4626/clusterfuzz-testcase-minimized-5647837887987712
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

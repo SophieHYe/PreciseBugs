@@ -1,0 +1,11 @@
+commit 22e51e95ac97864b3d7b21124eaf8fcce147f61e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sun May 10 11:08:28 2020 +0200
+
+    avcodec/alac: Fix integer overflow with 24/20bps samples
+    
+    Fixes: signed integer overflow: 1020048 * 4096 cannot be represented in type 'int'
+    Fixes: 20492/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALAC_fuzzer-5753877751660544
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

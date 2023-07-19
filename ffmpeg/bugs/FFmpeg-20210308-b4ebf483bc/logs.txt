@@ -1,0 +1,11 @@
+commit b4ebf483bcbf2e5db6bd29607142741f62598b4e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Jan 30 19:09:36 2021 +0100
+
+    avcodec/dcadsp: Fix integer overflow in dmix_add_c()
+    
+    Fixes: signed integer overflow: 1515225320 + 759416059 cannot be represented in type 'int'
+    Fixes: 29256/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_DCA_fuzzer-5719088561258496
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

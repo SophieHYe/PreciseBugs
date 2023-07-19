@@ -1,0 +1,11 @@
+commit f8f5668df590d853429586e1f95cbd9cee38920e
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jun 13 15:00:14 2019 +0200
+
+    avcodec/aacpsdsp_template: Fix integer overflow in ps_hybrid_analysis_c()
+    
+    Fixes: signed integer overflow: -1539565182 + -798086761 cannot be represented in type 'int'
+    Fixes: 14807/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_AAC_FIXED_fuzzer-564925382682214
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

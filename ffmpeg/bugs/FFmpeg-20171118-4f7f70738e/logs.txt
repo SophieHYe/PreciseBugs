@@ -1,0 +1,11 @@
+commit 4f7f70738e8dd77a698a5e28bba552ea7064af21
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Nov 15 03:38:37 2017 +0100
+
+    avcodec/mlpdsp: Fix undefined shift ff_mlp_pack_output()
+    
+    Fixes: runtime error: left shift of negative value -7862264
+    Fixes: 4074/clusterfuzz-testcase-minimized-4516104123711488
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

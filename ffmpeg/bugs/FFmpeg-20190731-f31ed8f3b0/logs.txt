@@ -1,0 +1,11 @@
+commit f31ed8f3b00ec7afe87092798bf0b397f6e19ed5
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jul 4 23:13:13 2019 +0200
+
+    avcodec/vc1_block: Fix integer overflow in ff_vc1_pred_dc()
+    
+    Fixes: signed integer overflow: 32796 * 65536 cannot be represented in type 'int'
+    Fixes: 15430/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_VC1IMAGE_fuzzer-5735424087031808
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

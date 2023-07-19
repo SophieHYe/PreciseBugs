@@ -1,0 +1,10 @@
+commit a3a408259912e6d9337837c5d63c4b826778530f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Mar 15 03:48:59 2017 +0100
+
+    avcodec/h264_cabac: Fix runtime error: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself
+    
+    Fixes: 858/clusterfuzz-testcase-5168477042114560
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/targets/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

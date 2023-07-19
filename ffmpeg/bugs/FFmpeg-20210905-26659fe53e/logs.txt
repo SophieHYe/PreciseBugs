@@ -1,0 +1,12 @@
+commit 26659fe53ee9e51dc06ea2384321cc18229f5768
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Sep 3 17:12:53 2021 +0200
+
+    avcodec/argo: Move U, fix shift
+    
+    Fixes: left shift of 255 by 24 places cannot be represented in type 'int'
+    Fixes: 37249/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ARGO_fuzzer-5754862984888320
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Reviewed-by: Paul B Mahol <onemda@gmail.com>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

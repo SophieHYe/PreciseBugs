@@ -1,0 +1,14 @@
+commit a026a3efaeb9c2026668dccbbda339a21ab3206b
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Jan 15 23:46:44 2018 +0100
+
+    avcodec/hevc_cabac: Check prefix so as to avoid invalid shifts in coeff_abs_level_remaining_decode()
+    
+    I suspect that this can be limited tighter, but i failed to find anything
+    in the spec that would confirm that.
+    
+    Fixes: 4833/clusterfuzz-testcase-minimized-5302840101699584
+    Fixes: runtime error: left shift of 134217730 by 4 places cannot be represented in type 'int'
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

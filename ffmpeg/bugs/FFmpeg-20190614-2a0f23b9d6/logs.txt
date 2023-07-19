@@ -1,0 +1,11 @@
+commit 2a0f23b9d647ad84e0351b43ca4b552add00c8dc
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Thu Jun 6 23:20:49 2019 +0200
+
+    avformat/sbgdec: Fixes integer overflow in str_to_time() with hours
+    
+    Fixes: signed integer overflow: 904444 * 3600 cannot be represented in type 'int'
+    Fixes: 15113/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-5764083346833408
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

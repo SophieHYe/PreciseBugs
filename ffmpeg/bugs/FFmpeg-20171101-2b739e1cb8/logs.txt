@@ -1,0 +1,11 @@
+commit 2b739e1cb8f6ce8baead03ce5c999103ba78f24f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Mon Oct 30 23:21:41 2017 +0100
+
+    avcodec/h264idct_template: Fix integer overflows in ff_h264_idct8_add()
+    
+    Fixes: runtime error: signed integer overflow: 924846844 + 1457520640 cannot be represented in type 'int'
+    Fixes: 3416/clusterfuzz-testcase-minimized-6125587682820096
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

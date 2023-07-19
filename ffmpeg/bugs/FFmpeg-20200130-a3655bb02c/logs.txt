@@ -1,0 +1,11 @@
+commit a3655bb02c21e70573335e9396632f64b2589536
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Sat Dec 7 20:55:16 2019 +0100
+
+    avcodec/apedec: Fix undefined integer overflow in decode_array_0000()
+    
+    Fixes: signed integer overflow: -2143289344 - 6246400 cannot be represented in type 'int'
+    Fixes: 19239/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_APE_fuzzer-5173755680915456
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

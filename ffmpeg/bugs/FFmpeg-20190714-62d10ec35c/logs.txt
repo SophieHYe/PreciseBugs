@@ -1,0 +1,13 @@
+commit 62d10ec35c3055a153b08f51d844932f19ed66e7
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Jun 28 21:03:59 2019 +0200
+
+    avformat/vividas: Fixes overflow in shift in recover_key()
+    
+    Fixes: left shift of 133 by 24 places cannot be represented in type 'int'
+    Fixes: 15365/clusterfuzz-testcase-minimized-ffmpeg_DEMUXER_fuzzer-5716153105645568
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Suggested-by: Reimar Döffinger <Reimar.Doeffinger@gmx.de>
+    Reviewed-by: Reimar Döffinger <Reimar.Doeffinger@gmx.de>
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

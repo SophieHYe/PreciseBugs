@@ -1,0 +1,13 @@
+commit e131568752ad41222946304c61eadb87b0a24791
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Wed Jun 19 21:53:43 2019 +0200
+
+    avcodec/alsdec: Fixes invalid shifts in read_var_block_data() and INTERLEAVE_OUTPUT()
+    
+    Fixes: left shift of negative value -6
+    Fixes: 15275/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5742361767837696
+    Fixes: signed integer overflow: 41582592 * 256 cannot be represented in type 'int'
+    Fixes: 15296/clusterfuzz-testcase-minimized-ffmpeg_AV_CODEC_ID_ALS_fuzzer-5739558227935232
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>

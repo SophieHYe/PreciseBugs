@@ -1,0 +1,11 @@
+commit 0976752420706c0a8b3cb8fd61497a47c7d7270f
+Author: Michael Niedermayer <michael@niedermayer.cc>
+Date:   Fri Oct 27 02:23:20 2017 +0200
+
+    avcodec/aacdec_fixed: Fix integer overflow in predict()
+    
+    Fixes: runtime error: signed integer overflow: -2110708110 + -82837504 cannot be represented in type 'int'
+    Fixes: 3547/clusterfuzz-testcase-minimized-6009386439802880
+    
+    Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+    Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
