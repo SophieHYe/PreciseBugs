@@ -1,0 +1,12 @@
+commit c8b2e8271350ad3a5a4ebb5824f387b727d424f7
+Author: Jakub Jelen <jjelen@redhat.com>
+Date:   Mon Nov 16 13:55:04 2020 +0100
+
+    oberthur: Once again, fix the error check
+    
+    The shared codition was executed but the condition in LOG_TEST_RET
+    was not met in case of the acl was null.
+    
+    Thanks oss-fuzz
+    
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=25962

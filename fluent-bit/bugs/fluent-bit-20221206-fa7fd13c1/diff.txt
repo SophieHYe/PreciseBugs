@@ -1,0 +1,13 @@
+diff --git a/tests/internal/fuzzers/ctrace_fuzzer.c b/tests/internal/fuzzers/ctrace_fuzzer.c
+index 8617bf6ed..e3756d13a 100644
+--- a/tests/internal/fuzzers/ctrace_fuzzer.c
++++ b/tests/internal/fuzzers/ctrace_fuzzer.c
+@@ -3,7 +3,7 @@
+ #include <ctraces/ctr_decode_msgpack.h>
+ 
+ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size){
+-    size_t off;
++    size_t off = 0;
+     struct ctrace *ctr = NULL;
+     ctr_decode_msgpack_create(&ctr, data, size, &off);
+     if (ctr != NULL) {

@@ -1,0 +1,11 @@
+commit ce773aaaaedd37a66329e0eea3c45f30cb567fe2
+Author: Veronika Hanulikova <xhanulik@fi.muni.cz>
+Date:   Mon Dec 5 12:16:38 2022 +0100
+
+    Fix stack-buffer-overflow
+    
+    When tag is found, check that output size is withing the bounds
+    of the buffer.
+    
+    Thanks OSS-Fuzz
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=53536

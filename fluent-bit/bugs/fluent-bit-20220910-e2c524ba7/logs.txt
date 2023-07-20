@@ -1,0 +1,11 @@
+commit e2c524ba7bf0487ba3df569cce8855cb753f084a
+Author: David Korczynski <david@adalogics.com>
+Date:   Fri Sep 9 14:40:14 2022 +0100
+
+    parser: fix double-free
+    
+    It's not necessary to free tmp here as tmp is freed at fconf_error
+    
+    Fixes: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=51132
+    
+    Signed-off-by: David Korczynski <david@adalogics.com>

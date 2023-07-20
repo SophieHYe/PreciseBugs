@@ -1,0 +1,13 @@
+commit 83162c5c87e88a5f911ca5349320938a52dbc1df
+Author: Frank Morgner <frankmorgner@gmail.com>
+Date:   Mon Mar 22 15:53:35 2021 +0100
+
+    fixed memory leak
+    
+    fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=32324
+    
+    sc_enum_apps() causes card->cache.current_ef to be allocated for
+    IAS/ECC, but not freed if any other error occurs during initialization.
+    since sc_enum_apps() is called anyway during PKCS#15 initialization.
+    Having this at the card driver level (instead of the PKCS#15 level) is
+    not needed.

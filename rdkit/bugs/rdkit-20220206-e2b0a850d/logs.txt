@@ -1,0 +1,43 @@
+commit e2b0a850d7f7087efc15181b8ab11a6b8a566228
+Author: Alex Rebert <alexandre.rebert@gmail.com>
+Date:   Sat Feb 5 23:06:38 2022 -0500
+
+    Fix memory safety issues found by OSS-Fuzz (#4983)
+    
+    * RWMol: replace atom in stereo groups
+    
+    Fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=36998, a
+    use-after-free in initFromOther.
+    
+    * Fix out-of-bounds write in iterateCIPRanks
+    
+    If the rank has not changed in the current iteration, the cipEntries
+    vectors might not have increased in size. Accessing `numIts + 1`
+    resulted in an out-of-bounds write. This commit skip the cipEntries
+    update when the rank is unchanged.
+    
+    Fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=28660
+    
+    * Fix use of uninitialized values in MolSGroupParsing
+    
+    `stream >> count` may silently fail without an exception. In that case,
+    `count` was uninitialized but used. This commit initalizes `count` to 0,
+    as well as other variables that may be read without being initialized.
+    
+    Fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=25220
+    Fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=25225
+    
+    * Fix vector size cast in streamReadVec
+    
+    In 32-bit systems, the implicit conversions from 64-bit to a 32-bit
+    size_t could lead to an underallocation of the vector. This would follow
+    by a out-of-bounds write while trying to populate the vector. Now, the
+    code throws an exception in case of a cast that would change the size.
+    
+    Fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=28034
+    
+    * RWMol: improve atom replacement in stereo groups
+    
+    This code is cleaner and more efficient.
+    
+    * Add test for replaceAtom and stereo groups

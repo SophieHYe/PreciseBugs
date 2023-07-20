@@ -1,0 +1,103 @@
+diff --git a/Code/GraphMol/Chirality.cpp b/Code/GraphMol/Chirality.cpp
+index bdbcfc7cf..c1abab5a0 100644
+--- a/Code/GraphMol/Chirality.cpp
++++ b/Code/GraphMol/Chirality.cpp
+@@ -1038,10 +1038,12 @@ void iterateCIPRanks(const ROMol &mol, const DOUBLE_VECT &invars,
+     numRanks = *std::max_element(ranks.begin(), ranks.end()) + 1;
+ 
+     // now truncate each vector and stick the rank at the end
+-    for (unsigned int i = 0; i < numAtoms; ++i) {
+-      cipEntries[i][numIts + 1] = ranks[i];
+-      cipEntries[i].erase(cipEntries[i].begin() + numIts + 2,
+-                          cipEntries[i].end());
++    if (static_cast<unsigned int>(lastNumRanks) != numRanks) {
++      for (unsigned int i = 0; i < numAtoms; ++i) {
++        cipEntries[i][numIts + 1] = ranks[i];
++        cipEntries[i].erase(cipEntries[i].begin() + numIts + 2,
++                            cipEntries[i].end());
++      }
+     }
+ 
+     ++numIts;
+diff --git a/Code/GraphMol/FileParsers/MolSGroupParsing.cpp b/Code/GraphMol/FileParsers/MolSGroupParsing.cpp
+index e5c7ae489..50cf60a77 100644
+--- a/Code/GraphMol/FileParsers/MolSGroupParsing.cpp
++++ b/Code/GraphMol/FileParsers/MolSGroupParsing.cpp
+@@ -942,7 +942,7 @@ std::vector<T> ParseV3000Array(std::stringstream &stream, int maxV,
+         << "WARNING: first character of V3000 array is not '('" << std::endl;
+   }
+ 
+-  unsigned int count;
++  unsigned int count = 0;
+   stream >> count;
+   std::vector<T> values;
+   if (maxV >= 0 && count > static_cast<unsigned int>(maxV)) {
+@@ -1009,8 +1009,8 @@ void ParseV3000SAPLabel(RWMol *mol, SubstanceGroup &sgroup,
+                         std::stringstream &stream, bool strictParsing) {
+   stream.get();  // discard parentheses
+ 
+-  unsigned int count;
+-  unsigned int aIdxMark;
++  unsigned int count = 0;
++  unsigned int aIdxMark = 0;
+   std::string lvIdxStr;  // In V3000 this may be a string
+   std::string sapIdStr;
+   stream >> count >> aIdxMark >> lvIdxStr >> sapIdStr;
+diff --git a/Code/GraphMol/RWMol.cpp b/Code/GraphMol/RWMol.cpp
+index 171658474..a1e4838fe 100644
+--- a/Code/GraphMol/RWMol.cpp
++++ b/Code/GraphMol/RWMol.cpp
+@@ -151,6 +151,16 @@ void RWMol::replaceAtom(unsigned int idx, Atom *atom_pin, bool,
+       }
+     }
+   }
++
++  // handle stereo group
++  for (auto &group : d_stereo_groups) {
++    auto atoms = group.getAtoms();
++    auto aiter = std::find(atoms.begin(), atoms.end(), orig_p);
++    if (aiter != atoms.end()) {
++      *aiter = atom_p;
++      group = StereoGroup(group.getGroupType(), std::move(atoms));
++    }
++  }
+ };
+ 
+ void RWMol::replaceBond(unsigned int idx, Bond *bond_pin, bool preserveProps,
+diff --git a/Code/GraphMol/catch_chirality.cpp b/Code/GraphMol/catch_chirality.cpp
+index 9cc403f58..0891c0197 100644
+--- a/Code/GraphMol/catch_chirality.cpp
++++ b/Code/GraphMol/catch_chirality.cpp
+@@ -1738,3 +1738,19 @@ TEST_CASE("StereoGroup Testing") {
+     CHECK(mol->getStereoGroups().size() == 1);
+   }
+ }
++
++TEST_CASE("replaceAtom and StereoGroups") {
++  SECTION("basics") {
++    auto mol = "C[C@](O)(Cl)[C@H](F)Cl |o1:1,4|"_smiles;
++    REQUIRE(mol);
++    CHECK(mol->getStereoGroups().size() == 1);
++    CHECK(mol->getStereoGroups()[0].getAtoms().size() == 2);
++    CHECK(mol->getStereoGroups()[0].getAtoms()[0] == mol->getAtomWithIdx(1));
++
++    Atom acp(*mol->getAtomWithIdx(1));
++    mol->replaceAtom(1, &acp);
++    CHECK(mol->getStereoGroups().size() == 1);
++    CHECK(mol->getStereoGroups()[0].getAtoms().size() == 2);
++    CHECK(mol->getStereoGroups()[0].getAtoms()[0] == mol->getAtomWithIdx(1));
++  }
++}
+diff --git a/Code/RDGeneral/StreamOps.h b/Code/RDGeneral/StreamOps.h
+index 57ce42c78..8b08f0f59 100644
+--- a/Code/RDGeneral/StreamOps.h
++++ b/Code/RDGeneral/StreamOps.h
+@@ -307,7 +307,7 @@ template <class T>
+ void streamReadVec(std::istream &ss, T &val) {
+   boost::uint64_t size;
+   streamRead(ss, size);
+-  val.resize(size);
++  val.resize(boost::numeric_cast<size_t>(size));
+ 
+   for (size_t i = 0; i < size; ++i) streamRead(ss, val[i]);
+ }
