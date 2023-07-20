@@ -1,0 +1,25 @@
+diff --git a/ChangeLog b/ChangeLog
+index f35dff2e6..004c84120 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,8 @@
+   * Do not refer to page in OptimizeLayerFrames (reference
+     https://github.com/ImageMagick/ImageMagick/pull/987).
+   * PerlMagick unit tests pass again.
++  * Fixed numerous use of uninitialized values, integer overflow,
++    memory exceeded, and timeouts (credit to OSS Fuzz).
+ 
+ 2018-02-18  7.0.7-23 Cristy  <quetzlzacatenango@image...>
+   * Release ImageMagick version 7.0.0-23, GIT revision 22969:c6b3a22b0:20180218.
+diff --git a/coders/hdr.c b/coders/hdr.c
+index 1feb1a6b0..74dd24c11 100644
+--- a/coders/hdr.c
++++ b/coders/hdr.c
+@@ -403,6 +403,7 @@ static Image *ReadHDRImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     sizeof(*pixels));
+   if (pixels == (unsigned char *) NULL)
+     ThrowReaderException(ResourceLimitError,"MemoryAllocationFailed");
++  (void) ResetMagickMemory(pixels,0,4*image->columns*sizeof(*pixels));
+   for (y=0; y < (ssize_t) image->rows; y++)
+   {
+     if (image->compression != RLECompression)

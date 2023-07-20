@@ -1,0 +1,26 @@
+diff --git a/coders/miff.c b/coders/miff.c
+index 37b63eece..329e96a97 100644
+--- a/coders/miff.c
++++ b/coders/miff.c
+@@ -1147,6 +1147,8 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+         while (name != (const char *) NULL)
+         {
+           length=ReadBlobMSBLong(image);
++          if ((MagickSizeType) length > GetBlobSize(image))
++            break;
+           profile=AcquireStringInfo(length);
+           if (profile == (StringInfo *) NULL)
+             break;
+diff --git a/coders/mpc.c b/coders/mpc.c
+index d1777525e..b5449989c 100644
+--- a/coders/mpc.c
++++ b/coders/mpc.c
+@@ -844,6 +844,8 @@ static Image *ReadMPCImage(const ImageInfo *image_info,ExceptionInfo *exception)
+         while (name != (const char *) NULL)
+         {
+           length=ReadBlobMSBLong(image);
++          if ((MagickSizeType) length > GetBlobSize(image))
++            break;
+           profile=AcquireStringInfo(length);
+           if (profile == (StringInfo *) NULL)
+             break;

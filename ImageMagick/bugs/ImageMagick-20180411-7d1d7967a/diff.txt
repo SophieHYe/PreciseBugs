@@ -1,0 +1,13 @@
+diff --git a/MagickCore/image.c b/MagickCore/image.c
+index b8e569882..4645303c5 100644
+--- a/MagickCore/image.c
++++ b/MagickCore/image.c
+@@ -2799,7 +2799,7 @@ MagickExport MagickBooleanType SetImageInfo(ImageInfo *image_info,
+ #endif
+   image_info->affirm=MagickFalse;
+   sans_exception=AcquireExceptionInfo();
+-  if (*component != '\0')
++  if ((*component != '\0') && (*component != '*'))
+     {
+       MagickFormatType
+         format_type;

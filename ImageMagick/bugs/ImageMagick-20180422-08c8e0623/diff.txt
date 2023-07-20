@@ -1,0 +1,13 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 07d118dee..8464538f4 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -1771,7 +1771,7 @@ static char *GetGroupByURL(const char *primitive,const char *url)
+       }
+   }
+   if (start == (const char *) NULL)
+-    return((char *) NULL);
++    return(DestroyString(token));
+   (void) CopyMagickString(token,start,length);
+   return(token);
+ }

@@ -1,0 +1,12 @@
+diff --git a/coders/wbmp.c b/coders/wbmp.c
+index abbb5f4d7..66232acdf 100644
+--- a/coders/wbmp.c
++++ b/coders/wbmp.c
+@@ -159,6 +159,7 @@ static Image *ReadWBMPImage(const ImageInfo *image_info,
+       image=DestroyImageList(image);
+       return((Image *) NULL);
+     }
++  header=0;
+   if (ReadBlob(image,2,(unsigned char *) &header) == 0)
+     ThrowReaderException(CorruptImageError,"ImproperImageHeader");
+   if (header != 0)

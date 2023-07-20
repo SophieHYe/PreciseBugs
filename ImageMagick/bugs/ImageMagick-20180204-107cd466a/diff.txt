@@ -1,0 +1,22 @@
+diff --git a/coders/sun.c b/coders/sun.c
+index 2c28a801b..b36a9ea23 100644
+--- a/coders/sun.c
++++ b/coders/sun.c
+@@ -313,6 +313,8 @@ static Image *ReadSUNImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     sun_info.type=ReadBlobMSBLong(image);
+     sun_info.maptype=ReadBlobMSBLong(image);
+     sun_info.maplength=ReadBlobMSBLong(image);
++    if (sun_info.maplength > GetBlobSize(image))
++      ThrowReaderException(CorruptImageError,"InsufficientImageDataInFile");
+     extent=sun_info.height*sun_info.width;
+     if ((sun_info.height != 0) && (sun_info.width != extent/sun_info.height))
+       ThrowReaderException(CorruptImageError,"ImproperImageHeader");
+@@ -336,8 +338,6 @@ static Image *ReadSUNImage(const ImageInfo *image_info,ExceptionInfo *exception)
+         size_t
+           one;
+ 
+-        if (sun_info.maplength > GetBlobSize(image))
+-          ThrowReaderException(CorruptImageError,"InsufficientImageDataInFile");
+         image->colors=sun_info.maplength;
+         one=1;
+         if (sun_info.maptype == RMT_NONE)

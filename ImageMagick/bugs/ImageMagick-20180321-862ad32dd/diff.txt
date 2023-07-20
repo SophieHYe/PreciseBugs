@@ -1,0 +1,21 @@
+diff --git a/coders/sct.c b/coders/sct.c
+index 4f980f3b1..84cdfbc9c 100644
+--- a/coders/sct.c
++++ b/coders/sct.c
+@@ -279,13 +279,15 @@ static Image *ReadSCTImage(const ImageInfo *image_info,ExceptionInfo *exception)
+         }
+         q+=GetPixelChannels(image);
+       }
+-      if (c == EOF)
++      if (x < (ssize_t) image->columns)
+         break;
+       if (SyncAuthenticPixels(image,exception) == MagickFalse)
+         break;
+       if ((image->columns % 2) != 0)
+         (void) ReadBlobByte(image);  /* pad */
+     }
++    if (i < (ssize_t) separations)
++      break;
+     status=SetImageProgress(image,LoadImageTag,(MagickOffsetType) y,
+       image->rows);
+     if (status == MagickFalse)

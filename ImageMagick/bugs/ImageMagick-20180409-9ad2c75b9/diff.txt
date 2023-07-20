@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index a78e46c37..2a51712a4 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -941,7 +941,7 @@ static MagickBooleanType decodeH265Image(Image *image, HEICImageContext *ctx, un
+       if (warning==DE265_OK) {
+         break;
+       }
+-
++      buffer = (unsigned char *) RelinquishMagickMemory(buffer);
+       ThrowBinaryException(CoderWarning,(const char *)NULL,
+         de265_get_error_text(warning));
+     }

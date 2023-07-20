@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index df48726ce..19c0fbdb4 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -336,6 +336,8 @@ static MagickBooleanType ParseHvcCAtom(HEICItemProp *prop, ExceptionInfo *except
+   p = prop->data;
+ 
+   size = prop->size;
++  if (size >= MAX_HVCC_ATOM_SIZE)
++    ThrowAndReturn("hvcC atom is too long");
+   memcpy(buffer, prop->data, size);
+ 
+   pos = 22;

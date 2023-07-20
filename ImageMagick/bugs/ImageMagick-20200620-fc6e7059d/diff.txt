@@ -1,0 +1,13 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 8ed937e47..4e18ebab4 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -4221,7 +4221,7 @@ static MagickBooleanType RenderMVGContent(Image *image,
+       {
+         if (primitive_info[j].coordinates != 3)
+           {
+-            primitive_type=UndefinedPrimitive;
++            status=MagickFalse;
+             break;
+           }
+         status&=TraceArc(&mvg_info,primitive_info[j].point,

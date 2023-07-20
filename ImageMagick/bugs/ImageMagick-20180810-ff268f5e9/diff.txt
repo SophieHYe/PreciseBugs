@@ -1,0 +1,13 @@
+diff --git a/MagickCore/token.c b/MagickCore/token.c
+index abddc26b0..d5435273d 100644
+--- a/MagickCore/token.c
++++ b/MagickCore/token.c
+@@ -383,7 +383,7 @@ MagickExport MagickBooleanType GlobExpression(const char *expression,
+       image_info=AcquireImageInfo();
+       (void) CopyMagickString(image_info->filename,pattern,MagickPathExtent);
+       exception=AcquireExceptionInfo();
+-      (void) SetImageInfo(image_info,0,exception);
++      (void) SetImageInfo(image_info,1,exception);
+       exception=DestroyExceptionInfo(exception);
+       if (LocaleCompare(image_info->filename,pattern) != 0)
+         {

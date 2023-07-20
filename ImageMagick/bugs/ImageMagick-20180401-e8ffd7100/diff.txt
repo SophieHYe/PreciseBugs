@@ -1,0 +1,14 @@
+diff --git a/coders/psd.c b/coders/psd.c
+index ce5c90859..f0c39d80b 100644
+--- a/coders/psd.c
++++ b/coders/psd.c
+@@ -1235,6 +1235,9 @@ static MagickBooleanType ReadPSDChannelZip(Image *image,const size_t channels,
+     (void) LogMagickEvent(CoderEvent,GetMagickModule(),
+        "      layer data is ZIP compressed");
+ 
++  if ((MagickSizeType) compact_size > GetBlobSize(image))
++    ThrowBinaryException(CorruptImageError,"UnexpectedEndOfFile",
++      image->filename);
+   compact_pixels=(unsigned char *) AcquireQuantumMemory(compact_size,
+     sizeof(*compact_pixels));
+   if (compact_pixels == (unsigned char *) NULL)

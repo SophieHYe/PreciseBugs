@@ -1,0 +1,15 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 28f2867e2..54f173e19 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -1570,7 +1570,9 @@ static MagickBooleanType DrawDashPolygon(const DrawInfo *draw_info,
+   {
+     dx=primitive_info[i].point.x-primitive_info[i-1].point.x;
+     dy=primitive_info[i].point.y-primitive_info[i-1].point.y;
+-    maximum_length=hypot((double) dx,dy);
++    maximum_length=hypot(dx,dy);
++    if (maximum_length > MaxBezierCoordinates)
++      break;
+     if (fabs(length) < DrawEpsilon)
+       {
+         n++;

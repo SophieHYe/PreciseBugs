@@ -1,0 +1,35 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index e0d89403c..18b01ab3c 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -5538,7 +5538,8 @@ MagickExport MagickBooleanType DrawPrimitive(Image *image,
+               MagickPathExtent);
+             status&=SetImageInfo(clone_info,0,exception);
+             if ((LocaleNCompare(clone_info->magick,"http",4) == 0) ||
+-                (LocaleCompare(clone_info->magick,"mpri") == 0))
++                (LocaleCompare(clone_info->magick,"mpri") == 0) ||
++                (LocaleCompare(clone_info->magick,"*") == 0))
+               (void) CopyMagickString(clone_info->filename,primitive_info->text,
+                 MagickPathExtent);
+             if (clone_info->size != (char *) NULL)
+diff --git a/coders/vid.c b/coders/vid.c
+index e10330ddf..59b98bba3 100644
+--- a/coders/vid.c
++++ b/coders/vid.c
+@@ -168,7 +168,6 @@ static Image *ReadVIDImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       (void) LogMagickEvent(CoderEvent,GetMagickModule(),"name: %s",
+         filelist[i]);
+     (void) CopyMagickString(read_info->filename,filelist[i],MagickPathExtent);
+-    filelist[i]=DestroyString(filelist[i]);
+     *read_info->magick='\0';
+     next_image=ReadImage(read_info,exception);
+     CatchException(exception);
+@@ -205,6 +204,8 @@ static Image *ReadVIDImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       break;
+   }
+   read_info=DestroyImageInfo(read_info);
++  for (i=0; i < (ssize_t) number_files; i++)
++    filelist[i]=DestroyString(filelist[i]);
+   filelist=(char **) RelinquishMagickMemory(filelist);
+   if (images == (Image *) NULL)
+     ThrowReaderException(CorruptImageError,

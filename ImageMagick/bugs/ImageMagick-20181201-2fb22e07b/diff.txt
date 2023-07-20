@@ -1,0 +1,24 @@
+diff --git a/coders/xcf.c b/coders/xcf.c
+index f6197a07c..27cff865a 100644
+--- a/coders/xcf.c
++++ b/coders/xcf.c
+@@ -1202,6 +1202,8 @@ static Image *ReadXCFImage(const ImageInfo *image_info,ExceptionInfo *exception)
+   status=SetImageExtent(image,image->columns,image->rows,exception);
+   if (status == MagickFalse)
+     return(DestroyImageList(image));
++  if (status != MagickFalse)
++    status=ResetImagePixels(image,exception);
+   if (image_type == GIMP_INDEXED)
+     ThrowReaderException(CoderError,"ColormapTypeNotSupported");
+   if (image_type == GIMP_RGB)
+@@ -1409,8 +1411,8 @@ static Image *ReadXCFImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       XCFLayerInfo
+         *layer_info;
+ 
+-      /* 
+-        the read pointer
++      /*
++        The read pointer.
+       */
+       do
+       {

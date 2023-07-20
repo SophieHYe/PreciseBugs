@@ -1,0 +1,126 @@
+diff --git a/coders/bmp.c b/coders/bmp.c
+index d9b84a828..e0724252a 100644
+--- a/coders/bmp.c
++++ b/coders/bmp.c
+@@ -839,16 +839,16 @@ static Image *ReadBMPImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     if ((bmp_info.bits_per_pixel != 1) && (bmp_info.bits_per_pixel != 4) &&
+         (bmp_info.bits_per_pixel != 8) && (bmp_info.bits_per_pixel != 16) &&
+         (bmp_info.bits_per_pixel != 24) && (bmp_info.bits_per_pixel != 32))
+-      ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++      ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+     if (bmp_info.bits_per_pixel < 16 &&
+         bmp_info.number_colors > (1U << bmp_info.bits_per_pixel))
+       ThrowReaderException(CorruptImageError,"UnrecognizedNumberOfColors");
+     if ((bmp_info.compression == 1) && (bmp_info.bits_per_pixel != 8))
+-      ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++      ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+     if ((bmp_info.compression == 2) && (bmp_info.bits_per_pixel != 4))
+-      ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++      ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+     if ((bmp_info.compression == 3) && (bmp_info.bits_per_pixel < 16))
+-      ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++      ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+     switch (bmp_info.compression)
+     {
+       case BI_RGB:
+diff --git a/coders/dib.c b/coders/dib.c
+index a22554fd4..5208e8d6e 100644
+--- a/coders/dib.c
++++ b/coders/dib.c
+@@ -559,16 +559,16 @@ static Image *ReadDIBImage(const ImageInfo *image_info,ExceptionInfo *exception)
+   if ((dib_info.bits_per_pixel != 1) && (dib_info.bits_per_pixel != 4) &&
+       (dib_info.bits_per_pixel != 8) && (dib_info.bits_per_pixel != 16) &&
+       (dib_info.bits_per_pixel != 24) && (dib_info.bits_per_pixel != 32))
+-    ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++    ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+   if ((dib_info.bits_per_pixel < 16) &&
+       (dib_info.number_colors > (unsigned int) (1UL << dib_info.bits_per_pixel)))
+     ThrowReaderException(CorruptImageError,"UnrecognizedNumberOfColors");
+   if ((dib_info.compression == 1) && (dib_info.bits_per_pixel != 8))
+-    ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++    ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+   if ((dib_info.compression == 2) && (dib_info.bits_per_pixel != 4))
+-    ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++    ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+   if ((dib_info.compression == 3) && (dib_info.bits_per_pixel < 16))
+-    ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++    ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+   switch (dib_info.compression)
+   {
+     case BI_RGB:
+diff --git a/coders/palm.c b/coders/palm.c
+index 536d0df41..c8a85d83c 100644
+--- a/coders/palm.c
++++ b/coders/palm.c
+@@ -322,7 +322,7 @@ static Image *ReadPALMImage(const ImageInfo *image_info,
+     if ((bits_per_pixel != 1) && (bits_per_pixel != 2) &&
+         (bits_per_pixel != 4) && (bits_per_pixel != 8) &&
+         (bits_per_pixel != 16))
+-      ThrowReaderException(CorruptImageError,"UnrecognizedBitsPerPixel");
++      ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
+     version=(size_t) ReadBlobByte(image);
+     if ((version != 0) && (version != 1) && (version != 2))
+       ThrowReaderException(CorruptImageError,"FileFormatVersionMismatch");
+diff --git a/coders/tiff.c b/coders/tiff.c
+index 726b07ae0..bfa162741 100644
+--- a/coders/tiff.c
++++ b/coders/tiff.c
+@@ -1387,6 +1387,12 @@ RestoreMSCWarning
+         TIFFClose(tiff);
+         ThrowReaderException(CorruptImageError,"ImproperImageHeader");
+       }
++    if (((sample_format != SAMPLEFORMAT_IEEEFP) || (bits_per_sample == 64)) &&
++        ((bits_per_sample <= 0) || (bits_per_sample > 32)))
++      {
++        TIFFClose(tiff);
++        ThrowReaderException(CorruptImageError,"UnsupportedBitsPerPixel");
++      }
+     if (sample_format == SAMPLEFORMAT_IEEEFP)
+       (void) SetImageProperty(image,"quantum:format","floating-point",
+         exception);
+diff --git a/config/english.xml b/config/english.xml
+index 780b3f19b..17e83460d 100644
+--- a/config/english.xml
++++ b/config/english.xml
+@@ -324,15 +324,15 @@
+           <message name="UnrecognizedAlphaChannelOption">
+             unrecognized alpha channel option
+           </message>
+-          <message name="UnrecognizedBitsPerPixel">
+-            unrecognized bits per pixel
+-          </message>
+           <message name="UnrecognizedImageCompression">
+             unrecognized compression
+           </message>
+           <message name="UnrecognizedNumberOfColors">
+             unrecognized number of colors
+           </message>
++          <message name="UnsupportedBitsPerPixel">
++            unsupported bits per pixel
++          </message>
+         </error>
+         <fatalerror>
+           <message name="UnableToPersistKey">
+diff --git a/config/francais.xml b/config/francais.xml
+index 11126372f..9f47196a1 100644
+--- a/config/francais.xml
++++ b/config/francais.xml
+@@ -324,15 +324,15 @@
+           <message name="UnrecognizedAlphaChannelOption">
+             alpha de canal l'option non reconnus
+           </message>
+-          <message name="UnrecognizedBitsPerPixel">
+-            bits par pixel non reconnus
+-          </message>
+           <message name="UnrecognizedImageCompression">
+             compression non reconnue
+           </message>
+           <message name="UnrecognizedNumberOfColors">
+             nombre de couleurs non reconnu
+           </message>
++          <message name="UnsupportedBitsPerPixel">
++            bits par pixel non supporté
++          </message>
+         </error>
+         <fatalerror>
+           <message name="UnableToPersistKey">

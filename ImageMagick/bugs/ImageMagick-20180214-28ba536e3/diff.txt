@@ -1,0 +1,13 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index eac32d9ff..cd48710e1 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -3890,7 +3890,7 @@ static double GetFillAlpha(PolygonInfo *polygon_info,const double mid,
+             }
+           else
+             {
+-              alpha=1.0/alpha;
++              alpha=PerceptibleReciprocal(alpha);
+               beta=delta.x*(y-q->y)-delta.y*(x-q->x);
+               distance=alpha*beta*beta;
+             }

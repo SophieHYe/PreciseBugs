@@ -1,0 +1,108 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 29aad764d..23df35ba2 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -334,13 +334,13 @@ MagickExport DrawInfo *CloneDrawInfo(const ImageInfo *image_info,
+         x;
+ 
+       for (x=0; fabs(draw_info->dash_pattern[x]) >= MagickEpsilon; x++) ;
+-      clone_info->dash_pattern=(double *) AcquireQuantumMemory((size_t) x+1UL,
++      clone_info->dash_pattern=(double *) AcquireQuantumMemory((size_t) (x+2),
+         sizeof(*clone_info->dash_pattern));
+       if (clone_info->dash_pattern == (double *) NULL)
+         ThrowFatalException(ResourceLimitFatalError,
+           "UnableToAllocateDashPattern");
+       (void) memcpy(clone_info->dash_pattern,draw_info->dash_pattern,(size_t)
+-        (x+1)*sizeof(*clone_info->dash_pattern));
++        (x+2)*sizeof(*clone_info->dash_pattern));
+     }
+   clone_info->gradient=draw_info->gradient;
+   if (draw_info->gradient.stops != (StopInfo *) NULL)
+@@ -3516,7 +3516,7 @@ MagickExport MagickBooleanType DrawImage(Image *image,const DrawInfo *draw_info,
+                     GetNextToken(r,&r,extent,token);
+                 }
+                 graphic_context[n]->dash_pattern=(double *)
+-                  AcquireQuantumMemory((size_t) (2UL*x+2UL),
++                  AcquireQuantumMemory((size_t) (2*x+2),
+                   sizeof(*graphic_context[n]->dash_pattern));
+                 if (graphic_context[n]->dash_pattern == (double *) NULL)
+                   {
+@@ -3527,7 +3527,7 @@ MagickExport MagickBooleanType DrawImage(Image *image,const DrawInfo *draw_info,
+                     break;
+                   }
+                 (void) memset(graphic_context[n]->dash_pattern,0,(size_t)
+-                  (2UL*x+2UL)*sizeof(*graphic_context[n]->dash_pattern));
++                  (2*x+2)*sizeof(*graphic_context[n]->dash_pattern));
+                 for (j=0; j < x; j++)
+                 {
+                   GetNextToken(q,&q,extent,token);
+diff --git a/coders/miff.c b/coders/miff.c
+index 8ba78ca6e..7d8ceaccd 100644
+--- a/coders/miff.c
++++ b/coders/miff.c
+@@ -483,6 +483,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+ 
+   size_t
+     compress_extent,
++    extent,
+     length,
+     packet_size;
+ 
+@@ -1432,6 +1433,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+       q=QueueAuthenticPixels(image,0,y,image->columns,1,exception);
+       if (q == (Quantum *) NULL)
+         break;
++      extent=0;
+       switch (image->compression)
+       {
+ #if defined(MAGICKCORE_BZLIB_DELEGATE)
+@@ -1470,7 +1472,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+             if (code == BZ_STREAM_END)
+               break;
+           } while (bzip_info.avail_out != 0);
+-          (void) ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
++          extent=ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
+             quantum_type,pixels,exception);
+           break;
+         }
+@@ -1509,7 +1511,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+             if (code == LZMA_STREAM_END)
+               break;
+           } while (lzma_info.avail_out != 0);
+-          (void) ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
++          extent=ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
+             quantum_type,pixels,exception);
+           break;
+         }
+@@ -1551,7 +1553,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+             if (code == Z_STREAM_END)
+               break;
+           } while (zip_info.avail_out != 0);
+-          (void) ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
++          extent=ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
+             quantum_type,pixels,exception);
+           break;
+         }
+@@ -1582,6 +1584,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+               SetPixelAlpha(image,ClampToQuantum(pixel.alpha),q);
+             q+=GetPixelChannels(image);
+           }
++          extent=(size_t) x;
+           break;
+         }
+         default:
+@@ -1589,11 +1592,13 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+           count=ReadBlob(image,packet_size*image->columns,pixels);
+           if (count != (ssize_t) (packet_size*image->columns))
+             ThrowMIFFException(CorruptImageError,"UnableToReadImageData");
+-          (void) ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
++          extent=ImportQuantumPixels(image,(CacheView *) NULL,quantum_info,
+             quantum_type,pixels,exception);
+           break;
+         }
+       }
++      if (extent < image->columns)
++        break;
+       if (SyncAuthenticPixels(image,exception) == MagickFalse)
+         break;
+     }

@@ -1,0 +1,13 @@
+diff --git a/coders/rle.c b/coders/rle.c
+index 03258073b..5da2136e6 100644
+--- a/coders/rle.c
++++ b/coders/rle.c
+@@ -287,6 +287,8 @@ static Image *ReadRLEImage(const ImageInfo *image_info,ExceptionInfo *exception)
+           3*map_length*sizeof(*colormap));
+         if (colormap == (unsigned char *) NULL)
+           ThrowRLEException(ResourceLimitError,"MemoryAllocationFailed");
++        (void) memset(colormap,0,number_colormaps*3*map_length*
++          sizeof(*colormap));
+         p=colormap;
+         for (i=0; i < (ssize_t) number_colormaps; i++)
+           for (x=0; x < (ssize_t) map_length; x++)

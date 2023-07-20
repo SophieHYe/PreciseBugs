@@ -1,0 +1,14 @@
+diff --git a/MagickCore/cache.c b/MagickCore/cache.c
+index a3d580749..cef4a6596 100644
+--- a/MagickCore/cache.c
++++ b/MagickCore/cache.c
+@@ -2701,7 +2701,8 @@ static inline MagickModulo VirtualPixelModulo(const ssize_t offset,
+   modulo.quotient=offset/(ssize_t) extent;
+   if (offset < 0L)
+     modulo.quotient--;
+-  modulo.remainder=offset-modulo.quotient*(ssize_t) extent;
++  modulo.remainder=(ssize_t) (offset-(MagickOffsetType) modulo.quotient*
++    (ssize_t) extent);
+   return(modulo);
+ }
+ 

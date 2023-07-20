@@ -1,0 +1,20 @@
+diff --git a/coders/wpg.c b/coders/wpg.c
+index eb4f54766..e57a5d5f9 100644
+--- a/coders/wpg.c
++++ b/coders/wpg.c
+@@ -1163,6 +1163,7 @@ static Image *ReadWPGImage(const ImageInfo *image_info,
+               status=SetImageExtent(image,image->columns,image->rows,exception);
+               if (status == MagickFalse)
+                 break;
++              (void) SetImageBackgroundColor(image,exception);
+               if ((image->storage_class != PseudoClass) && (bpp < 24))
+                 {
+                   image->colors=one << bpp;
+@@ -1363,6 +1364,7 @@ static Image *ReadWPGImage(const ImageInfo *image_info,
+               status=SetImageExtent(image,image->columns,image->rows,exception);
+               if (status == MagickFalse)
+                 break;
++              (void) SetImageBackgroundColor(image,exception);
+               if ((image->colors == 0) && (bpp != 24))
+                 {
+                   image->colors=one << bpp;

@@ -1,0 +1,58 @@
+diff --git a/MagickCore/property.c b/MagickCore/property.c
+index b06d80be2..94f3105e0 100644
+--- a/MagickCore/property.c
++++ b/MagickCore/property.c
+@@ -2520,7 +2520,8 @@ static const char *GetMagickPropertyLetter(ImageInfo *image_info,
+ 
+       WarnNoImageReturn("\"%%%c\"",letter);
+       colorspace=image->colorspace;
+-      if (SetImageGray(image,exception) != MagickFalse)
++      if ((image->columns != 0) && (image->rows != 0) &&
++          (SetImageGray(image,exception) != MagickFalse))
+         colorspace=GRAYColorspace;   /* FUTURE: this is IMv6 not IMv7 */
+       (void) FormatLocaleString(value,MagickPathExtent,"%s %s %s",
+         CommandOptionToMnemonic(MagickClassOptions,(ssize_t)
+diff --git a/coders/caption.c b/coders/caption.c
+index e0cc5fc54..3dc16636e 100644
+--- a/coders/caption.c
++++ b/coders/caption.c
+@@ -134,9 +134,6 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
+   assert(exception != (ExceptionInfo *) NULL);
+   assert(exception->signature == MagickCoreSignature);
+   image=AcquireImage(image_info,exception);
+-  image->columns=1;
+-  image->rows=1;
+-  (void) SetImageBackgroundColor(image,exception);
+   (void) ResetImagePage(image,"0x0+0+0");
+   /*
+     Format caption.
+@@ -152,9 +149,6 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
+     else
+       property=InterpretImageProperties((ImageInfo *) image_info,image,option,
+         exception);
+-  image=DestroyImage(image);
+-  image=AcquireImage(image_info,exception);
+-  (void) ResetImagePage(image,"0x0+0+0");
+   (void) SetImageProperty(image,"caption",property,exception);
+   property=DestroyString(property);
+   caption=ConstantString(GetImageProperty(image,"caption",exception));
+diff --git a/coders/label.c b/coders/label.c
+index c1567b00a..60d00e3ff 100644
+--- a/coders/label.c
++++ b/coders/label.c
+@@ -123,15 +123,9 @@ static Image *ReadLABELImage(const ImageInfo *image_info,
+   assert(exception != (ExceptionInfo *) NULL);
+   assert(exception->signature == MagickCoreSignature);
+   image=AcquireImage(image_info,exception);
+-  image->columns=1;
+-  image->rows=1;
+-  (void) SetImageBackgroundColor(image,exception);
+   (void) ResetImagePage(image,"0x0+0+0");
+   property=InterpretImageProperties((ImageInfo *) image_info,image,
+     image_info->filename,exception);
+-  image=DestroyImage(image);
+-  image=AcquireImage(image_info,exception);
+-  (void) ResetImagePage(image,"0x0+0+0");
+   (void) SetImageProperty(image,"label",property,exception);
+   property=DestroyString(property);
+   label=GetImageProperty(image,"label",exception);

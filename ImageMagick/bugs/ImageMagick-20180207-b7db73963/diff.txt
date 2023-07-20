@@ -1,0 +1,13 @@
+diff --git a/MagickCore/string.c b/MagickCore/string.c
+index b065ccd6e..9a0853dab 100644
+--- a/MagickCore/string.c
++++ b/MagickCore/string.c
+@@ -237,6 +237,8 @@ MagickExport StringInfo *BlobToStringInfo(const void *blob,const size_t length)
+     }
+   if (blob != (const void *) NULL)
+     (void) memcpy(string_info->datum,blob,length);
++  else
++    (void) memset(string_info->datum,0,length);
+   return(string_info);
+ }
+ 

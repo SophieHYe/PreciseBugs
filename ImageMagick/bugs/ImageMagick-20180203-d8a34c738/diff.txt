@@ -1,0 +1,18 @@
+diff --git a/coders/miff.c b/coders/miff.c
+index 88b9205aa..a1d3b8541 100644
+--- a/coders/miff.c
++++ b/coders/miff.c
+@@ -911,8 +911,11 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+                       *profile;
+ 
+                     if ((MagickSizeType) StringToLong(options) > GetBlobSize(image))
+-                      ThrowReaderException(CorruptImageError,
+-                        "InsufficientImageDataInFile");
++                      {
++                        options=DestroyString(options);
++                        ThrowReaderException(CorruptImageError,
++                          "InsufficientImageDataInFile");
++                      }
+                     if (profiles == (LinkedListInfo *) NULL)
+                       profiles=NewLinkedList(0);
+                     (void) AppendValueToLinkedList(profiles,

@@ -1,0 +1,28 @@
+diff --git a/MagickCore/token.c b/MagickCore/token.c
+index 6ce4ed198..9cafcc2d3 100644
+--- a/MagickCore/token.c
++++ b/MagickCore/token.c
+@@ -284,13 +284,17 @@ MagickExport void GetNextToken(const char *start,const char **end,
+         if (*p == '>')
+           break;
+         if (*p == '(')
+-          for (p++; *p != '\0'; p++)
+           {
+-            if (i < (ssize_t) (extent-1))
+-              token[i++]=(*p);
+-            if ((*p == ')') && (*(p-1) != '\\'))
+-              break;
+-            if ((size_t) (p-start) >= (extent-1))
++            for (p++; *p != '\0'; p++)
++            {
++              if (i < (ssize_t) (extent-1))
++                token[i++]=(*p);
++              if ((*p == ')') && (*(p-1) != '\\'))
++                break;
++              if ((size_t) (p-start) >= (extent-1))
++                break;
++            }
++            if (*p == '\0')
+               break;
+           }
+         if ((size_t) (p-start) >= (extent-1))

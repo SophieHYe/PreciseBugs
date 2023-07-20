@@ -1,0 +1,16 @@
+diff --git a/MagickCore/color.c b/MagickCore/color.c
+index 9832ca094..166d98fd3 100644
+--- a/MagickCore/color.c
++++ b/MagickCore/color.c
+@@ -2403,8 +2403,9 @@ MagickExport MagickBooleanType QueryColorCompliance(const char *name,
+         }
+       SetGeometryInfo(&geometry_info);
+       if (i >= strlen(name))
+-        i=(-1);
+-      flags=ParseGeometry(name+i+1,&geometry_info);
++        flags=ParseGeometry(name,&geometry_info);
++      else
++        flags=ParseGeometry(name+i+1,&geometry_info);
+       if (flags == 0)
+         {
+           char

@@ -1,0 +1,25 @@
+diff --git a/coders/miff.c b/coders/miff.c
+index c79e2b657..2107c769b 100644
+--- a/coders/miff.c
++++ b/coders/miff.c
+@@ -1271,6 +1271,7 @@ static Image *ReadMIFFImage(const ImageInfo *image_info,
+     status=SetImageExtent(image,image->columns,image->rows,exception);
+     if (status == MagickFalse)
+       return(DestroyImageList(image));
++    (void) SetImageBackgroundColor(image,exception);
+     /*
+       Allocate image pixels.
+     */
+diff --git a/configure b/configure
+index f9001bb37..20165c688 100755
+--- a/configure
++++ b/configure
+@@ -4550,7 +4550,7 @@ MAGICK_PATCHLEVEL_VERSION=26
+ 
+ MAGICK_VERSION=7.0.7-26
+ 
+-MAGICK_GIT_REVISION=23183:ce433f804:20180304
++MAGICK_GIT_REVISION=23204:cd80f0cb4:20180304
+ 
+ 
+ # Substitute library versioning

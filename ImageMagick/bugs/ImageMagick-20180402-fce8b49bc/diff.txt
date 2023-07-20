@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index e4eb8af48..580efbf20 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -416,7 +416,7 @@ static MagickBooleanType ParseIpcoAtom(Image *image, DataBuffer *db,
+     if (DBChop(&propDb, db, prop->size) != MagickTrue) {
+       ThrowAndReturn("incorrect read size");
+     }
+-    memcpy(prop->data, propDb.data, prop->size);
++    memcpy(prop->data, propDb.data, prop->size+4);
+ 
+     switch (prop->type) {
+       case ATOM('h', 'v', 'c', 'C'):

@@ -1,0 +1,13 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 3120c0bbc..008f1b10d 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -3300,6 +3300,8 @@ MagickExport MagickBooleanType DrawImage(Image *image,const DrawInfo *draw_info,
+   if (primitive_info != (PrimitiveInfo *) NULL)
+     primitive_info=(PrimitiveInfo *) RelinquishMagickMemory(primitive_info);
+   primitive=DestroyString(primitive);
++  if (stops != (StopInfo *) NULL)
++    stops=(StopInfo *) RelinquishMagickMemory(stops);
+   for ( ; n >= 0; n--)
+     graphic_context[n]=DestroyDrawInfo(graphic_context[n]);
+   graphic_context=(DrawInfo **) RelinquishMagickMemory(graphic_context);

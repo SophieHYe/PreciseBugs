@@ -1,0 +1,53 @@
+diff --git a/ChangeLog b/ChangeLog
+index 9269071f1..b38a7d014 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,8 @@
+ 
+ 2020-12-39  7.0.10-53  <quetzlzacatenango@image...>
+   * CSS colors no longer require commas.
++  * eliminate possible arthimetic overflow (reference
++    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=28849)
+ 
+ 2020-12-19  7.0.10-52  <quetzlzacatenango@image...>
+   * Release ImageMagick version 7.0.10-52 GIT revision 18057:1f5bab30b:20201219
+diff --git a/MagickCore/fx.c b/MagickCore/fx.c
+index 23641762e..9c75a6974 100644
+--- a/MagickCore/fx.c
++++ b/MagickCore/fx.c
+@@ -520,11 +520,13 @@ static inline MagickBooleanType IsFxFunction(const char *expression,
+   return(MagickFalse);
+ }
+ 
+-static MagickOffsetType FxGCD(MagickOffsetType alpha,MagickOffsetType beta)
++static inline double FxGCD(const double alpha,const double beta)
+ {
+-  if (beta != 0)
+-    return(FxGCD(beta,alpha % beta));
+-  return(alpha);
++  if (alpha < beta) 
++    return(FxGCD(beta,alpha)); 
++  if (fabs(beta) < MagickEpsilon) 
++    return(alpha); 
++  return(FxGCD(beta,alpha-beta*floor(alpha/beta))); 
+ }
+ 
+ static inline const char *FxSubexpression(const char *expression,
+@@ -2277,14 +2279,13 @@ static double FxEvaluateSubexpression(FxInfo *fx_info,
+         }
+       if (IsFxFunction(expression,"gcd",3) != MagickFalse)
+         {
+-          MagickOffsetType
++          double
+             gcd;
+ 
+           alpha=FxEvaluateSubexpression(fx_info,channel,x,y,expression+3,
+             depth+1,beta,exception);
+-          gcd=FxGCD((MagickOffsetType) (alpha+0.5),(MagickOffsetType) (*beta+
+-            0.5));
+-          FxReturn((double) gcd);
++          gcd=FxGCD(alpha,*beta);
++          FxReturn(gcd);
+         }
+       if (LocaleCompare(expression,"g") == 0)
+         FxReturn(FxGetSymbol(fx_info,channel,x,y,expression,depth+1,exception));

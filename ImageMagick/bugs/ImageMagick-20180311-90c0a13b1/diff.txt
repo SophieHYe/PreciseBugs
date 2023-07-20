@@ -1,0 +1,26 @@
+diff --git a/MagickCore/distort.c b/MagickCore/distort.c
+index d07486a60..1403f3abe 100644
+--- a/MagickCore/distort.c
++++ b/MagickCore/distort.c
+@@ -2824,7 +2824,7 @@ MagickExport Image *RotateImage(const Image *image,const double degrees,
+     (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",image->filename);
+   assert(exception != (ExceptionInfo *) NULL);
+   assert(exception->signature == MagickCoreSignature);
+-  angle=degrees-(360.0*floor(degrees/360.0));
++  angle=fmod(degrees,360.0);
+   while (angle < -45.0)
+     angle+=360.0;
+   for (rotations=0; angle > 45.0; rotations++)
+diff --git a/MagickCore/shear.c b/MagickCore/shear.c
+index b6a627081..82568ec57 100644
+--- a/MagickCore/shear.c
++++ b/MagickCore/shear.c
+@@ -1742,7 +1742,7 @@ MagickExport Image *ShearRotateImage(const Image *image,const double degrees,
+     (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",image->filename);
+   assert(exception != (ExceptionInfo *) NULL);
+   assert(exception->signature == MagickCoreSignature);
+-  angle=degrees-(360.0*floor(degrees/360.0));
++  angle=fmod(degrees,360.0);
+   if (angle < -45.0)
+     angle+=360.0;
+   for (rotations=0; angle > 45.0; rotations++)

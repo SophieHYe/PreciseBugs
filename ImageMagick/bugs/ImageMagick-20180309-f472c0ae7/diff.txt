@@ -1,0 +1,14 @@
+diff --git a/coders/tim.c b/coders/tim.c
+index 6d1da3220..314ad7d57 100644
+--- a/coders/tim.c
++++ b/coders/tim.c
+@@ -239,6 +239,9 @@ static Image *ReadTIMImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     image->columns=width;
+     image->rows=height;
+     status=SetImageExtent(image,image->columns,image->rows,exception);
++    if (status == MagickFalse)
++      return(DestroyImageList(image));
++    status=ResetImagePixels(image,exception);
+     if (status == MagickFalse)
+       return(DestroyImageList(image));
+     tim_pixels=(unsigned char *) AcquireQuantumMemory(image_size,

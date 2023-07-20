@@ -1,0 +1,13 @@
+diff --git a/coders/tiff.c b/coders/tiff.c
+index dd0766df9..0c0934c28 100644
+--- a/coders/tiff.c
++++ b/coders/tiff.c
+@@ -1545,8 +1545,6 @@ RestoreMSCWarning
+     option=GetImageOption(image_info,"tiff:exif-properties");
+     if (IsStringFalse(option) == MagickFalse) /* enabled by default */
+       TIFFGetEXIFProperties(tiff,image,exception);
+-    (void) TIFFGetFieldDefaulted(tiff,TIFFTAG_SAMPLESPERPIXEL,
+-      &samples_per_pixel);
+     if ((TIFFGetFieldDefaulted(tiff,TIFFTAG_XRESOLUTION,&x_resolution) == 1) &&
+         (TIFFGetFieldDefaulted(tiff,TIFFTAG_YRESOLUTION,&y_resolution) == 1))
+       {

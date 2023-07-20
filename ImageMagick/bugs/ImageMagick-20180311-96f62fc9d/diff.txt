@@ -1,0 +1,13 @@
+diff --git a/coders/icon.c b/coders/icon.c
+index a99c68c48..a2268c8e9 100644
+--- a/coders/icon.c
++++ b/coders/icon.c
+@@ -620,7 +620,7 @@ static Image *ReadICONImage(const ImageInfo *image_info,
+               for (x=0; x < (ssize_t) image->columns; x++)
+               {
+                 byte=(size_t) ReadBlobByte(image);
+-                byte|=(size_t) (ReadBlobByte(image) << 8);
++                byte|=((size_t) ReadBlobByte(image) << 8);
+                 SetPixelIndex(image,(Quantum) byte,q);
+                 q+=GetPixelChannels(image);
+               }
