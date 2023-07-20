@@ -1,0 +1,13 @@
+commit a54611f16cf2140d93f8a33563bbc79af136636a
+Author: Kristian Evers <kristianevers@gmail.com>
+Date:   Tue May 23 17:37:42 2017 +0200
+
+    Fix possible zero division.
+    
+    For some extreme values of eccentricity a zero divison can occur. In
+    those rare cases we return HUGE_VAL to indicate something went wrong
+    while still returning a defined value.
+    
+    Credit to OSS Fuzz.
+    
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1801

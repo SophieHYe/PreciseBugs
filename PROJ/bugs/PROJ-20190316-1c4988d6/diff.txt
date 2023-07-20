@@ -1,0 +1,103 @@
+diff --git a/src/gauss.cpp b/src/gauss.cpp
+index b7a27191..49ccfa1c 100644
+--- a/src/gauss.cpp
++++ b/src/gauss.cpp
+@@ -65,9 +65,14 @@ void *pj_gauss_ini(double e, double phi0, double *chi, double *rc) {
+     }
+     *chi = asin(sphi / en->C);
+     en->ratexp = 0.5 * en->C * e;
+-    en->K = tan(.5 * *chi + M_FORTPI) / (
+-        pow(tan(.5 * phi0 + M_FORTPI), en->C) *
+-        srat(en->e * sphi, en->ratexp)  );
++    if( .5 * phi0 + M_FORTPI < 1e-10 ) {
++        en->K = 1.0 / srat(en->e * sphi, en->ratexp);
++    }
++    else {
++        en->K = tan(.5 * *chi + M_FORTPI) / (
++            pow(tan(.5 * phi0 + M_FORTPI), en->C) *
++            srat(en->e * sphi, en->ratexp)  );
++    }
+     return ((void *)en);
+ }
+ 
+diff --git a/test/gie/builtins.gie b/test/gie/builtins.gie
+index 0c1a70b4..32aad873 100644
+--- a/test/gie/builtins.gie
++++ b/test/gie/builtins.gie
+@@ -4709,7 +4709,7 @@ Oblique Stereographic Alternative
+ ===============================================================================
+ 
+ -------------------------------------------------------------------------------
+-operation +proj=sterea   +ellps=GRS80  +lat_1=0.5 +lat_2=2 +n=0.5
++operation +proj=sterea   +ellps=GRS80
+ -------------------------------------------------------------------------------
+ tolerance 0.1 mm
+ accept  2 1
+@@ -4732,7 +4732,7 @@ accept  -200 -100
+ expect  -0.001796631 -0.000904369
+ 
+ -------------------------------------------------------------------------------
+-operation +proj=sterea   +R=6400000    +lat_1=0.5 +lat_2=2 +n=0.5
++operation +proj=sterea   +R=6400000
+ -------------------------------------------------------------------------------
+ tolerance 0.1 mm
+ accept  2 1
+@@ -4754,6 +4754,58 @@ expect  -0.001790493 0.000895247
+ accept  -200 -100
+ expect  -0.001790493 -0.000895247
+ 
++-------------------------------------------------------------------------------
++operation +proj=sterea   +ellps=GRS80    +lat_0=90
++-------------------------------------------------------------------------------
++tolerance 0.1 mm
++accept  0 90
++expect  0 0
++accept  0 89
++expect  0.000000000000   -111696.700323081997
++accept  0 45
++expect  0.000000000000   -5291160.727484324016
++accept  0 0
++expect  0.000000000000   -12713600.098641794175
++
++-------------------------------------------------------------------------------
++operation +proj=sterea   +ellps=GRS80    +lat_0=89
++-------------------------------------------------------------------------------
++tolerance 0.1 mm
++accept  0 90
++expect  0.000000000000   111696.700314355621
++accept  0 89
++expect  0.000000000000   0
++accept  0 45
++expect  0.000000000000   -5160845.342319893651
++accept  0 0
++expect  0.000000000000   -12493602.143489977345
++
++-------------------------------------------------------------------------------
++operation +proj=sterea   +ellps=GRS80    +lat_0=-90
++-------------------------------------------------------------------------------
++tolerance 0.1 mm
++accept  0 -90
++expect  0 0
++accept  0 -89
++expect  0.000000000000   111696.700323081997
++accept  0 -45
++expect  0.000000000000   5291160.727484324016
++accept  0 0
++expect  0.000000000000   12713600.098641794175
++
++-------------------------------------------------------------------------------
++operation +proj=sterea   +ellps=GRS80   +lat_0=-89
++-------------------------------------------------------------------------------
++tolerance 0.1 mm
++accept  0 -90
++expect  0.000000000000   -111696.700314355621
++accept  0 -89
++expect  0.000000000000   0
++accept  0 -45
++expect  0.000000000000   5160845.342319893651
++accept  0 0
++expect  0.000000000000   12493602.143489977345
++
+ 
+ ===============================================================================
+ Gauss-Schreiber Transverse Mercator (aka Gauss-Laborde Reunion)

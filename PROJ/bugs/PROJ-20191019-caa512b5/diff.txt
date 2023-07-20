@@ -1,0 +1,28 @@
+diff --git a/src/iso19111/io.cpp b/src/iso19111/io.cpp
+index b442f993..0c5b2f1a 100644
+--- a/src/iso19111/io.cpp
++++ b/src/iso19111/io.cpp
+@@ -8236,6 +8236,8 @@ static double getAngularValue(const std::string &paramValue,
+ // ---------------------------------------------------------------------------
+ 
+ static bool is_in_stringlist(const std::string &str, const char *stringlist) {
++    if (str.empty())
++        return false;
+     const char *haystack = stringlist;
+     while (true) {
+         const char *res = strstr(haystack, str.c_str());
+diff --git a/test/unit/test_io.cpp b/test/unit/test_io.cpp
+index 52608a4a..3484d3c2 100644
+--- a/test/unit/test_io.cpp
++++ b/test/unit/test_io.cpp
+@@ -8805,6 +8805,10 @@ TEST(io, projparse_longlat_errors) {
+                      "+proj=pipeline +step +proj=longlat +ellps=GRS80 +step "
+                      "+proj=axisswap +order=0,0"),
+                  ParsingException);
++
++    // We just want to check that we don't loop forever
++    PROJStringParser().createFromPROJString(
++        "+=x;proj=pipeline step proj=push +type=crs");
+ }
+ 
+ // ---------------------------------------------------------------------------

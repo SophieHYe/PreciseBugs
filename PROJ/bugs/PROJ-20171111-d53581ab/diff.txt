@@ -1,0 +1,62 @@
+diff --git a/src/PJ_aea.c b/src/PJ_aea.c
+index 5e8e3333..f48d2e9b 100644
+--- a/src/PJ_aea.c
++++ b/src/PJ_aea.c
+@@ -211,6 +211,7 @@ PJ *PROJECTION(leac) {
+     if (0==Q)
+         return pj_default_destructor (P, ENOMEM);
+     P->opaque = Q;
++    P->destructor = destructor;
+ 
+     Q->phi2 = pj_param(P->ctx, P->params, "rlat_1").f;
+     Q->phi1 = pj_param(P->ctx, P->params, "bsouth").i ? - M_HALFPI: M_HALFPI;
+diff --git a/src/pj_init.c b/src/pj_init.c
+index f69d9eae..534f0827 100644
+--- a/src/pj_init.c
++++ b/src/pj_init.c
+@@ -500,7 +500,7 @@ pj_init_ctx(projCtx ctx, int argc, char **argv) {
+ 
+     /* find projection selection */
+     if (!(name = pj_param(ctx, start, "sproj").s))
+-        return pj_default_destructor (PIN, PJD_ERR_PROJ_NOT_NAMED);
++        return pj_dealloc_params (ctx, start, PJD_ERR_PROJ_NOT_NAMED);
+     for (i = 0; (s = pj_list[i].id) && strcmp(name, s) ; ++i) ;
+ 
+     if (!s)
+@@ -693,7 +693,10 @@ pj_init_ctx(projCtx ctx, int argc, char **argv) {
+     /* projection specific initialization */
+     PIN = proj(PIN);
+     if ((0==PIN) || ctx->last_errno)
++    {
++        pj_free(PIN);
+         return 0;
++    }
+     return PIN;
+ }
+ 
+diff --git a/test/fuzzers/README.TXT b/test/fuzzers/README.TXT
+index 483c33be..a5f8f3ea 100644
+--- a/test/fuzzers/README.TXT
++++ b/test/fuzzers/README.TXT
+@@ -10,7 +10,7 @@ https://bugs.chromium.org/p/oss-fuzz/issues/list?q=proj4
+ 
+ - Build standard_fuzzer in a standalone mode:
+ 
+-    $ g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -DSTANDALONE ../../src/.libs/libproj.a -lpthread
++    $ g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -DSTANDALONE ../../src/.libs/libproj.a -lpthread -I../../src
+ 
+   Run it:
+     $ PROJ_LIB=../../nad ./standard_fuzzer {file_generated_by_oss_fuzz}
+diff --git a/test/fuzzers/standard_fuzzer.cpp b/test/fuzzers/standard_fuzzer.cpp
+index 73c7827a..be90b80a 100644
+--- a/test/fuzzers/standard_fuzzer.cpp
++++ b/test/fuzzers/standard_fuzzer.cpp
+@@ -38,7 +38,7 @@
+ #include "proj_api.h"
+ 
+ /* Standalone build:
+-g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -DSTANDALONE ../../src/.libs/libproj.a -lpthread 
++g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -DSTANDALONE ../../src/.libs/libproj.a -lpthread -I../../src
+ */
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv);

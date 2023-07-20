@@ -1,0 +1,37 @@
+diff --git a/src/iso19111/io.cpp b/src/iso19111/io.cpp
+index e0e6152a..b57d1de5 100644
+--- a/src/iso19111/io.cpp
++++ b/src/iso19111/io.cpp
+@@ -2683,7 +2683,9 @@ WKTParser::Private::buildGeodeticCRS(const WKTNodeNNPtr &node) {
+     auto cs = buildCS(csNode, node, angularUnit);
+     auto ellipsoidalCS = nn_dynamic_pointer_cast<EllipsoidalCS>(cs);
+     if (ellipsoidalCS) {
+-        assert(!ci_equal(nodeName, WKTConstants::GEOCCS));
++        if (ci_equal(nodeName, WKTConstants::GEOCCS)) {
++            throw ParsingException("ellipsoidal CS not expected in GEOCCS");
++        }
+         try {
+             auto crs = GeographicCRS::create(props, datum, datumEnsemble,
+                                              NN_NO_CHECK(ellipsoidalCS));
+diff --git a/test/unit/test_io.cpp b/test/unit/test_io.cpp
+index 38dfc2b4..9fefaf9b 100644
+--- a/test/unit/test_io.cpp
++++ b/test/unit/test_io.cpp
+@@ -5577,6 +5577,17 @@ TEST(wkt_parse, invalid_GEOCCS) {
+                                            "NORTH],AXIS[\"longitude\",EAST]]"),
+                  ParsingException);
+ 
++    // ellipsoidal CS is invalid in a GEOCCS
++    EXPECT_THROW(WKTParser().createFromWKT(
++                     "GEOCCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\","
++                     "ELLIPSOID[\"WGS 84\",6378274,298.257223564,"
++                     "LENGTHUNIT[\"metre\",1]]],"
++                     "CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,"
++                     "ANGLEUNIT[\"degree\",0.0174532925199433]],"
++                     "AXIS[\"geodetic longitude (Lon)\",east,"
++                     "ANGLEUNIT[\"degree\",0.0174532925199433]]]"),
++                 ParsingException);
++
+     // 3 axis required
+     EXPECT_THROW(WKTParser().createFromWKT(
+                      "GEOCCS[\"x\",DATUM[\"x\",SPHEROID[\"x\",1,0.5]],PRIMEM["

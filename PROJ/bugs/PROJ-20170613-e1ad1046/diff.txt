@@ -1,0 +1,47 @@
+diff --git a/src/PJ_vgridshift.c b/src/PJ_vgridshift.c
+index c91db968..72d97517 100644
+--- a/src/PJ_vgridshift.c
++++ b/src/PJ_vgridshift.c
+@@ -29,8 +29,8 @@ static XYZ forward_3d(LPZ lpz, PJ *P) {
+         /* Only try the gridshift if at least one grid is loaded,
+          * otherwise just pass the coordinate through unchanged. */
+         pj_apply_vgridshift( P, "sgrids",
+-                             &(P->vgridlist_geoid),
+-                             &(P->vgridlist_geoid_count),
++                             &(P->gridlist),
++                             &(P->gridlist_count),
+                              1, 1, 0,
+                              &point.xyz.x, &point.xyz.y, &point.xyz.z );
+     }
+@@ -47,8 +47,8 @@ static LPZ reverse_3d(XYZ xyz, PJ *P) {
+         /* Only try the gridshift if at least one grid is loaded,
+          * otherwise just pass the coordinate through unchanged. */
+         pj_apply_vgridshift( P, "sgrids",
+-                             &(P->vgridlist_geoid),
+-                             &(P->vgridlist_geoid_count),
++                             &(P->gridlist),
++                             &(P->gridlist_count),
+                              0, 1, 0,
+                              &point.xyz.x, &point.xyz.y, &point.xyz.z );
+     }
+@@ -84,6 +84,8 @@ PJ *PROJECTION(vgridshift) {
+     /* Was gridlist compiled properly? */
+     if ( pj_ctx_get_errno(P->ctx) ) {
+         pj_log_error(P, "vgridshift: could not find required grid(s).");
++        pj_dalloc(P->gridlist);
++        P->gridlist = NULL;
+         return freeup_msg(P, -38);
+     }
+ 
+diff --git a/src/pj_gridlist.c b/src/pj_gridlist.c
+index 39ed200d..4193526f 100644
+--- a/src/pj_gridlist.c
++++ b/src/pj_gridlist.c
+@@ -193,6 +193,7 @@ PJ_GRIDINFO **pj_gridlist_from_nadgrids( projCtx ctx, const char *nadgrids,
+ 
+         if( end_char >= sizeof(name) )
+         {
++            pj_dalloc( gridlist );
+             pj_ctx_set_errno( ctx, -38 );
+             pj_release_lock();
+             return NULL;

@@ -1,0 +1,27 @@
+diff --git a/src/ell_set.cpp b/src/ell_set.cpp
+index 0d7fb6d5..d2930ca4 100644
+--- a/src/ell_set.cpp
++++ b/src/ell_set.cpp
+@@ -389,6 +389,9 @@ static int ellps_spherification (PJ *P) {
+             return proj_errno_set (P, PJD_ERR_REF_RAD_LARGER_THAN_90);
+         t = sin (t);
+         t = 1 - P->es * t * t;
++        if (t == 0.) {
++            return proj_errno_set(P, PJD_ERR_INVALID_ECCENTRICITY);
++        }
+         if (i==5)   /* arithmetic */
+             P->a *= (1. - P->es + t) / (2 * t * sqrt(t));
+         else        /* geometric */
+diff --git a/test/gie/ellipsoid.gie b/test/gie/ellipsoid.gie
+index b84a512f..74fbe31d 100644
+--- a/test/gie/ellipsoid.gie
++++ b/test/gie/ellipsoid.gie
+@@ -116,6 +116,8 @@ accept    12 55
+ expect    1338073.2696101593  7374207.4801437631
+ -------------------------------------------------------------------------------
+ 
++operation proj=merc a=1E77 R_lat_a=90 b=1
++expect    failure errno invalid_eccentricity
+ 
+ -------------------------------------------------------------------------------
+ This one from testvarious failed at first version of the pull request

@@ -1,0 +1,35 @@
+diff --git a/internal/impl/validate.go b/internal/impl/validate.go
+index 0c32026..e210086 100644
+--- a/internal/impl/validate.go
++++ b/internal/impl/validate.go
+@@ -353,7 +353,7 @@ State:
+ 
+ 			switch wtyp {
+ 			case wire.VarintType:
+-				if len(b) >= 9 {
++				if len(b) >= 10 {
+ 					switch {
+ 					case b[0] < 0x80:
+ 						b = b[1:]
+diff --git a/proto/testmessages_test.go b/proto/testmessages_test.go
+index 3847c21..7a2eaad 100644
+--- a/proto/testmessages_test.go
++++ b/proto/testmessages_test.go
+@@ -1853,6 +1853,17 @@ var testInvalidMessages = []testProto{
+ 			pack.Raw("\xff\xff\xff\xff\xff\xff\xff\xff\xff\x02"),
+ 		}.Marshal(),
+ 	},
++	{
++		desc: "varint length overrun",
++		decodeTo: []proto.Message{
++			(*testpb.TestAllTypes)(nil),
++			(*testpb.TestAllExtensions)(nil),
++		},
++		wire: pack.Message{
++			pack.Tag{1, pack.VarintType},
++			pack.Raw("\xff\xff\xff\xff\xff\xff\xff\xff\xff"),
++		}.Marshal(),
++	},
+ }
+ 
+ type filterResolver struct {
