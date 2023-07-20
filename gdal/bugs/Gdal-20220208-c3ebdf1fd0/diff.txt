@@ -1,0 +1,40 @@
+diff --git a/autotest/gcore/data/gtiff/invalid_GeogAngularUnitSizeGeoKey.tif b/autotest/gcore/data/gtiff/invalid_GeogAngularUnitSizeGeoKey.tif
+new file mode 100644
+index 0000000000..1f640e7bb1
+Binary files /dev/null and b/autotest/gcore/data/gtiff/invalid_GeogAngularUnitSizeGeoKey.tif differ
+diff --git a/autotest/gcore/tiff_srs.py b/autotest/gcore/tiff_srs.py
+index f8f9eada67..0e7bc5c968 100755
+--- a/autotest/gcore/tiff_srs.py
++++ b/autotest/gcore/tiff_srs.py
+@@ -900,3 +900,12 @@ def test_tiff_srs_read_buggy_sentinel1_ellipsoid_code_4326():
+     assert gdal.GetLastErrorMsg() == ''
+     assert sr.GetAuthorityCode('GEOGCS|DATUM|SPHEROID') == '7030'
+ 
++
++def test_tiff_srs_read_invalid_GeogAngularUnitSizeGeoKey():
++    # That file has GeogAngularUnitSizeGeoKey = 0
++    ds = gdal.Open('data/gtiff/invalid_GeogAngularUnitSizeGeoKey.tif')
++    gdal.ErrorReset()
++    with gdaltest.error_handler():
++        ds.GetSpatialRef()
++    assert gdal.GetLastErrorMsg() != ''
++
+diff --git a/frmts/gtiff/gt_wkt_srs.cpp b/frmts/gtiff/gt_wkt_srs.cpp
+index adcf4579a5..81dc86450c 100644
+--- a/frmts/gtiff/gt_wkt_srs.cpp
++++ b/frmts/gtiff/gt_wkt_srs.cpp
+@@ -770,6 +770,14 @@ OGRSpatialReferenceH GTIFGetOGISDefnAsOSR( GTIF *hGTIF, GTIFDefn * psDefn )
+         }
+     }
+ 
++    // Avoid later division by zero.
++    if( psDefn->UOMAngleInDegrees == 0 )
++    {
++        CPLError(CE_Warning, CPLE_AppDefined,
++                 "Invalid value for GeogAngularUnitSizeGeoKey.");
++        psDefn->UOMAngleInDegrees = 1;
++    }
++
+     if( pszDatumName != nullptr )
+         WKTMassageDatum( &pszDatumName );
+ 

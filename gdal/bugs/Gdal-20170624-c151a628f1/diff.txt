@@ -1,0 +1,16 @@
+diff --git a/gdal/frmts/mrf/libLERC/BitStuffer2.cpp b/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
+index 80253b59d1..238a98af72 100644
+--- a/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
++++ b/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
+@@ -213,6 +213,11 @@ bool BitStuffer2::Decode(const Byte** ppByte, size_t& nRemainingBytes, vector<un
+     int nBitsLut = 0;
+     while (nLut >> nBitsLut)
+       nBitsLut++;
++    if( nBitsLut == 0 )
++    {
++      LERC_BRKPNT();
++      return false;
++    }
+ 
+     // unstuff indexes
+     if( !BitUnStuff(ppByte, nRemainingBytes, dataVec, numElements, nBitsLut) )

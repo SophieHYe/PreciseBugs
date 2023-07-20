@@ -1,0 +1,14 @@
+diff --git a/gdal/frmts/sdts/sdtspolygonreader.cpp b/gdal/frmts/sdts/sdtspolygonreader.cpp
+index d271720a23..ff89d4ec3b 100644
+--- a/gdal/frmts/sdts/sdtspolygonreader.cpp
++++ b/gdal/frmts/sdts/sdtspolygonreader.cpp
+@@ -610,6 +610,9 @@ void SDTSPolygonReader::AssembleRings( SDTSTransfer * poTransfer,
+         poLineReader->Rewind();
+     }
+ 
++    if( !IsIndexed() )
++        return;
++
+ /* -------------------------------------------------------------------- */
+ /*      Scan all polygons indexed on this reader, and assemble their    */
+ /*      rings.                                                          */

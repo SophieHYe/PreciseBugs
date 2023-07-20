@@ -1,0 +1,20 @@
+diff --git a/gdal/frmts/raw/eirdataset.cpp b/gdal/frmts/raw/eirdataset.cpp
+index 66dabcf266..dc95076139 100644
+--- a/gdal/frmts/raw/eirdataset.cpp
++++ b/gdal/frmts/raw/eirdataset.cpp
+@@ -489,6 +489,15 @@ GDALDataset *EIRDataset::Open( GDALOpenInfo * poOpenInfo )
+         }
+     }
+ 
++    if( !RAWDatasetCheckMemoryUsage(
++                        poDS->nRasterXSize, poDS->nRasterYSize, nBands,
++                        nItemSize,
++                        nPixelOffset, nLineOffset, nSkipBytes, nBandOffset,
++                        poDS->fpImage) )
++    {
++        return nullptr;
++    }
++
+     poDS->SetDescription( poOpenInfo->pszFilename );
+     poDS->PamInitialize();
+ 

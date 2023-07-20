@@ -1,0 +1,15 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackageutility.cpp b/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackageutility.cpp
+index a6ceb8910c..90e9a4f61c 100644
+--- a/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackageutility.cpp
++++ b/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackageutility.cpp
+@@ -367,6 +367,10 @@ OGRErr GPkgHeaderFromWKB(const GByte *pabyGpkg, size_t nGpkgLen, GPkgHeader *poH
+ #endif
+             nEnvelopeDim = 4; /* 2D+ZM envelope */
+         }
++        else
++        {
++            return OGRERR_FAILURE;
++        }
+     }
+ 
+     /* SrsId */

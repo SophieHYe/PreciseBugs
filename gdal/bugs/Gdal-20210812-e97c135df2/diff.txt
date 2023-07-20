@@ -1,0 +1,59 @@
+diff --git a/autotest/gdrivers/zarr_driver.py b/autotest/gdrivers/zarr_driver.py
+index 4334d9f755..52bd2a074f 100644
+--- a/autotest/gdrivers/zarr_driver.py
++++ b/autotest/gdrivers/zarr_driver.py
+@@ -2209,3 +2209,33 @@ def test_zarr_pam_spatial_ref():
+     finally:
+         gdal.RmdirRecursive('/vsimem/test.zarr')
+ 
++
++def test_zarr_read_too_large_tile_size():
++
++    j = {
++        "chunks": [
++            1000000,
++            2000
++        ],
++        "compressor": None,
++        "dtype": '!b1',
++        "fill_value": None,
++        "filters": None,
++        "order": "C",
++        "shape": [
++            5,
++            4
++        ],
++        "zarr_format": 2
++    }
++
++    try:
++        gdal.Mkdir('/vsimem/test.zarr', 0)
++        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zarray', json.dumps(j))
++        ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
++        assert ds is not None
++        with gdaltest.error_handler():
++            assert ds.GetRootGroup().OpenMDArray('test').Read() is None
++    finally:
++        gdal.RmdirRecursive('/vsimem/test.zarr')
++
+diff --git a/gdal/frmts/zarr/zarr_array.cpp b/gdal/frmts/zarr/zarr_array.cpp
+index b322a25fce..290157bfa4 100644
+--- a/gdal/frmts/zarr/zarr_array.cpp
++++ b/gdal/frmts/zarr/zarr_array.cpp
+@@ -647,6 +647,16 @@ bool ZarrArray::AllocateWorkingBuffers() const
+     {
+         nTileSize *= static_cast<size_t>(nBlockSize);
+     }
++    if( nTileSize > 1024 * 1024 * 1024 &&
++        !CPLTestBool(CPLGetConfigOption("ZARR_ALLOW_BIG_TILE_SIZE", "NO")) )
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "Zarr tile allocation would require " CPL_FRMT_GUIB " bytes. "
++                 "By default the driver limits to 1 GB. To allow that memory "
++                 "allocation, set the ZARR_ALLOW_BIG_TILE_SIZE configuration "
++                 "option to YES.", static_cast<GUIntBig>(nTileSize));
++        return false;
++    }
+     try
+     {
+         m_abyRawTileData.resize( nTileSize );

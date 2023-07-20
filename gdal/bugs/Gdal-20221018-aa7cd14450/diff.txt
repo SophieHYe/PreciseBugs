@@ -1,0 +1,16 @@
+diff --git a/frmts/sentinel2/sentinel2dataset.cpp b/frmts/sentinel2/sentinel2dataset.cpp
+index 25385859b1..a3664af813 100644
+--- a/frmts/sentinel2/sentinel2dataset.cpp
++++ b/frmts/sentinel2/sentinel2dataset.cpp
+@@ -510,6 +510,11 @@ GDALDataset *SENTINEL2Dataset::Open( GDALOpenInfo * poOpenInfo )
+         CPLString osBasename(CPLGetBasename(pszJustFilename));
+         CPLString osFilename(poOpenInfo->pszFilename);
+         CPLString osMTD(osBasename);
++        // Normally given above constraints, osMTD.size() should be >= 16
++        // but if pszJustFilename is too long, CPLGetBasename() will return
++        // an empty string.
++        if( osMTD.size() < 16 )
++            return nullptr;
+         osMTD[9] = 'M';
+         osMTD[10] = 'T';
+         osMTD[11] = 'D';

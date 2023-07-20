@@ -1,0 +1,15 @@
+diff --git a/ogr/ogrsf_frmts/cad/libopencad/cadlayer.cpp b/ogr/ogrsf_frmts/cad/libopencad/cadlayer.cpp
+index 4cbbc77725..95c9353a92 100644
+--- a/ogr/ogrsf_frmts/cad/libopencad/cadlayer.cpp
++++ b/ogr/ogrsf_frmts/cad/libopencad/cadlayer.cpp
+@@ -186,6 +186,10 @@ void CADLayer::addHandle( long handle, CADObject::ObjectType type, long cadinser
+                     assert( 0 );
+                 }
+ #endif //_DEBUG
++                if( pBlockHeader->hEntities.empty() )
++                {
++                    return;
++                }
+                 auto dCurrentEntHandle = pBlockHeader->hEntities[0].getAsLong();
+                 auto dLastEntHandle    = pBlockHeader->hEntities.back().getAsLong(); // FIXME: in 2000+ entities probably has no links to each other.
+ 

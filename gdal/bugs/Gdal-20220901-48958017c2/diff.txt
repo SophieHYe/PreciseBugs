@@ -1,0 +1,13 @@
+diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
+index 3f151fef0b..ff036b83af 100644
+--- a/ogr/ogrct.cpp
++++ b/ogr/ogrct.cpp
+@@ -1553,6 +1553,8 @@ int OGRProjCT::Initialize( const OGRSpatialReference * poSourceIn,
+             {
+                 proj_destroy(srcCRS);
+                 proj_destroy(targetCRS);
++                if( area )
++                    proj_area_destroy(area);
+                 return FALSE;
+             }
+             CPLStringList aosOptions;

@@ -1,0 +1,19 @@
+diff --git a/gdal/frmts/iso8211/ddffielddefn.cpp b/gdal/frmts/iso8211/ddffielddefn.cpp
+index da0d16cd56..0b58550fc7 100644
+--- a/gdal/frmts/iso8211/ddffielddefn.cpp
++++ b/gdal/frmts/iso8211/ddffielddefn.cpp
+@@ -827,6 +827,14 @@ int DDFFieldDefn::ApplyFormats()
+         }
+         else
+         {
++            if( nFixedWidth > INT_MAX - papoSubfields[i]->GetWidth() )
++            {
++                CPLError( CE_Warning,
++                          static_cast<CPLErrorNum>(CPLE_DiscardedFormat),
++                          "Invalid format controls for `%s': %s",
++                          pszTag, _formatControls );
++                return FALSE;
++            }
+             nFixedWidth += papoSubfields[i]->GetWidth();
+         }
+     }

@@ -1,0 +1,85 @@
+diff --git a/autotest/ogr/ogr_pcidsk.py b/autotest/ogr/ogr_pcidsk.py
+index 7988a322ef..dee4f31bbe 100755
+--- a/autotest/ogr/ogr_pcidsk.py
++++ b/autotest/ogr/ogr_pcidsk.py
+@@ -272,6 +272,34 @@ def ogr_pcidsk_5():
+ 
+     return 'success'
+ 
++###############################################################################
++def ogr_pcidsk_add_field_to_non_empty_layer():
++
++    if ogr.GetDriverByName('PCIDSK') is None:
++        return 'skip'
++
++    tmpfile = '/vsimem/tmp.pix'
++    ds = ogr.GetDriverByName('PCIDSK').CreateDataSource(tmpfile)
++    lyr = ds.CreateLayer('foo')
++    lyr.CreateField( ogr.FieldDefn('foo', ogr.OFTString) )
++    f = ogr.Feature(lyr.GetLayerDefn())
++    f['foo'] = 'bar'
++    lyr.CreateFeature(f)
++    f = None
++    with gdaltest.error_handler():
++        if lyr.CreateField( ogr.FieldDefn('bar', ogr.OFTString) ) == 0:
++            return 'fail'
++    f = ogr.Feature(lyr.GetLayerDefn())
++    f['foo'] = 'bar2'
++    lyr.CreateFeature(f)
++    f = None
++    ds = None
++
++    ogr.GetDriverByName('PCIDSK').DeleteDataSource(tmpfile)
++
++    return 'success'
++
++
+ ###############################################################################
+ # Check a polygon layer
+ 
+@@ -344,6 +372,7 @@ gdaltest_list = [
+     ogr_pcidsk_3,
+     ogr_pcidsk_4,
+     ogr_pcidsk_5,
++    ogr_pcidsk_add_field_to_non_empty_layer,
+     ogr_pcidsk_online_1,
+     ogr_pcidsk_online_2,
+     ogr_pcidsk_cleanup ]
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidskvectorsegment.cpp b/gdal/frmts/pcidsk/sdk/segment/cpcidskvectorsegment.cpp
+index 8e40c0b461..f59747a6a2 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidskvectorsegment.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidskvectorsegment.cpp
+@@ -1150,6 +1150,16 @@ void CPCIDSKVectorSegment::AddField( std::string name, ShapeFieldType type,
+ 
+     LoadHeader();
+ 
++/* -------------------------------------------------------------------- */
++/*      If we have existing features, we should go through adding       */
++/*      this new field.                                                 */
++/* -------------------------------------------------------------------- */
++    if( shape_count > 0 )
++    {
++        return ThrowPCIDSKException( "Support for adding fields in populated layers "
++                              "has not yet been implemented." );
++    }
++
+ /* -------------------------------------------------------------------- */
+ /*      If no default is provided, use the obvious value.               */
+ /* -------------------------------------------------------------------- */
+@@ -1207,16 +1217,6 @@ void CPCIDSKVectorSegment::AddField( std::string name, ShapeFieldType type,
+     vh.field_defaults.push_back( *default_value );
+ 
+     vh.WriteFieldDefinitions();
+-
+-/* -------------------------------------------------------------------- */
+-/*      If we have existing features, we should go through adding       */
+-/*      this new field.                                                 */
+-/* -------------------------------------------------------------------- */
+-    if( shape_count > 0 )
+-    {
+-        return ThrowPCIDSKException( "Support for adding fields in populated layers "
+-                              "has not yet been implemented." );
+-    }
+ }
+ 
+ /************************************************************************/

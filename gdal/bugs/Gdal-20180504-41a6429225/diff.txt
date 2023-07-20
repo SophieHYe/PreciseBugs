@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+index 8d17904c65..22ba7da06f 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+@@ -3035,6 +3035,13 @@ OGRDXFFeature *OGRDXFLayer::InsertBlockInline( GUInt32 nInitialErrorCounter,
+         }
+     }
+ 
++    while( !apoInnerExtraFeatures.empty() )
++    {
++        auto poFeatureToDelete = apoInnerExtraFeatures.front();
++        apoInnerExtraFeatures.pop();
++        delete poFeatureToDelete;
++    }
++
+     poDS->PopBlockInsertion();
+ 
+ /* -------------------------------------------------------------------- */

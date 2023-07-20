@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+index 78827147bd..d5659c1acf 100644
+--- a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
++++ b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+@@ -1138,6 +1138,13 @@ static void ReadVarIntAndAddNoCheck(GByte*& pabyIter, GIntBig& nOutVal)
+             return;
+         }
+         nShift += 7;
++        // To avoid undefined behaviour later when doing << nShift
++        if( nShift >= static_cast<int>(sizeof(GIntBig)) * 8 )
++        {
++            pabyIter = pabyLocalIter;
++            nOutVal = nVal;
++            return;
++        }
+     }
+ }
+ 

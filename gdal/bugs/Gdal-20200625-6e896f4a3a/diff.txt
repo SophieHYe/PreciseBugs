@@ -1,0 +1,27 @@
+diff --git a/gdal/ogr/ogrsf_frmts/lvbag/ogrlvbaglayer.cpp b/gdal/ogr/ogrsf_frmts/lvbag/ogrlvbaglayer.cpp
+index a24150b140..c0456f646f 100644
+--- a/gdal/ogr/ogrsf_frmts/lvbag/ogrlvbaglayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/lvbag/ogrlvbaglayer.cpp
+@@ -481,10 +481,12 @@ void OGRLVBAGLayer::StartElementCbk( const char *pszName, const char **ppszAttr
+         osElementString += ">";
+     }
+     else if( nFeatureCollectionDepth > 0 && nFeatureElementDepth == 0 &&
+-             EQUAL("sl-bag-extract:bagObject", pszName) )
++             EQUAL("sl-bag-extract:bagObject", pszName) &&
++             bHasReadSchema )
+     {
+         nFeatureElementDepth = nCurrentDepth;
+         m_poFeature = new OGRFeature(poFeatureDefn);
++        m_poFeature->SetFID(nNextFID++);
+     }
+     else if( nFeatureCollectionDepth == 0 && EQUAL("sl:standBestand", pszName) )
+         nFeatureCollectionDepth = nCurrentDepth;
+@@ -663,8 +665,6 @@ void OGRLVBAGLayer::EndElementCbk( const char *pszName )
+ 
+         m_poFeature->SetField(poFeatureDefn->GetFieldIndex("lvID"), oLvId.toupper().c_str());
+ 
+-        m_poFeature->SetFID(nNextFID++);
+-
+         XML_StopParser(oParser.get(), XML_TRUE);
+     }
+     else if( nFeatureCollectionDepth == nCurrentDepth )

@@ -1,0 +1,18 @@
+diff --git a/gdal/frmts/fit/fitdataset.cpp b/gdal/frmts/fit/fitdataset.cpp
+index 3df2b5c52a..4412274d9b 100644
+--- a/gdal/frmts/fit/fitdataset.cpp
++++ b/gdal/frmts/fit/fitdataset.cpp
+@@ -1250,8 +1250,13 @@ static GDALDataset *FITCreateCopy(const char * pszFilename,
+                                       bytesPerPixel, // nPixelSpace
+                                       bytesPerPixel * blockX, nullptr); // nLineSpace
+                 if (eErr != CE_None)
++                {
+                     CPLError(CE_Failure, CPLE_FileIO,
+                              "FIT write - CreateCopy got read error %i", eErr);
++                    CPL_IGNORE_RET_VAL(VSIFCloseL( fpImage ));
++                    VSIUnlink( pszFilename );
++                    return nullptr;
++                }
+             } // for iBand
+ 
+ #ifdef swapping

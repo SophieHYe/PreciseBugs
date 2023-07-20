@@ -1,0 +1,64 @@
+diff --git a/autotest/gcore/mask.py b/autotest/gcore/mask.py
+index 9a2f03d0fe..e718653645 100755
+--- a/autotest/gcore/mask.py
++++ b/autotest/gcore/mask.py
+@@ -61,6 +61,12 @@ def mask_1():
+         print(cs)
+         return 'fail'
+ 
++    my_min, my_max, mean, stddev = band.GetMaskBand().ComputeStatistics(0)
++    if (my_min, my_max, mean, stddev) != (255, 255, 255, 0):
++        gdaltest.post_reason('Got wrong mask stats')
++        print(my_min, my_max, mean, stddev)
++        return 'fail'
++
+     return 'success'
+ 
+ ###############################################################################
+diff --git a/gdal/gcore/gdal_priv.h b/gdal/gcore/gdal_priv.h
+index 836fa497b8..bec0372935 100644
+--- a/gdal/gcore/gdal_priv.h
++++ b/gdal/gcore/gdal_priv.h
+@@ -1274,6 +1274,12 @@ class CPL_DLL GDALAllValidMaskBand : public GDALRasterBand
+ 
+     GDALRasterBand *GetMaskBand() override;
+     int             GetMaskFlags() override;
++
++    CPLErr ComputeStatistics( int bApproxOK,
++                            double *pdfMin, double *pdfMax,
++                            double *pdfMean, double *pdfStdDev,
++                            GDALProgressFunc, void *pProgressData ) override;
++
+ };
+ 
+ /* ******************************************************************** */
+diff --git a/gdal/gcore/gdalallvalidmaskband.cpp b/gdal/gcore/gdalallvalidmaskband.cpp
+index 4380ef1041..d7cdbdf308 100644
+--- a/gdal/gcore/gdalallvalidmaskband.cpp
++++ b/gdal/gcore/gdalallvalidmaskband.cpp
+@@ -93,4 +93,25 @@ int GDALAllValidMaskBand::GetMaskFlags()
+ {
+     return GMF_ALL_VALID;
+ }
++
++/************************************************************************/
++/*                           ComputeStatistics()                        */
++/************************************************************************/
++
++CPLErr GDALAllValidMaskBand::ComputeStatistics( int /* bApproxOK */,
++                            double *pdfMin, double *pdfMax,
++                            double *pdfMean, double *pdfStdDev,
++                            GDALProgressFunc, void * /*pProgressData*/ )
++{
++    if( pdfMin )
++        *pdfMin = 255.0;
++    if( pdfMax )
++        *pdfMax = 255.0;
++    if( pdfMean )
++        *pdfMean = 255.0;
++    if( pdfStdDev )
++        *pdfStdDev = 0.0;
++    return CE_None;
++}
++
+ //! @endcond

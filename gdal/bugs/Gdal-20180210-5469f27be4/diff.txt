@@ -1,0 +1,15 @@
+diff --git a/gdal/frmts/sentinel2/sentinel2dataset.cpp b/gdal/frmts/sentinel2/sentinel2dataset.cpp
+index 047849cf2c..8c06f1c2ee 100644
+--- a/gdal/frmts/sentinel2/sentinel2dataset.cpp
++++ b/gdal/frmts/sentinel2/sentinel2dataset.cpp
+@@ -2238,6 +2238,10 @@ GDALDataset *SENTINEL2Dataset::OpenL1C_L2A( const char* pszFilename,
+     {
+         return nullptr;
+     }
++    if( oSetResolutions.empty() )
++    {
++        return nullptr;
++    }
+ 
+     std::set<int> oSetEPSGCodes;
+     for(size_t i=0;i<aosGranuleList.size();i++)

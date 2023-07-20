@@ -1,0 +1,137 @@
+diff --git a/autotest/ogr/data/junk_content_after_valid_doc.kml b/autotest/ogr/data/junk_content_after_valid_doc.kml
+new file mode 100644
+index 0000000000..519965ce59
+--- /dev/null
++++ b/autotest/ogr/data/junk_content_after_valid_doc.kml
+@@ -0,0 +1,65 @@
++<kml xmlns="http://www.opengis.net/kml/2.2">
++                                                                               
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                               
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                           
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                              
++                                                                                                                                                             
++                                                                                                                                                              
++</kml><kml>
+\ No newline at end of file
+diff --git a/autotest/ogr/ogr_kml.py b/autotest/ogr/ogr_kml.py
+index 60b1198904..3550c7acf3 100755
+--- a/autotest/ogr/ogr_kml.py
++++ b/autotest/ogr/ogr_kml.py
+@@ -875,6 +875,21 @@ def ogr_kml_read_weird_empty_folders():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test fix for https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1683
++
++def ogr_kml_read_junk_content_after_valid_doc():
++
++    if not ogrtest.have_read_kml:
++        return 'skip'
++
++    with gdaltest.error_handler():
++        ds = ogr.Open('data/junk_content_after_valid_doc.kml')
++    if ds is not None:
++        return 'fail'
++
++    return 'success'
++
+ ###############################################################################
+ # Build tests runner
+ 
+@@ -902,6 +917,7 @@ gdaltest_list = [
+     ogr_kml_read_folder_with_subfolder_placemark,
+     ogr_kml_read_truncated,
+     ogr_kml_read_weird_empty_folders,
++    ogr_kml_read_junk_content_after_valid_doc,
+     ogr_kml_cleanup ]
+ 
+ if __name__ == '__main__':
+diff --git a/gdal/ogr/ogrsf_frmts/kml/kml.cpp b/gdal/ogr/ogrsf_frmts/kml/kml.cpp
+index 40924d7db8..30edbf8104 100644
+--- a/gdal/ogr/ogrsf_frmts/kml/kml.cpp
++++ b/gdal/ogr/ogrsf_frmts/kml/kml.cpp
+@@ -116,11 +116,22 @@ bool KML::parse()
+             XML_ParserFree(oParser);
+             VSIRewindL(pKMLFile_);
+ 
+-            while( poCurrent_ )
++            if( poCurrent_ != NULL )
+             {
+-                KMLNode* poTemp = poCurrent_->getParent();
+-                delete poCurrent_;
+-                poCurrent_ = poTemp;
++                while( poCurrent_ )
++                {
++                    KMLNode* poTemp = poCurrent_->getParent();
++                    delete poCurrent_;
++                    poCurrent_ = poTemp;
++                }
++                // No need to destroy poTrunk_ : it has been destroyed in
++                // the last iteration
++            }
++            else
++            {
++                // Case of invalid content after closing element matching
++                // first <kml> element
++                delete poTrunk_;
+             }
+             poTrunk_ = NULL;
+ 

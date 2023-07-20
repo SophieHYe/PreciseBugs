@@ -1,0 +1,14 @@
+diff --git a/gdal/ogr/ogrspatialreference.cpp b/gdal/ogr/ogrspatialreference.cpp
+index 39652eb815..2f880ea36a 100644
+--- a/gdal/ogr/ogrspatialreference.cpp
++++ b/gdal/ogr/ogrspatialreference.cpp
+@@ -1241,6 +1241,9 @@ OGRErr OGRSpatialReference::SetTargetLinearUnits( const char *pszTargetKey,
+                                                   double dfInMeters )
+ 
+ {
++    if( dfInMeters <= 0.0 )
++        return OGRERR_FAILURE;
++
+     bNormInfoSet = FALSE;
+ 
+     OGR_SRSNode *poCS = NULL;

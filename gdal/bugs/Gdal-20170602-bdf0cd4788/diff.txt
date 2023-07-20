@@ -1,0 +1,12 @@
+diff --git a/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitelayer.cpp b/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitelayer.cpp
+index f7a193e06a..e1b8746b71 100644
+--- a/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitelayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitelayer.cpp
+@@ -2331,6 +2331,7 @@ OGRErr OGRSQLiteLayer::createFromSpatialiteInternal(const GByte *pabyData,
+             eErr = poGC->addGeometryDirectly( poThisGeom );
+             if( eErr != OGRERR_NONE )
+             {
++                delete poThisGeom;
+                 delete poGC;
+                 return eErr;
+             }

@@ -1,0 +1,26 @@
+diff --git a/gdal/gcore/gdaldefaultoverviews.cpp b/gdal/gcore/gdaldefaultoverviews.cpp
+index 6a6576b840..b1c6950ebc 100644
+--- a/gdal/gcore/gdaldefaultoverviews.cpp
++++ b/gdal/gcore/gdaldefaultoverviews.cpp
+@@ -197,6 +197,12 @@ void GDALDefaultOverviews::OverviewScan()
+ 
+     bCheckedForOverviews = true;
+ 
++    static thread_local int nAntiRecursionCounter = 0;
++    // arbitrary number. 32 should be enough to handle a .ovr.ovr.ovr...
++    if( nAntiRecursionCounter == 64 )
++        return;
++    ++nAntiRecursionCounter;
++
+     CPLDebug( "GDAL", "GDALDefaultOverviews::OverviewScan()" );
+ 
+ /* -------------------------------------------------------------------- */
+@@ -352,6 +358,8 @@ void GDALDefaultOverviews::OverviewScan()
+             }
+         }
+     }
++
++    --nAntiRecursionCounter;
+ }
+ 
+ /************************************************************************/

@@ -1,0 +1,20 @@
+diff --git a/gdal/fuzzers/gdal_vector_translate_fuzzer.cpp b/gdal/fuzzers/gdal_vector_translate_fuzzer.cpp
+index 6f0445354d..5ee4fa862a 100644
+--- a/gdal/fuzzers/gdal_vector_translate_fuzzer.cpp
++++ b/gdal/fuzzers/gdal_vector_translate_fuzzer.cpp
+@@ -75,8 +75,15 @@ int LLVMFuzzerTestOneInput(const uint8_t *buf, size_t len)
+             osOutFilename = pszLine;
+             osOutFilename = osOutFilename.replaceAll('/', '_');
+         }
++        int nCandidateLayerNames = 0;
+         while( (pszLine = CPLReadLineL(fp)) != nullptr )
+         {
++            if( pszLine[0] != '-' )
++            {
++                nCandidateLayerNames ++;
++                if( nCandidateLayerNames == 10 )
++                    break;
++            }
+             papszArgv = CSLAddString(papszArgv, pszLine);
+         }
+         VSIFCloseL(fp);

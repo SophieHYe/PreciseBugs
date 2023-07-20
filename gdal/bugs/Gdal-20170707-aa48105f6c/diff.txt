@@ -1,0 +1,150 @@
+diff --git a/autotest/gcore/data/many_blocks_truncated.tif b/autotest/gcore/data/many_blocks_truncated.tif
+new file mode 100644
+index 0000000000..6245ef3e33
+Binary files /dev/null and b/autotest/gcore/data/many_blocks_truncated.tif differ
+diff --git a/autotest/gcore/data/toomanyblocks_separate.tif b/autotest/gcore/data/toomanyblocks_separate.tif
+new file mode 100644
+index 0000000000..60d2b75655
+Binary files /dev/null and b/autotest/gcore/data/toomanyblocks_separate.tif differ
+diff --git a/autotest/gcore/tiff_read.py b/autotest/gcore/tiff_read.py
+index 43387ff93f..85369e7a53 100755
+--- a/autotest/gcore/tiff_read.py
++++ b/autotest/gcore/tiff_read.py
+@@ -3187,6 +3187,23 @@ def tiff_read_many_blocks():
+ 
+     return 'success'
+ 
++###############################################################################
++
++def tiff_read_many_blocks_truncated():
++
++    md = gdal.GetDriverByName('GTiff').GetMetadata()
++    if md['LIBTIFF'] != 'INTERNAL':
++        return 'skip'
++
++    ds = gdal.Open('data/many_blocks_truncated.tif')
++    with gdaltest.error_handler():
++        ds.GetRasterBand(1).GetMetadataItem('BLOCK_OFFSET_0_2000000', 'TIFF')
++    if gdal.GetLastErrorMsg() != 'File too short':
++        print(gdal.GetLastErrorMsg())
++        return 'fail'
++
++    return 'success'
++
+ ###############################################################################
+ # Test reading  images with nbits > 32
+ 
+@@ -3232,7 +3249,7 @@ def tiff_read_packbits_not_enough_data():
+     return 'success'
+ 
+ ###############################################################################
+-# Test reading images with more than 2billion blocks
++# Test reading images with more than 2billion blocks for a single band
+ 
+ def tiff_read_toomanyblocks():
+ 
+@@ -3245,6 +3262,19 @@ def tiff_read_toomanyblocks():
+     return 'success'
+ 
+ 
++###############################################################################
++# Test reading images with more than 2billion blocks for all bands
++
++def tiff_read_toomanyblocks_separate():
++
++    with gdaltest.error_handler():
++        ds = gdal.Open('data/toomanyblocks_separate.tif')
++    if ds is not None:
++        gdaltest.post_reason('fail')
++        return 'fail'
++
++    return 'success'
++
+ ###############################################################################
+ # Test reading images where the number of items in StripByteCounts/StripOffsets
+ # tag is lesser than the number of strips
+@@ -3468,10 +3498,12 @@ gdaltest_list.append( (tiff_read_big_strip_chunky_way) )
+ gdaltest_list.append( (tiff_read_big_tile) )
+ gdaltest_list.append( (tiff_read_huge_number_strips) )
+ gdaltest_list.append( (tiff_read_many_blocks) )
++gdaltest_list.append( (tiff_read_many_blocks_truncated) )
+ gdaltest_list.append( (tiff_read_uint33) )
+ gdaltest_list.append( (tiff_read_corrupted_deflate_singlestrip) )
+ gdaltest_list.append( (tiff_read_packbits_not_enough_data) )
+ gdaltest_list.append( (tiff_read_toomanyblocks) )
++gdaltest_list.append( (tiff_read_toomanyblocks_separate) )
+ gdaltest_list.append( (tiff_read_size_of_stripbytecount_lower_than_stripcount) )
+ gdaltest_list.append( (tiff_read_stripoffset_types) )
+ gdaltest_list.append( (tiff_read_progressive_jpeg_denial_of_service) )
+diff --git a/gdal/frmts/gtiff/geotiff.cpp b/gdal/frmts/gtiff/geotiff.cpp
+index db9d0d510a..8c4eee26e2 100644
+--- a/gdal/frmts/gtiff/geotiff.cpp
++++ b/gdal/frmts/gtiff/geotiff.cpp
+@@ -268,6 +268,7 @@ class GTiffDataset CPL_FINAL : public GDALPamDataset
+     VSILFILE   *fpL;
+ #if defined(INTERNAL_LIBTIFF) && defined(DEFER_STRILE_LOAD)
+     uint32      nStripArrayAlloc;
++    vsi_l_offset m_nFileSize; // 0 when unknown, only valid in GA_ReadOnly mode
+ #endif
+ 
+     bool        bStreamingIn;
+@@ -6975,6 +6976,7 @@ GTiffDataset::GTiffDataset() :
+     fpL(NULL),
+ #if defined(INTERNAL_LIBTIFF) && defined(DEFER_STRILE_LOAD)
+     nStripArrayAlloc(0),
++    m_nFileSize(0),
+ #endif
+     bStreamingIn(false),
+     bStreamingOut(false),
+@@ -9207,6 +9209,32 @@ bool GTiffDataset::IsBlockAvailable( int nBlockId,
+         }
+         if( static_cast<uint32>(nBlockId) >= nStripArrayAlloc )
+         {
++            if( nBlockId > 1000000 )
++            {
++                // Avoid excessive memory allocation attempt
++                if( m_nFileSize == 0 )
++                {
++                    VSILFILE* fp = VSI_TIFFGetVSILFile(TIFFClientdata( hTIFF ));
++                    const vsi_l_offset nCurOffset = VSIFTellL(fp);
++                    CPL_IGNORE_RET_VAL( VSIFSeekL(fp, 0, SEEK_END) );
++                    m_nFileSize = VSIFTellL(fp);
++                    CPL_IGNORE_RET_VAL( VSIFSeekL(fp, nCurOffset, SEEK_SET) );
++                }
++                // For such a big blockid we need at least a TIFF_LONG
++                if( static_cast<vsi_l_offset>(nBlockId) >
++                                        m_nFileSize / (2 * sizeof(GUInt32)) )
++                {
++                    CPLError(CE_Failure, CPLE_AppDefined, "File too short");
++                    if( pnOffset )
++                        *pnOffset = 0;
++                    if( pnSize )
++                        *pnSize = 0;
++                    if( pbErrOccured )
++                        *pbErrOccured = true;
++                    return false;
++                }
++            }
++
+             uint32 nStripArrayAllocBefore = nStripArrayAlloc;
+             uint32 nStripArrayAllocNew;
+             if( nStripArrayAlloc == 0 &&
+@@ -13245,7 +13273,18 @@ CPLErr GTiffDataset::OpenOffset( TIFF *hTIFFIn,
+                   l_nBlocksPerRow, l_nBlocksPerColumn );
+         return CE_Failure;
+     }
++
++    // Note: we could potentially go up to UINT_MAX blocks, but currently
++    // we use a int nBlockId
+     nBlocksPerBand = l_nBlocksPerColumn * l_nBlocksPerRow;
++    if( nPlanarConfig == PLANARCONFIG_SEPARATE &&
++        nBlocksPerBand > INT_MAX / nBands )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Too many blocks: %d x %d x %d bands",
++                  l_nBlocksPerRow, l_nBlocksPerColumn, nBands );
++        return CE_Failure;
++    }
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Should we handle this using the GTiffBitmapBand?                */

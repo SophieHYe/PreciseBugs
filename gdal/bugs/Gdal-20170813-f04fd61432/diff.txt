@@ -1,0 +1,14 @@
+diff --git a/gdal/frmts/sdts/sdtslib.cpp b/gdal/frmts/sdts/sdtslib.cpp
+index 31edbb4278..f3f43e46f2 100644
+--- a/gdal/frmts/sdts/sdtslib.cpp
++++ b/gdal/frmts/sdts/sdtslib.cpp
+@@ -219,6 +219,9 @@ char **SDTSScanModuleReferences( DDFModule * poModule, const char * pszFName )
+                     const char *pszModName
+                         = poField->GetSubfieldData(poMODN, NULL, i);
+ 
++                    if( pszModName == NULL || strlen(pszModName) < 4 )
++                        continue;
++
+                     char szName[5];
+                     strncpy( szName, pszModName, 4 );
+                     szName[4] = '\0';

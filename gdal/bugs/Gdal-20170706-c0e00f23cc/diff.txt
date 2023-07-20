@@ -1,0 +1,12 @@
+diff --git a/gdal/frmts/wms/minidriver_mrf.cpp b/gdal/frmts/wms/minidriver_mrf.cpp
+index 22e2b7d18a..ddb396c658 100644
+--- a/gdal/frmts/wms/minidriver_mrf.cpp
++++ b/gdal/frmts/wms/minidriver_mrf.cpp
+@@ -159,6 +159,7 @@ WMSMiniDriver_MRF::~WMSMiniDriver_MRF() {
+         delete index_cache;
+     if (fp)
+         VSIFCloseL(fp);
++    delete m_request;
+ }
+ 
+ CPLErr WMSMiniDriver_MRF::Initialize(CPLXMLNode *config, CPL_UNUSED char **papszOpenOptions) {

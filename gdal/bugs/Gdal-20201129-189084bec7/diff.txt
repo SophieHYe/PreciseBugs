@@ -1,0 +1,46 @@
+diff --git a/autotest/ogr/ogr_gml_geom.py b/autotest/ogr/ogr_gml_geom.py
+index 41d0380aa5..f68cdb7bb5 100755
+--- a/autotest/ogr/ogr_gml_geom.py
++++ b/autotest/ogr/ogr_gml_geom.py
+@@ -1086,6 +1086,8 @@ def test_gml_invalid_geoms():
+         ('<gml:Polygon><gml:outerBoundaryIs><gml:LinearRing><gml:posList>0 1 2 3 4 5 0 1</gml:posList></gml:LinearRing></gml:outerBoundaryIs><gml:innerBoundaryIs/></gml:Polygon>', None),
+         ('<gml:Polygon><gml:outerBoundaryIs><gml:LinearRing/></gml:outerBoundaryIs><gml:innerBoundaryIs/></gml:Polygon>', None),
+         ('<gml:Polygon><gml:outerBoundaryIs><gml:LinearRing><gml:posList>0 1 2 3 4 5 0 1</gml:posList></gml:LinearRing></gml:outerBoundaryIs><gml:innerBoundaryIs><gml:Point><gml:pos>31 29 16</gml:pos></gml:Point></gml:innerBoundaryIs></gml:Polygon>', None),
++        ('<gml:Polygon><gml:exterior><gml:CompositeCurve/></gml:exterior></gml:Polygon>', None),
++        ('<gml:Polygon><gml:exterior><gml:LinearRing><gml:posList>0 0 4 0 4 4 0 4 0 0<gml:/posList><gml:/LinearRing><gml:/exterior><gml:interior><gml:CompositeCurve/></gml:interior></gml:Polygon>', None),
+         ('<gml:Ring/>', None),
+         ('<gml:Ring><foo/></gml:Ring>', None),
+         ('<gml:Ring><gml:curveMember/></gml:Ring>', None),
+@@ -1204,6 +1206,7 @@ def test_gml_invalid_geoms():
+         ('<gml:PolyhedralSurface><foo/></gml:PolyhedralSurface>', None),
+         ('<gml:PolyhedralSurface><gml:polygonPatches><foo/></gml:polygonPatches></gml:PolyhedralSurface>', None),
+         ('<gml:PolyhedralSurface><gml:polygonPatches><gml:PolygonPatch><gml:exterior><foo/></gml:exterior></gml:PolygonPatch></gml:polygonPatches></gml:PolyhedralSurface>', None),
++        ('<gml:Triangle><gml:exterior><gml:CompositeCurve/></gml:exterior></gml:Triangle>', None),
+     ]
+ 
+     for (gml, expected_wkt) in gml_expected_wkt_list:
+diff --git a/gdal/ogr/gml2ogrgeometry.cpp b/gdal/ogr/gml2ogrgeometry.cpp
+index a76c5d8a89..98147e57b9 100644
+--- a/gdal/ogr/gml2ogrgeometry.cpp
++++ b/gdal/ogr/gml2ogrgeometry.cpp
+@@ -1012,6 +1012,8 @@ OGRGeometry *GML2OGRGeometry_XMLNode_Internal(
+         {
+             OGRCurve *poCurve = poGeom->toCurve();
+             poGeom = OGRCurve::CastToLinearRing(poCurve);
++            if( poGeom == nullptr )
++                return nullptr;
+         }
+ 
+         OGRCurvePolygon *poCP = nullptr;
+@@ -1085,6 +1087,11 @@ OGRGeometry *GML2OGRGeometry_XMLNode_Internal(
+                         {
+                             OGRLineString* poLS = poGeom->toLineString();
+                             poGeom = OGRCurve::CastToLinearRing(poLS);
++                            if( poGeom == nullptr )
++                            {
++                                delete poCP;
++                                return nullptr;
++                            }
+                         }
+                         else
+                         {

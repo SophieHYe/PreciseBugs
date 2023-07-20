@@ -1,0 +1,16 @@
+diff --git a/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp b/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
+index 6813ef7738..abbbd6faf1 100644
+--- a/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
+@@ -310,6 +310,11 @@ void OGRPDSLayer::ReadStructure(CPLString osStructureFilename)
+                     CPLError(CE_Failure, CPLE_AppDefined,
+                                 "Field %d out of record extents", nFields);
+                     CSLDestroy(papszTokens);
++                    if( nFields == 0 )
++                    {
++                        CPLFree(pasFieldDesc);
++                        pasFieldDesc = nullptr;
++                    }
+                     break;
+                 }
+             }

@@ -1,0 +1,38 @@
+diff --git a/gdal/fuzzers/build.sh b/gdal/fuzzers/build.sh
+index 7ab8eae84c..160127a188 100755
+--- a/gdal/fuzzers/build.sh
++++ b/gdal/fuzzers/build.sh
+@@ -25,9 +25,13 @@ rm -rf curl
+ git clone --depth 1 https://github.com/curl/curl.git curl
+ 
+ rm -rf netcdf-c-4.7.4
++# fix_stack_read_overflow_ncindexlookup.patch: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=39189
+ curl -L https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz > v4.7.4.tar.gz && \
+     tar xzf v4.7.4.tar.gz && \
+-    rm -f v4.7.4.tar.gz
++    rm -f v4.7.4.tar.gz && \
++    cd netcdf-c-4.7.4 && \
++    patch -p0 < $SRC/gdal/gdal/fuzzers/fix_stack_read_overflow_ncindexlookup.patch && \
++    cd ..
+ 
+ rm -rf poppler
+ git clone --depth 1 https://anongit.freedesktop.org/git/poppler/poppler.git poppler
+diff --git a/gdal/fuzzers/fix_stack_read_overflow_ncindexlookup.patch b/gdal/fuzzers/fix_stack_read_overflow_ncindexlookup.patch
+new file mode 100644
+index 0000000000..2335aed3ed
+--- /dev/null
++++ b/gdal/fuzzers/fix_stack_read_overflow_ncindexlookup.patch
+@@ -0,0 +1,13 @@
++--- ./libhdf5/hdf5internal.c.ori	2021-09-24 12:04:56.890823968 +0200
+++++ ./libhdf5/hdf5internal.c	2021-09-24 12:04:44.914865539 +0200
++@@ -896,7 +896,10 @@
++ 
++     /* Give the people what they want. */
++     if (norm_name)
+++    {
++         strncpy(norm_name, my_norm_name, NC_MAX_NAME);
+++        norm_name[NC_MAX_NAME] = 0;
+++    }
++     if (h5)
++         *h5 = my_h5;
++     if (grp)

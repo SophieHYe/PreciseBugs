@@ -1,0 +1,35 @@
+diff --git a/gdal/frmts/adrg/adrgdataset.cpp b/gdal/frmts/adrg/adrgdataset.cpp
+index 4449956087..cfb9a5f237 100644
+--- a/gdal/frmts/adrg/adrgdataset.cpp
++++ b/gdal/frmts/adrg/adrgdataset.cpp
+@@ -951,7 +951,7 @@ ADRGDataset* ADRGDataset::OpenDataset(
+ 
+         BRV = record->GetIntSubfield("GEN", 0, "BRV", 0);
+         CPLDebug("ADRG", "BRV=%d", BRV);
+-        if( ARV <= 0 || BRV <= 0 )
++        if( ARV <= 0 || (ZNA != 9 && ZNA != 18 && BRV <= 0) )
+             return NULL;
+ 
+         const char* pszLSO = record->GetStringSubfield("GEN", 0, "LSO", 0);
+diff --git a/gdal/frmts/adrg/srpdataset.cpp b/gdal/frmts/adrg/srpdataset.cpp
+index b96ffa3fbe..f5a3043d5b 100644
+--- a/gdal/frmts/adrg/srpdataset.cpp
++++ b/gdal/frmts/adrg/srpdataset.cpp
+@@ -398,6 +398,8 @@ CPLErr SRPDataset::GetGeoTransform( double * padfGeoTransform)
+ {
+     if( EQUAL(osProduct,"ASRP") )
+     {
++        if( ARV == 0 )
++            return CE_Failure;
+         if( ZNA == 9)
+         {
+             // North Polar Case
+@@ -420,6 +422,8 @@ CPLErr SRPDataset::GetGeoTransform( double * padfGeoTransform)
+         }
+         else
+         {
++            if( BRV == 0 )
++                return CE_Failure;
+             padfGeoTransform[0] = LSO/3600.0;
+             padfGeoTransform[1] = 360. / ARV;
+             padfGeoTransform[2] = 0.0;

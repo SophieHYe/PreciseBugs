@@ -1,0 +1,33 @@
+diff --git a/gdal/frmts/grib/degrib/degrib/clock.c b/gdal/frmts/grib/degrib/degrib/clock.c
+index 40a53df724..549bdd9fe2 100644
+--- a/gdal/frmts/grib/degrib/degrib/clock.c
++++ b/gdal/frmts/grib/degrib/degrib/clock.c
+@@ -2460,6 +2460,9 @@ double Clock_AddMonthYear (double refTime, int incrMonth, int incrYear)
+    double d_remain;
+    int i;
+ 
++   if( !(fabs(refTime) < SEC_DAY * 365 * 10000) )
++       return 0;
++
+    totDay = (sInt4) floor (refTime / SEC_DAY);
+    Clock_Epoch2YearDay (totDay, &day, &year);
+    month = Clock_MonthNum (day, year);
+diff --git a/gdal/frmts/grib/degrib/degrib/inventory.cpp b/gdal/frmts/grib/degrib/degrib/inventory.cpp
+index e2be00aec2..39bc6c185c 100644
+--- a/gdal/frmts/grib/degrib/degrib/inventory.cpp
++++ b/gdal/frmts/grib/degrib/degrib/inventory.cpp
+@@ -1061,7 +1061,13 @@ int GRIB2Inventory (DataSource &fp, inventoryType **Inv, uInt4 *LenInv,
+             return -4;
+          }
+          /* InventoryParseTime reads 7 bytes */
+-         InventoryParseTime (buffer + 13 - 5, &(inv->refTime));
++         if( InventoryParseTime (buffer + 13 - 5, &(inv->refTime)) < 0 )
++         {
++            errSprintf ("ERROR: Problems with section 1: invalid refTime\n");
++            free (buffer);
++            free (buff);
++            return -4;
++         }
+          MEMCPY_BIG (&center, buffer + 6 - 5, sizeof (short int));
+          MEMCPY_BIG (&subcenter, buffer + 8 - 5, sizeof (short int));
+          MEMCPY_BIG (&mstrVersion, buffer + 10 - 5, sizeof (uChar));

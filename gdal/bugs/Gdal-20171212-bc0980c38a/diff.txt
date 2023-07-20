@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
+index 018941752f..4f661e7f44 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
+@@ -824,8 +824,11 @@ OGRDXFFeature *OGRDXFLayer::TranslateMLEADER()
+ 
+                 // The following bits are copied from
+                 // OGRDXFLayer::InsertBlockInline
+-                poAttribFeature->GetGeometryRef()->transform(
+-                    &oBlockTransformer );
++                if( poAttribFeature->GetGeometryRef() )
++                {
++                    poAttribFeature->GetGeometryRef()->transform(
++                        &oBlockTransformer );
++                }
+ 
+                 if( EQUAL( poAttribFeature->GetFieldAsString( "Layer" ), "0" ) &&
+                     !EQUAL( poOverallFeature->GetFieldAsString( "Layer" ), "" ) )

@@ -1,0 +1,7 @@
+commit 28ee0469aa93b82186a02b20b1c2982fac6706f4
+Author: Even Rouault <even.rouault@mines-paris.org>
+Date:   Sat May 13 13:45:26 2017 +0000
+
+    Internal libjpeg: uses unsigned type for bit_buf_type to avoid potentially undefined behaviour on left shifting (and set BIT_BUF_SIZE to the actual size of bit_buf_type, which should help on 64bit machines). Fixed similarly to https://github.com/libjpeg-turbo/libjpeg-turbo/commit/a1dd35680d40758f234f214cef4c53cd1bc4b34e. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1521. Credit to OSS-Fuzz
+    
+    git-svn-id: https://svn.osgeo.org/gdal/trunk@38251 f0d54148-0727-0410-94bb-9a71ac55c965

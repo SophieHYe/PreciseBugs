@@ -1,0 +1,61 @@
+diff --git a/autotest/ogr/ogr_vrt.py b/autotest/ogr/ogr_vrt.py
+index eb84af46ff..07548ec2d4 100755
+--- a/autotest/ogr/ogr_vrt.py
++++ b/autotest/ogr/ogr_vrt.py
+@@ -1366,7 +1366,42 @@ def ogr_vrt_23(shared_ds_flag = ''):
+ 
+ def ogr_vrt_24():
+ 
+-    return ogr_vrt_23(' shared="1"')
++    ret = ogr_vrt_23(' shared="1"')
++    if ret != 'success':
++        return ret
++
++    rec1 = """<OGRVRTDataSource>
++    <OGRVRTLayer name="test">
++        <SrcDataSource shared="1">/vsimem/rec2.vrt</SrcDataSource>
++    </OGRVRTLayer>
++</OGRVRTDataSource>"""
++
++    rec2 = """<OGRVRTDataSource>
++    <OGRVRTLayer name="test">
++        <SrcDataSource shared="1">/vsimem/rec2.vrt</SrcDataSource>
++    </OGRVRTLayer>
++</OGRVRTDataSource>"""
++
++    gdal.FileFromMemBuffer('/vsimem/rec1.vrt', rec1)
++    gdal.FileFromMemBuffer('/vsimem/rec2.vrt', rec2)
++
++    ds = ogr.Open('/vsimem/rec1.vrt')
++    if ds is None:
++        return 'fail'
++
++    gdal.ErrorReset()
++    gdal.PushErrorHandler('CPLQuietErrorHandler')
++    ds.GetLayer(0).GetLayerDefn()
++    ds.GetLayer(0).GetFeatureCount()
++    gdal.PopErrorHandler()
++    if gdal.GetLastErrorMsg() == '':
++        gdaltest.post_reason('error expected !')
++        return 'fail'
++
++    gdal.Unlink('/vsimem/rec1.vrt')
++    gdal.Unlink('/vsimem/rec2.vrt')
++
++    return 'success'
+ 
+ 
+ ###############################################################################
+diff --git a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
+index f493d7082d..1028089d14 100644
+--- a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
+@@ -800,6 +800,8 @@ bool OGRVRTDataSource::Initialize( CPLXMLNode *psTreeIn, const char *pszNewName,
+ {
+     CPLAssert(nLayers == 0);
+ 
++    AddForbiddenNames(pszNewName);
++
+     psTree = psTreeIn;
+ 
+     // Set name, and capture the directory path so we can use it

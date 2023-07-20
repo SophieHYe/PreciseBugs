@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp b/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
+index f24f1e1481..420c3f9268 100644
+--- a/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
++++ b/gdal/ogr/ogrsf_frmts/vfk/vfkfeature.cpp
+@@ -404,6 +404,8 @@ bool VFKFeature::SetProperties(const char *pszLine)
+                        -> only last two quotes used */
+                     poChar -= 2;
+                 }
++                else if( *poChar == '\0' )
++                    break;
+                 /* odd number of quotes -> none of quotes used */
+             }
+         }

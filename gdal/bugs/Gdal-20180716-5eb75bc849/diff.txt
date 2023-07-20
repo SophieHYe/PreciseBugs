@@ -1,0 +1,26 @@
+diff --git a/gdal/third_party/LercLib/Lerc2.cpp b/gdal/third_party/LercLib/Lerc2.cpp
+index 3b2bc84e17..153031d2c8 100644
+--- a/gdal/third_party/LercLib/Lerc2.cpp
++++ b/gdal/third_party/LercLib/Lerc2.cpp
+@@ -376,6 +376,8 @@ bool Lerc2::DoChecksOnEncode(Byte* pBlobBegin, Byte* pBlobEnd) const
+   {
+     int blobSize = (int)(pBlobEnd - pBlobBegin);
+     int nBytes = (int)(FileKey().length() + sizeof(int) + sizeof(unsigned int));    // start right after the checksum entry
++    if( blobSize < nBytes )
++      return false;
+     unsigned int checksum = ComputeChecksumFletcher32(pBlobBegin + nBytes, blobSize - nBytes);
+ 
+     nBytes -= sizeof(unsigned int);
+diff --git a/gdal/third_party/LercLib/Lerc2.h b/gdal/third_party/LercLib/Lerc2.h
+index 9863f3c4d9..8fdea35d97 100644
+--- a/gdal/third_party/LercLib/Lerc2.h
++++ b/gdal/third_party/LercLib/Lerc2.h
+@@ -481,6 +481,8 @@ bool Lerc2::Decode(const Byte** ppByte, size_t& nBytesRemaining, T* arr, Byte* p
+   if (m_headerInfo.version >= 3)
+   {
+     int nBytes = (int)(FileKey().length() + sizeof(int) + sizeof(unsigned int));    // start right after the checksum entry
++    if( m_headerInfo.blobSize < nBytes )
++      return false;
+     unsigned int checksum = ComputeChecksumFletcher32(ptrBlob + nBytes, m_headerInfo.blobSize - nBytes);
+ #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+     // For fuzzing, ignore checksum verification

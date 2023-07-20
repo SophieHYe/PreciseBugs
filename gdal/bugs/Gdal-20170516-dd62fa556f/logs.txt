@@ -1,0 +1,7 @@
+commit dd62fa556f90a93d6090ddc566d875076f9a560a
+Author: Even Rouault <even.rouault@mines-paris.org>
+Date:   Tue May 16 09:21:57 2017 +0000
+
+    CPLErrorSetState(): Workaround clang -fsanitize=undefined behaviour that doesn't like dereferencing szLastErrMsg[i>=DEFAULT_LAST_ERR_MSG_SIZE] even when structure has been properly resize. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1628. Credit to OSS Fuz
+    
+    git-svn-id: https://svn.osgeo.org/gdal/trunk@38405 f0d54148-0727-0410-94bb-9a71ac55c965

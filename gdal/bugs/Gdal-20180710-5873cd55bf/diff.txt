@@ -1,0 +1,13 @@
+diff --git a/gdal/third_party/LercLib/BitStuffer2.cpp b/gdal/third_party/LercLib/BitStuffer2.cpp
+index e0f72c410a..474ea5b49a 100644
+--- a/gdal/third_party/LercLib/BitStuffer2.cpp
++++ b/gdal/third_party/LercLib/BitStuffer2.cpp
+@@ -219,6 +219,8 @@ bool BitStuffer2::Decode(const Byte** ppByte, size_t& nBytesRemaining, vector<un
+     int nBitsLut = 0;
+     while (nLut >> nBitsLut)
+       nBitsLut++;
++    if (nBitsLut == 0)
++      return false;
+ 
+     // unstuff indexes
+     if (lerc2Version >= 3)

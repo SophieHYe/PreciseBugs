@@ -1,0 +1,15 @@
+diff --git a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdriver.cpp b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdriver.cpp
+index ba06ab33d0..cb294b991f 100644
+--- a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdriver.cpp
++++ b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdriver.cpp
+@@ -99,6 +99,10 @@ static GDALDataset *OGRVRTDriverOpen( GDALOpenInfo *poOpenInfo )
+     // Open file and check if it contains appropriate XML.
+     else
+     {
++#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++        if( poOpenInfo->fpL == NULL )
++            return NULL;
++#endif
+         VSIStatBufL sStatBuf;
+         if( VSIStatL(poOpenInfo->pszFilename, &sStatBuf) != 0 ||
+             sStatBuf.st_size > 1024 * 1024 )

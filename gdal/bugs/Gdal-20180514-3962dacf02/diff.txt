@@ -1,0 +1,16 @@
+diff --git a/gdal/ogr/ogrsf_frmts/xlsx/ogrxlsxdatasource.cpp b/gdal/ogr/ogrsf_frmts/xlsx/ogrxlsxdatasource.cpp
+index 3b8c95f957..5e2cb41b55 100644
+--- a/gdal/ogr/ogrsf_frmts/xlsx/ogrxlsxdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/xlsx/ogrxlsxdatasource.cpp
+@@ -714,7 +714,10 @@ void OGRXLSXDataSource::endElementTable(CPL_UNUSED const char *pszNameIn)
+                                                      eSubType);
+                 OGRFieldDefn oFieldDefn(pszFieldName, eType);
+                 oFieldDefn.SetSubType(eSubType);
+-                poCurLayer->CreateField(&oFieldDefn);
++                if( poCurLayer->CreateField(&oFieldDefn) != OGRERR_NONE )
++                {
++                    return;
++                }
+             }
+ 
+             OGRFeature* poFeature = new OGRFeature(poCurLayer->GetLayerDefn());

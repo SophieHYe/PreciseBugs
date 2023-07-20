@@ -1,0 +1,13 @@
+diff --git a/frmts/pds/isis2dataset.cpp b/frmts/pds/isis2dataset.cpp
+index 419aefd0b1..47cf73230c 100644
+--- a/frmts/pds/isis2dataset.cpp
++++ b/frmts/pds/isis2dataset.cpp
+@@ -231,7 +231,7 @@ GDALDataset *ISIS2Dataset::Open( GDALOpenInfo * poOpenInfo )
+     // ^QUBE = "ui31s015.img" - which implies no label or skip value
+ 
+     const char *pszQube = poDS->GetKeyword( "^QUBE" );
+-    GUIntBig nQube = 0;
++    int nQube = 0;
+     int bByteLocation = FALSE;
+     CPLString osTargetFile = poOpenInfo->pszFilename;
+ 

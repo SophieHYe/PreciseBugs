@@ -1,0 +1,12 @@
+diff --git a/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitetablelayer.cpp b/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitetablelayer.cpp
+index 9cad900d42..46fbc5f4a8 100644
+--- a/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitetablelayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/sqlite/ogrsqlitetablelayer.cpp
+@@ -414,6 +414,7 @@ CPLErr OGRSQLiteTableLayer::EstablishFeatureDefn(const char* pszGeomCol)
+             if( papszRow[1] == NULL || papszRow[2] == NULL )
+             {
+                 CPLDebug("SQLite", "Did not get expected col value");
++                sqlite3_free_table(papszResult);
+                 continue;
+             }
+             if( papszRow[0] != NULL )

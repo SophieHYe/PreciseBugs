@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+index 9e3b63d280..28ed1b3fb0 100644
+--- a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
++++ b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+@@ -412,11 +412,11 @@ int FileGDBTable::IsLikelyFeatureAtOffset(vsi_l_offset nOffset,
+                 CPLAssert(false);
+                 break;
+         }
++        if( nRowBlobLength < nRequiredLength )
++            return FALSE;
+     }
+     if( !bExactSizeKnown )
+     {
+-        if( nRowBlobLength < nRequiredLength )
+-            return FALSE;
+         if( VSIFReadL(pabyBuffer + nNullableFieldsSizeInBytes,
+                 nRowBlobLength - nNullableFieldsSizeInBytes, 1, fpTable) != 1 )
+             return FALSE;

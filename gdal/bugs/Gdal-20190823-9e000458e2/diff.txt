@@ -1,0 +1,13 @@
+diff --git a/gdal/port/cpl_vsil_subfile.cpp b/gdal/port/cpl_vsil_subfile.cpp
+index 327aef42a9..d8cd3b2d38 100644
+--- a/gdal/port/cpl_vsil_subfile.cpp
++++ b/gdal/port/cpl_vsil_subfile.cpp
+@@ -342,7 +342,7 @@ VSISubFileFilesystemHandler::Open( const char *pszFilename,
+         errno = ENOENT;
+         return nullptr;
+     }
+-    if( nOff + nSize < nOff )
++    if( nOff > std::numeric_limits<vsi_l_offset>::max() - nSize )
+     {
+         return nullptr;
+     }

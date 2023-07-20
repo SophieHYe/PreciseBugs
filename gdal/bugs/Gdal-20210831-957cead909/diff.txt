@@ -1,0 +1,71 @@
+diff --git a/autotest/gdrivers/data/pcidsk/invalid_segment_pointers_offset.pix b/autotest/gdrivers/data/pcidsk/invalid_segment_pointers_offset.pix
+new file mode 100644
+index 0000000000..45a4043060
+Binary files /dev/null and b/autotest/gdrivers/data/pcidsk/invalid_segment_pointers_offset.pix differ
+diff --git a/autotest/gdrivers/pcidsk.py b/autotest/gdrivers/pcidsk.py
+index 01eb8f75fc..bb91fc01ab 100755
+--- a/autotest/gdrivers/pcidsk.py
++++ b/autotest/gdrivers/pcidsk.py
+@@ -592,6 +592,17 @@ def test_pcidsk_online_rpc():
+     ds = gdal.Open('tmp/cache/demo.PIX')
+     assert ds.GetMetadata("RPC") is not None
+ 
++###############################################################################
++# Test opening invalid files
++
++
++@pytest.mark.parametrize("filename", ["data/pcidsk/invalid_segment_pointers_offset.pix"])
++def test_pcidsk_invalid_files(filename):
++
++    with gdaltest.error_handler():
++        assert gdal.VSIStatL(filename) is not None
++        assert gdal.Open(filename) is None
++
+ ###############################################################################
+ # Cleanup.
+ 
+diff --git a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+index 99cf3d99d2..391f8b9cfd 100644
+--- a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
++++ b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+@@ -570,16 +570,37 @@ void CPCIDSKFile::InitializeFromHeader()
+         return ThrowPCIDSKException( "Invalid segment_block_count: %d",
+                                      segment_block_count );
+ 
+-    segment_count = (segment_block_count * 512) / 32;
+-    segment_pointers.SetSize( segment_block_count * 512 );
+     segment_pointers_offset = atouint64(fh.Get(440,16));
+     if( segment_pointers_offset == 0 ||
+-        segment_pointers_offset-1 > std::numeric_limits<uint64>::max() / 512 )
++        segment_pointers_offset-1 > file_size )
+     {
+         return ThrowPCIDSKException(
+             "Invalid segment_pointers_offset: " PCIDSK_FRMT_UINT64, segment_pointers_offset );
+     }
+     segment_pointers_offset = segment_pointers_offset * 512 - 512;
++
++    // Sanity check to avoid allocating too much memory
++    if( segment_block_count * 512 > 100 * 1024 * 1024 )
++    {
++        MutexHolder oHolder( io_mutex );
++
++        interfaces.io->Seek( io_handle, 0, SEEK_END );
++        const auto nRealFileSize = interfaces.io->Tell( io_handle );
++        if( segment_pointers_offset > nRealFileSize )
++        {
++            return ThrowPCIDSKException(
++                "Invalid segment_pointers_offset: " PCIDSK_FRMT_UINT64, segment_pointers_offset );
++        }
++        if( static_cast<unsigned>(segment_block_count * 512) > nRealFileSize - segment_pointers_offset )
++        {
++            // I guess we could also decide to error out
++            segment_block_count = static_cast<int>((nRealFileSize - segment_pointers_offset) / 512);
++        }
++    }
++
++    segment_count = (segment_block_count * 512) / 32;
++    segment_pointers.SetSize( segment_block_count * 512 );
++
+     ReadFromFile( segment_pointers.buffer, segment_pointers_offset,
+                   segment_block_count * 512 );
+ 

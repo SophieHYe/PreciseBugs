@@ -1,0 +1,130 @@
+diff --git a/gdal/port/cpl_vsil_curl.cpp b/gdal/port/cpl_vsil_curl.cpp
+index 54d634b61b..e869b782ea 100644
+--- a/gdal/port/cpl_vsil_curl.cpp
++++ b/gdal/port/cpl_vsil_curl.cpp
+@@ -2295,6 +2295,9 @@ VSIVirtualHandle* VSICurlFilesystemHandler::Open( const char *pszFilename,
+                                                   const char *pszAccess,
+                                                   bool bSetError )
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return NULL;
++
+     if( strchr(pszAccess, 'w') != NULL ||
+         strchr(pszAccess, '+') != NULL )
+     {
+@@ -3291,6 +3294,9 @@ int VSICurlFilesystemHandler::Stat( const char *pszFilename,
+                                     VSIStatBufL *pStatBuf,
+                                     int nFlags )
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return -1;
++
+     const CPLString osFilename(pszFilename);
+ 
+     memset(pStatBuf, 0, sizeof(VSIStatBufL));
+@@ -4172,6 +4178,9 @@ VSIVirtualHandle* VSIS3FSHandler::Open( const char *pszFilename,
+                                         const char *pszAccess,
+                                         bool bSetError)
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return NULL;
++
+     if( strchr(pszAccess, 'w') != NULL || strchr(pszAccess, 'a') != NULL )
+     {
+         /*if( strchr(pszAccess, '+') != NULL)
+@@ -4207,6 +4216,9 @@ VSIVirtualHandle* VSIS3FSHandler::Open( const char *pszFilename,
+ int VSIS3FSHandler::Stat( const char *pszFilename, VSIStatBufL *pStatBuf,
+                           int nFlags )
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return -1;
++
+     CPLString osFilename(pszFilename);
+     if( osFilename.find('/', GetFSPrefix().size()) == std::string::npos )
+         osFilename += "/";
+diff --git a/gdal/port/cpl_vsil_curl_streaming.cpp b/gdal/port/cpl_vsil_curl_streaming.cpp
+index f46791ee3d..023e2ec201 100644
+--- a/gdal/port/cpl_vsil_curl_streaming.cpp
++++ b/gdal/port/cpl_vsil_curl_streaming.cpp
+@@ -1588,6 +1588,9 @@ VSIVirtualHandle* VSICurlStreamingFSHandler::Open( const char *pszFilename,
+                                                    const char *pszAccess,
+                                                    bool /* bSetError */ )
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return NULL;
++
+     if( strchr(pszAccess, 'w') != NULL ||
+         strchr(pszAccess, '+') != NULL )
+     {
+@@ -1620,6 +1623,9 @@ int VSICurlStreamingFSHandler::Stat( const char *pszFilename,
+                                      VSIStatBufL *pStatBuf,
+                                      int nFlags )
+ {
++    if( !STARTS_WITH_CI(pszFilename, GetFSPrefix()) )
++        return -1;
++
+     CPLString osFilename(pszFilename);
+ 
+     memset(pStatBuf, 0, sizeof(VSIStatBufL));
+diff --git a/gdal/port/cpl_vsil_gzip.cpp b/gdal/port/cpl_vsil_gzip.cpp
+index 76f46893e0..7e92d3a7e4 100644
+--- a/gdal/port/cpl_vsil_gzip.cpp
++++ b/gdal/port/cpl_vsil_gzip.cpp
+@@ -1531,6 +1531,9 @@ VSIVirtualHandle* VSIGZipFilesystemHandler::Open( const char *pszFilename,
+                                                   const char *pszAccess,
+                                                   bool /* bSetError */ )
+ {
++    if( !STARTS_WITH_CI(pszFilename, "/vsigzip/") )
++        return NULL;
++
+     VSIFilesystemHandler *poFSHandler =
+         VSIFileManager::GetHandler( pszFilename + strlen("/vsigzip/"));
+ 
+@@ -1635,6 +1638,9 @@ int VSIGZipFilesystemHandler::Stat( const char *pszFilename,
+                                     VSIStatBufL *pStatBuf,
+                                     int nFlags )
+ {
++    if( !STARTS_WITH_CI(pszFilename, "/vsigzip/") )
++        return -1;
++
+     CPLMutexHolder oHolder(&hMutex);
+ 
+     memset(pStatBuf, 0, sizeof(VSIStatBufL));
+diff --git a/gdal/port/cpl_vsil_sparsefile.cpp b/gdal/port/cpl_vsil_sparsefile.cpp
+index 9bf06f83dc..69361dc002 100644
+--- a/gdal/port/cpl_vsil_sparsefile.cpp
++++ b/gdal/port/cpl_vsil_sparsefile.cpp
+@@ -358,7 +358,8 @@ VSISparseFileFilesystemHandler::Open( const char *pszFilename,
+                                       bool /* bSetError */ )
+ 
+ {
+-    CPLAssert( STARTS_WITH_CI(pszFilename, "/vsisparse/") );
++    if( !STARTS_WITH_CI(pszFilename, "/vsisparse/") )
++        return NULL;
+ 
+     if( !EQUAL(pszAccess, "r") && !EQUAL(pszAccess, "rb") )
+     {
+diff --git a/gdal/port/cpl_vsil_subfile.cpp b/gdal/port/cpl_vsil_subfile.cpp
+index d73c53169b..626b67adbf 100644
+--- a/gdal/port/cpl_vsil_subfile.cpp
++++ b/gdal/port/cpl_vsil_subfile.cpp
+@@ -332,6 +332,9 @@ VSISubFileFilesystemHandler::Open( const char *pszFilename,
+                                    bool /* bSetError */ )
+ 
+ {
++    if( !STARTS_WITH_CI(pszFilename, "/vsisubfile/") )
++        return NULL;
++
+     CPLString osSubFilePath;
+     vsi_l_offset nOff = 0;
+     vsi_l_offset nSize = 0;
+@@ -384,6 +387,9 @@ int VSISubFileFilesystemHandler::Stat( const char * pszFilename,
+                                        int nFlags )
+ 
+ {
++    if( !STARTS_WITH_CI(pszFilename, "/vsisubfile/") )
++        return -1;
++
+     CPLString osSubFilePath;
+     vsi_l_offset nOff = 0;
+     vsi_l_offset nSize = 0;

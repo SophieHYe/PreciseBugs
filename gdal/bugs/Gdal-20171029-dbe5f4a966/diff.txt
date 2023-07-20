@@ -1,0 +1,37 @@
+diff --git a/gdal/gcore/rasterio.cpp b/gdal/gcore/rasterio.cpp
+index 3c1694fc52..98d7113b34 100644
+--- a/gdal/gcore/rasterio.cpp
++++ b/gdal/gcore/rasterio.cpp
+@@ -1034,6 +1034,10 @@ CPLErr GDALRasterBand::RasterIOResampled(
+                 3 + static_cast<int>(nDstBlockXSize * dfXRatioDstToSrc);
+             nFullResYChunk =
+                 3 + static_cast<int>(nDstBlockYSize * dfYRatioDstToSrc);
++            if( nFullResXChunk > nRasterXSize )
++                nFullResXChunk = nRasterXSize;
++            if( nFullResYChunk > nRasterYSize )
++                nFullResYChunk = nRasterYSize;
+             if( (nDstBlockXSize == 1 && nDstBlockYSize == 1) ||
+                 ((GIntBig)nFullResXChunk * nFullResYChunk <= 1024 * 1024) )
+                 break;
+@@ -1043,7 +1047,8 @@ CPLErr GDALRasterBand::RasterIOResampled(
+                 nDstBlockYSize > 1 )
+                 nDstBlockYSize /= 2;
+             /* Otherwise cut the maximal dimension */
+-            else if( nDstBlockXSize > 1 && nFullResXChunk > nFullResYChunk )
++            else if( nDstBlockXSize > 1 &&
++                     (nFullResXChunk > nFullResYChunk || nDstBlockYSize == 1) )
+                 nDstBlockXSize /= 2;
+             else
+                 nDstBlockYSize /= 2;
+@@ -1057,6 +1062,11 @@ CPLErr GDALRasterBand::RasterIOResampled(
+         int nFullResYSizeQueried =
+             nFullResYChunk + 2 * nKernelRadius * nOvrFactor;
+ 
++        if( nFullResXSizeQueried > nRasterXSize )
++            nFullResXSizeQueried = nRasterXSize;
++        if( nFullResYSizeQueried > nRasterYSize )
++            nFullResYSizeQueried = nRasterYSize;
++
+         void * pChunk =
+             VSI_MALLOC3_VERBOSE( GDALGetDataTypeSizeBytes(eWrkDataType),
+                                  nFullResXSizeQueried, nFullResYSizeQueried );

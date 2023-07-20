@@ -1,0 +1,76 @@
+diff --git a/autotest/ogr/data/insert-too-many-errors.dxf b/autotest/ogr/data/insert-too-many-errors.dxf
+new file mode 100644
+index 0000000000..faf2b592e9
+--- /dev/null
++++ b/autotest/ogr/data/insert-too-many-errors.dxf
+@@ -0,0 +1,42 @@
++0
++SECTION
++2
++HEADER
++0
++ENDSEC
++0
++BLOCKS
++0
++BLOCK
++2
++x
++0
++INSERT
++71
++7
++0
++unknown
++
++-1
++0
++BLOCK
++0
++DIMENSION
++0
++INSERT
++71
++755
++0
++unknown
++
++-1
++0
++BLOCK
++2
++0
++0
++DIMENSION
++2
++x
++0
++0
+diff --git a/autotest/ogr/ogr_dxf.py b/autotest/ogr/ogr_dxf.py
+index ecf28aca54..9763b81322 100755
+--- a/autotest/ogr/ogr_dxf.py
++++ b/autotest/ogr/ogr_dxf.py
+@@ -3867,6 +3867,15 @@ def ogr_dxf_53():
+ 
+     return 'success'
+ 
++
++###############################################################################
++def ogr_dxf_insert_too_many_errors():
++
++    with gdaltest.error_handler():
++        ogr.Open('data/insert-too-many-errors.dxf')
++
++    return 'success'
++
+ ###############################################################################
+ # cleanup
+ 
+@@ -3935,6 +3944,7 @@ gdaltest_list = [
+     ogr_dxf_51,
+     ogr_dxf_52,
+     ogr_dxf_53,
++    ogr_dxf_insert_too_many_errors,
+     ogr_dxf_cleanup]
+ 
+ if __name__ == '__main__':

@@ -1,0 +1,60 @@
+diff --git a/autotest/gcore/data/toomanyblocks.tif b/autotest/gcore/data/toomanyblocks.tif
+new file mode 100644
+index 0000000000..d58c8d20e8
+Binary files /dev/null and b/autotest/gcore/data/toomanyblocks.tif differ
+diff --git a/autotest/gcore/tiff_read.py b/autotest/gcore/tiff_read.py
+index 8045e8828a..c43a98819c 100755
+--- a/autotest/gcore/tiff_read.py
++++ b/autotest/gcore/tiff_read.py
+@@ -3119,6 +3119,19 @@ def tiff_read_packbits_not_enough_data():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test reading images with more than 2billion blocks
++
++def tiff_read_toomanyblocks():
++
++    with gdaltest.error_handler():
++        ds = gdal.Open('data/toomanyblocks.tif')
++    if ds is not None:
++        gdaltest.post_reason('fail')
++        return 'fail'
++
++    return 'success'
++
+ ###############################################################################
+ 
+ for item in init_list:
+@@ -3226,6 +3239,7 @@ gdaltest_list.append( (tiff_read_many_blocks) )
+ gdaltest_list.append( (tiff_read_uint33) )
+ gdaltest_list.append( (tiff_read_corrupted_deflate_singlestrip) )
+ gdaltest_list.append( (tiff_read_packbits_not_enough_data) )
++gdaltest_list.append( (tiff_read_toomanyblocks) )
+ 
+ gdaltest_list.append( (tiff_read_online_1) )
+ gdaltest_list.append( (tiff_read_online_2) )
+diff --git a/gdal/frmts/gtiff/geotiff.cpp b/gdal/frmts/gtiff/geotiff.cpp
+index 0fe94393ca..a41c0f2d90 100644
+--- a/gdal/frmts/gtiff/geotiff.cpp
++++ b/gdal/frmts/gtiff/geotiff.cpp
+@@ -12831,9 +12831,16 @@ CPLErr GTiffDataset::OpenOffset( TIFF *hTIFFIn,
+         nBlockYSize = nRowsPerStrip;
+     }
+ 
+-    nBlocksPerBand =
+-        DIV_ROUND_UP(nRasterYSize, nBlockYSize) *
+-        DIV_ROUND_UP(nRasterXSize, nBlockXSize);
++    const int l_nBlocksPerColumn = DIV_ROUND_UP(nRasterYSize, nBlockYSize);
++    const int l_nBlocksPerRow = DIV_ROUND_UP(nRasterXSize, nBlockXSize);
++    if( l_nBlocksPerColumn > INT_MAX / l_nBlocksPerRow )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Too many blocks: %d x %d",
++                  l_nBlocksPerRow, l_nBlocksPerColumn );
++        return CE_Failure;
++    }
++    nBlocksPerBand = l_nBlocksPerColumn * l_nBlocksPerRow;
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Should we handle this using the GTiffBitmapBand?                */

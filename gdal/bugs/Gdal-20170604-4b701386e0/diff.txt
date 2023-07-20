@@ -1,0 +1,26 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntf.h b/gdal/ogr/ogrsf_frmts/ntf/ntf.h
+index 4666d3fa41..f0fccf8488 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntf.h
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntf.h
+@@ -464,7 +464,7 @@ class OGRNTFRasterLayer : public OGRLayer
+     int                 iCurrentFC;
+ 
+     int                 nDEMSample;
+-    int                 nFeatureCount;
++    GIntBig             nFeatureCount;
+ 
+   public:
+                         OGRNTFRasterLayer( OGRNTFDataSource * poDS,
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp b/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
+index 0597a8d5dd..43475db2f4 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
+@@ -256,7 +256,7 @@ OGRNTFRasterLayer::OGRNTFRasterLayer( OGRNTFDataSource *poDSIn,
+     OGRFieldDefn oHeight( "HEIGHT", OFTReal );
+     poFeatureDefn->AddFieldDefn( &oHeight );
+ 
+-    nFeatureCount = (poReader->GetRasterXSize() / nDEMSample)
++    nFeatureCount = static_cast<GIntBig>(poReader->GetRasterXSize() / nDEMSample)
+                   * (poReader->GetRasterYSize() / nDEMSample);
+ }
+ 

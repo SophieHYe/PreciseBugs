@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gmt/ogrgmtlayer.cpp b/gdal/ogr/ogrsf_frmts/gmt/ogrgmtlayer.cpp
+index 0f6d5c081d..ba7827e923 100644
+--- a/gdal/ogr/ogrsf_frmts/gmt/ogrgmtlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/gmt/ogrgmtlayer.cpp
+@@ -312,7 +312,7 @@ bool OGRGmtLayer::ReadLine()
+ 
+     for( size_t i = 0; i < osLine.length(); i++ )
+     {
+-        if( osLine[i] == '@' )
++        if( osLine[i] == '@' && i + 2 <= osLine.size() )
+         {
+             bool bInQuotes = false;
+ 

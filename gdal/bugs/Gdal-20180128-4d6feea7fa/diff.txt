@@ -1,0 +1,130 @@
+diff --git a/autotest/ogr/data/mvt/multilinestring/0/0/0.pbf b/autotest/ogr/data/mvt/multilinestring/0/0/0.pbf
+index 97334a1e8d..373f65f351 100644
+Binary files a/autotest/ogr/data/mvt/multilinestring/0/0/0.pbf and b/autotest/ogr/data/mvt/multilinestring/0/0/0.pbf differ
+diff --git a/autotest/ogr/data/mvt/multilinestring/metadata.json b/autotest/ogr/data/mvt/multilinestring/metadata.json
+index 6bd5aba34e..837908ba1b 100644
+--- a/autotest/ogr/data/mvt/multilinestring/metadata.json
++++ b/autotest/ogr/data/mvt/multilinestring/metadata.json
+@@ -1,11 +1,11 @@
+ {
+-    "name": "out_multilinestring",
+-    "description": "out_multilinestring",
++    "name": "multilinestring",
++    "description": "multilinestring",
+     "version": "2",
+     "minzoom": "0",
+     "maxzoom": "0",
+     "center": "2.000000,49.000000,0",
+-    "bounds": "2.000000,49.000000,5.000000,52.000000",
++    "bounds": "2.000000,49.000000,7.000000,54.000000",
+     "type": "overlay",
+     "format": "pbf",
+     "json": "{\"vector_layers\": [ { \"id\": \"multilinestring\", \"description\": \"\", \"minzoom\": 0, \"maxzoom\": 0, \"fields\": {} } ],\"tilestats\": {\"layerCount\": 1,\"layers\": [{\"layer\": \"multilinestring\",\"count\": 1,\"geometry\": \"LineString\",\"attributeCount\": 0,\"attributes\": []}]}}"
+diff --git a/autotest/ogr/data/mvt/polygon/0/0/0.pbf b/autotest/ogr/data/mvt/polygon/0/0/0.pbf
+new file mode 100644
+index 0000000000..6f7e2b6460
+Binary files /dev/null and b/autotest/ogr/data/mvt/polygon/0/0/0.pbf differ
+diff --git a/autotest/ogr/data/mvt/polygon/metadata.json b/autotest/ogr/data/mvt/polygon/metadata.json
+new file mode 100644
+index 0000000000..2d82174a1a
+--- /dev/null
++++ b/autotest/ogr/data/mvt/polygon/metadata.json
+@@ -0,0 +1,12 @@
++{
++    "name": "polygon",
++    "description": "polygon",
++    "version": "2",
++    "minzoom": "0",
++    "maxzoom": "0",
++    "center": "2.000000,49.000000,0",
++    "bounds": "2.000000,49.000000,3.000000,50.000000",
++    "type": "overlay",
++    "format": "pbf",
++    "json": "{\"vector_layers\": [ { \"id\": \"polygon\", \"description\": \"\", \"minzoom\": 0, \"maxzoom\": 0, \"fields\": {} } ],\"tilestats\": {\"layerCount\": 1,\"layers\": [{\"layer\": \"polygon\",\"count\": 1,\"geometry\": \"Polygon\",\"attributeCount\": 0,\"attributes\": []}]}}"
++}
+diff --git a/autotest/ogr/ogr_mvt.py b/autotest/ogr/ogr_mvt.py
+index 1a87b5d8d8..1e574b61ab 100644
+--- a/autotest/ogr/ogr_mvt.py
++++ b/autotest/ogr/ogr_mvt.py
+@@ -237,6 +237,13 @@ def ogr_mvt_linestring():
+         f.DumpReadable()
+         return 'fail'
+ 
++    ds = gdal.OpenEx('data/mvt/linestring/0/0/0.pbf', open_options = ['METADATA_FILE='])
++    lyr = ds.GetLayer(0)
++    f = lyr.GetNextFeature()
++    if ogrtest.check_feature_geometry(f, 'LINESTRING (215246.671651058 6281289.23636264,332653.947097085 6447616.20991119)') != 0:
++        f.DumpReadable()
++        return 'fail'
++
+     return 'success'
+ 
+ ###############################################################################
+@@ -246,10 +253,40 @@ def ogr_mvt_multilinestring():
+     ds = ogr.Open('data/mvt/multilinestring/0/0/0.pbf')
+     lyr = ds.GetLayer(0)
+     f = lyr.GetNextFeature()
+-    if ogrtest.check_feature_geometry(f, 'MULTILINESTRING ((215246.671651058 6281289.23636264,332653.947097085 6447616.20991119),(440277.282922614 6623727.12308023,547900.618748143 6809621.97586978))') != 0:
++    if ogrtest.check_feature_geometry(f, 'MULTILINESTRING ((215246.671651058 6281289.23636264,332653.947097085 6447616.20991119),(440277.282922614 6623727.12308023,547900.618748143 6809621.97586978),(665307.894194175 6985732.88903883,772931.230019704 7171627.74182838))') != 0:
+         f.DumpReadable()
+         return 'fail'
+ 
++    ds = gdal.OpenEx('data/mvt/multilinestring/0/0/0.pbf', open_options = ['METADATA_FILE='])
++    lyr = ds.GetLayer(0)
++    f = lyr.GetNextFeature()
++    if ogrtest.check_feature_geometry(f, 'MULTILINESTRING ((215246.671651058 6281289.23636264,332653.947097085 6447616.20991119),(440277.282922614 6623727.12308023,547900.618748143 6809621.97586978),(665307.894194175 6985732.88903883,772931.230019704 7171627.74182838))') != 0:
++        f.DumpReadable()
++        return 'fail'
++
++    return 'success'
++
++
++###############################################################################
++
++def ogr_mvt_polygon():
++
++
++    ds = ogr.Open('data/mvt/polygon/0/0/0.pbf')
++    lyr = ds.GetLayer(0)
++    f = lyr.GetNextFeature()
++    if ogrtest.check_feature_geometry(f, 'MULTIPOLYGON (((332653.947097085 6447616.20991119,332653.947097085 6281289.23636264,215246.671651058 6281289.23636264,215246.671651058 6447616.20991119,332653.947097085 6447616.20991119)))') != 0:
++        f.DumpReadable()
++        return 'fail'
++
++    ds = gdal.OpenEx('data/mvt/polygon/0/0/0.pbf', open_options = ['METADATA_FILE='])
++    lyr = ds.GetLayer(0)
++    f = lyr.GetNextFeature()
++    if ogrtest.check_feature_geometry(f, 'POLYGON ((332653.947097085 6447616.20991119,332653.947097085 6281289.23636264,215246.671651058 6281289.23636264,215246.671651058 6447616.20991119,332653.947097085 6447616.20991119))') != 0:
++        f.DumpReadable()
++        return 'fail'
++
++
+     return 'success'
+ 
+ ###############################################################################
+@@ -607,6 +644,7 @@ gdaltest_list = [
+     ogr_mvt_mixed,
+     ogr_mvt_linestring,
+     ogr_mvt_multilinestring,
++    ogr_mvt_polygon,
+     ogr_mvt_point_polygon,
+     ogr_mvt_point_polygon_clip,
+     ogr_mvt_tileset_without_readdir,
+diff --git a/gdal/ogr/ogrsf_frmts/mvt/ogrmvtdataset.cpp b/gdal/ogr/ogrsf_frmts/mvt/ogrmvtdataset.cpp
+index 3af32d05c1..deec6a7ac4 100644
+--- a/gdal/ogr/ogrsf_frmts/mvt/ogrmvtdataset.cpp
++++ b/gdal/ogr/ogrsf_frmts/mvt/ogrmvtdataset.cpp
+@@ -939,8 +939,11 @@ OGRGeometry* OGRMVTLayer::ParseGeometry(unsigned int nGeomType,
+                 GetXY(nX, nY, dfX, dfY);
+                 if( poLine != nullptr )
+                 {
+-                    poMultiLS = new OGRMultiLineString();
+-                    poMultiLS->addGeometryDirectly(poLine);
++                    if( poMultiLS == nullptr )
++                    {
++                        poMultiLS = new OGRMultiLineString();
++                        poMultiLS->addGeometryDirectly(poLine);
++                    }
+                     poLine = new OGRLineString();
+                     poMultiLS->addGeometryDirectly(poLine);
+                 }

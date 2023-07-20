@@ -1,0 +1,49 @@
+diff --git a/autotest/ogr/ogr_geom.py b/autotest/ogr/ogr_geom.py
+index 3c74bd2903..1e82c49e3f 100755
+--- a/autotest/ogr/ogr_geom.py
++++ b/autotest/ogr/ogr_geom.py
+@@ -817,18 +817,15 @@ def test_ogr_geom_linestring_limits():
+     gdal.PopErrorHandler()
+     assert gdal.GetLastErrorType() != 0
+ 
+-    if False:  # pylint: disable=using-constant-test
+-        gdal.ErrorReset()
+-        gdal.PushErrorHandler('CPLQuietErrorHandler')
++    gdal.ErrorReset()
++    with gdaltest.error_handler():
+         geom.SetPoint(2147000000, 5, 6, 7)
+-        gdal.PopErrorHandler()
+-        assert gdal.GetLastErrorType() != 0
++    assert gdal.GetLastErrorType() != 0
+ 
+-        gdal.ErrorReset()
+-        gdal.PushErrorHandler('CPLQuietErrorHandler')
++    gdal.ErrorReset()
++    with gdaltest.error_handler():
+         geom.SetPoint_2D(2147000000, 5, 6)
+-        gdal.PopErrorHandler()
+-        assert gdal.GetLastErrorType() != 0
++    assert gdal.GetLastErrorType() != 0
+ 
+     geom = ogr.CreateGeometryFromWkt('LINESTRING(0 0)')
+     assert geom.Length() == 0
+diff --git a/gdal/ogr/ogrlinestring.cpp b/gdal/ogr/ogrlinestring.cpp
+index e5381c4e13..b8af7161e0 100644
+--- a/gdal/ogr/ogrlinestring.cpp
++++ b/gdal/ogr/ogrlinestring.cpp
+@@ -454,6 +454,15 @@ void OGRSimpleCurve::setNumPoints( int nNewPointCount, int bZeroizeNewContent )
+ 
+     if( nNewPointCount > nPointCount )
+     {
++        // Overflow of sizeof(OGRRawPoint) * nNewPointCount can only occur on
++        // 32 bit, but we don't really want to allocate 2 billion points even on
++        // 64 bit...
++        if( nNewPointCount > std::numeric_limits<int>::max() /
++                                    static_cast<int>(sizeof(OGRRawPoint)) )
++        {
++            CPLError(CE_Failure, CPLE_IllegalArg, "Too big point count.");
++            return;
++        }
+         OGRRawPoint* paoNewPoints = static_cast<OGRRawPoint *>(
+             VSI_REALLOC_VERBOSE(paoPoints,
+                                 sizeof(OGRRawPoint) * nNewPointCount));

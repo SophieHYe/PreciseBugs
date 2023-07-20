@@ -1,0 +1,13 @@
+diff --git a/frmts/pcidsk/sdk/segment/cpcidskrpcmodel.cpp b/frmts/pcidsk/sdk/segment/cpcidskrpcmodel.cpp
+index a131206100..b16ab471c9 100644
+--- a/frmts/pcidsk/sdk/segment/cpcidskrpcmodel.cpp
++++ b/frmts/pcidsk/sdk/segment/cpcidskrpcmodel.cpp
+@@ -124,7 +124,7 @@ void CPCIDSKRPCModelSegment::Load()
+ 
+     mbEmpty = false;
+ 
+-    if( data_size - 1024 != 7 * 512 )
++    if( data_size != 1024 + 7 * 512 )
+     {
+         return ThrowPCIDSKException("Wrong data_size in CPCIDSKRPCModelSegment");
+     }

@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/adrg/srpdataset.cpp b/gdal/frmts/adrg/srpdataset.cpp
+index 7a2643193c..55992f5e44 100644
+--- a/gdal/frmts/adrg/srpdataset.cpp
++++ b/gdal/frmts/adrg/srpdataset.cpp
+@@ -199,7 +199,7 @@ CPLErr SRPRasterBand::IReadBlock( int nBlockXOff, int nBlockYOff,
+ /* -------------------------------------------------------------------- */
+ /*      Is this a null block?                                           */
+ /* -------------------------------------------------------------------- */
+-    if (l_poDS->TILEINDEX && l_poDS->TILEINDEX[nBlock] == 0)
++    if (l_poDS->TILEINDEX && l_poDS->TILEINDEX[nBlock] <= 0)
+     {
+         memset(pImage, 0, 128 * 128);
+         return CE_None;

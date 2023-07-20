@@ -1,0 +1,195 @@
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/dec_jpeg2000.cpp b/gdal/frmts/grib/degrib18/g2clib-1.0.4/dec_jpeg2000.cpp
+index 66646ee5ef..ce678392fc 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/dec_jpeg2000.cpp
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/dec_jpeg2000.cpp
+@@ -16,7 +16,7 @@ CPL_C_START
+ #include "grib2.h"
+ CPL_C_END
+ 
+-int dec_jpeg2000(const void *injpc,g2int bufsize,g2int *outfld,g2int outpixels)
++int dec_jpeg2000(const void *injpc,g2int bufsize,g2int **outfld,g2int outpixels)
+ /*$$$  SUBPROGRAM DOCUMENTATION BLOCK
+ *                .      .    .                                       .
+ * SUBPROGRAM:    dec_jpeg2000      Decodes JPEG2000 code stream
+@@ -86,12 +86,29 @@ int dec_jpeg2000(const void *injpc,g2int bufsize,g2int *outfld,g2int outpixels)
+     // is actually smaller than the requested number of pixels
+     if( nYSize == 0 || nXSize > outpixels / nYSize )
+     {
+-        fprintf(stderr, "dec_jpeg2000: Image contains %d pixels > %d.\n",
+-                nXSize * nYSize, outpixels);
++        fprintf(stderr, "dec_jpeg2000: Image contains %ld pixels > %d.\n",
++                (long)nXSize * nYSize, outpixels);
+        GDALClose( poJ2KDataset );
+        VSIUnlink( osFileName );
+        return (-5);
+     }
++    // But on the other side if the image is much smaller than it is suspicious
++    if( nXSize < outpixels / nYSize / 100 )
++    {
++        fprintf(stderr, "dec_jpeg2000: Image contains %ld pixels << %d.\n",
++                (long)nXSize * nYSize, outpixels);
++       GDALClose( poJ2KDataset );
++       VSIUnlink( osFileName );
++       return (-5);
++    }
++    *outfld=(g2int *)calloc(outpixels,sizeof(g2int));
++    if ( *outfld == 0 ) {
++        fprintf(stderr, "Could not allocate space in jpcunpack.\n"
++                "Data field NOT unpacked.\n");
++        GDALClose( poJ2KDataset );
++        VSIUnlink( osFileName );
++        return(-5);
++    }
+     int nXOff = 0;
+     int nYOff = 0;
+     int nBufXSize = nXSize;
+@@ -105,7 +122,7 @@ int dec_jpeg2000(const void *injpc,g2int bufsize,g2int *outfld,g2int outpixels)
+ 
+     //    Decompress the JPEG2000 into the output integer array.
+     const CPLErr eErr = poJ2KDataset->RasterIO( GF_Read, nXOff, nYOff, nXSize, nYSize,
+-                            outfld, nBufXSize, nBufYSize, eBufType,
++                            *outfld, nBufXSize, nBufYSize, eBufType,
+                             nBandCount, panBandMap,
+                             nPixelSpace, nLineSpace, nBandSpace, NULL );
+ 
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
+index 0cf04c0c57..ade64c9775 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
+@@ -95,13 +95,20 @@ g2int g2_unpack7(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int igds
+       if( ipos >= cgrib_length ) {
+           return 7;
+       }
+-      lfld=(g2float *)calloc(ndpts,sizeof(g2float));
+-      if (lfld == 0) {
+-         ierr=6;
+-         return(ierr);
++      if (idrsnum == 40 || idrsnum == 40000)
++      {
++          *fld= lfld = 0;
+       }
+-      else {
+-         *fld=lfld;
++      else
++      {
++        lfld=(g2float *)calloc(ndpts,sizeof(g2float));
++        if (lfld == 0) {
++            ierr=6;
++            return(ierr);
++        }
++        else {
++            *fld=lfld;
++        }
+       }
+ 
+       if (idrsnum == 0)
+@@ -126,8 +133,14 @@ g2int g2_unpack7(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int igds
+           return(ierr);
+         }
+       else if (idrsnum == 40 || idrsnum == 40000) {
+-        jpcunpack(cgrib+ipos,lensec-5,idrstmpl,ndpts,lfld);
++        if( jpcunpack(cgrib+ipos,lensec-5,idrstmpl,ndpts,fld) != 0 )
++        {
++            ierr=7;
++            if ( *fld != 0 ) free(*fld);
++            *fld=0;     //NULL
++            return(ierr);
+         }
++      }
+ #ifdef USE_PNG
+       else if (idrsnum == 41 || idrsnum == 40010) {
+         pngunpack(cgrib+ipos,lensec-5,idrstmpl,ndpts,lfld);
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h b/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
+index ade8436800..33b74ce4c2 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
+@@ -255,7 +255,7 @@ g2int g2_unpack7(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int igds
+ g2int simunpack(unsigned char *,g2int cpack_length,g2int *, g2int,g2float *);
+ int comunpack(unsigned char *,g2int cpack_length,g2int,g2int,g2int *,g2int,g2float *);
+ g2int specunpack(unsigned char *,g2int *,g2int,g2int,g2int, g2int, g2float *);
+-g2int jpcunpack(unsigned char *,g2int,g2int *,g2int, g2float *);
++g2int jpcunpack(unsigned char *,g2int,g2int *,g2int, g2float **);
+ void specpack(g2float *fld,g2int ndpts,g2int JJ,g2int KK,g2int MM,
+               g2int *idrstmpl,unsigned char *cpack,g2int *lcpack);
+ 
+@@ -283,7 +283,7 @@ g2int pngunpack(unsigned char *cpack,g2int len,g2int *idrstmpl,g2int ndpts,
+ void pngpack(g2float *fld,g2int width,g2int height,g2int *idrstmpl,
+              unsigned char *cpack,g2int *lcpack);
+ 
+-int dec_jpeg2000(const void *injpc,g2int bufsize,g2int *outfld,g2int outpixels);
++int dec_jpeg2000(const void *injpc,g2int bufsize,g2int **outfld,g2int outpixels);
+ 
+ #endif  /*  grib2_H  */
+ 
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/jpcunpack.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/jpcunpack.c
+index 4df9ec725e..6a9a563341 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/jpcunpack.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/jpcunpack.c
+@@ -3,7 +3,7 @@
+ #include "grib2.h"
+ 
+ g2int jpcunpack(unsigned char *cpack,g2int len,g2int *idrstmpl,g2int ndpts,
+-                g2float *fld)
++                g2float **fld)
+ //$$$  SUBPROGRAM DOCUMENTATION BLOCK
+ //                .      .    .                                       .
+ // SUBPROGRAM:    jpcunpack
+@@ -38,7 +38,7 @@ g2int jpcunpack(unsigned char *cpack,g2int len,g2int *idrstmpl,g2int ndpts,
+ {
+ 
+       g2int  *ifld;
+-      g2int  j,nbits /* ,iret */;
++      g2int  j,nbits, iret;
+       g2float  ref,bscale,dscale;
+ 
+       rdieee(idrstmpl+0,&ref,1);
+@@ -49,22 +49,41 @@ g2int jpcunpack(unsigned char *cpack,g2int len,g2int *idrstmpl,g2int ndpts,
+ //  if nbits equals 0, we have a constant field where the reference value
+ //  is the data value at each gridpoint
+ //
++      *fld = 0;
+       if (nbits != 0) {
+ 
+-         ifld=(g2int *)calloc(ndpts,sizeof(g2int));
+-         if ( ifld == 0 ) {
+-            fprintf(stderr, "Could not allocate space in jpcunpack.\n"
+-                    "Data field NOT unpacked.\n");
+-            return(1);
++         ifld = NULL;
++         iret= (g2int) dec_jpeg2000(cpack,len,&ifld,ndpts);
++         if( iret != 0 )
++         {
++             free(ifld);
++             return -1;
++         }
++         *fld =(g2float *)calloc(ndpts,sizeof(g2float));
++         if( *fld == 0 )
++         {
++             free(ifld);
++             return -1;
+          }
+-         /* iret= (g2int) */ dec_jpeg2000(cpack,len,ifld,ndpts);
+          for (j=0;j<ndpts;j++) {
+-           fld[j]=(((g2float)ifld[j]*bscale)+ref)*dscale;
++           (*fld)[j]=(((g2float)ifld[j]*bscale)+ref)*dscale;
+          }
+          free(ifld);
+       }
+       else {
+-         for (j=0;j<ndpts;j++) fld[j]=ref;
++         // Limit to 2 GB
++         if( ndpts > 500 * 1024 * 1024 )
++         {
++             fprintf(stderr, "jpcunpack: ndpts = %d > 500 * 1024 * 1024", ndpts );
++             return -1;
++         }
++         *fld =(g2float *)calloc(ndpts,sizeof(g2float));
++         if( *fld == 0 )
++         {
++             free(ifld);
++             return -1;
++         }
++         for (j=0;j<ndpts;j++) (*fld)[j]=ref;
+       }
+ 
+       return(0);

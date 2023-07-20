@@ -1,0 +1,210 @@
+diff --git a/autotest/ogr/ogr_ili.py b/autotest/ogr/ogr_ili.py
+index e54ecd70ae..680169fae9 100755
+--- a/autotest/ogr/ogr_ili.py
++++ b/autotest/ogr/ogr_ili.py
+@@ -1209,9 +1209,6 @@ def ogr_interlis2_3():
+ 
+     dst_lyr = dst_ds.CreateLayer( 'RoadsExdm2ien.RoadsExtended.RoadSign' )
+ 
+-    layer_defn = lyr.GetLayerDefn()
+-    for i in range( layer_defn.GetFieldCount() ):
+-        dst_lyr.CreateField( layer_defn.GetFieldDefn( i ) )
+     dst_feat = ogr.Feature( feature_def = dst_lyr.GetLayerDefn() )
+     dst_feat.SetFrom( feat )
+     dst_lyr.CreateFeature( dst_feat )
+@@ -1221,9 +1218,6 @@ def ogr_interlis2_3():
+ 
+     dst_lyr = dst_ds.CreateLayer( 'RoadsExdm2ben.Roads.LandCover' )
+ 
+-    layer_defn = lyr.GetLayerDefn()
+-    for i in range( layer_defn.GetFieldCount() ):
+-        dst_lyr.CreateField( layer_defn.GetFieldDefn( i ) )
+     dst_feat = ogr.Feature( feature_def = dst_lyr.GetLayerDefn() )
+     dst_feat.SetFrom( feat )
+     dst_lyr.CreateFeature( dst_feat )
+diff --git a/gdal/ogr/ogr_feature.h b/gdal/ogr/ogr_feature.h
+index 760a1fa765..866410010e 100644
+--- a/gdal/ogr/ogr_feature.h
++++ b/gdal/ogr/ogr_feature.h
+@@ -35,6 +35,8 @@
+ #include "ogr_featurestyle.h"
+ #include "ogr_geometry.h"
+ 
++#include <vector>
++
+ /**
+  * \file ogr_feature.h
+  *
+@@ -266,6 +268,9 @@ class CPL_DLL OGRFeatureDefn
+     void ReserveSpaceForFields(int nFieldCountIn);
+ //! @endcond
+ 
++    std::vector<int>    ComputeMapForSetFrom( OGRFeatureDefn* poSrcFDefn,
++                                              bool bForgiving = true );
++
+     static OGRFeatureDefn  *CreateFeatureDefn( const char *pszName = nullptr );
+     static void         DestroyFeatureDefn( OGRFeatureDefn * );
+ 
+diff --git a/gdal/ogr/ogrfeature.cpp b/gdal/ogr/ogrfeature.cpp
+index f4395f676d..98178d2dec 100644
+--- a/gdal/ogr/ogrfeature.cpp
++++ b/gdal/ogr/ogrfeature.cpp
+@@ -39,6 +39,7 @@
+ #include <ctime>
+ 
+ #include <limits>
++#include <map>
+ #include <new>
+ #include <vector>
+ 
+@@ -5556,35 +5557,16 @@ int OGR_F_Equal( OGRFeatureH hFeat, OGRFeatureH hOtherFeat )
+ OGRErr OGRFeature::SetFrom( OGRFeature * poSrcFeature, int bForgiving )
+ 
+ {
+-/* -------------------------------------------------------------------- */
+-/*      Retrieve the field ids by name.                                 */
+-/* -------------------------------------------------------------------- */
+-    int *panMap = static_cast<int *>(
+-        VSI_MALLOC_VERBOSE( sizeof(int) * poSrcFeature->GetFieldCount() ) );
+-    if( panMap == nullptr )
+-        return OGRERR_FAILURE;
+-    for( int iField = 0; iField < poSrcFeature->GetFieldCount(); iField++ )
++    const auto& oMap = poDefn->ComputeMapForSetFrom(
++        poSrcFeature->GetDefnRef(), CPL_TO_BOOL(bForgiving) );
++    if( oMap.empty() )
+     {
+-        panMap[iField] = GetFieldIndex(
+-            poSrcFeature->GetFieldDefnRef(iField)->GetNameRef() );
+-
+-        if( panMap[iField] == -1 )
+-        {
+-            if( bForgiving )
+-                continue;
+-            else
+-            {
+-                VSIFree(panMap);
+-                return OGRERR_FAILURE;
+-            }
+-        }
++        if( poSrcFeature->GetFieldCount() )
++            return OGRERR_FAILURE;
++        return SetFrom( poSrcFeature, nullptr, bForgiving );
+     }
+-
+-    const OGRErr eErr = SetFrom( poSrcFeature, panMap, bForgiving );
+-
+-    VSIFree(panMap);
+-
+-    return eErr;
++    // FIXME when SetFrom() accepts a const int*
++    return SetFrom( poSrcFeature, const_cast<int*>(oMap.data()), bForgiving );
+ }
+ 
+ /************************************************************************/
+diff --git a/gdal/ogr/ogrfeaturedefn.cpp b/gdal/ogr/ogrfeaturedefn.cpp
+index b4c9be4ccc..389381a3d2 100644
+--- a/gdal/ogr/ogrfeaturedefn.cpp
++++ b/gdal/ogr/ogrfeaturedefn.cpp
+@@ -1471,3 +1471,80 @@ int OGR_FD_IsSame( OGRFeatureDefnH hFDefn, OGRFeatureDefnH hOtherFDefn )
+     return reinterpret_cast<OGRFeatureDefn *>(hFDefn)->
+         IsSame(reinterpret_cast<OGRFeatureDefn *>(hOtherFDefn));
+ }
++
++/************************************************************************/
++/*                      ComputeMapForSetFrom()                          */
++/************************************************************************/
++
++/**
++ * \brief Compute the map from source to target field that can be passed to
++ * SetFrom().
++ *
++ * @param poSrcFDefn the feature definition of source features later passed to
++ * SetFrom()
++ *
++ * @param bForgiving true if the operation should continue despite lacking
++ * output fields matching some of the source fields.
++ *
++ * @return an array of size poSrcFDefn->GetFieldCount() if everything succeeds,
++ * or empty in case a source field definition was not found in the target layer
++ * and bForgiving == true.
++ *
++ * @since GDAL 2.3
++ */
++
++std::vector<int> OGRFeatureDefn::ComputeMapForSetFrom( OGRFeatureDefn* poSrcFDefn,
++                                                       bool bForgiving )
++{
++    std::map<CPLString, int> oMapNameToTargetFieldIndex;
++    std::map<CPLString, int> oMapNameToTargetFieldIndexUC;
++    for( int i = 0; i < GetFieldCount(); i++ )
++    {
++        const char* pszName = GetFieldDefn(i)->GetNameRef();
++        // In the insane case where there are several matches, arbitrarily
++        // decide for the first one (preserve past behaviour)
++        if( oMapNameToTargetFieldIndex.find(pszName) ==
++                                        oMapNameToTargetFieldIndex.end() )
++        {
++            oMapNameToTargetFieldIndex[pszName] = i;
++        }
++    }
++    std::vector<int> aoMapSrcToTargetIdx;
++    aoMapSrcToTargetIdx.resize(poSrcFDefn->GetFieldCount());
++    for( int i = 0; i < poSrcFDefn->GetFieldCount(); i++ )
++    {
++        const char* pszSrcName = poSrcFDefn->GetFieldDefn(i)->GetNameRef();
++        auto oIter = oMapNameToTargetFieldIndex.find(pszSrcName);
++        if( oIter == oMapNameToTargetFieldIndex.end() )
++        {
++            // Build case insensitive map only if needed
++            if( oMapNameToTargetFieldIndexUC.empty() )
++            {
++                for( int j = 0; j < GetFieldCount(); j++ )
++                {
++                    oMapNameToTargetFieldIndexUC[
++                        CPLString(GetFieldDefn(j)->GetNameRef()).toupper()] = j;
++                }
++            }
++            oIter = oMapNameToTargetFieldIndexUC.find(
++                CPLString(pszSrcName).toupper());
++            if( oIter == oMapNameToTargetFieldIndexUC.end() )
++            {
++                if( !bForgiving )
++                {
++                    return std::vector<int>();
++                }
++                aoMapSrcToTargetIdx[i] = -1;
++            }
++            else
++            {
++                aoMapSrcToTargetIdx[i] = oIter->second;
++            }
++        }
++        else
++        {
++            aoMapSrcToTargetIdx[i] = oIter->second;
++        }
++    }
++    return aoMapSrcToTargetIdx;
++}
+diff --git a/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp b/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
+index 9a359c6b3c..b889df511c 100644
+--- a/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
+@@ -200,12 +200,16 @@ OGRErr OGRCSVEditableLayerSynchronizer::EditableSyncToDisk(
+         poFilterGeomBak = poFilterGeomBak->clone();
+     poEditableLayer->SetSpatialFilter(nullptr);
+ 
++    auto aoMapSrcToTargetIdx = poCSVTmpLayer->GetLayerDefn()->
++        ComputeMapForSetFrom(poEditableLayer->GetLayerDefn(), true);
++    aoMapSrcToTargetIdx.push_back(-1); // add dummy entry to be sure that .data() is valid
++
+     while( eErr == OGRERR_NONE &&
+            (poFeature = poEditableLayer->GetNextFeature()) != nullptr )
+     {
+         OGRFeature *poNewFeature =
+             new OGRFeature(poCSVTmpLayer->GetLayerDefn());
+-        poNewFeature->SetFrom(poFeature);
++        poNewFeature->SetFrom(poFeature, aoMapSrcToTargetIdx.data(), true);
+         if( bHasXY )
+         {
+             OGRGeometry *poGeom = poFeature->GetGeometryRef();

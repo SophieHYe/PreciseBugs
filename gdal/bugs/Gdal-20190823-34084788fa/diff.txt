@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/l1b/l1bdataset.cpp b/gdal/frmts/l1b/l1bdataset.cpp
+index 50d3dc5e81..a62eba9568 100644
+--- a/gdal/frmts/l1b/l1bdataset.cpp
++++ b/gdal/frmts/l1b/l1bdataset.cpp
+@@ -3332,6 +3332,8 @@ GDALDataset *L1BDataset::Open( GDALOpenInfo * poOpenInfo )
+ 
+     // Compute number of lines dynamically, so we can read partially
+     // downloaded files.
++    if( poDS->nDataStartOffset > sStat.st_size )
++        goto bad;
+     poDS->nRasterYSize =
+         static_cast<int>( (sStat.st_size - poDS->nDataStartOffset)
+                           / poDS->nRecordSize);

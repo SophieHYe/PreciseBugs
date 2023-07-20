@@ -1,0 +1,14 @@
+diff --git a/ogr/ogrsf_frmts/gml/gmlhandler.cpp b/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+index efbd73d950..96f38ce3d6 100644
+--- a/ogr/ogrsf_frmts/gml/gmlhandler.cpp
++++ b/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+@@ -1645,6 +1645,9 @@ OGRErr GMLHandler::endElementGeometry()
+ 
+     if (m_nDepth == m_nGeometryDepth)
+     {
++        m_nGeometryDepth = 0;
++
++        CPLAssert(apsXMLNode.size() == 2);
+         CPLXMLNode *psInterestNode = apsXMLNode.back().psNode;
+ 
+         /*char* pszXML = CPLSerializeXMLTree(psInterestNode);

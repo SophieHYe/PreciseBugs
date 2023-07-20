@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/hf2/hf2dataset.cpp b/gdal/frmts/hf2/hf2dataset.cpp
+index de75524b8d..bd80495906 100644
+--- a/gdal/frmts/hf2/hf2dataset.cpp
++++ b/gdal/frmts/hf2/hf2dataset.cpp
+@@ -297,7 +297,7 @@ int HF2Dataset::LoadBlockMap()
+         vsi_l_offset nSize = VSIFTellL(fp);
+         VSIFSeekL( fp, nCurOff, SEEK_SET );
+         // Check that the file is big enough to have 8 bytes per block
+-        if( static_cast<vsi_l_offset>(nXBlocks) * nYBlocks < (nSize - nCurOff) / 8 )
++        if( static_cast<vsi_l_offset>(nXBlocks) * nYBlocks > nSize / 8 )
+         {
+             return FALSE;
+         }

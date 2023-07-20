@@ -1,0 +1,14 @@
+diff --git a/gdal/frmts/vrt/vrtderivedrasterband.cpp b/gdal/frmts/vrt/vrtderivedrasterband.cpp
+index 6d8b19408a..69fa9e9fc4 100644
+--- a/gdal/frmts/vrt/vrtderivedrasterband.cpp
++++ b/gdal/frmts/vrt/vrtderivedrasterband.cpp
+@@ -2000,7 +2000,8 @@ CPLErr VRTDerivedRasterBand::XMLInit( CPLXMLNode *psTree,
+ 
+     m_poPrivate->m_nBufferRadius =
+                         atoi(CPLGetXMLValue( psTree, "BufferRadius", "0" ));
+-    if( m_poPrivate->m_nBufferRadius < 0 )
++    if( m_poPrivate->m_nBufferRadius < 0 ||
++        m_poPrivate->m_nBufferRadius > 1024 )
+     {
+         CPLError(CE_Failure, CPLE_AppDefined, "Invalid value for BufferRadius");
+         return CE_Failure;

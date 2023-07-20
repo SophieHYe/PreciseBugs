@@ -1,0 +1,16 @@
+diff --git a/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp b/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+index 5f0736e988..763c538289 100644
+--- a/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
++++ b/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+@@ -3196,6 +3196,11 @@ CADImageObject * DWGFileR2000::getImage(unsigned int dObjectSize,
+         for( long i = 0; i < image->nNumberVertexesInClipPolygon; ++i )
+         {
+             CADVector vertPoint = buffer.ReadRAWVector();
++            if( buffer.IsEOB() )
++            {
++                delete image;
++                return nullptr;
++            }
+             image->avertClippingPolygonVertexes.push_back( vertPoint );
+         }
+     }

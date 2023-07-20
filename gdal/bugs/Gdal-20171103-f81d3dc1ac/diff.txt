@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp b/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
+index 6daf3c7bef..f72cb5f21e 100644
+--- a/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
++++ b/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
+@@ -810,8 +810,6 @@ bool GTM::readFile(void* pBuffer, size_t nSize, size_t nCount)
+     const size_t nRead = VSIFReadL( pBuffer, nSize, nCount, pGTMFile );
+     if (nRead == 0)
+     {
+-        VSIFCloseL( pGTMFile );
+-        pGTMFile = NULL;
+         return false;
+     }
+     return true;

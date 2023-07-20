@@ -1,0 +1,14 @@
+diff --git a/gdal/third_party/LercLib/BitStuffer2.cpp b/gdal/third_party/LercLib/BitStuffer2.cpp
+index 9f4e898cc9..e0f72c410a 100644
+--- a/gdal/third_party/LercLib/BitStuffer2.cpp
++++ b/gdal/third_party/LercLib/BitStuffer2.cpp
+@@ -460,6 +460,9 @@ void BitStuffer2::BitStuff(Byte** ppByte, const vector<unsigned int>& dataVec, i
+ bool BitStuffer2::BitUnStuff(const Byte** ppByte, size_t& nBytesRemaining, vector<unsigned int>& dataVec,
+   unsigned int numElements, int numBits) const
+ {
++  if( numElements == 0 )
++    return false;
++
+   dataVec.resize(numElements);
+ 
+   unsigned int numUInts = (numElements * numBits + 31) / 32;

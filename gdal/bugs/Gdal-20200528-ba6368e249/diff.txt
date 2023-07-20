@@ -1,0 +1,56 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h b/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
+index d7f9b5e7da..ced3318fde 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
+@@ -503,6 +503,7 @@ class OGRDXFLayer final: public OGRLayer
+ 
+ class OGRDXFReader
+ {
++    int                 ReadValueRaw( char *pszValueBuffer, int nValueBufferSize );
+ public:
+     OGRDXFReader();
+     ~OGRDXFReader();
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfreader.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfreader.cpp
+index 3c7038d7ac..60af48f211 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfreader.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfreader.cpp
+@@ -125,7 +125,7 @@ void OGRDXFReader::LoadDiskChunk()
+ /*      Read one type code and value line pair from the DXF file.       */
+ /************************************************************************/
+ 
+-int OGRDXFReader::ReadValue( char *pszValueBuf, int nValueBufSize )
++int OGRDXFReader::ReadValueRaw( char *pszValueBuf, int nValueBufSize )
+ 
+ {
+ /* -------------------------------------------------------------------- */
+@@ -215,13 +215,23 @@ int OGRDXFReader::ReadValue( char *pszValueBuf, int nValueBufSize )
+ /* -------------------------------------------------------------------- */
+     nLastValueSize = iSrcBufferOffset - iStartSrcBufferOffset;
+ 
+-/* -------------------------------------------------------------------- */
+-/*      Is this a comment?  If so, tail recurse to get another line.    */
+-/* -------------------------------------------------------------------- */
+-    if( nValueCode == 999 )
+-        return ReadValue(pszValueBuf,nValueBufSize);
+-    else
+-        return nValueCode;
++    return nValueCode;
++}
++
++int OGRDXFReader::ReadValue( char *pszValueBuf, int nValueBufSize )
++{
++    int nValueCode;
++    while( true )
++    {
++        nValueCode = ReadValueRaw(pszValueBuf,nValueBufSize);
++        if( nValueCode == 999 )
++        {
++            // Skip comments
++            continue;
++        }
++        break;
++    }
++    return nValueCode;
+ }
+ 
+ /************************************************************************/

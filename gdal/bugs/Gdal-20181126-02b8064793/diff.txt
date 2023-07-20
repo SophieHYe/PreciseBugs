@@ -1,0 +1,55 @@
+diff --git a/autotest/ogr/ogr_dxf.py b/autotest/ogr/ogr_dxf.py
+index 853a05b8f8..b25a89dcc1 100644
+--- a/autotest/ogr/ogr_dxf.py
++++ b/autotest/ogr/ogr_dxf.py
+@@ -3891,6 +3891,27 @@ def ogr_dxf_insert_too_many_errors():
+ 
+     return 'success'
+ 
++
++###############################################################################
++
++
++def ogr_dxf_write_geometry_collection_of_unsupported_type():
++
++
++    tmpfile = '/vsimem/ogr_dxf_write_geometry_collection_of_unsupported_type.dxf'
++    ds = ogr.GetDriverByName('DXF').CreateDataSource(tmpfile)
++    lyr = ds.CreateLayer('test')
++    f = ogr.Feature(lyr.GetLayerDefn())
++    f.SetGeometryDirectly(ogr.CreateGeometryFromWkt('GEOMETRYCOLLECTION(TIN EMPTY)'))
++    with gdaltest.error_handler():
++        ret = lyr.CreateFeature(f)
++    if ret == 0:
++        return 'fail'
++    ds = None
++    gdal.Unlink(tmpfile)
++
++    return 'success'
++
+ ###############################################################################
+ # cleanup
+ 
+@@ -3960,6 +3981,7 @@ gdaltest_list = [
+     ogr_dxf_52,
+     ogr_dxf_53,
+     ogr_dxf_insert_too_many_errors,
++    ogr_dxf_write_geometry_collection_of_unsupported_type,
+     ogr_dxf_cleanup]
+ 
+ if __name__ == '__main__':
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfwriterlayer.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfwriterlayer.cpp
+index 8e32056c0c..d1b10af8af 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfwriterlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfwriterlayer.cpp
+@@ -1307,7 +1307,10 @@ OGRErr OGRDXFWriterLayer::ICreateFeature( OGRFeature *poFeature )
+             OGRErr eErr = CreateFeature( poFeature );
+ 
+             if( eErr != OGRERR_NONE )
++            {
++                delete poGC;
+                 return eErr;
++            }
+         }
+ 
+         poFeature->SetGeometryDirectly( poGC );

@@ -1,0 +1,112 @@
+diff --git a/gdal/frmts/raw/ehdrdataset.cpp b/gdal/frmts/raw/ehdrdataset.cpp
+index 52fd5f1844..e2cc62d451 100644
+--- a/gdal/frmts/raw/ehdrdataset.cpp
++++ b/gdal/frmts/raw/ehdrdataset.cpp
+@@ -1316,6 +1316,7 @@ GDALDataset *EHdrDataset::Open( GDALOpenInfo * poOpenInfo )
+ 
+     if( nBits >= 8 && !RAWDatasetCheckMemoryUsage(
+                         poDS->nRasterXSize, poDS->nRasterYSize, nBands,
++                        nItemSize,
+                         nPixelOffset, nLineOffset, nSkipBytes, nBandOffset,
+                         poDS->fpImage) )
+     {
+diff --git a/gdal/frmts/raw/envidataset.cpp b/gdal/frmts/raw/envidataset.cpp
+index 85480fb348..4d053ab000 100644
+--- a/gdal/frmts/raw/envidataset.cpp
++++ b/gdal/frmts/raw/envidataset.cpp
+@@ -2308,6 +2308,7 @@ GDALDataset *ENVIDataset::Open( GDALOpenInfo *poOpenInfo )
+     // among bands.
+     if( !RAWDatasetCheckMemoryUsage(
+                         poDS->nRasterXSize, poDS->nRasterYSize, nBands,
++                        nDataSize,
+                         nPixelOffset, nLineOffset, nHeaderSize, nBandOffset,
+                         poDS->fpImage) )
+     {
+diff --git a/gdal/frmts/raw/genbindataset.cpp b/gdal/frmts/raw/genbindataset.cpp
+index 90c0790329..765e8b8193 100644
+--- a/gdal/frmts/raw/genbindataset.cpp
++++ b/gdal/frmts/raw/genbindataset.cpp
+@@ -809,6 +809,7 @@ GDALDataset *GenBinDataset::Open( GDALOpenInfo * poOpenInfo )
+     if( nBits < 0 &&
+         !RAWDatasetCheckMemoryUsage(
+                         poDS->nRasterXSize, poDS->nRasterYSize, nBands,
++                        nItemSize,
+                         nPixelOffset, nLineOffset, 0, nBandOffset,
+                         poDS->fpImage) )
+     {
+diff --git a/gdal/frmts/raw/iscedataset.cpp b/gdal/frmts/raw/iscedataset.cpp
+index 259f70ce8b..140a19d2c7 100644
+--- a/gdal/frmts/raw/iscedataset.cpp
++++ b/gdal/frmts/raw/iscedataset.cpp
+@@ -714,6 +714,7 @@ GDALDataset *ISCEDataset::Open( GDALOpenInfo *poOpenInfo )
+ 
+     if( !RAWDatasetCheckMemoryUsage(
+                         poDS->nRasterXSize, poDS->nRasterYSize, nBands,
++                        nDTSize,
+                         nPixelOffset, nLineOffset, 0, nBandOffset,
+                         poDS->fpImage) )
+     {
+diff --git a/gdal/frmts/raw/rawdataset.cpp b/gdal/frmts/raw/rawdataset.cpp
+index b23d9505e1..3bbefb8be9 100644
+--- a/gdal/frmts/raw/rawdataset.cpp
++++ b/gdal/frmts/raw/rawdataset.cpp
+@@ -1226,6 +1226,7 @@ CPLErr RawDataset::IRasterIO( GDALRWFlag eRWFlag,
+ /************************************************************************/
+ 
+ bool RAWDatasetCheckMemoryUsage(int nXSize, int nYSize, int nBands,
++                                int nDTSize,
+                                 int nPixelOffset,
+                                 int nLineOffset,
+                                 vsi_l_offset nHeaderSize,
+@@ -1255,5 +1256,15 @@ bool RAWDatasetCheckMemoryUsage(int nXSize, int nYSize, int nBands,
+             return false;
+         }
+     }
++
++    // Currently each RawRasterBand need to allocate nLineSize
++    GIntBig nLineSize =
++        static_cast<GIntBig>(std::abs(nPixelOffset)) * (nXSize - 1) + nDTSize;
++    if( nBands > 0 && nLineSize > INT_MAX / nBands )
++    {
++        CPLError(CE_Failure, CPLE_OutOfMemory, "Too much memory needed");
++        return false;
++    }
++
+     return true;
+ }
+diff --git a/gdal/frmts/raw/rawdataset.h b/gdal/frmts/raw/rawdataset.h
+index aa425d27ca..641782c5eb 100644
+--- a/gdal/frmts/raw/rawdataset.h
++++ b/gdal/frmts/raw/rawdataset.h
+@@ -177,6 +177,7 @@ public:
+ #ifdef GDAL_COMPILATION
+ 
+ bool RAWDatasetCheckMemoryUsage(int nXSize, int nYSize, int nBands,
++                                int nDTSize,
+                                 int nPixelOffset,
+                                 int nLineOffset,
+                                 vsi_l_offset nHeaderSize,
+diff --git a/gdal/frmts/raw/rrasterdataset.cpp b/gdal/frmts/raw/rrasterdataset.cpp
+index 2856efbc0b..0d1de6beba 100644
+--- a/gdal/frmts/raw/rrasterdataset.cpp
++++ b/gdal/frmts/raw/rrasterdataset.cpp
+@@ -1211,6 +1211,7 @@ GDALDataset *RRASTERDataset::Open( GDALOpenInfo * poOpenInfo )
+ 
+     if( !RAWDatasetCheckMemoryUsage(
+                         nCols, nRows, l_nBands,
++                        GDALGetDataTypeSizeBytes(eDT),
+                         nPixelOffset, nLineOffset, 0, nBandOffset,
+                         fpImage) )
+     {
+diff --git a/gdal/frmts/vrt/vrtrawrasterband.cpp b/gdal/frmts/vrt/vrtrawrasterband.cpp
+index 74f39ec92f..b22708e786 100644
+--- a/gdal/frmts/vrt/vrtrawrasterband.cpp
++++ b/gdal/frmts/vrt/vrtrawrasterband.cpp
+@@ -243,6 +243,7 @@ CPLErr VRTRawRasterBand::SetRawLink( const char *pszFilename,
+ 
+     if( !RAWDatasetCheckMemoryUsage(
+                         nRasterXSize, nRasterYSize, 1,
++                        GDALGetDataTypeSizeBytes(GetRasterDataType()),
+                         nPixelOffset, nLineOffset, nImageOffset, 0,
+                         reinterpret_cast<VSILFILE*>(fp)) )
+     {

@@ -1,0 +1,14 @@
+diff --git a/gdal/frmts/xpm/xpmdataset.cpp b/gdal/frmts/xpm/xpmdataset.cpp
+index 8efaa98965..ce5b063080 100644
+--- a/gdal/frmts/xpm/xpmdataset.cpp
++++ b/gdal/frmts/xpm/xpmdataset.cpp
+@@ -567,7 +567,8 @@ ParseXPM( const char *pszInput,
+ 
+     for( int iColor = 0; iColor < nColorCount; iColor++ )
+     {
+-        if( papszXPMList[iColor+1] == nullptr )
++        if( papszXPMList[iColor+1] == nullptr ||
++            papszXPMList[iColor+1][0] == '\0' )
+         {
+             CPLError( CE_Failure, CPLE_AppDefined,
+                       "Missing color definition for %d in XPM header.",

@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/mitab/mitab_indfile.cpp b/gdal/ogr/ogrsf_frmts/mitab/mitab_indfile.cpp
+index 8615408949..86c3f51e9c 100644
+--- a/gdal/ogr/ogrsf_frmts/mitab/mitab_indfile.cpp
++++ b/gdal/ogr/ogrsf_frmts/mitab/mitab_indfile.cpp
+@@ -1249,7 +1249,7 @@ GInt32 TABINDNode::FindFirst(GByte *pKeyValue)
+                         m_nCurIndexEntry++;
+ 
+                     int nChildNodePtr = ReadIndexEntry(m_nCurIndexEntry, nullptr);
+-                    if (nChildNodePtr == 0)
++                    if (nChildNodePtr <= 0)
+                     {
+                         /* Invalid child node??? */
+                         nRetValue = 0;

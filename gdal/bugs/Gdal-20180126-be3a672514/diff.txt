@@ -1,0 +1,13 @@
+diff --git a/gdal/port/cpl_json.cpp b/gdal/port/cpl_json.cpp
+index 7164bc2b02..82d3f95593 100644
+--- a/gdal/port/cpl_json.cpp
++++ b/gdal/port/cpl_json.cpp
+@@ -166,7 +166,7 @@ bool CPLJSONDocument::LoadMemory(const GByte *pabyData, int nLength)
+     {
+         CPLError( CE_Failure, CPLE_AppDefined, "JSON parsing error: %s (at offset %d)",
+                  json_tokener_error_desc( jstok->err ), jstok->char_offset );
+-
++        json_tokener_free( jstok );
+         return false;
+     }
+     json_tokener_free( jstok );

@@ -1,0 +1,47 @@
+diff --git a/gdal/ogr/ogr_geo_utils.cpp b/gdal/ogr/ogr_geo_utils.cpp
+index 057084642d..f121af84cc 100644
+--- a/gdal/ogr/ogr_geo_utils.cpp
++++ b/gdal/ogr/ogr_geo_utils.cpp
+@@ -138,6 +138,20 @@ int OGR_GreatCircle_ExtendPosition(double dfLatA_deg, double dfLonA_deg,
+     const double cos_complement_LatA = sin(dfLatA_rad);
+     const double sin_complement_LatA = cos(dfLatA_rad);
+ 
++    if( cos_complement_LatA == 0.0 && cos_Heading == 0.0 )
++    {
++        *pdfLonB_deg = dfLonA_deg;
++        if( fabs(dfHeadingInA) < 1e-10 )
++        {
++            *pdfLatB_deg = dfDistanceRad * RAD2DEG;
++        }
++        else
++        {
++            *pdfLatB_deg = -dfDistanceRad * RAD2DEG;
++        }
++        return 1;
++    }
++
+     const double cos_complement_latB =
+         cos_Distance * cos_complement_LatA +
+         sin_Distance * sin_complement_LatA * cos_Heading;
+diff --git a/gdal/ogr/test_geo_utils.cpp b/gdal/ogr/test_geo_utils.cpp
+index a4916de685..a6270ffc26 100644
+--- a/gdal/ogr/test_geo_utils.cpp
++++ b/gdal/ogr/test_geo_utils.cpp
+@@ -22,5 +22,17 @@ int main( int /* argc */ , char* /* argv */ [])
+   printf("heading=%f, distance=%f\n", heading, distance);
+   printf("%.15f=%.15f, %.15f=%.15f\n", latA, latC, lonA, lonC);
+ 
++  OGR_GreatCircle_ExtendPosition(0, 100, 100000, 0, &latC, &lonC);
++  printf("lat=%.15f, lon=%.15f\n", latC, lonC);
++
++  OGR_GreatCircle_ExtendPosition(0, 100, 100000, 90, &latC, &lonC);
++  printf("lat=%.15f, lon=%.15f\n", latC, lonC);
++
++  OGR_GreatCircle_ExtendPosition(0, 100, 100000, 180, &latC, &lonC);
++  printf("lat=%.15f, lon=%.15f\n", latC, lonC);
++
++  OGR_GreatCircle_ExtendPosition(0, 100, 100000, 270, &latC, &lonC);
++  printf("lat=%.15f, lon=%.15f\n", latC, lonC);
++
+   return 0;
+ }

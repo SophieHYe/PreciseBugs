@@ -1,0 +1,176 @@
+diff --git a/gdal/ogr/ogrsf_frmts/csv/ogr_csv.h b/gdal/ogr/ogrsf_frmts/csv/ogr_csv.h
+index 7d0b45e88b..72ba173aae 100644
+--- a/gdal/ogr/ogrsf_frmts/csv/ogr_csv.h
++++ b/gdal/ogr/ogrsf_frmts/csv/ogr_csv.h
+@@ -33,6 +33,8 @@
+ 
+ #include "ogrsf_frmts.h"
+ 
++#include <set>
++
+ #if defined(_MSC_VER) && _MSC_VER <= 1600 // MSVC <= 2010
+ # define GDAL_OVERRIDE
+ #else
+@@ -83,6 +85,7 @@ class OGRCSVLayer : public OGRLayer
+ 
+   private:
+     OGRFeatureDefn     *poFeatureDefn;
++    std::set<CPLString> m_oSetFields;
+ 
+     VSILFILE           *fpCSV;
+ 
+@@ -180,6 +183,7 @@ class OGRCSVLayer : public OGRLayer
+ 
+     static
+     OGRCSVCreateFieldAction PreCreateField( OGRFeatureDefn *poFeatureDefn,
++                                            const std::set<CPLString>& oSetFields,
+                                             OGRFieldDefn *poNewField,
+                                             int bApproxOK );
+     virtual OGRErr      CreateGeomField( OGRGeomFieldDefn *poGeomField,
+diff --git a/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp b/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
+index e76017c6bc..1d53c51ea0 100644
+--- a/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/csv/ogrcsvdatasource.cpp
+@@ -299,11 +299,15 @@ OGRErr OGRCSVEditableLayerSynchronizer::EditableSyncToDisk(
+ 
+ class OGRCSVEditableLayer: public OGREditableLayer
+ {
++    std::set<CPLString> m_oSetFields;
++
+   public:
+     OGRCSVEditableLayer(OGRCSVLayer *poCSVLayer, char **papszOpenOptions);
+ 
+     virtual OGRErr      CreateField( OGRFieldDefn *poField,
+                                      int bApproxOK = TRUE ) override;
++    virtual OGRErr      DeleteField( int iField ) override;
++    virtual OGRErr      AlterFieldDefn( int iField, OGRFieldDefn* poNewFieldDefn, int nFlagsIn ) override;
+     virtual GIntBig     GetFeatureCount( int bForce = TRUE ) override;
+ };
+ 
+@@ -330,13 +334,40 @@ OGRErr OGRCSVEditableLayer::CreateField( OGRFieldDefn *poNewField,
+                                          int bApproxOK )
+ 
+ {
++
++    if( m_oSetFields.empty() )
++    {
++        for( int i = 0; i < m_poEditableFeatureDefn->GetFieldCount(); i++ )
++        {
++            m_oSetFields.insert(CPLString(
++                m_poEditableFeatureDefn->GetFieldDefn(i)->GetNameRef()).toupper());
++        }
++    }
++
+     const OGRCSVCreateFieldAction eAction = OGRCSVLayer::PreCreateField(
+-        m_poEditableFeatureDefn, poNewField, bApproxOK);
++        m_poEditableFeatureDefn, m_oSetFields, poNewField, bApproxOK);
+     if( eAction == CREATE_FIELD_DO_NOTHING )
+         return OGRERR_NONE;
+     if( eAction == CREATE_FIELD_ERROR )
+         return OGRERR_FAILURE;
+-    return OGREditableLayer::CreateField(poNewField, bApproxOK);
++    OGRErr eErr = OGREditableLayer::CreateField(poNewField, bApproxOK);
++    if( eErr == OGRERR_NONE )
++    {
++        m_oSetFields.insert(CPLString(poNewField->GetNameRef()).toupper());
++    }
++    return eErr;
++}
++
++OGRErr OGRCSVEditableLayer::DeleteField( int iField )
++{
++    m_oSetFields.clear();
++    return OGREditableLayer::DeleteField(iField);
++}
++
++OGRErr OGRCSVEditableLayer::AlterFieldDefn( int iField, OGRFieldDefn* poNewFieldDefn, int nFlagsIn )
++{
++    m_oSetFields.clear();
++    return OGREditableLayer::AlterFieldDefn(iField, poNewFieldDefn, nFlagsIn);
+ }
+ 
+ /************************************************************************/
+diff --git a/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp b/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
+index 3367039daa..56f4370d3d 100644
+--- a/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
+@@ -1830,10 +1830,11 @@ int OGRCSVLayer::TestCapability( const char *pszCap )
+ 
+ OGRCSVCreateFieldAction
+ OGRCSVLayer::PreCreateField( OGRFeatureDefn *poFeatureDefn,
++                             const std::set<CPLString>& oSetFields,
+                              OGRFieldDefn *poNewField, int bApproxOK )
+ {
+     // Does this duplicate an existing field?
+-    if( poFeatureDefn->GetFieldIndex(poNewField->GetNameRef()) >= 0 )
++    if( oSetFields.find(CPLString(poNewField->GetNameRef()).toupper()) != oSetFields.end() )
+     {
+         if( poFeatureDefn->GetGeomFieldIndex(poNewField->GetNameRef()) >= 0 ||
+             poFeatureDefn->GetGeomFieldIndex(
+@@ -1904,8 +1905,17 @@ OGRErr OGRCSVLayer::CreateField( OGRFieldDefn *poNewField, int bApproxOK )
+         return OGRERR_FAILURE;
+     }
+ 
++    if( m_oSetFields.empty() )
++    {
++        for( int i = 0; i < poFeatureDefn->GetFieldCount(); i++ )
++        {
++            m_oSetFields.insert(CPLString(
++                poFeatureDefn->GetFieldDefn(i)->GetNameRef()).toupper());
++        }
++    }
++
+     const OGRCSVCreateFieldAction eAction =
+-        PreCreateField(poFeatureDefn, poNewField, bApproxOK);
++        PreCreateField(poFeatureDefn, m_oSetFields, poNewField, bApproxOK);
+     if( eAction == CREATE_FIELD_DO_NOTHING )
+         return OGRERR_NONE;
+     if( eAction == CREATE_FIELD_ERROR )
+@@ -1914,6 +1924,7 @@ OGRErr OGRCSVLayer::CreateField( OGRFieldDefn *poNewField, int bApproxOK )
+     // Seems ok, add to field list.
+     poFeatureDefn->AddFieldDefn(poNewField);
+     nCSVFieldCount++;
++    m_oSetFields.insert(CPLString(poNewField->GetNameRef()).toupper());
+ 
+     panGeomFieldIndex = static_cast<int *>(CPLRealloc(
+         panGeomFieldIndex, sizeof(int) * poFeatureDefn->GetFieldCount()));
+diff --git a/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp b/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
+index 211467482e..26b25d4093 100644
+--- a/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
+@@ -29,6 +29,8 @@
+ #include "ogreditablelayer.h"
+ #include "../mem/ogr_mem.h"
+ 
++#include <map>
++
+ CPL_CVSID("$Id$")
+ 
+ //! @cond Doxygen_Suppress
+@@ -174,6 +176,13 @@ OGRFeature* OGREditableLayer::Translate(OGRFeatureDefn* poTargetDefn,
+         return nullptr;
+     OGRFeature* poRet = new OGRFeature(poTargetDefn);
+ 
++    std::map<CPLString, int> oMapTargetFieldNameToIdx;
++    for( int iField = 0; iField < poTargetDefn->GetFieldCount(); iField++ )
++    {
++        oMapTargetFieldNameToIdx[
++            poTargetDefn->GetFieldDefn(iField)->GetNameRef()] = iField;
++    }
++
+     int* panMap = static_cast<int *>(CPLMalloc( sizeof(int) * poSrcFeature->GetFieldCount() ));
+     for( int iField = 0; iField < poSrcFeature->GetFieldCount(); iField++ )
+     {
+@@ -184,7 +193,11 @@ OGRFeature* OGREditableLayer::Translate(OGRFeatureDefn* poTargetDefn,
+             panMap[iField] = -1;
+         }
+         else
+-            panMap[iField] = poRet->GetFieldIndex(pszFieldName);
++        {
++            auto oIter = oMapTargetFieldNameToIdx.find(pszFieldName);
++            panMap[iField] =
++                (oIter == oMapTargetFieldNameToIdx.end()) ? -1 : oIter->second;
++        }
+     }
+     poRet->SetFieldsFrom( poSrcFeature, panMap, TRUE );
+     CPLFree(panMap);

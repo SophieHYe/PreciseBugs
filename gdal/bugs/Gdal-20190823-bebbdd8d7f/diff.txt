@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/io.cpp b/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/io.cpp
+index 9bd38c3fb5..0db794ec14 100644
+--- a/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/io.cpp
++++ b/gdal/ogr/ogrsf_frmts/cad/libopencad/dwg/io.cpp
+@@ -836,6 +836,13 @@ int CADBuffer::ReadBITLONG()
+ void CADBuffer::SkipTV()
+ {
+     short stringLength = ReadBITSHORT();
++    if( stringLength < 0 )
++    {
++#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++        std::cerr << "Negative string length" << std::endl;
++#endif
++        return;
++    }
+     m_nBitOffsetFromStart += size_t( stringLength * 8 );
+ }
+ 

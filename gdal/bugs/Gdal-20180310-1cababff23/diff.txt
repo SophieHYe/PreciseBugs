@@ -1,0 +1,72 @@
+diff --git a/gdal/ogr/ogr_feature.h b/gdal/ogr/ogr_feature.h
+index e32099bab7..26a44b5bc8 100644
+--- a/gdal/ogr/ogr_feature.h
++++ b/gdal/ogr/ogr_feature.h
+@@ -447,6 +447,7 @@ class CPL_DLL OGRFeature
+ //! @cond Doxygen_Suppress
+     OGRErr              RemapFields( OGRFeatureDefn *poNewDefn,
+                                      int *panRemapSource );
++    void                AppendField();
+     OGRErr              RemapGeomFields( OGRFeatureDefn *poNewDefn,
+                                      int *panRemapSource );
+ //! @endcond
+diff --git a/gdal/ogr/ogrfeature.cpp b/gdal/ogr/ogrfeature.cpp
+index 09f4f77e54..f4395f676d 100644
+--- a/gdal/ogr/ogrfeature.cpp
++++ b/gdal/ogr/ogrfeature.cpp
+@@ -6160,6 +6160,21 @@ OGRErr OGRFeature::RemapFields( OGRFeatureDefn *poNewDefn,
+     return OGRERR_NONE;
+ }
+ 
++/************************************************************************/
++/*                            AppendField()                             */
++/*                                                                      */
++/*      This is used to transform a feature "in place" by appending     */
++/*      an unset field.                                                 */
++/************************************************************************/
++
++void OGRFeature::AppendField()
++{
++    int nFieldCount = poDefn->GetFieldCount();
++    pauFields = static_cast<OGRField *>(CPLRealloc( pauFields,
++                            nFieldCount * sizeof(OGRField) ) );
++    OGR_RawField_SetUnset(&pauFields[nFieldCount-1]);
++}
++
+ /************************************************************************/
+ /*                        RemapGeomFields()                             */
+ /*                                                                      */
+diff --git a/gdal/ogr/ogrsf_frmts/mem/ogrmemlayer.cpp b/gdal/ogr/ogrsf_frmts/mem/ogrmemlayer.cpp
+index 6b40dbb3fe..f9382d8abc 100644
+--- a/gdal/ogr/ogrsf_frmts/mem/ogrmemlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/mem/ogrmemlayer.cpp
+@@ -560,28 +560,16 @@ OGRErr OGRMemLayer::CreateField( OGRFieldDefn *poField, int /* bApproxOK */ )
+     // Add field definition and setup remap definition.
+     m_poFeatureDefn->AddFieldDefn(poField);
+ 
+-    int *panRemap = static_cast<int *>(
+-        CPLMalloc(sizeof(int) * m_poFeatureDefn->GetFieldCount()));
+-    for( int i = 0; i < m_poFeatureDefn->GetFieldCount(); ++i )
+-    {
+-        if( i < m_poFeatureDefn->GetFieldCount() - 1 )
+-            panRemap[i] = i;
+-        else
+-            panRemap[i] = -1;
+-    }
+-
+     // Remap all the internal features.  Hopefully there aren't any
+     // external features referring to our OGRFeatureDefn!
+     IOGRMemLayerFeatureIterator *poIter = GetIterator();
+     OGRFeature *poFeature = nullptr;
+     while( (poFeature = poIter->Next()) != nullptr )
+     {
+-        poFeature->RemapFields(nullptr, panRemap);
++        poFeature->AppendField();
+     }
+     delete poIter;
+ 
+-    CPLFree(panRemap);
+-
+     m_bUpdated = true;
+ 
+     return OGRERR_NONE;

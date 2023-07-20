@@ -1,0 +1,117 @@
+diff --cc autotest/ogr/ogr_dgn.py
+index 806f0335d0,806f0335d0..a552ee2d56
+--- a/autotest/ogr/ogr_dgn.py
++++ b/autotest/ogr/ogr_dgn.py
+@@@ -195,25 -195,25 +195,6 @@@ def test_ogr_dgn_7()
+  
+          feat = dgn_lyr.GetNextFeature()
+  
+--    # Null geometry
+--    dst_feat = ogr.Feature(feature_def=dgn2_lyr.GetLayerDefn())
+--    with pytest.raises(Exception):
+--        assert dgn2_lyr.CreateFeature(dst_feat) != 0
+--
+--    # Empty geometry
+--    dst_feat = ogr.Feature(feature_def=dgn2_lyr.GetLayerDefn())
+--    dst_feat.SetGeometry(ogr.CreateGeometryFromWkt("POINT EMPTY"))
+--    with pytest.raises(Exception):
+--        assert dgn2_lyr.CreateFeature(dst_feat) != 0
+--
+--    # Empty geometry in subpart
+--    dst_feat = ogr.Feature(feature_def=dgn2_lyr.GetLayerDefn())
+--    dst_feat.SetGeometry(
+--        ogr.CreateGeometryFromWkt("GEOMETRYCOLLECTION(POINT (1 2),POLYGON EMPTY)")
+--    )
+--    with pytest.raises(Exception):
+--        assert dgn2_lyr.CreateFeature(dst_feat) != 0
+--
+  
+  ###############################################################################
+  # Verify that our copy is pretty similar.
+diff --cc ogr/ogrsf_frmts/dgn/ogr_dgn.h
+index 24d83fe519,24d83fe519..ca0ce546f8
+--- a/ogr/ogrsf_frmts/dgn/ogr_dgn.h
++++ b/ogr/ogrsf_frmts/dgn/ogr_dgn.h
+@@@ -53,14 -53,14 +53,14 @@@ class OGRDGNLayer final : public OGRLay
+      void ConsiderBrush(DGNElemCore *, const char *pszPen,
+                         OGRFeature *poFeature);
+  
+--    DGNElemCore **LineStringToElementGroup(const OGRLineString *, int);
+++    DGNElemCore **LineStringToElementGroup(OGRLineString *, int);
+      DGNElemCore **TranslateLabel(OGRFeature *);
+  
+      // Unused:
+      // int                 bHaveSimpleQuery;
+      OGRFeature *poEvalFeature;
+  
+--    OGRErr CreateFeatureWithGeom(OGRFeature *, const OGRGeometry *);
+++    OGRErr CreateFeatureWithGeom(OGRFeature *, OGRGeometry *);
+  
+    public:
+      OGRDGNLayer(const char *pszName, DGNHandle hDGN, int bUpdate);
+diff --cc ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
+index ddb190f735,ddb190f735..96b9135efb
+--- a/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
++++ b/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
+@@@ -1017,7 -1017,7 +1017,7 @@@ OGRErr OGRDGNLayer::GetExtent(OGREnvelo
+  
+  constexpr int MAX_ELEM_POINTS = 38;
+  
+--DGNElemCore **OGRDGNLayer::LineStringToElementGroup(const OGRLineString *poLS,
+++DGNElemCore **OGRDGNLayer::LineStringToElementGroup(OGRLineString *poLS,
+                                                      int nGroupType)
+  
+  {
+@@@ -1210,6 -1210,6 +1210,14 @@@ OGRErr OGRDGNLayer::ICreateFeature(OGRF
+          return OGRERR_FAILURE;
+      }
+  
+++    if (poFeature->GetGeometryRef() == nullptr)
+++    {
+++        CPLError(CE_Failure, CPLE_AppDefined,
+++                 "Features with empty, geometry collection geometries not\n"
+++                 "supported in DGN format.");
+++        return OGRERR_FAILURE;
+++    }
+++
+      return CreateFeatureWithGeom(poFeature, poFeature->GetGeometryRef());
+  }
+  
+@@@ -1222,18 -1222,18 +1230,9 @@@
+  /************************************************************************/
+  
+  OGRErr OGRDGNLayer::CreateFeatureWithGeom(OGRFeature *poFeature,
+--                                          const OGRGeometry *poGeom)
+++                                          OGRGeometry *poGeom)
+  
+  {
+--
+--    if (poGeom == nullptr || poGeom->IsEmpty())
+--    {
+--        CPLError(CE_Failure, CPLE_AppDefined,
+--                 "Features with empty, geometry collection geometries not\n"
+--                 "supported in DGN format.");
+--        return OGRERR_FAILURE;
+--    }
+--
+      /* -------------------------------------------------------------------- */
+      /*      Translate the geometry.                                         */
+      /* -------------------------------------------------------------------- */
+@@@ -1242,7 -1242,7 +1241,7 @@@
+  
+      if (wkbFlatten(poGeom->getGeometryType()) == wkbPoint)
+      {
+--        const OGRPoint *poPoint = poGeom->toPoint();
+++        OGRPoint *poPoint = poGeom->toPoint();
+          const char *pszText = poFeature->GetFieldAsString("Text");
+  
+          if ((pszText == nullptr || strlen(pszText) == 0) &&
+@@@ -1272,7 -1272,7 +1271,7 @@@
+      }
+      else if (wkbFlatten(poGeom->getGeometryType()) == wkbPolygon)
+      {
+--        const OGRPolygon *poPoly = poGeom->toPolygon();
+++        OGRPolygon *poPoly = poGeom->toPolygon();
+  
+          DGNElemCore **papsGroupExt =
+              LineStringToElementGroup(poPoly->getExteriorRing(), DGNT_SHAPE);

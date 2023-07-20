@@ -1,0 +1,131 @@
+diff --cc autotest/gcore/vsifile.py
+index 38482eef9f,38482eef9f..13ff94c71d
+--- a/autotest/gcore/vsifile.py
++++ b/autotest/gcore/vsifile.py
+@@@ -881,16 -881,16 +881,3 @@@ def test_vsifile_rmdirrecursive()
+      open('tmp/rmdirrecursive/subdir/bar.bin', 'wb').close()
+      assert gdal.RmdirRecursive('tmp/rmdirrecursive') == 0
+      assert not os.path.exists('tmp/rmdirrecursive')
+--
+--###############################################################################
+--
+--def test_vsifile_vsizip_error():
+--
+--    for i in range(128):
+--        filename = '/vsimem/tmp||maxlength=%d.zip' % i
+--        with gdaltest.error_handler():
+--            f = gdal.VSIFOpenL('/vsizip/%s/out.bin' % filename, 'wb')
+--            if f is not None:
+--                assert gdal.VSIFCloseL(f) < 0
+--        gdal.Unlink(filename)
+--
+diff --cc gdal/port/cpl_vsil_gzip.cpp
+index 66309fd877,66309fd877..638cc4482b
+--- a/gdal/port/cpl_vsil_gzip.cpp
++++ b/gdal/port/cpl_vsil_gzip.cpp
+@@@ -1919,30 -1919,30 +1919,24 @@@ int VSIGZipWriteHandle::Close(
+          const size_t nOutBytes =
+              static_cast<uInt>(Z_BUFSIZE) - sStream.avail_out;
+  
+--        deflateEnd( &sStream );
+--
+          if( m_poBaseHandle->Write( pabyOutBuf, 1, nOutBytes ) < nOutBytes )
+--        {
+--            nRet = -1;
+--        }
+++            return EOF;
+++
+++        deflateEnd( &sStream );
+  
+--        if( nRet == 0 && nDeflateType == CPL_DEFLATE_TYPE_GZIP )
+++        if( nDeflateType == CPL_DEFLATE_TYPE_GZIP )
+          {
+              const GUInt32 anTrailer[2] = {
+                  CPL_LSBWORD32(static_cast<GUInt32>(nCRC)),
+                  CPL_LSBWORD32(static_cast<GUInt32>(nCurOffset))
+              };
+  
+--            if( m_poBaseHandle->Write( anTrailer, 1, 8 ) < 8 )
+--            {
+--                nRet = -1;
+--            }
+++            m_poBaseHandle->Write( anTrailer, 1, 8 );
+          }
+  
+          if( bAutoCloseBaseHandle )
+          {
+--            if( nRet == 0 )
+--                nRet = m_poBaseHandle->Close();
+++            nRet = m_poBaseHandle->Close();
+  
+              delete m_poBaseHandle;
+          }
+@@@ -3074,8 -3074,8 +3068,8 @@@ VSIZipFilesystemHandler::OpenForWrite_u
+          if( hZIP == nullptr )
+              return nullptr;
+  
+--        auto poHandle = new VSIZipWriteHandle(this, hZIP, nullptr);
+--        oMapZipWriteHandles[osZipFilename] = poHandle;
+++        oMapZipWriteHandles[osZipFilename] =
+++            new VSIZipWriteHandle(this, hZIP, nullptr);
+  
+          if( !osZipInFileName.empty() )
+          {
+@@@ -3083,8 -3083,8 +3077,7 @@@
+                  OpenForWrite_unlocked(pszFilename, pszAccess));
+              if( poRes == nullptr )
+              {
+--                delete poHandle;
+--                oMapZipWriteHandles.erase(osZipFilename);
+++                delete oMapZipWriteHandles[osZipFilename];
+                  return nullptr;
+              }
+  
+@@@ -3093,7 -3093,7 +3086,7 @@@
+              return poRes;
+          }
+  
+--        return poHandle;
+++        return oMapZipWriteHandles[osZipFilename];
+      }
+  }
+  
+@@@ -3236,35 -3236,35 +3229,28 @@@ int VSIZipWriteHandle::Flush(
+  
+  int VSIZipWriteHandle::Close()
+  {
+--    int nRet = 0;
+      if( m_poParent )
+      {
+          CPLCloseFileInZip(m_poParent->m_hZIP);
+          m_poParent->poChildInWriting = nullptr;
+          if( bAutoDeleteParent )
+--        {
+--            if( m_poParent->Close() != 0 )
+--                nRet = -1;
+              delete m_poParent;
+--        }
+          m_poParent = nullptr;
+      }
+      if( poChildInWriting )
+      {
+--        if( poChildInWriting->Close() != 0 )
+--            nRet = -1;
+++        poChildInWriting->Close();
+          poChildInWriting = nullptr;
+      }
+      if( m_hZIP )
+      {
+--        if( CPLCloseZip(m_hZIP) != CE_None )
+--            nRet = -1;
+++        CPLCloseZip(m_hZIP);
+          m_hZIP = nullptr;
+  
+          m_poFS->RemoveFromMap(this);
+      }
+  
+--    return nRet;
+++    return 0;
+  }
+  
+  /************************************************************************/

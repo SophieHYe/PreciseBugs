@@ -1,0 +1,24 @@
+diff --git a/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp b/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
+index f154cb544c..86f9e41d4d 100644
+--- a/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/generic/ogreditablelayer.cpp
+@@ -674,9 +674,6 @@ OGRErr      OGREditableLayer::CreateField( OGRFieldDefn *poField,
+ 
+     m_oMapEditableFDefnFieldNameToIdx.clear();
+ 
+-    // workarounds a bug in certain QGIS versions (2.0 for example)
+-    SetIgnoredFields(nullptr);
+-
+     if( !m_bStructureModified &&
+         m_poDecoratedLayer->TestCapability(OLCCreateField) )
+     {
+@@ -711,9 +708,6 @@ OGRErr      OGREditableLayer::DeleteField( int iField )
+ 
+     m_oMapEditableFDefnFieldNameToIdx.clear();
+ 
+-    // workarounds a bug in certain QGIS versions (2.0 for example)
+-    SetIgnoredFields(nullptr);
+-
+     CPLString osDeletedField;
+     if( iField >= 0 && iField < m_poEditableFeatureDefn->GetFieldCount() )
+     {

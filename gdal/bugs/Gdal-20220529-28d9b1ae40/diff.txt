@@ -1,0 +1,22 @@
+diff --git a/frmts/rmf/rmfdataset.cpp b/frmts/rmf/rmfdataset.cpp
+index 18f33604d1..5e2dc485a1 100644
+--- a/frmts/rmf/rmfdataset.cpp
++++ b/frmts/rmf/rmfdataset.cpp
+@@ -980,7 +980,7 @@ do {                                                    \
+ /*  Write out the extended header.                                      */
+ /* -------------------------------------------------------------------- */
+ 
+-    if( sHeader.nExtHdrOffset && sHeader.nExtHdrSize )
++    if( sHeader.nExtHdrOffset && sHeader.nExtHdrSize >= 36 + 4 )
+     {
+         GByte *pabyExtHeader = reinterpret_cast<GByte *>(
+             CPLCalloc( sHeader.nExtHdrSize, 1 ) );
+@@ -1052,7 +1052,7 @@ void RMFDataset::FlushCache(bool bAtClosing)
+         poCompressData->oThreadPool.WaitCompletion();
+     }
+ 
+-    if( bAtClosing && eRMFType == RMFT_MTW )
++    if( bAtClosing && eRMFType == RMFT_MTW && eAccess == GA_Update )
+     {
+         GDALRasterBand *poBand = GetRasterBand(1);
+ 

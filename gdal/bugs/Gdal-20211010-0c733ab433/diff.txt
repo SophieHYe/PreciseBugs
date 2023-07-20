@@ -1,0 +1,28 @@
+diff --git a/gdal/frmts/dimap/dimapdataset.cpp b/gdal/frmts/dimap/dimapdataset.cpp
+index 38a1463f5b..ff81b20094 100644
+--- a/gdal/frmts/dimap/dimapdataset.cpp
++++ b/gdal/frmts/dimap/dimapdataset.cpp
+@@ -1602,9 +1602,9 @@ int DIMAPDataset::ReadImageInformation2()
+                                 else
+                                 {
+                                     nBandIndex =
+-                                        atoi(&psTag->psChild->pszValue[1]) + 1;
+-                                    if( nBandIndex <= 0 ||
+-                                    nBandIndex > poImageDS->GetRasterCount() )
++                                        atoi(&psTag->psChild->pszValue[1]);
++                                    if( nBandIndex < 0 ||
++                                        nBandIndex >= poImageDS->GetRasterCount() )
+                                     {
+                                         CPLError(
+                                             CE_Warning, CPLE_AppDefined,
+@@ -1612,6 +1612,10 @@ int DIMAPDataset::ReadImageInformation2()
+                                             psTag->psChild->pszValue);
+                                         nBandIndex = 0;
+                                     }
++                                    else
++                                    {
++                                        nBandIndex++;
++                                    }
+                                 }
+                             }
+                         }

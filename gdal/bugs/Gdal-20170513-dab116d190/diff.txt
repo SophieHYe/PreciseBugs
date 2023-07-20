@@ -1,0 +1,35 @@
+diff --git a/gdal/frmts/jpeg/libjpeg/jdhuff.c b/gdal/frmts/jpeg/libjpeg/jdhuff.c
+index f843cc8553..a9ea31b5e7 100644
+--- a/gdal/frmts/jpeg/libjpeg/jdhuff.c
++++ b/gdal/frmts/jpeg/libjpeg/jdhuff.c
+@@ -103,6 +103,10 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
+     actbl = compptr->ac_tbl_no;
+     /* Compute derived values for Huffman tables */
+     /* We may do this more than once for a table, but it's not expensive */
++    if (dctbl < 0 || dctbl >= NUM_HUFF_TBLS)
++      ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, dctbl);
++    if (actbl < 0 || actbl >= NUM_HUFF_TBLS)
++      ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, actbl);
+     jpeg_make_d_derived_tbl(cinfo, TRUE, dctbl,
+ 			    & entropy->dc_derived_tbls[dctbl]);
+     jpeg_make_d_derived_tbl(cinfo, FALSE, actbl,
+diff --git a/gdal/frmts/jpeg/libjpeg/jdphuff.c b/gdal/frmts/jpeg/libjpeg/jdphuff.c
+index 95d9cb6de2..80a816781b 100644
+--- a/gdal/frmts/jpeg/libjpeg/jdphuff.c
++++ b/gdal/frmts/jpeg/libjpeg/jdphuff.c
+@@ -166,11 +166,15 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
+     if (is_DC_band) {
+       if (cinfo->Ah == 0) {	/* DC refinement needs no table */
+ 	tbl = compptr->dc_tbl_no;
++	if (tbl < 0 || tbl >= NUM_HUFF_TBLS)
++		ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, tbl);
+ 	jpeg_make_d_derived_tbl(cinfo, TRUE, tbl,
+ 				& entropy->derived_tbls[tbl]);
+       }
+     } else {
+       tbl = compptr->ac_tbl_no;
++      if (tbl < 0 || tbl >= NUM_HUFF_TBLS)
++        ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, tbl);
+       jpeg_make_d_derived_tbl(cinfo, FALSE, tbl,
+ 			      & entropy->derived_tbls[tbl]);
+       /* remember the single active table */

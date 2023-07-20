@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/hfa/hfaband.cpp b/gdal/frmts/hfa/hfaband.cpp
+index d67914f791..1ff52c8a50 100644
+--- a/gdal/frmts/hfa/hfaband.cpp
++++ b/gdal/frmts/hfa/hfaband.cpp
+@@ -897,7 +897,7 @@ static CPLErr UncompressBlock( GByte *pabyCData, int nSrcBytes,
+         }
+ 
+         // Offset by the minimum value.
+-        nDataValue += nDataMin;
++        nDataValue = CPLUnsanitizedAdd<int>(nDataValue, nDataMin);
+ 
+         // Now apply to the output buffer in a type specific way.
+         if( nRepeatCount > INT_MAX - nPixelsOutput ||

@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/sdts/sdtslib.cpp b/gdal/frmts/sdts/sdtslib.cpp
+index f7d281c451..4cf69d7869 100644
+--- a/gdal/frmts/sdts/sdtslib.cpp
++++ b/gdal/frmts/sdts/sdtslib.cpp
+@@ -124,6 +124,8 @@ int SDTSModId::Set( DDFField *poField )
+     {
+         DDFSubfieldDefn *poSF
+             = poField->GetFieldDefn()->FindSubfieldDefn( "MODN" );
++        if( poSF == NULL )
++            return FALSE;
+         int nBytesRemaining;
+         pachData = poField->GetSubfieldData(poSF, &nBytesRemaining);
+         snprintf( szModule, sizeof(szModule), "%s",

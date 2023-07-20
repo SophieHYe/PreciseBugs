@@ -1,0 +1,50 @@
+diff --git a/autotest/gcore/vrt_read.py b/autotest/gcore/vrt_read.py
+index a85789f3b5..3407670bc7 100755
+--- a/autotest/gcore/vrt_read.py
++++ b/autotest/gcore/vrt_read.py
+@@ -1199,6 +1199,18 @@ def vrt_read_27():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test fix for https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1551
++
++def vrt_read_28():
++
++    with gdaltest.error_handler():
++        ds = gdal.Open('<VRTDataset rasterXSize="1 "rasterYSize="1"><VRTRasterBand band="-2147483648"><SimpleSource></SimpleSource></VRTRasterBand></VRTDataset>')
++    if ds is not None:
++        return 'fail'
++
++    return 'success'
++    
+ for item in init_list:
+     ut = gdaltest.GDALTest( 'VRT', item[0], item[1], item[2] )
+     if ut is None:
+@@ -1233,6 +1245,7 @@ gdaltest_list.append( vrt_read_24 )
+ gdaltest_list.append( vrt_read_25 )
+ gdaltest_list.append( vrt_read_26 )
+ gdaltest_list.append( vrt_read_27 )
++gdaltest_list.append( vrt_read_28 )
+ 
+ if __name__ == '__main__':
+ 
+diff --git a/gdal/frmts/vrt/vrtrasterband.cpp b/gdal/frmts/vrt/vrtrasterband.cpp
+index 892b47ec91..e71eb67a41 100644
+--- a/gdal/frmts/vrt/vrtrasterband.cpp
++++ b/gdal/frmts/vrt/vrtrasterband.cpp
+@@ -342,7 +342,13 @@ CPLErr VRTRasterBand::XMLInit( CPLXMLNode * psTree,
+     const char* pszBand = CPLGetXMLValue( psTree, "band", NULL);
+     if( pszBand != NULL )
+     {
+-        nBand = atoi(pszBand);
++        int nNewBand = atoi(pszBand);
++        if( nNewBand != nBand )
++        {
++            CPLError(CE_Failure, CPLE_AppDefined,
++                     "Invalid band. Got %s, expected %d", pszBand, nBand);
++            return CE_Failure;
++        }
+     }
+ 
+ /* -------------------------------------------------------------------- */

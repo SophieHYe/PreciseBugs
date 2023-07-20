@@ -1,0 +1,33 @@
+diff --git a/gdal/frmts/grib/degrib/g2clib/g2_unpack4.c b/gdal/frmts/grib/degrib/g2clib/g2_unpack4.c
+index fc382fd1cc..5cbbd43ca6 100644
+--- a/gdal/frmts/grib/degrib/g2clib/g2_unpack4.c
++++ b/gdal/frmts/grib/degrib/g2clib/g2_unpack4.c
+@@ -140,6 +140,7 @@ g2int g2_unpack4(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int *ipd
+         //   Unpack the rest of the Product Definition Template
+         j=0;
+         for (i=*mappdslen;i<newlen;i++) {
++#ifdef notneeded
+           if( mappds->ext[j] < INT_MIN / 8 || mappds->ext[j] > INT_MAX / 8 )
+           {
+               ierr=6;
+@@ -152,6 +153,7 @@ g2int g2_unpack4(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int *ipd
+               free(lipdstmpl);
+               return(ierr);
+           }
++#endif
+           nbits=abs(mappds->ext[j])*8;
+           if ( mappds->ext[j] >= 0 ) {
+             gbit2(cgrib,cgrib_length,lipdstmpl+i,*iofst,nbits);
+diff --git a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+index 0ed1e5e4f3..b6aa9db280 100644
+--- a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
++++ b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+@@ -505,7 +505,7 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
+               }
+            }
+            else if ( number == 32 ) {
+-              new->extlen=list[9]*10;
++              new->extlen=list[9]*5; /* ERO: was 10, but wrong given the below loop */
+               new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+               for (i=0;i<list[9];i++) {
+                  l=i*5;

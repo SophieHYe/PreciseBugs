@@ -1,0 +1,49 @@
+diff --git a/autotest/ogr/ogr_vrt.py b/autotest/ogr/ogr_vrt.py
+index 2303d8d4f7..eb84af46ff 100755
+--- a/autotest/ogr/ogr_vrt.py
++++ b/autotest/ogr/ogr_vrt.py
+@@ -3591,6 +3591,22 @@ def ogr_vrt_40():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test GetExtent() on erroneous definition
++
++def ogr_vrt_41():
++
++    ds = ogr.Open("""<OGRVRTDataSource>
++  <OGRVRTLayer name="test">
++    <SrcDataSource>/i_dont/exist</SrcDataSource>
++  </OGRVRTLayer>
++</OGRVRTDataSource>""")
++    lyr = ds.GetLayer(0)
++    with gdaltest.error_handler():
++        lyr.GetExtent()
++
++    return 'success'
++
+ ###############################################################################
+ #
+ 
+@@ -3659,6 +3675,7 @@ gdaltest_list = [
+     ogr_vrt_38,
+     ogr_vrt_39,
+     ogr_vrt_40,
++    ogr_vrt_41,
+     ogr_vrt_cleanup ]
+ 
+ if __name__ == '__main__':
+diff --git a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
+index 5e3e23777a..bbc3bf5fae 100644
+--- a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
+@@ -1069,7 +1069,9 @@ error:
+     CPLFree(pszSrcDSName);
+     poFeatureDefn->Release();
+     poFeatureDefn = new OGRFeatureDefn(osName);
++    poFeatureDefn->SetGeomType(wkbNone);
+     poFeatureDefn->Reference();
++    apoGeomFieldProps.clear();
+     return false;
+ }
+ 

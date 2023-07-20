@@ -1,0 +1,33 @@
+diff --git a/gdal/ogr/ogrsf_frmts/bna/ogrbnalayer.cpp b/gdal/ogr/ogrsf_frmts/bna/ogrbnalayer.cpp
+index fcfc6c2e71..39b08c4afb 100644
+--- a/gdal/ogr/ogrsf_frmts/bna/ogrbnalayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/bna/ogrbnalayer.cpp
+@@ -623,6 +623,7 @@ OGRFeature *OGRBNALayer::BuildFeatureFromBNARecord (BNARecord* record, long fid)
+             {
+                 OGRPolygon* polygon = new OGRPolygon ();
+                 polygon->addRingDirectly(ring);
++                ring = NULL;
+                 tabPolygons[nbPolygons] = polygon;
+                 nbPolygons++;
+ 
+@@ -648,6 +649,7 @@ OGRFeature *OGRBNALayer::BuildFeatureFromBNARecord (BNARecord* record, long fid)
+ 
+                 OGRPolygon* polygon = new OGRPolygon ();
+                 polygon->addRingDirectly(ring);
++                ring = NULL;
+                 tabPolygons[nbPolygons] = polygon;
+                 nbPolygons++;
+ 
+@@ -706,10 +708,12 @@ OGRFeature *OGRBNALayer::BuildFeatureFromBNARecord (BNARecord* record, long fid)
+ 
+                 OGRPolygon* polygon = new OGRPolygon ();
+                 polygon->addRingDirectly(ring);
++                ring = NULL;
+                 tabPolygons[nbPolygons] = polygon;
+                 nbPolygons++;
+             }
+         }
++        delete ring;
+ 
+         if (nbPolygons == 1)
+         {
