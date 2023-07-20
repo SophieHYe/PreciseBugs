@@ -1,0 +1,12 @@
+commit 0c1ec30f9a292b0a5eca4aaaa651150aa5712d6d
+Author: Micah Snyder (micasnyd) <micasnyd@cisco.com>
+Date:   Tue Apr 6 10:06:04 2021 -0700
+
+    fuzz-29504: Fix null-reference in mail parser
+    
+    Fix a null-dereference read in the email parser caused by improperly
+    re-initializing the structure used for keeping state when scanning
+    messages.
+    
+    Fix addresses:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=29504

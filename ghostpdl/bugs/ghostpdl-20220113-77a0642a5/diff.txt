@@ -1,0 +1,14 @@
+diff --git a/pdf/pdf_cmap.c b/pdf/pdf_cmap.c
+index 718ca8a1c..c09346c76 100644
+--- a/pdf/pdf_cmap.c
++++ b/pdf/pdf_cmap.c
+@@ -845,6 +845,9 @@ pdfi_read_cmap(pdf_context *ctx, pdf_obj *cmap, pdf_cmap **pcmap)
+             }
+         }
+     }
++    else {
++        goto error_out;
++    }
+     return 0;
+ 
+ error_out:

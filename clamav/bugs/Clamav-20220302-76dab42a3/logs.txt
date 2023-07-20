@@ -1,0 +1,11 @@
+commit 76dab42a3097e1108c293e89313e7d02cfc0f9d8
+Author: Andy Ragusa <aragusa@cisco.com>
+Date:   Thu Feb 10 09:28:21 2022 -0800
+
+    DB load, CRB: Fix benign heap buffer overflow
+    
+    Validate the length of the crt subject before memcpying it.
+    This resolves a possible multibyte heap buffer overread.
+    We determiend that this issue is not a vulnerability.
+    
+    Fixes: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=43828

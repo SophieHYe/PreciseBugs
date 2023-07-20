@@ -1,0 +1,16 @@
+diff --git a/src/hb-ot-color-colr-table.hh b/src/hb-ot-color-colr-table.hh
+index 5722acba4..9f34e56fb 100644
+--- a/src/hb-ot-color-colr-table.hh
++++ b/src/hb-ot-color-colr-table.hh
+@@ -971,6 +971,7 @@ struct ClipList
+                                    const hb_map_t& gid_offset_map) const
+   {
+     TRACE_SERIALIZE (this);
++    if (gids.is_empty ()) return_trace (0);
+     unsigned count  = 0;
+ 
+     hb_codepoint_t start_gid= gids.get_min ();
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-6315334756335616 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-6315334756335616
+new file mode 100644
+index 000000000..a7d8dda8e
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-6315334756335616 differ

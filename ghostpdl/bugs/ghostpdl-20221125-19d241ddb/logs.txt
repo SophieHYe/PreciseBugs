@@ -1,0 +1,8 @@
+commit 19d241ddb9aa65370bd176522e6c3317bd3be64d
+Author: Chris Liddell <chris.liddell@artifex.com>
+Date:   Thu Nov 24 17:38:29 2022 +0000
+
+    oss-fuzz 53711: Fix thinko in pdfi cmap code
+    
+    When adding a range, copy the previous number of ranges multiplied by the size
+    of a range structure, rather than the previous number ranges bytes.

@@ -1,0 +1,13 @@
+commit 9d9caf396ad99b19a1dfa5f61cf5f73b51c6c964
+Author: m-sola <msola@sourcefire.com>
+Date:   Fri Apr 1 16:39:57 2022 -0400
+
+    Fix benign 1-byte stack buffer overwrite when loading PDB/WDB regex signatures
+    
+    The check of pattern_len against FILEBUF is largely meaningless since
+    pattern is derived from a strchr() call against buffer (with length FILEBUFF).
+    
+    This fix ensures that the relative size is checked against max buffer size
+    which prevents overwriting stack memory with a single null byte.
+    
+    Resolves: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=45247

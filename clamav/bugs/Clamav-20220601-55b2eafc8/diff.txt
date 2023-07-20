@@ -1,0 +1,77 @@
+diff --git a/libclamav/matcher-ac.c b/libclamav/matcher-ac.c
+index b99e9e600..c6f5dc34a 100644
+--- a/libclamav/matcher-ac.c
++++ b/libclamav/matcher-ac.c
+@@ -132,10 +132,23 @@ static int patt_cmp_fn(const struct cli_ac_patt *a, const struct cli_ac_patt *b)
+     RETURN_RES_IF_NE(a->ch[1], b->ch[1]);
+     RETURN_RES_IF_NE(a->boundary, b->boundary);
+ 
+-    res = memcmp(a->pattern, b->pattern, a->length[0] * sizeof(uint16_t));
+-    if (res) return res;
+-    res = memcmp(a->prefix, b->prefix, a->prefix_length[0] * sizeof(uint16_t));
+-    if (res) return res;
++    /*
++     * If the first two arguments to memcmp are NULL, clangs
++     * UndefinedBehaviorSanitizer will complain.  It is legal if the length
++     * is zero, so don't call memcmp if the length is zero.
++     */
++    if (a->length[0] > 0) {
++        res = memcmp(a->pattern, b->pattern, a->length[0] * sizeof(uint16_t));
++        if (res) {
++            return res;
++        }
++    }
++    if (a->prefix_length[0] > 0) {
++        res = memcmp(a->prefix, b->prefix, a->prefix_length[0] * sizeof(uint16_t));
++        if (res) {
++            return res;
++        }
++    }
+ 
+     RETURN_RES_IF_NE(a->special, b->special);
+     if (!a->special && !b->special)
+diff --git a/libclamav/mpool.c b/libclamav/mpool.c
+index be9ebd07a..33913f188 100644
+--- a/libclamav/mpool.c
++++ b/libclamav/mpool.c
+@@ -697,9 +697,10 @@ static void *allocbase_fromfrag(struct FRAG *f)
+ 
+ void mpool_free(struct MP *mp, void *ptr)
+ {
+-    struct FRAG *f = (struct FRAG *)((char *)ptr - FRAG_OVERHEAD);
+-    unsigned int sbits;
++    struct FRAG *f     = NULL;
++    unsigned int sbits = 0;
+     if (!ptr) return;
++    f = (struct FRAG *)((char *)ptr - FRAG_OVERHEAD);
+ 
+ #ifdef CL_DEBUG
+     assert(f->magic == MPOOLMAGIC && "Attempt to mpool_free a pointer we did not allocate!");
+@@ -729,10 +730,11 @@ void *mpool_calloc(struct MP *mp, size_t nmemb, size_t size)
+ 
+ void *mpool_realloc(struct MP *mp, void *ptr, size_t size)
+ {
+-    struct FRAG *f = (struct FRAG *)((char *)ptr - FRAG_OVERHEAD);
+-    size_t csize;
+-    void *new_ptr;
++    struct FRAG *f = NULL;
++    size_t csize   = 0;
++    void *new_ptr  = NULL;
+     if (!ptr) return mpool_malloc(mp, size);
++    f = (struct FRAG *)((char *)ptr - FRAG_OVERHEAD);
+ 
+     if (!size || !(csize = from_bits(f->u.a.sbits))) {
+         cli_errmsg("mpool_realloc(): Attempt to allocate %lu bytes. Please report to https://github.com/Cisco-Talos/clamav/issues\n", (unsigned long)size);
+diff --git a/libclamav/nsis/nulsft.c b/libclamav/nsis/nulsft.c
+index ae409cdfd..fab42e6bb 100644
+--- a/libclamav/nsis/nulsft.c
++++ b/libclamav/nsis/nulsft.c
+@@ -484,7 +484,7 @@ static int nsis_headers(struct nsis_st *n, cli_ctx *ctx)
+             pos += 4;
+             buf += 4;
+         }
+-        if ((pos += 4 + nextsz) > n->asz) {
++        if ((pos += (4 + ((uint32_t)nextsz))) > n->asz) {
+             n->solid = 1;
+             break;
+         }

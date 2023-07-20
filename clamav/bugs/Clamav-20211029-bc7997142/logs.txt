@@ -1,0 +1,20 @@
+commit bc7997142ae57bbb304da72f7996736618db8ae8
+Author: Micah Snyder <micasnyd@cisco.com>
+Date:   Fri Oct 8 16:56:11 2021 -0700
+
+    OLE2: Fix benign heap buffer overflow read
+    
+    A heap buffer over-read may occur in the OLE2 parser if the --gen-json
+    option is enabled (the CL_SCAN_GENERAL_COLLECT_METADATA scan option).
+    
+    The issue occurs because a string input is not checked to verify if it
+    is empty (zero-byte length) prior to use.
+    
+    We determined that this issue is not exploitable to cause a crash or to
+    do anything malicious. The overflow (er... underflow?) is 1 byte before
+    a malloced buffer.
+    
+    This commit adds checks to the function parameters in case the original
+    pointer itself is NULL, and to account for conversion of an empty string.
+    
+    Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=39673

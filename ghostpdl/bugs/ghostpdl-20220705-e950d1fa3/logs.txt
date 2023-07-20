@@ -1,0 +1,13 @@
+commit e950d1fa30cda37cae4cc0553a4d24135fc09695
+Author: Chris Liddell <chris.liddell@artifex.com>
+Date:   Mon Jul 4 14:02:54 2022 +0100
+
+    oss-fuzz 48547/48528/48526: Various TTF hinter fixes
+    
+    A couple of opcode functions in the bytecode interpreter were not bounds
+    checking the values they used.
+    
+    If a bytcode execution context initialisation encountered an out of memory
+    error part way through, the remainder of the context would be left
+    uninitialised which could then lead to a later crash when cleaning up the
+    partially initialised context.

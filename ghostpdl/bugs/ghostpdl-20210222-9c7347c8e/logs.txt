@@ -1,0 +1,15 @@
+commit 9c7347c8e1bb146b9ae27b35b8207e10a7c5dc43
+Author: Chris Liddell <chris.liddell@artifex.com>
+Date:   Wed Feb 10 09:35:39 2021 +0000
+
+    Bug 703326: Create a new clip path for clist typed image handling
+    
+    Stupid fuzzing file uses a Type 3 font with a sampled image in the glyph
+    proc. The image uses a procedure as a data source. The glyph proc does
+    gsave, and the image data source procedure does a grestore. So by the time we
+    clean up the image "samples", the gstate and the clip path it contains have
+    gone. So the image enumerator's reference to the clip path is left dangling.
+    
+    Copying, rather than referencing, that clip path solves the crash.
+    
+    Fixes oss-fuzz issue: 26987

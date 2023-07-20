@@ -1,0 +1,17 @@
+commit d6d7f183bf9c172c0a01f92c16df0ddbf33b05cc
+Author: ragusaa <54862477+ragusaa@users.noreply.github.com>
+Date:   Fri May 27 21:02:40 2022 -0400
+
+    Fix heap over-read when loading some LDB signatures
+    
+    There is a possible heap buffer overflow read when loading some malformed
+    logical signatures that use the byte-compare feature.
+    
+    Previously the upper bound for loop in cli_bcomp_freemeta was hardcoded to 2.
+    But it's possibly for there to be less than 2 items.
+    
+    This issue is not a vulnerability.
+    
+    Changed "2" to "bm->comp_count" to avoid going past the end.
+    
+    Fixes: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=43816

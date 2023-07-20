@@ -1,0 +1,9 @@
+commit 00ae4be6bf8b1d0800043167c5cf95187ac12515
+Author: Behdad Esfahbod <behdad@behdad.org>
+Date:   Fri Oct 26 21:59:20 2018 -0700
+
+    [morx] Fix bailing out ligation at end-of-text
+    
+    Check was after a move_to, which wouldn't work.
+    
+    Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=11147

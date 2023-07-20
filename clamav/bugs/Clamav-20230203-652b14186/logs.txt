@@ -1,0 +1,11 @@
+commit 652b1418646132cf25d9d3cd32dd03b9fd94d94d
+Author: ragusaa <54862477+ragusaa@users.noreply.github.com>
+Date:   Fri Feb 3 16:24:46 2023 -0500
+
+    Fix heap overflow read when reading PDB signatures
+    
+    This buffer overflow read is not a vulnerability.
+    
+    This commit fixes the bug by handling the case of an empty regex string.
+    
+    Resolves: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=47506

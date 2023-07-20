@@ -1,0 +1,12 @@
+commit 03085132bac6bb3f69378cab3eaf5a57ad1362ff
+Author: Behdad Esfahbod <behdad@behdad.org>
+Date:   Mon Mar 21 18:06:33 2022 -0600
+
+    [buffer] Fix out-buffer under memory-alloc failure
+    
+    This was broken in July refactoring of the buffer, and exposed to
+    ReverseChainSingleSubstFormat1 in 3807061d634b60bd6235d6e1d8c47a034377f924
+    
+    Fixes:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=38800
+    https://bugs.chromium.org/p/chromium/issues/detail?id=1303552

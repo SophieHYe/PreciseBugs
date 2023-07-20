@@ -1,0 +1,9 @@
+commit 3588812afd4945050f7e65c79f8541366c1c8ec7
+Author: Klaus Post <klauspost@gmail.com>
+Date:   Wed Mar 8 04:16:33 2023 -0800
+
+    zstd: Fix ineffective block size check (#771)
+    
+    When falling back to Go decoding block sizes were not checked correctly.
+    
+    Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=56755

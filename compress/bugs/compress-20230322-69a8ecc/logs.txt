@@ -1,0 +1,18 @@
+commit 69a8ecc12ba38c39dc31da8b5d232eabb484fada
+Author: Klaus Post <klauspost@gmail.com>
+Date:   Wed Mar 22 06:45:21 2023 -0700
+
+    zstd: Fix amd64 not always detecting corrupt data (#785)
+    
+    * zstd: Fix amd64 not always detecting corrupt data
+    
+    Fix undetected corrupt data in amd64 assembly.
+    
+    In rare cases overreads would not get returned as errors, if a multiple of 256 bits was overread.
+    This would make the "bitsread" equal the expected 64.
+    
+    Whenever all bytes has been read from memory we start checking if more than 64 bits has been read on every fill. This ensures that an overflow can never occur.
+    
+    No invalid memory was accessed, this is merely a question if errors are reported.
+    
+    Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=57290

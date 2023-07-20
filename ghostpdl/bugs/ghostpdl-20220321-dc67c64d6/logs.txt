@@ -1,0 +1,10 @@
+commit dc67c64d6d61f5fa9b065c03cabd237d67158802
+Author: Michael Vrhel <michael.vrhel@artifex.com>
+Date:   Mon Mar 21 12:42:54 2022 -0700
+
+    Bug 705090 oss-fuzz #45892  Bug 705092 oss-fuzz #45823
+    
+    If begin transparency group returns an error, do not set the
+    GroupPushed state variable to true.  Otherwise we will end
+    up doing an unmatched end group command later, leading to
+    the seg fault.

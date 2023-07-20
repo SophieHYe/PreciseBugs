@@ -1,0 +1,16 @@
+diff --git a/jbig2dec/jbig2_arith.c b/jbig2dec/jbig2_arith.c
+index 58dcff2ca..d34d7927c 100644
+--- a/jbig2dec/jbig2_arith.c
++++ b/jbig2dec/jbig2_arith.c
+@@ -298,8 +298,10 @@ jbig2_arith_decode(Jbig2ArithState *as, Jbig2ArithCx *pcx, int *code)
+             jbig2_arith_renormd(as);
+             *code = 0;
+             return D;
+-        } else
++        } else {
++            *code = 0;
+             return cx >> 7;
++        }
+     } else {
+ #ifdef SOFTWARE_CONVENTION
+         as->C -= (as->A) << 16;

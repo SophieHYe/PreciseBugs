@@ -1,0 +1,16 @@
+commit 55b2eafc847caac68581ee691b575e9755d5dc68
+Author: ragusaa <54862477+ragusaa@users.noreply.github.com>
+Date:   Wed Jun 1 16:46:36 2022 -0400
+
+    Fix integer overflow/undefined behavior in NSIS parser
+    
+    Fix integer overflow in the NSIS parser
+    
+    Cast int32_t to uint32_t for comparison with uint32_t, to prevent
+    integer overflow, as well as signed/unsigned compare warning.
+    
+    Fixes: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=44493
+    
+    Also address some other undefined behavior warnings:
+    * mpool.c: Fixed pointer overflow errors uncovered by UndefinedBehaviorSanitizer.
+    * matcher-ac.c: Test length to avoid passing NULLs to memcmp.

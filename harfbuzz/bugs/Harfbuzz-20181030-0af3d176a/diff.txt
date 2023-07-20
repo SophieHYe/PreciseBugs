@@ -1,0 +1,19 @@
+diff --git a/src/hb-ot-color-sbix-table.hh b/src/hb-ot-color-sbix-table.hh
+index 39f85129a..4feb4e193 100644
+--- a/src/hb-ot-color-sbix-table.hh
++++ b/src/hb-ot-color-sbix-table.hh
+@@ -244,7 +244,10 @@ struct sbix
+       hb_blob_t *blob = reference_png (font, glyph, &x_offset, &y_offset, &strike_ppem);
+ 
+       if (unlikely (blob->length < sizeof (PNGHeader)))
++      {
++        hb_blob_destroy (blob);
+         return false;
++      }
+ 
+       const PNGHeader &png = *blob->as<PNGHeader>();
+ 
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5768601332613120 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5768601332613120
+new file mode 100644
+index 000000000..385e67079
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5768601332613120 differ

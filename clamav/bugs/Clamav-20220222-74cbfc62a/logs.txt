@@ -1,0 +1,11 @@
+commit 74cbfc62ad07698a0ae31dfed4a7560400faa696
+Author: ragusaa <54862477+ragusaa@users.noreply.github.com>
+Date:   Tue Feb 22 20:46:03 2022 -0500
+
+    DB load, PDB/WDB: Fix benign stack buffer overflow
+    
+    Corrected buffer size check in the regex signature parsing code.
+    This resolves a possible 1-byte stack buffer overwrite (NULL byte).
+    We determined that this issue is not a vulnerability.
+    
+    Fixes: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=43869

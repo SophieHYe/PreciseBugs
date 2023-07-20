@@ -1,0 +1,12 @@
+commit f7e120ad574fba7fa2869ae8e7ced6bd921fafa5
+Author: m-sola <msola@sourcefire.com>
+Date:   Tue May 31 16:14:26 2022 -0400
+
+    Fix benign overread during ldb database load
+    
+    There is a buffer over read possible when using the "wide" sig option.
+    This issue is not a vulnerability.
+    
+    Added bounds checking for 3-byte comparison step.
+    
+    Resolves: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=43843
