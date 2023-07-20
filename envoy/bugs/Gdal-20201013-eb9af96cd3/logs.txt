@@ -1,0 +1,20 @@
+commit eb9af96cd317b823ee6822dc10aeb26d63e51608
+Author: asraa <asraa@google.com>
+Date:   Tue Oct 13 08:54:08 2020 -0400
+
+    router:  fix an invalid ASSERT when encoding metadata frames in the router. (#13511)
+    
+    Commit Message: Fix an invalid ASSERT when encoding metadata frames in the router.
+    Additional Description:
+    METADATA frames can't end stream, so there must be data, trailers, or a reset stream frame to end the stream. The ASSERT was meant to verify that there is data following METADATA frames to end the stream (for example, in case a client sends headers only request and metadata is added, FM adds empty data to end the stream). However, trailers could also end the stream, or the client could send body later/never. The ASSERT is invalid.
+    
+    The PR removes the ASSERT.
+    
+    Open to suggestions to have an ASSERT, but I couldn't think of one that was worth it / could be detected here. "if we had a header only request before, ASSERT there is empty data", or "if there is no possibility of stream reset occurring at this stage, ASSERT there is data or trailers."
+    
+    Risk Level: Low. This only affects the ASSERT, has no impact on traffic.
+    Testing: Integration test added as a regression. Fuzz testcase added.
+    Fixes:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26238
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

@@ -1,0 +1,107 @@
+diff --git a/test/common/access_log/access_log_formatter_fuzz_test.cc b/test/common/access_log/access_log_formatter_fuzz_test.cc
+index 1df65dd173..09d6b43225 100644
+--- a/test/common/access_log/access_log_formatter_fuzz_test.cc
++++ b/test/common/access_log/access_log_formatter_fuzz_test.cc
+@@ -10,12 +10,14 @@ namespace {
+ 
+ DEFINE_PROTO_FUZZER(const test::common::access_log::TestCase& input) {
+   try {
++    NiceMock<Ssl::MockConnectionInfo> connection_info;
+     std::vector<AccessLog::FormatterProviderPtr> formatters =
+         AccessLog::AccessLogFormatParser::parse(input.format());
+     for (const auto& it : formatters) {
+-      it->format(
+-          Fuzz::fromHeaders(input.request_headers()), Fuzz::fromHeaders(input.response_headers()),
+-          Fuzz::fromHeaders(input.response_trailers()), Fuzz::fromStreamInfo(input.stream_info()));
++      it->format(Fuzz::fromHeaders(input.request_headers()),
++                 Fuzz::fromHeaders(input.response_headers()),
++                 Fuzz::fromHeaders(input.response_trailers()),
++                 Fuzz::fromStreamInfo(input.stream_info(), &connection_info));
+     }
+     ENVOY_LOG_MISC(trace, "Success");
+   } catch (const EnvoyException& e) {
+diff --git a/test/common/router/header_parser_corpus/clusterfuzz-testcase-header_parser_fuzz_test-5702537941876736 b/test/common/router/header_parser_corpus/clusterfuzz-testcase-header_parser_fuzz_test-5702537941876736
+new file mode 100644
+index 0000000000..d9a0b9b95e
+--- /dev/null
++++ b/test/common/router/header_parser_corpus/clusterfuzz-testcase-header_parser_fuzz_test-5702537941876736
+@@ -0,0 +1,6 @@
++headers_to_add {
++  header {
++    key: "m"
++    value: "%DOWNSTREAM_PEER_SUBJECT%"
++  }
++}
+diff --git a/test/common/router/header_parser_fuzz_test.cc b/test/common/router/header_parser_fuzz_test.cc
+index 24750341c4..451aae702c 100644
+--- a/test/common/router/header_parser_fuzz_test.cc
++++ b/test/common/router/header_parser_fuzz_test.cc
+@@ -20,7 +20,9 @@ DEFINE_PROTO_FUZZER(const test::common::router::TestCase& input) {
+     Router::HeaderParserPtr parser =
+         Router::HeaderParser::configure(headers_to_add, headers_to_remove);
+     Http::HeaderMapImpl header_map;
+-    parser->evaluateHeaders(header_map, fromStreamInfo(input.stream_info()));
++    NiceMock<Ssl::MockConnectionInfo> connection_info;
++    TestStreamInfo test_stream_info = fromStreamInfo(input.stream_info(), &connection_info);
++    parser->evaluateHeaders(header_map, test_stream_info);
+     ENVOY_LOG_MISC(trace, "Success");
+   } catch (const EnvoyException& e) {
+     ENVOY_LOG_MISC(debug, "EnvoyException: {}", e.what());
+diff --git a/test/common/stream_info/test_util.h b/test/common/stream_info/test_util.h
+index 931c22feea..a532ba1a8d 100644
+--- a/test/common/stream_info/test_util.h
++++ b/test/common/stream_info/test_util.h
+@@ -207,7 +207,7 @@ public:
+   Network::Address::InstanceConstSharedPtr downstream_local_address_;
+   Network::Address::InstanceConstSharedPtr downstream_direct_remote_address_;
+   Network::Address::InstanceConstSharedPtr downstream_remote_address_;
+-  const Ssl::ConnectionInfo* downstream_connection_info_;
++  const Ssl::ConnectionInfo* downstream_connection_info_{};
+   const Router::RouteEntry* route_entry_{};
+   envoy::api::v2::core::Metadata metadata_{};
+   Envoy::StreamInfo::FilterStateImpl filter_state_{};
+diff --git a/test/fuzz/BUILD b/test/fuzz/BUILD
+index 9d6efb14a8..5cb9b78c9b 100644
+--- a/test/fuzz/BUILD
++++ b/test/fuzz/BUILD
+@@ -51,6 +51,7 @@ envoy_cc_test_library(
+         ":common_proto_cc",
+         "//source/common/network:utility_lib",
+         "//test/common/stream_info:test_util",
++        "//test/mocks/ssl:ssl_mocks",
+         "//test/mocks/upstream:upstream_mocks",
+         "//test/test_common:utility_lib",
+     ],
+diff --git a/test/fuzz/utility.h b/test/fuzz/utility.h
+index f33e76b76a..73782414b2 100644
+--- a/test/fuzz/utility.h
++++ b/test/fuzz/utility.h
+@@ -4,6 +4,7 @@
+ 
+ #include "test/common/stream_info/test_util.h"
+ #include "test/fuzz/common.pb.h"
++#include "test/mocks/ssl/mocks.h"
+ #include "test/mocks/upstream/host.h"
+ #include "test/test_common/utility.h"
+ 
+@@ -50,7 +51,8 @@ inline test::fuzz::Headers toHeaders(const Http::HeaderMap& headers) {
+   return fuzz_headers;
+ }
+ 
+-inline TestStreamInfo fromStreamInfo(const test::fuzz::StreamInfo& stream_info) {
++inline TestStreamInfo fromStreamInfo(const test::fuzz::StreamInfo& stream_info,
++                                     const Ssl::MockConnectionInfo* connection_info) {
+   TestStreamInfo test_stream_info;
+   test_stream_info.metadata_ = stream_info.dynamic_metadata();
+   // libc++ clocks don't track at nanosecond on macOS.
+@@ -73,6 +75,10 @@ inline TestStreamInfo fromStreamInfo(const test::fuzz::StreamInfo& stream_info)
+   test_stream_info.downstream_local_address_ = address;
+   test_stream_info.downstream_direct_remote_address_ = address;
+   test_stream_info.downstream_remote_address_ = address;
++  test_stream_info.setDownstreamSslConnection(connection_info);
++  ON_CALL(*connection_info, subjectPeerCertificate())
++      .WillByDefault(testing::Return(
++          "CN=Test Server,OU=Lyft Engineering,O=Lyft,L=San Francisco,ST=California,C=US"));
+   return test_stream_info;
+ }
+ 

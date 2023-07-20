@@ -1,0 +1,19 @@
+commit fedaac992dc7498cb8cb6b7f49025a5ef51df331
+Author: htuch <htuch@users.noreply.github.com>
+Date:   Mon Sep 10 14:44:09 2018 -0400
+
+    sds/dns: fix late SDS exception throw during c-ares callbacks. (#4377)
+    
+    Previously, we only validated local info in SDS initialize(), which could happen during c-ares
+    resolution. This is too late to be throwing config validation exceptions, so instead do it at SdsApi
+    construction time.
+    
+    Also, make sure we safely copy exception info for EnvoyExceptions; for libc++ in oss-fuzz,
+    attempting to copy/throw the exception in the post() was causing UBSAN failures.
+    
+    Fixes oss-fuzz issue https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=10262.
+    
+    Risk level: Low
+    Testing: Corpus entry added.
+    
+    Signed-off-by: Harvey Tuch <htuch@google.com>

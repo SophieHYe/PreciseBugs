@@ -1,0 +1,173 @@
+diff --git a/api/envoy/api/v2/cds.proto b/api/envoy/api/v2/cds.proto
+index 15d13eade7..c4fef7826f 100644
+--- a/api/envoy/api/v2/cds.proto
++++ b/api/envoy/api/v2/cds.proto
+@@ -402,9 +402,9 @@ message Cluster {
+   message RingHashLbConfig {
+     // Minimum hash ring size. The larger the ring is (that is, the more hashes there are for each
+     // provided host) the better the request distribution will reflect the desired weights. Defaults
+-    // to 1024 entries. See also
++    // to 1024 entries, and limited to 8M entries. See also
+     // :ref:`maximum_ring_size<envoy_api_field_Cluster.RingHashLbConfig.maximum_ring_size>`.
+-    google.protobuf.UInt64Value minimum_ring_size = 1;
++    google.protobuf.UInt64Value minimum_ring_size = 1 [(validate.rules).uint64.lte = 8388608];
+ 
+     // [#not-implemented-hide:] Hide from docs.
+     message DeprecatedV1 {
+@@ -431,10 +431,10 @@ message Cluster {
+     // :ref:`XX_HASH<envoy_api_enum_value_Cluster.RingHashLbConfig.HashFunction.XX_HASH>`.
+     HashFunction hash_function = 3 [(validate.rules).enum.defined_only = true];
+ 
+-    // Maximum hash ring size. Defaults to 8M entries, but can be lowered to further constrain
+-    // resource use. See also
++    // Maximum hash ring size. Defaults to 8M entries, and limited to 8M entries, but can be lowered
++    // to further constrain resource use. See also
+     // :ref:`minimum_ring_size<envoy_api_field_Cluster.RingHashLbConfig.minimum_ring_size>`.
+-    google.protobuf.UInt64Value maximum_ring_size = 4;
++    google.protobuf.UInt64Value maximum_ring_size = 4 [(validate.rules).uint64.lte = 8388608];
+   }
+ 
+   // Specific configuration for the
+diff --git a/source/common/upstream/ring_hash_lb.cc b/source/common/upstream/ring_hash_lb.cc
+index 27ca42282e..a9b83b7c28 100644
+--- a/source/common/upstream/ring_hash_lb.cc
++++ b/source/common/upstream/ring_hash_lb.cc
+@@ -19,7 +19,25 @@ RingHashLoadBalancer::RingHashLoadBalancer(
+     const absl::optional<envoy::api::v2::Cluster::RingHashLbConfig>& config,
+     const envoy::api::v2::Cluster::CommonLbConfig& common_config)
+     : ThreadAwareLoadBalancerBase(priority_set, stats, runtime, random, common_config),
+-      config_(config), scope_(scope.createScope("ring_hash_lb.")), stats_(generateStats(*scope_)) {}
++      scope_(scope.createScope("ring_hash_lb.")), stats_(generateStats(*scope_)),
++      min_ring_size_(config ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value(), minimum_ring_size,
++                                                              DefaultMinRingSize)
++                            : DefaultMinRingSize),
++      max_ring_size_(config ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value(), maximum_ring_size,
++                                                              DefaultMaxRingSize)
++                            : DefaultMaxRingSize),
++      use_std_hash_(config ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value().deprecated_v1(),
++                                                             use_std_hash, false)
++                           : false),
++      hash_function_(config ? config.value().hash_function()
++                            : HashFunction::Cluster_RingHashLbConfig_HashFunction_XX_HASH) {
++  // It's important to do any config validation here, rather than deferring to Ring's ctor, because
++  // any exceptions thrown here will be caught and handled properly.
++  if (min_ring_size_ > max_ring_size_) {
++    throw EnvoyException(fmt::format("ring hash: minimum_ring_size ({}) > maximum_ring_size ({})",
++                                     min_ring_size_, max_ring_size_));
++  }
++}
+ 
+ RingHashLoadBalancerStats RingHashLoadBalancer::generateStats(Stats::Scope& scope) {
+   return {ALL_RING_HASH_LOAD_BALANCER_STATS(POOL_GAUGE(scope))};
+@@ -131,29 +149,12 @@ void normalizeWeights(const HostSet& host_set, bool in_panic,
+ 
+ } // namespace
+ 
+-using HashFunction = envoy::api::v2::Cluster_RingHashLbConfig_HashFunction;
+-RingHashLoadBalancer::Ring::Ring(
+-    const HostSet& host_set, bool in_panic,
+-    const absl::optional<envoy::api::v2::Cluster::RingHashLbConfig>& config,
+-    RingHashLoadBalancerStats& stats)
++RingHashLoadBalancer::Ring::Ring(const HostSet& host_set, bool in_panic, uint64_t min_ring_size,
++                                 uint64_t max_ring_size, bool use_std_hash,
++                                 HashFunction hash_function, RingHashLoadBalancerStats& stats)
+     : stats_(stats) {
+   ENVOY_LOG(trace, "ring hash: building ring");
+ 
+-  const uint64_t min_ring_size =
+-      config
+-          ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value(), minimum_ring_size, DefaultMinRingSize)
+-          : DefaultMinRingSize;
+-  const uint64_t max_ring_size =
+-      config
+-          ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value(), maximum_ring_size, DefaultMaxRingSize)
+-          : DefaultMaxRingSize;
+-
+-  // Sanity-check ring size bounds.
+-  if (min_ring_size > max_ring_size) {
+-    throw EnvoyException(fmt::format("ring hash: minimum_ring_size ({}) > maximum_ring_size ({})",
+-                                     min_ring_size, max_ring_size));
+-  }
+-
+   // Normalize weights, such that the sum of all weights = 1.
+   NormalizedHostWeightVector normalized_weights;
+   double min_normalized_weight = 1.0;
+@@ -177,14 +178,6 @@ RingHashLoadBalancer::Ring::Ring(
+   const uint64_t ring_size = std::ceil(scale);
+   ring_.reserve(ring_size);
+ 
+-  const bool use_std_hash =
+-      config ? PROTOBUF_GET_WRAPPED_OR_DEFAULT(config.value().deprecated_v1(), use_std_hash, false)
+-             : false;
+-
+-  const HashFunction hash_function =
+-      config ? config.value().hash_function()
+-             : HashFunction::Cluster_RingHashLbConfig_HashFunction_XX_HASH;
+-
+   // Populate the hash ring by walking through the (host, weight) entries in the normalized_weights
+   // map, and generating (scale * weight) hashes for each host. Since these aren't necessarily whole
+   // numbers, we maintain running sums -- current_hashes and target_hashes -- which allows us to
+diff --git a/source/common/upstream/ring_hash_lb.h b/source/common/upstream/ring_hash_lb.h
+index 5cd4a9f61e..7c08dca45d 100644
+--- a/source/common/upstream/ring_hash_lb.h
++++ b/source/common/upstream/ring_hash_lb.h
+@@ -49,38 +49,43 @@ public:
+   const RingHashLoadBalancerStats& stats() const { return stats_; }
+ 
+ private:
++  using HashFunction = envoy::api::v2::Cluster_RingHashLbConfig_HashFunction;
++
+   struct RingEntry {
+     uint64_t hash_;
+     HostConstSharedPtr host_;
+   };
+ 
+   struct Ring : public HashingLoadBalancer {
+-    Ring(const HostSet& host_set, bool in_panic,
+-         const absl::optional<envoy::api::v2::Cluster::RingHashLbConfig>& config,
+-         RingHashLoadBalancerStats& stats);
++    Ring(const HostSet& host_set, bool in_panic, uint64_t min_ring_size, uint64_t max_ring_size,
++         bool use_std_hash, HashFunction hash_function, RingHashLoadBalancerStats& stats);
+ 
+     // ThreadAwareLoadBalancerBase::HashingLoadBalancer
+     HostConstSharedPtr chooseHost(uint64_t hash) const override;
+ 
+     std::vector<RingEntry> ring_;
+ 
+-    static const uint64_t DefaultMinRingSize = 1024;
+-    static const uint64_t DefaultMaxRingSize = 1024 * 1024 * 8;
+-
+     RingHashLoadBalancerStats& stats_;
+   };
+   typedef std::shared_ptr<const Ring> RingConstSharedPtr;
+ 
+   // ThreadAwareLoadBalancerBase
+   HashingLoadBalancerSharedPtr createLoadBalancer(const HostSet& host_set, bool in_panic) override {
+-    return std::make_shared<Ring>(host_set, in_panic, config_, stats_);
++    return std::make_shared<Ring>(host_set, in_panic, min_ring_size_, max_ring_size_, use_std_hash_,
++                                  hash_function_, stats_);
+   }
+ 
+   static RingHashLoadBalancerStats generateStats(Stats::Scope& scope);
+ 
+-  const absl::optional<envoy::api::v2::Cluster::RingHashLbConfig>& config_;
+   Stats::ScopePtr scope_;
+   RingHashLoadBalancerStats stats_;
++
++  static const uint64_t DefaultMinRingSize = 1024;
++  static const uint64_t DefaultMaxRingSize = 1024 * 1024 * 8;
++  const uint64_t min_ring_size_;
++  const uint64_t max_ring_size_;
++  const bool use_std_hash_;
++  const HashFunction hash_function_;
+ };
+ 
+ } // namespace Upstream
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5751467204411392 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5751467204411392
+new file mode 100644
+index 0000000000..3a5f0b7ab9
+--- /dev/null
++++ b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5751467204411392
+@@ -0,0 +1 @@
++static_resources {   clusters {     name: " "     connect_timeout {       nanos: 6     }     lb_policy: RING_HASH     hosts {       pipe {       }     }     health_checks {       timeout {         nanos: 6       }       interval {         nanos: 6       }       unhealthy_threshold {       }       healthy_threshold {       }       tcp_health_check {       }     }     ring_hash_lb_config {       minimum_ring_size {         value:  8765695       }     }   } } 
+\ No newline at end of file

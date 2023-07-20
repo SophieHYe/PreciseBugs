@@ -1,0 +1,54 @@
+diff --git a/api/envoy/api/v2/core/grpc_service.proto b/api/envoy/api/v2/core/grpc_service.proto
+index 02fb63ff55..562d999b8e 100644
+--- a/api/envoy/api/v2/core/grpc_service.proto
++++ b/api/envoy/api/v2/core/grpc_service.proto
+@@ -93,7 +93,9 @@ message GrpcService {
+       // [#next-free-field: 10]
+       message StsService {
+         // URI of the token exchange service that handles token exchange requests.
+-        string token_exchange_service_uri = 1 [(validate.rules).string = {uri: true}];
++        // [#comment:TODO(asraa): Add URI validation when implemented. Tracked by
++        // https://github.com/envoyproxy/protoc-gen-validate/issues/303]
++        string token_exchange_service_uri = 1;
+ 
+         // Location of the target service or resource where the client
+         // intends to use the requested security token.
+diff --git a/api/envoy/api/v3alpha/core/grpc_service.proto b/api/envoy/api/v3alpha/core/grpc_service.proto
+index 68aac39551..1b1426a0bd 100644
+--- a/api/envoy/api/v3alpha/core/grpc_service.proto
++++ b/api/envoy/api/v3alpha/core/grpc_service.proto
+@@ -130,7 +130,9 @@ message GrpcService {
+             "envoy.api.v2.core.GrpcService.GoogleGrpc.CallCredentials.StsService";
+ 
+         // URI of the token exchange service that handles token exchange requests.
+-        string token_exchange_service_uri = 1 [(validate.rules).string = {uri: true}];
++        // [#comment:TODO(asraa): Add URI validation when implemented. Tracked by
++        // https://github.com/envoyproxy/protoc-gen-validate/issues/303]
++        string token_exchange_service_uri = 1;
+ 
+         // Location of the target service or resource where the client
+         // intends to use the requested security token.
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5633109961998336 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5633109961998336
+new file mode 100644
+index 0000000000..1a2333fee4
+Binary files /dev/null and b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5633109961998336 differ
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5665272556158976 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5665272556158976
+new file mode 100644
+index 0000000000..c5b607bc5b
+Binary files /dev/null and b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5665272556158976 differ
+diff --git a/test/server/server_fuzz_test.cc b/test/server/server_fuzz_test.cc
+index 634426ab57..8fef2d8ebc 100644
+--- a/test/server/server_fuzz_test.cc
++++ b/test/server/server_fuzz_test.cc
+@@ -52,6 +52,11 @@ makeHermeticPathsAndPorts(Fuzz::PerTestEnvironment& test_env,
+     }
+   }
+   for (auto& cluster : *output.mutable_static_resources()->mutable_clusters()) {
++    for (auto& health_check : *cluster.mutable_health_checks()) {
++      // TODO(asraa): QUIC is not enabled in production code yet, so remove references for HTTP3.
++      // Tracked at https://github.com/envoyproxy/envoy/issues/9513.
++      health_check.mutable_http_health_check()->clear_codec_client_type();
++    }
+     for (auto& host : *cluster.mutable_hosts()) {
+       makePortHermetic(test_env, host);
+     }

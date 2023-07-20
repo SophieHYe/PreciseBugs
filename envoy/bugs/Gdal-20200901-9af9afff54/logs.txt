@@ -1,0 +1,16 @@
+commit 9af9afff54e30cab45ad7a80565ed9e300cda019
+Author: asraa <asraa@google.com>
+Date:   Tue Sep 1 15:46:05 2020 -0400
+
+    [fuzz] fix minor fuzz test bugs (#12903)
+    
+    Matcher API was moved recently, PGV validation wasn't moved to the new directory. This was the previous fix: #12289
+    Mock encoder callbacks never set a definition for addEncodedTrailers
+    
+    Risk Level: Low
+    Testing: Added regression tests
+    Fixes:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=25163
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=25273
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

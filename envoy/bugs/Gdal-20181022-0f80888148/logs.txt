@@ -1,0 +1,17 @@
+commit 0f80888148c581cb4d0c81aba40488d8507a4ca2
+Author: htuch <htuch@users.noreply.github.com>
+Date:   Mon Oct 22 23:17:49 2018 -0400
+
+    date_formatter: fix keying bug in cached fromTime(). (#4814)
+    
+    Previously, two distinct format strings that mapped to identical intermediate representation with
+    ??? acting as placeholders would falsely share the same cached time format.
+    
+    Also, as a bonus, used this as an opportuntiy to move towards TimeSource for DateFormatter.
+    
+    Fixes oss-fuzz bug https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=10109.
+    
+    Risk Level: Low
+    Testing: Unit test and corpus entry added.
+    
+    Signed-off-by: Harvey Tuch <htuch@google.com>

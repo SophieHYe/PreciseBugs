@@ -1,0 +1,538 @@
+diff --git a/api/bazel/repository_locations.bzl b/api/bazel/repository_locations.bzl
+index 50390b2a79..d70a8c45b9 100644
+--- a/api/bazel/repository_locations.bzl
++++ b/api/bazel/repository_locations.bzl
+@@ -4,8 +4,8 @@ BAZEL_SKYLIB_SHA256 = "1dde365491125a3db70731e25658dfdd3bc5dbdfd11b840b3e987ecf0
+ OPENCENSUS_PROTO_GIT_SHA = "be218fb6bd674af7519b1850cdf8410d8cbd48e8"  # Dec 20, 2019
+ OPENCENSUS_PROTO_SHA256 = "e3bbdc94375e86c0edfb2fc5851507e08a3f26ee725ffff7c5c0e73264bdfcde"
+ 
+-PGV_GIT_SHA = "973ea075fe989fd7878619845d1e532e5bfe7115"  # Dec 26, 2019
+-PGV_SHA256 = "d1cd20dd2cae953d6ccd09db6926fe67d0d2231412666c9b4ac5f159011f14a6"
++PGV_GIT_SHA = "61843aea0c3ca81fe7a558caf75fa36789a6d16e"  # Feb 14, 2020
++PGV_SHA256 = "0cdadf1bf786fcd05944831bd23bfcdb15c7c8940405c476696c9560fb039e26"
+ 
+ GOOGLEAPIS_GIT_SHA = "82944da21578a53b74e547774cf62ed31a05b841"  # Dec 2, 2019
+ GOOGLEAPIS_SHA = "a45019af4d3290f02eaeb1ce10990166978c807cb33a9692141a076ba46d1405"
+diff --git a/api/envoy/api/v2/core/base.proto b/api/envoy/api/v2/core/base.proto
+index 67a97dd6e2..43403633f6 100644
+--- a/api/envoy/api/v2/core/base.proto
++++ b/api/envoy/api/v2/core/base.proto
+@@ -233,14 +233,17 @@ message RuntimeFeatureFlag {
+ // Header name/value pair.
+ message HeaderValue {
+   // Header name.
+-  string key = 1 [(validate.rules).string = {min_bytes: 1 max_bytes: 16384}];
++  string key = 1 [
++    (validate.rules).string = {min_bytes: 1 max_bytes: 16384 well_known_regex: HTTP_HEADER_NAME}
++  ];
+ 
+   // Header value.
+   //
+   // The same :ref:`format specifier <config_access_log_format>` as used for
+   // :ref:`HTTP access logging <config_access_log>` applies here, however
+   // unknown header values are replaced with the empty string instead of `-`.
+-  string value = 2 [(validate.rules).string = {max_bytes: 16384}];
++  string value = 2
++      [(validate.rules).string = {max_bytes: 16384 well_known_regex: HTTP_HEADER_VALUE}];
+ }
+ 
+ // Header name/value pair plus option to control append behavior.
+diff --git a/api/envoy/api/v2/route.proto b/api/envoy/api/v2/route.proto
+index 11ae686239..73f8402864 100644
+--- a/api/envoy/api/v2/route.proto
++++ b/api/envoy/api/v2/route.proto
+@@ -43,7 +43,8 @@ message RouteConfiguration {
+   // will consider to be internal only. If they are found on external requests they will be cleaned
+   // prior to filter invocation. See :ref:`config_http_conn_man_headers_x-envoy-internal` for more
+   // information.
+-  repeated string internal_only_headers = 3;
++  repeated string internal_only_headers = 3
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // Specifies a list of HTTP headers that should be added to each response that
+   // the connection manager encodes. Headers specified at this level are applied
+@@ -56,7 +57,8 @@ message RouteConfiguration {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // that the connection manager encodes.
+-  repeated string response_headers_to_remove = 5;
++  repeated string response_headers_to_remove = 5
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // Specifies a list of HTTP headers that should be added to each request
+   // routed by the HTTP connection manager. Headers specified at this level are
+@@ -69,7 +71,8 @@ message RouteConfiguration {
+ 
+   // Specifies a list of HTTP headers that should be removed from each request
+   // routed by the HTTP connection manager.
+-  repeated string request_headers_to_remove = 8;
++  repeated string request_headers_to_remove = 8
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // By default, headers that should be added/removed are evaluated from most to least specific:
+   //
+diff --git a/api/envoy/api/v2/route/route_components.proto b/api/envoy/api/v2/route/route_components.proto
+index f5e6bae79a..4953abc45c 100644
+--- a/api/envoy/api/v2/route/route_components.proto
++++ b/api/envoy/api/v2/route/route_components.proto
+@@ -69,7 +69,12 @@ message VirtualHost {
+   //   The longest wildcards match first.
+   //   Only a single virtual host in the entire route configuration can match on ``*``. A domain
+   //   must be unique across all virtual hosts or the config will fail to load.
+-  repeated string domains = 2 [(validate.rules).repeated = {min_items: 1}];
++  //
++  // Domains cannot contain control characters. This is validated by the well_known_regex HTTP_HEADER_VALUE.
++  repeated string domains = 2 [(validate.rules).repeated = {
++    min_items: 1
++    items {string {well_known_regex: HTTP_HEADER_VALUE}}
++  }];
+ 
+   // The list of routes that will be matched, in order, for incoming requests.
+   // The first route that matches will be used.
+@@ -597,7 +602,8 @@ message RouteAction {
+     message Header {
+       // The name of the request header that will be used to obtain the hash
+       // key. If the request header is not present, no hash will be produced.
+-      string header_name = 1 [(validate.rules).string = {min_bytes: 1}];
++      string header_name = 1
++          [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+     }
+ 
+     // Envoy supports two types of cookie affinity:
+@@ -690,7 +696,7 @@ message RouteAction {
+     // The case-insensitive name of this upgrade, e.g. "websocket".
+     // For each upgrade type present in upgrade_configs, requests with
+     // Upgrade: [upgrade_type] will be proxied upstream.
+-    string upgrade_type = 1;
++    string upgrade_type = 1 [(validate.rules).string = {well_known_regex: HTTP_HEADER_VALUE}];
+ 
+     // Determines if upgrades are available on this route. Defaults to true.
+     google.protobuf.BoolValue enabled = 2;
+@@ -714,7 +720,8 @@ message RouteAction {
+     //
+     //   Internally, Envoy always uses the HTTP/2 *:authority* header to represent the HTTP/1
+     //   *Host* header. Thus, if attempting to match on *Host*, match on *:authority* instead.
+-    string cluster_header = 2 [(validate.rules).string = {min_bytes: 1}];
++    string cluster_header = 2
++        [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+     // Multiple upstream clusters can be specified for a given route. The
+     // request is routed to one of the upstream clusters based on weights
+@@ -1263,7 +1270,8 @@ message RateLimit {
+       // The header name to be queried from the request headers. The header’s
+       // value is used to populate the value of the descriptor entry for the
+       // descriptor_key.
+-      string header_name = 1 [(validate.rules).string = {min_bytes: 1}];
++      string header_name = 1
++          [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+       // The key to use in the descriptor entry.
+       string descriptor_key = 2 [(validate.rules).string = {min_bytes: 1}];
+@@ -1384,7 +1392,7 @@ message HeaderMatcher {
+   reserved 2, 3;
+ 
+   // Specifies the name of the header in the request.
+-  string name = 1 [(validate.rules).string = {min_bytes: 1}];
++  string name = 1 [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+   // Specifies how the header match will be performed to route the request.
+   oneof header_match_specifier {
+diff --git a/api/envoy/config/core/v3/base.proto b/api/envoy/config/core/v3/base.proto
+index 85218a90e8..4def9c0bc0 100644
+--- a/api/envoy/config/core/v3/base.proto
++++ b/api/envoy/config/core/v3/base.proto
+@@ -248,14 +248,17 @@ message HeaderValue {
+   option (udpa.annotations.versioning).previous_message_type = "envoy.api.v2.core.HeaderValue";
+ 
+   // Header name.
+-  string key = 1 [(validate.rules).string = {min_bytes: 1 max_bytes: 16384}];
++  string key = 1 [
++    (validate.rules).string = {min_bytes: 1 max_bytes: 16384 well_known_regex: HTTP_HEADER_NAME}
++  ];
+ 
+   // Header value.
+   //
+   // The same :ref:`format specifier <config_access_log_format>` as used for
+   // :ref:`HTTP access logging <config_access_log>` applies here, however
+   // unknown header values are replaced with the empty string instead of `-`.
+-  string value = 2 [(validate.rules).string = {max_bytes: 16384}];
++  string value = 2
++      [(validate.rules).string = {max_bytes: 16384 well_known_regex: HTTP_HEADER_VALUE}];
+ }
+ 
+ // Header name/value pair plus option to control append behavior.
+diff --git a/api/envoy/config/route/v3/route.proto b/api/envoy/config/route/v3/route.proto
+index 96faec71e7..8e9471acbc 100644
+--- a/api/envoy/config/route/v3/route.proto
++++ b/api/envoy/config/route/v3/route.proto
+@@ -45,7 +45,8 @@ message RouteConfiguration {
+   // will consider to be internal only. If they are found on external requests they will be cleaned
+   // prior to filter invocation. See :ref:`config_http_conn_man_headers_x-envoy-internal` for more
+   // information.
+-  repeated string internal_only_headers = 3;
++  repeated string internal_only_headers = 3
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // Specifies a list of HTTP headers that should be added to each response that
+   // the connection manager encodes. Headers specified at this level are applied
+@@ -58,7 +59,8 @@ message RouteConfiguration {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // that the connection manager encodes.
+-  repeated string response_headers_to_remove = 5;
++  repeated string response_headers_to_remove = 5
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // Specifies a list of HTTP headers that should be added to each request
+   // routed by the HTTP connection manager. Headers specified at this level are
+@@ -71,7 +73,8 @@ message RouteConfiguration {
+ 
+   // Specifies a list of HTTP headers that should be removed from each request
+   // routed by the HTTP connection manager.
+-  repeated string request_headers_to_remove = 8;
++  repeated string request_headers_to_remove = 8
++      [(validate.rules).repeated = {items {string {well_known_regex: HTTP_HEADER_NAME}}}];
+ 
+   // By default, headers that should be added/removed are evaluated from most to least specific:
+   //
+diff --git a/api/envoy/config/route/v3/route_components.proto b/api/envoy/config/route/v3/route_components.proto
+index 2fde356ea6..4c13708a77 100644
+--- a/api/envoy/config/route/v3/route_components.proto
++++ b/api/envoy/config/route/v3/route_components.proto
+@@ -73,7 +73,12 @@ message VirtualHost {
+   //   The longest wildcards match first.
+   //   Only a single virtual host in the entire route configuration can match on ``*``. A domain
+   //   must be unique across all virtual hosts or the config will fail to load.
+-  repeated string domains = 2 [(validate.rules).repeated = {min_items: 1}];
++  //
++  // Domains cannot contain control characters. This is validated by the well_known_regex HTTP_HEADER_VALUE.
++  repeated string domains = 2 [(validate.rules).repeated = {
++    min_items: 1
++    items {string {well_known_regex: HTTP_HEADER_VALUE}}
++  }];
+ 
+   // The list of routes that will be matched, in order, for incoming requests.
+   // The first route that matches will be used.
+@@ -556,7 +561,8 @@ message RouteAction {
+ 
+       // The name of the request header that will be used to obtain the hash
+       // key. If the request header is not present, no hash will be produced.
+-      string header_name = 1 [(validate.rules).string = {min_bytes: 1}];
++      string header_name = 1
++          [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+     }
+ 
+     // Envoy supports two types of cookie affinity:
+@@ -661,7 +667,7 @@ message RouteAction {
+     // The case-insensitive name of this upgrade, e.g. "websocket".
+     // For each upgrade type present in upgrade_configs, requests with
+     // Upgrade: [upgrade_type] will be proxied upstream.
+-    string upgrade_type = 1;
++    string upgrade_type = 1 [(validate.rules).string = {well_known_regex: HTTP_HEADER_VALUE}];
+ 
+     // Determines if upgrades are available on this route. Defaults to true.
+     google.protobuf.BoolValue enabled = 2;
+@@ -687,7 +693,8 @@ message RouteAction {
+     //
+     //   Internally, Envoy always uses the HTTP/2 *:authority* header to represent the HTTP/1
+     //   *Host* header. Thus, if attempting to match on *Host*, match on *:authority* instead.
+-    string cluster_header = 2 [(validate.rules).string = {min_bytes: 1}];
++    string cluster_header = 2
++        [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+     // Multiple upstream clusters can be specified for a given route. The
+     // request is routed to one of the upstream clusters based on weights
+@@ -1245,7 +1252,8 @@ message RateLimit {
+       // The header name to be queried from the request headers. The header’s
+       // value is used to populate the value of the descriptor entry for the
+       // descriptor_key.
+-      string header_name = 1 [(validate.rules).string = {min_bytes: 1}];
++      string header_name = 1
++          [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+       // The key to use in the descriptor entry.
+       string descriptor_key = 2 [(validate.rules).string = {min_bytes: 1}];
+@@ -1378,7 +1386,7 @@ message HeaderMatcher {
+   reserved "regex_match";
+ 
+   // Specifies the name of the header in the request.
+-  string name = 1 [(validate.rules).string = {min_bytes: 1}];
++  string name = 1 [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+   // Specifies how the header match will be performed to route the request.
+   oneof header_match_specifier {
+diff --git a/api/envoy/type/tracing/v2/custom_tag.proto b/api/envoy/type/tracing/v2/custom_tag.proto
+index 683a5c5367..7910f25b72 100644
+--- a/api/envoy/type/tracing/v2/custom_tag.proto
++++ b/api/envoy/type/tracing/v2/custom_tag.proto
+@@ -35,7 +35,7 @@ message CustomTag {
+   // Header type custom tag with header name and default value.
+   message Header {
+     // Header name to obtain the value to populate the tag value.
+-    string name = 1 [(validate.rules).string = {min_bytes: 1}];
++    string name = 1 [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+     // When the header does not exist,
+     // the tag value will be populated with this default value if specified,
+diff --git a/api/envoy/type/tracing/v3/custom_tag.proto b/api/envoy/type/tracing/v3/custom_tag.proto
+index a1e0bdb9bf..7dff6609de 100644
+--- a/api/envoy/type/tracing/v3/custom_tag.proto
++++ b/api/envoy/type/tracing/v3/custom_tag.proto
+@@ -48,7 +48,7 @@ message CustomTag {
+         "envoy.type.tracing.v2.CustomTag.Header";
+ 
+     // Header name to obtain the value to populate the tag value.
+-    string name = 1 [(validate.rules).string = {min_bytes: 1}];
++    string name = 1 [(validate.rules).string = {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME}];
+ 
+     // When the header does not exist,
+     // the tag value will be populated with this default value if specified,
+diff --git a/generated_api_shadow/bazel/repository_locations.bzl b/generated_api_shadow/bazel/repository_locations.bzl
+index 50390b2a79..d70a8c45b9 100644
+Binary files a/generated_api_shadow/bazel/repository_locations.bzl and b/generated_api_shadow/bazel/repository_locations.bzl differ
+diff --git a/generated_api_shadow/envoy/api/v2/core/base.proto b/generated_api_shadow/envoy/api/v2/core/base.proto
+index 67a97dd6e2..43403633f6 100644
+Binary files a/generated_api_shadow/envoy/api/v2/core/base.proto and b/generated_api_shadow/envoy/api/v2/core/base.proto differ
+diff --git a/generated_api_shadow/envoy/api/v2/route.proto b/generated_api_shadow/envoy/api/v2/route.proto
+index 11ae686239..73f8402864 100644
+Binary files a/generated_api_shadow/envoy/api/v2/route.proto and b/generated_api_shadow/envoy/api/v2/route.proto differ
+diff --git a/generated_api_shadow/envoy/api/v2/route/route_components.proto b/generated_api_shadow/envoy/api/v2/route/route_components.proto
+index f5e6bae79a..4953abc45c 100644
+Binary files a/generated_api_shadow/envoy/api/v2/route/route_components.proto and b/generated_api_shadow/envoy/api/v2/route/route_components.proto differ
+diff --git a/generated_api_shadow/envoy/config/core/v3/base.proto b/generated_api_shadow/envoy/config/core/v3/base.proto
+index 0172a289c8..576793e152 100644
+Binary files a/generated_api_shadow/envoy/config/core/v3/base.proto and b/generated_api_shadow/envoy/config/core/v3/base.proto differ
+diff --git a/generated_api_shadow/envoy/config/route/v3/route.proto b/generated_api_shadow/envoy/config/route/v3/route.proto
+index 96faec71e7..8e9471acbc 100644
+Binary files a/generated_api_shadow/envoy/config/route/v3/route.proto and b/generated_api_shadow/envoy/config/route/v3/route.proto differ
+diff --git a/generated_api_shadow/envoy/config/route/v3/route_components.proto b/generated_api_shadow/envoy/config/route/v3/route_components.proto
+index 68a4c600ae..4d537a89ac 100644
+Binary files a/generated_api_shadow/envoy/config/route/v3/route_components.proto and b/generated_api_shadow/envoy/config/route/v3/route_components.proto differ
+diff --git a/generated_api_shadow/envoy/type/tracing/v2/custom_tag.proto b/generated_api_shadow/envoy/type/tracing/v2/custom_tag.proto
+index 683a5c5367..7910f25b72 100644
+Binary files a/generated_api_shadow/envoy/type/tracing/v2/custom_tag.proto and b/generated_api_shadow/envoy/type/tracing/v2/custom_tag.proto differ
+diff --git a/generated_api_shadow/envoy/type/tracing/v3/custom_tag.proto b/generated_api_shadow/envoy/type/tracing/v3/custom_tag.proto
+index a1e0bdb9bf..7dff6609de 100644
+Binary files a/generated_api_shadow/envoy/type/tracing/v3/custom_tag.proto and b/generated_api_shadow/envoy/type/tracing/v3/custom_tag.proto differ
+diff --git a/test/common/http/conn_manager_impl_corpus/clusterfuzz-testcase-minimized-conn_manager_impl_fuzz_test-5714279517126656 b/test/common/http/conn_manager_impl_corpus/clusterfuzz-testcase-minimized-conn_manager_impl_fuzz_test-5714279517126656
+new file mode 100644
+index 0000000000..9968e58172
+Binary files /dev/null and b/test/common/http/conn_manager_impl_corpus/clusterfuzz-testcase-minimized-conn_manager_impl_fuzz_test-5714279517126656 differ
+diff --git a/test/common/http/conn_manager_impl_fuzz_test.cc b/test/common/http/conn_manager_impl_fuzz_test.cc
+index 46a0564e9e..481acf3e0e 100644
+--- a/test/common/http/conn_manager_impl_fuzz_test.cc
++++ b/test/common/http/conn_manager_impl_fuzz_test.cc
+@@ -209,6 +209,13 @@ public:
+           if (headers->Method() == nullptr) {
+             headers->setReferenceKey(Headers::get().Method, "GET");
+           }
++          if (headers->Host() != nullptr &&
++              !HeaderUtility::authorityIsValid(headers->Host()->value().getStringView())) {
++            // Sanitize host header so we don't fail at ASSERTs that verify header sanity checks
++            // which should have been performed by the codec.
++            headers->setHost(
++                Fuzz::replaceInvalidHostCharacters(headers->Host()->value().getStringView()));
++          }
+           decoder_->decodeHeaders(std::move(headers), end_stream);
+         }));
+     fakeOnData();
+diff --git a/test/common/router/header_parser_fuzz_test.cc b/test/common/router/header_parser_fuzz_test.cc
+index f2ca239bae..74dede78b3 100644
+--- a/test/common/router/header_parser_fuzz_test.cc
++++ b/test/common/router/header_parser_fuzz_test.cc
+@@ -12,13 +12,8 @@ namespace {
+ DEFINE_PROTO_FUZZER(const test::common::router::TestCase& input) {
+   try {
+     TestUtility::validate(input);
+-    auto headers_to_add = replaceInvalidHeaders(input.headers_to_add());
+-    Protobuf::RepeatedPtrField<std::string> headers_to_remove;
+-    for (const auto& s : input.headers_to_remove()) {
+-      headers_to_remove.Add(replaceInvalidCharacters(s));
+-    }
+     Router::HeaderParserPtr parser =
+-        Router::HeaderParser::configure(headers_to_add, headers_to_remove);
++        Router::HeaderParser::configure(input.headers_to_add(), input.headers_to_remove());
+     Http::HeaderMapImpl header_map;
+     TestStreamInfo test_stream_info = fromStreamInfo(input.stream_info());
+     parser->evaluateHeaders(header_map, test_stream_info);
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4592245302362112 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4592245302362112
+new file mode 100644
+index 0000000000..1237d4e42e
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4592245302362112 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5206842068697088 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5206842068697088
+new file mode 100644
+index 0000000000..f6c0011568
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5206842068697088 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5634743613259776 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5634743613259776
+new file mode 100644
+index 0000000000..533591f790
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5634743613259776 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5635252339343360 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5635252339343360
+new file mode 100644
+index 0000000000..ddac5e7bd2
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5635252339343360 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5661762636742656 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5661762636742656
+new file mode 100644
+index 0000000000..598b90e067
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5661762636742656 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5699465522970624 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5699465522970624
+new file mode 100644
+index 0000000000..7426a62fbc
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5699465522970624 differ
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5750746072481792 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5750746072481792
+new file mode 100644
+index 0000000000..a9dc3db68a
+Binary files /dev/null and b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5750746072481792 differ
+diff --git a/test/common/router/route_fuzz_test.cc b/test/common/router/route_fuzz_test.cc
+index 324a9c150e..fea78715c7 100644
+--- a/test/common/router/route_fuzz_test.cc
++++ b/test/common/router/route_fuzz_test.cc
+@@ -13,67 +13,27 @@ namespace Envoy {
+ namespace Router {
+ namespace {
+ 
+-// A templated method to replace invalid characters in a protocol buffer that contains
+-// (request/response)_headers_to_(add/remove).
+-template <class T> T replaceInvalidHeaders(const T& config) {
+-  T clean_config = config;
+-  clean_config.mutable_request_headers_to_add()->CopyFrom(
+-      Fuzz::replaceInvalidHeaders(config.request_headers_to_add()));
+-  clean_config.mutable_response_headers_to_add()->CopyFrom(
+-      Fuzz::replaceInvalidHeaders(config.response_headers_to_add()));
+-  auto request_headers_to_remove = clean_config.mutable_request_headers_to_remove();
+-  std::for_each(request_headers_to_remove->begin(), request_headers_to_remove->end(),
+-                [](std::string& n) { n = Fuzz::replaceInvalidCharacters(n); });
+-  auto response_headers_to_remove = clean_config.mutable_response_headers_to_remove();
+-  std::for_each(response_headers_to_remove->begin(), response_headers_to_remove->end(),
+-                [](std::string& n) { n = Fuzz::replaceInvalidCharacters(n); });
+-  return clean_config;
+-}
+-
+-// Removes invalid headers from the RouteConfiguration as well as in each of the virtual hosts.
++// Remove regex matching route configs.
+ envoy::config::route::v3::RouteConfiguration
+ cleanRouteConfig(envoy::config::route::v3::RouteConfiguration route_config) {
+-  // A route config contains a list of HTTP headers that should be added and/or removed to each
+-  // request and/or response the connection manager routes. This removes invalid characters the
+-  // headers.
+-  envoy::config::route::v3::RouteConfiguration clean_config =
+-      replaceInvalidHeaders<envoy::config::route::v3::RouteConfiguration>(route_config);
+-  auto internal_only_headers = clean_config.mutable_internal_only_headers();
+-  std::for_each(internal_only_headers->begin(), internal_only_headers->end(),
+-                [](std::string& n) { n = Fuzz::replaceInvalidCharacters(n); });
++  envoy::config::route::v3::RouteConfiguration clean_config = route_config;
+   auto virtual_hosts = clean_config.mutable_virtual_hosts();
+-  std::for_each(
+-      virtual_hosts->begin(), virtual_hosts->end(),
+-      [](envoy::config::route::v3::VirtualHost& virtual_host) {
+-        // Each virtual host in the routing configuration contains a list of headers to add and/or
+-        // remove from each request and response that get routed through it. This replaces invalid
+-        // header characters in these fields.
+-        virtual_host = replaceInvalidHeaders<envoy::config::route::v3::VirtualHost>(virtual_host);
+-        // Envoy can determine the cluster to route to by reading the HTTP header named by the
+-        // cluster_header from the request header. Because these cluster_headers are destined to be
+-        // added to a Header Map, we iterate through each route in and remove invalid characters
+-        // from their cluster headers.
+-        auto routes = virtual_host.mutable_routes();
+-        for (int i = 0; i < routes->size();) {
+-          // Erase routes that use a regex matcher. This is deprecated and may cause crashes when
+-          // wildcards are matched against very long headers.
+-          // See https://github.com/envoyproxy/envoy/issues/7728.
+-          if (routes->Get(i).match().path_specifier_case() ==
+-              envoy::config::route::v3::RouteMatch::PathSpecifierCase::
+-                  kHiddenEnvoyDeprecatedRegex) {
+-            routes->erase(routes->begin() + i);
+-          } else {
+-            if (routes->Get(i).has_route()) {
+-              routes->Mutable(i)->mutable_route()->set_cluster_header(
+-                  Fuzz::replaceInvalidCharacters(routes->Mutable(i)->route().cluster_header()));
+-              if (routes->Get(i).route().cluster_header().empty()) {
+-                routes->Mutable(i)->mutable_route()->set_cluster_header("not-empty");
+-              }
+-            }
+-            ++i;
+-          }
+-        }
+-      });
++  std::for_each(virtual_hosts->begin(), virtual_hosts->end(),
++                [](envoy::config::route::v3::VirtualHost& virtual_host) {
++                  auto routes = virtual_host.mutable_routes();
++                  for (int i = 0; i < routes->size();) {
++                    // Erase routes that use a regex matcher. This is deprecated and may cause
++                    // crashes when wildcards are matched against very long headers. See
++                    // https://github.com/envoyproxy/envoy/issues/7728.
++                    if (routes->Get(i).match().path_specifier_case() ==
++                        envoy::config::route::v3::RouteMatch::PathSpecifierCase::
++                            kHiddenEnvoyDeprecatedRegex) {
++                      routes->erase(routes->begin() + i);
++                    } else {
++                      ++i;
++                    }
++                  }
++                });
+ 
+   return clean_config;
+ }
+diff --git a/test/fuzz/utility.h b/test/fuzz/utility.h
+index 5c599e08b1..ac1354648b 100644
+--- a/test/fuzz/utility.h
++++ b/test/fuzz/utility.h
+@@ -45,18 +45,20 @@ inline std::string replaceInvalidCharacters(absl::string_view string) {
+   return filtered;
+ }
+ 
+-// Return a new RepeatedPtrField of HeaderValueOptions with invalid characters removed.
+-inline Protobuf::RepeatedPtrField<envoy::config::core::v3::HeaderValueOption> replaceInvalidHeaders(
+-    const Protobuf::RepeatedPtrField<envoy::config::core::v3::HeaderValueOption>& headers_to_add) {
+-  Protobuf::RepeatedPtrField<envoy::config::core::v3::HeaderValueOption> processed;
+-  for (const auto& header : headers_to_add) {
+-    auto* header_value_option = processed.Add();
+-    auto* mutable_header = header_value_option->mutable_header();
+-    mutable_header->set_key(replaceInvalidCharacters(header.header().key()));
+-    mutable_header->set_value(replaceInvalidCharacters(header.header().value()));
+-    header_value_option->mutable_append()->CopyFrom(header.append());
++// Replace invalid host characters.
++inline std::string replaceInvalidHostCharacters(absl::string_view string) {
++  std::string filtered;
++  filtered.reserve(string.length());
++  for (const char& c : string) {
++    switch (c) {
++    case ' ':
++      filtered.push_back('0');
++      break;
++    default:
++      filtered.push_back(c);
++    }
+   }
+-  return processed;
++  return filtered;
+ }
+ 
+ inline envoy::config::core::v3::Metadata
+@@ -76,22 +78,16 @@ replaceInvalidStringValues(const envoy::config::core::v3::Metadata& upstream_met
+   return processed;
+ }
+ 
+-// Convert from test proto Headers to a variant of TestHeaderMapImpl.
++// Convert from test proto Headers to a variant of TestHeaderMapImpl. Validate proto if you intend
++// to sanitize for invalid header characters.
+ template <class T>
+ inline T fromHeaders(
+     const test::fuzz::Headers& headers,
+     const std::unordered_set<std::string>& ignore_headers = std::unordered_set<std::string>()) {
+   T header_map;
+   for (const auto& header : headers.headers()) {
+-    // HeaderMapImpl and places such as the route lookup should never see strings with embedded
+-    // {NULL, CR, LF} values, the HTTP codecs should reject them. So, don't inject any such strings
+-    // into the fuzz tests and replace these invalid characters with spaces.
+-    // When we are injecting headers, we don't allow the key to ever be empty, since calling code is
+-    // not supposed to do this.
+-    const std::string key =
+-        header.key().empty() ? "not-empty" : replaceInvalidCharacters(header.key());
+-    if (ignore_headers.find(absl::AsciiStrToLower(key)) == ignore_headers.end()) {
+-      header_map.addCopy(key, replaceInvalidCharacters(header.value()));
++    if (ignore_headers.find(absl::AsciiStrToLower(header.key())) == ignore_headers.end()) {
++      header_map.addCopy(header.key(), header.value());
+     }
+   }
+   return header_map;

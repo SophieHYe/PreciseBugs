@@ -1,0 +1,19 @@
+commit 7cc5244a838e2af5a7e410a8d9c244fc65c02187
+Author: htuch <htuch@users.noreply.github.com>
+Date:   Thu Feb 14 16:50:39 2019 -0500
+
+    fuzz: fix false positives triggered by H1 codec fuzzer. (#5959)
+    
+    This PR addresses oss-fuzz issues https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=13081.
+    
+    This false positive (heap-use-after-free) resulted from a
+    misunderstanding around how we handle request/response encode/decoder
+    ownership.
+    
+    As a bonus, fixed stream ID in corpus; it represents an index into the
+    list of created streams, not the HTTP/2 level stream ID.
+    
+    Risk level: Low
+    Testing: Corpus entry added, validated under ASAN.
+    
+    Signed-off-by: Harvey Tuch <htuch@google.com>

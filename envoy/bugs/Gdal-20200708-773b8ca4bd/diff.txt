@@ -1,0 +1,616 @@
+diff --git a/api/envoy/config/route/v3/route_components.proto b/api/envoy/config/route/v3/route_components.proto
+index 4120babdf0..46e7ae99f5 100644
+--- a/api/envoy/config/route/v3/route_components.proto
++++ b/api/envoy/config/route/v3/route_components.proto
+@@ -275,7 +275,9 @@ message Route {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // to requests matching this route.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Presence of the object defines whether the connection manager's tracing configuration
+   // is overridden by this route specific instance.
+diff --git a/api/envoy/config/route/v4alpha/route_components.proto b/api/envoy/config/route/v4alpha/route_components.proto
+index 2bc1da8486..711914d9d1 100644
+--- a/api/envoy/config/route/v4alpha/route_components.proto
++++ b/api/envoy/config/route/v4alpha/route_components.proto
+@@ -274,7 +274,9 @@ message Route {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // to requests matching this route.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Presence of the object defines whether the connection manager's tracing configuration
+   // is overridden by this route specific instance.
+diff --git a/api/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto b/api/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
+index 07fbba4089..189de8e745 100644
+--- a/api/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
++++ b/api/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
+@@ -78,7 +78,7 @@ message Config {
+         [(udpa.annotations.field_migrate).oneof_promotion = "value_type"];
+ 
+     // The value's type — defaults to string.
+-    ValueType type = 4;
++    ValueType type = 4 [(validate.rules).enum = {defined_only: true}];
+ 
+     // How is the value encoded, default is NONE (not encoded).
+     // The value will be decoded accordingly before storing to metadata.
+diff --git a/api/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto b/api/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
+index c7df11e3fc..603d0a002d 100644
+--- a/api/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
++++ b/api/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
+@@ -78,7 +78,7 @@ message Config {
+     }
+ 
+     // The value's type — defaults to string.
+-    ValueType type = 4;
++    ValueType type = 4 [(validate.rules).enum = {defined_only: true}];
+ 
+     // How is the value encoded, default is NONE (not encoded).
+     // The value will be decoded accordingly before storing to metadata.
+diff --git a/generated_api_shadow/envoy/config/route/v3/route_components.proto b/generated_api_shadow/envoy/config/route/v3/route_components.proto
+index b91cf10620..1e077dee4d 100644
+--- a/generated_api_shadow/envoy/config/route/v3/route_components.proto
++++ b/generated_api_shadow/envoy/config/route/v3/route_components.proto
+@@ -274,7 +274,9 @@ message Route {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // to requests matching this route.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Presence of the object defines whether the connection manager's tracing configuration
+   // is overridden by this route specific instance.
+diff --git a/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto b/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
+index 9cdb879eed..97fd33e535 100644
+--- a/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
++++ b/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
+@@ -274,7 +274,9 @@ message Route {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // to requests matching this route.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Presence of the object defines whether the connection manager's tracing configuration
+   // is overridden by this route specific instance.
+diff --git a/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto b/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
+index 07fbba4089..189de8e745 100644
+--- a/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
++++ b/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v3/header_to_metadata.proto
+@@ -78,7 +78,7 @@ message Config {
+         [(udpa.annotations.field_migrate).oneof_promotion = "value_type"];
+ 
+     // The value's type — defaults to string.
+-    ValueType type = 4;
++    ValueType type = 4 [(validate.rules).enum = {defined_only: true}];
+ 
+     // How is the value encoded, default is NONE (not encoded).
+     // The value will be decoded accordingly before storing to metadata.
+diff --git a/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto b/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
+index c7df11e3fc..603d0a002d 100644
+--- a/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
++++ b/generated_api_shadow/envoy/extensions/filters/http/header_to_metadata/v4alpha/header_to_metadata.proto
+@@ -78,7 +78,7 @@ message Config {
+     }
+ 
+     // The value's type — defaults to string.
+-    ValueType type = 4;
++    ValueType type = 4 [(validate.rules).enum = {defined_only: true}];
+ 
+     // How is the value encoded, default is NONE (not encoded).
+     // The value will be decoded accordingly before storing to metadata.
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4803620674732032.fuzz b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4803620674732032.fuzz
+new file mode 100644
+index 0000000000..f47ad4226d
+--- /dev/null
++++ b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4803620674732032.fuzz
+@@ -0,0 +1,485 @@
++config {
++  virtual_hosts {
++    name: "/"
++    domains: ""
++    domains: ""
++    domains: "*"
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++      name: "J"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++            value: true
++          }
++        }
++      }
++      response_headers_to_remove: "\021"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\25537"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "W"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\020"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++            value: true
++          }
++        }
++      }
++      response_headers_to_remove: "\021"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      response_headers_to_remove: "\022"
++      filter_action {
++      }
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++            value: true
++          }
++        }
++      }
++      response_headers_to_remove: ""
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++            value: true
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++        }
++      }
++      response_headers_to_remove: "\021"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\001"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\0s#"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++      request_headers_to_remove: "J"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++    routes {
++      match {
++        prefix: ""
++        grpc {
++        }
++      }
++      route {
++        cluster_header: "J"
++        upgrade_configs {
++          enabled {
++          }
++        }
++      }
++      response_headers_to_remove: "\022"
++    }
++  }
++}
+diff --git a/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-filter_fuzz_test-5082368313655296 b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-filter_fuzz_test-5082368313655296
+new file mode 100644
+index 0000000000..2ac06ba4ab
+--- /dev/null
++++ b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-filter_fuzz_test-5082368313655296
+@@ -0,0 +1,7 @@
++config {
++  name: "envoy.filters.http.header_to_metadata"
++  typed_config {
++    type_url: "type.googleapis.com/envoy.extensions.filters.http.header_to_metadata.v3.Config"
++    value: "\n\033\n\002;;\032\023\022\001;\032\014stanotcci_fi \t \001\n+\n\001;\022\021\022\001;\032\014static_confi\032\023\022\001;\032\014static_confi \t\022\031\n\002m;\032\023\022\001;\032\014stanotcci_fi \t"
++  }
++}

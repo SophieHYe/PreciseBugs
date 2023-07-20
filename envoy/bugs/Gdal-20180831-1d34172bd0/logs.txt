@@ -1,0 +1,29 @@
+commit 1d34172bd058f31956741ec5f3346339fc624fd0
+Author: htuch <htuch@users.noreply.github.com>
+Date:   Fri Aug 31 10:41:27 2018 -0400
+
+    dns: fix exception unsafe behavior in c-ares callbacks. (#4307)
+    
+    Previously, we were taking an exception due to the late validation of update_merge_window duration
+    in ClusterManagerImpl::scheduleUpdate, which happened under a c-ares strict DNS host resolution
+    callback. There are several related issues here:
+    
+    1. c-ares is exception unsafe, see https://github.com/c-ares/c-ares/issues/219.
+    2. We should be validating Durations with PGV, see
+       https://github.com/lyft/protoc-gen-validate/issues/97.
+    3. We should defer the c-ares resolution callbacks to be outside the c-ares callback context for
+       exception safety.
+    
+    This PR addresses (3) by moving callbacks, even when they are "immediate", to a dispatcher post, so
+    that we never take an exception under a c-ares callback.
+    
+    A workaround for (2) is provided, in lieu of https://github.com/lyft/protoc-gen-validate/issues/97,
+    which is blocked on our ability to bump PGV version in Envoy, see
+    https://github.com/lyft/protoc-gen-star/issues/28.
+    
+    Fixes oss-fuzz issue https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9868.
+    
+    Risk level: Medium (DNS clusters will have some timing changes).
+    Testing: Updated DNS implementation unit tests, server fuzz corpus entry added.
+    
+    Signed-off-by: Harvey Tuch <htuch@google.com>

@@ -1,0 +1,102 @@
+diff --git a/source/common/event/timer_impl.cc b/source/common/event/timer_impl.cc
+index 4c2a8c0ca4..4725e2018c 100644
+--- a/source/common/event/timer_impl.cc
++++ b/source/common/event/timer_impl.cc
+@@ -9,6 +9,14 @@
+ namespace Envoy {
+ namespace Event {
+ 
++void TimerUtils::millisecondsToTimeval(const std::chrono::milliseconds& d, timeval& tv) {
++  std::chrono::seconds secs = std::chrono::duration_cast<std::chrono::seconds>(d);
++  std::chrono::microseconds usecs = std::chrono::duration_cast<std::chrono::microseconds>(d - secs);
++
++  tv.tv_sec = secs.count();
++  tv.tv_usec = usecs.count();
++}
++
+ TimerImpl::TimerImpl(Libevent::BasePtr& libevent, TimerCb cb) : cb_(cb) {
+   ASSERT(cb_);
+   evtimer_assign(
+@@ -22,11 +30,8 @@ void TimerImpl::enableTimer(const std::chrono::milliseconds& d) {
+   if (d.count() == 0) {
+     event_active(&raw_event_, EV_TIMEOUT, 0);
+   } else {
+-    // TODO(#4332): use duration_cast more nicely to clean up this code.
+-    std::chrono::microseconds us = std::chrono::duration_cast<std::chrono::microseconds>(d);
+     timeval tv;
+-    tv.tv_sec = us.count() / 1000000;
+-    tv.tv_usec = us.count() % 1000000;
++    TimerUtils::millisecondsToTimeval(d, tv);
+     event_add(&raw_event_, &tv);
+   }
+ }
+diff --git a/source/common/event/timer_impl.h b/source/common/event/timer_impl.h
+index 2572b7c1ed..206525ec1e 100644
+--- a/source/common/event/timer_impl.h
++++ b/source/common/event/timer_impl.h
+@@ -10,6 +10,14 @@
+ namespace Envoy {
+ namespace Event {
+ 
++/**
++ * Utility helper functions for Timer implementation.
++ */
++class TimerUtils {
++public:
++  static void millisecondsToTimeval(const std::chrono::milliseconds& d, timeval& tv);
++};
++
+ /**
+  * libevent implementation of Timer.
+  */
+diff --git a/test/common/event/dispatcher_impl_test.cc b/test/common/event/dispatcher_impl_test.cc
+index ba06d0a4be..97a36cc43c 100644
+--- a/test/common/event/dispatcher_impl_test.cc
++++ b/test/common/event/dispatcher_impl_test.cc
+@@ -5,6 +5,7 @@
+ #include "common/api/api_impl.h"
+ #include "common/common/lock_guard.h"
+ #include "common/event/dispatcher_impl.h"
++#include "common/event/timer_impl.h"
+ #include "common/stats/isolated_store_impl.h"
+ 
+ #include "test/mocks/common.h"
+@@ -197,6 +198,29 @@ TEST(TimerImplTest, TimerEnabledDisabled) {
+   EXPECT_FALSE(timer->enabled());
+ }
+ 
++TEST(TimerImplTest, TimerValueConversion) {
++  timeval tv;
++  std::chrono::milliseconds msecs;
++
++  // Basic test with zero milliseconds.
++  msecs = std::chrono::milliseconds(0);
++  TimerUtils::millisecondsToTimeval(msecs, tv);
++  EXPECT_EQ(tv.tv_sec, 0);
++  EXPECT_EQ(tv.tv_usec, 0);
++
++  // 2050 milliseconds is 2 seconds and 50000 microseconds.
++  msecs = std::chrono::milliseconds(2050);
++  TimerUtils::millisecondsToTimeval(msecs, tv);
++  EXPECT_EQ(tv.tv_sec, 2);
++  EXPECT_EQ(tv.tv_usec, 50000);
++
++  // Check maximum value conversion.
++  msecs = std::chrono::milliseconds::duration::max();
++  TimerUtils::millisecondsToTimeval(msecs, tv);
++  EXPECT_EQ(tv.tv_sec, msecs.count() / 1000);
++  EXPECT_EQ(tv.tv_usec, (msecs.count() % tv.tv_sec) * 1000);
++}
++
+ } // namespace
+ } // namespace Event
+ } // namespace Envoy
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5686444035670016 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5686444035670016
+new file mode 100644
+index 0000000000..ac84d01a09
+--- /dev/null
++++ b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5686444035670016
+@@ -0,0 +1,2 @@
++static_resources {   clusters {     name: " "     connect_timeout {       nanos: 4     }     hosts {
++      pipe {       }     }     health_checks {       timeout {         nanos: 4       }       interval {         nanos: 4       }       unhealthy_threshold {       }       healthy_threshold {       }       tcp_health_check {       }       no_traffic_interval {         seconds: 2818048       }       interval_jitter_percent: 537791091     }   } } 
+\ No newline at end of file

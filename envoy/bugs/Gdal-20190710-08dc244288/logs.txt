@@ -1,0 +1,16 @@
+commit 08dc2442882665d6e96262eaec03099a9a8f535d
+Author: asraa <asraa@google.com>
+Date:   Wed Jul 10 17:19:15 2019 -0400
+
+    fuzz: fix filesystem bug, use std::__fs::filesystem (#7507)
+    
+    Since OSS-Fuzz minijail prohibits mkdir calls, we use std::__fs::filesystem namespace which implements filesystem.
+    
+    The OSS-Fuzz image was taking the mkdir branch, since neither filesystem nor experimental/filesystem was found. However, we are able to use std::__fs::filesystem branch in the OSS-Fuzz image and the std::experimental::filesystem branch locally.
+    
+    Risk Level: Low
+    Testing: Add RELEASE_ASSERT(1==0, "") under the #if defined(_LIBCPP_VERSION) && TEST_STD_VER < 17 branch to verify that branch is taken in oss-fuzz docker. run_fuzzer with oss-fuzz docker is successful.
+    Fixes OSS-Fuzz issue:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=15414
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

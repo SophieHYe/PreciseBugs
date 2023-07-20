@@ -1,0 +1,16 @@
+commit bf37452667a8f4b31028df17be0ee5e64b766f20
+Author: asraa <asraa@google.com>
+Date:   Tue Oct 29 12:57:09 2019 -0400
+
+    zlib: consume dev branch with timeouts/crashes fixes (#8788)
+    
+    Consume zlib's dev branch instead of their v1.11.2.1 release branch. Many issues are fixed since their release from Jan 2017, including timeouts and out of bound errors reported by our fuzzers.
+    The dev branch is about 45 commits ahead of v1.11.2.1 release, making importing specific patches (probably 5-10 relevant to the issues we've seen so far), hard to keep up with.
+    
+    Testing: Added all corpus entries for crashes and timeouts.
+    Fixes OSS-Fuzz issues:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=18379
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=18530
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=18423
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

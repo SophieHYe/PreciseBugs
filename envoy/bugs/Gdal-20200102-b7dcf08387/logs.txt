@@ -1,0 +1,17 @@
+commit b7dcf083876f5d34d0dde5df535989a81dfa8023
+Author: asraa <asraa@google.com>
+Date:   Thu Jan 2 14:54:17 2020 -0500
+
+    [fuzz] fix server test fuzz bugs (#9486)
+    
+    Fixes server_fuzz_test fuzz bugs:
+    
+    * QUIC upstream not implemented in prod, so the fuzzer removes the HTTP3 codec types for http health checks
+    
+    * PGV validate throws a not yet implemented error on URIs. I removed this check for now and replaced with a TODO. If I catch the std::exception that is thrown and bypass it with a warning statement in the logs, we skip over other validations, which means that any fuzz test or user using this uri field will be in danger of failing because of other invalid fields @JimmyCYJ. PGV issue tracked: envoyproxy/protoc-gen-validate#303
+    
+    Fixes OSS-Fuzz Issues:
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=19614
+    https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=19689
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

@@ -1,0 +1,47 @@
+diff --git a/source/common/upstream/outlier_detection_impl.cc b/source/common/upstream/outlier_detection_impl.cc
+index 081f0d92b0..40f22f0a33 100644
+--- a/source/common/upstream/outlier_detection_impl.cc
++++ b/source/common/upstream/outlier_detection_impl.cc
+@@ -412,7 +412,8 @@ void DetectorImpl::processSuccessRateEjections() {
+     }
+   }
+ 
+-  if (valid_success_rate_hosts.size() >= success_rate_minimum_hosts) {
++  if (!valid_success_rate_hosts.empty() &&
++      valid_success_rate_hosts.size() >= success_rate_minimum_hosts) {
+     double success_rate_stdev_factor =
+         runtime_.snapshot().getInteger("outlier_detection.success_rate_stdev_factor",
+                                        config_.successRateStdevFactor()) /
+diff --git a/test/common/upstream/outlier_detection_impl_test.cc b/test/common/upstream/outlier_detection_impl_test.cc
+index 34bf614201..0d83131570 100644
+--- a/test/common/upstream/outlier_detection_impl_test.cc
++++ b/test/common/upstream/outlier_detection_impl_test.cc
+@@ -523,6 +523,21 @@ TEST_F(OutlierDetectorImplTest, BasicFlowSuccessRate) {
+   EXPECT_EQ(-1, detector->successRateEjectionThreshold());
+ }
+ 
++// Validate that empty hosts doesn't crash success rate handling when success_rate_minimum_hosts is
++// zero. This is a regression test for earlier divide-by-zero behavior.
++TEST_F(OutlierDetectorImplTest, EmptySuccessRate) {
++  EXPECT_CALL(*interval_timer_, enableTimer(std::chrono::milliseconds(10000)));
++  std::shared_ptr<DetectorImpl> detector(DetectorImpl::create(
++      cluster_, empty_outlier_detection_, dispatcher_, runtime_, time_system_, event_logger_));
++  loadRq(hosts_, 200, 503);
++
++  time_system_.setMonotonicTime(std::chrono::milliseconds(10000));
++  EXPECT_CALL(*interval_timer_, enableTimer(std::chrono::milliseconds(10000)));
++  ON_CALL(runtime_.snapshot_, getInteger("outlier_detection.success_rate_minimum_hosts", 5))
++      .WillByDefault(Return(0));
++  interval_timer_->callback_();
++}
++
+ TEST_F(OutlierDetectorImplTest, RemoveWhileEjected) {
+   EXPECT_CALL(cluster_.prioritySet(), addMemberUpdateCb(_));
+   addHosts({"tcp://127.0.0.1:80"});
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5690948441341952 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5690948441341952
+new file mode 100644
+index 0000000000..9b966e8fe0
+--- /dev/null
++++ b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5690948441341952
+@@ -0,0 +1 @@
++static_resources {   clusters {     name: " "     type: STRICT_DNS     connect_timeout { nanos:   8 }     outlier_detection {       interval {         nanos:   800000000       }       success_rate_minimum_hosts {       }     }   } }

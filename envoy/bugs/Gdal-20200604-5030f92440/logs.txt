@@ -1,0 +1,20 @@
+commit 5030f92440b2d17dcca193c37178ec0d8aa06097
+Author: asraa <asraa@google.com>
+Date:   Thu Jun 4 15:40:18 2020 -0400
+
+    fix all filter fuzz bugs (#11422)
+    
+    Closes fuzz bugs related to configuration and test issues in filter_fuzz_test
+    
+    * Require that encodeComplete() is called after end_stream/trailers per the HCM/filter contract. Otherwise, you run into destruction issues.
+    * TAP configuration can't use unimplemented TapDS configuration. Had to enforce in code because it's a oneof, which can only be constrained to be required
+    * Squash filter configuration requires some JSON attachment template. Scrubbed if invalid JSON
+    
+    Risk Level: Low
+    Testing: Regression corpuses added, fuzzer runs for a 2 minutes
+    Fixes OSS-fuzz issues:
+    * https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=18938
+    * https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=20844
+    * https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=22428
+    
+    Signed-off-by: Asra Ali <asraa@google.com>

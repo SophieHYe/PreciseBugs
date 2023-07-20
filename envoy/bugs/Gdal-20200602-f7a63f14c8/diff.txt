@@ -1,0 +1,43 @@
+diff --git a/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5144919410999296 b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5144919410999296
+new file mode 100644
+index 0000000000..4178a4b002
+Binary files /dev/null and b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5144919410999296 differ
+diff --git a/test/extensions/filters/http/common/fuzz/uber_filter.cc b/test/extensions/filters/http/common/fuzz/uber_filter.cc
+index d5f8d346fd..37d1a7af8a 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_filter.cc
++++ b/test/extensions/filters/http/common/fuzz/uber_filter.cc
+@@ -13,7 +13,7 @@ namespace Envoy {
+ namespace Extensions {
+ namespace HttpFilters {
+ 
+-UberFilterFuzzer::UberFilterFuzzer() {
++UberFilterFuzzer::UberFilterFuzzer() : async_request_{&cluster_manager_.async_client_} {
+   // This is a decoder filter.
+   ON_CALL(filter_callback_, addStreamDecoderFilter(_))
+       .WillByDefault(Invoke([&](Http::StreamDecoderFilterSharedPtr filter) -> void {
+diff --git a/test/extensions/filters/http/common/fuzz/uber_filter.h b/test/extensions/filters/http/common/fuzz/uber_filter.h
+index b871524706..bc9db99880 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_filter.h
++++ b/test/extensions/filters/http/common/fuzz/uber_filter.h
+@@ -59,6 +59,8 @@ private:
+   Http::FilterFactoryCb cb_;
+   NiceMock<Envoy::Network::MockConnection> connection_;
+   Network::Address::InstanceConstSharedPtr addr_;
++  NiceMock<Upstream::MockClusterManager> cluster_manager_;
++  NiceMock<Http::MockAsyncClientRequest> async_request_;
+   NiceMock<Envoy::StreamInfo::MockStreamInfo> stream_info_;
+ 
+   // Mocked callbacks.
+diff --git a/test/extensions/filters/http/common/fuzz/uber_per_filter.cc b/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
+index ad6913bda5..50c33396c2 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
++++ b/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
+@@ -83,6 +83,8 @@ void UberFilterFuzzer::perFilterSetup() {
+   addr_ = std::make_shared<Network::Address::Ipv4Instance>("1.2.3.4", 1111);
+   ON_CALL(connection_, remoteAddress()).WillByDefault(testing::ReturnRef(addr_));
+   ON_CALL(connection_, localAddress()).WillByDefault(testing::ReturnRef(addr_));
++  ON_CALL(factory_context_, clusterManager()).WillByDefault(testing::ReturnRef(cluster_manager_));
++  ON_CALL(cluster_manager_.async_client_, send_(_, _, _)).WillByDefault(Return(&async_request_));
+ 
+   ON_CALL(decoder_callbacks_, connection()).WillByDefault(testing::Return(&connection_));
+   ON_CALL(decoder_callbacks_, activeSpan())

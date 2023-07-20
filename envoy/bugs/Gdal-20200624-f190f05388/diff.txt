@@ -1,0 +1,41 @@
+diff --git a/test/common/http/utility_corpus/clusterfuzz-testcase-minimized-utility_fuzz_test-5091558495092736 b/test/common/http/utility_corpus/clusterfuzz-testcase-minimized-utility_fuzz_test-5091558495092736
+new file mode 100644
+index 0000000000..aff9fb7726
+Binary files /dev/null and b/test/common/http/utility_corpus/clusterfuzz-testcase-minimized-utility_fuzz_test-5091558495092736 differ
+diff --git a/test/common/http/utility_corpus/valid b/test/common/http/utility_corpus/valid
+index f47f99e15a..1ea7275bf4 100644
+Binary files a/test/common/http/utility_corpus/valid and b/test/common/http/utility_corpus/valid differ
+diff --git a/test/common/http/utility_fuzz_test.cc b/test/common/http/utility_fuzz_test.cc
+index e3524fde27..18d5c0c4c3 100644
+--- a/test/common/http/utility_fuzz_test.cc
++++ b/test/common/http/utility_fuzz_test.cc
+@@ -79,7 +79,28 @@ DEFINE_PROTO_FUZZER(const test::common::http::UtilityTestCase& input) {
+   }
+   case test::common::http::UtilityTestCase::kInitializeAndValidate: {
+     const auto& options = input.initialize_and_validate();
+-    Http2::Utility::initializeAndValidateOptions(options);
++    try {
++      Http2::Utility::initializeAndValidateOptions(options);
++    } catch (EnvoyException& e) {
++      absl::string_view msg = e.what();
++      // initializeAndValidateOptions throws exceptions for 4 different reasons due to malformed
++      // settings, so check for them and allow any other exceptions through
++      if (absl::StartsWith(
++              msg, "server push is not supported by Envoy and can not be enabled via a SETTINGS "
++                   "parameter.") ||
++          absl::StartsWith(
++              msg, "the \"allow_connect\" SETTINGS parameter must only be configured through the "
++                   "named field") ||
++          absl::StartsWith(
++              msg, "inconsistent HTTP/2 custom SETTINGS parameter(s) detected; identifiers =") ||
++          absl::EndsWith(
++              msg, "HTTP/2 SETTINGS parameter(s) can not be configured through both named and "
++                   "custom parameters")) {
++        ENVOY_LOG_MISC(trace, "Caught exception {} in initializeAndValidateOptions test", e.what());
++      } else {
++        throw EnvoyException(e.what());
++      }
++    }
+     break;
+   }
+ 

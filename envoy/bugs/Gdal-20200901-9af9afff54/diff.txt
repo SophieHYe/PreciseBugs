@@ -1,0 +1,180 @@
+diff --git a/api/envoy/config/common/matcher/v3/matcher.proto b/api/envoy/config/common/matcher/v3/matcher.proto
+index d0955e7a1f..119740547a 100644
+--- a/api/envoy/config/common/matcher/v3/matcher.proto
++++ b/api/envoy/config/common/matcher/v3/matcher.proto
+@@ -85,10 +85,10 @@ message HttpGenericBodyMatch {
+       option (validate.required) = true;
+ 
+       // Text string to be located in HTTP body.
+-      string string_match = 1;
++      string string_match = 1 [(validate.rules).string = {min_len: 1}];
+ 
+       // Sequence of bytes to be located in HTTP body.
+-      bytes binary_match = 2;
++      bytes binary_match = 2 [(validate.rules).bytes = {min_len: 1}];
+     }
+   }
+ 
+diff --git a/api/envoy/config/common/matcher/v4alpha/matcher.proto b/api/envoy/config/common/matcher/v4alpha/matcher.proto
+index 685ae03a18..3be0d2aea3 100644
+--- a/api/envoy/config/common/matcher/v4alpha/matcher.proto
++++ b/api/envoy/config/common/matcher/v4alpha/matcher.proto
+@@ -99,10 +99,10 @@ message HttpGenericBodyMatch {
+       option (validate.required) = true;
+ 
+       // Text string to be located in HTTP body.
+-      string string_match = 1;
++      string string_match = 1 [(validate.rules).string = {min_len: 1}];
+ 
+       // Sequence of bytes to be located in HTTP body.
+-      bytes binary_match = 2;
++      bytes binary_match = 2 [(validate.rules).bytes = {min_len: 1}];
+     }
+   }
+ 
+diff --git a/generated_api_shadow/envoy/config/common/matcher/v3/matcher.proto b/generated_api_shadow/envoy/config/common/matcher/v3/matcher.proto
+index d0955e7a1f..119740547a 100644
+--- a/generated_api_shadow/envoy/config/common/matcher/v3/matcher.proto
++++ b/generated_api_shadow/envoy/config/common/matcher/v3/matcher.proto
+@@ -85,10 +85,10 @@ message HttpGenericBodyMatch {
+       option (validate.required) = true;
+ 
+       // Text string to be located in HTTP body.
+-      string string_match = 1;
++      string string_match = 1 [(validate.rules).string = {min_len: 1}];
+ 
+       // Sequence of bytes to be located in HTTP body.
+-      bytes binary_match = 2;
++      bytes binary_match = 2 [(validate.rules).bytes = {min_len: 1}];
+     }
+   }
+ 
+diff --git a/generated_api_shadow/envoy/config/common/matcher/v4alpha/matcher.proto b/generated_api_shadow/envoy/config/common/matcher/v4alpha/matcher.proto
+index 685ae03a18..3be0d2aea3 100644
+--- a/generated_api_shadow/envoy/config/common/matcher/v4alpha/matcher.proto
++++ b/generated_api_shadow/envoy/config/common/matcher/v4alpha/matcher.proto
+@@ -99,10 +99,10 @@ message HttpGenericBodyMatch {
+       option (validate.required) = true;
+ 
+       // Text string to be located in HTTP body.
+-      string string_match = 1;
++      string string_match = 1 [(validate.rules).string = {min_len: 1}];
+ 
+       // Sequence of bytes to be located in HTTP body.
+-      bytes binary_match = 2;
++      bytes binary_match = 2 [(validate.rules).bytes = {min_len: 1}];
+     }
+   }
+ 
+diff --git a/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5115447232692224 b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5115447232692224
+new file mode 100644
+index 0000000000..64d2de3427
+--- /dev/null
++++ b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5115447232692224
+@@ -0,0 +1,29 @@
++config {
++  name: "envoy.filters.http.grpc_http1_reverse_bridge"
++  typed_config {
++    type_url: "type.googleapis.com/envoy.extensions.filters.http.grpc_http1_reverse_bridge.v3.FilterConfig"
++    value: "\n\020application/grpc"
++  }
++}
++data {
++  headers {
++    headers {
++      key: "content-type"
++      value: "application/grpc"
++    }
++  }
++  http_body {
++    data: "\000\000\000\000\000\000\000\000"
++  }
++}
++upstream_data {
++  headers {
++    headers {
++      key: "content-type"
++      value: "application/grpc"
++    }
++  }
++  http_body {
++    data: "\000\000\000\000\000\000\000\000"
++  }
++}
+\ No newline at end of file
+diff --git a/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-6506457133219840 b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-6506457133219840
+new file mode 100644
+index 0000000000..bb2383802c
+--- /dev/null
++++ b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-6506457133219840
+@@ -0,0 +1,36 @@
++config {
++  name: "envoy.filters.http.tap"
++  typed_config {
++    type_url: "type.googleapis.com/envoy.extensions.filters.http.tap.v3.Tap"
++    value: "\n \022\036\n\002 \001\022\020\n\007\010\001\032\003\n\001(\032\003\010\200` \001\"\006R\004\022\002\n\000"
++  }
++}
++data {
++  headers {
++    headers {
++      key: "\036"
++      value: "\036"
++    }
++  }
++  trailers {
++    headers {
++      key: "\036"
++      value: "\036"
++    }
++  }
++  proto_body {
++    message {
++      type_url: "type.googleapis.com/bookstore.CreateShelfRequest"
++    }
++    chunk_size: 2
++  }
++}
++upstream_data {
++  proto_body {
++    message {
++      type_url: "type.googleapis.com/envoy.extensions.filters.http.rbac.v3.RBAC"
++      value: "\022\277\001\0229\n\000\0225\022\013B\t*\007\022\005\010\200\200\200\020\032&\020\377\377\377\377\277\240\224\244U:\032\n\t\020\242\200\200\200\203\206\2277\n\r:\013\n\t\020\242\200\200\200\203\206\2277\022\022\n\0108Y;\003\000\000\000\000\022\006\022\002\n\000\"\000\022[\nW///////////////////////////////////////////////////////////////////////////////////////\022\000\022\021\n\004size\022\t\n\000\022\005Z\003\n\001m"
++    }
++    chunk_size: 2
++  }
++}
+\ No newline at end of file
+diff --git a/test/extensions/filters/http/common/fuzz/uber_filter.cc b/test/extensions/filters/http/common/fuzz/uber_filter.cc
+index da0e353d1b..65924becd9 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_filter.cc
++++ b/test/extensions/filters/http/common/fuzz/uber_filter.cc
+@@ -48,6 +48,8 @@ UberFilterFuzzer::UberFilterFuzzer() : async_request_{&cluster_manager_.async_cl
+             enabled_ = false;
+             decoder_callbacks_.sendLocalReply_(code, body, modify_headers, grpc_status, details);
+           }));
++  ON_CALL(encoder_callbacks_, addEncodedTrailers())
++      .WillByDefault(testing::ReturnRef(encoded_trailers_));
+   // Set expectations for particular filters that may get fuzzed.
+   perFilterSetup();
+ }
+@@ -234,6 +236,7 @@ void UberFilterFuzzer::reset() {
+   response_headers_.clear();
+   request_trailers_.clear();
+   response_trailers_.clear();
++  encoded_trailers_.clear();
+ }
+ 
+ } // namespace HttpFilters
+diff --git a/test/extensions/filters/http/common/fuzz/uber_filter.h b/test/extensions/filters/http/common/fuzz/uber_filter.h
+index 7090aed3ad..4d1a894fef 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_filter.h
++++ b/test/extensions/filters/http/common/fuzz/uber_filter.h
+@@ -81,6 +81,7 @@ private:
+   Http::TestResponseHeaderMapImpl response_headers_;
+   Http::TestRequestTrailerMapImpl request_trailers_;
+   Http::TestResponseTrailerMapImpl response_trailers_;
++  Http::TestResponseTrailerMapImpl encoded_trailers_;
+ };
+ 
+ } // namespace HttpFilters

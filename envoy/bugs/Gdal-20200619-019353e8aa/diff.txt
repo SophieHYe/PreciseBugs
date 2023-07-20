@@ -1,0 +1,36 @@
+diff --git a/api/envoy/config/core/v3/grpc_service.proto b/api/envoy/config/core/v3/grpc_service.proto
+index cf7663b348..3f62884df6 100644
+--- a/api/envoy/config/core/v3/grpc_service.proto
++++ b/api/envoy/config/core/v3/grpc_service.proto
+@@ -209,6 +209,8 @@ message GrpcService {
+         // Pointer values are not supported, since they don't make any sense when
+         // delivered via the API.
+         oneof value_specifier {
++          option (validate.required) = true;
++
+           string string_value = 1;
+ 
+           int64 int_value = 2;
+diff --git a/api/envoy/config/core/v4alpha/grpc_service.proto b/api/envoy/config/core/v4alpha/grpc_service.proto
+index 3abff88ea4..4c95bb9e98 100644
+--- a/api/envoy/config/core/v4alpha/grpc_service.proto
++++ b/api/envoy/config/core/v4alpha/grpc_service.proto
+@@ -215,6 +215,8 @@ message GrpcService {
+         // Pointer values are not supported, since they don't make any sense when
+         // delivered via the API.
+         oneof value_specifier {
++          option (validate.required) = true;
++
+           string string_value = 1;
+ 
+           int64 int_value = 2;
+diff --git a/generated_api_shadow/envoy/config/core/v3/grpc_service.proto b/generated_api_shadow/envoy/config/core/v3/grpc_service.proto
+index 04d1456693..f4d41ddba2 100644
+Binary files a/generated_api_shadow/envoy/config/core/v3/grpc_service.proto and b/generated_api_shadow/envoy/config/core/v3/grpc_service.proto differ
+diff --git a/generated_api_shadow/envoy/config/core/v4alpha/grpc_service.proto b/generated_api_shadow/envoy/config/core/v4alpha/grpc_service.proto
+index 3abff88ea4..4c95bb9e98 100644
+Binary files a/generated_api_shadow/envoy/config/core/v4alpha/grpc_service.proto and b/generated_api_shadow/envoy/config/core/v4alpha/grpc_service.proto differ
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5714049408172032 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5714049408172032
+new file mode 100644
+index 0000000000..db5e415d56
+Binary files /dev/null and b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5714049408172032 differ

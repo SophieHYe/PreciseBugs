@@ -1,0 +1,28 @@
+diff --git a/test/common/buffer/buffer_corpus/clusterfuzz-testcase-minimized-buffer_fuzz_test-5664992304562176 b/test/common/buffer/buffer_corpus/clusterfuzz-testcase-minimized-buffer_fuzz_test-5664992304562176
+new file mode 100644
+index 0000000000..8d8126487b
+Binary files /dev/null and b/test/common/buffer/buffer_corpus/clusterfuzz-testcase-minimized-buffer_fuzz_test-5664992304562176 differ
+diff --git a/test/common/buffer/buffer_fuzz.cc b/test/common/buffer/buffer_fuzz.cc
+index 3b1760e6c8..fe2453905c 100644
+--- a/test/common/buffer/buffer_fuzz.cc
++++ b/test/common/buffer/buffer_fuzz.cc
+@@ -318,15 +318,18 @@ uint32_t bufferAction(Context& ctxt, char insert_value, uint32_t max_alloc, Buff
+     }
+     Buffer::Instance& source_buffer = *buffers[source_index];
+     if (action.move().length() == 0) {
+-      target_buffer.move(source_buffer);
+       if (source_buffer.length() > max_alloc) {
+         break;
+       }
++      target_buffer.move(source_buffer);
+       allocated += source_buffer.length();
+     } else {
+       const uint32_t source_length =
+           std::min(static_cast<uint32_t>(source_buffer.length()), action.move().length());
+       const uint32_t move_length = clampSize(max_alloc, source_length);
++      if (move_length == 0) {
++        break;
++      }
+       target_buffer.move(source_buffer, move_length);
+       allocated += move_length;
+     }
