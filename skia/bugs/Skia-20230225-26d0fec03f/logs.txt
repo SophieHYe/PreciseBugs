@@ -1,0 +1,24 @@
+commit 26d0fec03f784e1956c71f180a1a42c59baaa0b1
+Author: John Stiles <johnstiles@google.com>
+Date:   Sat Feb 25 11:49:13 2023 -0500
+
+    Fix SkRP crash when dividing an int by zero.
+    
+    This adds two instructions to each of the div-int ops:
+        d244: 12 9a a0 4e   cmeq.4s v18, v16, #0
+        d248: 10 1e b2 4e   orr.16b v16, v16, v18
+    
+    This is one of our least efficient ops anyway, so the cost of a guard
+    is negligible. (`div_int` is 23 instructions. `div_4_ints` is 83.)
+    
+    This will convert zeros to ~0 (-1). This means div_int against zero
+    will negate the number, and div_uint against zero will clear it.
+    Since the behavior is explicitly not defined, this is OK.
+    
+    Bug: skia:14015, oss-fuzz:56346
+    Change-Id: I4bf44e2334433f8b0be1193b4408fd51333bdd65
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/648743
+    Commit-Queue: Brian Osman <brianosman@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>

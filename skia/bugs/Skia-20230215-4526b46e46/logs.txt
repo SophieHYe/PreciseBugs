@@ -1,0 +1,17 @@
+commit 4526b46e4694f568109d880ae58331d7f9882068
+Author: Robert Phillips <robertphillips@google.com>
+Date:   Tue Feb 14 14:22:12 2023 -0500
+
+    Fix up DDL fuzzer
+    
+    I'm not sure this fuzzer has ever worked. This CL:
+    
+    Adds an 'fDrawn' field so we can correctly assert the expected state
+    Correctly set the kDone state (was being reset to kInitial)
+    Adds an explicit flush step to actually execute the collected DDLs
+    
+    Bug: oss-fuzz:38709
+    Change-Id: I859dd9ac346bc36206eeb288aa178defd8989493
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/643459
+    Reviewed-by: Michael Ludwig <michaelludwig@google.com>
+    Commit-Queue: Robert Phillips <robertphillips@google.com>

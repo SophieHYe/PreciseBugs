@@ -1,0 +1,91 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 2a832a51b1..1691936eca 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -1385,6 +1385,7 @@ if (skia_enable_tools) {
+       ":flags",
+       ":skia",
+       ":tool_utils",
++      "modules/skottie:tests",
+       "modules/sksg:tests",
+       "//third_party/libpng",
+       "//third_party/zlib",
+diff --git a/modules/skottie/BUILD.gn b/modules/skottie/BUILD.gn
+index dff355cf82..9442592968 100644
+--- a/modules/skottie/BUILD.gn
++++ b/modules/skottie/BUILD.gn
+@@ -40,6 +40,26 @@ source_set("skottie") {
+   }
+ }
+ 
++source_set("tests") {
++  if (skia_enable_skottie) {
++    testonly = true
++
++    configs += [
++      "../..:skia_private",
++      "../..:tests_config",
++    ]
++    sources = [
++      "src/SkottieTest.cpp",
++    ]
++
++    deps = [
++      ":skottie",
++      "../..:gpu_tool_utils",
++      "../..:skia",
++    ]
++  }
++}
++
+ source_set("fuzz") {
+   if (skia_enable_skottie) {
+     testonly = true
+diff --git a/modules/skottie/src/SkottieJson.cpp b/modules/skottie/src/SkottieJson.cpp
+index 4f23939d15..186cd42c31 100644
+--- a/modules/skottie/src/SkottieJson.cpp
++++ b/modules/skottie/src/SkottieJson.cpp
+@@ -84,8 +84,12 @@ bool Parse<SkPoint>(const Value& v, SkPoint* pt) {
+     const auto& jvy = ov["y"];
+ 
+     // Some BM versions seem to store x/y as single-element arrays.
+-    return Parse<SkScalar>(jvx.is<ArrayValue>() ? jvx.as<ArrayValue>()[0] : jvx, &pt->fX)
+-        && Parse<SkScalar>(jvy.is<ArrayValue>() ? jvy.as<ArrayValue>()[0] : jvy, &pt->fY);
++    // TODO: We should be able to check size == 1 below, or just delegate to Parse<SkScalar>,
++    //       but that change introduces diffs.  Investigate.
++    const ArrayValue* jvxa = jvx;
++    const ArrayValue* jvya = jvy;
++    return Parse<SkScalar>(jvxa && jvxa->size() > 0 ? (*jvxa)[0] : jvx, &pt->fX)
++        && Parse<SkScalar>(jvya && jvya->size() > 0 ? (*jvya)[0] : jvy, &pt->fY);
+ }
+ 
+ template <>
+diff --git a/modules/skottie/src/SkottieTest.cpp b/modules/skottie/src/SkottieTest.cpp
+new file mode 100644
+index 0000000000..1c4cc078a5
+--- /dev/null
++++ b/modules/skottie/src/SkottieTest.cpp
+@@ -0,0 +1,23 @@
++/*
++ * Copyright 2018 Google Inc.
++ *
++ * Use of this source code is governed by a BSD-style license that can be
++ * found in the LICENSE file.
++ */
++
++#include "Skottie.h"
++#include "SkStream.h"
++
++#include "Test.h"
++
++DEF_TEST(Skottie_OssFuzz8956, reporter) {
++    static constexpr const char json[] =
++        "{\"v\":\" \",\"fr\":3,\"w\":4,\"h\":3,\"layers\":[{\"ty\": 1, \"sw\": 10, \"sh\": 10,"
++            " \"sc\":\"#ffffff\", \"ks\":{\"o\":{\"a\": true, \"k\":"
++            " [{\"t\": 0, \"s\": 0, \"e\": 1, \"i\": {\"x\":[]}}]}}}]}";
++
++    SkMemoryStream stream(json, strlen(json));
++
++    // Passes if parsing doesn't crash.
++    auto animation = skottie::Animation::Make(&stream);
++}

@@ -1,0 +1,19 @@
+commit bb8542f08685e649bfecca4a9ec462b34509ef1a
+Author: John Stiles <johnstiles@google.com>
+Date:   Fri Feb 26 11:32:06 2021 -0500
+
+    Fix fuzzer-discovered error with ~ prefix on literals.
+    
+    The expression `~123` was making a PrefixExpression of type $intLiteral.
+    It should be converted to type `int` when the ~ prefix is applied.
+    
+    This change also changes the output from oss-fuzz:27614. Both programs
+    are essentially nonsense expressions with no real behavior, so this is
+    fine.
+    
+    Change-Id: I586be149ce95136fabee72fdd3473814d54948cf
+    Bug: oss-fuzz:31410
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/376620
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

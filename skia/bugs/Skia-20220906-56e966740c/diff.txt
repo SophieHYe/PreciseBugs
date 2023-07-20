@@ -1,0 +1,121 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 7686bfb55e..699756937a 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -168,6 +168,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz48592.sksl",
+   "/sksl/errors/Ossfuzz49558.sksl",
+   "/sksl/errors/Ossfuzz50798.sksl",
++  "/sksl/errors/Ossfuzz50922.sksl",
+   "/sksl/errors/OverflowFloatIntrinsic.sksl",
+   "/sksl/errors/OverflowFloatLiteral.rts",
+   "/sksl/errors/OverflowInlinedLiteral.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz50922.sksl b/resources/sksl/errors/Ossfuzz50922.sksl
+new file mode 100644
+index 0000000000..89c30e630f
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz50922.sksl
+@@ -0,0 +1 @@
++struct Tes{int[]i;};Tes$(){Tes$;}
+diff --git a/src/sksl/ir/SkSLFunctionDefinition.cpp b/src/sksl/ir/SkSLFunctionDefinition.cpp
+index b865d0e2fe..b0cf646e11 100644
+--- a/src/sksl/ir/SkSLFunctionDefinition.cpp
++++ b/src/sksl/ir/SkSLFunctionDefinition.cpp
+@@ -117,20 +117,19 @@ std::unique_ptr<FunctionDefinition> FunctionDefinition::Convert(const Context& c
+                     // (i.e., RelaxedPrecision math doesn't mean your variable takes less space.)
+                     // We also don't attempt to reclaim slots at the end of a Block.
+                     size_t prevSlotsUsed = fSlotsUsed;
+-                    if (stmt.as<VarDeclaration>().var().type().isUnsizedArray()) {
++                    const Variable& var = stmt.as<VarDeclaration>().var();
++                    if (var.type().isOrContainsUnsizedArray()) {
+                         fContext.fErrors->error(stmt.fPosition,
+                                                 "unsized arrays are not permitted here");
+                         break;
+                     }
+-                    fSlotsUsed = SkSafeMath::Add(
+-                            fSlotsUsed, stmt.as<VarDeclaration>().var().type().slotCount());
++                    fSlotsUsed = SkSafeMath::Add(fSlotsUsed, var.type().slotCount());
+                     // To avoid overzealous error reporting, only trigger the error at the first
+                     // place where the stack limit is exceeded.
+                     if (prevSlotsUsed < kVariableSlotLimit && fSlotsUsed >= kVariableSlotLimit) {
+-                        fContext.fErrors->error(
+-                                stmt.fPosition,
+-                                "variable '" + std::string(stmt.as<VarDeclaration>().var().name()) +
+-                                "' exceeds the stack size limit");
++                        fContext.fErrors->error(stmt.fPosition,
++                                                "variable '" + std::string(var.name()) +
++                                                "' exceeds the stack size limit");
+                     }
+                     break;
+                 }
+diff --git a/src/sksl/ir/SkSLType.cpp b/src/sksl/ir/SkSLType.cpp
+index da5107b789..a931f6d582 100644
+--- a/src/sksl/ir/SkSLType.cpp
++++ b/src/sksl/ir/SkSLType.cpp
+@@ -1012,17 +1012,31 @@ bool Type::isPrivate() const {
+     return skstd::starts_with(this->name(), '$');
+ }
+ 
+-bool Type::isOrContainsArray() const {
+-    if (this->isStruct()) {
+-        for (const Field& f : this->fields()) {
+-            if (f.fType->isOrContainsArray()) {
++static bool is_or_contains_array(const Type* type, bool onlyMatchUnsizedArrays) {
++    if (type->isStruct()) {
++        for (const Type::Field& f : type->fields()) {
++            if (is_or_contains_array(f.fType, onlyMatchUnsizedArrays)) {
+                 return true;
+             }
+         }
+         return false;
+     }
+ 
+-    return this->isArray();
++    if (type->isArray()) {
++        return onlyMatchUnsizedArrays
++                    ? (type->isUnsizedArray() || is_or_contains_array(&type->componentType(), true))
++                    : true;
++    }
++
++    return false;
++}
++
++bool Type::isOrContainsArray() const {
++    return is_or_contains_array(this, /*onlyMatchUnsizedArrays=*/false);
++}
++
++bool Type::isOrContainsUnsizedArray() const {
++    return is_or_contains_array(this, /*onlyMatchUnsizedArrays=*/true);
+ }
+ 
+ bool Type::isTooDeeplyNested(int limit) const {
+diff --git a/src/sksl/ir/SkSLType.h b/src/sksl/ir/SkSLType.h
+index 5ee5f20f3c..ce9d04254c 100644
+--- a/src/sksl/ir/SkSLType.h
++++ b/src/sksl/ir/SkSLType.h
+@@ -518,6 +518,7 @@ public:
+     }
+ 
+     bool isOrContainsArray() const;
++    bool isOrContainsUnsizedArray() const;
+ 
+     /**
+      * Returns true if this type is a struct that is too deeply nested.
+diff --git a/tests/sksl/errors/Ossfuzz50922.glsl b/tests/sksl/errors/Ossfuzz50922.glsl
+new file mode 100644
+index 0000000000..e316cacf61
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz50922.glsl
+@@ -0,0 +1,12 @@
++### Compilation failed:
++
++error: 1: name '$' is reserved
++struct Tes{int[]i;};Tes$(){Tes$;}
++                              ^
++error: 1: unsized arrays are not permitted here
++struct Tes{int[]i;};Tes$(){Tes$;}
++                           ^^^^^
++error: 1: function '$' can exit without returning a value
++struct Tes{int[]i;};Tes$(){Tes$;}
++                          ^^^^^^^
++3 errors

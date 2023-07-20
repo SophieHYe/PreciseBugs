@@ -1,0 +1,84 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 5696f005b3..d2836fe485 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -122,6 +122,7 @@ sksl_error_tests = [
+   "$_tests/sksl/errors/Ossfuzz26759.sksl",
+   "$_tests/sksl/errors/Ossfuzz27650.sksl",
+   "$_tests/sksl/errors/Ossfuzz27663.sksl",
++  "$_tests/sksl/errors/Ossfuzz29085.sksl",
+   "$_tests/sksl/errors/OverflowFloatLiteral.sksl",
+   "$_tests/sksl/errors/OverflowIntLiteral.sksl",
+   "$_tests/sksl/errors/OverflowParamArraySize.sksl",
+diff --git a/src/sksl/SkSLCFGGenerator.cpp b/src/sksl/SkSLCFGGenerator.cpp
+index 3e6808ffd5..9a203a446d 100644
+--- a/src/sksl/SkSLCFGGenerator.cpp
++++ b/src/sksl/SkSLCFGGenerator.cpp
+@@ -80,9 +80,10 @@ void BasicBlock::dump() const {
+     printf("Before: [");
+     const char* separator = "";
+     for (const auto& [var, expr] : fBefore) {
+-        printf("%s%s = %s", separator,
+-                            var->description().c_str(),
+-                            expr ? (*expr)->description().c_str() : "<undefined>");
++        printf("%s%s = %s",
++               separator,
++               var->description().c_str(),
++               expr ? *expr ? (*expr)->description().c_str() : "NULL" : "<undefined>");
+         separator = ", ";
+     }
+     printf("]\nIs Reachable: [%s]\n", fIsReachable ? "yes" : "no");
+diff --git a/src/sksl/SkSLCompiler.cpp b/src/sksl/SkSLCompiler.cpp
+index 2630dcffef..6ac8f33199 100644
+--- a/src/sksl/SkSLCompiler.cpp
++++ b/src/sksl/SkSLCompiler.cpp
+@@ -1133,15 +1133,13 @@ void Compiler::simplifyExpression(DefinitionMap& definitions,
+                 for (int c : s.components()) {
+                     final.push_back(base.components()[c]);
+                 }
+-                optimizationContext->fUpdated = true;
+                 std::unique_ptr<Expression> replacement(new Swizzle(*fContext, base.base()->clone(),
+                                                                     final));
++                // We're replacing an expression with a cloned version; we'll need a rescan.
+                 // No fUsage change: `foo.gbr.gbr` and `foo.brg` have equivalent reference counts
+-                if (!try_replace_expression(&b, iter, &replacement)) {
+-                    optimizationContext->fNeedsRescan = true;
+-                    return;
+-                }
+-                SkASSERT((*iter)->isExpression());
++                try_replace_expression(&b, iter, &replacement);
++                optimizationContext->fUpdated = true;
++                optimizationContext->fNeedsRescan = true;
+                 break;
+             }
+             // Optimize swizzles of constructors.
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index 764243aade..5c6639727a 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -1863,7 +1863,7 @@ std::unique_ptr<Expression> IRGenerator::constantFold(const Expression& left,
+     if (left.is<BoolLiteral>() && !right.isCompileTimeConstant()) {
+         return short_circuit_boolean(fContext, left, op, right);
+     } else if (right.is<BoolLiteral>() && !left.isCompileTimeConstant()) {
+-        // There aren't side effects in SKSL within expressions, so (left OP right) is equivalent to
++        // There aren't side effects in SkSL within expressions, so (left OP right) is equivalent to
+         // (right OP left) for short-circuit optimizations
+         return short_circuit_boolean(fContext, right, op, left);
+     }
+diff --git a/tests/sksl/errors/Ossfuzz29085.sksl b/tests/sksl/errors/Ossfuzz29085.sksl
+new file mode 100644
+index 0000000000..a59608ea22
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz29085.sksl
+@@ -0,0 +1 @@
++void a() { int i; (i=i).x1x.xx.x; }
+diff --git a/tests/sksl/errors/golden/Ossfuzz29085.glsl b/tests/sksl/errors/golden/Ossfuzz29085.glsl
+new file mode 100644
+index 0000000000..6af751da0b
+--- /dev/null
++++ b/tests/sksl/errors/golden/Ossfuzz29085.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: 'i' has not been assigned
++1 error

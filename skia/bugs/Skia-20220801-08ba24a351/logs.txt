@@ -1,0 +1,24 @@
+commit 08ba24a351cfeb2d515e72dcb268d7a37d49b4c2
+Author: John Stiles <johnstiles@google.com>
+Date:   Mon Aug 1 18:09:34 2022 -0400
+
+    Fix fuzzer-discovered assertion with texture2d parameters.
+    
+    The Metal code generator would assert if you try to `writeType` on a
+    texture type, because we don't know the access type to pass (read,
+    write or both). Places in the code which can support textures need to
+    call `writeTextureType` instead.
+    
+    Function parameters weren't considered here, so they tripped the
+    assert. We now have `writeParameterType` which can be used. For now,
+    we don't have a good way of setting access type on texture params,
+    so you will get the default access type (sampleable, no read/write).
+    In the future we can add `readonly` and `writeonly` modifiers to
+    pass access information, like GLSL.
+    
+    Change-Id: I2f6e059e233b28a0ff831f04f2dea6c7ee99f7dd
+    Bug: skia:13609, oss-fuzz:49691
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/563746
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Arman Uguray <armansito@google.com>
+    Commit-Queue: Arman Uguray <armansito@google.com>

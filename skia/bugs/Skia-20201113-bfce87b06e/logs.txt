@@ -1,0 +1,24 @@
+commit bfce87b06e400ec62c2e0cee1c68c4a8fb4d1e9f
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Nov 12 16:03:23 2020 -0500
+
+    Fix fuzzing error with duplicate function definitions.
+    
+    Without an early return, the inliner tries to inline a function inside
+    of itself, eating up gigabytes of memory before hitting its inline
+    threshold.
+    
+    This normally wouldn't be possible because functions are meant to be
+    fully assembled before they're added to the list of ProgramElements, so
+    the inliner shouldn't find a function as a candidate to be inlined into
+    itself at all. However, the fuzzer found that an existing function
+    could be extended by re-declaring it; in this case, it is findable as
+    a ProgramElement and becomes inlinable.
+    
+    Change-Id: I4c02a7b52e4b75151b75c94cb70dfadb8e4c9e6b
+    Bug: oss-fuzz:27442
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/334556
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

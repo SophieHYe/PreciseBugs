@@ -1,0 +1,110 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index bd09388e31..cb2f874ed3 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -106,6 +106,7 @@ sksl_error_tests = [
+   "$_tests/sksl/errors/InvalidUnary.sksl",
+   "$_tests/sksl/errors/ModifiersInStruct.sksl",
+   "$_tests/sksl/errors/OpenArray.sksl",
++  "$_tests/sksl/errors/Ossfuzz26700.sksl",
+   "$_tests/sksl/errors/Ossfuzz26759.sksl",
+   "$_tests/sksl/errors/ReturnDifferentType.sksl",
+   "$_tests/sksl/errors/ReturnFromVoid.sksl",
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index 7647e9534c..cf7e677250 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -1093,43 +1093,45 @@ std::unique_ptr<InterfaceBlock> IRGenerator::convertInterfaceBlock(const ASTNode
+     SkASSERT(intf.fKind == ASTNode::Kind::kInterfaceBlock);
+     ASTNode::InterfaceBlockData id = intf.getInterfaceBlockData();
+     std::shared_ptr<SymbolTable> old = fSymbolTable;
+-    this->pushSymbolTable();
+-    std::shared_ptr<SymbolTable> symbols = fSymbolTable;
++    std::shared_ptr<SymbolTable> symbols;
+     std::vector<Type::Field> fields;
+-    bool haveRuntimeArray = false;
+     bool foundRTAdjust = false;
+     auto iter = intf.begin();
+-    for (size_t i = 0; i < id.fDeclarationCount; ++i) {
+-        StatementArray decls = this->convertVarDeclarations(*(iter++),
+-                                                            Variable::Storage::kInterfaceBlock);
+-        if (decls.empty()) {
+-            return nullptr;
+-        }
+-        for (const auto& decl : decls) {
+-            const VarDeclaration& vd = decl->as<VarDeclaration>();
+-            if (haveRuntimeArray) {
+-                fErrors.error(decl->fOffset,
+-                            "only the last entry in an interface block may be a runtime-sized "
+-                            "array");
+-            }
+-            if (&vd.var() == fRTAdjust) {
+-                foundRTAdjust = true;
+-                SkASSERT(vd.var().type() == *fContext.fFloat4_Type);
+-                fRTAdjustFieldIndex = fields.size();
+-            }
+-            fields.push_back(Type::Field(vd.var().modifiers(), vd.var().name(),
+-                                        &vd.var().type()));
+-            if (vd.value()) {
+-                fErrors.error(decl->fOffset,
+-                            "initializers are not permitted on interface block fields");
++    {
++        AutoSymbolTable table(this);
++        symbols = fSymbolTable;
++        bool haveRuntimeArray = false;
++        for (size_t i = 0; i < id.fDeclarationCount; ++i) {
++            StatementArray decls = this->convertVarDeclarations(*(iter++),
++                                                                Variable::Storage::kInterfaceBlock);
++            if (decls.empty()) {
++                return nullptr;
+             }
+-            if (vd.var().type().typeKind() == Type::TypeKind::kArray &&
+-                vd.var().type().columns() == Type::kUnsizedArray) {
+-                haveRuntimeArray = true;
++            for (const auto& decl : decls) {
++                const VarDeclaration& vd = decl->as<VarDeclaration>();
++                if (haveRuntimeArray) {
++                    fErrors.error(decl->fOffset,
++                                "only the last entry in an interface block may be a runtime-sized "
++                                "array");
++                }
++                if (&vd.var() == fRTAdjust) {
++                    foundRTAdjust = true;
++                    SkASSERT(vd.var().type() == *fContext.fFloat4_Type);
++                    fRTAdjustFieldIndex = fields.size();
++                }
++                fields.push_back(Type::Field(vd.var().modifiers(), vd.var().name(),
++                                            &vd.var().type()));
++                if (vd.value()) {
++                    fErrors.error(decl->fOffset,
++                                "initializers are not permitted on interface block fields");
++                }
++                if (vd.var().type().typeKind() == Type::TypeKind::kArray &&
++                    vd.var().type().columns() == Type::kUnsizedArray) {
++                    haveRuntimeArray = true;
++                }
+             }
+         }
+     }
+-    this->popSymbolTable();
+     const Type* type =
+             old->takeOwnershipOfSymbol(std::make_unique<Type>(intf.fOffset, id.fTypeName, fields));
+     ExpressionArray sizes;
+diff --git a/tests/sksl/errors/Ossfuzz26700.sksl b/tests/sksl/errors/Ossfuzz26700.sksl
+new file mode 100644
+index 0000000000..6a4e5057fd
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz26700.sksl
+@@ -0,0 +1,2 @@
++q { int y; };
++G { int q=_; };
+diff --git a/tests/sksl/errors/golden/Ossfuzz26700.glsl b/tests/sksl/errors/golden/Ossfuzz26700.glsl
+new file mode 100644
+index 0000000000..72b338724d
+--- /dev/null
++++ b/tests/sksl/errors/golden/Ossfuzz26700.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 2: unknown identifier '_'
++1 error

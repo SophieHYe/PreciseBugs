@@ -1,0 +1,56 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 77547179f2..7a1194fb2f 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -102,6 +102,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz37620.sksl",
+   "/sksl/errors/Ossfuzz38106.sksl",
+   "/sksl/errors/Ossfuzz38140.sksl",
++  "/sksl/errors/Ossfuzz38560.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz38560.sksl b/resources/sksl/errors/Ossfuzz38560.sksl
+new file mode 100644
+index 0000000000..1b2eab7217
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz38560.sksl
+@@ -0,0 +1 @@
++void n() { for(int r,r;;) int s; }
+diff --git a/src/sksl/ir/SkSLForStatement.cpp b/src/sksl/ir/SkSLForStatement.cpp
+index 9114322f10..9f8eb975dc 100644
+--- a/src/sksl/ir/SkSLForStatement.cpp
++++ b/src/sksl/ir/SkSLForStatement.cpp
+@@ -117,6 +117,10 @@ std::unique_ptr<Statement> ForStatement::Convert(const Context& context, int off
+         }
+     }
+ 
++    if (Analysis::DetectVarDeclarationWithoutScope(*statement, context.fErrors)) {
++        return nullptr;
++    }
++
+     if (isVardeclBlockInitializer) {
+         // If the initializer statement of a for loop contains multiple variables, this causes
+         // difficulties for several of our backends; e.g. Metal doesn't have a way to express arrays
+@@ -132,10 +136,6 @@ std::unique_ptr<Statement> ForStatement::Convert(const Context& context, int off
+         return Block::Make(offset, std::move(scope));
+     }
+ 
+-    if (Analysis::DetectVarDeclarationWithoutScope(*statement, context.fErrors)) {
+-        return nullptr;
+-    }
+-
+     return ForStatement::Make(context, offset, std::move(initializer), std::move(test),
+                               std::move(next), std::move(statement), std::move(unrollInfo),
+                               std::move(symbolTable));
+diff --git a/tests/sksl/errors/Ossfuzz38560.glsl b/tests/sksl/errors/Ossfuzz38560.glsl
+new file mode 100644
+index 0000000000..42b75d7436
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz38560.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: symbol 'r' was already defined
++error: 1: variable 's' must be created in a scope
++2 errors

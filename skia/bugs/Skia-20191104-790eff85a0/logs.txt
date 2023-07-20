@@ -1,0 +1,14 @@
+commit 790eff85a0393d6b8440e7c81803c273cbd4ce92
+Author: Herb Derby <herb@google.com>
+Date:   Mon Nov 4 12:03:51 2019 -0500
+
+    Fix fuzz bug in isValid for SkDescriptor
+    
+    isValid read memory beyond the buffer that was uninitialized.
+    
+    BUG=oss-fuzz:18555
+    
+    Change-Id: I5576add2cd7bfbe146d495239b96210fe15fe562
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/252538
+    Commit-Queue: Herb Derby <herb@google.com>
+    Reviewed-by: Mike Klein <mtklein@google.com>

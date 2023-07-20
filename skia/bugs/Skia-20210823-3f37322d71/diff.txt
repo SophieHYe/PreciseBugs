@@ -1,0 +1,82 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 0bcd2a9eab..b39a591133 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -98,6 +98,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz32587.sksl",
+   "/sksl/errors/Ossfuzz32851.sksl",
+   "/sksl/errors/Ossfuzz37457.sksl",
++  "/sksl/errors/Ossfuzz37465.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz37465.sksl b/resources/sksl/errors/Ossfuzz37465.sksl
+new file mode 100644
+index 0000000000..c16257a05d
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz37465.sksl
+@@ -0,0 +1 @@
++float f(const float x) { 5+x; }
+diff --git a/resources/sksl/shared/Functions.sksl b/resources/sksl/shared/Functions.sksl
+index d4b5b5f9c7..5386c74359 100644
+--- a/resources/sksl/shared/Functions.sksl
++++ b/resources/sksl/shared/Functions.sksl
+@@ -2,7 +2,7 @@
+ 
+ uniform half4 colorGreen, colorRed;
+ 
+-float foo(float2 v) {
++float foo(const float2 v) {
+     return v.x * v.y;
+ }
+ 
+diff --git a/src/sksl/SkSLConstantFolder.cpp b/src/sksl/SkSLConstantFolder.cpp
+index 50a656d531..2048e8c9f4 100644
+--- a/src/sksl/SkSLConstantFolder.cpp
++++ b/src/sksl/SkSLConstantFolder.cpp
+@@ -213,8 +213,7 @@ const Expression* ConstantFolder::GetConstantValueForVariable(const Expression&
+         }
+         expr = var.initialValue();
+         if (!expr) {
+-            SkDEBUGFAILF("found a const variable without an initial value (%s)",
+-                         var.description().c_str());
++            // Function parameters can be const but won't have an initial value.
+             break;
+         }
+         if (expr->isCompileTimeConstant()) {
+diff --git a/tests/sksl/errors/Ossfuzz37465.glsl b/tests/sksl/errors/Ossfuzz37465.glsl
+new file mode 100644
+index 0000000000..561b73d06a
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz37465.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: function 'f' can exit without returning a value
++1 error
+diff --git a/tests/sksl/shared/Functions.glsl b/tests/sksl/shared/Functions.glsl
+index 256fbf7a9e..12f75745ec 100644
+--- a/tests/sksl/shared/Functions.glsl
++++ b/tests/sksl/shared/Functions.glsl
+@@ -2,7 +2,7 @@
+ out vec4 sk_FragColor;
+ uniform vec4 colorGreen;
+ uniform vec4 colorRed;
+-float foo_ff2(vec2 v) {
++float foo_ff2(const vec2 v) {
+     return v.x * v.y;
+ }
+ void bar_vf(inout float x) {
+diff --git a/tests/sksl/shared/Functions.metal b/tests/sksl/shared/Functions.metal
+index 1597fefa2f..ee22a096e3 100644
+--- a/tests/sksl/shared/Functions.metal
++++ b/tests/sksl/shared/Functions.metal
+@@ -16,7 +16,7 @@ void _skOutParamHelper0_bar_vf(thread float& x) {
+     bar_vf(_var0);
+     x = _var0;
+ }
+-float foo_ff2(float2 v) {
++float foo_ff2(const float2 v) {
+     return v.x * v.y;
+ }
+ void bar_vf(thread float& x) {

@@ -1,0 +1,117 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 03aa4aa088..09d3584b63 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -351,6 +351,7 @@ sksl_shared_tests = [
+   "/sksl/shared/Ossfuzz29494.sksl",
+   "/sksl/shared/Ossfuzz36770.sksl",
+   "/sksl/shared/Ossfuzz36852.sksl",
++  "/sksl/shared/Ossfuzz37466.sksl",
+   "/sksl/shared/OutParams.sksl",
+   "/sksl/shared/OutParamsNoInline.sksl",
+   "/sksl/shared/OutParamsTricky.sksl",
+diff --git a/resources/sksl/shared/Ossfuzz37466.sksl b/resources/sksl/shared/Ossfuzz37466.sksl
+new file mode 100644
+index 0000000000..c2277ed33a
+--- /dev/null
++++ b/resources/sksl/shared/Ossfuzz37466.sksl
+@@ -0,0 +1,2 @@
++float foo(float v[2]) { return v[0]=v[1]; }
++void main() { float y[2]; foo(y); }
+diff --git a/src/sksl/SkSLInliner.cpp b/src/sksl/SkSLInliner.cpp
+index d915512171..3d64ccc283 100644
+--- a/src/sksl/SkSLInliner.cpp
++++ b/src/sksl/SkSLInliner.cpp
+@@ -608,9 +608,14 @@ Inliner::InlineVariable Inliner::makeInlineVariable(const String& baseName,
+                                           type,
+                                           isBuiltinCode,
+                                           Variable::Storage::kLocal);
+-
++    // If we are creating an array type, reduce it to base type plus array-size.
++    int arraySize = 0;
++    if (type->isArray()) {
++        arraySize = type->columns();
++        type = &type->componentType();
++    }
+     // Create our variable declaration.
+-    result.fVarDecl = VarDeclaration::Make(*fContext, var.get(), type, /*arraySize=*/0,
++    result.fVarDecl = VarDeclaration::Make(*fContext, var.get(), type, arraySize,
+                                            std::move(*initialValue));
+     result.fVarSymbol = symbolTable->add(std::move(var));
+     return result;
+diff --git a/tests/sksl/shared/Ossfuzz37466.asm.frag b/tests/sksl/shared/Ossfuzz37466.asm.frag
+new file mode 100644
+index 0000000000..df3c814937
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz37466.asm.frag
+@@ -0,0 +1,36 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %main "main" %sk_Clockwise
++OpExecutionMode %main OriginUpperLeft
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %main "main"
++OpName %y "y"
++OpName %_0_v "_0_v"
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++OpDecorate %_arr_float_int_2 ArrayStride 16
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%void = OpTypeVoid
++%7 = OpTypeFunction %void
++%float = OpTypeFloat 32
++%int = OpTypeInt 32 1
++%int_2 = OpConstant %int 2
++%_arr_float_int_2 = OpTypeArray %float %int_2
++%_ptr_Function__arr_float_int_2 = OpTypePointer Function %_arr_float_int_2
++%int_1 = OpConstant %int 1
++%_ptr_Function_float = OpTypePointer Function %float
++%int_0 = OpConstant %int 0
++%main = OpFunction %void None %7
++%8 = OpLabel
++%y = OpVariable %_ptr_Function__arr_float_int_2 Function
++%_0_v = OpVariable %_ptr_Function__arr_float_int_2 Function
++%16 = OpLoad %_arr_float_int_2 %y
++OpStore %_0_v %16
++%18 = OpAccessChain %_ptr_Function_float %_0_v %int_1
++%20 = OpLoad %float %18
++%22 = OpAccessChain %_ptr_Function_float %_0_v %int_0
++OpStore %22 %20
++OpReturn
++OpFunctionEnd
+diff --git a/tests/sksl/shared/Ossfuzz37466.glsl b/tests/sksl/shared/Ossfuzz37466.glsl
+new file mode 100644
+index 0000000000..6e18a5d46f
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz37466.glsl
+@@ -0,0 +1,6 @@
++
++void main() {
++    float y[2];
++    float _0_v[2] = y;
++    _0_v[0] = _0_v[1];
++}
+diff --git a/tests/sksl/shared/Ossfuzz37466.metal b/tests/sksl/shared/Ossfuzz37466.metal
+new file mode 100644
+index 0000000000..87091eb35f
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz37466.metal
+@@ -0,0 +1,16 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    float4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _out;
++    (void)_out;
++    array<float, 2> y;
++    array<float, 2> _0_v = y;
++    _0_v[0] = _0_v[1];
++    return _out;
++}

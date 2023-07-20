@@ -1,0 +1,40 @@
+diff --git a/fuzz/FuzzMain.cpp b/fuzz/FuzzMain.cpp
+index b18be4e066..8b551a8254 100644
+--- a/fuzz/FuzzMain.cpp
++++ b/fuzz/FuzzMain.cpp
+@@ -303,6 +303,7 @@ static std::map<std::string, std::string> cf_api_map = {
+ static std::map<std::string, std::string> cf_map = {
+     {"android_codec", "android_codec"},
+     {"animated_image_decode", "animated_image_decode"},
++    {"colrv1", "colrv1"},
+     {"image_decode", "image_decode"},
+     {"image_decode_incremental", "image_decode_incremental"},
+     {"image_filter_deserialize", "filter_fuzz"},
+diff --git a/fuzz/oss_fuzz/FuzzCOLRv1.cpp b/fuzz/oss_fuzz/FuzzCOLRv1.cpp
+index 3850a8ec50..b236a155a3 100644
+--- a/fuzz/oss_fuzz/FuzzCOLRv1.cpp
++++ b/fuzz/oss_fuzz/FuzzCOLRv1.cpp
+@@ -11,10 +11,13 @@
+ #include "include/core/SkStream.h"
+ #include "include/core/SkSurface.h"
+ #include "include/core/SkTypeface.h"
++#include "src/core/SkFontMgrPriv.h"
+ 
+ #include <algorithm>
+ 
+ void FuzzCOLRv1(sk_sp<SkData> bytes) {
++    // We do not want the portable fontmgr here, as it does not allow creation of fonts from bytes.
++    gSkFontMgr_DefaultFactory = nullptr;
+     std::unique_ptr<SkStreamAsset> stream = SkMemoryStream::Make(bytes);
+     sk_sp<SkTypeface> typeface = SkTypeface::MakeFromStream(std::move(stream));
+ 
+@@ -28,7 +31,8 @@ void FuzzCOLRv1(sk_sp<SkData> bytes) {
+     }
+ 
+     // Place at a baseline in the lower part of the canvas square, but canvas size and baseline
+-    // placement are chosen arbitraly and we just need to cover colrv1 rendering in this fuzz test.
++    // placement are chosen arbitrarily and we just need to cover colrv1 rendering in this
++    // fuzz test.
+     SkFont colrv1Font = SkFont(typeface, 120);
+     SkCanvas* canvas = s->getCanvas();
+     SkPaint paint;

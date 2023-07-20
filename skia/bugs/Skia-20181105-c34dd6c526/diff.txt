@@ -1,0 +1,54 @@
+diff --git a/src/shaders/gradients/SkGradientShader.cpp b/src/shaders/gradients/SkGradientShader.cpp
+index 52a9b56413..6e0c98d0ce 100644
+--- a/src/shaders/gradients/SkGradientShader.cpp
++++ b/src/shaders/gradients/SkGradientShader.cpp
+@@ -694,19 +694,23 @@ sk_sp<SkShader> SkGradientShader::MakeTwoPointConical(const SkPoint& start,
+     if (startRadius < 0 || endRadius < 0) {
+         return nullptr;
+     }
+-    if (SkScalarNearlyZero((start - end).length()) && SkScalarNearlyZero(startRadius)) {
+-        // We can treat this gradient as radial, which is faster.
+-        return MakeRadial(start, endRadius, colors, std::move(colorSpace), pos, colorCount,
+-                          mode, flags, localMatrix);
++    if (SkScalarNearlyZero((start - end).length())) {
++        // If the center positions are the same, then the gradient is the radial variant of a
++        // 2 pt conical gradient, or an actual radial gradient (startRadius == 0), or it is
++        // fully degenerate (startRadius == endRadius).
++        if (SkScalarNearlyEqual(startRadius, endRadius)) {
++            // Degenerate case
++            return SkShader::MakeEmptyShader();
++        } else if (SkScalarNearlyZero(startRadius)) {
++            // We can treat this gradient as radial, which is faster.
++            return MakeRadial(start, endRadius, colors, std::move(colorSpace), pos, colorCount,
++                              mode, flags, localMatrix);
++        }
+     }
+     if (!valid_grad(colors, pos, colorCount, mode)) {
+         return nullptr;
+     }
+-    if (startRadius == endRadius) {
+-        if (start == end || startRadius == 0) {
+-            return SkShader::MakeEmptyShader();
+-        }
+-    }
++
+     if (localMatrix && !localMatrix->invert(nullptr)) {
+         return nullptr;
+     }
+diff --git a/src/shaders/gradients/SkTwoPointConicalGradient.cpp b/src/shaders/gradients/SkTwoPointConicalGradient.cpp
+index 49d0631c67..469c8ad0b9 100644
+--- a/src/shaders/gradients/SkTwoPointConicalGradient.cpp
++++ b/src/shaders/gradients/SkTwoPointConicalGradient.cpp
+@@ -55,8 +55,10 @@ sk_sp<SkShader> SkTwoPointConicalGradient::Create(const SkPoint& c0, SkScalar r0
+     Type     gradientType;
+ 
+     if (SkScalarNearlyZero((c0 - c1).length())) {
+-        if (SkScalarNearlyZero(SkTMax(r0, r1))) {
+-            return nullptr; // Degenerate case; avoid dividing by zero.
++        if (SkScalarNearlyZero(SkTMax(r0, r1)) || SkScalarNearlyEqual(r0, r1)) {
++            // Degenerate case; avoid dividing by zero. Should have been caught by caller but
++            // just in case, recheck here.
++            return nullptr;
+         }
+         // Concentric case: we can pretend we're radial (with a tiny twist).
+         const SkScalar scale = sk_ieee_float_divide(1, SkTMax(r0, r1));

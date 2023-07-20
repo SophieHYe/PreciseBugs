@@ -1,0 +1,16 @@
+commit b4d60f807dbd034edf9fae1233aa1784f6c36d5c
+Author: Tyler Denniston <tdenniston@google.com>
+Date:   Tue Jul 7 14:11:27 2020 -0400
+
+    Fix use of uninitialized value in SkSVGDevice
+    
+    The asAGradient() function appears to be deprecated
+    (https://crbug.com/skia/8941) but there's no easy way to remove its use
+    here at the moment. So, fixing the surface-level issue.
+    
+    Bug: oss-fuzz:23932
+    Change-Id: Ia9675f3b31644f2754421f27844e77c43f189c90
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/300907
+    Reviewed-by: Florin Malita <fmalita@chromium.org>
+    Auto-Submit: Tyler Denniston <tdenniston@google.com>
+    Commit-Queue: Tyler Denniston <tdenniston@google.com>

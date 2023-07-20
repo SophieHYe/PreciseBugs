@@ -1,0 +1,18 @@
+commit a56cf5ec3301f2573622e8cb192e66da640c68eb
+Author: John Stiles <johnstiles@google.com>
+Date:   Tue Oct 25 12:43:03 2022 -0400
+
+    Fix fuzzer-discovered error with overloading main().
+    
+    The backends aren't equipped to deal with code containing conflicting
+    signatures for `main`. We now reject any code that attempts to supply
+    more than one signature for main (whether via prototype or a full
+    definition). We do still allow prototyping `main` as long as it's the
+    same signature as the eventual function defintion; the existing test
+    FunctionPrototype.sksl does this already.
+    
+    Change-Id: Ib58562453914e5c35ef590b28159fa3dc66c7f14
+    Bug: oss-fuzz:52714
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/595436
+    Reviewed-by: Arman Uguray <armansito@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>

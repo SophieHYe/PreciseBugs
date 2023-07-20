@@ -1,0 +1,26 @@
+commit d0e4840b1178c0a4d59b489ab5ac4a7d4557ce5a
+Author: John Stiles <johnstiles@google.com>
+Date:   Tue Sep 22 14:00:40 2020 -0400
+
+    Fix crash when swizzling a bvec with constant 0/1s.
+    
+    Code like
+      bool4 result = val.xy01;
+    
+    Will now be converted to:
+      bvec4 result = bvec4(val.xy, bool(0), bool(1));
+    
+    Previously it tried to do this, but there isn't an implicit conversion
+    from int to bool, so it was silently failing and adding nulls into the
+    constructor:
+      bvec4 result = bvec4(val.xy, $coerceToBool(0), $coerceToBool(1));
+    
+    This CL also cleans up some related code that I was checking while
+    trying to understand the nature of the error.
+    
+    Change-Id: I5b7d96760a03170ff78b46251c4182cc4e89836f
+    Bug: oss-fuzz:25781
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/318636
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

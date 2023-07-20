@@ -1,0 +1,16 @@
+commit ffeee9bfdeba868c53badee8285d37576dca9ade
+Author: Jim Van Verth <jvanverth@google.com>
+Date:   Fri Apr 2 15:42:35 2021 -0400
+
+    Fix lost precision case in SkComputeRadialSteps.
+    
+    With large offsets, we can end up with a tiny change in angle at each
+    radial step, so that rotSin and rotCos can get truncated to 0 and/or 1,
+    respectively. This means that we won't sweep the entire radial distance,
+    throwing future calculations off. Instead in this case we should fail.
+    
+    Bug: oss-fuzz:21826
+    Change-Id: I24f5b1ac315a3697d2ea00ee4bd73652ec3e16dd
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/392377
+    Commit-Queue: Jim Van Verth <jvanverth@google.com>
+    Reviewed-by: Kevin Lubick <kjlubick@google.com>

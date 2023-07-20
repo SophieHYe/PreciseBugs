@@ -1,0 +1,422 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index ff71cf5ec8..503faba4d4 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -344,6 +344,7 @@ sksl_shared_tests = [
+   "/sksl/shared/Ossfuzz29494.sksl",
+   "/sksl/shared/Ossfuzz36655.sksl",
+   "/sksl/shared/Ossfuzz36770.sksl",
++  "/sksl/shared/Ossfuzz36852.sksl",
+   "/sksl/shared/OutParams.sksl",
+   "/sksl/shared/OutParamsNoInline.sksl",
+   "/sksl/shared/OutParamsTricky.sksl",
+diff --git a/resources/sksl/shared/Ossfuzz36852.sksl b/resources/sksl/shared/Ossfuzz36852.sksl
+new file mode 100644
+index 0000000000..bc7398ff3d
+--- /dev/null
++++ b/resources/sksl/shared/Ossfuzz36852.sksl
+@@ -0,0 +1,5 @@
++half4 main(float2 coords) {
++    half2x2 x = half2x2(0, 1, 2, 3);
++    float2 y = float4(x).xy;
++    return half4(y.xyxy);
++}
+diff --git a/src/sksl/ir/SkSLSwizzle.cpp b/src/sksl/ir/SkSLSwizzle.cpp
+index 7921368e4b..1df580b8a0 100644
+--- a/src/sksl/ir/SkSLSwizzle.cpp
++++ b/src/sksl/ir/SkSLSwizzle.cpp
+@@ -68,6 +68,134 @@ static bool validate_swizzle_domain(skstd::string_view fields) {
+     return true;
+ }
+ 
++static std::unique_ptr<Expression> optimize_constructor_swizzle(const Context& context,
++                                                                const AnyConstructor& base,
++                                                                ComponentArray components) {
++    auto baseArguments = base.argumentSpan();
++    std::unique_ptr<Expression> replacement;
++    const Type& exprType = base.type();
++    const Type& componentType = exprType.componentType();
++    int swizzleSize = components.size();
++
++    // Swizzles can duplicate some elements and discard others, e.g.
++    // `half4(1, 2, 3, 4).xxz` --> `half3(1, 1, 3)`. However, there are constraints:
++    // - Expressions with side effects need to occur exactly once, even if they would otherwise be
++    //   swizzle-eliminated
++    // - Non-trivial expressions should not be repeated, but elimination is OK.
++    //
++    // Look up the argument for the constructor at each index. This is typically simple but for
++    // weird cases like `half4(bar.yz, half2(foo))`, it can be harder than it seems. This example
++    // would result in:
++    //     argMap[0] = {.fArgIndex = 0, .fComponent = 0}   (bar.yz     .x)
++    //     argMap[1] = {.fArgIndex = 0, .fComponent = 1}   (bar.yz     .y)
++    //     argMap[2] = {.fArgIndex = 1, .fComponent = 0}   (half2(foo) .x)
++    //     argMap[3] = {.fArgIndex = 1, .fComponent = 1}   (half2(foo) .y)
++    struct ConstructorArgMap {
++        int8_t fArgIndex;
++        int8_t fComponent;
++    };
++
++    int numConstructorArgs = base.type().columns();
++    ConstructorArgMap argMap[4] = {};
++    int writeIdx = 0;
++    for (int argIdx = 0; argIdx < (int)baseArguments.size(); ++argIdx) {
++        const Expression& arg = *baseArguments[argIdx];
++        const Type& argType = arg.type();
++
++        if (!argType.isScalar() && !argType.isVector()) {
++            return nullptr;
++        }
++
++        int argSlots = argType.slotCount();
++        for (int componentIdx = 0; componentIdx < argSlots; ++componentIdx) {
++            argMap[writeIdx].fArgIndex = argIdx;
++            argMap[writeIdx].fComponent = componentIdx;
++            ++writeIdx;
++        }
++    }
++    SkASSERT(writeIdx == numConstructorArgs);
++
++    // Count up the number of times each constructor argument is used by the swizzle.
++    //    `half4(bar.yz, half2(foo)).xwxy` -> { 3, 1 }
++    // - bar.yz    is referenced 3 times, by `.x_xy`
++    // - half(foo) is referenced 1 time,  by `._w__`
++    int8_t exprUsed[4] = {};
++    for (int8_t c : components) {
++        exprUsed[argMap[c].fArgIndex]++;
++    }
++
++    for (int index = 0; index < numConstructorArgs; ++index) {
++        int8_t constructorArgIndex = argMap[index].fArgIndex;
++        const Expression& baseArg = *baseArguments[constructorArgIndex];
++
++        // Check that non-trivial expressions are not swizzled in more than once.
++        if (exprUsed[constructorArgIndex] > 1 && !Analysis::IsTrivialExpression(baseArg)) {
++            return nullptr;
++        }
++        // Check that side-effect-bearing expressions are swizzled in exactly once.
++        if (exprUsed[constructorArgIndex] != 1 && baseArg.hasSideEffects()) {
++            return nullptr;
++        }
++    }
++
++    struct ReorderedArgument {
++        int8_t fArgIndex;
++        ComponentArray fComponents;
++    };
++    SkSTArray<4, ReorderedArgument> reorderedArgs;
++    for (int8_t c : components) {
++        const ConstructorArgMap& argument = argMap[c];
++        const Expression& baseArg = *baseArguments[argument.fArgIndex];
++
++        if (baseArg.type().isScalar()) {
++            // This argument is a scalar; add it to the list as-is.
++            SkASSERT(argument.fComponent == 0);
++            reorderedArgs.push_back({argument.fArgIndex,
++                                     ComponentArray{}});
++        } else {
++            // This argument is a component from a vector.
++            SkASSERT(baseArg.type().isVector());
++            SkASSERT(argument.fComponent < baseArg.type().columns());
++            if (reorderedArgs.empty() ||
++                reorderedArgs.back().fArgIndex != argument.fArgIndex) {
++                // This can't be combined with the previous argument. Add a new one.
++                reorderedArgs.push_back({argument.fArgIndex,
++                                         ComponentArray{argument.fComponent}});
++            } else {
++                // Since we know this argument uses components, it should already have at least one
++                // component set.
++                SkASSERT(!reorderedArgs.back().fComponents.empty());
++                // Build up the current argument with one more component.
++                reorderedArgs.back().fComponents.push_back(argument.fComponent);
++            }
++        }
++    }
++
++    // Convert our reordered argument list to an actual array of expressions, with the new order and
++    // any new inner swizzles that need to be applied.
++    ExpressionArray newArgs;
++    newArgs.reserve_back(swizzleSize);
++    for (const ReorderedArgument& reorderedArg : reorderedArgs) {
++        std::unique_ptr<Expression> newArg =
++                baseArguments[reorderedArg.fArgIndex]->clone();
++
++        if (reorderedArg.fComponents.empty()) {
++            newArgs.push_back(std::move(newArg));
++        } else {
++            newArgs.push_back(Swizzle::Make(context, std::move(newArg),
++                                            reorderedArg.fComponents));
++        }
++    }
++
++    // Wrap the new argument list in a constructor.
++    auto ctor = Constructor::Convert(context,
++                                     base.fOffset,
++                                     componentType.toCompound(context, swizzleSize, /*rows=*/1),
++                                     std::move(newArgs));
++    SkASSERT(ctor);
++    return ctor;
++}
++
+ std::unique_ptr<Expression> Swizzle::Convert(const Context& context,
+                                              std::unique_ptr<Expression> base,
+                                              skstd::string_view maskString) {
+@@ -344,126 +472,9 @@ std::unique_ptr<Expression> Swizzle::Make(const Context& context,
+ 
+         // Optimize swizzles of constructors.
+         if (value->isAnyConstructor()) {
+-            const AnyConstructor& base = value->asAnyConstructor();
+-            auto baseArguments = base.argumentSpan();
+-            std::unique_ptr<Expression> replacement;
+-            const Type& componentType = exprType.componentType();
+-            int swizzleSize = components.size();
+-
+-            // Swizzles can duplicate some elements and discard others, e.g.
+-            // `half4(1, 2, 3, 4).xxz` --> `half3(1, 1, 3)`. However, there are constraints:
+-            // - Expressions with side effects need to occur exactly once, even if they
+-            //   would otherwise be swizzle-eliminated
+-            // - Non-trivial expressions should not be repeated, but elimination is OK.
+-            //
+-            // Look up the argument for the constructor at each index. This is typically simple
+-            // but for weird cases like `half4(bar.yz, half2(foo))`, it can be harder than it
+-            // seems. This example would result in:
+-            //     argMap[0] = {.fArgIndex = 0, .fComponent = 0}   (bar.yz     .x)
+-            //     argMap[1] = {.fArgIndex = 0, .fComponent = 1}   (bar.yz     .y)
+-            //     argMap[2] = {.fArgIndex = 1, .fComponent = 0}   (half2(foo) .x)
+-            //     argMap[3] = {.fArgIndex = 1, .fComponent = 1}   (half2(foo) .y)
+-            struct ConstructorArgMap {
+-                int8_t fArgIndex;
+-                int8_t fComponent;
+-            };
+-
+-            int numConstructorArgs = base.type().columns();
+-            ConstructorArgMap argMap[4] = {};
+-            int writeIdx = 0;
+-            for (int argIdx = 0; argIdx < (int)baseArguments.size(); ++argIdx) {
+-                const Expression& arg = *baseArguments[argIdx];
+-                int argWidth = arg.type().columns();
+-                for (int componentIdx = 0; componentIdx < argWidth; ++componentIdx) {
+-                    argMap[writeIdx].fArgIndex = argIdx;
+-                    argMap[writeIdx].fComponent = componentIdx;
+-                    ++writeIdx;
+-                }
+-            }
+-            SkASSERT(writeIdx == numConstructorArgs);
+-
+-            // Count up the number of times each constructor argument is used by the swizzle.
+-            //    `half4(bar.yz, half2(foo)).xwxy` -> { 3, 1 }
+-            // - bar.yz    is referenced 3 times, by `.x_xy`
+-            // - half(foo) is referenced 1 time,  by `._w__`
+-            int8_t exprUsed[4] = {};
+-            for (int8_t c : components) {
+-                exprUsed[argMap[c].fArgIndex]++;
+-            }
+-
+-            bool safeToOptimize = true;
+-            for (int index = 0; index < numConstructorArgs; ++index) {
+-                int8_t constructorArgIndex = argMap[index].fArgIndex;
+-                const Expression& baseArg = *baseArguments[constructorArgIndex];
+-
+-                // Check that non-trivial expressions are not swizzled in more than once.
+-                if (exprUsed[constructorArgIndex] > 1 && !Analysis::IsTrivialExpression(baseArg)) {
+-                    safeToOptimize = false;
+-                    break;
+-                }
+-                // Check that side-effect-bearing expressions are swizzled in exactly once.
+-                if (exprUsed[constructorArgIndex] != 1 && baseArg.hasSideEffects()) {
+-                    safeToOptimize = false;
+-                    break;
+-                }
+-            }
+-
+-            if (safeToOptimize) {
+-                struct ReorderedArgument {
+-                    int8_t fArgIndex;
+-                    ComponentArray fComponents;
+-                };
+-                SkSTArray<4, ReorderedArgument> reorderedArgs;
+-                for (int8_t c : components) {
+-                    const ConstructorArgMap& argument = argMap[c];
+-                    const Expression& baseArg = *baseArguments[argument.fArgIndex];
+-
+-                    if (baseArg.type().isScalar()) {
+-                        // This argument is a scalar; add it to the list as-is.
+-                        SkASSERT(argument.fComponent == 0);
+-                        reorderedArgs.push_back({argument.fArgIndex,
+-                                                 ComponentArray{}});
+-                    } else {
+-                        // This argument is a component from a vector.
+-                        SkASSERT(argument.fComponent < baseArg.type().columns());
+-                        if (reorderedArgs.empty() ||
+-                            reorderedArgs.back().fArgIndex != argument.fArgIndex) {
+-                            // This can't be combined with the previous argument. Add a new one.
+-                            reorderedArgs.push_back({argument.fArgIndex,
+-                                                     ComponentArray{argument.fComponent}});
+-                        } else {
+-                            // Since we know this argument uses components, it should already
+-                            // have at least one component set.
+-                            SkASSERT(!reorderedArgs.back().fComponents.empty());
+-                            // Build up the current argument with one more component.
+-                            reorderedArgs.back().fComponents.push_back(argument.fComponent);
+-                        }
+-                    }
+-                }
+-
+-                // Convert our reordered argument list to an actual array of expressions, with
+-                // the new order and any new inner swizzles that need to be applied.
+-                ExpressionArray newArgs;
+-                newArgs.reserve_back(swizzleSize);
+-                for (const ReorderedArgument& reorderedArg : reorderedArgs) {
+-                    std::unique_ptr<Expression> newArg =
+-                            baseArguments[reorderedArg.fArgIndex]->clone();
+-
+-                    if (reorderedArg.fComponents.empty()) {
+-                        newArgs.push_back(std::move(newArg));
+-                    } else {
+-                        newArgs.push_back(Swizzle::Make(context, std::move(newArg),
+-                                                        reorderedArg.fComponents));
+-                    }
+-                }
+-
+-                // Wrap the new argument list in a constructor.
+-                auto ctor = Constructor::Convert(
+-                        context, base.fOffset,
+-                        componentType.toCompound(context, swizzleSize, /*rows=*/1),
+-                        std::move(newArgs));
+-                SkASSERT(ctor);
+-                return ctor;
++            const AnyConstructor& ctor = value->asAnyConstructor();
++            if (auto replacement = optimize_constructor_swizzle(context, ctor, components)) {
++                return replacement;
+             }
+         }
+     }
+diff --git a/tests/SkSLTest.cpp b/tests/SkSLTest.cpp
+index 9d1565b625..c48315aa33 100644
+--- a/tests/SkSLTest.cpp
++++ b/tests/SkSLTest.cpp
+@@ -259,6 +259,7 @@ SKSL_TEST(SkSLNegatedVectorLiteral,            "shared/NegatedVectorLiteral.sksl
+ SKSL_TEST(SkSLNumberCasts,                     "shared/NumberCasts.sksl")
+ SKSL_TEST(SkSLOperatorsES2,                    "shared/OperatorsES2.sksl")
+ SKSL_TEST_ES3(SkSLOperatorsES3,                "shared/OperatorsES3.sksl")
++SKSL_TEST(SkSLOssfuzz36852,                    "shared/Ossfuzz36852.sksl")
+ 
+ // skbug.com/11919: Fails on Adreno + Vulkan
+ SKSL_TEST_CPU(SkSLOutParams,                   "shared/OutParams.sksl")
+diff --git a/tests/sksl/shared/Ossfuzz36852.asm.frag b/tests/sksl/shared/Ossfuzz36852.asm.frag
+new file mode 100644
+index 0000000000..065c911ec6
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz36852.asm.frag
+@@ -0,0 +1,74 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %_entrypoint_v "_entrypoint" %sk_FragColor %sk_Clockwise
++OpExecutionMode %_entrypoint_v OriginUpperLeft
++OpName %sk_FragColor "sk_FragColor"
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %_entrypoint_v "_entrypoint_v"
++OpName %main "main"
++OpName %x "x"
++OpName %y "y"
++OpDecorate %sk_FragColor RelaxedPrecision
++OpDecorate %sk_FragColor Location 0
++OpDecorate %sk_FragColor Index 0
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++OpDecorate %x RelaxedPrecision
++OpDecorate %29 RelaxedPrecision
++OpDecorate %30 RelaxedPrecision
++OpDecorate %31 RelaxedPrecision
++OpDecorate %33 RelaxedPrecision
++OpDecorate %34 RelaxedPrecision
++OpDecorate %35 RelaxedPrecision
++OpDecorate %36 RelaxedPrecision
++OpDecorate %37 RelaxedPrecision
++OpDecorate %38 RelaxedPrecision
++OpDecorate %39 RelaxedPrecision
++%float = OpTypeFloat 32
++%v4float = OpTypeVector %float 4
++%_ptr_Output_v4float = OpTypePointer Output %v4float
++%sk_FragColor = OpVariable %_ptr_Output_v4float Output
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%void = OpTypeVoid
++%12 = OpTypeFunction %void
++%v2float = OpTypeVector %float 2
++%float_0 = OpConstant %float 0
++%16 = OpConstantComposite %v2float %float_0 %float_0
++%_ptr_Function_v2float = OpTypePointer Function %v2float
++%20 = OpTypeFunction %v4float %_ptr_Function_v2float
++%mat2v2float = OpTypeMatrix %v2float 2
++%_ptr_Function_mat2v2float = OpTypePointer Function %mat2v2float
++%float_1 = OpConstant %float 1
++%float_2 = OpConstant %float 2
++%float_3 = OpConstant %float 3
++%_entrypoint_v = OpFunction %void None %12
++%13 = OpLabel
++%17 = OpVariable %_ptr_Function_v2float Function
++OpStore %17 %16
++%19 = OpFunctionCall %v4float %main %17
++OpStore %sk_FragColor %19
++OpReturn
++OpFunctionEnd
++%main = OpFunction %v4float None %20
++%21 = OpFunctionParameter %_ptr_Function_v2float
++%22 = OpLabel
++%x = OpVariable %_ptr_Function_mat2v2float Function
++%y = OpVariable %_ptr_Function_v2float Function
++%29 = OpCompositeConstruct %v2float %float_0 %float_1
++%30 = OpCompositeConstruct %v2float %float_2 %float_3
++%31 = OpCompositeConstruct %mat2v2float %29 %30
++OpStore %x %31
++%33 = OpLoad %mat2v2float %x
++%34 = OpCompositeExtract %float %33 0 0
++%35 = OpCompositeExtract %float %33 0 1
++%36 = OpCompositeExtract %float %33 1 0
++%37 = OpCompositeExtract %float %33 1 1
++%38 = OpCompositeConstruct %v4float %34 %35 %36 %37
++%39 = OpVectorShuffle %v2float %38 %38 0 1
++OpStore %y %39
++%40 = OpLoad %v2float %y
++%41 = OpVectorShuffle %v4float %40 %40 0 1 0 1
++OpReturnValue %41
++OpFunctionEnd
+diff --git a/tests/sksl/shared/Ossfuzz36852.glsl b/tests/sksl/shared/Ossfuzz36852.glsl
+new file mode 100644
+index 0000000000..18894cbea0
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz36852.glsl
+@@ -0,0 +1,7 @@
++
++out vec4 sk_FragColor;
++vec4 main() {
++    mat2 x = mat2(0.0, 1.0, 2.0, 3.0);
++    vec2 y = vec4(x).xy;
++    return y.xyxy;
++}
+diff --git a/tests/sksl/shared/Ossfuzz36852.metal b/tests/sksl/shared/Ossfuzz36852.metal
+new file mode 100644
+index 0000000000..2aa42f8316
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz36852.metal
+@@ -0,0 +1,19 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    float4 sk_FragColor [[color(0)]];
++};
++float4 float4_from_float2x2(float2x2 x) {
++    return float4(x[0].xy, x[1].xy);
++}
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _out;
++    (void)_out;
++    float2x2 x = float2x2(float2(0.0, 1.0), float2(2.0, 3.0));
++    float2 y = float4_from_float2x2(x).xy;
++    _out.sk_FragColor = y.xyxy;
++    return _out;
++}

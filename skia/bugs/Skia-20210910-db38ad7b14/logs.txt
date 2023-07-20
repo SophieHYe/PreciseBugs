@@ -1,0 +1,16 @@
+commit db38ad7b142e44aa4718d7c71d47f680d247cff0
+Author: Ethan Nicholas <ethannicholas@google.com>
+Date:   Fri Sep 10 13:57:48 2021 -0400
+
+    Fixed DSL assertion error on source files containing nulls
+    
+    The assertion was there to make sure we weren't running off the end of
+    the source, but naturally fails in the presence of legitimate embedded
+    nulls.
+    
+    Change-Id: I3b80499e9b182c9ea046c479f35d7a965d548401
+    Bug: oss-fuzz:38107
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/447182
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Reviewed-by: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

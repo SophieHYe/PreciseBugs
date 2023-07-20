@@ -1,0 +1,22 @@
+commit 85f4226bd372524f268b985e26709b02c7005a25
+Author: John Stiles <johnstiles@google.com>
+Date:   Wed Nov 17 10:01:57 2021 -0500
+
+    Fix fuzzer-discovered error with child calls.
+    
+    The `eval` methods take a shader/blender/colorFilter, and we assumed
+    when assembling the ChildCall expression that the child expression would
+    be a VariableReference because opaque objects don't participate in
+    normal expressions. However, comma-expressions were allowed to contain
+    opaque types. GLSL doesn't allow opaque types in comma-expressions:
+    
+    http://screen/8YW59tYDUbBh9eW
+    
+    Now we disallow them as well.
+    
+    Change-Id: Iaf88ef7bddb5cc8f1f1e23b515174dfc291e00c7
+    Bug: oss-fuzz:41072
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/472446
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>

@@ -1,0 +1,23 @@
+commit 18a947ed2253910e1b8f13344f3340632beca94c
+Author: John Stiles <johnstiles@google.com>
+Date:   Sat Jun 24 11:07:11 2023 -0400
+
+    Fix assertion discovered by fuzzer.
+    
+    SkRP inlines functions at the call site; that will cause all of its
+    variables to be redeclared. Previously, this could cause an
+    assertion because we would try to map an slot range to an immutable
+    variable more than once. This is harmless, so the simplest fix is to
+    just remove the assertion.
+    
+    (It isn't safe to check that the slot range is the same as the
+    previous range, either--our search for matching immutable data
+    might come up with different-but-equally-valid matching ranges at
+    different points in execution, since it's hash-table based.)
+    
+    Bug: oss-fuzz:60077
+    Change-Id: I5a5f01f53921ba34297e405c7ff1353569edc42b
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/716216
+    Commit-Queue: Brian Osman <brianosman@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>

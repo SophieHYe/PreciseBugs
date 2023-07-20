@@ -1,0 +1,17 @@
+commit e3ec13bb8e1705c39eca33390b8403fe483b7d7b
+Author: Kevin Lubick <kjlubick@google.com>
+Date:   Fri Oct 28 10:05:22 2022 -0400
+
+    [fuzz] Fix COLRv1 fuzz harness
+    
+    Now, one can reproduce a COLRv1 fuzz result like:
+    out/ASAN/fuzz -b ~/Downloads/clusterfuzz-testcase-colrv1-533334477798765
+    
+    We do not want to use the portable fontmgr because it does
+    not actually deserialize fonts.
+    
+    Change-Id: Id1f19ed0fa08ff5ab0bab7c5b02985265268a35d
+    Bug: oss-fuzz:52328
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/597441
+    Commit-Queue: Kevin Lubick <kjlubick@google.com>
+    Reviewed-by: Ben Wagner <bungeman@google.com>

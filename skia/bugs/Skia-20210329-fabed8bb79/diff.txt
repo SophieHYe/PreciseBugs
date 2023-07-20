@@ -1,0 +1,51 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 400df5a08c..cec6b1b5e1 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -142,6 +142,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz29849.sksl",
+   "/sksl/errors/Ossfuzz31410.sksl",
+   "/sksl/errors/Ossfuzz31469.sksl",
++  "/sksl/errors/Ossfuzz32587.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowParamArraySize.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz32587.sksl b/resources/sksl/errors/Ossfuzz32587.sksl
+new file mode 100644
+index 0000000000..b113c9d604
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz32587.sksl
+@@ -0,0 +1,2 @@
++const float x=1, _=x1;
++half x=x*8;
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index 40fe0b7213..aca0746c9d 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -457,13 +457,13 @@ StatementArray IRGenerator::convertVarDeclarations(const ASTNode& decls,
+                 arraySize = this->convertExpression(*iter++);
+             } else {
+                 this->errorReporter().error(decls.fOffset, "array must have a size");
+-                return {};
++                continue;
+             }
+         }
+         if (iter != varDecl.end()) {
+             value = this->convertExpression(*iter);
+             if (!value) {
+-                return {};
++                continue;
+             }
+         }
+         std::unique_ptr<Statement> varDeclStmt = this->convertVarDeclaration(varDecl.fOffset,
+diff --git a/tests/sksl/errors/Ossfuzz32587.glsl b/tests/sksl/errors/Ossfuzz32587.glsl
+new file mode 100644
+index 0000000000..4894152082
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz32587.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: unknown identifier 'x1'
++error: 2: symbol 'x' was already defined
++2 errors

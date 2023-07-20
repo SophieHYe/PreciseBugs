@@ -1,0 +1,53 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 9c083cd514..94c787d26d 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -72,6 +72,7 @@ sksl_error_tests = [
+   "/sksl/errors/DuplicateBinding.sksl",
+   "/sksl/errors/DuplicateFunction.rts",
+   "/sksl/errors/DuplicateOutput.sksl",
++  "/sksl/errors/DuplicateRTAdjust.sksl",
+   "/sksl/errors/DuplicateSymbol.rts",
+   "/sksl/errors/EmptyArray.rts",
+   "/sksl/errors/EmptyStruct.rts",
+diff --git a/resources/sksl/errors/DuplicateRTAdjust.sksl b/resources/sksl/errors/DuplicateRTAdjust.sksl
+new file mode 100644
+index 0000000000..d773ed9fa9
+--- /dev/null
++++ b/resources/sksl/errors/DuplicateRTAdjust.sksl
+@@ -0,0 +1,5 @@
++MyInterfaceBlock {
++    float4 sk_RTAdjust;
++} interfaceBlock;
++
++float4 sk_RTAdjust;
+diff --git a/src/sksl/ir/SkSLVarDeclarations.cpp b/src/sksl/ir/SkSLVarDeclarations.cpp
+index 512d097d7d..0842665feb 100644
+--- a/src/sksl/ir/SkSLVarDeclarations.cpp
++++ b/src/sksl/ir/SkSLVarDeclarations.cpp
+@@ -374,8 +374,11 @@ std::unique_ptr<Statement> VarDeclaration::Convert(const Context& context,
+ 
+         // `sk_RTAdjust` is special, and makes the IR generator emit position-fixup expressions.
+         if (var->name() == Compiler::RTADJUST_NAME) {
+-            SkASSERT(!ThreadContext::RTAdjustState().fVar &&
+-                     !ThreadContext::RTAdjustState().fInterfaceBlock);
++            if (ThreadContext::RTAdjustState().fVar ||
++                ThreadContext::RTAdjustState().fInterfaceBlock) {
++                context.fErrors->error(var->fPosition, "duplicate definition of 'sk_RTAdjust'");
++                return nullptr;
++            }
+             if (!var->type().matches(*context.fTypes.fFloat4)) {
+                 context.fErrors->error(var->fPosition, "sk_RTAdjust must have type 'float4'");
+                 return nullptr;
+diff --git a/tests/sksl/errors/DuplicateRTAdjust.glsl b/tests/sksl/errors/DuplicateRTAdjust.glsl
+new file mode 100644
+index 0000000000..95c0030e49
+--- /dev/null
++++ b/tests/sksl/errors/DuplicateRTAdjust.glsl
+@@ -0,0 +1,6 @@
++### Compilation failed:
++
++error: 5: duplicate definition of 'sk_RTAdjust'
++float4 sk_RTAdjust;
++^^^^^^^^^^^^^^^^^^
++1 error

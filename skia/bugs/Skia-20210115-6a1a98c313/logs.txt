@@ -1,0 +1,22 @@
+commit 6a1a98c313bfbe24fa140b3ccba0af23676d5bea
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Jan 14 18:35:34 2021 -0500
+
+    Fix for fuzzer-discovered use-after-free.
+    
+    The inliner discovered that when a binary expression is inlined, its
+    type is not cloned into the destination's SymbolTable. This meant that
+    when the inlined-from function was later dead-stripped, the type pointer
+    would become dangling. Did a quick pass over inlineExpression and
+    inlineStatement and ensured that types are always copied.
+    
+    Also found that `copy_if_needed` was making a copy of eligible types
+    each time one was encountered, instead of making one copy and reusing
+    it. This is fixed as well.
+    
+    Change-Id: Iee3259ab038dfb04034bf0110af1909ccffec3de
+    Bug: oss-fuzz:29444
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/354219
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>

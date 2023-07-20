@@ -1,0 +1,297 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index a033fdc8b5..214a2df01e 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -754,6 +754,7 @@ sksl_shared_tests = [
+   "shared/Ossfuzz41000.sksl",
+   "shared/Ossfuzz50636.sksl",
+   "shared/Ossfuzz58483.sksl",
++  "shared/Ossfuzz60077.sksl",
+   "shared/OutParams.sksl",
+   "shared/OutParamsAreDistinct.sksl",
+   "shared/OutParamsAreDistinctFromGlobal.sksl",
+diff --git a/resources/sksl/BUILD.bazel b/resources/sksl/BUILD.bazel
+index 6c3ab99a33..10654dab68 100644
+--- a/resources/sksl/BUILD.bazel
++++ b/resources/sksl/BUILD.bazel
+@@ -930,6 +930,7 @@ skia_filegroup(
+         "shared/Ossfuzz41000.sksl",
+         "shared/Ossfuzz50636.sksl",
+         "shared/Ossfuzz58483.sksl",
++        "shared/Ossfuzz60077.sksl",
+         "shared/OutParams.sksl",
+         "shared/OutParamsAreDistinct.sksl",
+         "shared/OutParamsAreDistinctFromGlobal.sksl",
+diff --git a/resources/sksl/shared/Ossfuzz60077.sksl b/resources/sksl/shared/Ossfuzz60077.sksl
+new file mode 100644
+index 0000000000..a4c6acfa56
+--- /dev/null
++++ b/resources/sksl/shared/Ossfuzz60077.sksl
+@@ -0,0 +1,7 @@
++/*#pragma settings NoOptimize*/
++
++void d(int)        { int b=4; }
++void c(int i)      { d(i); }
++void b(int i)      { c(i); }
++void a(int i)      { b(i); b(i); }
++half4 main(float2) { int i; a(i); return half4(0); }
+diff --git a/src/sksl/codegen/SkSLRasterPipelineCodeGenerator.cpp b/src/sksl/codegen/SkSLRasterPipelineCodeGenerator.cpp
+index b4c3b6b925..0c7fb71d33 100644
+--- a/src/sksl/codegen/SkSLRasterPipelineCodeGenerator.cpp
++++ b/src/sksl/codegen/SkSLRasterPipelineCodeGenerator.cpp
+@@ -1187,7 +1187,6 @@ SlotRange SlotManager::createSlots(std::string name,
+ }
+ 
+ void SlotManager::mapVariableToSlots(const Variable& v, SlotRange range) {
+-    SkASSERT(fSlotMap.find(&v) == nullptr);
+     SkASSERT(v.type().slotCount() == SkToSizeT(range.count));
+     fSlotMap.set(&v, range);
+ }
+diff --git a/tests/sksl/shared/Ossfuzz60077.asm.frag b/tests/sksl/shared/Ossfuzz60077.asm.frag
+new file mode 100644
+index 0000000000..fc6cb179f2
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz60077.asm.frag
+@@ -0,0 +1,94 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %_entrypoint_v "_entrypoint" %sk_Clockwise %sk_FragColor
++OpExecutionMode %_entrypoint_v OriginUpperLeft
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %sk_FragColor "sk_FragColor"
++OpName %_entrypoint_v "_entrypoint_v"
++OpName %d_vi "d_vi"
++OpName %b "b"
++OpName %c_vi "c_vi"
++OpName %b_vi "b_vi"
++OpName %a_vi "a_vi"
++OpName %main "main"
++OpName %i "i"
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++OpDecorate %sk_FragColor RelaxedPrecision
++OpDecorate %sk_FragColor Location 0
++OpDecorate %sk_FragColor Index 0
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%float = OpTypeFloat 32
++%v4float = OpTypeVector %float 4
++%_ptr_Output_v4float = OpTypePointer Output %v4float
++%sk_FragColor = OpVariable %_ptr_Output_v4float Output
++%void = OpTypeVoid
++%16 = OpTypeFunction %void
++%float_0 = OpConstant %float 0
++%v2float = OpTypeVector %float 2
++%20 = OpConstantComposite %v2float %float_0 %float_0
++%_ptr_Function_v2float = OpTypePointer Function %v2float
++%int = OpTypeInt 32 1
++%_ptr_Function_int = OpTypePointer Function %int
++%26 = OpTypeFunction %void %_ptr_Function_int
++%int_4 = OpConstant %int 4
++%49 = OpTypeFunction %v4float %_ptr_Function_v2float
++%56 = OpConstantComposite %v4float %float_0 %float_0 %float_0 %float_0
++%_entrypoint_v = OpFunction %void None %16
++%17 = OpLabel
++%21 = OpVariable %_ptr_Function_v2float Function
++OpStore %21 %20
++%23 = OpFunctionCall %v4float %main %21
++OpStore %sk_FragColor %23
++OpReturn
++OpFunctionEnd
++%d_vi = OpFunction %void None %26
++%27 = OpFunctionParameter %_ptr_Function_int
++%28 = OpLabel
++%b = OpVariable %_ptr_Function_int Function
++OpStore %b %int_4
++OpReturn
++OpFunctionEnd
++%c_vi = OpFunction %void None %26
++%31 = OpFunctionParameter %_ptr_Function_int
++%32 = OpLabel
++%34 = OpVariable %_ptr_Function_int Function
++%33 = OpLoad %int %31
++OpStore %34 %33
++%35 = OpFunctionCall %void %d_vi %34
++OpReturn
++OpFunctionEnd
++%b_vi = OpFunction %void None %26
++%36 = OpFunctionParameter %_ptr_Function_int
++%37 = OpLabel
++%39 = OpVariable %_ptr_Function_int Function
++%38 = OpLoad %int %36
++OpStore %39 %38
++%40 = OpFunctionCall %void %c_vi %39
++OpReturn
++OpFunctionEnd
++%a_vi = OpFunction %void None %26
++%41 = OpFunctionParameter %_ptr_Function_int
++%42 = OpLabel
++%44 = OpVariable %_ptr_Function_int Function
++%47 = OpVariable %_ptr_Function_int Function
++%43 = OpLoad %int %41
++OpStore %44 %43
++%45 = OpFunctionCall %void %b_vi %44
++%46 = OpLoad %int %41
++OpStore %47 %46
++%48 = OpFunctionCall %void %b_vi %47
++OpReturn
++OpFunctionEnd
++%main = OpFunction %v4float None %49
++%50 = OpFunctionParameter %_ptr_Function_v2float
++%51 = OpLabel
++%i = OpVariable %_ptr_Function_int Function
++%54 = OpVariable %_ptr_Function_int Function
++%53 = OpLoad %int %i
++OpStore %54 %53
++%55 = OpFunctionCall %void %a_vi %54
++OpReturnValue %56
++OpFunctionEnd
+diff --git a/tests/sksl/shared/Ossfuzz60077.glsl b/tests/sksl/shared/Ossfuzz60077.glsl
+new file mode 100644
+index 0000000000..78799f12e2
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz60077.glsl
+@@ -0,0 +1,20 @@
++
++out vec4 sk_FragColor;
++void d_vi(int _skAnonymousParam0) {
++    int b = 4;
++}
++void c_vi(int i) {
++    d_vi(i);
++}
++void b_vi(int i) {
++    c_vi(i);
++}
++void a_vi(int i) {
++    b_vi(i);
++    b_vi(i);
++}
++vec4 main() {
++    int i;
++    a_vi(i);
++    return vec4(0.0);
++}
+diff --git a/tests/sksl/shared/Ossfuzz60077.hlsl b/tests/sksl/shared/Ossfuzz60077.hlsl
+new file mode 100644
+index 0000000000..513b742f1f
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz60077.hlsl
+@@ -0,0 +1,53 @@
++static float4 sk_FragColor;
++
++struct SPIRV_Cross_Output
++{
++    float4 sk_FragColor : SV_Target0;
++};
++
++void d_vi(int _27)
++{
++    int b = 4;
++}
++
++void c_vi(int _31)
++{
++    int _34 = _31;
++    d_vi(_34);
++}
++
++void b_vi(int _36)
++{
++    int _39 = _36;
++    c_vi(_39);
++}
++
++void a_vi(int _41)
++{
++    int _44 = _41;
++    b_vi(_44);
++    int _47 = _41;
++    b_vi(_47);
++}
++
++float4 main(float2 _50)
++{
++    int i = 0;
++    int _54 = i;
++    a_vi(_54);
++    return 0.0f.xxxx;
++}
++
++void frag_main()
++{
++    float2 _21 = 0.0f.xx;
++    sk_FragColor = main(_21);
++}
++
++SPIRV_Cross_Output main()
++{
++    frag_main();
++    SPIRV_Cross_Output stage_output;
++    stage_output.sk_FragColor = sk_FragColor;
++    return stage_output;
++}
+diff --git a/tests/sksl/shared/Ossfuzz60077.metal b/tests/sksl/shared/Ossfuzz60077.metal
+new file mode 100644
+index 0000000000..c9014ca32f
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz60077.metal
+@@ -0,0 +1,29 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    half4 sk_FragColor [[color(0)]];
++};
++void d_vi(int ) {
++    int b = 4;
++}
++void c_vi(int i) {
++    d_vi(i);
++}
++void b_vi(int i) {
++    c_vi(i);
++}
++void a_vi(int i) {
++    b_vi(i);
++    b_vi(i);
++}
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _out;
++    (void)_out;
++    int i;
++    a_vi(i);
++    _out.sk_FragColor = half4(0.0h);
++    return _out;
++}
+diff --git a/tests/sksl/shared/Ossfuzz60077.skrp b/tests/sksl/shared/Ossfuzz60077.skrp
+new file mode 100644
+index 0000000000..48be0df0b5
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz60077.skrp
+@@ -0,0 +1,22 @@
++[immutable slots]
++i0 = 0x00000004 (5.605194e-45)
++
++store_src_rg                   v0..1 = src.rg
++init_lane_masks                CondMask = LoopMask = RetMask = true
++copy_constant                  i = 0
++copy_slot_unmasked             i₁ = i
++copy_slot_unmasked             i₂ = i₁
++copy_slot_unmasked             i₃ = i₂
++copy_slot_unmasked             ₁ = i₃
++label                          label 0x00000003
++label                          label 0x00000002
++label                          label 0x00000001
++copy_slot_unmasked             i₂ = i₁
++copy_slot_unmasked             i₃ = i₂
++copy_slot_unmasked             ₁ = i₃
++label                          label 0x00000006
++label                          label 0x00000005
++label                          label 0x00000004
++label                          label 0
++splat_4_constants              $0..3 = 0
++load_src                       src.rgba = $0..3

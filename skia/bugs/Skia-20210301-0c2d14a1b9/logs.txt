@@ -1,0 +1,20 @@
+commit 0c2d14a1b976b3d7c543b17730ef120350101b62
+Author: John Stiles <johnstiles@google.com>
+Date:   Mon Mar 1 10:08:08 2021 -0500
+
+    Fix fuzzer-discovered error with inlining.
+    
+    In http://review.skia.org/375776, an optimization was added to the
+    Inliner, causing it to skip generation of unnecessary temporary
+    variables. The fuzzer immediately discovered a flaw in this logic: the
+    "unnecessary" variable was actually used in the rare case that a
+    function failed to actually return a value. The inliner didn't detect
+    this case. Of course, this isn't a valid program either, so now we
+    report the error and cleanly fail.
+    
+    Change-Id: I1f201cfd33f45cace3be93765a4e214e43a46e69
+    Bug: oss-fuzz:31469, oss-fuzz:31525
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/377101
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>

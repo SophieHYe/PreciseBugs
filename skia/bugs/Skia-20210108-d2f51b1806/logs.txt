@@ -1,0 +1,17 @@
+commit d2f51b18065a1ed93a4195afb8852b12e2fae1cd
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Jan 7 18:12:31 2021 -0500
+
+    Fix fuzzer-discovered optimizer crash.
+    
+    The CFG/definition map are no longer valid after replacing an expression
+    entirely. Swizzle-of-swizzle optimization was another case where the
+    optimizer would replace an expression wholesale, but failed to set the
+    needs-rescan flag.
+    
+    Change-Id: Ida0363d738cd1d3ac2a48c824aa04065a7ca16b7
+    Bug: oss-fuzz:29085
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/351776
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>

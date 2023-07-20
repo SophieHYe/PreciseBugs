@@ -1,0 +1,16 @@
+commit 8f633ef2b5f72872d89445fc3ce3981f0e49756d
+Author: John Stiles <johnstiles@google.com>
+Date:   Sat Aug 21 17:13:11 2021 -0400
+
+    Fix assertion discovered by fuzzer.
+    
+    We now stop processing a var-declaration if its array-size expression is
+    invalid. Previously, we'd pass a null array-size expression into
+    convertVar, which would assert (but would fail cleanly afterwards).
+    
+    Change-Id: I976f3326e32afbc7045a86d73c0dcb28f418a6f4
+    Bug: oss-fuzz:37457
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/441079
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Commit-Queue: Brian Osman <brianosman@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

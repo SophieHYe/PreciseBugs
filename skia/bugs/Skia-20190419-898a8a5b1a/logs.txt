@@ -1,0 +1,17 @@
+commit 898a8a5b1a8135bf3d30285592e6fab0ac21a2f1
+Author: Ethan Nicholas <ethannicholas@google.com>
+Date:   Fri Apr 19 09:39:14 2019 -0400
+
+    Fixed internal skslc error with negated literal vectors
+    
+    There was a spot where we were assuming that a constant vector was
+    guaranteed to be a vector constructor (e.g. float4(1)), while ignoring
+    the possibility that it could be a prefix operator applied to a
+    constructor (-float4(1)), leading to a crash. This fixes that and
+    simplifies the logic.
+    
+    Bug: oss-fuzz:14019
+    Change-Id: Ic4b8fc896764494112a83c2fcca0a66eed804bf4
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/209176
+    Reviewed-by: Greg Daniel <egdaniel@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>

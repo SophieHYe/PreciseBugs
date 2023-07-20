@@ -1,0 +1,45 @@
+diff --git a/resources/sksl/errors/OverloadedMain.sksl b/resources/sksl/errors/OverloadedMain.sksl
+index a236e5b6d1..ae34c446d4 100644
+--- a/resources/sksl/errors/OverloadedMain.sksl
++++ b/resources/sksl/errors/OverloadedMain.sksl
+@@ -2,4 +2,6 @@ half4 c;
+ void  main()          {}
+ half4 main(float2 xy) { return c; }
+ 
+-TODO(johnstiles): overloading main should be forbidden
++/*%%*
++duplicate definition of 'main'
++*%%*/
+diff --git a/src/sksl/ir/SkSLFunctionDeclaration.cpp b/src/sksl/ir/SkSLFunctionDeclaration.cpp
+index 089111564b..9640c64680 100644
+--- a/src/sksl/ir/SkSLFunctionDeclaration.cpp
++++ b/src/sksl/ir/SkSLFunctionDeclaration.cpp
+@@ -431,6 +431,10 @@ static bool find_existing_declaration(const Context& context,
+             *outExistingDecl = other;
+             break;
+         }
++        if (!*outExistingDecl && entry->as<FunctionDeclaration>().isMain()) {
++            errors.error(pos, "duplicate definition of 'main'");
++            return false;
++        }
+     }
+     return true;
+ }
+diff --git a/tests/sksl/errors/OverloadedMain.glsl b/tests/sksl/errors/OverloadedMain.glsl
+index f1eb2d8147..4b7a60af6f 100644
+--- a/tests/sksl/errors/OverloadedMain.glsl
++++ b/tests/sksl/errors/OverloadedMain.glsl
+@@ -1,9 +1,6 @@
+ ### Compilation failed:
+ 
+-error: 5: no type named 'TODO'
+-TODO(johnstiles): overloading main should be forbidden
+-^^^^
+-error: 5: expected a type, but found '('
+-TODO(johnstiles): overloading main should be forbidden
+-    ^
+-2 errors
++error: 3: duplicate definition of 'main'
++half4 main(float2 xy) { return c; }
++^^^^^^^^^^^^^^^^^^^^^
++1 error

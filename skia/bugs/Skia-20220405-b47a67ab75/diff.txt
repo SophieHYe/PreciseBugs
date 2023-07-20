@@ -1,0 +1,186 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index e348022709..ceb6d26abb 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -410,6 +410,7 @@ sksl_shared_tests = [
+   "/sksl/shared/DependentInitializers.sksl",
+   "/sksl/shared/DerivativesUnused.sksl",
+   "/sksl/shared/Discard.sksl",
++  "/sksl/shared/DoubleNegation.sksl",
+   "/sksl/shared/DoWhileControlFlow.sksl",
+   "/sksl/shared/EmptyBlocksES2.sksl",
+   "/sksl/shared/EmptyBlocksES3.sksl",
+diff --git a/resources/sksl/shared/DoubleNegation.sksl b/resources/sksl/shared/DoubleNegation.sksl
+new file mode 100644
+index 0000000000..d587d83720
+--- /dev/null
++++ b/resources/sksl/shared/DoubleNegation.sksl
+@@ -0,0 +1,5 @@
++uniform half4 colorGreen;
++
++half4 main(float2 coords) {
++    return half4(half(-(-int(colorGreen.r))), -(-colorGreen.g), -(-(colorGreen.ba)));
++}
+diff --git a/src/sksl/ir/SkSLExpression.h b/src/sksl/ir/SkSLExpression.h
+index 0e08221c07..e3f460d7e2 100644
+--- a/src/sksl/ir/SkSLExpression.h
++++ b/src/sksl/ir/SkSLExpression.h
+@@ -206,6 +206,15 @@ public:
+ 
+     virtual std::unique_ptr<Expression> clone() const = 0;
+ 
++    /**
++     * Returns a clone with a modified position.
++     */
++    std::unique_ptr<Expression> clone(Position pos) {
++        std::unique_ptr<Expression> result = this->clone();
++        result->fPosition = pos;
++        return result;
++    }
++
+ private:
+     const Type* fType;
+ 
+diff --git a/src/sksl/ir/SkSLPrefixExpression.cpp b/src/sksl/ir/SkSLPrefixExpression.cpp
+index b8dfd845f6..b5734d9419 100644
+--- a/src/sksl/ir/SkSLPrefixExpression.cpp
++++ b/src/sksl/ir/SkSLPrefixExpression.cpp
+@@ -44,7 +44,7 @@ static std::unique_ptr<Expression> simplify_negation(const Context& context,
+             // Convert `-(-expression)` into `expression`.
+             const PrefixExpression& prefix = value->as<PrefixExpression>();
+             if (prefix.getOperator().kind() == Operator::Kind::MINUS) {
+-                return prefix.operand()->clone();
++                return prefix.operand()->clone(pos);
+             }
+             break;
+         }
+diff --git a/tests/SkSLTest.cpp b/tests/SkSLTest.cpp
+index 9d4adeeb73..c3304912e6 100644
+--- a/tests/SkSLTest.cpp
++++ b/tests/SkSLTest.cpp
+@@ -455,6 +455,7 @@ SKSL_TEST(CPU + GPU + SkQP, DeadReturn,                      "shared/DeadReturn.
+ // SKSL_TEST(GPU_ES3,       SkSLDeadReturnES3,               "shared/DeadReturnES3.sksl")
+ SKSL_TEST(CPU + GPU + SkQP, DeadStripFunctions,              "shared/DeadStripFunctions.sksl")
+ SKSL_TEST(CPU + GPU + SkQP, DependentInitializers,           "shared/DependentInitializers.sksl")
++SKSL_TEST(CPU + GPU + SkQP, DoubleNegation,                  "shared/DoubleNegation.sksl")
+ SKSL_TEST(GPU_ES3,          DoWhileControlFlow,              "shared/DoWhileControlFlow.sksl")
+ SKSL_TEST(CPU + GPU + SkQP, EmptyBlocksES2,                  "shared/EmptyBlocksES2.sksl")
+ SKSL_TEST(GPU_ES3,          EmptyBlocksES3,                  "shared/EmptyBlocksES3.sksl")
+diff --git a/tests/sksl/shared/DoubleNegation.asm.frag b/tests/sksl/shared/DoubleNegation.asm.frag
+new file mode 100644
+index 0000000000..aaa6b2c29e
+--- /dev/null
++++ b/tests/sksl/shared/DoubleNegation.asm.frag
+@@ -0,0 +1,77 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %_entrypoint_v "_entrypoint" %sk_FragColor %sk_Clockwise
++OpExecutionMode %_entrypoint_v OriginUpperLeft
++OpName %sk_FragColor "sk_FragColor"
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %_UniformBuffer "_UniformBuffer"
++OpMemberName %_UniformBuffer 0 "colorGreen"
++OpName %_entrypoint_v "_entrypoint_v"
++OpName %main "main"
++OpDecorate %sk_FragColor RelaxedPrecision
++OpDecorate %sk_FragColor Location 0
++OpDecorate %sk_FragColor Index 0
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++OpMemberDecorate %_UniformBuffer 0 Offset 0
++OpMemberDecorate %_UniformBuffer 0 RelaxedPrecision
++OpDecorate %_UniformBuffer Block
++OpDecorate %10 Binding 0
++OpDecorate %10 DescriptorSet 0
++OpDecorate %30 RelaxedPrecision
++OpDecorate %31 RelaxedPrecision
++OpDecorate %33 RelaxedPrecision
++OpDecorate %35 RelaxedPrecision
++OpDecorate %36 RelaxedPrecision
++OpDecorate %38 RelaxedPrecision
++OpDecorate %39 RelaxedPrecision
++OpDecorate %40 RelaxedPrecision
++OpDecorate %41 RelaxedPrecision
++OpDecorate %42 RelaxedPrecision
++%float = OpTypeFloat 32
++%v4float = OpTypeVector %float 4
++%_ptr_Output_v4float = OpTypePointer Output %v4float
++%sk_FragColor = OpVariable %_ptr_Output_v4float Output
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%_UniformBuffer = OpTypeStruct %v4float
++%_ptr_Uniform__UniformBuffer = OpTypePointer Uniform %_UniformBuffer
++%10 = OpVariable %_ptr_Uniform__UniformBuffer Uniform
++%void = OpTypeVoid
++%15 = OpTypeFunction %void
++%v2float = OpTypeVector %float 2
++%float_0 = OpConstant %float 0
++%19 = OpConstantComposite %v2float %float_0 %float_0
++%_ptr_Function_v2float = OpTypePointer Function %v2float
++%23 = OpTypeFunction %v4float %_ptr_Function_v2float
++%_ptr_Uniform_v4float = OpTypePointer Uniform %v4float
++%int = OpTypeInt 32 1
++%int_0 = OpConstant %int 0
++%_entrypoint_v = OpFunction %void None %15
++%16 = OpLabel
++%20 = OpVariable %_ptr_Function_v2float Function
++OpStore %20 %19
++%22 = OpFunctionCall %v4float %main %20
++OpStore %sk_FragColor %22
++OpReturn
++OpFunctionEnd
++%main = OpFunction %v4float None %23
++%24 = OpFunctionParameter %_ptr_Function_v2float
++%25 = OpLabel
++%26 = OpAccessChain %_ptr_Uniform_v4float %10 %int_0
++%30 = OpLoad %v4float %26
++%31 = OpCompositeExtract %float %30 0
++%32 = OpConvertFToS %int %31
++%33 = OpConvertSToF %float %32
++%34 = OpAccessChain %_ptr_Uniform_v4float %10 %int_0
++%35 = OpLoad %v4float %34
++%36 = OpCompositeExtract %float %35 1
++%37 = OpAccessChain %_ptr_Uniform_v4float %10 %int_0
++%38 = OpLoad %v4float %37
++%39 = OpVectorShuffle %v2float %38 %38 2 3
++%40 = OpCompositeExtract %float %39 0
++%41 = OpCompositeExtract %float %39 1
++%42 = OpCompositeConstruct %v4float %33 %36 %40 %41
++OpReturnValue %42
++OpFunctionEnd
+diff --git a/tests/sksl/shared/DoubleNegation.glsl b/tests/sksl/shared/DoubleNegation.glsl
+new file mode 100644
+index 0000000000..8952757f33
+--- /dev/null
++++ b/tests/sksl/shared/DoubleNegation.glsl
+@@ -0,0 +1,6 @@
++
++out vec4 sk_FragColor;
++uniform vec4 colorGreen;
++vec4 main() {
++    return vec4(float(int(colorGreen.x)), colorGreen.y, colorGreen.zw);
++}
+diff --git a/tests/sksl/shared/DoubleNegation.metal b/tests/sksl/shared/DoubleNegation.metal
+new file mode 100644
+index 0000000000..0cbfd24381
+--- /dev/null
++++ b/tests/sksl/shared/DoubleNegation.metal
+@@ -0,0 +1,17 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Uniforms {
++    half4 colorGreen;
++};
++struct Inputs {
++};
++struct Outputs {
++    half4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], constant Uniforms& _uniforms [[buffer(0)]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _out;
++    (void)_out;
++    _out.sk_FragColor = half4(half(int(_uniforms.colorGreen.x)), _uniforms.colorGreen.y, _uniforms.colorGreen.zw);
++    return _out;
++}

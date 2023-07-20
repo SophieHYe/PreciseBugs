@@ -1,0 +1,16 @@
+commit ffaba7d934078d94a262e6d6c7c33636aa818a1c
+Author: Jim Van Verth <jvanverth@google.com>
+Date:   Wed Mar 22 09:44:40 2023 -0400
+
+    Fix potential integer overflow in SkRegion::setPath()
+    
+    For large integers some intermediate calculations can overflow, but the
+    end results will still be in integer range. Using int64_t for the
+    intermediate values should handle this situation.
+    
+    Bug: oss-fuzz:56907
+    Change-Id: I86906b769d35d772ce77b3a57576b4fc0e4c5390
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/659718
+    Reviewed-by: James Godfrey-Kittle <jamesgk@google.com>
+    Auto-Submit: Jim Van Verth <jvanverth@google.com>
+    Commit-Queue: Jim Van Verth <jvanverth@google.com>

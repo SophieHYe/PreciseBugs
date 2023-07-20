@@ -1,0 +1,51 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index f23c620d3e..ec9afe8e36 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -307,6 +307,7 @@ sksl_metal_tests = [
+   "/sksl/metal/NumericGlobals.sksl",
+   "/sksl/metal/OpaqueTypeInInterfaceBlock.sksl",
+   "/sksl/metal/OpaqueTypeInStruct.sksl",
++  "/sksl/metal/Ossfuzz48371.sksl",
+   "/sksl/metal/OutParams.sksl",
+   "/sksl/metal/OutVarsRequireLocation.sksl",
+   "/sksl/metal/SamplerGlobals.sksl",
+diff --git a/resources/sksl/metal/Ossfuzz48371.sksl b/resources/sksl/metal/Ossfuzz48371.sksl
+new file mode 100644
+index 0000000000..14f5b823c5
+--- /dev/null
++++ b/resources/sksl/metal/Ossfuzz48371.sksl
+@@ -0,0 +1 @@
++uniform texture2D s;
+\ No newline at end of file
+diff --git a/src/sksl/codegen/SkSLMetalCodeGenerator.cpp b/src/sksl/codegen/SkSLMetalCodeGenerator.cpp
+index 66b706a46a..e96c52e16d 100644
+--- a/src/sksl/codegen/SkSLMetalCodeGenerator.cpp
++++ b/src/sksl/codegen/SkSLMetalCodeGenerator.cpp
+@@ -2553,7 +2553,8 @@ void MetalCodeGenerator::writeUniformStruct() {
+             const GlobalVarDeclaration& decls = e->as<GlobalVarDeclaration>();
+             const Variable& var = decls.declaration()->as<VarDeclaration>().var();
+             if (var.modifiers().fFlags & Modifiers::kUniform_Flag &&
+-                var.type().typeKind() != Type::TypeKind::kSampler) {
++                var.type().typeKind() != Type::TypeKind::kSampler &&
++                var.type().typeKind() != Type::TypeKind::kTexture) {
+                 int uniformSet = this->getUniformSet(var.modifiers());
+                 // Make sure that the program's uniform-set value is consistent throughout.
+                 if (-1 == fUniformBuffer) {
+diff --git a/tests/sksl/metal/Ossfuzz48371.metal b/tests/sksl/metal/Ossfuzz48371.metal
+new file mode 100644
+index 0000000000..cbe4f15524
+--- /dev/null
++++ b/tests/sksl/metal/Ossfuzz48371.metal
+@@ -0,0 +1,11 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    half4 sk_FragColor [[color(0)]];
++};
++struct Globals {
++    texture2d<half, access::read> s;
++};

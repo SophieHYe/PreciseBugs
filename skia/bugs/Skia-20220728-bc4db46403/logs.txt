@@ -1,0 +1,30 @@
+commit bc4db4640390b1d2cacb8457c7db58a682a1e248
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Jul 28 10:44:15 2022 -0400
+
+    Fix for fuzzer-discovered error with overloaded functions.
+    
+    The SkSL parser detected types via two functions: IsType and
+    IsBuiltinType. These were designed around SymbolTable::lookup, and
+    would do a full symbol lookup just to return a true/false result.
+    In practice, doing a symbol table lookup on an overloaded function
+    name was pretty expensive--it can create new UnresolvedFunction
+    nodes.
+    
+    For `IsType` this behavior was just inefficient. For `IsBuiltinType`
+    it was worse--it would create new Program-owned nodes in the built-in
+    modules. (This behavior changed subtly at http://review.skia.org/562306
+    --previously, we would go through the entire lookup, then just give up
+    at the end when we realized we were in a builtin symbol table.)
+    
+    SymbolTable now has dedicated `isType` and `isBuiltinType` methods
+    instead that will never modify the tables. As an unexpected perk,
+    this actually eliminates a few UnresolvedFunction nodes from our
+    dehydrated data.
+    
+    Change-Id: Ice80d55e21d199639e34e4d4f4c583ff9d7ac3e1
+    Bug: oss-fuzz:49558
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/562956
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>

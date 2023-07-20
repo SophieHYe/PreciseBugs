@@ -1,0 +1,17 @@
+commit 537c8a7ad56db045632966af55fe98a701bd6409
+Author: John Stiles <johnstiles@google.com>
+Date:   Fri Aug 27 11:07:09 2021 -0400
+
+    Fix assertion when returning intermediate types.
+    
+    The fuzzer managed to trigger an assertion by returning an invalid type
+    from a void function. We were neglecting to clear out the expression
+    when reporting it as invalid, leaving it for `checkValid` to find later.
+    
+    Change-Id: Icc152c867a3316fe994967e192601fb4d10da98f
+    Bug: oss-fuzz:37704
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/442678
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>

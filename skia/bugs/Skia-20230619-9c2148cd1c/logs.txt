@@ -1,0 +1,21 @@
+commit 9c2148cd1c82d267c8d22af013843a9dec4f33bf
+Author: John Stiles <johnstiles@google.com>
+Date:   Mon Jun 19 09:48:34 2023 -0400
+
+    Fix fuzzer-discovered error with inlined arrays.
+    
+    When inlining a function that mutates its passed-in parameters, we
+    need to make a scratch copy of that parameter. This is potentially
+    expensive for structs and arrays, and in ES2 it may require an
+    element-by-element copy since arrays are not first-class values.
+    However, ES2 _does_ allow passing entire arrays and structs into a
+    function (somewhat surprisingly, given its other limitations on
+    array types). The inliner no longer attempts to inline any function
+    that mutates a passed-in struct or array parameter.
+    
+    Bug: oss-fuzz:59891
+    Change-Id: I2b852a70dc51c464351155d274dc8d5173edaf5e
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/713216
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

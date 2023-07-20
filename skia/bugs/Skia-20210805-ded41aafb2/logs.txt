@@ -1,0 +1,18 @@
+commit ded41aafb2e476aa46ddce025dd48e7a30d23ab7
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Aug 5 12:19:35 2021 -0400
+
+    Fix fuzzer-discovered error with SPIR-V interface arrays.
+    
+    OSSFuzz discovered a minor variation of oss-fuzz:36770 which tickled a
+    different bug in SPIR-V RTFlip handling; we did not properly handle the
+    case where the InterfaceBlock is an array. SPIR-V does not support this
+    at all, but the IRGenerator allows it, and we don't detect it an an
+    error until later in the compilation process.
+    
+    Change-Id: I80bd67a13dad878717dc122462132a2ed675532d
+    Bug: oss-fuzz:36850
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/437018
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>

@@ -1,0 +1,20 @@
+commit 7d3f089e581145465da30bbe8ca4fcff9c489333
+Author: John Stiles <johnstiles@google.com>
+Date:   Tue Nov 3 11:35:01 2020 -0500
+
+    Fix use-after-free error discovered by the fuzzer.
+    
+    When eliminating a CFG node, we now flag its exit nodes; if our
+    optimization pass reaches one of those flagged nodes, we stop the
+    current optimization process in its tracks and initiate a rescan.
+    
+    We do NOT recursively mark the exits of the exit nodes, so this fix is
+    reliant on the CFG being ordered in a non-chaotic fashion, but in
+    practice this seems to be sufficient for the CFGs we generate today.
+    
+    Change-Id: I892805361c5f4297e02146f37a759dfda83f5488
+    Bug: oss-fuzz:26942
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/331597
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>

@@ -1,0 +1,19 @@
+commit 1b91c0e29bc802b515f509d6a0e9396f2318b066
+Author: John Stiles <johnstiles@google.com>
+Date:   Thu Feb 11 11:43:09 2021 -0500
+
+    Fix use-after-free discovered by the fuzzer.
+    
+    The optimization which replaces unnecessarily nested constructors is
+    creating a new constructor from whole cloth, obliterating the original
+    constructor and its arguments. This can invalidate the definition map.
+    For now, this is fixed by forcing a rescan when this optimization is
+    applied.
+    
+    Change-Id: I8a46bccf3b6422282eaf95409cd4fa50b8ad3187
+    Bug: oss-fuzz:29994
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/369324
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Commit-Queue: Ethan Nicholas <ethannicholas@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>
+    Reviewed-by: Ethan Nicholas <ethannicholas@google.com>

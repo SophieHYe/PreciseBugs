@@ -1,0 +1,15 @@
+commit edccc2ca4b6043c0b4128f67cd6ce3f96158ea07
+Author: Jim Van Verth <jvanverth@google.com>
+Date:   Mon Jan 30 10:42:31 2023 -0500
+
+    Fix UBSAN report in SkM44::Perspective.
+    
+    Passing in a zero angle is meaningless in this case, just as much as
+    near == far, so handle it in the same way.
+    
+    Bug: oss-fuzz:26951
+    Change-Id: I4f5e3227f78dfe5a98222138fc3f8096fd1bb789
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/635499
+    Commit-Queue: Jim Van Verth <jvanverth@google.com>
+    Reviewed-by: Michael Ludwig <michaelludwig@google.com>
+    Reviewed-by: Florin Malita <fmalita@google.com>

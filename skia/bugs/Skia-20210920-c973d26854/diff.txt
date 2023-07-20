@@ -1,0 +1,126 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 81b9160773..5ee9f22628 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -104,6 +104,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz37620.sksl",
+   "/sksl/errors/Ossfuzz38106.sksl",
+   "/sksl/errors/Ossfuzz38107.sksl",
++  "/sksl/errors/Ossfuzz38108.sksl",
+   "/sksl/errors/Ossfuzz38140.sksl",
+   "/sksl/errors/Ossfuzz38560.sksl",
+   "/sksl/errors/Ossfuzz38865.sksl",
+diff --git a/include/sksl/DSLSymbols.h b/include/sksl/DSLSymbols.h
+index 93e32ade46..13be7c67b2 100644
+--- a/include/sksl/DSLSymbols.h
++++ b/include/sksl/DSLSymbols.h
+@@ -57,7 +57,7 @@ bool IsType(skstd::string_view name);
+ /**
+  * Adds a variable to the current symbol table.
+  */
+-void AddToSymbolTable(DSLVarBase& var);
++void AddToSymbolTable(DSLVarBase& var, PositionInfo pos = PositionInfo::Capture());
+ 
+ } // namespace dsl
+ 
+diff --git a/resources/sksl/errors/DuplicateSymbol.sksl b/resources/sksl/errors/DuplicateSymbol.sksl
+index 91f4b3fda1..fa73e8e68c 100644
+--- a/resources/sksl/errors/DuplicateSymbol.sksl
++++ b/resources/sksl/errors/DuplicateSymbol.sksl
+@@ -2,4 +2,6 @@ int x;
+ int x;
+ 
+ int main;
+-void main() {}
++void main() {
++    int y,y;
++}
+diff --git a/resources/sksl/errors/Ossfuzz38108.sksl b/resources/sksl/errors/Ossfuzz38108.sksl
+new file mode 100644
+index 0000000000..de4bf01ec8
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz38108.sksl
+@@ -0,0 +1 @@
++int a,a;
+\ No newline at end of file
+diff --git a/src/sksl/SkSLCompiler.cpp b/src/sksl/SkSLCompiler.cpp
+index f6800c2723..8d284d1838 100644
+--- a/src/sksl/SkSLCompiler.cpp
++++ b/src/sksl/SkSLCompiler.cpp
+@@ -884,6 +884,7 @@ bool Compiler::toSPIRV(Program& program, OutputStream& out) {
+                 errors.append(disassembly);
+             }
+             this->errorReporter().error(-1, errors);
++            this->errorReporter().reportPendingErrors(PositionInfo());
+ #else
+             SkDEBUGFAILF("%s", errors.c_str());
+ #endif
+@@ -957,7 +958,6 @@ void Compiler::handleError(skstd::string_view msg, PositionInfo pos) {
+ }
+ 
+ String Compiler::errorText(bool showCount) {
+-    this->errorReporter().reportPendingErrors(PositionInfo());
+     if (showCount) {
+         this->writeErrorCount();
+     }
+diff --git a/src/sksl/SkSLDSLParser.cpp b/src/sksl/SkSLDSLParser.cpp
+index 71fdd2bd47..1d3a1316ae 100644
+--- a/src/sksl/SkSLDSLParser.cpp
++++ b/src/sksl/SkSLDSLParser.cpp
+@@ -450,7 +450,7 @@ void DSLParser::globalVarDeclarationEnd(PositionInfo pos, const dsl::DSLModifier
+         }
+         DSLGlobalVar next(mods, type, this->text(identifierName), std::move(anotherInitializer));
+         Declare(next);
+-        AddToSymbolTable(next);
++        AddToSymbolTable(next, this->position(identifierName));
+     }
+     this->expect(Token::Kind::TK_SEMICOLON, "';'");
+ }
+@@ -486,7 +486,7 @@ DSLStatement DSLParser::localVarDeclarationEnd(PositionInfo pos, const dsl::DSLM
+         }
+         DSLVar next(mods, type, this->text(identifierName), std::move(anotherInitializer));
+         DSLWriter::AddVarDeclaration(result, next);
+-        AddToSymbolTable(next);
++        AddToSymbolTable(next, this->position(identifierName));
+     }
+     this->expect(Token::Kind::TK_SEMICOLON, "';'");
+     return result;
+diff --git a/src/sksl/dsl/DSLSymbols.cpp b/src/sksl/dsl/DSLSymbols.cpp
+index 1ffde5af36..4103898bd2 100644
+--- a/src/sksl/dsl/DSLSymbols.cpp
++++ b/src/sksl/dsl/DSLSymbols.cpp
+@@ -35,11 +35,12 @@ bool IsType(skstd::string_view name) {
+     return s && s->is<Type>();
+ }
+ 
+-void AddToSymbolTable(DSLVarBase& var) {
++void AddToSymbolTable(DSLVarBase& var, PositionInfo pos) {
+     const SkSL::Variable* skslVar = DSLWriter::Var(var);
+     if (skslVar) {
+         CurrentSymbolTable()->addWithoutOwnership(skslVar);
+     }
++    DSLWriter::ReportErrors(pos);
+ }
+ 
+ const String* Retain(String string) {
+diff --git a/tests/sksl/errors/DuplicateSymbol.glsl b/tests/sksl/errors/DuplicateSymbol.glsl
+index 77dbf821e8..9e5cb06293 100644
+--- a/tests/sksl/errors/DuplicateSymbol.glsl
++++ b/tests/sksl/errors/DuplicateSymbol.glsl
+@@ -2,4 +2,5 @@
+ 
+ error: 2: symbol 'x' was already defined
+ error: 5: symbol 'main' was already defined
+-2 errors
++error: 6: symbol 'y' was already defined
++3 errors
+diff --git a/tests/sksl/errors/Ossfuzz38108.glsl b/tests/sksl/errors/Ossfuzz38108.glsl
+new file mode 100644
+index 0000000000..62df40c227
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz38108.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: symbol 'a' was already defined
++1 error

@@ -1,0 +1,26 @@
+commit ce98326ffda6c663033613e72f49416a46b1fadf
+Author: John Stiles <johnstiles@google.com>
+Date:   Fri Sep 23 10:26:46 2022 -0400
+
+    Fix for fuzzer-discovered error with dead-local elimination.
+    
+    Eliminating a dead-variable assignment would turn an expression like
+    `a = (b = 123)` into `b = 123`. The fuzzer discovered that, after
+    removing the dead `a =` assignment from the code, we neglected to
+    recurse into the remaining subexpression. So if the input code was
+    `a = a = 123;` we would optimize it into `a = 123;` but wouldn't
+    keep going and eliminate the assignment entirely.
+    
+    This was invalid because `a` is marked as dead and its declaration has
+    been eliminated; it can't be allowed to remain anywhere in the
+    finished program.
+    
+    We now recurse into the remaining subexpression and optimize it
+    properly.
+    
+    Change-Id: I3a609133fd9752d94098218250a90477f80e02d3
+    Bug: oss-fuzz:51729, oss-fuzz:51741
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/583964
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>

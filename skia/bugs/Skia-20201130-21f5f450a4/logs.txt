@@ -1,0 +1,35 @@
+commit 21f5f450a4eec856ac69d3a3d86da4095f9b5141
+Author: John Stiles <johnstiles@google.com>
+Date:   Mon Nov 30 09:57:59 2020 -0500
+
+    Fix SPIR-V compilation error with arrays of samplers.
+    
+    This CL addresses the root cause of the fuzzer issue, by checking for
+    LayoutIsSupported before getting the MemoryLayout of a type. However,
+    this array ought to be detected as an error everywhere, as samplers are
+    opaque types; at present, this code compiles without error in GLSL and
+    Metal. This is an issue for followup CLs.
+    
+    GLSL's actual support for arrays of samplers is interesting and probably
+    too nuanced for us to try to emulate:
+    
+    https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)#Opaque_arrays
+    
+    "Under GLSL version 3.30, Sampler arrays (the only opaque type 3.30
+    provides) can be declared, but they can only be accessed by compile-time
+    integral Constant Expressions. So you cannot loop over an array of
+    samplers, no matter what the array initializer, offset and comparison
+    expressions are.
+    
+    Under GLSL 4.00 and above, array indices leading to an opaque value can
+    be accessed by non-compile-time constants, but these index values must
+    be dynamically uniform. The value of those indices must be the same
+    value, in the same execution order, regardless of any non-uniform
+    parameter values, for all shader invocations in the invocation group."
+    
+    Change-Id: Ib382f5c3b563f996b3c8f1eb6b021b6d31fa9ce7
+    Bug: oss-fuzz:28107
+    Reviewed-on: https://skia-review.googlesource.com/c/skia/+/339159
+    Commit-Queue: John Stiles <johnstiles@google.com>
+    Reviewed-by: Brian Osman <brianosman@google.com>
+    Auto-Submit: John Stiles <johnstiles@google.com>

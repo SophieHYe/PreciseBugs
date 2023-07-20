@@ -1,0 +1,126 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index b86729a9da..6e2e36c547 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -84,6 +84,7 @@ sksl_error_tests = [
+   "$_tests/sksl/errors/BitShiftFloat.sksl",
+   "$_tests/sksl/errors/BitShiftFloatMatrix.sksl",
+   "$_tests/sksl/errors/BitShiftFloatVector.sksl",
++  "$_tests/sksl/errors/BooleanArithmetic.sksl",
+   "$_tests/sksl/errors/BreakOutsideLoop.sksl",
+   "$_tests/sksl/errors/CallNonFunction.sksl",
+   "$_tests/sksl/errors/CanExitWithoutReturningValue.sksl",
+diff --git a/src/sksl/SkSLCompiler.cpp b/src/sksl/SkSLCompiler.cpp
+index b0a61e00a1..da507f77ae 100644
+--- a/src/sksl/SkSLCompiler.cpp
++++ b/src/sksl/SkSLCompiler.cpp
+@@ -663,23 +663,25 @@ static bool is_constant(const Expression& expr, T value) {
+             const Constructor& constructor = expr.as<Constructor>();
+             if (constructor.isCompileTimeConstant()) {
+                 const Type& constructorType = constructor.type();
+-                bool isFloat = constructorType.columns() > 1
+-                                       ? constructorType.componentType().isFloat()
+-                                       : constructorType.isFloat();
+                 switch (constructorType.typeKind()) {
+                     case Type::TypeKind::kVector:
+-                        for (int i = 0; i < constructorType.columns(); ++i) {
+-                            if (isFloat) {
++                        if (constructor.componentType().isFloat()) {
++                            for (int i = 0; i < constructorType.columns(); ++i) {
+                                 if (constructor.getFVecComponent(i) != value) {
+                                     return false;
+                                 }
+-                            } else {
++                            }
++                            return true;
++                        } else if (constructor.componentType().isInteger()) {
++                            for (int i = 0; i < constructorType.columns(); ++i) {
+                                 if (constructor.getIVecComponent(i) != value) {
+                                     return false;
+                                 }
+                             }
++                            return true;
+                         }
+-                        return true;
++                        // Other types (e.g. boolean) might occur, but aren't supported here.
++                        return false;
+ 
+                     case Type::TypeKind::kScalar:
+                         SkASSERT(constructor.arguments().size() == 1);
+diff --git a/src/sksl/ir/SkSLConstructor.cpp b/src/sksl/ir/SkSLConstructor.cpp
+index 53f7fd2ee3..a505e9d87c 100644
+--- a/src/sksl/ir/SkSLConstructor.cpp
++++ b/src/sksl/ir/SkSLConstructor.cpp
+@@ -103,7 +103,7 @@ ResultType Constructor::getVecComponent(int index) const {
+                 if (current + constructor.type().columns() > index) {
+                     // We've found a constructor that overlaps the proper argument. Descend into
+                     // it, honoring the type.
+-                    return constructor.type().componentType().isFloat()
++                    return constructor.componentType().isFloat()
+                               ? ResultType(constructor.getVecComponent<SKSL_FLOAT>(index - current))
+                               : ResultType(constructor.getVecComponent<SKSL_INT>(index - current));
+                 }
+diff --git a/src/sksl/ir/SkSLConstructor.h b/src/sksl/ir/SkSLConstructor.h
+index 2212ef0615..d062e28a06 100644
+--- a/src/sksl/ir/SkSLConstructor.h
++++ b/src/sksl/ir/SkSLConstructor.h
+@@ -75,6 +75,12 @@ public:
+         return result;
+     }
+ 
++    const Type& componentType() const {
++        // Returns `float` for constructors of type `float(...)` or `floatN(...)`.
++        const Type& type = this->type();
++        return type.columns() == 1 ? type : type.componentType();
++    }
++
+     bool isCompileTimeConstant() const override {
+         for (const std::unique_ptr<Expression>& arg: this->arguments()) {
+             if (!arg->isCompileTimeConstant()) {
+@@ -98,13 +104,17 @@ public:
+     template <typename resultType>
+     resultType getVecComponent(int index) const;
+ 
++    /**
++     * For a literal vector expression, return the float value of the n'th vector component. It is
++     * an error to call this method on an expression which is not a vector of FloatLiterals.
++     */
+     SKSL_FLOAT getFVecComponent(int n) const override {
+         return this->getVecComponent<SKSL_FLOAT>(n);
+     }
+ 
+     /**
+      * For a literal vector expression, return the integer value of the n'th vector component. It is
+-     * an error to call this method on an expression which is not a literal vector.
++     * an error to call this method on an expression which is not a vector of IntLiterals.
+      */
+     SKSL_INT getIVecComponent(int n) const override {
+         return this->getVecComponent<SKSL_INT>(n);
+diff --git a/tests/sksl/errors/BooleanArithmetic.sksl b/tests/sksl/errors/BooleanArithmetic.sksl
+new file mode 100644
+index 0000000000..a4e6e4477c
+--- /dev/null
++++ b/tests/sksl/errors/BooleanArithmetic.sksl
+@@ -0,0 +1,13 @@
++bool2 add_boolean_vec() { return bool2(false, false) + bool2(true, true); }
++bool2 sub_boolean_vec() { return bool2(false, false) - bool2(true, true); }
++bool2 mul_boolean_vec() { return bool2(false, false) * bool2(true, true); }
++bool2 div_boolean_vec() { return bool2(false, false) / bool2(true, true); }
++bool2 mod_boolean_vec() { return bool2(false, false) % bool2(true, true); }
++
++void main() {
++    add_boolean_vec();
++    sub_boolean_vec();
++    mul_boolean_vec();
++    div_boolean_vec();
++    mod_boolean_vec();
++}
+diff --git a/tests/sksl/errors/golden/BooleanArithmetic.glsl b/tests/sksl/errors/golden/BooleanArithmetic.glsl
+new file mode 100644
+index 0000000000..2933520785
+--- /dev/null
++++ b/tests/sksl/errors/golden/BooleanArithmetic.glsl
+@@ -0,0 +1,3 @@
++
++void main() {
++}
