@@ -1,9 +1,0 @@
-commit a7de9b8f2061e01b54b2cca399128fa751dafdaf
-Author: chaoqin-li1123 <55518381+chaoqin-li1123@users.noreply.github.com>
-Date:   Tue Aug 17 10:48:46 2021 -0500
-
-    Fix dns resolve fuzz bug (#17107)
-    
-    The DNS resolver takes reference to a local variable as its member dns_resolver_options_, and may access invalid data during a DNS refresh, fix by copy the parameter in ctor of DnsResolverImpl.(https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=35272)
-    
-    Signed-off-by: chaoqin-li1123 <chaoqinli@google.com>

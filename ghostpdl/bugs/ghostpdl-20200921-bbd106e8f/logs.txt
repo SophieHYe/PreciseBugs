@@ -1,8 +1,0 @@
-commit bbd106e8f9345296cb5b5a452487bda603d54173
-Author: Chris Liddell <chris.liddell@artifex.com>
-Date:   Mon Sep 21 22:16:34 2020 +0100
-
-    oss-fuzz 23637: Fix error code confusion
-    
-    Confusion of error codes meant we were allocating space for glyph data,
-    but never copying the data into it. Thus the memory sanitizer error.

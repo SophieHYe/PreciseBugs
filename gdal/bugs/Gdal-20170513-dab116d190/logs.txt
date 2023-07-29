@@ -1,7 +1,0 @@
-commit dab116d190b6c7e07b5221f9540479db73b952c7
-Author: Even Rouault <even.rouault@mines-paris.org>
-Date:   Sat May 13 13:19:06 2017 +0000
-
-    Internal libjpeg: avoid UBSAN warning without consequence. jpeg_make_d_derived_tbl() checks the table number before dereferencing the pointer to it, so there was no problem, but it is saner validating before. libjpeg-turbo fixed it differently in https://github.com/libjpeg-turbo/libjpeg-turbo/commit/a1dd35680d40758f234f214cef4c53cd1bc4b34e but I prefer my fix. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1540. Credit to OSS-Fuzz
-    
-    git-svn-id: https://svn.osgeo.org/gdal/trunk@38250 f0d54148-0727-0410-94bb-9a71ac55c965
