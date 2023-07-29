@@ -1,13 +1,0 @@
-diff --git a/MagickCore/constitute.c b/MagickCore/constitute.c
-index 935b45304..d5402d6bd 100644
---- a/MagickCore/constitute.c
-+++ b/MagickCore/constitute.c
-@@ -845,7 +845,7 @@ MagickExport Image *ReadImage(const ImageInfo *image_info,
-   }
-   read_info=DestroyImageInfo(read_info);
-   if (GetBlobError(image) != MagickFalse)
--    ThrowImageException(FileOpenError,"UnableToReadFile");
-+    ThrowReaderException(ThrowImageException,"UnableToReadImageData");
-   return(GetFirstImageInList(image));
- }
- 
