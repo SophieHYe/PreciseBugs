@@ -1,0 +1,43 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 8b0c49a24c..ee6dde76ae 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -112,6 +112,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz38944.sksl",
+   "/sksl/errors/Ossfuzz39000.sksl",
+   "/sksl/errors/Ossfuzz40427.sksl",
++  "/sksl/errors/Ossfuzz40428.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz40428.sksl b/resources/sksl/errors/Ossfuzz40428.sksl
+new file mode 100644
+index 0000000000..78dc543155
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz40428.sksl
+@@ -0,0 +1 @@
++int x[~2147483649];
+diff --git a/src/sksl/ir/SkSLPrefixExpression.cpp b/src/sksl/ir/SkSLPrefixExpression.cpp
+index 01c53ae3bf..ed677ee750 100644
+--- a/src/sksl/ir/SkSLPrefixExpression.cpp
++++ b/src/sksl/ir/SkSLPrefixExpression.cpp
+@@ -216,6 +216,9 @@ std::unique_ptr<Expression> PrefixExpression::Convert(const Context& context,
+             if (baseType.isLiteral()) {
+                 // The expression `~123` is no longer a literal; coerce to the actual type.
+                 base = baseType.scalarTypeForLiteral().coerceExpression(std::move(base), context);
++                if (!base) {
++                    return nullptr;
++                }
+             }
+             break;
+ 
+diff --git a/tests/sksl/errors/Ossfuzz40428.glsl b/tests/sksl/errors/Ossfuzz40428.glsl
+new file mode 100644
+index 0000000000..55c92d91b6
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz40428.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: integer is out of range for type 'int': 2147483649
++1 error

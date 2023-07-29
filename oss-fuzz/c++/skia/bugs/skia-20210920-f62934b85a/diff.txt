@@ -1,0 +1,50 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 5ee9f22628..098a7c61e0 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -108,6 +108,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz38140.sksl",
+   "/sksl/errors/Ossfuzz38560.sksl",
+   "/sksl/errors/Ossfuzz38865.sksl",
++  "/sksl/errors/Ossfuzz38944.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz38944.sksl b/resources/sksl/errors/Ossfuzz38944.sksl
+new file mode 100644
+index 0000000000..b6b5aa5e69
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz38944.sksl
+@@ -0,0 +1 @@
++int a = log(    
+\ No newline at end of file
+diff --git a/src/sksl/SkSLDSLParser.cpp b/src/sksl/SkSLDSLParser.cpp
+index 1d3a1316ae..4cf8d44aae 100644
+--- a/src/sksl/SkSLDSLParser.cpp
++++ b/src/sksl/SkSLDSLParser.cpp
+@@ -1666,11 +1666,11 @@ DSLExpression DSLParser::suffix(DSLExpression base) {
+             ExpressionArray args;
+             if (this->peek().fKind != Token::Kind::TK_RPAREN) {
+                 for (;;) {
+-                    skstd::optional<DSLWrapper<DSLExpression>> expr = this->assignmentExpression();
+-                    if (!expr) {
++                    DSLExpression expr = this->assignmentExpression();
++                    if (!expr.hasValue()) {
+                         return {};
+                     }
+-                    args.push_back((**expr).release());
++                    args.push_back(expr.release());
+                     if (!this->checkNext(Token::Kind::TK_COMMA)) {
+                         break;
+                     }
+diff --git a/tests/sksl/errors/Ossfuzz38944.glsl b/tests/sksl/errors/Ossfuzz38944.glsl
+new file mode 100644
+index 0000000000..1b8be41048
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz38944.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: expected expression, but found ''
++error: 1: expected ';', but found ''
++2 errors

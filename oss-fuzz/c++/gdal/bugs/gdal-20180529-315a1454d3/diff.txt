@@ -1,0 +1,44 @@
+diff --git a/gdal/frmts/ers/ershdrnode.cpp b/gdal/frmts/ers/ershdrnode.cpp
+index f2c68c7f71..eaf7c0b511 100644
+--- a/gdal/frmts/ers/ershdrnode.cpp
++++ b/gdal/frmts/ers/ershdrnode.cpp
+@@ -148,9 +148,16 @@ int ERSHdrNode::ReadLine( VSILFILE * fp, CPLString &osLine )
+ /*      This function is used recursively to read sub-objects.          */
+ /************************************************************************/
+ 
+-int ERSHdrNode::ParseChildren( VSILFILE * fp )
++int ERSHdrNode::ParseChildren( VSILFILE * fp, int nRecLevel )
+ 
+ {
++    if( nRecLevel == 100 ) // arbitrary limit
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "Too many recursion level while parsing .ers header");
++        return false;
++    }
++
+     while( true )
+     {
+ /* -------------------------------------------------------------------- */
+@@ -197,7 +204,7 @@ int ERSHdrNode::ParseChildren( VSILFILE * fp )
+ 
+             nItemCount++;
+ 
+-            if( !papoItemChild[nItemCount-1]->ParseChildren( fp ) )
++            if( !papoItemChild[nItemCount-1]->ParseChildren( fp, nRecLevel + 1 ) )
+                 return FALSE;
+         }
+ 
+diff --git a/gdal/frmts/ers/ershdrnode.h b/gdal/frmts/ers/ershdrnode.h
+index f7da083a3f..67877a397f 100644
+--- a/gdal/frmts/ers/ershdrnode.h
++++ b/gdal/frmts/ers/ershdrnode.h
+@@ -17,7 +17,7 @@ public:
+     ERSHdrNode();
+     ~ERSHdrNode();
+ 
+-    int    ParseChildren( VSILFILE *fp );
++    int    ParseChildren( VSILFILE *fp, int nRecLevel = 0 );
+     int    WriteSelf( VSILFILE *fp, int nIndent );
+ 
+     const char *Find( const char *pszPath, const char *pszDefault = nullptr );

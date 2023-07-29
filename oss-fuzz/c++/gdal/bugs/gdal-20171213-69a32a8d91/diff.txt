@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+index 2df53de85e..1e6ba09807 100644
+--- a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
++++ b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+@@ -602,7 +602,7 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
+                     }
+                  }
+               }
+-              l=(list[29]-1)*6;
++              l=(list[28]-1)*6; /* GDAL fix */
+               if ( l<0 ) l=0;
+               for (i=0;i<list[15];i++) {
+                 new->ext[l+i]=1;

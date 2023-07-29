@@ -1,0 +1,56 @@
+diff --git a/include/envoy/common/platform.h b/include/envoy/common/platform.h
+index c3398829f8..d5606ca32e 100644
+--- a/include/envoy/common/platform.h
++++ b/include/envoy/common/platform.h
+@@ -248,19 +248,15 @@ struct mmsghdr {
+ #endif // __ANDROID_API__ < 24
+ #endif // ifdef __ANDROID_API__
+ 
+-#ifdef __linux__
+-#define SUPPORTS_PTHREAD_GETNAME_NP 1
+-#endif
+-
+ // https://android.googlesource.com/platform/bionic/+/master/docs/status.md
+ // ``pthread_getname_np`` is introduced in API 26
+-#ifdef __ANDROID_API__
+-#if __ANDROID_API__ > 26
+-#define SUPPORTS_PTHREAD_GETNAME_NP 1
+-#endif // __ANDROID_API__ > 26
+-#endif // ifdef __ANDROID_API__
+-
+-// Ensure `SUPPORTS_PTHREAD_GETNAME_NP` is set
+-#ifndef SUPPORTS_PTHREAD_GETNAME_NP
+-#define SUPPORTS_PTHREAD_GETNAME_NP 0
+-#endif
++#define SUPPORTS_PTHREAD_NAMING 0
++#if defined(__ANDROID_API__)
++#if __ANDROID_API__ >= 26
++#undef SUPPORTS_PTHREAD_NAMING
++#define SUPPORTS_PTHREAD_NAMING 1
++#endif // __ANDROID_API__ >= 26
++#elif defined(__linux__)
++#undef SUPPORTS_PTHREAD_NAMING
++#define SUPPORTS_PTHREAD_NAMING 1
++#endif // defined(__ANDROID_API__)
+diff --git a/source/common/common/posix/thread_impl.cc b/source/common/common/posix/thread_impl.cc
+index c85bbfce57..71cbf2b02e 100644
+--- a/source/common/common/posix/thread_impl.cc
++++ b/source/common/common/posix/thread_impl.cc
+@@ -52,7 +52,7 @@ public:
+         this);
+     RELEASE_ASSERT(rc == 0, "");
+ 
+-#if SUPPORTS_PTHREAD_GETNAME_NP
++#if SUPPORTS_PTHREAD_NAMING
+     // If the name was not specified, get it from the OS. If the name was
+     // specified, write it into the thread, and assert that the OS sees it the
+     // same way.
+@@ -93,7 +93,7 @@ public:
+   }
+ 
+ private:
+-#if SUPPORTS_PTHREAD_GETNAME_NP
++#if SUPPORTS_PTHREAD_NAMING
+   // Attempts to get the name from the operating system, returning true and
+   // updating 'name' if successful. Note that during normal operation this
+   // may fail, if the thread exits prior to the system call.

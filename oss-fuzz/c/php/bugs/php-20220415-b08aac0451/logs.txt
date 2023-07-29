@@ -1,0 +1,1 @@
+commit b08aac0451d4f421be3cbfea235ac61613e07196Author: Nikita Popov <nikita.ppv@gmail.com>Date:   Fri Apr 15 22:14:44 2022 +0200    Fix inference for assignment of known object to reference        We cannot retain the ce information in that case, we have to    assume the ce may change indirectly through the reference.        Fixes oss-fuzz #46720.

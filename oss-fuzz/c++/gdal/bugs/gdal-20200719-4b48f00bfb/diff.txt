@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/pds/vicardataset.cpp b/gdal/frmts/pds/vicardataset.cpp
+index 0e146821a9..682d5258a6 100644
+--- a/gdal/frmts/pds/vicardataset.cpp
++++ b/gdal/frmts/pds/vicardataset.cpp
+@@ -880,7 +880,7 @@ CPLErr VICARBASICRasterBand::IReadBlock( int /*nXBlock*/, int nYBlock, void *pIm
+         VSIFReadL( &nSize, 1, sizeof(nSize), poGDS->fpImage);
+         CPL_LSBPTR32(&nSize);
+         if( (poGDS->m_eCompress == VICARDataset::COMPRESS_BASIC &&
+-             nSize < sizeof(GUInt32)) ||
++             nSize <= sizeof(GUInt32)) ||
+             (poGDS->m_eCompress == VICARDataset::COMPRESS_BASIC2 &&
+              nSize == 0) )
+         {

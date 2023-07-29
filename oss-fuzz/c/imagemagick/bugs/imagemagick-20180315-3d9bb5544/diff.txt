@@ -1,0 +1,13 @@
+diff --git a/coders/pcd.c b/coders/pcd.c
+index f2a1e9a33..b990952e1 100644
+--- a/coders/pcd.c
++++ b/coders/pcd.c
+@@ -703,6 +703,8 @@ static Image *ReadPCDImage(const ImageInfo *image_info,ExceptionInfo *exception)
+         image->colorspace=YCCColorspace;
+         if (LocaleCompare(image_info->magick,"PCDS") == 0)
+           (void) SetImageColorspace(image,sRGBColorspace,exception);
++        if (EOFBlob(image) != MagickFalse)
++          break;
+         if (j < (ssize_t) number_images)
+           {
+             /*

@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+index 64e471a3c9..6da6af0e80 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+@@ -1707,7 +1707,7 @@ OGRDXFFeature *OGRDXFLayer::TranslateCIRCLE()
+ 
+         // Add the bottom base as a polygon
+         OGRLinearRing *poRing1 = new OGRLinearRing();
+-        poRing1->addSubLineString( poCircle.release() );
++        poRing1->addSubLineString( poCircle.get() );
+ 
+         OGRPolygon *poBase1 = new OGRPolygon();
+         poBase1->addRingDirectly( poRing1 );

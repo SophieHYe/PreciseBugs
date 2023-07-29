@@ -1,0 +1,30 @@
+diff --git a/p9/messages.go b/p9/messages.go
+index 60f665e..0d481d5 100644
+--- a/p9/messages.go
++++ b/p9/messages.go
+@@ -2011,7 +2011,7 @@ type msgFactory struct {
+ var msgRegistry registry
+ 
+ type registry struct {
+-	factories [math.MaxUint8]msgFactory
++	factories [math.MaxUint8 + 1]msgFactory
+ 
+ 	// largestFixedSize is computed so that given some message size M, you can
+ 	// compute the maximum payload size (e.g. for Twrite, Rread) with
+diff --git a/p9/messages_test.go b/p9/messages_test.go
+index 2c63023..c7252a4 100644
+--- a/p9/messages_test.go
++++ b/p9/messages_test.go
+@@ -417,6 +417,12 @@ func TestRegisterDuplicate(t *testing.T) {
+ 	msgRegistry.register(msgRlerror, func() message { return &rlerror{} })
+ }
+ 
++func TestMaxMessageType(t *testing.T) {
++	if _, err := msgRegistry.get(0, 255); err == nil {
++		t.Fail()
++	}
++}
++
+ func TestMsgCache(t *testing.T) {
+ 	// Cache starts empty.
+ 	if got, want := len(msgRegistry.factories[msgRlerror].cache), 0; got != want {

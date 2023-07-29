@@ -1,0 +1,50 @@
+diff --git a/coders/caption.c b/coders/caption.c
+index a953ed2cc..fb1e2fb97 100644
+--- a/coders/caption.c
++++ b/coders/caption.c
+@@ -58,6 +58,7 @@
+ #include "MagickCore/option.h"
+ #include "MagickCore/property.h"
+ #include "MagickCore/quantum-private.h"
++#include "MagickCore/resource_.h"
+ #include "MagickCore/static.h"
+ #include "MagickCore/string_.h"
+ #include "MagickCore/string-private.h"
+@@ -155,6 +156,12 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
+   property=DestroyString(property);
+   caption=ConstantString(GetImageProperty(image,"caption",exception));
+   draw_info=CloneDrawInfo(image_info,(DrawInfo *) NULL);
++  width=draw_info->pointsize*strlen(caption);
++  if (AcquireMagickResource(WidthResource,width) == MagickFalse)
++    {
++      draw_info=DestroyDrawInfo(draw_info);
++      ThrowReaderException(ImageError,"WidthOrHeightExceedsLimit");
++    }
+   (void) CloneString(&draw_info->text,caption);
+   gravity=GetImageOption(image_info,"gravity");
+   if (gravity != (char *) NULL)
+diff --git a/coders/label.c b/coders/label.c
+index 0a4201114..c6b0294d2 100644
+--- a/coders/label.c
++++ b/coders/label.c
+@@ -54,6 +54,7 @@
+ #include "MagickCore/memory_.h"
+ #include "MagickCore/property.h"
+ #include "MagickCore/quantum-private.h"
++#include "MagickCore/resource_.h"
+ #include "MagickCore/static.h"
+ #include "MagickCore/string_.h"
+ #include "MagickCore/module.h"
+@@ -134,6 +135,12 @@ static Image *ReadLABELImage(const ImageInfo *image_info,
+   property=DestroyString(property);
+   label=GetImageProperty(image,"label",exception);
+   draw_info=CloneDrawInfo(image_info,(DrawInfo *) NULL);
++  width=draw_info->pointsize*strlen(label);
++  if (AcquireMagickResource(WidthResource,width) == MagickFalse)
++    {
++      draw_info=DestroyDrawInfo(draw_info);
++      ThrowReaderException(ImageError,"WidthOrHeightExceedsLimit");
++    }
+   draw_info->text=ConstantString(label);
+   metrics.width=0.0;
+   metrics.height=0.0;

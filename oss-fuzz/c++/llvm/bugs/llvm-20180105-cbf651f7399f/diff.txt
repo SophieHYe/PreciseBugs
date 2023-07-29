@@ -1,0 +1,81 @@
+diff --git a/llvm/include/llvm/DebugInfo/DWARF/DWARFFormValue.h b/llvm/include/llvm/DebugInfo/DWARF/DWARFFormValue.h
+index d32053519ec4..2c0a942a5a5c 100644
+--- a/llvm/include/llvm/DebugInfo/DWARF/DWARFFormValue.h
++++ b/llvm/include/llvm/DebugInfo/DWARF/DWARFFormValue.h
+@@ -50,6 +50,8 @@ struct DWARFFormParams {
+     }
+     llvm_unreachable("Invalid Format value");
+   }
++
++  explicit operator bool() const { return Version && AddrSize; }
+ };
+ 
+ class DWARFFormValue {
+diff --git a/llvm/lib/DebugInfo/DWARF/DWARFDebugLine.cpp b/llvm/lib/DebugInfo/DWARF/DWARFDebugLine.cpp
+index e5ef4eaceebe..861122cfbaff 100644
+--- a/llvm/lib/DebugInfo/DWARF/DWARFDebugLine.cpp
++++ b/llvm/lib/DebugInfo/DWARF/DWARFDebugLine.cpp
+@@ -268,7 +268,7 @@ bool DWARFDebugLine::Prologue::parse(const DWARFDataExtractor &DebugLineData,
+ 
+   if (getVersion() >= 5) {
+     if (!parseV5DirFileTables(DebugLineData, OffsetPtr, EndPrologueOffset,
+-                              getFormParams(), U, HasMD5, IncludeDirectories,
++                              FormParams, U, HasMD5, IncludeDirectories,
+                               FileNames)) {
+       fprintf(stderr,
+               "warning: parsing line table prologue at 0x%8.8" PRIx64
+diff --git a/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp b/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp
+index 44886de2e3d5..769ac37aa0b6 100644
+--- a/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp
++++ b/llvm/lib/DebugInfo/DWARF/DWARFFormValue.cpp
+@@ -64,8 +64,9 @@ DWARFFormValue::getFixedByteSize(dwarf::Form Form,
+                                  const DWARFFormParams Params) {
+   switch (Form) {
+   case DW_FORM_addr:
+-    assert(Params.Version && Params.AddrSize && "Invalid Params for form");
+-    return Params.AddrSize;
++    if (Params)
++      return Params.AddrSize;
++    return None;
+ 
+   case DW_FORM_block:          // ULEB128 length L followed by L bytes.
+   case DW_FORM_block1:         // 1 byte length L followed by L bytes.
+@@ -86,8 +87,9 @@ DWARFFormValue::getFixedByteSize(dwarf::Form Form,
+     return None;
+ 
+   case DW_FORM_ref_addr:
+-    assert(Params.Version && Params.AddrSize && "Invalid Params for form");
+-    return Params.getRefAddrByteSize();
++    if (Params)
++      return Params.getRefAddrByteSize();
++    return None;
+ 
+   case DW_FORM_flag:
+   case DW_FORM_data1:
+@@ -118,8 +120,9 @@ DWARFFormValue::getFixedByteSize(dwarf::Form Form,
+   case DW_FORM_line_strp:
+   case DW_FORM_sec_offset:
+   case DW_FORM_strp_sup:
+-    assert(Params.Version && Params.AddrSize && "Invalid Params for form");
+-    return Params.getDwarfOffsetByteSize();
++    if (Params)
++      return Params.getDwarfOffsetByteSize();
++    return None;
+ 
+   case DW_FORM_data8:
+   case DW_FORM_ref8:
+diff --git a/llvm/test/DebugInfo/Inputs/invalid.linetable b/llvm/test/DebugInfo/Inputs/invalid.linetable
+new file mode 100644
+index 000000000000..5df41391afa6
+Binary files /dev/null and b/llvm/test/DebugInfo/Inputs/invalid.linetable differ
+diff --git a/llvm/test/DebugInfo/dwarfdump-invalid-line-table.test b/llvm/test/DebugInfo/dwarfdump-invalid-line-table.test
+new file mode 100644
+index 000000000000..afcaec003064
+--- /dev/null
++++ b/llvm/test/DebugInfo/dwarfdump-invalid-line-table.test
+@@ -0,0 +1,5 @@
++Verify that dwarfdump doesn't crash on invalid line table prologue.
++OSS-Fuzz Issue 4644 (https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=4644)
++
++RUN: llvm-dwarfdump --verbose %p/Inputs/invalid.linetable 2>&1 | FileCheck %s --check-prefix=INVALID-LINE-TABLE
++INVALID-LINE-TABLE: invalid directory or file table description

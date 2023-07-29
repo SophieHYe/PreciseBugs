@@ -1,0 +1,114 @@
+diff --git a/NEWS b/NEWS
+index 80e71e8f25..072a28ae6c 100644
+--- a/NEWS
++++ b/NEWS
+@@ -2,6 +2,9 @@ PHP                                                                        NEWS
+ |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ ?? ??? ????, PHP 8.3.0beta2
+ 
++- Core:
++  . Fixed oss-fuzz #60741 (Leak in open_basedir). (ilutov)
++
+ - FFI:
+   . Fix leaking definitions when using FFI::cdef()->new(...). (ilutov)
+ 
+diff --git a/Zend/tests/oss_fuzz_60741.phpt b/Zend/tests/oss_fuzz_60741.phpt
+new file mode 100644
+index 0000000000..8064bf5459
+--- /dev/null
++++ b/Zend/tests/oss_fuzz_60741.phpt
+@@ -0,0 +1,9 @@
++--TEST--
++oss-fuzz #60741: Leak in open_basedir
++--INI--
++open_basedir="{TMP}"
++--FILE--
++<?php
++ini_set('open_basedir', ini_get('open_basedir'));
++?>
++--EXPECT--
+diff --git a/Zend/zend.c b/Zend/zend.c
+index 48a7bef867..56770ac311 100644
+--- a/Zend/zend.c
++++ b/Zend/zend.c
+@@ -1271,29 +1271,11 @@ void zend_call_destructors(void) /* {{{ */
+ }
+ /* }}} */
+ 
+-static void zend_release_open_basedir(void)
+-{
+-	/* Release custom open_basedir config, this needs to happen before ini shutdown */
+-	if (PG(open_basedir)) {
+-		zend_ini_entry *ini_entry = zend_hash_str_find_ptr(EG(ini_directives), "open_basedir", strlen("open_basedir"));
+-		/* ini_entry->modified is unreliable, it might also be set when on_update has failed. */
+-		if (ini_entry
+-		 && ini_entry->modified
+-		 && ini_entry->value != ini_entry->orig_value) {
+-			efree(PG(open_basedir));
+-			PG(open_basedir) = NULL;
+-		}
+-	}
+-}
+-
+ ZEND_API void zend_deactivate(void) /* {{{ */
+ {
+ 	/* we're no longer executing anything */
+ 	EG(current_execute_data) = NULL;
+ 
+-	/* Needs to run before zend_ini_deactivate(). */
+-	zend_release_open_basedir();
+-
+ 	zend_try {
+ 		shutdown_scanner();
+ 	} zend_end_try();
+diff --git a/main/fopen_wrappers.c b/main/fopen_wrappers.c
+index bcc7f6740c..d7644dcd06 100644
+--- a/main/fopen_wrappers.c
++++ b/main/fopen_wrappers.c
+@@ -77,8 +77,12 @@ PHPAPI ZEND_INI_MH(OnUpdateBaseDir)
+ 	char *pathbuf, *ptr, *end;
+ 
+ 	if (stage == PHP_INI_STAGE_STARTUP || stage == PHP_INI_STAGE_SHUTDOWN || stage == PHP_INI_STAGE_ACTIVATE || stage == PHP_INI_STAGE_DEACTIVATE) {
++		if (PG(open_basedir_modified)) {
++			efree(*p);
++		}
+ 		/* We're in a PHP_INI_SYSTEM context, no restrictions */
+ 		*p = new_value ? ZSTR_VAL(new_value) : NULL;
++		PG(open_basedir_modified) = false;
+ 		return SUCCESS;
+ 	}
+ 
+@@ -117,15 +121,13 @@ PHPAPI ZEND_INI_MH(OnUpdateBaseDir)
+ 	efree(pathbuf);
+ 
+ 	/* Everything checks out, set it */
+-	if (*p) {
+-		/* Unfortunately entry->modified has already been set to true so we compare entry->value
+-		 * against entry->orig_value. */
+-		if (entry->modified && entry->value != entry->orig_value) {
+-			efree(*p);
+-		}
+-	}
+ 	zend_string *tmp = smart_str_extract(&buf);
+-	*p = estrdup(ZSTR_VAL(tmp));
++	char *result = estrdup(ZSTR_VAL(tmp));
++	if (PG(open_basedir_modified)) {
++		efree(*p);
++	}
++	*p = result;
++	PG(open_basedir_modified) = true;
+ 	zend_string_release(tmp);
+ 
+ 	return SUCCESS;
+diff --git a/main/php_globals.h b/main/php_globals.h
+index d62516f9d6..b2f2696c2d 100644
+--- a/main/php_globals.h
++++ b/main/php_globals.h
+@@ -80,6 +80,7 @@ struct _php_core_globals {
+ 	char *user_dir;
+ 	char *include_path;
+ 	char *open_basedir;
++	bool open_basedir_modified;
+ 	char *extension_dir;
+ 	char *php_binary;
+ 	char *sys_temp_dir;

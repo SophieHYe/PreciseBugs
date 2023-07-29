@@ -1,0 +1,23 @@
+diff --git a/src/hb-aat-layout-kerx-table.hh b/src/hb-aat-layout-kerx-table.hh
+index 642578091..e8eb43b87 100644
+--- a/src/hb-aat-layout-kerx-table.hh
++++ b/src/hb-aat-layout-kerx-table.hh
+@@ -103,7 +103,8 @@ struct KerxSubTableFormat0
+   inline bool sanitize (hb_sanitize_context_t *c) const
+   {
+     TRACE_SANITIZE (this);
+-    return_trace (likely (pairs.sanitize (c)));
++    return_trace (likely (c->check_struct (this) &&
++			  pairs.sanitize (c)));
+   }
+ 
+   protected:
+@@ -275,7 +276,7 @@ struct KerxSubTableFormat2
+   inline bool sanitize (hb_sanitize_context_t *c) const
+   {
+     TRACE_SANITIZE (this);
+-    return_trace (likely (rowWidth.sanitize (c) &&
++    return_trace (likely (c->check_struct (this) &&
+ 			  leftClassTable.sanitize (c, this) &&
+ 			  rightClassTable.sanitize (c, this) &&
+ 			  c->check_range (this, array)));

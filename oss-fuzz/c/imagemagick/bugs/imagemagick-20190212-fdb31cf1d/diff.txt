@@ -1,0 +1,60 @@
+diff --git a/ChangeLog b/ChangeLog
+index 0d1747175..5cc2b517f 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2019-02-12  7.0.8-28 Cristy  <quetzlzacatenango@image...>
++  * Fixed a number of issues (reference
++    https://github.com/ImageMagick/ImageMagick/issues).
++
+ 2019-02-09  7.0.8-27 Cristy  <quetzlzacatenango@image...>
+   * Release ImageMagick version 7.0.8-27, GIT revision 15315:5d48cd312:20190209
+ 
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index 24935d924..f7086559a 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -2500,7 +2500,7 @@ static MagickBooleanType RenderMVGContent(Image *image,
+   if (primitive == (char *) NULL)
+     return(MagickFalse);
+   primitive_extent=(double) strlen(primitive);
+-  (void) SetImageArtifact(image,"MVG",primitive);
++  (void) SetImageArtifact(image,"mvg:vector-graphics",primitive);
+   n=0;
+   number_stops=0;
+   stops=(StopInfo *) NULL;
+diff --git a/coders/mvg.c b/coders/mvg.c
+index 792db76b5..481c5a433 100644
+--- a/coders/mvg.c
++++ b/coders/mvg.c
+@@ -237,7 +237,7 @@ static Image *ReadMVGImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       ThrowReaderException(CorruptImageError,"ImproperImageHeader");
+     }
+   (void) DrawImage(image,draw_info,exception);
+-  (void) SetImageArtifact(image,"MVG",draw_info->primitive);
++  (void) SetImageArtifact(image,"mvg:vector-graphics",draw_info->primitive);
+   draw_info=DestroyDrawInfo(draw_info);
+   (void) CloseBlob(image);
+   return(GetFirstImageInList(image));
+@@ -350,7 +350,7 @@ static MagickBooleanType WriteMVGImage(const ImageInfo *image_info,Image *image,
+   assert(image->signature == MagickCoreSignature);
+   if (image->debug != MagickFalse)
+     (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",image->filename);
+-  value=GetImageArtifact(image,"MVG");
++  value=GetImageArtifact(image,"mvg:vector-graphics");
+   if (value == (const char *) NULL)
+     ThrowWriterException(OptionError,"NoImageVectorGraphics");
+   status=OpenBlob(image_info,image,WriteBlobMode,exception);
+diff --git a/coders/svg.c b/coders/svg.c
+index 0663f715e..d78172a5d 100644
+--- a/coders/svg.c
++++ b/coders/svg.c
+@@ -4136,7 +4136,7 @@ static MagickBooleanType WriteSVGImage(const ImageInfo *image_info,Image *image,
+       (void) CloseBlob(image);
+       return(MagickTrue);
+     }
+-  value=GetImageArtifact(image,"MVG");
++  value=GetImageArtifact(image,"mvg:vector-graphics");
+   if (value == (char *) NULL)
+     return(TraceSVGImage(image,exception));
+   /*

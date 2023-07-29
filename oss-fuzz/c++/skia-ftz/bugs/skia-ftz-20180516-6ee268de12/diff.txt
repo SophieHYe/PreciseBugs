@@ -1,0 +1,59 @@
+diff --git a/include/effects/SkPerlinNoiseShader.h b/include/effects/SkPerlinNoiseShader.h
+index 5bf3847ae3..6b9bcd86d1 100644
+--- a/include/effects/SkPerlinNoiseShader.h
++++ b/include/effects/SkPerlinNoiseShader.h
+@@ -27,9 +27,9 @@ public:
+     /**
+      *  This will construct Perlin noise of the given type (Fractal Noise or Turbulence).
+      *
+-     *  Both base frequencies (X and Y) have a usual range of (0..1).
++     *  Both base frequencies (X and Y) have a usual range of (0..1) and must be non-negative.
+      *
+-     *  The number of octaves provided should be fairly small, although no limit is enforced.
++     *  The number of octaves provided should be fairly small, with a limit of 255 enforced.
+      *  Each octave doubles the frequency, so 10 octaves would produce noise from
+      *  baseFrequency * 1, * 2, * 4, ..., * 512, which quickly yields insignificantly small
+      *  periods and resembles regular unstructured noise rather than Perlin noise.
+diff --git a/src/shaders/SkPerlinNoiseShader.cpp b/src/shaders/SkPerlinNoiseShader.cpp
+index 8f6c85a494..4895683527 100644
+--- a/src/shaders/SkPerlinNoiseShader.cpp
++++ b/src/shaders/SkPerlinNoiseShader.cpp
+@@ -270,7 +270,8 @@ public:
+                 SkScalar highFrequencx =
+                     SkScalarCeilToScalar(tileWidth * fBaseFrequency.fX) / tileWidth;
+                 // BaseFrequency should be non-negative according to the standard.
+-                if (fBaseFrequency.fX / lowFrequencx < highFrequencx / fBaseFrequency.fX) {
++                // lowFrequencx can be 0 if fBaseFrequency.fX is very small.
++                if (sk_ieee_float_divide(fBaseFrequency.fX, lowFrequencx) < highFrequencx / fBaseFrequency.fX) {
+                     fBaseFrequency.fX = lowFrequencx;
+                 } else {
+                     fBaseFrequency.fX = highFrequencx;
+@@ -281,7 +282,8 @@ public:
+                     SkScalarFloorToScalar(tileHeight * fBaseFrequency.fY) / tileHeight;
+                 SkScalar highFrequency =
+                     SkScalarCeilToScalar(tileHeight * fBaseFrequency.fY) / tileHeight;
+-                if (fBaseFrequency.fY / lowFrequency < highFrequency / fBaseFrequency.fY) {
++                // lowFrequency can be 0 if fBaseFrequency.fY is very small.
++                if (sk_ieee_float_divide(fBaseFrequency.fY, lowFrequency) < highFrequency / fBaseFrequency.fY) {
+                     fBaseFrequency.fY = lowFrequency;
+                 } else {
+                     fBaseFrequency.fY = highFrequency;
+@@ -419,6 +421,8 @@ SkPerlinNoiseShaderImpl::SkPerlinNoiseShaderImpl(SkPerlinNoiseShaderImpl::Type t
+   , fStitchTiles(!fTileSize.isEmpty())
+ {
+     SkASSERT(numOctaves >= 0 && numOctaves <= kMaxOctaves);
++    SkASSERT(fBaseFrequencyX >= 0);
++    SkASSERT(fBaseFrequencyY >= 0);
+ }
+ 
+ sk_sp<SkFlattenable> SkPerlinNoiseShaderImpl::CreateProc(SkReadBuffer& buffer) {
+@@ -426,6 +430,9 @@ sk_sp<SkFlattenable> SkPerlinNoiseShaderImpl::CreateProc(SkReadBuffer& buffer) {
+ 
+     SkScalar freqX = buffer.readScalar();
+     SkScalar freqY = buffer.readScalar();
++    if (!buffer.validate(freqX >= 0 && freqY >= 0)) {
++        return nullptr;
++    }
+ 
+     int octaves = buffer.read32LE<int>(kMaxOctaves);
+ 

@@ -1,0 +1,51 @@
+diff --git a/llvm/lib/IR/Instructions.cpp b/llvm/lib/IR/Instructions.cpp
+index 7a5670dc100b..91340e2333ad 100644
+--- a/llvm/lib/IR/Instructions.cpp
++++ b/llvm/lib/IR/Instructions.cpp
+@@ -2225,6 +2225,12 @@ bool ShuffleVectorInst::isExtractSubvectorMask(ArrayRef<int> Mask,
+ bool ShuffleVectorInst::isIdentityWithPadding() const {
+   if (isa<UndefValue>(Op<2>()))
+     return false;
++
++  // FIXME: Not currently possible to express a shuffle mask for a scalable
++  // vector for this case.
++  if (isa<ScalableVectorType>(getType()))
++    return false;
++
+   int NumOpElts = cast<FixedVectorType>(Op<0>()->getType())->getNumElements();
+   int NumMaskElts = cast<FixedVectorType>(getType())->getNumElements();
+   if (NumMaskElts <= NumOpElts)
+@@ -2248,7 +2254,7 @@ bool ShuffleVectorInst::isIdentityWithExtract() const {
+     return false;
+ 
+   // FIXME: Not currently possible to express a shuffle mask for a scalable
+-  // vector for this case
++  // vector for this case.
+   if (isa<ScalableVectorType>(getType()))
+     return false;
+ 
+diff --git a/llvm/test/Transforms/InstCombine/vscale_insertelement.ll b/llvm/test/Transforms/InstCombine/vscale_insertelement.ll
+index e1962d731bf1..9df4bc99cab4 100644
+--- a/llvm/test/Transforms/InstCombine/vscale_insertelement.ll
++++ b/llvm/test/Transforms/InstCombine/vscale_insertelement.ll
+@@ -83,3 +83,20 @@ define <vscale x 4 x float> @insertelement_sequene_may_not_be_splat(float %x) {
+   %t3 = insertelement <vscale x 4 x float> %t2, float %x, i32 3
+   ret <vscale x 4 x float> %t3
+ }
++
++; OSS-Fuzz #27416
++; https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=27416
++define void @ossfuzz_27416(i32 %v) {
++; CHECK-LABEL: @ossfuzz_27416(
++; CHECK-NEXT:    [[IN:%.*]] = insertelement <vscale x 4 x i32> undef, i32 [[V:%.*]], i32 0
++; CHECK-NEXT:    [[SPLAT:%.*]] = shufflevector <vscale x 4 x i32> [[IN]], <vscale x 4 x i32> undef, <vscale x 4 x i32> zeroinitializer
++; CHECK-NEXT:    [[I1:%.*]] = insertelement <vscale x 4 x i32> [[SPLAT]], i32 undef, i8 -128
++; CHECK-NEXT:    store <vscale x 4 x i32> [[I1]], <vscale x 4 x i32>* undef, align 16
++; CHECK-NEXT:    ret void
++;
++  %in = insertelement <vscale x 4 x i32> undef, i32 %v, i32 0
++  %splat = shufflevector <vscale x 4 x i32> %in, <vscale x 4 x i32> undef, <vscale x 4 x i32> zeroinitializer
++  %I1 = insertelement <vscale x 4 x i32> %splat, i32 undef, i8 -128
++  store <vscale x 4 x i32> %I1, <vscale x 4 x i32>* undef, align 16
++  ret void
++}

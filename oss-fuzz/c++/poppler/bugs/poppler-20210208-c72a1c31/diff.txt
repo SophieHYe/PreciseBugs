@@ -1,0 +1,67 @@
+diff --git a/poppler/PSOutputDev.cc b/poppler/PSOutputDev.cc
+index 695f1c1e..bb50080a 100644
+--- a/poppler/PSOutputDev.cc
++++ b/poppler/PSOutputDev.cc
+@@ -4447,6 +4447,18 @@ bool PSOutputDev::tilingPatternFillL2(GfxState *state, Catalog *cat, Object *str
+ 
+ bool PSOutputDev::tilingPatternFill(GfxState *state, Gfx *gfxA, Catalog *cat, GfxTilingPattern *tPat, const double *mat, int x0, int y0, int x1, int y1, double xStep, double yStep)
+ {
++    std::set<int>::iterator patternRefIt;
++    const int patternRefNum = tPat->getPatternRefNum();
++    if (patternRefNum != -1) {
++        if (patternsBeingTiled.find(patternRefNum) == patternsBeingTiled.end()) {
++            patternRefIt = patternsBeingTiled.insert(patternRefNum).first;
++        } else {
++            // pretend we drew it anyway
++            error(errSyntaxError, -1, "Loop in pattern fills");
++            return true;
++        }
++    }
++
+     const double *bbox = tPat->getBBox();
+     const double *pmat = tPat->getMatrix();
+     const int paintType = tPat->getPaintType();
+@@ -4454,6 +4466,7 @@ bool PSOutputDev::tilingPatternFill(GfxState *state, Gfx *gfxA, Catalog *cat, Gf
+     Dict *resDict = tPat->getResDict();
+     Object *str = tPat->getContentStream();
+ 
++    bool res;
+     if (x1 - x0 == 1 && y1 - y0 == 1) {
+         // Don't need to use patterns if only one instance of the pattern is used
+         PDFRectangle box;
+@@ -4473,14 +4486,18 @@ bool PSOutputDev::tilingPatternFill(GfxState *state, Gfx *gfxA, Catalog *cat, Gf
+         gfx->display(str);
+         inType3Char = false;
+         delete gfx;
+-        return true;
++        res = true;
++    } else if (level == psLevel1 || level == psLevel1Sep) {
++        res = tilingPatternFillL1(state, cat, str, pmat, paintType, tilingType, resDict, mat, bbox, x0, y0, x1, y1, xStep, yStep);
++    } else {
++        res = tilingPatternFillL2(state, cat, str, pmat, paintType, tilingType, resDict, mat, bbox, x0, y0, x1, y1, xStep, yStep);
+     }
+ 
+-    if (level == psLevel1 || level == psLevel1Sep) {
+-        return tilingPatternFillL1(state, cat, str, pmat, paintType, tilingType, resDict, mat, bbox, x0, y0, x1, y1, xStep, yStep);
+-    } else {
+-        return tilingPatternFillL2(state, cat, str, pmat, paintType, tilingType, resDict, mat, bbox, x0, y0, x1, y1, xStep, yStep);
++    if (patternRefNum != -1) {
++        patternsBeingTiled.erase(patternRefIt);
+     }
++
++    return res;
+ }
+ 
+ bool PSOutputDev::functionShadedFill(GfxState *state, GfxFunctionShading *shading)
+diff --git a/poppler/PSOutputDev.h b/poppler/PSOutputDev.h
+index 5c320914..9acaee91 100644
+--- a/poppler/PSOutputDev.h
++++ b/poppler/PSOutputDev.h
+@@ -536,6 +536,7 @@ private:
+ #endif
+ 
+     bool ok; // set up ok?
++    std::set<int> patternsBeingTiled; // the patterns that are being tiled
+ 
+     friend class WinPDFPrinter;
+ };

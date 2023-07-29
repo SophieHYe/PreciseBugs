@@ -1,0 +1,72 @@
+diff --git a/clang/lib/Lex/LiteralSupport.cpp b/clang/lib/Lex/LiteralSupport.cpp
+index cbec5e6b6385..ec342ee3ae2a 100644
+--- a/clang/lib/Lex/LiteralSupport.cpp
++++ b/clang/lib/Lex/LiteralSupport.cpp
+@@ -738,15 +738,17 @@ void NumericLiteralParser::ParseDecimalOrOctalCommon(SourceLocation TokLoc){
+     s++;
+     radix = 10;
+     saw_exponent = true;
+-    if (*s == '+' || *s == '-')  s++; // sign
++    if (s != ThisTokEnd && (*s == '+' || *s == '-'))  s++; // sign
+     const char *first_non_digit = SkipDigits(s);
+     if (containsDigits(s, first_non_digit)) {
+       checkSeparator(TokLoc, s, CSK_BeforeDigits);
+       s = first_non_digit;
+     } else {
+-      PP.Diag(PP.AdvanceToTokenCharacter(TokLoc, Exponent-ThisTokBegin),
+-              diag::err_exponent_has_no_digits);
+-      hadError = true;
++      if (!hadError) {
++        PP.Diag(PP.AdvanceToTokenCharacter(TokLoc, Exponent-ThisTokBegin),
++                diag::err_exponent_has_no_digits);
++        hadError = true;
++      }
+       return;
+     }
+   }
+@@ -787,10 +789,12 @@ void NumericLiteralParser::checkSeparator(SourceLocation TokLoc,
+   } else if (Pos == ThisTokEnd)
+     return;
+ 
+-  if (isDigitSeparator(*Pos))
++  if (isDigitSeparator(*Pos)) {
+     PP.Diag(PP.AdvanceToTokenCharacter(TokLoc, Pos - ThisTokBegin),
+             diag::err_digit_separator_not_between_digits)
+       << IsAfterDigits;
++    hadError = true;
++  }
+ }
+ 
+ /// ParseNumberStartingWithZero - This method is called when the first character
+@@ -840,12 +844,14 @@ void NumericLiteralParser::ParseNumberStartingWithZero(SourceLocation TokLoc) {
+       const char *Exponent = s;
+       s++;
+       saw_exponent = true;
+-      if (*s == '+' || *s == '-')  s++; // sign
++      if (s != ThisTokEnd && (*s == '+' || *s == '-'))  s++; // sign
+       const char *first_non_digit = SkipDigits(s);
+       if (!containsDigits(s, first_non_digit)) {
+-        PP.Diag(PP.AdvanceToTokenCharacter(TokLoc, Exponent-ThisTokBegin),
+-                diag::err_exponent_has_no_digits);
+-        hadError = true;
++        if (!hadError) {
++          PP.Diag(PP.AdvanceToTokenCharacter(TokLoc, Exponent-ThisTokBegin),
++                  diag::err_exponent_has_no_digits);
++          hadError = true;
++        }
+         return;
+       }
+       checkSeparator(TokLoc, s, CSK_BeforeDigits);
+diff --git a/clang/test/Lexer/cxx1y_digit_separators.cpp b/clang/test/Lexer/cxx1y_digit_separators.cpp
+index 55366342eda0..67dcd7c510ed 100644
+--- a/clang/test/Lexer/cxx1y_digit_separators.cpp
++++ b/clang/test/Lexer/cxx1y_digit_separators.cpp
+@@ -51,6 +51,8 @@ namespace floating {
+   float u = 0x.'p1f; // expected-error {{hexadecimal floating literal requires a significand}}
+   float v = 0e'f; // expected-error {{exponent has no digits}}
+   float w = 0x0p'f; // expected-error {{exponent has no digits}}
++  float x = 0'e+1; // expected-error {{digit separator cannot appear at end of digit sequence}}
++  float y = 0x0'p+1; // expected-error {{digit separator cannot appear at end of digit sequence}}
+ }
+ 
+ #line 123'456

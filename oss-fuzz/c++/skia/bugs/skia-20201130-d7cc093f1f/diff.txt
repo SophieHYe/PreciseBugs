@@ -1,0 +1,123 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 2802a5e789..3b38fdfb9f 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -243,6 +243,7 @@ sksl_shared_tests = [
+   "$_tests/sksl/shared/Operators.sksl",
+   "$_tests/sksl/shared/Ossfuzz26167.sksl",
+   "$_tests/sksl/shared/Ossfuzz27614.sksl",
++  "$_tests/sksl/shared/Ossfuzz28050.sksl",
+   "$_tests/sksl/shared/OutParams.sksl",
+   "$_tests/sksl/shared/OutParamsTricky.sksl",
+   "$_tests/sksl/shared/RectangleTexture.sksl",
+diff --git a/src/sksl/SkSLInliner.cpp b/src/sksl/SkSLInliner.cpp
+index 910194ce86..5e3e906772 100644
+--- a/src/sksl/SkSLInliner.cpp
++++ b/src/sksl/SkSLInliner.cpp
+@@ -324,10 +324,11 @@ String Inliner::uniqueNameForInlineVar(const String& baseName, SymbolTable* symb
+ 
+ std::unique_ptr<Expression> Inliner::inlineExpression(int offset,
+                                                       VariableRewriteMap* varMap,
++                                                      SymbolTable* symbolTableForExpression,
+                                                       const Expression& expression) {
+     auto expr = [&](const std::unique_ptr<Expression>& e) -> std::unique_ptr<Expression> {
+         if (e) {
+-            return this->inlineExpression(offset, varMap, *e);
++            return this->inlineExpression(offset, varMap, symbolTableForExpression, *e);
+         }
+         return nullptr;
+     };
+@@ -356,8 +357,8 @@ std::unique_ptr<Expression> Inliner::inlineExpression(int offset,
+             return expression.clone();
+         case Expression::Kind::kConstructor: {
+             const Constructor& constructor = expression.as<Constructor>();
+-            return std::make_unique<Constructor>(offset, &constructor.type(),
+-                                                 argList(constructor.arguments()));
++            const Type* type = copy_if_needed(&constructor.type(), *symbolTableForExpression);
++            return std::make_unique<Constructor>(offset, type, argList(constructor.arguments()));
+         }
+         case Expression::Kind::kExternalFunctionCall: {
+             const ExternalFunctionCall& externalCall = expression.as<ExternalFunctionCall>();
+@@ -449,7 +450,7 @@ std::unique_ptr<Statement> Inliner::inlineStatement(int offset,
+     };
+     auto expr = [&](const std::unique_ptr<Expression>& e) -> std::unique_ptr<Expression> {
+         if (e) {
+-            return this->inlineExpression(offset, varMap, *e);
++            return this->inlineExpression(offset, varMap, symbolTableForStatement, *e);
+         }
+         return nullptr;
+     };
+diff --git a/src/sksl/SkSLInliner.h b/src/sksl/SkSLInliner.h
+index dda410b1ea..f415b8df3a 100644
+--- a/src/sksl/SkSLInliner.h
++++ b/src/sksl/SkSLInliner.h
+@@ -56,6 +56,7 @@ private:
+ 
+     std::unique_ptr<Expression> inlineExpression(int offset,
+                                                  VariableRewriteMap* varMap,
++                                                 SymbolTable* symbolTableForExpression,
+                                                  const Expression& expression);
+     std::unique_ptr<Statement> inlineStatement(int offset,
+                                                VariableRewriteMap* varMap,
+diff --git a/tests/sksl/shared/Ossfuzz28050.sksl b/tests/sksl/shared/Ossfuzz28050.sksl
+new file mode 100644
+index 0000000000..4fc38b82ab
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz28050.sksl
+@@ -0,0 +1,4 @@
++float an()  { return 2; }
++void wna()  { an(), float[](); }
++void na()   { wna(); }
++void main() { na(), na(); }
+diff --git a/tests/sksl/shared/golden/Ossfuzz28050.asm.frag b/tests/sksl/shared/golden/Ossfuzz28050.asm.frag
+new file mode 100644
+index 0000000000..b4a67d5d0d
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz28050.asm.frag
+@@ -0,0 +1,18 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %main "main" %sk_Clockwise
++OpExecutionMode %main OriginUpperLeft
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %main "main"
++OpDecorate %sk_Clockwise RelaxedPrecision
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%void = OpTypeVoid
++%7 = OpTypeFunction %void
++%main = OpFunction %void None %7
++%8 = OpLabel
++OpReturn
++OpFunctionEnd
+diff --git a/tests/sksl/shared/golden/Ossfuzz28050.glsl b/tests/sksl/shared/golden/Ossfuzz28050.glsl
+new file mode 100644
+index 0000000000..2933520785
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz28050.glsl
+@@ -0,0 +1,3 @@
++
++void main() {
++}
+diff --git a/tests/sksl/shared/golden/Ossfuzz28050.metal b/tests/sksl/shared/golden/Ossfuzz28050.metal
+new file mode 100644
+index 0000000000..c18cef376a
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz28050.metal
+@@ -0,0 +1,13 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    float4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _outputStruct;
++    thread Outputs* _out = &_outputStruct;
++    return *_out;
++}

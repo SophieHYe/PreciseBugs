@@ -1,0 +1,24 @@
+diff --git a/src/imageformats/xcf.cpp b/src/imageformats/xcf.cpp
+index 7373d31..fe228a3 100644
+--- a/src/imageformats/xcf.cpp
++++ b/src/imageformats/xcf.cpp
+@@ -537,6 +537,7 @@ inline QRgb qRgba(const QRgb rgb, int a)
+  */
+ XCFImageFormat::XCFImageFormat()
+ {
++    static_assert(sizeof(QRgb) == 4, "the code assumes sizeof(QRgb) == 4, if that's not your case, help us fix it :)");
+ }
+ 
+ /*!
+@@ -1361,6 +1362,11 @@ bool XCFImageFormat::loadHierarchy(QDataStream &xcf_io, Layer &layer)
+         break;
+     }
+ 
++    if (bpp > 4) {
++        qCDebug(XCFPLUGIN) << "bpp is" << bpp << "We don't support layers with bpp > 4";
++        return false;
++    }
++
+     // GIMP stores images in a "mipmap"-like format (multiple levels of
+     // increasingly lower resolution). Only the top level is used here,
+     // however.

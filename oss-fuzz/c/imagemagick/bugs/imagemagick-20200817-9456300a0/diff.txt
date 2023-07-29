@@ -1,0 +1,12 @@
+diff --git a/coders/gif.c b/coders/gif.c
+index f2aa60008..db8df8e0c 100644
+--- a/coders/gif.c
++++ b/coders/gif.c
+@@ -1175,6 +1175,7 @@ static Image *ReadGIFImage(const ImageInfo *image_info,ExceptionInfo *exception)
+                 if (info == (unsigned char *) NULL)
+                   ThrowGIFException(ResourceLimitError,
+                     "MemoryAllocationFailed");
++                (void) memset(info,0,reserved_length*sizeof(*info));
+                 for (info_length=0; ; )
+                 {
+                   block_length=(int) ReadBlobBlock(image,info+info_length);

@@ -1,0 +1,62 @@
+diff --git a/poppler/GfxState.cc b/poppler/GfxState.cc
+index 0b9a96bc..07da59a7 100644
+--- a/poppler/GfxState.cc
++++ b/poppler/GfxState.cc
+@@ -3891,7 +3891,7 @@ GfxUnivariateShading::~GfxUnivariateShading() {
+   gfree (cacheBounds);
+ }
+ 
+-void GfxUnivariateShading::getColor(double t, GfxColor *color) {
++int GfxUnivariateShading::getColor(double t, GfxColor *color) {
+   double out[gfxColorMaxComps];
+ 
+   // NB: there can be one function with n outputs or n functions with
+@@ -3901,7 +3901,7 @@ void GfxUnivariateShading::getColor(double t, GfxColor *color) {
+   if (unlikely(nFuncs < 1 || nComps > gfxColorMaxComps)) {
+     for (int i = 0; i < gfxColorMaxComps; i++)
+         color->c[i] = 0;
+-    return;
++    return gfxColorMaxComps;
+   }
+ 
+   if (cacheSize > 0) {
+@@ -3941,6 +3941,7 @@ void GfxUnivariateShading::getColor(double t, GfxColor *color) {
+   for (int i = 0; i < nComps; ++i) {
+     color->c[i] = dblToCol(out[i]);
+   }
++  return nComps;
+ }
+ 
+ void GfxUnivariateShading::setupCache(const Matrix *ctm,
+diff --git a/poppler/GfxState.h b/poppler/GfxState.h
+index 6f4ae9a7..cd109045 100644
+--- a/poppler/GfxState.h
++++ b/poppler/GfxState.h
+@@ -915,7 +915,9 @@ public:
+   GBool getExtend1() { return extend1; }
+   int getNFuncs() { return nFuncs; }
+   Function *getFunc(int i) { return funcs[i]; }
+-  void getColor(double t, GfxColor *color);
++  // returns the nComps of the shading
++  // i.e. how many positions of color have been set
++  int getColor(double t, GfxColor *color);
+ 
+   void setupCache(const Matrix *ctm,
+ 		  double xMin, double yMin,
+diff --git a/poppler/SplashOutputDev.cc b/poppler/SplashOutputDev.cc
+index e70f920f..b85a860c 100644
+--- a/poppler/SplashOutputDev.cc
++++ b/poppler/SplashOutputDev.cc
+@@ -315,7 +315,11 @@ GBool SplashUnivariatePattern::getColor(int x, int y, SplashColorPtr c) {
+   if (! getParameter (xc, yc, &t))
+       return gFalse;
+ 
+-  shading->getColor(t, &gfxColor);
++  const int filled = shading->getColor(t, &gfxColor);
++  if (unlikely(filled < shading->getColorSpace()->getNComps())) {
++    for (int i = filled; i < shading->getColorSpace()->getNComps(); ++i)
++      gfxColor.c[i] = 0;
++  }
+   convertGfxColor(c, colorMode, shading->getColorSpace(), &gfxColor);
+   return gTrue;
+ }

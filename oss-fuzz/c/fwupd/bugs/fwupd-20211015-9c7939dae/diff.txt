@@ -1,0 +1,42 @@
+diff --git a/libfwupdplugin/fu-efi-firmware-file.c b/libfwupdplugin/fu-efi-firmware-file.c
+index fa8029ae9..65745a1ca 100644
+--- a/libfwupdplugin/fu-efi-firmware-file.c
++++ b/libfwupdplugin/fu-efi-firmware-file.c
+@@ -291,6 +291,16 @@ fu_efi_firmware_file_write_sections(FuFirmware *firmware, GError **error)
+ 	g_autoptr(GPtrArray) images = fu_firmware_get_images(firmware);
+ 	g_autoptr(GByteArray) buf = g_byte_array_new();
+ 
++	/* sanity check */
++	if (fu_firmware_get_alignment(firmware) > FU_FIRMWARE_ALIGNMENT_1M) {
++		g_set_error(error,
++			    FWUPD_ERROR,
++			    FWUPD_ERROR_INVALID_FILE,
++			    "alignment invalid, got 0x%02x",
++			    fu_firmware_get_alignment(firmware));
++		return NULL;
++	}
++
+ 	/* no sections defined */
+ 	if (images->len == 0)
+ 		return fu_firmware_get_bytes(firmware, error);
+diff --git a/libfwupdplugin/fu-efi-firmware-filesystem.c b/libfwupdplugin/fu-efi-firmware-filesystem.c
+index 308163a56..917bda8fd 100644
+--- a/libfwupdplugin/fu-efi-firmware-filesystem.c
++++ b/libfwupdplugin/fu-efi-firmware-filesystem.c
+@@ -72,6 +72,16 @@ fu_efi_firmware_filesystem_write(FuFirmware *firmware, GError **error)
+ 	g_autoptr(GByteArray) buf = g_byte_array_new();
+ 	g_autoptr(GPtrArray) images = fu_firmware_get_images(firmware);
+ 
++	/* sanity check */
++	if (fu_firmware_get_alignment(firmware) > FU_FIRMWARE_ALIGNMENT_1M) {
++		g_set_error(error,
++			    FWUPD_ERROR,
++			    FWUPD_ERROR_INVALID_FILE,
++			    "alignment invalid, got 0x%02x",
++			    fu_firmware_get_alignment(firmware));
++		return NULL;
++	}
++
+ 	/* add each file */
+ 	for (guint i = 0; i < images->len; i++) {
+ 		FuFirmware *img = g_ptr_array_index(images, i);

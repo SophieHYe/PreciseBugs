@@ -1,0 +1,13 @@
+diff --git a/libavcodec/hevcdsp_template.c b/libavcodec/hevcdsp_template.c
+index 4017af8eb0..903aa3fe95 100644
+--- a/libavcodec/hevcdsp_template.c
++++ b/libavcodec/hevcdsp_template.c
+@@ -121,7 +121,7 @@ static void FUNC(dequant)(int16_t *coeffs, int16_t log2_size)
+     } else {
+         for (y = 0; y < size; y++) {
+             for (x = 0; x < size; x++) {
+-                *coeffs = *coeffs << -shift;
++                *coeffs = *(uint16_t*)coeffs << -shift;
+                 coeffs++;
+             }
+         }

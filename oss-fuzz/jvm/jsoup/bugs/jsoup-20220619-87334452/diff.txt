@@ -1,0 +1,20 @@
+diff --git a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+index e1f33a43..354b2170 100644
+--- a/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
++++ b/src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java
+@@ -385,8 +385,9 @@ enum HtmlTreeBuilderState {
+                         return false; // ignore
+                     } else {
+                         tb.framesetOk(false);
+-                        Element body = stack.get(1);
+-                        if (startTag.hasAttributes()) {
++                        // will be on stack if this is a nested body. won't be if closed (which is a variance from spec, which leaves it on)
++                        Element body;
++                        if (startTag.hasAttributes() && (body = tb.getFromStack("body")) != null) { // we only ever put one body on stack
+                             for (Attribute attribute : startTag.attributes) {
+                                 if (!body.hasAttr(attribute.getKey()))
+                                     body.attributes().put(attribute);
+diff --git a/src/test/resources/fuzztests/48116.html.gz b/src/test/resources/fuzztests/48116.html.gz
+new file mode 100644
+index 00000000..37367dc8
+Binary files /dev/null and b/src/test/resources/fuzztests/48116.html.gz differ

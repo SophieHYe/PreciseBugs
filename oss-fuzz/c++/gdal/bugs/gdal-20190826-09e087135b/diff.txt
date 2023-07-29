@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/bmp/bmpdataset.cpp b/gdal/frmts/bmp/bmpdataset.cpp
+index b92b34f182..c2a5d09c1b 100644
+--- a/gdal/frmts/bmp/bmpdataset.cpp
++++ b/gdal/frmts/bmp/bmpdataset.cpp
+@@ -1277,7 +1277,7 @@ GDALDataset *BMPDataset::Open( GDALOpenInfo * poOpenInfo )
+                 break;
+             }
+ 
+-            if( VSIFSeekL( poDS->fp, BFH_SIZE + poDS->sInfoHeader.iSize, SEEK_SET ) != 0 ||
++            if( VSIFSeekL( poDS->fp, BFH_SIZE + static_cast<vsi_l_offset>(poDS->sInfoHeader.iSize), SEEK_SET ) != 0 ||
+                 VSIFReadL( poDS->pabyColorTable, poDS->nColorElems,
+                            nColorTableSize, poDS->fp ) != (size_t)nColorTableSize )
+             {

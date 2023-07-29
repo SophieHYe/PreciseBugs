@@ -1,0 +1,77 @@
+diff --git a/ext/opcache/jit/zend_jit_x86.dasc b/ext/opcache/jit/zend_jit_x86.dasc
+index 3ea6b38fa4..5f4e914a6c 100644
+--- a/ext/opcache/jit/zend_jit_x86.dasc
++++ b/ext/opcache/jit/zend_jit_x86.dasc
+@@ -5000,9 +5000,6 @@ static int zend_jit_long_math_helper(dasm_State    **Dst,
+ 
+ 	if (opcode == ZEND_MOD) {
+ 		result_reg = ZREG_RAX;
+-		if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RAX) {
+-			|	mov aword T1, r0 // save
+-		}
+ 	} else if (Z_MODE(res_addr) == IS_REG) {
+ 		if ((opline->opcode == ZEND_SL || opline->opcode == ZEND_SR)
+ 		 && opline->op2_type != IS_CONST) {
+@@ -5127,6 +5124,11 @@ static int zend_jit_long_math_helper(dasm_State    **Dst,
+ 				|	GET_ZVAL_LVAL result_reg, op1_addr
+ 				|	LONG_MATH ZEND_BW_AND, result_reg, tmp_addr
+ 			} else {
++				if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RAX) {
++					|	mov aword T1, r0 // save
++				} else if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RCX) {
++					|	mov aword T1, Ra(ZREG_RCX) // save
++				}
+ 				result_reg = ZREG_RDX;
+ 				if (op2_lval == -1) {
+ 					|	xor Ra(result_reg), Ra(result_reg)
+@@ -5142,6 +5144,8 @@ static int zend_jit_long_math_helper(dasm_State    **Dst,
+ 				}
+ 				if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RAX) {
+ 					|	mov r0, aword T1 // restore
++				} else if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RCX) {
++					|	mov Ra(ZREG_RCX), aword T1 // restore
+ 				}
+ 			}
+ 		} else {
+@@ -5183,6 +5187,9 @@ static int zend_jit_long_math_helper(dasm_State    **Dst,
+ 				|.code
+ 			}
+ 
++			if (Z_MODE(res_addr) == IS_MEM_ZVAL && Z_REG(res_addr) == ZREG_RAX) {
++				|	mov aword T1, r0 // save
++			}
+ 			result_reg = ZREG_RDX;
+ 			|	GET_ZVAL_LVAL ZREG_RAX, op1_addr
+ 			|.if X64
+diff --git a/ext/opcache/tests/jit/mod_005.phpt b/ext/opcache/tests/jit/mod_005.phpt
+new file mode 100644
+index 0000000000..8c90f6b6ef
+--- /dev/null
++++ b/ext/opcache/tests/jit/mod_005.phpt
+@@ -0,0 +1,26 @@
++--TEST--
++JIT MOD: 005
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--FILE--
++<?php
++class Test{
++    public $prop = 32;
++}
++
++function test2($test) {
++    $test->prop %= 3;
++	return $test;
++}
++
++var_dump(test2(new Test));
++?>
++--EXPECT--
++object(Test)#1 (1) {
++  ["prop"]=>
++  int(2)
++}

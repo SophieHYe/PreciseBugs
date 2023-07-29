@@ -1,0 +1,16 @@
+diff --git a/src/ucl_parser.c b/src/ucl_parser.c
+index c2a51ad..abfcc3d 100644
+--- a/src/ucl_parser.c
++++ b/src/ucl_parser.c
+@@ -1828,6 +1828,11 @@ ucl_parse_value (struct ucl_parser *parser, struct ucl_chunk *chunk)
+ 					while (p < chunk->end && *p >= 'A' && *p <= 'Z') {
+ 						p ++;
+ 					}
++					if(p == chunk->end) {
++						ucl_set_err (parser, UCL_ESYNTAX,
++								"unterminated multiline value", &parser->err);
++						return false;
++					}
+ 					if (*p =='\n') {
+ 						/* Set chunk positions and start multiline parsing */
+ 						chunk->remain -= p - c + 1;

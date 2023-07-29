@@ -1,0 +1,109 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index fefbb09b4d..5f9c3abb8d 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -144,6 +144,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz29845.sksl",
+   "/sksl/errors/Ossfuzz29849.sksl",
+   "/sksl/errors/Ossfuzz31410.sksl",
++  "/sksl/errors/Ossfuzz31469.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowParamArraySize.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz31469.sksl b/resources/sksl/errors/Ossfuzz31469.sksl
+new file mode 100644
+index 0000000000..bd23a0c4ef
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz31469.sksl
+@@ -0,0 +1,3 @@
++half n() {}
++void S() { -n(); }
++void l() { S(); }
+diff --git a/src/sksl/SkSLInliner.cpp b/src/sksl/SkSLInliner.cpp
+index e6e55bb55c..86db614cd8 100644
+--- a/src/sksl/SkSLInliner.cpp
++++ b/src/sksl/SkSLInliner.cpp
+@@ -760,15 +760,22 @@ Inliner::InlinedCall Inliner::inlineCall(FunctionCall* call,
+                         &arguments[i]->type())));
+     }
+ 
+-    if (resultExpr != nullptr) {
+-        // Return our result variable as our replacement expression.
++    if (resultExpr) {
++        // Return our result expression as-is.
+         inlinedCall.fReplacementExpr = std::move(resultExpr);
+-    } else {
++    } else if (function.declaration().returnType() == *fContext->fTypes.fVoid) {
+         // It's a void function, so it doesn't actually result in anything, but we have to return
+         // something non-null as a standin.
+         inlinedCall.fReplacementExpr = std::make_unique<BoolLiteral>(*fContext,
+                                                                      offset,
+                                                                      /*value=*/false);
++    } else {
++        // It's a non-void function, but it never created a result expression--that is, it never
++        // returned anything! Discard our output and generate an error.
++        fContext->fErrors.error(function.fOffset, String("function '") +
++                                                  function.declaration().name() +
++                                                  "' exits without returning a value");
++        inlinedCall = {};
+     }
+ 
+     return inlinedCall;
+@@ -1198,25 +1205,29 @@ bool Inliner::analyze(const std::vector<std::unique_ptr<ProgramElement>>& elemen
+         // Convert the function call to its inlined equivalent.
+         InlinedCall inlinedCall = this->inlineCall(&funcCall, candidate.fSymbols,
+                                                    &candidate.fEnclosingFunction->declaration());
+-        if (inlinedCall.fInlinedBody) {
+-            // Ensure that the inlined body has a scope if it needs one.
+-            this->ensureScopedBlocks(inlinedCall.fInlinedBody.get(), candidate.fParentStmt->get());
+-
+-            // Add references within the inlined body
+-            usage->add(inlinedCall.fInlinedBody.get());
+-
+-            // Move the enclosing statement to the end of the unscoped Block containing the inlined
+-            // function, then replace the enclosing statement with that Block.
+-            // Before:
+-            //     fInlinedBody = Block{ stmt1, stmt2, stmt3 }
+-            //     fEnclosingStmt = stmt4
+-            // After:
+-            //     fInlinedBody = null
+-            //     fEnclosingStmt = Block{ stmt1, stmt2, stmt3, stmt4 }
+-            inlinedCall.fInlinedBody->children().push_back(std::move(*candidate.fEnclosingStmt));
+-            *candidate.fEnclosingStmt = std::move(inlinedCall.fInlinedBody);
++
++        // Stop if an error was detected during the inlining process.
++        if (!inlinedCall.fInlinedBody && !inlinedCall.fReplacementExpr) {
++            break;
+         }
+ 
++        // Ensure that the inlined body has a scope if it needs one.
++        this->ensureScopedBlocks(inlinedCall.fInlinedBody.get(), candidate.fParentStmt->get());
++
++        // Add references within the inlined body
++        usage->add(inlinedCall.fInlinedBody.get());
++
++        // Move the enclosing statement to the end of the unscoped Block containing the inlined
++        // function, then replace the enclosing statement with that Block.
++        // Before:
++        //     fInlinedBody = Block{ stmt1, stmt2, stmt3 }
++        //     fEnclosingStmt = stmt4
++        // After:
++        //     fInlinedBody = null
++        //     fEnclosingStmt = Block{ stmt1, stmt2, stmt3, stmt4 }
++        inlinedCall.fInlinedBody->children().push_back(std::move(*candidate.fEnclosingStmt));
++        *candidate.fEnclosingStmt = std::move(inlinedCall.fInlinedBody);
++
+         // Replace the candidate function call with our replacement expression.
+         usage->replace(candidate.fCandidateExpr->get(), inlinedCall.fReplacementExpr.get());
+         *candidate.fCandidateExpr = std::move(inlinedCall.fReplacementExpr);
+diff --git a/tests/sksl/errors/Ossfuzz31469.glsl b/tests/sksl/errors/Ossfuzz31469.glsl
+new file mode 100644
+index 0000000000..62d9a44123
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz31469.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: function 'n' can exit without returning a value
++error: 1: function 'n' exits without returning a value
++2 errors

@@ -1,0 +1,14 @@
+diff --git a/coders/fits.c b/coders/fits.c
+index ad6ae88ca..9fc3998d7 100644
+--- a/coders/fits.c
++++ b/coders/fits.c
+@@ -452,7 +452,8 @@ static Image *ReadFITSImage(const ImageInfo *image_info,
+     /*
+       Convert FITS pixels to pixel packets.
+     */
+-    scale=QuantumRange/(fits_info.max_data-fits_info.min_data);
++    scale=QuantumRange*PerceptibleReciprocal(fits_info.max_data-
++      fits_info.min_data);
+     for (y=(ssize_t) image->rows-1; y >= 0; y--)
+     {
+       q=QueueAuthenticPixels(image,0,y,image->columns,1,exception);

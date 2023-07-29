@@ -1,0 +1,12 @@
+diff --git a/coders/tiff.c b/coders/tiff.c
+index 63513dcf3..c1f066d3b 100644
+--- a/coders/tiff.c
++++ b/coders/tiff.c
+@@ -743,6 +743,7 @@ static MagickBooleanType TIFFGetProperties(TIFF *tiff,Image *image,
+     count,
+     type;
+ 
++  *text='\0';
+   status=MagickTrue;
+   if ((TIFFGetField(tiff,TIFFTAG_ARTIST,&text) == 1) &&
+       (text != (char *) NULL))

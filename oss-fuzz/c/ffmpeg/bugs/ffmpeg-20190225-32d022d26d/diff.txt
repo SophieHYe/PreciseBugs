@@ -1,0 +1,12 @@
+diff --git a/libavcodec/mjpegdec.c b/libavcodec/mjpegdec.c
+index 902b8eb7cb..e82c185433 100644
+--- a/libavcodec/mjpegdec.c
++++ b/libavcodec/mjpegdec.c
+@@ -1903,6 +1903,7 @@ static int mjpeg_decode_app(MJpegDecodeContext *s)
+         type   = get_bits(&s->gb, 8);
+         len -= 4;
+ 
++        av_freep(&s->stereo3d);
+         s->stereo3d = av_stereo3d_alloc();
+         if (!s->stereo3d) {
+             goto out;

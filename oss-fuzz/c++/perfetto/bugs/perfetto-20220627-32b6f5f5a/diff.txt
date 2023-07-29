@@ -1,0 +1,61 @@
+diff --git a/src/trace_processor/trace_sorter.cc b/src/trace_processor/trace_sorter.cc
+index bf8b713d9..3e88ef8e6 100644
+--- a/src/trace_processor/trace_sorter.cc
++++ b/src/trace_processor/trace_sorter.cc
+@@ -113,7 +113,7 @@ void TraceSorter::SortAndExtractEventsUntilPacket(uint64_t limit_offset) {
+         continue;
+       PERFETTO_DCHECK(queue.min_ts_ >= global_min_ts_);
+       PERFETTO_DCHECK(queue.max_ts_ <= global_max_ts_);
+-      if (queue.min_ts_ < min_queue_ts[0]) {
++      if (!has_queues_with_expired_events || queue.min_ts_ < min_queue_ts[0]) {
+         min_queue_ts[1] = min_queue_ts[0];
+         min_queue_ts[0] = queue.min_ts_;
+         min_queue_idx = i;
+diff --git a/src/trace_processor/trace_sorter.h b/src/trace_processor/trace_sorter.h
+index 2ae4c871b..34f8b5b8b 100644
+--- a/src/trace_processor/trace_sorter.h
++++ b/src/trace_processor/trace_sorter.h
+@@ -174,7 +174,7 @@ class TraceSorter {
+   void ExtractEventsForced() {
+     uint32_t cur_mem_block_offset = variadic_queue_.NextOffset();
+     SortAndExtractEventsUntilPacket(cur_mem_block_offset);
+-    queues_.resize(0);
++    queues_.clear();
+ 
+     offset_for_extraction_ = cur_mem_block_offset;
+     flushes_since_extraction_ = 0;
+@@ -257,8 +257,6 @@ class TraceSorter {
+   static_assert(sizeof(TimestampedDescriptor) == 16,
+                 "TimestampeDescriptor cannot grow beyond 16 bytes");
+ 
+-  static constexpr uint32_t kNoBatch = std::numeric_limits<uint32_t>::max();
+-
+   struct Queue {
+     inline void Append(TimestampedDescriptor ts_desc) {
+       auto ts = ts_desc.ts;
+diff --git a/src/trace_processor/trace_sorter_queue.h b/src/trace_processor/trace_sorter_queue.h
+index 7a806dfde..1a91c5362 100644
+--- a/src/trace_processor/trace_sorter_queue.h
++++ b/src/trace_processor/trace_sorter_queue.h
+@@ -126,8 +126,8 @@ class VariadicQueue {
+       new (ptr) T(std::move(value));
+       num_elements_++;
+       ptr += sizeof(T);
+-      offset_ =
+-          RoundUpToPowerOf8(static_cast<uint32_t>(ptr - storage_begin_ptr));
++      offset_ = static_cast<uint32_t>(
++          base::AlignUp<8>(static_cast<uint32_t>(ptr - storage_begin_ptr)));
+       return cur_offset;
+     }
+ 
+@@ -153,10 +153,6 @@ class VariadicQueue {
+     bool empty() const { return num_elements_ == num_elements_evicted_; }
+ 
+    private:
+-    static inline uint32_t RoundUpToPowerOf8(uint32_t offset) {
+-      return (offset + 7) & (~0u << 3);
+-    }
+-
+     uint32_t size_;
+     uint32_t offset_ = 0;
+ 

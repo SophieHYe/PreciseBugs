@@ -1,0 +1,26 @@
+diff --git a/gdal/gcore/overview.cpp b/gdal/gcore/overview.cpp
+index 9ab7a69fdd..c68b7a5124 100644
+--- a/gdal/gcore/overview.cpp
++++ b/gdal/gcore/overview.cpp
+@@ -2212,8 +2212,8 @@ static CPLErr GDALResampleChunk32R_Convolution(
+         int nBits = atoi(pszNBITS);
+         if( nBits == GDALGetDataTypeSize(eBandDT) )
+             nBits = 0;
+-        if( nBits )
+-            fMaxVal = static_cast<float>((1 << nBits) -1);
++        if( nBits > 0 && nBits < 32 )
++            fMaxVal = static_cast<float>((1U << nBits) -1);
+     }
+ 
+     if( eWrkDataType == GDT_Byte )
+@@ -2641,8 +2641,8 @@ static CPLErr GDALResampleChunk32RMultiBands_Convolution(
+         int nBits = atoi(pszNBITS);
+         if( nBits == GDALGetDataTypeSize(eBandDT) )
+             nBits = 0;
+-        if( nBits )
+-            fMaxVal = static_cast<float>((1 << nBits) -1);
++        if( nBits > 0 && nBits < 32 )
++            fMaxVal = static_cast<float>((1U << nBits) -1);
+     }
+ 
+     if( eWrkDataType == GDT_Byte )

@@ -1,0 +1,13 @@
+diff --git a/libavcodec/h264_cavlc.c b/libavcodec/h264_cavlc.c
+index 069b52129c..72dfaaab45 100644
+--- a/libavcodec/h264_cavlc.c
++++ b/libavcodec/h264_cavlc.c
+@@ -1112,7 +1112,7 @@ decode_intra_mb:
+ 
+         dquant= get_se_golomb(&sl->gb);
+ 
+-        sl->qscale += dquant;
++        sl->qscale += (unsigned)dquant;
+ 
+         if (((unsigned)sl->qscale) > max_qp){
+             if (sl->qscale < 0) sl->qscale += max_qp + 1;

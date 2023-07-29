@@ -1,0 +1,12 @@
+diff --git a/maplabel.c b/maplabel.c
+index 418a39a58..4416c5622 100644
+--- a/maplabel.c
++++ b/maplabel.c
+@@ -825,6 +825,7 @@ int msLoadFontSet(fontSetObj *fontset, mapObj *map)
+   if(!stream) {
+     msSetError(MS_IOERR, "Error opening fontset %s.", "msLoadFontset()",
+                fontset->filename);
++    free(path);
+     return(-1);
+   }
+ 

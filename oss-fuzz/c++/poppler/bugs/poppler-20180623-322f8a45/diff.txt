@@ -1,0 +1,14 @@
+diff --git a/poppler/GfxState.cc b/poppler/GfxState.cc
+index 157bcf44..f065b672 100644
+--- a/poppler/GfxState.cc
++++ b/poppler/GfxState.cc
+@@ -3057,7 +3057,8 @@ GfxColorSpace *GfxDeviceNColorSpace::parse(GfxResources *res, Array *arr, Output
+     Object obj2 = obj1.arrayGet(i);
+     if (!obj2.isName()) {
+       error(errSyntaxWarning, -1, "Bad DeviceN color space (names)");
+-      goto err1;
++      nCompsA = i;
++      goto err3;
+     }
+     namesA[i] = new GooString(obj2.getName());
+   }

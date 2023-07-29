@@ -1,0 +1,18 @@
+diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
+index 2d8ecad7..6d8941ea 100644
+--- a/poppler/GlobalParams.cc
++++ b/poppler/GlobalParams.cc
+@@ -1296,9 +1296,12 @@ GooString *GlobalParams::findSystemFontFile(GfxFont *font,
+   SysFontInfo *fi;
+   GooString *path;
+ 
++  const GooString *fontName = font->getName();
++  if (!fontName) return nullptr;
++
+   path = NULL;
+   lockGlobalParams;
+-  if ((fi = sysFonts->find(font->getName(), font->isFixedWidth(), gFalse))) {
++  if ((fi = sysFonts->find(fontName, font->isFixedWidth(), gFalse))) {
+     path = fi->path->copy();
+     *type = fi->type;
+     *fontNum = fi->fontNum;

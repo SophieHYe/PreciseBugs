@@ -1,0 +1,1 @@
+commit 2e36fa6ea4d753fc9aac0c6259078bdc9720a930Author: Rob Davies <rmd+git@sanger.ac.uk>Date:   Tue Mar 31 15:29:30 2020 +0100    Fix memory leak on failure in cram_decode_slice()        Make the error case decrement the reference count on any used    refs and free the refs array.        Credit to OSS-Fuzz    Fixes oss-fuzz 21393

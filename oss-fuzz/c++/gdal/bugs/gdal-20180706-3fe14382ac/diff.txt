@@ -1,0 +1,15 @@
+diff --git a/gdal/third_party/LercLib/RLE.cpp b/gdal/third_party/LercLib/RLE.cpp
+index 57d71522d5..09eb8a274b 100644
+--- a/gdal/third_party/LercLib/RLE.cpp
++++ b/gdal/third_party/LercLib/RLE.cpp
+@@ -307,8 +307,8 @@ bool RLE::decompress(const Byte* arrRLE, size_t nBytesRemaining, Byte* arr, size
+   short cnt = readCount(&srcPtr);
+   while (cnt != -32768)
+   {
+-    size_t i = cnt < 0 ? -cnt : cnt;
+-    size_t m = cnt < 0 ? 1 : i;
++    size_t i = cnt <= 0 ? -cnt : cnt;
++    size_t m = cnt <= 0 ? 1 : i;
+ 
+     if (nBytesRemaining < m + 2 || arrIdx + i > arrSize)
+       return false;

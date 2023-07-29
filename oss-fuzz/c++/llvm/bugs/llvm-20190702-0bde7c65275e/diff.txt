@@ -1,0 +1,46 @@
+diff --git a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+index 1558795b5308..0bbecde21842 100644
+--- a/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
++++ b/llvm/lib/Transforms/InstCombine/InstCombineShifts.cpp
+@@ -29,12 +29,12 @@ static Instruction *
+ reassociateShiftAmtsOfTwoSameDirectionShifts(BinaryOperator *Sh0,
+                                              const SimplifyQuery &SQ) {
+   // Look for:  (x shiftopcode ShAmt0) shiftopcode ShAmt1
+-  Value *X, *ShAmt1, *Sh1Value, *ShAmt0;
++  Value *X, *ShAmt1, *ShAmt0;
++  Instruction *Sh1;
+   if (!match(Sh0, m_Shift(m_CombineAnd(m_Shift(m_Value(X), m_Value(ShAmt1)),
+-                                       m_Value(Sh1Value)),
++                                       m_Instruction(Sh1)),
+                           m_Value(ShAmt0))))
+     return nullptr;
+-  auto *Sh1 = cast<BinaryOperator>(Sh1Value);
+ 
+   // The shift opcodes must be identical.
+   Instruction::BinaryOps ShiftOpcode = Sh0->getOpcode();
+diff --git a/llvm/test/Transforms/InstCombine/shift-amount-reassociation.ll b/llvm/test/Transforms/InstCombine/shift-amount-reassociation.ll
+index f7cd0791482d..e124a0358610 100644
+--- a/llvm/test/Transforms/InstCombine/shift-amount-reassociation.ll
++++ b/llvm/test/Transforms/InstCombine/shift-amount-reassociation.ll
+@@ -154,6 +154,21 @@ define i32 @t11_shl_nsw_flag_preservation(i32 %x, i32 %y) {
+   ret i32 %t3
+ }
+ 
++; Reduced from https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=15587
++@X = external global i32
++define i64 @constantexpr() {
++; CHECK-LABEL: @constantexpr(
++; CHECK-NEXT:    ret i64 0
++;
++  %A = alloca i64
++  %L = load i64, i64* %A
++  %V = add i64 ptrtoint (i32* @X to i64), 0
++  %B2 = shl i64 %V, 0
++  %B4 = ashr i64 %B2, %L
++  %B = and i64 undef, %B4
++  ret i64 %B
++}
++
+ ; No one-use tests since we will only produce a single instruction here.
+ 
+ ; Negative tests

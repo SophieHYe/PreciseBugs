@@ -1,0 +1,37 @@
+diff --git a/external/fontconfig/ExternalPackage_fontconfig.mk b/external/fontconfig/ExternalPackage_fontconfig.mk
+index 7114f80d9507..b09931f5e807 100644
+--- a/external/fontconfig/ExternalPackage_fontconfig.mk
++++ b/external/fontconfig/ExternalPackage_fontconfig.mk
+@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig,fontconfig))
+ 
+ $(eval $(call gb_ExternalPackage_use_external_project,fontconfig,fontconfig))
+ 
++ifeq ($(DISABLE_DYNLOADING),)
+ $(eval $(call gb_ExternalPackage_add_file,fontconfig,$(LIBO_LIB_FOLDER)/libfontconfig-lo.so.1.12.0,src/.libs/libfontconfig-lo.so.1.12.0))
++endif
+ 
+ # vim: set noet sw=4 ts=4:
+diff --git a/external/fontconfig/ExternalProject_fontconfig.mk b/external/fontconfig/ExternalProject_fontconfig.mk
+index 3bbecf1d672a..efa812250db8 100644
+--- a/external/fontconfig/ExternalProject_fontconfig.mk
++++ b/external/fontconfig/ExternalProject_fontconfig.mk
+@@ -48,11 +48,14 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
+ 			    --enable-libxml2 \
+ 			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
+ 			) \
+-			$(if $(filter LINUX,$(OS)), \
+-				--disable-static \
+-				--prefix=/ \
+-				--with-add-fonts=$(fontconfig_add_fonts) \
+-				--with-cache-dir=/usr/lib/fontconfig/cache \
++			$(if $(filter FUZZERS,$(BUILD_TYPE)), \
++				--disable-shared, \
++				$(if $(filter LINUX,$(OS)), \
++					--disable-static \
++					--prefix=/ \
++					--with-add-fonts=$(fontconfig_add_fonts) \
++					--with-cache-dir=/usr/lib/fontconfig/cache \
++				) \
+ 			) \
+ 		&& $(MAKE) -C src && $(MAKE) fonts.conf \
+ 	)

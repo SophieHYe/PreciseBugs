@@ -1,0 +1,81 @@
+diff --git a/ext/opcache/Optimizer/dce.c b/ext/opcache/Optimizer/dce.c
+index 2cbeab4ce6..f0f67055df 100644
+--- a/ext/opcache/Optimizer/dce.c
++++ b/ext/opcache/Optimizer/dce.c
+@@ -491,6 +491,10 @@ static inline zend_bool may_break_varargs(const zend_op_array *op_array, const z
+ 	return 0;
+ }
+ 
++static inline zend_bool may_throw_dce_exception(const zend_op *opline) {
++	return opline->opcode == ZEND_ADD_ARRAY_ELEMENT && opline->op2_type == IS_UNUSED;
++}
++
+ int dce_optimize_op_array(zend_op_array *op_array, zend_ssa *ssa, zend_bool reorder_dtor_effects) {
+ 	int i;
+ 	zend_ssa_phi *phi;
+@@ -557,7 +561,8 @@ int dce_optimize_op_array(zend_op_array *op_array, zend_ssa *ssa, zend_bool reor
+ 					add_operands_to_worklists(&ctx, &op_array->opcodes[op_data], &ssa->ops[op_data], ssa, 0);
+ 				}
+ 			} else if (may_have_side_effects(op_array, ssa, &op_array->opcodes[i], &ssa->ops[i], ctx.reorder_dtor_effects)
+-					|| zend_may_throw(&op_array->opcodes[i], &ssa->ops[i], op_array, ssa)
++					|| (zend_may_throw(&op_array->opcodes[i], &ssa->ops[i], op_array, ssa)
++						&& !may_throw_dce_exception(&op_array->opcodes[i]))
+ 					|| (has_varargs && may_break_varargs(op_array, ssa, &ssa->ops[i]))) {
+ 				if (op_array->opcodes[i].opcode == ZEND_NEW
+ 						&& op_array->opcodes[i+1].opcode == ZEND_DO_FCALL
+diff --git a/ext/opcache/Optimizer/sccp.c b/ext/opcache/Optimizer/sccp.c
+index 8c68099ec3..7792311637 100644
+--- a/ext/opcache/Optimizer/sccp.c
++++ b/ext/opcache/Optimizer/sccp.c
+@@ -2316,6 +2316,12 @@ static int try_remove_definition(sccp_ctx *ctx, int var_num, zend_ssa_var *var,
+ 							return 0;
+ 						}
+ 						break;
++					case ZEND_INIT_ARRAY:
++					case ZEND_ADD_ARRAY_ELEMENT:
++						if (opline->op2_type == IS_UNUSED) {
++							return 0;
++						}
++						/* break missing intentionally */
+ 					default:
+ 						if (zend_may_throw(opline, ssa_op, op_array, ssa)) {
+ 							return 0;
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index bbecc87ca5..e14c953095 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -4628,8 +4628,9 @@ int zend_may_throw_ex(const zend_op *opline, const zend_ssa_op *ssa_op, const ze
+ 		case ZEND_ROPE_END:
+ 			return t2 & (MAY_BE_ARRAY|MAY_BE_OBJECT);
+ 		case ZEND_INIT_ARRAY:
+-		case ZEND_ADD_ARRAY_ELEMENT:
+ 			return (opline->op2_type != IS_UNUSED) && (t2 & (MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE));
++		case ZEND_ADD_ARRAY_ELEMENT:
++			return (opline->op2_type == IS_UNUSED) || (t2 & (MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE));
+ 		case ZEND_STRLEN:
+ 			return (t1 & MAY_BE_ANY) != MAY_BE_STRING;
+ 		case ZEND_COUNT:
+diff --git a/ext/opcache/tests/jit/array_elem_002.phpt b/ext/opcache/tests/jit/array_elem_002.phpt
+new file mode 100644
+index 0000000000..c4f6c5b2dd
+--- /dev/null
++++ b/ext/opcache/tests/jit/array_elem_002.phpt
+@@ -0,0 +1,18 @@
++--TEST--
++Occupied next element
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++$float = 100000000000000000000000000000000000000;
++$string_float= PHP_INT_MAX;
++$a = [$float => 'a', $string_float => 'b', 'c', 'd'];
++?>
++--EXPECTF--
++Fatal error: Uncaught Error: Cannot add element to the array as the next element is already occupied in %sarray_elem_002.php:4
++Stack trace:
++#0 {main}
++  thrown in %sarray_elem_002.php on line 4

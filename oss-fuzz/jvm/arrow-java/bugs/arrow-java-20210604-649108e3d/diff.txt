@@ -1,0 +1,48 @@
+diff --git a/cpp/src/parquet/file_reader.cc b/cpp/src/parquet/file_reader.cc
+index 7ac0c9d86..4ff214232 100644
+--- a/cpp/src/parquet/file_reader.cc
++++ b/cpp/src/parquet/file_reader.cc
+@@ -30,6 +30,7 @@
+ #include "arrow/io/memory.h"
+ #include "arrow/util/checked_cast.h"
+ #include "arrow/util/future.h"
++#include "arrow/util/int_util_internal.h"
+ #include "arrow/util/logging.h"
+ #include "arrow/util/ubsan.h"
+ #include "parquet/column_reader.h"
+@@ -44,6 +45,8 @@
+ #include "parquet/schema.h"
+ #include "parquet/types.h"
+ 
++using arrow::internal::AddWithOverflow;
++
+ namespace parquet {
+ 
+ // PARQUET-978: Minimize footer reads by reading 64 KB from the end of the file
+@@ -103,13 +106,18 @@ const RowGroupMetaData* RowGroupReader::metadata() const { return contents_->met
+   }
+ 
+   int64_t col_length = column_metadata->total_compressed_size();
++  int64_t col_end;
++  if (AddWithOverflow(col_start, col_length, &col_end) || col_end > source_size) {
++    throw ParquetException("Invalid column metadata (corrupt file?)");
++  }
++
+   // PARQUET-816 workaround for old files created by older parquet-mr
+   const ApplicationVersion& version = file_metadata->writer_version();
+   if (version.VersionLt(ApplicationVersion::PARQUET_816_FIXED_VERSION())) {
+     // The Parquet MR writer had a bug in 1.2.8 and below where it didn't include the
+     // dictionary page header size in total_compressed_size and total_uncompressed_size
+     // (see IMPALA-694). We add padding to compensate.
+-    int64_t bytes_remaining = source_size - (col_start + col_length);
++    int64_t bytes_remaining = source_size - col_end;
+     int64_t padding = std::min<int64_t>(kMaxDictHeaderSize, bytes_remaining);
+     col_length += padding;
+   }
+diff --git a/testing b/testing
+index b658b0877..6d9824309 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit b658b087767b041b2081766814655b4dd5a9a439
++Subproject commit 6d98243093c0b36442da94de7010f3eacc2a9909

@@ -1,0 +1,75 @@
+diff --git a/src/libFLAC/fixed_intrin_sse2.c b/src/libFLAC/fixed_intrin_sse2.c
+index fd74b5ed..4f1427c5 100644
+--- a/src/libFLAC/fixed_intrin_sse2.c
++++ b/src/libFLAC/fixed_intrin_sse2.c
+@@ -191,6 +191,11 @@ uint32_t FLAC__fixed_compute_best_predictor_intrin_sse2(const FLAC__int32 data[]
+ FLAC__SSE_TARGET("sse2")
+ uint32_t FLAC__fixed_compute_best_predictor_wide_intrin_sse2(const FLAC__int32 data[], uint32_t data_len, float residual_bits_per_sample[FLAC__MAX_FIXED_ORDER + 1])
+ {
++	/* This code works up until a bitdepth of 25 bit
++	 * as 2log(17) bits are needed for error calculation
++	 * and processing happens in blocks of 7.
++	 * 2log(17*7) = 31.9
++	 */
+ 	FLAC__uint64 total_error_0, total_error_1, total_error_2, total_error_3, total_error_4;
+ 	FLAC__int32 i, data_len_int;
+ 	uint32_t order;
+@@ -263,7 +268,7 @@ uint32_t FLAC__fixed_compute_best_predictor_wide_intrin_sse2(const FLAC__int32 d
+ 		tempB   = _mm_xor_si128(tempA, bitmask);
+ 		tempB   = _mm_sub_epi32(tempB, bitmask);
+ 		total_err4 = _mm_add_epi32(total_err4,tempB);
+-		if(i % 8 == 7){
++		if(i % 7 == 6){
+ 			_mm_storeu_si128((__m128i*)data_scalar,total_err0);
+ 			total_error_0 += data_scalar[0] + data_scalar[1] + data_scalar[2] + data_scalar[3];
+ 			_mm_storeu_si128((__m128i*)data_scalar,total_err1);
+diff --git a/src/libFLAC/fixed_intrin_ssse3.c b/src/libFLAC/fixed_intrin_ssse3.c
+index 6fad35ca..ec522db4 100644
+--- a/src/libFLAC/fixed_intrin_ssse3.c
++++ b/src/libFLAC/fixed_intrin_ssse3.c
+@@ -177,8 +177,10 @@ FLAC__SSE_TARGET("ssse3")
+ uint32_t FLAC__fixed_compute_best_predictor_wide_intrin_ssse3(const FLAC__int32 data[], uint32_t data_len, float residual_bits_per_sample[FLAC__MAX_FIXED_ORDER + 1])
+ {
+ 	/* This code works up until a bitdepth of 25 bit
+-	 * as 4 bits are needed for error calculation
+-	 * and processing happens in blocks of 8 */
++	 * as 2log(17) bits are needed for error calculation
++	 * and processing happens in blocks of 7.
++	 * 2log(17*7) = 31.9
++	 */
+ 	FLAC__uint64 total_error_0, total_error_1, total_error_2, total_error_3, total_error_4;
+ 	FLAC__int32 i, data_len_int;
+ 	uint32_t order;
+@@ -236,7 +238,7 @@ uint32_t FLAC__fixed_compute_best_predictor_wide_intrin_ssse3(const FLAC__int32
+ 		prev_err3 = tempB;
+ 		tempB = _mm_abs_epi32(tempA);
+ 		total_err4 = _mm_add_epi32(total_err4,tempB);
+-		if(i % 8 == 7){
++		if(i % 7 == 6){
+ 			_mm_storeu_si128((__m128i*)data_scalar,total_err0);
+ 			total_error_0 += data_scalar[0] + data_scalar[1] + data_scalar[2] + data_scalar[3];
+ 			_mm_storeu_si128((__m128i*)data_scalar,total_err1);
+diff --git a/src/libFLAC/stream_encoder.c b/src/libFLAC/stream_encoder.c
+index 9d0188d7..18a049da 100644
+--- a/src/libFLAC/stream_encoder.c
++++ b/src/libFLAC/stream_encoder.c
+@@ -3438,9 +3438,17 @@ FLAC__bool process_subframe_(
+ 	else
+ 		_best_bits = evaluate_verbatim_subframe_(encoder, integer_signal, frame_header->blocksize, subframe_bps, subframe[_best_subframe]);
+ 
+-	if(frame_header->blocksize >= FLAC__MAX_FIXED_ORDER) {
++	if(frame_header->blocksize > FLAC__MAX_FIXED_ORDER) {
+ 		uint32_t signal_is_constant = false;
+-		if(subframe_bps + 4 + FLAC__bitmath_ilog2((frame_header->blocksize-FLAC__MAX_FIXED_ORDER)|1) <= 32)
++		/* The next formula determines when to use a 64-bit accumulator
++		 * for the error of a fixed predictor, and when a 32-bit one. As
++		 * the error of a 4th order predictor for a given sample is the
++		 * sum of 17 sample values (1+4+6+4+1) and there are blocksize -
++		 * order error values to be summed, the maximum total error is
++		 * maximum_sample_value * (blocksize - order) * 17. As ilog2(x)
++		 * calculates floor(2log(x)), the result must be 31 or lower
++		 */
++		if(subframe_bps + FLAC__bitmath_ilog2((frame_header->blocksize-FLAC__MAX_FIXED_ORDER)*17) < 32)
+ 			guess_fixed_order = encoder->private_->local_fixed_compute_best_predictor(integer_signal+FLAC__MAX_FIXED_ORDER, frame_header->blocksize-FLAC__MAX_FIXED_ORDER, fixed_residual_bits_per_sample);
+ 		else
+ 			guess_fixed_order = encoder->private_->local_fixed_compute_best_predictor_wide(integer_signal+FLAC__MAX_FIXED_ORDER, frame_header->blocksize-FLAC__MAX_FIXED_ORDER, fixed_residual_bits_per_sample);

@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/ceos/ceosopen.c b/gdal/frmts/ceos/ceosopen.c
+index 413cfd4e42..b268ef225c 100644
+--- a/gdal/frmts/ceos/ceosopen.c
++++ b/gdal/frmts/ceos/ceosopen.c
+@@ -233,7 +233,7 @@ CEOSImage * CEOSOpen( const char * pszFilename, const char * pszAccess )
+ /*      Try to read the header record.                                  */
+ /* -------------------------------------------------------------------- */
+     psRecord = CEOSReadRecord( psImage );
+-    if( psRecord == NULL )
++    if( psRecord == NULL || psRecord->nLength < 288 + 4 )
+     {
+         CEOSClose( psImage );
+         return NULL;

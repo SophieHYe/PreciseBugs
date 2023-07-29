@@ -1,0 +1,22 @@
+diff --git a/osquery/sql/sqlite_math.cpp b/osquery/sql/sqlite_math.cpp
+index 7e9cfe948..46e0ab6cd 100644
+--- a/osquery/sql/sqlite_math.cpp
++++ b/osquery/sql/sqlite_math.cpp
+@@ -67,7 +67,7 @@ static void callDoubleFunc(sqlite3_context* context,
+     if (errno == 0) {
+       sqlite3_result_double(context, val);
+     } else {
+-      sqlite3_result_error(context, platformStrerr(errno).c_str(), errno);
++      sqlite3_result_error(context, platformStrerr(errno).c_str(), -1);
+     }
+     break;
+   }
+@@ -139,7 +139,7 @@ static void powerFunc(sqlite3_context* context,
+     if (errno == 0) {
+       sqlite3_result_double(context, val);
+     } else {
+-      sqlite3_result_error(context, platformStrerr(errno).c_str(), errno);
++      sqlite3_result_error(context, platformStrerr(errno).c_str(), -1);
+     }
+   }
+ }

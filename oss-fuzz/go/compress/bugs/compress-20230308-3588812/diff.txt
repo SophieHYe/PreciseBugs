@@ -1,0 +1,85 @@
+diff --git a/zstd/fuzz_test.go b/zstd/fuzz_test.go
+index 1099b41..0c8212c 100644
+--- a/zstd/fuzz_test.go
++++ b/zstd/fuzz_test.go
+@@ -62,17 +62,6 @@ func FuzzDecAllNoBMI2(f *testing.F) {
+ func FuzzDecoder(f *testing.F) {
+ 	fuzz.AddFromZip(f, "testdata/fuzz/decode-corpus-raw.zip", true, testing.Short())
+ 	fuzz.AddFromZip(f, "testdata/fuzz/decode-corpus-encoded.zip", false, testing.Short())
+-	decLow, err := NewReader(nil, WithDecoderLowmem(true), WithDecoderConcurrency(2), WithDecoderMaxMemory(20<<20), WithDecoderMaxWindow(1<<20), IgnoreChecksum(true), WithDecodeBuffersBelow(8<<10))
+-	if err != nil {
+-		f.Fatal(err)
+-	}
+-	defer decLow.Close()
+-	// Test with high memory, but sync decoding
+-	decHi, err := NewReader(nil, WithDecoderLowmem(false), WithDecoderConcurrency(1), WithDecoderMaxMemory(20<<20), WithDecoderMaxWindow(1<<20), IgnoreChecksum(true), WithDecodeBuffersBelow(8<<10))
+-	if err != nil {
+-		f.Fatal(err)
+-	}
+-	defer decHi.Close()
+ 
+ 	brLow := newBytesReader(nil)
+ 	brHi := newBytesReader(nil)
+@@ -86,14 +75,19 @@ func FuzzDecoder(f *testing.F) {
+ 		}()
+ 		brLow.Reset(b)
+ 		brHi.Reset(b)
+-		err := decLow.Reset(brLow)
++		decLow, err := NewReader(brLow, WithDecoderLowmem(true), WithDecoderConcurrency(2), WithDecoderMaxMemory(20<<20), WithDecoderMaxWindow(1<<20), IgnoreChecksum(true), WithDecodeBuffersBelow(8<<10))
+ 		if err != nil {
+-			t.Fatal(err)
++			f.Fatal(err)
+ 		}
+-		err = decHi.Reset(brHi)
++		defer decLow.Close()
++
++		// Test with high memory, but sync decoding
++		decHi, err := NewReader(brHi, WithDecoderLowmem(false), WithDecoderConcurrency(1), WithDecoderMaxMemory(20<<20), WithDecoderMaxWindow(1<<20), IgnoreChecksum(true), WithDecodeBuffersBelow(8<<10))
+ 		if err != nil {
+-			t.Fatal(err)
++			f.Fatal(err)
+ 		}
++		defer decHi.Close()
++
+ 		b1, err1 := io.ReadAll(decLow)
+ 		b2, err2 := io.ReadAll(decHi)
+ 		if err1 != err2 {
+diff --git a/zstd/seqdec.go b/zstd/seqdec.go
+index f833d15..27fdf90 100644
+--- a/zstd/seqdec.go
++++ b/zstd/seqdec.go
+@@ -314,9 +314,6 @@ func (s *sequenceDecs) decodeSync(hist []byte) error {
+ 		}
+ 		size := ll + ml + len(out)
+ 		if size-startSize > maxBlockSize {
+-			if size-startSize == 424242 {
+-				panic("here")
+-			}
+ 			return fmt.Errorf("output bigger than max block size (%d)", maxBlockSize)
+ 		}
+ 		if size > cap(out) {
+@@ -427,8 +424,7 @@ func (s *sequenceDecs) decodeSync(hist []byte) error {
+ 		}
+ 	}
+ 
+-	// Check if space for literals
+-	if size := len(s.literals) + len(s.out) - startSize; size > maxBlockSize {
++	if size := len(s.literals) + len(out) - startSize; size > maxBlockSize {
+ 		return fmt.Errorf("output bigger than max block size (%d)", maxBlockSize)
+ 	}
+ 
+diff --git a/zstd/seqdec_amd64.go b/zstd/seqdec_amd64.go
+index 191384a..387a30e 100644
+--- a/zstd/seqdec_amd64.go
++++ b/zstd/seqdec_amd64.go
+@@ -148,7 +148,6 @@ func (s *sequenceDecs) decodeSyncSimple(hist []byte) (bool, error) {
+ 	s.seqSize += ctx.litRemain
+ 	if s.seqSize > maxBlockSize {
+ 		return true, fmt.Errorf("output bigger than max block size (%d)", maxBlockSize)
+-
+ 	}
+ 	err := br.close()
+ 	if err != nil {
+diff --git a/zstd/testdata/fuzz/decode-corpus-encoded.zip b/zstd/testdata/fuzz/decode-corpus-encoded.zip
+index 43a3ddd..bb73642 100644
+Binary files a/zstd/testdata/fuzz/decode-corpus-encoded.zip and b/zstd/testdata/fuzz/decode-corpus-encoded.zip differ

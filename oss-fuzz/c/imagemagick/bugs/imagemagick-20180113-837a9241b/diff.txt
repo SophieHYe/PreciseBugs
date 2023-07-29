@@ -1,0 +1,168 @@
+diff --git a/Magick++/fuzz/encoder_format.h b/Magick++/fuzz/encoder_format.h
+new file mode 100644
+index 000000000..3f214b196
+--- /dev/null
++++ b/Magick++/fuzz/encoder_format.h
+@@ -0,0 +1,11 @@
++class EncoderFormat {
++public:
++  std::string get() { return std::string(_format.begin(), _format.end()); } const
++  void set(const std::wstring format)
++  {
++    if (format.length() > 1)
++      _format = format.substr(1, format.size() - 1);
++  }
++private:
++  std::wstring _format = L".notset";
++};
+\ No newline at end of file
+diff --git a/Magick++/fuzz/encoder_fuzzer.cc b/Magick++/fuzz/encoder_fuzzer.cc
+index dc6b56caf..2a2f49149 100644
+--- a/Magick++/fuzz/encoder_fuzzer.cc
++++ b/Magick++/fuzz/encoder_fuzzer.cc
+@@ -8,7 +8,9 @@
+ static FuzzingResourceLimits kFuzzLimits;
+ 
+ #define FUZZ_ENCODER_STRING_LITERAL(name) #name
++#ifndef FUZZ_ENCODER
+ #define FUZZ_ENCODER FUZZ_ENCODER_STRING_LITERAL(FUZZ_IMAGEMAGICK_ENCODER)
++#endif
+ 
+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+   const Magick::Blob blob(Data, Size);
+@@ -17,14 +19,16 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+     image.magick(FUZZ_ENCODER);
+     image.fileName(FUZZ_ENCODER + ':');
+     image.read(blob);
+-  } catch (Magick::Exception &e) {
++  }
++  catch (Magick::Exception &e) {
+     return 0;
+   }
+ 
+   Magick::Blob outBlob;
+   try {
+     image.write(&outBlob, FUZZ_ENCODER);
+-  } catch (Magick::Exception &e) {
++  }
++  catch (Magick::Exception &e) {
+   }
+   return 0;
+ }
+diff --git a/Magick++/fuzz/main.cc b/Magick++/fuzz/main.cc
+new file mode 100644
+index 000000000..293c20de2
+--- /dev/null
++++ b/Magick++/fuzz/main.cc
+@@ -0,0 +1,88 @@
++#define WINVER 0x0501
++#define BUFSIZE 4096
++#pragma comment(lib, "Shlwapi.lib")
++
++#include <string>
++#include <iostream>
++#include <fstream>
++#include "Shlwapi.h"
++#include "encoder_format.h"
++using namespace std;
++
++extern EncoderFormat encoderFormat;
++extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size);
++
++class FuzzingDebugger
++{
++public:
++  bool load(wstring fileName);
++  void start();
++
++private:
++  char * _data;
++  size_t _size;
++};
++
++bool FuzzingDebugger::load(wstring fileName)
++{
++  ifstream
++    file;
++
++  streampos
++    size;
++
++  file = ifstream(fileName, ios::in | ios::binary | ios::ate);
++  if (!file.is_open())
++    return(false);
++
++  size = file.tellg();
++  _size = size;
++  _data = new char[_size];
++  file.seekg(0, ios::beg);
++  file.read(_data, size);
++  file.close();
++
++  encoderFormat.set(wstring(PathFindExtension(fileName.c_str())));
++
++  return(true);
++}
++
++void FuzzingDebugger::start()
++{
++  const uint8_t
++    *data;
++
++  data = reinterpret_cast<const uint8_t *>(_data);
++  LLVMFuzzerTestOneInput(data, _size);
++}
++
++int wmain(int argc, wchar_t *argv[])
++{
++  FuzzingDebugger
++    debugger;
++
++  wstring
++    fileName;
++
++  if (argc == 1)
++  {
++    wchar_t
++      fullPath[BUFSIZE],
++      **lppPart;
++
++    lppPart = NULL;
++    GetFullPathName(argv[0], BUFSIZE, fullPath, lppPart);
++    PathRemoveExtension(fullPath);
++    fileName = wstring(fullPath) + L".input";
++  }
++  else
++    fileName = wstring(argv[1]);
++
++  if (!debugger.load(fileName))
++  {
++    wcerr << L"Unable to load " << fileName;
++    cin.get();
++  }
++  else
++    debugger.start();
++}
+\ No newline at end of file
+diff --git a/Magick++/fuzz/utils.cc b/Magick++/fuzz/utils.cc
+index cd6e52a10..3a80b5768 100644
+--- a/Magick++/fuzz/utils.cc
++++ b/Magick++/fuzz/utils.cc
+@@ -1,9 +1,16 @@
+ #include <Magick++/ResourceLimits.h>
+ 
+-
+ class FuzzingResourceLimits {
+ public:
+     FuzzingResourceLimits() {
+         Magick::ResourceLimits::memory(1000000000);
+     }
+ };
++
++#if BUILD_MAIN
++#include "encoder_format.h"
++
++EncoderFormat encoderFormat;
++
++#define FUZZ_ENCODER encoderFormat.get()
++#endif // BUILD_MAIN

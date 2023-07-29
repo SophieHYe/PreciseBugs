@@ -1,0 +1,237 @@
+diff --git a/src/utils/SkPolyUtils.cpp b/src/utils/SkPolyUtils.cpp
+index b18ba2df66..da8e6ca095 100644
+--- a/src/utils/SkPolyUtils.cpp
++++ b/src/utils/SkPolyUtils.cpp
+@@ -185,17 +185,15 @@ bool SkIsConvexPolygon(const SkPoint* polygonVerts, int polygonSize) {
+         return false;
+     }
+ 
+-    SkScalar lastArea = 0;
+     SkScalar lastPerpDot = 0;
++    int xSignChangeCount = 0;
++    int ySignChangeCount = 0;
+ 
+     int prevIndex = polygonSize - 1;
+     int currIndex = 0;
+     int nextIndex = 1;
+-    SkPoint origin = polygonVerts[0];
+     SkVector v0 = polygonVerts[currIndex] - polygonVerts[prevIndex];
+     SkVector v1 = polygonVerts[nextIndex] - polygonVerts[currIndex];
+-    SkVector w0 = polygonVerts[currIndex] - origin;
+-    SkVector w1 = polygonVerts[nextIndex] - origin;
+     for (int i = 0; i < polygonSize; ++i) {
+         if (!polygonVerts[i].isFinite()) {
+             return false;
+@@ -210,23 +208,21 @@ bool SkIsConvexPolygon(const SkPoint* polygonVerts, int polygonSize) {
+             lastPerpDot = perpDot;
+         }
+ 
+-        // If the signed area ever flips it's concave
+-        // TODO: see if we can verify convexity only with signed area
+-        SkScalar quadArea = w0.cross(w1);
+-        if (quadArea*lastArea < 0) {
+-            return false;
++        // Check that the signs of the edge vectors don't change more than twice per coordinate
++        if (v0.fX*v1.fX < 0) {
++            xSignChangeCount++;
+         }
+-        if (0 != quadArea) {
+-            lastArea = quadArea;
++        if (v0.fY*v1.fY < 0) {
++            ySignChangeCount++;
++        }
++        if (xSignChangeCount > 2 || ySignChangeCount > 2) {
++            return false;
+         }
+-
+         prevIndex = currIndex;
+         currIndex = nextIndex;
+         nextIndex = (currIndex + 1) % polygonSize;
+         v0 = v1;
+         v1 = polygonVerts[nextIndex] - polygonVerts[currIndex];
+-        w0 = w1;
+-        w1 = polygonVerts[nextIndex] - origin;
+     }
+ 
+     return true;
+@@ -1090,6 +1086,10 @@ bool SkIsSimplePolygon(const SkPoint* polygon, int polygonSize) {
+         newVertex.fPrevIndex = (i - 1 + polygonSize) % polygonSize;
+         newVertex.fNextIndex = (i + 1) % polygonSize;
+         newVertex.fFlags = 0;
++        // The two edges adjacent to this vertex are the same, so polygon is not simple
++        if (polygon[newVertex.fPrevIndex] == polygon[newVertex.fNextIndex]) {
++            return false;
++        }
+         if (left(polygon[newVertex.fPrevIndex], polygon[i])) {
+             newVertex.fFlags |= kPrevLeft_VertexFlag;
+         }
+diff --git a/tests/PolyUtilsTest.cpp b/tests/PolyUtilsTest.cpp
+index 8535157d53..7c1d6dcf37 100644
+--- a/tests/PolyUtilsTest.cpp
++++ b/tests/PolyUtilsTest.cpp
+@@ -252,6 +252,165 @@ DEF_TEST(PolyUtils, reporter) {
+     // running this just to make sure it doesn't crash
+     REPORTER_ASSERT(reporter, !SkTriangulateSimplePolygon(poly.begin(), indexMap, poly.count(),
+                                                           &triangleIndices));
++
++    // self-intersecting polygon with two equal edges
++    poly.rewind();
++    *poly.push() = SkPoint::Make(0.0f, 0.0f);
++    *poly.push() = SkPoint::Make(10, 0);
++    *poly.push() = SkPoint::Make(0, 10);
++    *poly.push() = SkPoint::Make(10, 10);
++    *poly.push() = SkPoint::Make(10, 0);
++    *poly.push() = SkPoint::Make(0, 10);
++    REPORTER_ASSERT(reporter, SkGetPolygonWinding(poly.begin(), poly.count()) == 0);
++    REPORTER_ASSERT(reporter, !SkIsConvexPolygon(poly.begin(), poly.count()));
++    REPORTER_ASSERT(reporter, !SkIsSimplePolygon(poly.begin(), poly.count()));
++    triangleIndices.rewind();
++    // running this just to make sure it doesn't crash
++    REPORTER_ASSERT(reporter, !SkTriangulateSimplePolygon(poly.begin(), indexMap, poly.count(),
++                                                          &triangleIndices));
++
++    // absurd self-intersecting polygon
++    poly.rewind();
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, -10411310938997512334153865557442560.0000f);
++    *poly.push() = SkPoint::Make(-32768.7500f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3172.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -2147485952.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 170.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(137.0000f, 4105.6875f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3283.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 821.1250f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -30897.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.5625f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3526523879424.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.9375f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(129.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 859832320.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 129.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-33554468.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 219.0000f);
++    *poly.push() = SkPoint::Make(3220.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-35840.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -41625560509365411790244566154608640.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 215282736.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-41625560509365411790244566154608640.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(215282736.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3156.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 129.0000f);
++    *poly.push() = SkPoint::Make(7433.6875f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(59324728941049917997056.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-35840.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(137.0000f, 4105.6875f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3283.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.5625f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-44882437151680690189392273689542656.0000f, 134217728.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 217055232.0000f);
++    *poly.push() = SkPoint::Make(138.3125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.5625f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(2152988672.0000f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    *poly.push() = SkPoint::Make(138.0000f, 3284.8125f);
++    *poly.push() = SkPoint::Make(0.0000f, -32768.0625f);
++    *poly.push() = SkPoint::Make(0.0000f, 138.0000f);
++    *poly.push() = SkPoint::Make(3284.8125f, 0.0000f);
++    *poly.push() = SkPoint::Make(-32768.0625f, 0.0000f);
++    REPORTER_ASSERT(reporter, SkGetPolygonWinding(poly.begin(), poly.count()) < 0);
++    REPORTER_ASSERT(reporter, !SkIsConvexPolygon(poly.begin(), poly.count()));
++    REPORTER_ASSERT(reporter, !SkIsSimplePolygon(poly.begin(), poly.count()));
++    triangleIndices.rewind();
++    // running this just to make sure it doesn't crash
++    REPORTER_ASSERT(reporter, SkTriangulateSimplePolygon(poly.begin(), indexMap, poly.count(),
++                                                          &triangleIndices));
+ }
+ 
+ struct PtSet {

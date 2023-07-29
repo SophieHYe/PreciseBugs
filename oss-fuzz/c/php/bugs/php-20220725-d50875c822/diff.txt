@@ -1,0 +1,39 @@
+diff --git a/Zend/Optimizer/zend_inference.c b/Zend/Optimizer/zend_inference.c
+index 5c72ad4a13..5dec2dd24a 100644
+--- a/Zend/Optimizer/zend_inference.c
++++ b/Zend/Optimizer/zend_inference.c
+@@ -1942,6 +1942,9 @@ static uint32_t assign_dim_array_result_type(
+ 			tmp |= MAY_BE_HASH_ONLY(arr_type) ? MAY_BE_ARRAY_NUMERIC_HASH : MAY_BE_ARRAY_KEY_LONG;
+ 		} else {
+ 			if (dim_type & (MAY_BE_LONG|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_RESOURCE|MAY_BE_DOUBLE)) {
++				if (arr_type & (MAY_BE_UNDEF|MAY_BE_NULL|MAY_BE_FALSE)) {
++					tmp |= MAY_BE_ARRAY_PACKED;
++				}
+ 				tmp |= MAY_BE_HASH_ONLY(arr_type) ? MAY_BE_ARRAY_NUMERIC_HASH : MAY_BE_ARRAY_KEY_LONG;
+ 			}
+ 			if (dim_type & MAY_BE_STRING) {
+diff --git a/ext/opcache/tests/opt/inference_014.phpt b/ext/opcache/tests/opt/inference_014.phpt
+new file mode 100644
+index 0000000000..e6f7d1b27e
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_014.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++Type inference 014: ASSIGN_DIM_OP
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function y() {
++    for(;;){
++        $x[y] &= y;
++        $x = false;
++        $x[""]=y;
++    }
++}
++?>
++DONE
++--EXPECT--
++DONE

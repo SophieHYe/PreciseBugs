@@ -1,0 +1,13 @@
+diff --git a/libavcodec/takdec.c b/libavcodec/takdec.c
+index 7d3502b53c..8df73115d8 100644
+--- a/libavcodec/takdec.c
++++ b/libavcodec/takdec.c
+@@ -889,7 +889,7 @@ static int tak_decode_frame(AVCodecContext *avctx, void *data,
+             uint8_t *samples = (uint8_t *)frame->extended_data[chan];
+             int32_t *decoded = s->decoded[chan];
+             for (i = 0; i < s->nb_samples; i++)
+-                samples[i] = decoded[i] + 0x80;
++                samples[i] = decoded[i] + 0x80U;
+         }
+         break;
+     case AV_SAMPLE_FMT_S16P:

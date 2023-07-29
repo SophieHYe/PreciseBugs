@@ -1,0 +1,16 @@
+diff --git a/src/hb-ot-var-hvar-table.hh b/src/hb-ot-var-hvar-table.hh
+index 92e43fb8b..689534bfb 100644
+--- a/src/hb-ot-var-hvar-table.hh
++++ b/src/hb-ot-var-hvar-table.hh
+@@ -185,6 +185,7 @@ struct index_map_subset_plan_t
+ 	unsigned int inner = v & 0xFFFF;
+ 	outer_map.add (outer);
+ 	if (inner > max_inners[outer]) max_inners[outer] = inner;
++	if (outer >= inner_sets.length) return;
+ 	inner_sets[outer]->add (inner);
+       }
+     }
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5148388450631680 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5148388450631680
+new file mode 100644
+index 000000000..16213e481
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5148388450631680 differ

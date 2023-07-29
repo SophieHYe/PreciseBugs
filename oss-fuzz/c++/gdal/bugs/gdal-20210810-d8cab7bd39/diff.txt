@@ -1,0 +1,26 @@
+diff --git a/gdal/frmts/stacit/stacitdataset.cpp b/gdal/frmts/stacit/stacitdataset.cpp
+index 0956ffebd7..cd1819232d 100644
+--- a/gdal/frmts/stacit/stacitdataset.cpp
++++ b/gdal/frmts/stacit/stacitdataset.cpp
+@@ -484,7 +484,7 @@ bool STACITDataset::SetupDataset(GDALOpenInfo* poOpenInfo,
+ 
+     // Set SRS
+     OGRSpatialReference oSRS;
+-    if( oSRS.SetFromUserInput(assetByProj.osProjUserString.c_str()) == OGRERR_NONE )
++    if( oSRS.SetFromUserInput(assetByProj.osProjUserString.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+     {
+         oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+         SetSpatialRef(&oSRS);
+diff --git a/gdal/frmts/zarr/zarr_array.cpp b/gdal/frmts/zarr/zarr_array.cpp
+index 708b208be7..b322a25fce 100644
+--- a/gdal/frmts/zarr/zarr_array.cpp
++++ b/gdal/frmts/zarr/zarr_array.cpp
+@@ -2563,7 +2563,7 @@ std::shared_ptr<ZarrArray> ZarrGroupBase::LoadArray(const std::string& osArrayNa
+             {
+                 poSRS = std::make_shared<OGRSpatialReference>();
+                 poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-                if( poSRS->SetFromUserInput(item.ToString().c_str()) == OGRERR_NONE )
++                if( poSRS->SetFromUserInput(item.ToString().c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+                 {
+                     oAttributes.Delete("crs");
+                     break;

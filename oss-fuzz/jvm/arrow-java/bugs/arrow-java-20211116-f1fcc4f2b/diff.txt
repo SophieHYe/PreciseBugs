@@ -1,0 +1,25 @@
+diff --git a/cpp/src/parquet/encoding.cc b/cpp/src/parquet/encoding.cc
+index 3ff594234..549f3566f 100644
+--- a/cpp/src/parquet/encoding.cc
++++ b/cpp/src/parquet/encoding.cc
+@@ -2709,11 +2709,10 @@ std::unique_ptr<Decoder> MakeDecoder(Type::type type_num, Encoding::type encodin
+         break;
+     }
+   } else if (encoding == Encoding::DELTA_BYTE_ARRAY) {
+-    if (type_num == Type::BYTE_ARRAY || type_num == Type::FIXED_LEN_BYTE_ARRAY) {
++    if (type_num == Type::BYTE_ARRAY) {
+       return std::unique_ptr<Decoder>(new DeltaByteArrayDecoder(descr));
+     }
+-    throw ParquetException(
+-        "DELTA_BYTE_ARRAY only supports BYTE_ARRAY and FIXED_LEN_BYTE_ARRAY");
++    throw ParquetException("DELTA_BYTE_ARRAY only supports BYTE_ARRAY");
+   } else {
+     ParquetException::NYI("Selected encoding is not supported");
+   }
+diff --git a/testing b/testing
+index a51d8788c..065f6f201 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit a51d8788cf34994ef88c81cffb11117a949350ef
++Subproject commit 065f6f2019b7523dd0f68430790073d4ede5a058

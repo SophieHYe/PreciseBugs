@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/avc/ogravce00layer.cpp b/gdal/ogr/ogrsf_frmts/avc/ogravce00layer.cpp
+index 8b8ac07fe4..bdb0d86690 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/ogravce00layer.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/ogravce00layer.cpp
+@@ -520,6 +520,8 @@ bool OGRAVCE00Layer::AppendTableFields( OGRFeature *poFeature )
+ 
+     if( hRecord == nullptr )
+         return false;
++    if( psTableRead->hParseInfo->hdr.psTableDef == nullptr )
++        return false;
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Translate it.                                                   */

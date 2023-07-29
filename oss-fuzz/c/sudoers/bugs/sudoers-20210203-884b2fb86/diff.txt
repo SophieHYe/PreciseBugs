@@ -1,0 +1,24 @@
+diff --git a/plugins/sudoers/toke.c b/plugins/sudoers/toke.c
+index e70d9829c..bef96090f 100644
+--- a/plugins/sudoers/toke.c
++++ b/plugins/sudoers/toke.c
+@@ -5482,6 +5482,7 @@ sudoers_input(char *buf, yy_size_t max_size)
+ 		sudolinebuf.size++;
+ 	    }
+ 	    sudolinebuf.buf[avail++] = '\n';
++	    sudolinebuf.buf[avail] = '\0';
+ 	}
+ 
+ 	sudolinebuf.len = avail;
+diff --git a/plugins/sudoers/toke.l b/plugins/sudoers/toke.l
+index e83fd1a4d..f6de35ccd 100644
+--- a/plugins/sudoers/toke.l
++++ b/plugins/sudoers/toke.l
+@@ -1287,6 +1287,7 @@ sudoers_input(char *buf, yy_size_t max_size)
+ 		sudolinebuf.size++;
+ 	    }
+ 	    sudolinebuf.buf[avail++] = '\n';
++	    sudolinebuf.buf[avail] = '\0';
+ 	}
+ 
+ 	sudolinebuf.len = avail;

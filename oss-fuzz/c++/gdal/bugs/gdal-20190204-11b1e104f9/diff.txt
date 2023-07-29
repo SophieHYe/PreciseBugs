@@ -1,0 +1,20 @@
+diff --git a/gdal/gcore/gdaldataset.cpp b/gdal/gcore/gdaldataset.cpp
+index 16234b3d44..dd0e1b2a6b 100644
+--- a/gdal/gcore/gdaldataset.cpp
++++ b/gdal/gcore/gdaldataset.cpp
+@@ -1094,6 +1094,7 @@ CPLErr GDALDataset::OldSetProjectionFromSetSpatialRef(
+     char* pszWKT = nullptr;
+     if( poSRS->exportToWkt(&pszWKT) != OGRERR_NONE )
+     {
++        CPLFree(pszWKT);
+         return CE_Failure;
+     }
+     auto ret = _SetProjection(pszWKT);
+@@ -1824,6 +1825,7 @@ CPLErr GDALDataset::OldSetGCPsFromNew(
+     char* pszWKT = nullptr;
+     if( poGCP_SRS->exportToWkt(&pszWKT) != OGRERR_NONE )
+     {
++        CPLFree(pszWKT);
+         return CE_Failure;
+     }
+     auto ret = _SetGCPs(nGCPCount, pasGCPList, pszWKT);

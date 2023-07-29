@@ -1,0 +1,14 @@
+diff --git a/snmplib/snmp_api.c b/snmplib/snmp_api.c
+index a8c9b4ce72..6e41241c73 100644
+--- a/snmplib/snmp_api.c
++++ b/snmplib/snmp_api.c
+@@ -7603,6 +7603,9 @@ snmp_add_var(netsnmp_pdu *pdu,
+             }
+ 
+             ix = ltmp / 8;
++            if (ix >= INT_MAX) {
++                goto value_error;
++            }
+             if (ix >= (int) tint) {
+                 tint = ix + 1;
+             }

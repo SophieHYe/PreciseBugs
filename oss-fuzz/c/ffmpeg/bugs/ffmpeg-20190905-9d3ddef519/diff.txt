@@ -1,0 +1,13 @@
+diff --git a/libavcodec/apedec.c b/libavcodec/apedec.c
+index 490b11b94e..ed22f0f019 100644
+--- a/libavcodec/apedec.c
++++ b/libavcodec/apedec.c
+@@ -1266,7 +1266,7 @@ static void do_apply_filter(APEContext *ctx, int version, APEFilter *f,
+                                                      f->delay - order,
+                                                      f->adaptcoeffs - order,
+                                                      order, APESIGN(*data));
+-        res = (res + (1 << (fracbits - 1))) >> fracbits;
++        res = (int)(res + (1U << (fracbits - 1))) >> fracbits;
+         res += *data;
+         *data++ = res;
+ 

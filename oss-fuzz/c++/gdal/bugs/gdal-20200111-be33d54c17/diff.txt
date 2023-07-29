@@ -1,0 +1,77 @@
+diff --git a/gdal/frmts/pdf/gdal_pdf.h b/gdal/frmts/pdf/gdal_pdf.h
+index 084963155d..882cd6ebcd 100644
+--- a/gdal/frmts/pdf/gdal_pdf.h
++++ b/gdal/frmts/pdf/gdal_pdf.h
+@@ -340,7 +340,7 @@ private:
+     void                ExploreTree(GDALPDFObject* poObj,
+                                     std::set< std::pair<int,int> > aoSetAlreadyVisited,
+                                     int nRecLevel);
+-    void                ExploreContents(GDALPDFObject* poObj, GDALPDFObject* poResources);
++    void                ExploreContents(GDALPDFObject* poObj, GDALPDFObject* poResources, int nDepth, int& nVisited, bool& bStop);
+ 
+     void                ExploreContentsNonStructuredInternal(GDALPDFObject* poContents,
+                                                              GDALPDFObject* poResources,
+diff --git a/gdal/frmts/pdf/pdfdataset.cpp b/gdal/frmts/pdf/pdfdataset.cpp
+index f6149617ce..bb686fd990 100644
+--- a/gdal/frmts/pdf/pdfdataset.cpp
++++ b/gdal/frmts/pdf/pdfdataset.cpp
+@@ -3829,6 +3829,8 @@ void PDFDataset::ExploreLayersPdfium(GDALPDFArray* poArray,
+     for(int i=0;i<nLength;i++)
+     {
+         GDALPDFObject* poObj = poArray->Get(i);
++        if( poObj == nullptr )
++            continue;
+         if (i == 0 && poObj->GetType() == PDFObjectType_String)
+         {
+             CPLString osName = PDFSanitizeLayerName(poObj->GetString().c_str());
+diff --git a/gdal/frmts/pdf/pdfreadvectors.cpp b/gdal/frmts/pdf/pdfreadvectors.cpp
+index 69a9b2bf09..c28aed9c31 100644
+--- a/gdal/frmts/pdf/pdfreadvectors.cpp
++++ b/gdal/frmts/pdf/pdfreadvectors.cpp
+@@ -79,7 +79,10 @@ int PDFDataset::OpenVectorLayers(GDALPDFDictionary* poPageDict)
+     }
+     else
+     {
+-        ExploreContents(poContents, poResources);
++        int nDepth = 0;
++        int nVisited = 0;
++        bool bStop = false;
++        ExploreContents(poContents, poResources, nDepth, nVisited, bStop);
+         std::set< std::pair<int,int> > aoSetAlreadyVisited;
+         ExploreTree(poStructTreeRoot, aoSetAlreadyVisited, 0);
+     }
+@@ -1599,9 +1602,21 @@ OGRGeometry* PDFDataset::BuildGeometry(std::vector<double>& oCoords,
+ /************************************************************************/
+ 
+ void PDFDataset::ExploreContents(GDALPDFObject* poObj,
+-                                       GDALPDFObject* poResources)
++                                 GDALPDFObject* poResources,
++                                 int nDepth,
++                                 int& nVisited,
++                                 bool& bStop)
+ {
+     std::map<CPLString, OGRPDFLayer*> oMapPropertyToLayer;
++    if( nDepth == 10 || nVisited == 1000 )
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "ExploreContents(): too deep exploration or too many items");
++        bStop = true;
++        return;
++    }
++    if( bStop )
++        return;
+ 
+     if (poObj->GetType() == PDFObjectType_Array)
+     {
+@@ -1611,7 +1626,10 @@ void PDFDataset::ExploreContents(GDALPDFObject* poObj,
+             GDALPDFObject* poSubObj = poArray->Get(i);
+             if( poSubObj )
+             {
+-                ExploreContents(poSubObj, poResources);
++                nVisited ++;
++                ExploreContents(poSubObj, poResources, nDepth + 1, nVisited, bStop);
++                if( bStop )
++                    return;
+             }
+         }
+     }

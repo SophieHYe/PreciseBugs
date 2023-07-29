@@ -1,0 +1,18 @@
+diff --git a/src/hb-aat-layout-morx-table.hh b/src/hb-aat-layout-morx-table.hh
+index fd955b5b7..15686b657 100644
+--- a/src/hb-aat-layout-morx-table.hh
++++ b/src/hb-aat-layout-morx-table.hh
+@@ -330,7 +330,8 @@ struct ContextualSubtable
+     unsigned int num_entries = 0;
+     if (unlikely (!machine.sanitize (c, &num_entries))) return_trace (false);
+ 
+-    if (!Types::extended) return_trace (true);
++    if (!Types::extended)
++      return_trace (substitutionTables.sanitize (c, this, 0));
+ 
+     unsigned int num_lookups = 0;
+ 
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5631444412530688 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5631444412530688
+new file mode 100644
+index 000000000..25f7d697e
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5631444412530688 differ

@@ -1,0 +1,14 @@
+diff --git a/coders/mask.c b/coders/mask.c
+index b7c6a3e48..53a1774fc 100644
+--- a/coders/mask.c
++++ b/coders/mask.c
+@@ -110,7 +110,8 @@ static Image *ReadMASKImage(const ImageInfo *image_info,
+   assert(exception->signature == MagickCoreSignature);
+   read_info=CloneImageInfo(image_info);
+   SetImageInfoBlob(read_info,(void *) NULL,0);
+-  (void) CopyMagickString(read_info->magick,"MIFF",MagickPathExtent);
++  (void) FormatLocaleString(read_info->filename,MagickPathExtent,
++    "miff:%s",image_info->filename);
+   image=ReadImage(read_info,exception);
+   read_info=DestroyImageInfo(read_info);
+   if (image != (Image *) NULL)

@@ -1,0 +1,12 @@
+diff --git a/src/lib/protocols/tls.c b/src/lib/protocols/tls.c
+index 26d90679..99e11cc1 100644
+--- a/src/lib/protocols/tls.c
++++ b/src/lib/protocols/tls.c
+@@ -1488,6 +1488,7 @@ int processClientServerHello(struct ndpi_detection_module_struct *ndpi_struct,
+ 	  if(tot_alpn_len > packet->payload_packet_len)
+ 	    return 0;
+ 
++	  alpn_str[0] = '\0';
+ 	  while(s_offset < tot_alpn_len && s_offset < total_len) {
+ 	    u_int8_t alpn_i, alpn_len = packet->payload[s_offset++];
+ 

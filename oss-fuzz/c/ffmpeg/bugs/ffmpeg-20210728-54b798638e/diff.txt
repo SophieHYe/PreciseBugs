@@ -1,0 +1,13 @@
+diff --git a/tools/target_dec_fuzzer.c b/tools/target_dec_fuzzer.c
+index 3e7689b7ec..843b447f83 100644
+--- a/tools/target_dec_fuzzer.c
++++ b/tools/target_dec_fuzzer.c
+@@ -317,7 +317,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+     }
+     parser_avctx->codec_id = ctx->codec_id;
+     parser_avctx->extradata_size = ctx->extradata_size;
+-    parser_avctx->extradata      = av_memdup(ctx->extradata, ctx->extradata_size);
++    parser_avctx->extradata      = ctx->extradata ? av_memdup(ctx->extradata, ctx->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE) : NULL;
+ 
+ 
+     int got_frame;

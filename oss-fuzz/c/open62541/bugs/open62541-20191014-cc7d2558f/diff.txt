@@ -1,0 +1,14 @@
+diff --git a/src/ua_types_encoding_json.c b/src/ua_types_encoding_json.c
+index fa1141d8c..23ad48430 100644
+--- a/src/ua_types_encoding_json.c
++++ b/src/ua_types_encoding_json.c
+@@ -2259,6 +2259,9 @@ searchObjectForKeyRec(const char *searchKey, CtxJson *ctx,
+                 if(jsoneq((char*)ctx->pos, &parseCtx->tokenArray[parseCtx->index], searchKey) == 0) {
+                     /*found*/
+                     parseCtx->index++; /*We give back a pointer to the value of the searched key!*/
++                    if (parseCtx->index >= parseCtx->tokenCount)
++                        /* We got invalid json. See https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=14620 */
++                        return UA_STATUSCODE_BADOUTOFRANGE;
+                     *resultIndex = parseCtx->index;
+                     return UA_STATUSCODE_GOOD;
+                 }

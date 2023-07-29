@@ -1,0 +1,12 @@
+diff --git a/MagickCore/cache.c b/MagickCore/cache.c
+index 9602a4a08..c941b9e9a 100644
+--- a/MagickCore/cache.c
++++ b/MagickCore/cache.c
+@@ -3675,7 +3675,6 @@ static MagickBooleanType OpenPixelCache(Image *image,const MapMode mode,
+     }
+   if (OpenPixelCacheOnDisk(cache_info,mode) == MagickFalse)
+     {
+-      RelinquishMagickResource(DiskResource,cache_info->length);
+       ThrowFileException(exception,CacheError,"UnableToOpenPixelCache",
+         image->filename);
+       return(MagickFalse);

@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
+index 9713426fa7..369724338d 100644
+--- a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
++++ b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
+@@ -377,7 +377,7 @@ namespace Selafin {
+         int nLength=0;
+         read_integer(fp,nLength);
+         panData = NULL;
+-        if (nLength<0 || nLength+1<=0 || static_cast<unsigned>(nLength)/4 > nFileSize) {
++        if (nLength<0 || static_cast<unsigned>(nLength)/4 > nFileSize) {
+             CPLError(CE_Failure,CPLE_FileIO,"%s",SELAFIN_ERROR_MESSAGE);
+             return -1;
+         }

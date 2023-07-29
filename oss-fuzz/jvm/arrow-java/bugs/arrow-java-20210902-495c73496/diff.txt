@@ -1,0 +1,215 @@
+diff --git a/cpp/build-support/fuzzing/generate_corpuses.sh b/cpp/build-support/fuzzing/generate_corpuses.sh
+index f0d8e1623..e3f00e647 100755
+--- a/cpp/build-support/fuzzing/generate_corpuses.sh
++++ b/cpp/build-support/fuzzing/generate_corpuses.sh
+@@ -27,15 +27,21 @@ fi
+ set -ex
+ 
+ CORPUS_DIR=/tmp/corpus
+-ARROW_CPP=$(cd $(dirname $BASH_SOURCE)/../..; pwd)
++ARROW_ROOT=$(cd $(dirname $BASH_SOURCE)/../../..; pwd)
++ARROW_CPP=$ARROW_ROOT/cpp
+ OUT=$1
+ 
+ # NOTE: name of seed corpus output file should be "<FUZZ TARGET>-seed_corpus.zip"
+ # where "<FUZZ TARGET>" is the exact name of the fuzz target executable the
+ # seed corpus is generated for.
+ 
++IPC_INTEGRATION_FILES=$(find ${ARROW_ROOT}/testing/data/arrow-ipc-stream/integration -name "*.stream")
++
+ rm -rf ${CORPUS_DIR}
+ ${OUT}/arrow-ipc-generate-fuzz-corpus -stream ${CORPUS_DIR}
++# Several IPC integration files can have the same name, make sure
++# they all appear in the corpus by numbering the duplicates.
++cp --backup=numbered ${IPC_INTEGRATION_FILES} ${CORPUS_DIR}
+ ${ARROW_CPP}/build-support/fuzzing/pack_corpus.py ${CORPUS_DIR} ${OUT}/arrow-ipc-stream-fuzz_seed_corpus.zip
+ 
+ rm -rf ${CORPUS_DIR}
+@@ -48,5 +54,6 @@ ${ARROW_CPP}/build-support/fuzzing/pack_corpus.py ${CORPUS_DIR} ${OUT}/arrow-ipc
+ 
+ rm -rf ${CORPUS_DIR}
+ ${OUT}/parquet-arrow-generate-fuzz-corpus ${CORPUS_DIR}
++# Add Parquet testing examples
+ cp ${ARROW_CPP}/submodules/parquet-testing/data/*.parquet ${CORPUS_DIR}
+ ${ARROW_CPP}/build-support/fuzzing/pack_corpus.py ${CORPUS_DIR} ${OUT}/parquet-arrow-fuzz_seed_corpus.zip
+diff --git a/cpp/src/arrow/array/array_test.cc b/cpp/src/arrow/array/array_test.cc
+index cc45a3694..d9617c4e6 100644
+--- a/cpp/src/arrow/array/array_test.cc
++++ b/cpp/src/arrow/array/array_test.cc
+@@ -3214,4 +3214,73 @@ TEST(TestSwapEndianArrayData, MonthDayNanoInterval) {
+   ASSERT_OK(swap_array->ValidateFull());
+ }
+ 
++DataTypeVector SwappableTypes() {
++  return DataTypeVector{int8(),
++                        int16(),
++                        int32(),
++                        int64(),
++                        uint8(),
++                        uint16(),
++                        uint32(),
++                        uint64(),
++                        decimal128(19, 4),
++                        decimal256(37, 8),
++                        timestamp(TimeUnit::MICRO, ""),
++                        time32(TimeUnit::SECOND),
++                        time64(TimeUnit::NANO),
++                        date32(),
++                        date64(),
++                        day_time_interval(),
++                        month_interval(),
++                        month_day_nano_interval(),
++                        binary(),
++                        utf8(),
++                        large_binary(),
++                        large_utf8(),
++                        list(int16()),
++                        large_list(int16()),
++                        dictionary(int16(), utf8())};
++}
++
++TEST(TestSwapEndianArrayData, RandomData) {
++  random::RandomArrayGenerator rng(42);
++
++  for (const auto& type : SwappableTypes()) {
++    ARROW_SCOPED_TRACE("type = ", type->ToString());
++    auto arr = rng.ArrayOf(*field("", type), /*size=*/31);
++    ASSERT_OK_AND_ASSIGN(auto swapped_data,
++                         ::arrow::internal::SwapEndianArrayData(arr->data()));
++    auto swapped = MakeArray(swapped_data);
++    ASSERT_OK_AND_ASSIGN(auto roundtripped_data,
++                         ::arrow::internal::SwapEndianArrayData(swapped_data));
++    auto roundtripped = MakeArray(roundtripped_data);
++    ASSERT_OK(roundtripped->ValidateFull());
++
++    AssertArraysEqual(*arr, *roundtripped, /*verbose=*/true);
++    if (type->id() == Type::INT8 || type->id() == Type::UINT8) {
++      AssertArraysEqual(*arr, *swapped, /*verbose=*/true);
++    } else {
++      // Random generated data is unlikely to be made of byte-palindromes
++      ASSERT_FALSE(arr->Equals(*swapped));
++    }
++  }
++}
++
++TEST(TestSwapEndianArrayData, InvalidLength) {
++  // IPC-incoming data may be invalid, SwapEndianArrayData shouldn't crash
++  // by accessing memory out of bounds.
++  random::RandomArrayGenerator rng(42);
++
++  for (const auto& type : SwappableTypes()) {
++    ARROW_SCOPED_TRACE("type = ", type->ToString());
++    ASSERT_OK_AND_ASSIGN(auto arr, MakeArrayOfNull(type, 0));
++    auto data = arr->data();
++    // Fake length
++    data->length = 123456789;
++    ASSERT_OK_AND_ASSIGN(auto swapped_data, ::arrow::internal::SwapEndianArrayData(data));
++    auto swapped = MakeArray(swapped_data);
++    ASSERT_RAISES(Invalid, swapped->Validate());
++  }
++}
++
+ }  // namespace arrow
+diff --git a/cpp/src/arrow/array/util.cc b/cpp/src/arrow/array/util.cc
+index f12281155..232947d2c 100644
+--- a/cpp/src/arrow/array/util.cc
++++ b/cpp/src/arrow/array/util.cc
+@@ -78,11 +78,16 @@ class ArrayDataWrapper {
+ 
+ class ArrayDataEndianSwapper {
+  public:
+-  ArrayDataEndianSwapper(const std::shared_ptr<ArrayData>& data, int64_t length)
+-      : data_(data), length_(length) {
++  explicit ArrayDataEndianSwapper(const std::shared_ptr<ArrayData>& data) : data_(data) {
+     out_ = data->Copy();
+   }
+ 
++  // WARNING: this facility can be called on invalid Array data by the IPC reader.
++  // Do not rely on the advertised ArrayData length, instead use the physical
++  // buffer sizes to avoid accessing memory out of bounds.
++  //
++  // (If this guarantee turns out to be difficult to maintain, we should call
++  //  Validate() instead)
+   Status SwapType(const DataType& type) {
+     RETURN_NOT_OK(VisitTypeInline(type, this));
+     RETURN_NOT_OK(SwapChildren(type.fields()));
+@@ -111,6 +116,7 @@ class ArrayDataEndianSwapper {
+     auto in_data = reinterpret_cast<const T*>(in_buffer->data());
+     ARROW_ASSIGN_OR_RAISE(auto out_buffer, AllocateBuffer(in_buffer->size()));
+     auto out_data = reinterpret_cast<T*>(out_buffer->mutable_data());
++    // NOTE: data_->length not trusted (see warning above)
+     int64_t length = in_buffer->size() / sizeof(T);
+     for (int64_t i = 0; i < length; i++) {
+       out_data[i] = BitUtil::ByteSwap(in_data[i]);
+@@ -146,8 +152,8 @@ class ArrayDataEndianSwapper {
+     auto data = reinterpret_cast<const uint64_t*>(data_->buffers[1]->data());
+     ARROW_ASSIGN_OR_RAISE(auto new_buffer, AllocateBuffer(data_->buffers[1]->size()));
+     auto new_data = reinterpret_cast<uint64_t*>(new_buffer->mutable_data());
+-    int64_t length = length_;
+-    length = data_->buffers[1]->size() / (sizeof(uint64_t) * 2);
++    // NOTE: data_->length not trusted (see warning above)
++    const int64_t length = data_->buffers[1]->size() / Decimal128Type::kByteWidth;
+     for (int64_t i = 0; i < length; i++) {
+       uint64_t tmp;
+       auto idx = i * 2;
+@@ -169,8 +175,8 @@ class ArrayDataEndianSwapper {
+     auto data = reinterpret_cast<const uint64_t*>(data_->buffers[1]->data());
+     ARROW_ASSIGN_OR_RAISE(auto new_buffer, AllocateBuffer(data_->buffers[1]->size()));
+     auto new_data = reinterpret_cast<uint64_t*>(new_buffer->mutable_data());
+-    int64_t length = length_;
+-    length = data_->buffers[1]->size() / (sizeof(uint64_t) * 4);
++    // NOTE: data_->length not trusted (see warning above)
++    const int64_t length = data_->buffers[1]->size() / Decimal256Type::kByteWidth;
+     for (int64_t i = 0; i < length; i++) {
+       uint64_t tmp0, tmp1, tmp2;
+       auto idx = i * 4;
+@@ -206,9 +212,10 @@ class ArrayDataEndianSwapper {
+     auto data = reinterpret_cast<const MonthDayNanos*>(data_->buffers[1]->data());
+     ARROW_ASSIGN_OR_RAISE(auto new_buffer, AllocateBuffer(data_->buffers[1]->size()));
+     auto new_data = reinterpret_cast<MonthDayNanos*>(new_buffer->mutable_data());
+-    int64_t length = data_->length;
++    // NOTE: data_->length not trusted (see warning above)
++    const int64_t length = data_->buffers[1]->size() / sizeof(MonthDayNanos);
+     for (int64_t i = 0; i < length; i++) {
+-      MonthDayNanoIntervalType::MonthDayNanos tmp = data[i];
++      MonthDayNanos tmp = data[i];
+ #if ARROW_LITTLE_ENDIAN
+       tmp.months = BitUtil::FromBigEndian(tmp.months);
+       tmp.days = BitUtil::FromBigEndian(tmp.days);
+@@ -279,7 +286,6 @@ class ArrayDataEndianSwapper {
+   }
+ 
+   const std::shared_ptr<ArrayData>& data_;
+-  int64_t length_;
+   std::shared_ptr<ArrayData> out_;
+ };
+ 
+@@ -292,7 +298,7 @@ Result<std::shared_ptr<ArrayData>> SwapEndianArrayData(
+   if (data->offset != 0) {
+     return Status::Invalid("Unsupported data format: data.offset != 0");
+   }
+-  ArrayDataEndianSwapper swapper(data, data->length);
++  ArrayDataEndianSwapper swapper(data);
+   RETURN_NOT_OK(swapper.SwapType(*data->type));
+   return std::move(swapper.out_);
+ }
+diff --git a/cpp/src/arrow/type.cc b/cpp/src/arrow/type.cc
+index d2adbf04b..572286799 100644
+--- a/cpp/src/arrow/type.cc
++++ b/cpp/src/arrow/type.cc
+@@ -88,6 +88,8 @@ constexpr Type::type MonthIntervalType::type_id;
+ 
+ constexpr Type::type DayTimeIntervalType::type_id;
+ 
++constexpr Type::type MonthDayNanoIntervalType::type_id;
++
+ constexpr Type::type DurationType::type_id;
+ 
+ constexpr Type::type DictionaryType::type_id;
+diff --git a/testing b/testing
+index 6d9824309..896d05d35 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit 6d98243093c0b36442da94de7010f3eacc2a9909
++Subproject commit 896d05d35163168831876b0f3e76977f6f20d4f4

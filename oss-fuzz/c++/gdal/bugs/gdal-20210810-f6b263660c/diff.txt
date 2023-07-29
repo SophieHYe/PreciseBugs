@@ -1,0 +1,25 @@
+diff --cc gdal/frmts/pds/vicarkeywordhandler.cpp
+index d93275f363,d93275f363..09c58e0e59
+--- a/gdal/frmts/pds/vicarkeywordhandler.cpp
++++ b/gdal/frmts/pds/vicarkeywordhandler.cpp
+@@@ -34,7 -34,7 +34,6 @@@
+  #include "vicardataset.h"
+  
+  #include <algorithm>
+--#include <limits>
+  
+  CPL_CVSID("$Id$")
+  
+@@@ -143,12 -143,12 +142,6 @@@ bool VICARKeywordHandler::Ingest( VSILF
+          CPLAtoGIntBig(CSLFetchNameValueDef(papszKeywordList, "EOCI2", "0")));
+      const vsi_l_offset nEOCI = (nEOCI2 << 32) | nEOCI1;
+  
+--    if( nImageOffsetWithoutNBB > std::numeric_limits<GUInt64>::max() - nImageSize )
+--    {
+--        CPLError(CE_Failure, CPLE_AppDefined, "Invalid label values");
+--        return false;
+--    }
+--
+      const vsi_l_offset nStartEOL = nEOCI ? nEOCI :
+                                          nImageOffsetWithoutNBB + nImageSize;
+  

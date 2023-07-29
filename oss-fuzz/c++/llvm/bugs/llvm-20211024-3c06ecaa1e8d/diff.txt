@@ -1,0 +1,31 @@
+diff --git a/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp b/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
+index 481f4dd4a792..54d751e30ee3 100644
+--- a/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
++++ b/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
+@@ -4184,8 +4184,8 @@ Instruction *InstCombinerImpl::foldICmpBinOp(ICmpInst &I,
+     if (match(Op0, m_Mul(m_Value(X), m_APInt(C))) && *C != 0 &&
+         match(Op1, m_Mul(m_Value(Y), m_SpecificInt(*C))) && I.isEquality())
+       if (!C->countTrailingZeros() ||
+-          (BO0->hasNoSignedWrap() && BO1->hasNoSignedWrap()) ||
+-          (BO0->hasNoUnsignedWrap() && BO1->hasNoUnsignedWrap()))
++          (BO0 && BO1 && BO0->hasNoSignedWrap() && BO1->hasNoSignedWrap()) ||
++          (BO0 && BO1 && BO0->hasNoUnsignedWrap() && BO1->hasNoUnsignedWrap()))
+       return new ICmpInst(Pred, X, Y);
+   }
+ 
+diff --git a/llvm/test/Transforms/InstCombine/icmp-mul.ll b/llvm/test/Transforms/InstCombine/icmp-mul.ll
+index e2aff1c304ad..9f6cfe149d69 100644
+--- a/llvm/test/Transforms/InstCombine/icmp-mul.ll
++++ b/llvm/test/Transforms/InstCombine/icmp-mul.ll
+@@ -668,3 +668,11 @@ define <2 x i1> @eq_mul_constants_with_tz_splat(<2 x i32> %x, <2 x i32> %y) {
+   %C = icmp eq <2 x i32> %A, %B
+   ret <2 x i1> %C
+ }
++
++@g = extern_weak global i32
++
++define i1 @oss_fuzz_39934(i32 %arg) {
++  %B13 = mul nsw i32 %arg, -65536
++  %C10 = icmp ne i32 mul (i32 or (i32 zext (i1 icmp eq (i32* @g, i32* null) to i32), i32 65537), i32 -65536), %B13
++  ret i1 %C10
++}

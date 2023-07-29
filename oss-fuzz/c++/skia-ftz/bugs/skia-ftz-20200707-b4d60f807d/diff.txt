@@ -1,0 +1,13 @@
+diff --git a/src/svg/SkSVGDevice.cpp b/src/svg/SkSVGDevice.cpp
+index 3fbe4122ea..8bf5f8de0f 100644
+--- a/src/svg/SkSVGDevice.cpp
++++ b/src/svg/SkSVGDevice.cpp
+@@ -401,7 +401,7 @@ void SkSVGDevice::AutoElement::addGradientShaderResources(const SkShader* shader
+                                                           const SkPaint& paint,
+                                                           Resources* resources) {
+     SkShader::GradientInfo grInfo;
+-    grInfo.fColorCount = 0;
++    memset(&grInfo, 0, sizeof(grInfo));
+     if (SkShader::kLinear_GradientType != shader->asAGradient(&grInfo)) {
+         // TODO: non-linear gradient support
+         return;

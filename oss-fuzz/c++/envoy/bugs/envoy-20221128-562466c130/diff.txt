@@ -1,0 +1,100 @@
+diff --git a/mobile/library/common/config/config.cc b/mobile/library/common/config/config.cc
+index 6e2ed8cedd..42ccc2ad3e 100644
+--- a/mobile/library/common/config/config.cc
++++ b/mobile/library/common/config/config.cc
+@@ -39,6 +39,7 @@ const std::string config_header = R"(
+ - &dns_fail_max_interval 10s
+ - &dns_query_timeout 25s
+ - &dns_lookup_family V4_PREFERRED
++- &dns_multiple_addresses false
+ - &dns_preresolve_hostnames []
+ - &dns_resolver_name envoy.network.dns_resolver.cares
+ - &dns_resolver_config {"@type":"type.googleapis.com/envoy.extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig"}
+@@ -395,14 +396,17 @@ node:
+   id: envoy-mobile
+   cluster: envoy-mobile
+   metadata: *metadata
+-)"
+-// Needed due to warning in
+-// https://github.com/envoyproxy/envoy/blob/6eb7e642d33f5a55b63c367188f09819925fca34/source/server/server.cc#L546
+-R"(
+ layered_runtime:
+   layers:
+     - name: static_layer_0
+       static_layer:
++        envoy:
++          reloadable_features:
++            allow_multiple_dns_addresses: *dns_multiple_addresses
++)"
++// Needed due to warning in
++// https://github.com/envoyproxy/envoy/blob/6eb7e642d33f5a55b63c367188f09819925fca34/source/server/server.cc#L546
++R"(
+         overload:
+           global_downstream_max_connections: 0xffffffff # uint32 max
+ )";
+diff --git a/mobile/library/java/io/envoyproxy/envoymobile/engine/EnvoyConfiguration.java b/mobile/library/java/io/envoyproxy/envoymobile/engine/EnvoyConfiguration.java
+index 0ee6d7fa51..7651659a6a 100644
+--- a/mobile/library/java/io/envoyproxy/envoymobile/engine/EnvoyConfiguration.java
++++ b/mobile/library/java/io/envoyproxy/envoymobile/engine/EnvoyConfiguration.java
+@@ -163,6 +163,8 @@ public class EnvoyConfiguration {
+         .append(String.format("- &dns_preresolve_hostnames %s\n", dnsPreresolveHostnames))
+         .append(String.format("- &dns_lookup_family %s\n",
+                               enableHappyEyeballs ? "ALL" : "V4_PREFERRED"))
++        .append(
++            String.format("- &dns_multiple_addresses %s\n", enableHappyEyeballs ? "true" : "false"))
+         .append("- &dns_resolver_name envoy.network.dns_resolver.cares\n")
+         .append(String.format("- &dns_resolver_config %s\n", dnsResolverConfig))
+         .append(String.format("- &enable_interface_binding %s\n",
+diff --git a/mobile/library/objective-c/EnvoyConfiguration.m b/mobile/library/objective-c/EnvoyConfiguration.m
+index 339477f9a5..7b718f2884 100644
+--- a/mobile/library/objective-c/EnvoyConfiguration.m
++++ b/mobile/library/objective-c/EnvoyConfiguration.m
+@@ -124,6 +124,8 @@
+   [definitions appendFormat:@"- &dns_preresolve_hostnames %@\n", self.dnsPreresolveHostnames];
+   [definitions appendFormat:@"- &dns_lookup_family %@\n",
+                             self.enableHappyEyeballs ? @"ALL" : @"V4_PREFERRED"];
++  [definitions appendFormat:@"- &dns_multiple_addresses %@\n",
++                            self.enableHappyEyeballs ? @"true" : @"false"];
+   [definitions appendFormat:@"- &dns_resolver_name envoy.network.dns_resolver.apple\n"];
+   // No additional values are currently needed for Apple-based DNS resolver.
+   [definitions
+diff --git a/mobile/test/java/io/envoyproxy/envoymobile/engine/EnvoyConfigurationTest.kt b/mobile/test/java/io/envoyproxy/envoymobile/engine/EnvoyConfigurationTest.kt
+index 512345f570..fd9df845ba 100644
+--- a/mobile/test/java/io/envoyproxy/envoymobile/engine/EnvoyConfigurationTest.kt
++++ b/mobile/test/java/io/envoyproxy/envoymobile/engine/EnvoyConfigurationTest.kt
+@@ -46,6 +46,7 @@ class EnvoyConfigurationTest {
+     assertThat(resolvedTemplate).contains("&dns_fail_max_interval 456s")
+     assertThat(resolvedTemplate).contains("&dns_query_timeout 321s")
+     assertThat(resolvedTemplate).contains("&dns_lookup_family ALL")
++    assertThat(resolvedTemplate).contains("&dns_multiple_addresses true")
+     assertThat(resolvedTemplate).contains("&dns_preresolve_hostnames [hostname]")
+     assertThat(resolvedTemplate).contains("&dns_resolver_name envoy.network.dns_resolver.cares")
+     assertThat(resolvedTemplate).contains("&dns_resolver_config {\"@type\":\"type.googleapis.com/envoy.extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig\",\"resolvers\":[{\"socket_address\":{\"address\":\"8.8.8.8\"}}],\"use_resolvers_as_fallback\": true, \"filter_unroutable_families\": true}")
+@@ -92,6 +93,7 @@ class EnvoyConfigurationTest {
+     // DNS
+     assertThat(resolvedTemplate).contains("&dns_resolver_config {\"@type\":\"type.googleapis.com/envoy.extensions.network.dns_resolver.cares.v3.CaresDnsResolverConfig\",\"resolvers\":[],\"use_resolvers_as_fallback\": false, \"filter_unroutable_families\": false}")
+     assertThat(resolvedTemplate).contains("&dns_lookup_family V4_PREFERRED")
++    assertThat(resolvedTemplate).contains("&dns_multiple_addresses false")
+ 
+     // Interface Binding
+     assertThat(resolvedTemplate).contains("&enable_interface_binding false")
+diff --git a/mobile/test/swift/EngineBuilderTests.swift b/mobile/test/swift/EngineBuilderTests.swift
+index 1e0f17d819..0f85898f98 100644
+--- a/mobile/test/swift/EngineBuilderTests.swift
++++ b/mobile/test/swift/EngineBuilderTests.swift
+@@ -387,6 +387,7 @@ final class EngineBuilderTests: XCTestCase {
+     XCTAssertTrue(resolvedYAML.contains("&dns_query_timeout 800s"))
+     XCTAssertTrue(resolvedYAML.contains("&dns_preresolve_hostnames [test]"))
+     XCTAssertTrue(resolvedYAML.contains("&dns_lookup_family ALL"))
++    XCTAssertTrue(resolvedYAML.contains("&dns_multiple_addresses true"))
+     XCTAssertTrue(resolvedYAML.contains("&enable_interface_binding true"))
+ 
+     XCTAssertTrue(resolvedYAML.contains("&h2_connection_keepalive_idle_interval 0.001s"))
+@@ -446,6 +447,7 @@ final class EngineBuilderTests: XCTestCase {
+     )
+     let resolvedYAML = try XCTUnwrap(config.resolveTemplate(kMockTemplate))
+     XCTAssertTrue(resolvedYAML.contains("&dns_lookup_family V4_PREFERRED"))
++    XCTAssertTrue(resolvedYAML.contains("&dns_multiple_addresses false"))
+     XCTAssertTrue(resolvedYAML.contains("&enable_interface_binding false"))
+   }
+ 

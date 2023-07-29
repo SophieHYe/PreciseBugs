@@ -1,0 +1,17 @@
+diff --git a/src/trace_processor/proto_trace_tokenizer.cc b/src/trace_processor/proto_trace_tokenizer.cc
+index 1bc2b150e..75322bba3 100644
+--- a/src/trace_processor/proto_trace_tokenizer.cc
++++ b/src/trace_processor/proto_trace_tokenizer.cc
+@@ -203,6 +203,12 @@ void ProtoTraceTokenizer::ParseFtraceBundle(TraceBlobView bundle) {
+     }
+   }
+ 
++  if (PERFETTO_UNLIKELY(cpu > base::kMaxCpus)) {
++    PERFETTO_ELOG("CPU number larger than kMaxCpus (%" PRIu64 " > %zu)", cpu,
++                  base::kMaxCpus);
++    return;
++  }
++
+   for (auto fld = decoder.ReadField(); fld.id != 0; fld = decoder.ReadField()) {
+     switch (fld.id) {
+       case protos::FtraceEventBundle::kEventFieldNumber: {

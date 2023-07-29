@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogr_srs_esri.cpp b/gdal/ogr/ogr_srs_esri.cpp
+index 87b996fb7d..dda9a01039 100644
+--- a/gdal/ogr/ogr_srs_esri.cpp
++++ b/gdal/ogr/ogr_srs_esri.cpp
+@@ -2149,7 +2149,7 @@ OGRErr OGRSpatialReference::morphFromESRI()
+         const char* pszSRSName = GetAttrValue("PROJCS");
+         if( pszSRSName == NULL )
+             pszSRSName = GetAttrValue("GEOGCS");
+-        if( strstr(pszSRSName, "Peru96") )
++        if( pszSRSName != NULL && strstr(pszSRSName, "Peru96") )
+         {
+             bPeru96Datum = true;
+             poDatum->SetValue( "Peru96" );

@@ -1,0 +1,51 @@
+diff --git a/cpp/src/parquet/arrow/schema.cc b/cpp/src/parquet/arrow/schema.cc
+index 16d0e1f3d..3f7ff9223 100644
+--- a/cpp/src/parquet/arrow/schema.cc
++++ b/cpp/src/parquet/arrow/schema.cc
+@@ -693,10 +693,12 @@ Status ApplyOriginalStorageMetadata(const Field& origin_field, SchemaField* infe
+   auto origin_type = origin_field.type();
+   auto inferred_type = inferred->field->type();
+ 
+-  if (inferred_type->id() == ::arrow::Type::TIMESTAMP) {
++  if (origin_type->id() == ::arrow::Type::TIMESTAMP &&
++      inferred_type->id() == ::arrow::Type::TIMESTAMP) {
+     // Restore time zone, if any
+-    const auto& ts_type = static_cast<const ::arrow::TimestampType&>(*inferred_type);
+-    const auto& ts_origin_type = static_cast<const ::arrow::TimestampType&>(*origin_type);
++    const auto& ts_type = checked_cast<const ::arrow::TimestampType&>(*inferred_type);
++    const auto& ts_origin_type =
++        checked_cast<const ::arrow::TimestampType&>(*origin_type);
+ 
+     // If the unit is the same and the data is tz-aware, then set the original
+     // time zone, since Parquet has no native storage for timezones
+@@ -710,7 +712,7 @@ Status ApplyOriginalStorageMetadata(const Field& origin_field, SchemaField* infe
+       inferred_type->id() != ::arrow::Type::DICTIONARY &&
+       IsDictionaryReadSupported(*inferred_type)) {
+     const auto& dict_origin_type =
+-        static_cast<const ::arrow::DictionaryType&>(*origin_type);
++        checked_cast<const ::arrow::DictionaryType&>(*origin_type);
+     inferred->field = inferred->field->WithType(
+         ::arrow::dictionary(::arrow::int32(), inferred_type, dict_origin_type.ordered()));
+   }
+diff --git a/cpp/src/parquet/column_reader.cc b/cpp/src/parquet/column_reader.cc
+index 44a6dcf68..3cdc05255 100644
+--- a/cpp/src/parquet/column_reader.cc
++++ b/cpp/src/parquet/column_reader.cc
+@@ -463,6 +463,10 @@ std::shared_ptr<Buffer> SerializedPageReader::DecompressIfNeeded(
+   if (decompressor_ == nullptr) {
+     return page_buffer;
+   }
++  if (compressed_len < levels_byte_len || uncompressed_len < levels_byte_len) {
++    throw ParquetException("Invalid page header");
++  }
++
+   // Grow the uncompressed buffer if we need to.
+   if (uncompressed_len > static_cast<int>(decompression_buffer_->size())) {
+     PARQUET_THROW_NOT_OK(decompression_buffer_->Resize(uncompressed_len, false));
+diff --git a/testing b/testing
+index ec74f0349..860376d4e 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit ec74f03496ba100fd8497ad660909bb0261a3405
++Subproject commit 860376d4e586a3ac34ec93089889da624ead6c2a

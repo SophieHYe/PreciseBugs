@@ -1,0 +1,119 @@
+diff --git a/bazel/foreign_cc/BUILD b/bazel/foreign_cc/BUILD
+index 5dc37d92df..06d8ed05df 100644
+--- a/bazel/foreign_cc/BUILD
++++ b/bazel/foreign_cc/BUILD
+@@ -53,6 +53,7 @@ configure_make(
+         "//bazel:windows_x86_64": ["lua51.lib"],
+         "//conditions:default": ["libluajit-5.1.a"],
+     }),
++    tags = ["skip_on_windows"],
+ )
+ 
+ configure_make(
+@@ -72,6 +73,7 @@ configure_make(
+         "//bazel:windows_x86_64": ["lua51.lib"],
+         "//conditions:default": ["libluajit-5.1.a"],
+     }),
++    tags = ["skip_on_windows"],
+ )
+ 
+ envoy_cmake_external(
+diff --git a/bazel/repositories.bzl b/bazel/repositories.bzl
+index 1539332ec8..45b5966293 100644
+--- a/bazel/repositories.bzl
++++ b/bazel/repositories.bzl
+@@ -8,6 +8,7 @@ load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_languag
+ PPC_SKIP_TARGETS = ["envoy.filters.http.lua"]
+ 
+ WINDOWS_SKIP_TARGETS = [
++    "envoy.filters.http.lua",
+     "envoy.tracers.dynamic_ot",
+     "envoy.tracers.lightstep",
+     "envoy.tracers.datadog",
+diff --git a/bazel/repository_locations.bzl b/bazel/repository_locations.bzl
+index a08c2c63c5..812290a35b 100644
+--- a/bazel/repository_locations.bzl
++++ b/bazel/repository_locations.bzl
+@@ -94,10 +94,10 @@ DEPENDENCY_REPOSITORIES = dict(
+         cpe = "N/A",
+     ),
+     com_google_absl = dict(
+-        sha256 = "14ee08e2089c2a9b6bf27e1d10abc5629c69c4d0bab4b78ec5b65a29ea1c2af7",
+-        strip_prefix = "abseil-cpp-cf3a1998e9d41709d4141e2f13375993cba1130e",
+-        # 2020-03-05
+-        urls = ["https://github.com/abseil/abseil-cpp/archive/cf3a1998e9d41709d4141e2f13375993cba1130e.tar.gz"],
++        sha256 = "cd477bfd0d19f803f85d118c7943b7908930310d261752730afa981118fee230",
++        strip_prefix = "abseil-cpp-ca9856cabc23d771bcce634677650eb6fc4363ae",
++        # 2020-04-30
++        urls = ["https://github.com/abseil/abseil-cpp/archive/ca9856cabc23d771bcce634677650eb6fc4363ae.tar.gz"],
+         use_category = ["dataplane", "controlplane"],
+         cpe = "N/A",
+     ),
+diff --git a/test/extensions/filters/common/lua/BUILD b/test/extensions/filters/common/lua/BUILD
+index 17adba2c31..cbe0ef71b7 100644
+--- a/test/extensions/filters/common/lua/BUILD
++++ b/test/extensions/filters/common/lua/BUILD
+@@ -12,6 +12,7 @@ envoy_package()
+ envoy_cc_test(
+     name = "lua_test",
+     srcs = ["lua_test.cc"],
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/extensions/filters/common/lua:lua_lib",
+         "//test/mocks:common_lib",
+@@ -23,7 +24,7 @@ envoy_cc_test(
+ envoy_cc_test(
+     name = "wrappers_test",
+     srcs = ["wrappers_test.cc"],
+-    tags = ["fails_on_windows"],
++    tags = ["skip_on_windows"],
+     deps = [
+         ":lua_wrappers_lib",
+         "//source/common/buffer:buffer_lib",
+@@ -38,6 +39,7 @@ envoy_cc_test(
+ envoy_cc_test_library(
+     name = "lua_wrappers_lib",
+     hdrs = ["lua_wrappers.h"],
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/extensions/filters/common/lua:lua_lib",
+         "//test/mocks/thread_local:thread_local_mocks",
+diff --git a/test/extensions/filters/http/lua/BUILD b/test/extensions/filters/http/lua/BUILD
+index eba9a4ad2e..93b555322a 100644
+--- a/test/extensions/filters/http/lua/BUILD
++++ b/test/extensions/filters/http/lua/BUILD
+@@ -15,7 +15,7 @@ envoy_extension_cc_test(
+     name = "lua_filter_test",
+     srcs = ["lua_filter_test.cc"],
+     extension_name = "envoy.filters.http.lua",
+-    tags = ["fails_on_windows"],
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/common/stream_info:stream_info_lib",
+         "//source/extensions/filters/http/lua:lua_filter_lib",
+@@ -34,7 +34,7 @@ envoy_extension_cc_test(
+     name = "wrappers_test",
+     srcs = ["wrappers_test.cc"],
+     extension_name = "envoy.filters.http.lua",
+-    tags = ["fails_on_windows"],
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/common/stream_info:stream_info_lib",
+         "//source/extensions/filters/http/lua:wrappers_lib",
+@@ -49,7 +49,7 @@ envoy_extension_cc_test(
+     name = "lua_integration_test",
+     srcs = ["lua_integration_test.cc"],
+     extension_name = "envoy.filters.http.lua",
+-    tags = ["fails_on_windows"],
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/extensions/filters/http/lua:config",
+         "//test/integration:http_integration_lib",
+@@ -63,6 +63,7 @@ envoy_extension_cc_test(
+     name = "config_test",
+     srcs = ["config_test.cc"],
+     extension_name = "envoy.filters.http.lua",
++    tags = ["skip_on_windows"],
+     deps = [
+         "//source/extensions/filters/http/lua:config",
+         "//test/mocks/server:server_mocks",

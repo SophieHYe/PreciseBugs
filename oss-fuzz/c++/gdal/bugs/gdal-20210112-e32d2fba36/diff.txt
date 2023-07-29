@@ -1,0 +1,110 @@
+diff --git a/gdal/frmts/pcidsk/sdk/blockdir/blocktilelayer.cpp b/gdal/frmts/pcidsk/sdk/blockdir/blocktilelayer.cpp
+index b0c137b5a5..63342395a5 100644
+--- a/gdal/frmts/pcidsk/sdk/blockdir/blocktilelayer.cpp
++++ b/gdal/frmts/pcidsk/sdk/blockdir/blocktilelayer.cpp
+@@ -155,6 +155,10 @@ bool BlockTileLayer::IsCorrupted(void) const
+     if (GetLayerType() == BLTDead)
+         return false;
+ 
++    // The tile layer is corrupted when the image size is 0.
++    if (GetXSize() == 0 || GetYSize() == 0)
++        return true;
++
+     uint64 nTileSize =
+         static_cast<uint64>(GetTileXSize()) * GetTileYSize() * GetDataTypeSize();
+ 
+@@ -657,6 +661,12 @@ void BlockTileLayer::SetTileLayerInfo(uint32 nXSize, uint32 nYSize,
+                                     nTileXSize, nTileYSize);
+     }
+ 
++    if (nXSize == 0 || nYSize == 0)
++    {
++        return ThrowPCIDSKException("Invalid tile layer dimensions: %d x %d",
++                                    nXSize, nYSize);
++    }
++
+     mpsTileLayer->nXSize = nXSize;
+     mpsTileLayer->nYSize = nYSize;
+     mpsTileLayer->nTileXSize = nTileXSize;
+diff --git a/gdal/frmts/pcidsk/sdk/channel/cbandinterleavedchannel.cpp b/gdal/frmts/pcidsk/sdk/channel/cbandinterleavedchannel.cpp
+index f31ef4ff3f..f19ec8e2af 100644
+--- a/gdal/frmts/pcidsk/sdk/channel/cbandinterleavedchannel.cpp
++++ b/gdal/frmts/pcidsk/sdk/channel/cbandinterleavedchannel.cpp
+@@ -125,12 +125,6 @@ int CBandInterleavedChannel::ReadBlock( int block_index, void *buffer,
+                                     line_offset);
+     }
+ 
+-    if (pixel_offset > line_offset)
+-    {
+-        return ThrowPCIDSKException(0, "Invalid pixel_offset: " PCIDSK_FRMT_UINT64,
+-                                    pixel_offset);
+-    }
+-
+     if (start_byte > std::numeric_limits<uint64>::max() - line_offset * height)
+     {
+         return ThrowPCIDSKException(0, "Invalid start_byte: " PCIDSK_FRMT_UINT64,
+@@ -163,6 +157,11 @@ int CBandInterleavedChannel::ReadBlock( int block_index, void *buffer,
+ /*      Establish region to read.                                       */
+ /* -------------------------------------------------------------------- */
+     int    pixel_size = DataTypeSize( pixel_type );
++
++    if (pixel_offset == 0 || pixel_size == 0)
++    {
++        return ThrowPCIDSKException( 0, "Invalid data type." );
++    }
+     if( xsize > 1 && pixel_offset > static_cast<uint64>(INT_MAX / (xsize - 1)) )
+     {
+         return ThrowPCIDSKException( 0, "Int overfow in ReadBlock() ");
+@@ -268,6 +267,10 @@ int CBandInterleavedChannel::WriteBlock( int block_index, void *buffer )
+ /*      Establish region to read.                                       */
+ /* -------------------------------------------------------------------- */
+     int    pixel_size = DataTypeSize( pixel_type );
++
++    if (pixel_offset == 0 || pixel_size == 0)
++        return ThrowPCIDSKException( 0, "Invalid data type." );
++
+     uint64 offset = start_byte + line_offset * block_index;
+     int    window_size = (int) (pixel_offset*(width-1) + pixel_size);
+ 
+diff --git a/gdal/frmts/pcidsk/sdk/channel/ctiledchannel.cpp b/gdal/frmts/pcidsk/sdk/channel/ctiledchannel.cpp
+index cf2579115e..587cb430a7 100644
+--- a/gdal/frmts/pcidsk/sdk/channel/ctiledchannel.cpp
++++ b/gdal/frmts/pcidsk/sdk/channel/ctiledchannel.cpp
+@@ -234,6 +234,9 @@ int CTiledChannel::ReadBlock( int iBlock, void *buffer,
+ 
+     uint32 nTilePerRow = mpoTileLayer->GetTilePerRow();
+ 
++    if (nTilePerRow == 0)
++        return ThrowPCIDSKException(0, "Invalid number of tiles per row.");
++
+     uint32 nCol = iBlock % nTilePerRow;
+     uint32 nRow = iBlock / nTilePerRow;
+ 
+@@ -353,6 +356,9 @@ int CTiledChannel::WriteBlock( int iBlock, void *buffer )
+ 
+     uint32 nTilePerRow = mpoTileLayer->GetTilePerRow();
+ 
++    if (nTilePerRow == 0)
++        return ThrowPCIDSKException(0, "Invalid number of tiles per row.");
++
+     uint32 nCol = iBlock % nTilePerRow;
+     uint32 nRow = iBlock / nTilePerRow;
+ 
+diff --git a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+index 696d42b485..478114b377 100644
+--- a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
++++ b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+@@ -798,6 +798,13 @@ void CPCIDSKFile::InitializeFromHeader()
+ 
+         pixel_type = GetDataTypeFromName(pixel_type_string);
+ 
++        // For file interleaved channels, we expect a valid channel type.
++        if (interleaving == "FILE" && pixel_type == CHN_UNKNOWN)
++        {
++            return ThrowPCIDSKException("Invalid or unsupported channel type: %s",
++                                        pixel_type_string);
++        }
++
+         // if we didn't get channel type in header, work out from counts (old).
+         // Check this only if we don't have complex channels:
+ 

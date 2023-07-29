@@ -1,0 +1,13 @@
+diff --git a/poppler/TextOutputDev.cc b/poppler/TextOutputDev.cc
+index ea12b468..956c1328 100644
+--- a/poppler/TextOutputDev.cc
++++ b/poppler/TextOutputDev.cc
+@@ -931,7 +931,7 @@ TextPool::~TextPool()
+ int TextPool::getBaseIdx(double base) const
+ {
+     const double baseIdxDouble = base / textPoolStep;
+-    if (baseIdxDouble < minBaseIdx) {
++    if (std::isnan(baseIdxDouble) || baseIdxDouble < minBaseIdx) {
+         return minBaseIdx;
+     }
+     if (baseIdxDouble > maxBaseIdx) {

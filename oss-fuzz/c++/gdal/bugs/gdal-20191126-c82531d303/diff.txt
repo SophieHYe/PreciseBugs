@@ -1,0 +1,79 @@
+diff --git a/gdal/frmts/pdf/pdfdataset.cpp b/gdal/frmts/pdf/pdfdataset.cpp
+index 88017953de..967dd8fcd2 100644
+--- a/gdal/frmts/pdf/pdfdataset.cpp
++++ b/gdal/frmts/pdf/pdfdataset.cpp
+@@ -4292,11 +4292,12 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+ 
+         g_nPopplerErrors = 0;
+ #if POPPLER_MAJOR_VERSION >= 1 || POPPLER_MINOR_VERSION >= 58
+-        poDocPoppler = new PDFDoc(new VSIPDFFileStream(fp, pszFilename, std::move(oObj)), nullptr, poUserPwd);
++        auto poStream = new VSIPDFFileStream(fp, pszFilename, std::move(oObj));
+ #else
+         oObj.getObj()->initNull();
+-        poDocPoppler = new PDFDoc(new VSIPDFFileStream(fp, pszFilename, oObj.getObj()), nullptr, poUserPwd);
++        auto poStream = new VSIPDFFileStream(fp, pszFilename, oObj.getObj());
+ #endif
++        poDocPoppler = new PDFDoc(poStream, nullptr, poUserPwd);
+         delete poUserPwd;
+         if( g_nPopplerErrors >= MAX_POPPLER_ERRORS )
+         {
+@@ -4339,8 +4340,25 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+ 
+             return nullptr;
+         }
++        else if( poDocPoppler->isLinearized() &&
++                 !poStream->FoundLinearizedHint() )
++        {
++            // This is a likely defect of poppler Linearization.cc file that
++            // recognizes a file as linearized if the /Linearized hint is missing,
++            // but the content of this dictionary are present.
++            // But given the hacks of PDFFreeDoc() and VSIPDFFileStream::FillBuffer()
++            // opening such a file will result in a null-ptr deref at closing if
++            // we try to access a page and build the page cache, so just exit now
++            CPLError(CE_Failure, CPLE_AppDefined, "Invalid PDF");
++
++            PDFFreeDoc(poDocPoppler);
++
++            return nullptr;
++        }
+         else
++        {
+             break;
++        }
+     }
+ 
+     poCatalogPoppler = poDocPoppler->getCatalog();
+diff --git a/gdal/frmts/pdf/pdfio.cpp b/gdal/frmts/pdf/pdfio.cpp
+index c0b9dad93c..fdd6abe682 100644
+--- a/gdal/frmts/pdf/pdfio.cpp
++++ b/gdal/frmts/pdf/pdfio.cpp
+@@ -226,6 +226,7 @@ int VSIPDFFileStream::FillBuffer()
+             if( memcmp(abyBuffer + i, "/Linearized ",
+                        strlen("/Linearized ")) == 0 )
+             {
++                bFoundLinearizedHint = true;
+                 memcpy(abyBuffer + i, "/XXXXXXXXXX ", strlen("/Linearized "));
+                 break;
+             }
+diff --git a/gdal/frmts/pdf/pdfio.h b/gdal/frmts/pdf/pdfio.h
+index 23344d33f7..d42b33373b 100644
+--- a/gdal/frmts/pdf/pdfio.h
++++ b/gdal/frmts/pdf/pdfio.h
+@@ -97,6 +97,8 @@ class VSIPDFFileStream final: public BaseStream
+         virtual void       unfilteredReset () override;
+         virtual void       close() override;
+ 
++        bool               FoundLinearizedHint() const { return bFoundLinearizedHint; }
++
+     private:
+         virtual GBool hasGetChars() override;
+         virtual int getChars(int nChars, Guchar *buffer) override;
+@@ -116,6 +118,8 @@ class VSIPDFFileStream final: public BaseStream
+         int                nPosInBuffer;
+         int                nBufferLength;
+ 
++        bool               bFoundLinearizedHint = false;
++
+         int                FillBuffer();
+ };
+ 

@@ -1,0 +1,59 @@
+diff --git a/gdal/ogr/ogrsf_frmts/pds/ogrpdsdatasource.cpp b/gdal/ogr/ogrsf_frmts/pds/ogrpdsdatasource.cpp
+index 70943bf0c3..cae3fbc8cb 100644
+--- a/gdal/ogr/ogrsf_frmts/pds/ogrpdsdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/pds/ogrpdsdatasource.cpp
+@@ -335,7 +335,8 @@ int OGRPDSDataSource::Open( const char * pszFilename )
+     CPLString osRecordBytes = oKeywords.GetKeyword( "RECORD_BYTES", "" );
+     int nRecordSize = atoi(osRecordBytes);
+     if (osRecordType.empty() || osFileRecords.empty() ||
+-        osRecordBytes.empty() || nRecordSize <= 0)
++        osRecordBytes.empty() || nRecordSize <= 0 ||
++        nRecordSize > 10*1024*1024)
+     {
+         CPLError(CE_Failure, CPLE_NotSupported,
+                  "One of RECORD_TYPE, FILE_RECORDS or RECORD_BYTES is missing");
+diff --git a/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp b/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
+index 25838664ed..c58cd1f6d1 100644
+--- a/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/pds/ogrpdslayer.cpp
+@@ -30,6 +30,7 @@
+ #include "cpl_conv.h"
+ #include "cpl_string.h"
+ #include "ogr_p.h"
++#include "cpl_safemaths.hpp"
+ 
+ #include <algorithm>
+ 
+@@ -343,10 +344,31 @@ void OGRPDSLayer::ReadStructure(CPLString osStructureFilename)
+             else if (EQUAL(papszTokens[0], "ROW_BYTES"))
+             {
+                 nRowBytes = atoi(papszTokens[1]);
++                if( nRowBytes < 0 || nRowBytes > 10*1024*1024)
++                {
++                    CPLError(CE_Failure, CPLE_NotSupported,
++                             "Invalid value of ROW_BYTES");
++                    break;
++                }
+             }
+             else if (EQUAL(papszTokens[0], "ROW_SUFFIX_BYTES"))
+             {
+-                nRowBytes += atoi(papszTokens[1]);
++                try
++                {
++                    nRowBytes = (CPLSM(nRowBytes) + CPLSM(atoi(papszTokens[1]))).v();
++                }
++                catch( const CPLSafeIntOverflow& )
++                {
++                    CPLError(CE_Failure, CPLE_NotSupported,
++                             "Invalid value of ROW_SUFFIX_BYTES");
++                    break;
++                }
++                if( nRowBytes < 0 || nRowBytes > 10*1024*1024)
++                {
++                    CPLError(CE_Failure, CPLE_NotSupported,
++                             "Invalid value of ROW_SUFFIX_BYTES");
++                    break;
++                }
+             }
+             else if (EQUAL(papszTokens[0], "OBJECT") &&
+                      EQUAL(papszTokens[1], "COLUMN"))

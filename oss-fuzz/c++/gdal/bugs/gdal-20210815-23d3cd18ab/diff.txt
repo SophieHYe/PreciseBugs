@@ -1,0 +1,236 @@
+diff --cc autotest/ogr/data/gml/too_nested.gml
+index db799cb951,db799cb951..0000000000
+deleted file mode 100644,100644
+--- a/autotest/ogr/data/gml/too_nested.gml
++++ /dev/null
+@@@ -1,13 -1,13 +1,0 @@@
+--<?xml version="1.0" encoding="utf-8" ?>
+--<ogr:FeatureCollection
+--     gml:id="aFeatureCollection"
+--     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+--     xsi:schemaLocation="http://ogr.maptools.org/ test.xsd"
+--     xmlns:ogr="http://ogr.maptools.org/"
+--     xmlns:gml="http://www.opengis.net/gml/3.2">
+--  <ogr:featureMember>
+--    <ogr:test gml:id="test.0">
+--        <ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a><ogr:a>X</ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a></ogr:a>
+--    </ogr:test>
+--  </ogr:featureMember>
+--</ogr:FeatureCollection>
+diff --cc autotest/ogr/ogr_gml_read.py
+index f907114396,f907114396..007594afcd
+--- a/autotest/ogr/ogr_gml_read.py
++++ b/autotest/ogr/ogr_gml_read.py
+@@@ -3861,28 -3861,28 +3861,3 @@@ def test_ogr_gml_srs_name_in_xsd(gml_fo
+  
+      gdal.Unlink(filename)
+      gdal.Unlink(xsdfilename)
+--
+--
+--###############################################################################
+--
+--
+--def test_ogr_gml_too_nested():
+--
+--    if not gdaltest.have_gml_reader:
+--        pytest.skip()
+--
+--    gdal.Unlink('data/gml/too_nested.gfs')
+--
+--    with gdaltest.error_handler():
+--        ds = ogr.Open('data/gml/too_nested.gml')
+--        lyr = ds.GetLayer(0)
+--        assert lyr.GetNextFeature() is None
+--
+--    gdal.Unlink('data/gml/too_nested.gfs')
+--
+--    with gdaltest.config_option('OGR_GML_NESTING_LEVEL', 'UNLIMITED'):
+--        ds = ogr.Open('data/gml/too_nested.gml')
+--        lyr = ds.GetLayer(0)
+--        assert lyr.GetNextFeature() is not None
+--
+--    gdal.Unlink('data/gml/too_nested.gfs')
+diff --cc gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+index a13dd1078a,a13dd1078a..2a26a13fb7
+--- a/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
++++ b/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+@@@ -67,22 -67,22 +67,6 @@@ GMLXercesHandler::GMLXercesHandler( GML
+      m_nEntityCounter(0)
+  {}
+  
+--/************************************************************************/
+--/*                    GMLXercesHandlerDealWithError()                   */
+--/************************************************************************/
+--
+--static void GMLXercesHandlerDealWithError(OGRErr eErr)
+--{
+--    if( eErr == OGRERR_NOT_ENOUGH_MEMORY )
+--    {
+--        throw SAXNotSupportedException("Out of memory");
+--    }
+--    else if( eErr != OGRERR_NONE )
+--    {
+--        throw SAXNotSupportedException("Other error during parsing");
+--    }
+--}
+--
+  /************************************************************************/
+  /*                            startElement()                            */
+  /************************************************************************/
+@@@ -96,10 -96,10 +80,13 @@@ void GMLXercesHandler::startElement( co
+  
+      transcode(localname, m_osElement);
+  
+--    GMLXercesHandlerDealWithError(GMLHandler::startElement(
+++    if( GMLHandler::startElement(
+              m_osElement.c_str(),
+              static_cast<int>(m_osElement.size()),
+--            const_cast<Attributes *>(&attrs)));
+++            const_cast<Attributes *>(&attrs)) == OGRERR_NOT_ENOUGH_MEMORY )
+++    {
+++        throw SAXNotSupportedException("Out of memory");
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -111,7 -111,7 +98,10 @@@ void GMLXercesHandler::endElement(cons
+  {
+      m_nEntityCounter = 0;
+  
+--    GMLXercesHandlerDealWithError(GMLHandler::endElement());
+++    if (GMLHandler::endElement() == OGRERR_NOT_ENOUGH_MEMORY)
+++    {
+++        throw SAXNotSupportedException("Out of memory");
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -123,8 -123,8 +113,12 @@@ void GMLXercesHandler::characters(cons
+  
+  {
+      transcode( chars_in, m_osCharacters, static_cast<int>(length) );
+--    GMLXercesHandlerDealWithError(GMLHandler::dataHandler(m_osCharacters.c_str(),
+--                                    static_cast<int>(m_osCharacters.size())));
+++    OGRErr eErr = GMLHandler::dataHandler(m_osCharacters.c_str(),
+++                                    static_cast<int>(m_osCharacters.size()));
+++    if (eErr == OGRERR_NOT_ENOUGH_MEMORY)
+++    {
+++        throw SAXNotSupportedException("Out of memory");
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -270,21 -270,21 +264,6 @@@ GMLExpatHandler::GMLExpatHandler( GMLRe
+      m_nDataHandlerCounter(0)
+  {}
+  
+--/************************************************************************/
+--/*                  GMLExpatHandler::DealWithError()                    */
+--/************************************************************************/
+--
+--void GMLExpatHandler::DealWithError(OGRErr eErr)
+--{
+--    if( eErr != OGRERR_NONE )
+--    {
+--        m_bStopParsing = true;
+--        XML_StopParser(m_oParser, XML_FALSE);
+--        if( eErr == OGRERR_NOT_ENOUGH_MEMORY )
+--            CPLError(CE_Failure, CPLE_OutOfMemory, "Out of memory");
+--    }
+--}
+--
+  /************************************************************************/
+  /*                           startElementCbk()                          */
+  /************************************************************************/
+@@@ -307,9 -307,9 +286,14 @@@ void XMLCALL GMLExpatHandler::startElem
+          pszIter ++;
+      }
+  
+--    pThis->DealWithError( pThis->GMLHandler::startElement(pszName,
+++    if( pThis->GMLHandler::startElement(pszName,
+                                          static_cast<int>(pszIter - pszName),
+--                                        ppszAttr) );
+++                                        ppszAttr) == OGRERR_NOT_ENOUGH_MEMORY )
+++    {
+++        CPLError(CE_Failure, CPLE_OutOfMemory, "Out of memory");
+++        pThis->m_bStopParsing = true;
+++        XML_StopParser(pThis->m_oParser, XML_FALSE);
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -322,7 -322,7 +306,12 @@@ void XMLCALL GMLExpatHandler::endElemen
+      if( pThis->m_bStopParsing )
+          return;
+  
+--    pThis->DealWithError( pThis->GMLHandler::endElement() );
+++    if( pThis->GMLHandler::endElement() == OGRERR_NOT_ENOUGH_MEMORY )
+++    {
+++        CPLError(CE_Failure, CPLE_OutOfMemory, "Out of memory");
+++        pThis->m_bStopParsing = true;
+++        XML_StopParser(pThis->m_oParser, XML_FALSE);
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -354,7 -354,7 +343,12 @@@ GMLExpatHandler::dataHandlerCbk(void *p
+          return;
+      }
+  
+--    pThis->DealWithError( pThis->GMLHandler::dataHandler(data, nLen) );
+++    if( pThis->GMLHandler::dataHandler(data, nLen) == OGRERR_NOT_ENOUGH_MEMORY )
+++    {
+++        CPLError(CE_Failure, CPLE_OutOfMemory, "Out of memory");
+++        pThis->m_bStopParsing = true;
+++        XML_StopParser(pThis->m_oParser, XML_FALSE);
+++    }
+  }
+  
+  /************************************************************************/
+@@@ -598,25 -598,25 +592,6 @@@ OGRErr GMLHandler::startElement(const c
+          default:                        eRet = OGRERR_NONE; break;
+      }
+      m_nDepth++;
+--    if( m_nDepth == 64 )
+--    {
+--        // Avoid performance issues on files like
+--        // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=21737
+--        if( m_nUnlimitedDepth < 0 )
+--        {
+--            m_nUnlimitedDepth =
+--                EQUAL(CPLGetConfigOption("OGR_GML_NESTING_LEVEL", ""), "UNLIMITED");
+--        }
+--        if( !m_nUnlimitedDepth )
+--        {
+--            CPLError(CE_Failure, CPLE_NotSupported,
+--                     "Too deep XML nesting level (%d). "
+--                     "Set the OGR_GML_NESTING_LEVEL configuration option to "
+--                     "UNLIMITED to remove that limitation.",
+--                     m_nDepth);
+--            eRet = OGRERR_FAILURE;
+--        }
+--    }
+      return eRet;
+  }
+  
+diff --cc gdal/ogr/ogrsf_frmts/gml/gmlreaderp.h
+index 5e8e5dc2d1,5e8e5dc2d1..3997a13bb3
+--- a/gdal/ogr/ogrsf_frmts/gml/gmlreaderp.h
++++ b/gdal/ogr/ogrsf_frmts/gml/gmlreaderp.h
+@@@ -135,7 -135,7 +135,6 @@@ class GMLHandle
+  
+      int        m_nDepth;
+      int        m_nDepthFeature;
+--    int        m_nUnlimitedDepth = -1; // -1 unknown, 0=false, 1=true
+  
+      int        m_inBoundedByDepth;
+  
+@@@ -266,8 -266,8 +265,6 @@@ class GMLExpatHandler final: public GML
+      bool       m_bStopParsing;
+      int        m_nDataHandlerCounter;
+  
+--    void       DealWithError(OGRErr eErr);
+--
+  public:
+      GMLExpatHandler( GMLReader *poReader, XML_Parser oParser );
+  

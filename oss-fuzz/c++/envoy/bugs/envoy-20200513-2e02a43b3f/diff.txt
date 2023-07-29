@@ -1,0 +1,17 @@
+diff --git a/docs/root/configuration/http/http_filters/compressor_filter.rst b/docs/root/configuration/http/http_filters/compressor_filter.rst
+index 08e7298e1d..9b59b15a8d 100644
+--- a/docs/root/configuration/http/http_filters/compressor_filter.rst
++++ b/docs/root/configuration/http/http_filters/compressor_filter.rst
+@@ -42,10 +42,10 @@ An example configuration of the filter may look like the following:
+         compressor_library:
+           name: text_optimized
+           typed_config:
+-            "@type": type.googleapis.com/envoy.extensions.filters.http.compressor.gzip.v3.Gzip
++            "@type": type.googleapis.com/envoy.extensions.compression.gzip.compressor.v3.Gzip
+             memory_level: 3
+             window_bits: 10
+-            compression_level: best
++            compression_level: best_compression
+             compression_strategy: default_strategy
+ 
+ By *default* compression will be *skipped* when:

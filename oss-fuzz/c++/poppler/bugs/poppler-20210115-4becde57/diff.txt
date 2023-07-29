@@ -1,0 +1,13 @@
+diff --git a/poppler/Stream.cc b/poppler/Stream.cc
+index 666d5b2a..a1c8b094 100644
+--- a/poppler/Stream.cc
++++ b/poppler/Stream.cc
+@@ -1893,7 +1893,7 @@ inline void CCITTFaxStream::addPixelsNeg(int a1, int blackPixels)
+         if (a1 < 0) {
+             error(errSyntaxError, getPos(), "Invalid CCITTFax code");
+             err = true;
+-            a1 = 0;
++            a1 = columns;
+         }
+         while (a0i > 0 && a1 <= codingLine[a0i - 1]) {
+             --a0i;

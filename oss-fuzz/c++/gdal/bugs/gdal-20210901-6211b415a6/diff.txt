@@ -1,0 +1,64 @@
+diff --git a/autotest/osr/osr_basic.py b/autotest/osr/osr_basic.py
+index 18c372beb8..76d8f23fdc 100755
+--- a/autotest/osr/osr_basic.py
++++ b/autotest/osr/osr_basic.py
+@@ -36,7 +36,7 @@ import subprocess
+ import sys
+ 
+ import gdaltest
+-from osgeo import gdal, osr
++from osgeo import gdal, ogr, osr
+ import pytest
+ from threading import Thread
+ 
+@@ -1787,3 +1787,20 @@ def test_osr_basic_export_equal_earth_to_wkt():
+     assert wkt == srs.ExportToWkt(['FORMAT=WKT2'])
+     assert 'METHOD["Equal Earth",' in wkt
+     assert gdal.GetLastErrorMsg() == ''
++
++
++###############################################################################
++# Test too long user input
++
++
++def test_osr_basic_set_from_user_input_too_long():
++
++    srs = osr.SpatialReference()
++    with gdaltest.error_handler():
++        assert srs.SetFromUserInput("+proj=pipeline " + "+step +proj=longlat " * 100000) != ogr.OGRERR_NONE
++
++    with gdaltest.error_handler():
++        assert srs.SetFromUserInput("AUTO:" + "x" * 100000) != ogr.OGRERR_NONE
++
++    with gdaltest.error_handler():
++        assert srs.SetFromUserInput("http://opengis.net/def/crs/" + "x" * 100000) != ogr.OGRERR_NONE
+diff --git a/gdal/ogr/ogrspatialreference.cpp b/gdal/ogr/ogrspatialreference.cpp
+index 98cec4695e..39593e2d2f 100644
+--- a/gdal/ogr/ogrspatialreference.cpp
++++ b/gdal/ogr/ogrspatialreference.cpp
+@@ -4198,6 +4198,12 @@ OGRErr OGRSpatialReference::importFromCRSURL( const char *pszURL )
+ 
+ {
+ #if PROJ_AT_LEAST_VERSION(8,1,0)
++    if( strlen(pszURL) >= 10000 )
++    {
++        CPLError(CE_Failure, CPLE_AppDefined, "Too long input string");
++        return OGRERR_CORRUPT_DATA;
++    }
++
+     auto obj = proj_create(d->getPROJContext(), pszURL);
+     if( !obj )
+     {
+@@ -4356,6 +4362,12 @@ OGRErr OGRSpatialReference::importFromWMSAUTO( const char * pszDefinition )
+ 
+ {
+ #if PROJ_AT_LEAST_VERSION(8,1,0)
++    if( strlen(pszDefinition) >= 10000 )
++    {
++        CPLError(CE_Failure, CPLE_AppDefined, "Too long input string");
++        return OGRERR_CORRUPT_DATA;
++    }
++
+     auto obj = proj_create(d->getPROJContext(), pszDefinition);
+     if( !obj )
+     {

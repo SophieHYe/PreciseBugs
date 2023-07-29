@@ -1,0 +1,52 @@
+diff --git a/maplexer.c b/maplexer.c
+index b128d98cb..5148de7ce 100644
+--- a/maplexer.c
++++ b/maplexer.c
+@@ -4418,10 +4418,6 @@ YY_RULE_SETUP
+                                                    return(-1);
+                                                  }
+ 
+-                                                 include_stack[include_stack_ptr] = YY_CURRENT_BUFFER; /* save state */
+-                                                 include_lineno[include_stack_ptr] = msyylineno;
+-                                                 include_stack_ptr++;
+-
+                                                  msyyin = fopen(msBuildPath(path, msyybasepath, msyytext), "r");
+                                                  if(!msyyin) {
+                                                    msSetError(MS_IOERR, "Error opening included file \"%s\".", "msyylex()", msyytext);
+@@ -4429,6 +4425,10 @@ YY_RULE_SETUP
+                                                    return(-1);
+                                                  }
+ 
++                                                 include_stack[include_stack_ptr] = YY_CURRENT_BUFFER; /* save state */
++                                                 include_lineno[include_stack_ptr] = msyylineno;
++                                                 include_stack_ptr++;
++
+                                                  msyy_switch_to_buffer( msyy_create_buffer(msyyin, YY_BUF_SIZE) );
+                                                  msyylineno = 1;
+ 
+diff --git a/maplexer.l b/maplexer.l
+index 7a67479c4..bc3785857 100644
+--- a/maplexer.l
++++ b/maplexer.l
+@@ -655,10 +655,6 @@ char path[MS_MAXPATHLEN];
+                                                    return(-1);
+                                                  }
+ 
+-                                                 include_stack[include_stack_ptr] = YY_CURRENT_BUFFER; /* save state */
+-                                                 include_lineno[include_stack_ptr] = msyylineno;
+-                                                 include_stack_ptr++;
+-
+                                                  msyyin = fopen(msBuildPath(path, msyybasepath, msyytext), "r");
+                                                  if(!msyyin) {
+                                                    msSetError(MS_IOERR, "Error opening included file \"%s\".", "msyylex()", msyytext);
+@@ -666,6 +662,10 @@ char path[MS_MAXPATHLEN];
+                                                    return(-1);
+                                                  }
+ 
++                                                 include_stack[include_stack_ptr] = YY_CURRENT_BUFFER; /* save state */
++                                                 include_lineno[include_stack_ptr] = msyylineno;
++                                                 include_stack_ptr++;
++
+                                                  msyy_switch_to_buffer( msyy_create_buffer(msyyin, YY_BUF_SIZE) );
+                                                  msyylineno = 1;
+ 

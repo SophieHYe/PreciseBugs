@@ -1,0 +1,18 @@
+diff --git a/ogr/ogrsf_frmts/openfilegdb/filegdbtable_write.cpp b/ogr/ogrsf_frmts/openfilegdb/filegdbtable_write.cpp
+index 0104ed9b54..6deac042a3 100644
+--- a/ogr/ogrsf_frmts/openfilegdb/filegdbtable_write.cpp
++++ b/ogr/ogrsf_frmts/openfilegdb/filegdbtable_write.cpp
+@@ -1212,7 +1212,13 @@ bool FileGDBTable::EncodeGeometry(const FileGDBGeomField *poGeomField,
+                 WriteVarUInt(m_abyGeomBuffer, nParts);
+ 
+                 if (!EncodeEnvelope(m_abyGeomBuffer, poGeomField, poGeom))
++                {
++                    CPLFree(panPartStart);
++                    CPLFree(panPartType);
++                    CPLFree(poPoints);
++                    CPLFree(padfZ);
+                     return false;
++                }
+ 
+                 for (int i = 0; i < nParts - 1; i++)
+                 {

@@ -1,0 +1,159 @@
+diff --git a/resources/sksl/errors/AssignmentTypeMismatch.sksl b/resources/sksl/errors/AssignmentTypeMismatch.sksl
+index d63fb15f67..bb8e3c9253 100644
+--- a/resources/sksl/errors/AssignmentTypeMismatch.sksl
++++ b/resources/sksl/errors/AssignmentTypeMismatch.sksl
+@@ -3,3 +3,6 @@ void statement_assign_float_to_int() { int x; x = 1.0; }
+ void times_equals_int3_by_float()    { int3 x = int3(0); x *= 1.0; }
+ void function_ref_in_comma_expr()    { int x = (radians, 1); }
+ void type_ref_in_comma_expr()        { int x = (bool4, 1); }
++int function_ref_in_global_variable = mix;
++float3x3 type_ref_in_global_variable = float3x3;
++
+diff --git a/resources/sksl/errors/IntrinsicInGlobalVariable.sksl b/resources/sksl/errors/IntrinsicInGlobalVariable.sksl
+index d1eb39f5f6..f24d23a245 100644
+--- a/resources/sksl/errors/IntrinsicInGlobalVariable.sksl
++++ b/resources/sksl/errors/IntrinsicInGlobalVariable.sksl
+@@ -1,2 +1,2 @@
+-float c = blend_src_over(half4(1), half4(0));
++half4 c = blend_src_over(half4(1), half4(0));
+ void f() {}
+diff --git a/src/sksl/SkSLAnalysis.cpp b/src/sksl/SkSLAnalysis.cpp
+index f145008383..52dbc84563 100644
+--- a/src/sksl/SkSLAnalysis.cpp
++++ b/src/sksl/SkSLAnalysis.cpp
+@@ -1163,21 +1163,23 @@ public:
+             case Expression::Kind::kTernary:
+                 return INHERITED::visitExpression(e);
+ 
+-            // These are completely disallowed in SkSL constant-(index)-expressions. GLSL allows
+-            // calls to built-in functions where the arguments are all constant-expressions, but
+-            // we don't guarantee that behavior. (skbug.com/10835)
+-            case Expression::Kind::kChildCall:
+-            case Expression::Kind::kExternalFunctionCall:
++            // Function calls are completely disallowed in SkSL constant-(index)-expressions.
++            // GLSL does mandate that calling a built-in function where the arguments are all
++            // constant-expressions should result in a constant-expression. SkSL handles this by
++            // optimizing fully-constant function calls into literals in FunctionCall::Make.
+             case Expression::Kind::kFunctionCall:
+-                return true;
++            case Expression::Kind::kExternalFunctionCall:
++            case Expression::Kind::kChildCall:
+ 
++            // These shouldn't appear in a valid program at all, and definitely aren't
++            // constant-index-expressions.
+             case Expression::Kind::kPoison:
+-                return true;
+-
+-            // These should never appear in final IR
+-            case Expression::Kind::kExternalFunctionReference:
+             case Expression::Kind::kFunctionReference:
++            case Expression::Kind::kExternalFunctionReference:
+             case Expression::Kind::kTypeReference:
++            case Expression::Kind::kCodeString:
++                return true;
++
+             default:
+                 SkDEBUGFAIL("Unexpected expression type");
+                 return true;
+diff --git a/src/sksl/ir/SkSLVarDeclarations.cpp b/src/sksl/ir/SkSLVarDeclarations.cpp
+index 2bac18d411..6cd96ca50b 100644
+--- a/src/sksl/ir/SkSLVarDeclarations.cpp
++++ b/src/sksl/ir/SkSLVarDeclarations.cpp
+@@ -37,6 +37,32 @@ String VarDeclaration::description() const {
+ std::unique_ptr<Statement> VarDeclaration::Convert(const Context& context,
+                                                    Variable* var,
+                                                    std::unique_ptr<Expression> value) {
++    if (value) {
++        if (var->type().isOpaque()) {
++            context.fErrors->error(value->fOffset, "opaque type '" + var->type().name() +
++                                                   "' cannot use initializer expressions");
++            return nullptr;
++        }
++        if (var->modifiers().fFlags & Modifiers::kIn_Flag) {
++            context.fErrors->error(value->fOffset,
++                                   "'in' variables cannot use initializer expressions");
++            return nullptr;
++        }
++        if (var->modifiers().fFlags & Modifiers::kUniform_Flag) {
++            context.fErrors->error(value->fOffset,
++                                   "'uniform' variables cannot use initializer expressions");
++            return nullptr;
++        }
++        if (var->storage() == Variable::Storage::kInterfaceBlock) {
++            context.fErrors->error(value->fOffset,
++                                   "initializers are not permitted on interface block fields");
++            return nullptr;
++        }
++        value = var->type().coerceExpression(std::move(value), context);
++        if (!value) {
++            return nullptr;
++        }
++    }
+     if (var->modifiers().fFlags & Modifiers::kConst_Flag) {
+         if (!value) {
+             context.fErrors->error(var->fOffset, "'const' variables must be initialized");
+@@ -54,11 +80,6 @@ std::unique_ptr<Statement> VarDeclaration::Convert(const Context& context,
+                                                  "' is not permitted in an interface block");
+             return nullptr;
+         }
+-        if (value) {
+-            context.fErrors->error(value->fOffset,
+-                                   "initializers are not permitted on interface block fields");
+-            return nullptr;
+-        }
+     }
+     if (var->storage() == Variable::Storage::kGlobal) {
+         if (value && !Analysis::IsConstantExpression(*value)) {
+@@ -67,28 +88,6 @@ std::unique_ptr<Statement> VarDeclaration::Convert(const Context& context,
+             return nullptr;
+         }
+     }
+-    if (value) {
+-        if (var->type().isOpaque()) {
+-            context.fErrors->error(
+-                    value->fOffset,
+-                    "opaque type '" + var->type().name() + "' cannot use initializer expressions");
+-            return nullptr;
+-        }
+-        if (var->modifiers().fFlags & Modifiers::kIn_Flag) {
+-            context.fErrors->error(value->fOffset,
+-                                   "'in' variables cannot use initializer expressions");
+-            return nullptr;
+-        }
+-        if (var->modifiers().fFlags & Modifiers::kUniform_Flag) {
+-            context.fErrors->error(value->fOffset,
+-                                   "'uniform' variables cannot use initializer expressions");
+-            return nullptr;
+-        }
+-        value = var->type().coerceExpression(std::move(value), context);
+-        if (!value) {
+-            return nullptr;
+-        }
+-    }
+     const Type* baseType = &var->type();
+     int arraySize = 0;
+     if (baseType->isArray()) {
+diff --git a/tests/sksl/errors/AssignmentTypeMismatch.glsl b/tests/sksl/errors/AssignmentTypeMismatch.glsl
+index 0b9ebbfa97..ec59bdc924 100644
+--- a/tests/sksl/errors/AssignmentTypeMismatch.glsl
++++ b/tests/sksl/errors/AssignmentTypeMismatch.glsl
+@@ -5,4 +5,6 @@ error: 2: type mismatch: '=' cannot operate on 'int', 'float'
+ error: 3: type mismatch: '*=' cannot operate on 'int3', 'float'
+ error: 4: expected '(' to begin function call
+ error: 5: expected '(' to begin constructor invocation
+-5 errors
++error: 6: expected '(' to begin function call
++error: 7: expected '(' to begin constructor invocation
++7 errors
+diff --git a/tests/sksl/errors/OpaqueTypeAssignment.glsl b/tests/sksl/errors/OpaqueTypeAssignment.glsl
+index a9fe71ead9..612299704a 100644
+--- a/tests/sksl/errors/OpaqueTypeAssignment.glsl
++++ b/tests/sksl/errors/OpaqueTypeAssignment.glsl
+@@ -1,6 +1,6 @@
+ ### Compilation failed:
+ 
+-error: 3: global variable initializer must be a constant expression
++error: 3: opaque type 'sampler' cannot use initializer expressions
+ error: 4: variables of type 'sampler' must be global
+ error: 5: variables of type 'sampler' must be global
+ error: 5: opaque type 'sampler' cannot use initializer expressions

@@ -1,0 +1,303 @@
+diff --git a/logback-classic/src/test/input/joran/ossfuzz/nestedComplexWithNoKnownClass.xml b/logback-classic/src/test/input/joran/ossfuzz/nestedComplexWithNoKnownClass.xml
+new file mode 100644
+index 000000000..23e2c89c2
+--- /dev/null
++++ b/logback-classic/src/test/input/joran/ossfuzz/nestedComplexWithNoKnownClass.xml
+@@ -0,0 +1,3 @@
++<configuration>
++  <listener/>
++</configuration>
+\ No newline at end of file
+diff --git a/logback-classic/src/test/input/joran/ossfuzz/unknownProperty.xml b/logback-classic/src/test/input/joran/ossfuzz/unknownProperty.xml
+new file mode 100644
+index 000000000..943aa6979
+--- /dev/null
++++ b/logback-classic/src/test/input/joran/ossfuzz/unknownProperty.xml
+@@ -0,0 +1,3 @@
++<configuration>
++  <a/>
++</configuration>
+\ No newline at end of file
+diff --git a/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java b/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
+index 1a1b9723d..63c93e3b9 100755
+--- a/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
++++ b/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
+@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
+ import java.io.IOException;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
+-import java.util.List;
+ 
+ import org.junit.Ignore;
+ import org.junit.Test;
+@@ -225,7 +224,6 @@ public class JoranConfiguratorTest {
+     @Test
+     public void missingConfigurationElement() throws JoranException {
+         configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "ossfuzz/noConfig.xml");
+-        StatusPrinter.print(loggerContext);
+         
+         String msg1 = "Exception in body\\(\\) method for action \\["+ParamAction.class.getName()+"\\]";
+         checker.assertContainsMatch(Status.ERROR, msg1);
+@@ -233,6 +231,23 @@ public class JoranConfiguratorTest {
+         String msg2 = "current model is null. Is <configuration> element missing?";
+         checker.assertContainsException(ActionException.class, msg2 );
+     }
++
++    @Test
++    public void ignoreUnknownProperty() throws JoranException {
++        
++        configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "ossfuzz/unknownProperty.xml");
++        String msg = "Ignoring unkown property \\[a\\] in \\[ch.qos.logback.classic.LoggerContext\\]";
++        checker.assertContainsMatch(Status.WARN, msg);
++    }
++    
++    // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46995
++    @Test
++    public void complexCollectionWihhNoKnownClass() throws JoranException {
++        
++       configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "ossfuzz/nestedComplexWithNoKnownClass.xml");
++       String msg = "Could not find an appropriate class for property \\[listener\\]";
++       checker.assertContainsMatch(Status.ERROR, msg);
++    }
+     
+     @Test
+     public void turboFilter() throws JoranException {
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/GenericXMLConfigurator.java b/logback-core/src/main/java/ch/qos/logback/core/joran/GenericXMLConfigurator.java
+index 68b62c5b2..4e1dafc00 100755
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/GenericXMLConfigurator.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/GenericXMLConfigurator.java
+@@ -134,10 +134,10 @@ public abstract class GenericXMLConfigurator extends ContextAwareBase {
+         return new ElementPath();
+     }
+ 
+-    protected void buildSaxEventInterpreter() {
++    protected void buildSaxEventInterpreter(List<SaxEvent> saxEvents) {
+         RuleStore rs = new SimpleRuleStore(context);
+         addInstanceRules(rs);
+-        this.saxEventInterpreter = new SaxEventInterpreter(context, rs, initialElementPath());
++        this.saxEventInterpreter = new SaxEventInterpreter(context, rs, initialElementPath(), saxEvents);
+         SaxEventInterpretationContext interpretationContext = saxEventInterpreter.getSaxEventInterpretationContext();
+         interpretationContext.setContext(context);
+         addImplicitRules(saxEventInterpreter);
+@@ -157,7 +157,7 @@ public abstract class GenericXMLConfigurator extends ContextAwareBase {
+         long threshold = System.currentTimeMillis();
+ 
+         SaxEventRecorder recorder = populateSaxEventRecorder(inputSource);
+-        Model top = buildModelFromSaxEventList(recorder.saxEventList);
++        Model top = buildModelFromSaxEventList(recorder.getSaxEventList());
+         if(top == null) {
+             addError(ErrorCodes.EMPTY_MODEL_STACK);
+             return;
+@@ -179,14 +179,14 @@ public abstract class GenericXMLConfigurator extends ContextAwareBase {
+     }
+ 
+     public Model buildModelFromSaxEventList(List<SaxEvent> saxEvents) throws JoranException {
+-        buildSaxEventInterpreter();
+-        playSaxEvents(saxEvents);
++        buildSaxEventInterpreter(saxEvents);
++        playSaxEvents();
+         Model top = saxEventInterpreter.getSaxEventInterpretationContext().peekModel();
+         return top;
+     }
+ 
+-    private void playSaxEvents(final List<SaxEvent> eventList) throws JoranException {
+-        saxEventInterpreter.getEventPlayer().play(eventList);
++    private void playSaxEvents() throws JoranException {
++        saxEventInterpreter.getEventPlayer().play();
+     }
+ 
+     public void processModel(Model model) {
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/action/IncludeAction.java b/logback-core/src/main/java/ch/qos/logback/core/joran/action/IncludeAction.java
+index b74406332..e42aa0b04 100755
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/action/IncludeAction.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/action/IncludeAction.java
+@@ -75,8 +75,7 @@ public class IncludeAction extends Action {
+             inError = true;
+             return;
+         }
+-
+-        
++         
+         InputStream in = getInputStream(ec, attributes);
+ 
+         try {
+@@ -87,7 +86,7 @@ public class IncludeAction extends Action {
+ 
+                 // offset = 2, because we need to get past this element as well as the end
+                 // element
+-                ec.getSaxEventInterpreter().getEventPlayer().addEventsDynamically(recorder.saxEventList, 2);
++                ec.getSaxEventInterpreter().getEventPlayer().addEventsDynamically(recorder.getSaxEventList(), 2);
+             }
+         } catch (JoranException e) {
+             addError("Error while parsing  " + attributeInUse, e);
+@@ -243,7 +242,9 @@ public class IncludeAction extends Action {
+         // Let's remove the two <included> events before
+         // adding the events to the player.
+ 
+-        List<SaxEvent> saxEventList = recorder.saxEventList;
++        // note saxEventList.size() changes over time as events are removed 
++        
++        List<SaxEvent> saxEventList = recorder.getSaxEventList();
+ 
+         if (saxEventList.size() == 0) {
+             return;
+@@ -253,10 +254,10 @@ public class IncludeAction extends Action {
+         if (first != null && first.qName.equalsIgnoreCase(INCLUDED_TAG)) {
+             saxEventList.remove(0);
+         }
+-
+-        SaxEvent last = saxEventList.get(recorder.saxEventList.size() - 1);
++        
++        SaxEvent last = saxEventList.get(saxEventList.size() - 1);
+         if (last != null && last.qName.equalsIgnoreCase(INCLUDED_TAG)) {
+-            saxEventList.remove(recorder.saxEventList.size() - 1);
++            saxEventList.remove(saxEventList.size() - 1);
+         }
+     }
+ 
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/event/SaxEventRecorder.java b/logback-core/src/main/java/ch/qos/logback/core/joran/event/SaxEventRecorder.java
+index 46514642d..3b3421bd4 100644
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/event/SaxEventRecorder.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/event/SaxEventRecorder.java
+@@ -42,7 +42,7 @@ public class SaxEventRecorder extends DefaultHandler implements ContextAware {
+ 
+     final ContextAwareImpl contextAwareImpl;
+     final ElementPath elementPath;
+-    public List<SaxEvent> saxEventList = new ArrayList<SaxEvent>();
++    List<SaxEvent> saxEventList = new ArrayList<SaxEvent>();
+     Locator locator;
+ 
+     public SaxEventRecorder(Context context) {
+@@ -58,11 +58,11 @@ public class SaxEventRecorder extends DefaultHandler implements ContextAware {
+         recordEvents(new InputSource(inputStream));
+     }
+ 
+-    public List<SaxEvent> recordEvents(InputSource inputSource) throws JoranException {
++    public void recordEvents(InputSource inputSource) throws JoranException {
+         SAXParser saxParser = buildSaxParser();
+         try {
+             saxParser.parse(inputSource, this);
+-            return saxEventList;
++            return;
+         } catch (IOException ie) {
+             handleError("I/O error occurred while parsing xml file", ie);
+         } catch (SAXException se) {
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/EventPlayer.java b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/EventPlayer.java
+index fa47b80ff..285489977 100644
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/EventPlayer.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/EventPlayer.java
+@@ -13,6 +13,7 @@
+  */
+ package ch.qos.logback.core.joran.spi;
+ 
++
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+@@ -24,11 +25,12 @@ import ch.qos.logback.core.joran.event.StartEvent;
+ public class EventPlayer {
+ 
+     final SaxEventInterpreter interpreter;
+-    List<SaxEvent> eventList;
++    final List<SaxEvent> saxEvents;
+     int currentIndex;
+ 
+-    public EventPlayer(SaxEventInterpreter interpreter) {
++    public EventPlayer(SaxEventInterpreter interpreter, List<SaxEvent> saxEvents) {
+         this.interpreter = interpreter;
++        this.saxEvents = saxEvents;
+     }
+ 
+     /**
+@@ -38,14 +40,13 @@ public class EventPlayer {
+      * @since 0.9.20
+      */
+     public List<SaxEvent> getCopyOfPlayerEventList() {
+-        return new ArrayList<SaxEvent>(eventList);
++        return new ArrayList<SaxEvent>(saxEvents);
+     }
+ 
+-    public void play(List<SaxEvent> aSaxEventList) {
+-        eventList = aSaxEventList;
+-        SaxEvent se;
+-        for (currentIndex = 0; currentIndex < eventList.size(); currentIndex++) {
+-            se = eventList.get(currentIndex);
++    public void play() {
++         
++        for (currentIndex = 0; currentIndex < saxEvents.size(); currentIndex++) {
++            SaxEvent se = saxEvents.get(currentIndex);
+ 
+             if (se instanceof StartEvent) {
+                 interpreter.startElement((StartEvent) se);
+@@ -61,6 +62,6 @@ public class EventPlayer {
+     }
+ 
+     public void addEventsDynamically(List<SaxEvent> eventList, int offset) {
+-        this.eventList.addAll(currentIndex + offset, eventList);
++        this.saxEvents.addAll(currentIndex + offset, eventList);
+     }
+ }
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
+index 8e10e641a..4db3f4bb0 100644
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
+@@ -25,6 +25,7 @@ import ch.qos.logback.core.Context;
+ import ch.qos.logback.core.joran.action.Action;
+ import ch.qos.logback.core.joran.event.BodyEvent;
+ import ch.qos.logback.core.joran.event.EndEvent;
++import ch.qos.logback.core.joran.event.SaxEvent;
+ import ch.qos.logback.core.joran.event.StartEvent;
+ import ch.qos.logback.core.spi.ContextAwareImpl;
+ 
+@@ -88,20 +89,20 @@ public class SaxEventInterpreter {
+      */
+     ElementPath skip = null;
+ 
+-    public SaxEventInterpreter(Context context, RuleStore rs, ElementPath initialElementPath) {
++    public SaxEventInterpreter(Context context, RuleStore rs, ElementPath initialElementPath, List<SaxEvent> saxEvents) {
+         this.cai = new CAI_WithLocatorSupport(context, this);
+         ruleStore = rs;
+         interpretationContext = new SaxEventInterpretationContext(context, this);
+         implicitActions = new ArrayList<Action>(3);
+         this.elementPath = initialElementPath;
+         actionListStack = new Stack<List<Action>>();
+-        eventPlayer = new EventPlayer(this);
++        eventPlayer = new EventPlayer(this, saxEvents);
+     }
+ 
+-    public SaxEventInterpreter duplicate(ElementPath initial) {
+-        SaxEventInterpreter clone = new SaxEventInterpreter(this.cai.getContext(), ruleStore, initial);
++    public SaxEventInterpreter xduplicate(ElementPath initial) {
++        SaxEventInterpreter clone = new SaxEventInterpreter(this.cai.getContext(), ruleStore, initial, eventPlayer.getCopyOfPlayerEventList());
+         clone.addImplicitActions(implicitActions);
+-        clone.elementPath = initial;
++        clone.elementPath = initial; 
+         return clone;
+     }
+ 
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/model/processor/ImplicitModelHandler.java b/logback-core/src/main/java/ch/qos/logback/core/model/processor/ImplicitModelHandler.java
+index f0be8162a..df684fdae 100755
+--- a/logback-core/src/main/java/ch/qos/logback/core/model/processor/ImplicitModelHandler.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/model/processor/ImplicitModelHandler.java
+@@ -64,6 +64,8 @@ public class ImplicitModelHandler extends ModelHandlerBase {
+         case NOT_FOUND:
+             addWarn("Ignoring unkown property [" + nestedElementTagName + "] in [" + o.getClass().getName() + "]");
+             inError = true;
++            // no point in processing submodels
++            implicitModel.markAsSkipped();
+             return;
+         case AS_BASIC_PROPERTY:
+         case AS_BASIC_PROPERTY_COLLECTION:
+@@ -163,7 +165,11 @@ public class ImplicitModelHandler extends ModelHandlerBase {
+ 
+         Stack<ImplicitActionDataBase> actionDataStack = intercon.getImplcitActionDataStack();
+         ImplicitActionDataBase actionData = actionDataStack.pop();
+-
++        // the action data can in an incorrect state, in which case we need to 
++        // disengage
++        if(actionData.inError) {
++            return;
++        }
+         if (actionData instanceof ImplicitActionDataForComplexProperty) {
+             postHandleComplex(intercon, model, actionData);
+         }

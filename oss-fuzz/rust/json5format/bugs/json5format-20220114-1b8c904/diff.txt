@@ -1,0 +1,83 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 10365c5..3281a27 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -149,7 +149,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "json5format"
+-version = "0.2.3"
++version = "0.2.4"
+ dependencies = [
+  "anyhow",
+  "lazy_static",
+diff --git a/Cargo.toml b/Cargo.toml
+index 5a29df3..34d0cef 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "json5format"
+-version = "0.2.3"
++version = "0.2.4"
+ authors = [
+   "Rich Kadel <richkadel@google.com>",
+   "David Tamas-Parris <davidatp@google.com>",
+diff --git a/samples/fuzz_fails_fixed/clusterfuzz-testcase-minimized-fuzz_parse-6642606161920000 b/samples/fuzz_fails_fixed/clusterfuzz-testcase-minimized-fuzz_parse-6642606161920000
+new file mode 100644
+index 0000000..4bcda97
+--- /dev/null
++++ b/samples/fuzz_fails_fixed/clusterfuzz-testcase-minimized-fuzz_parse-6642606161920000
+@@ -0,0 +1,2 @@
++[
++//                                                                                                                                                                                                       
+\ No newline at end of file
+diff --git a/src/parser.rs b/src/parser.rs
+index 0180b47..8c5972a 100644
+--- a/src/parser.rs
++++ b/src/parser.rs
+@@ -776,16 +776,23 @@ impl<'parser> Parser<'parser> {
+         min_context_len: usize,
+         ellipsis: &str,
+     ) -> ParserErrorContext {
++        // `indicator_start` is a 0-based char position
++        let indicator_start = self.column_number - 1;
++
++        let error_line_len = self.current_line.chars().count();
++
+         let indicator_len = if self.line_number == self.next_line_number {
+-            std::cmp::max(self.next_column_number - self.column_number, 1)
++            std::cmp::max(
++                std::cmp::min(
++                    self.next_column_number - self.column_number,
++                    error_line_len - indicator_start,
++                ),
++                1,
++            )
+         } else {
+             1
+         };
+ 
+-        // `indicator_start` is a 0-based char position
+-        let indicator_start = self.column_number - 1;
+-
+-        let error_line_len = self.current_line.chars().count();
+         if error_line_len <= max_error_line_len {
+             ParserErrorContext::new(self.current_line.to_owned(), indicator_start, indicator_len)
+         } else {
+@@ -852,7 +859,14 @@ fn trim_error_line_and_indicator(
+     assert!(max_error_line_len > ellipsis_len);
+     assert!(max_error_line_len < error_line_len);
+     assert!(indicator_start <= error_line_len);
+-    assert!(indicator_len == 1 || (indicator_start + indicator_len) <= error_line_len);
++    assert!(
++        indicator_len == 1 || (indicator_start + indicator_len) <= error_line_len,
++        "indicator_start={}, indicator_len={}, error_line_len={}\n{}",
++        indicator_start,
++        indicator_len,
++        error_line_len,
++        error_line
++    );
+ 
+     indicator_len = std::cmp::min(indicator_len, max_error_line_len);
+ 

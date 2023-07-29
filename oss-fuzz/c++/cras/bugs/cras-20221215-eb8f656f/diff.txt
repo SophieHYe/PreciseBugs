@@ -1,0 +1,64 @@
+diff --git a/cras/src/server/rust/src/feature_tier.rs b/cras/src/server/rust/src/feature_tier.rs
+index 7cbf0de8..d2173e7e 100644
+--- a/cras/src/server/rust/src/feature_tier.rs
++++ b/cras/src/server/rust/src/feature_tier.rs
+@@ -56,7 +56,7 @@ mod tests {
+ }
+ 
+ pub mod bindings {
+-    use std::ffi::{CStr, CString};
++    use std::ffi::CStr;
+ 
+     pub use super::CrasFeatureTier;
+ 
+@@ -68,24 +68,22 @@ pub mod bindings {
+         board_name: *const libc::c_char,
+         cpu_name: *const libc::c_char,
+     ) -> libc::c_int {
+-        let empty = CString::new("").unwrap();
+         let board_name = if board_name.is_null() {
+-            &empty
++            ""
+         } else {
+-            CStr::from_ptr(board_name)
+-        };
+-        let board_name = match board_name.to_str() {
+-            Ok(name) => name,
+-            Err(_) => return -libc::EINVAL,
++            match CStr::from_ptr(board_name).to_str() {
++                Ok(name) => name,
++                Err(_) => return -libc::EINVAL,
++            }
+         };
++
+         let cpu_name = if cpu_name.is_null() {
+-            &empty
++            ""
+         } else {
+-            CStr::from_ptr(cpu_name)
+-        };
+-        let cpu_name = match cpu_name.to_str() {
+-            Ok(name) => name,
+-            Err(_) => return -libc::EINVAL,
++            match CStr::from_ptr(cpu_name).to_str() {
++                Ok(name) => name,
++                Err(_) => return -libc::EINVAL,
++            }
+         };
+ 
+         *out = CrasFeatureTier::new(board_name, cpu_name);
+diff --git a/cras/src/tests/feature_tier_unittest.cc b/cras/src/tests/feature_tier_unittest.cc
+index be21706b..034b6868 100644
+--- a/cras/src/tests/feature_tier_unittest.cc
++++ b/cras/src/tests/feature_tier_unittest.cc
+@@ -23,4 +23,10 @@ TEST(FeatureTierTest, RandomCeleron) {
+   EXPECT_EQ(tier.sr_bt_supported, false);
+ }
+ 
++TEST(FeatureTierTest, NullString) {
++  cras_feature_tier tier;
++  cras_feature_tier_init(&tier, nullptr, nullptr);
++  EXPECT_EQ(tier.sr_bt_supported, false);
++}
++
+ }  // namespace

@@ -1,0 +1,27 @@
+diff --git a/gdal/frmts/cosar/cosar_dataset.cpp b/gdal/frmts/cosar/cosar_dataset.cpp
+index 992101b1ae..72ca414415 100644
+--- a/gdal/frmts/cosar/cosar_dataset.cpp
++++ b/gdal/frmts/cosar/cosar_dataset.cpp
+@@ -50,6 +50,7 @@ class COSARDataset : public GDALDataset
+ {
+ public:
+         COSARDataset() : fp(NULL) { }
++        ~COSARDataset();
+         VSILFILE *fp;
+ 
+         static GDALDataset *Open( GDALOpenInfo * );
+@@ -140,6 +141,14 @@ CPLErr COSARRasterBand::IReadBlock(CPL_UNUSED int nBlockXOff,
+  * COSARDataset Implementation
+  *****************************************************************************/
+ 
++COSARDataset::~COSARDataset()
++{
++    if( fp != NULL )
++    {
++        VSIFCloseL(fp);
++    }
++}
++
+ GDALDataset *COSARDataset::Open( GDALOpenInfo * pOpenInfo ) {
+     long nRTNB;
+     /* Check if we're actually a COSAR data set. */

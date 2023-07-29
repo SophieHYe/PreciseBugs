@@ -1,0 +1,46 @@
+diff --git a/source/extensions/filters/http/header_to_metadata/header_to_metadata_filter.cc b/source/extensions/filters/http/header_to_metadata/header_to_metadata_filter.cc
+index e96cbb55a5..f9c060960e 100644
+--- a/source/extensions/filters/http/header_to_metadata/header_to_metadata_filter.cc
++++ b/source/extensions/filters/http/header_to_metadata/header_to_metadata_filter.cc
+@@ -210,7 +210,8 @@ void HeaderToMetadataFilter::writeHeaderToMetadata(Http::HeaderMap& headers,
+       if (proto_rule.remove()) {
+         headers.remove(header);
+       }
+-    } else if (proto_rule.has_on_header_missing()) {
++    }
++    if (header_entry == nullptr && proto_rule.has_on_header_missing()) {
+       // Add metadata for the header missing case.
+       const auto& keyval = proto_rule.on_header_missing();
+ 
+diff --git a/test/extensions/filters/http/header_to_metadata/header_to_metadata_filter_test.cc b/test/extensions/filters/http/header_to_metadata/header_to_metadata_filter_test.cc
+index 906475013f..cf09a67ae7 100644
+--- a/test/extensions/filters/http/header_to_metadata/header_to_metadata_filter_test.cc
++++ b/test/extensions/filters/http/header_to_metadata/header_to_metadata_filter_test.cc
+@@ -522,6 +522,27 @@ request_rules:
+   }
+ }
+ 
++/**
++ * Missing case is not executed when header is present.
++ */
++TEST_F(HeaderToMetadataTest, NoMissingWhenHeaderIsPresent) {
++  const std::string config = R"EOF(
++request_rules:
++  - header: x-version
++    on_header_missing:
++      metadata_namespace: envoy.lb
++      key: version
++      value: some_value
++      type: STRING
++)EOF";
++  initializeFilter(config);
++  Http::TestRequestHeaderMapImpl headers{{"x-version", "19"}};
++
++  EXPECT_CALL(decoder_callbacks_, streamInfo()).WillRepeatedly(ReturnRef(req_info_));
++  EXPECT_CALL(req_info_, setDynamicMetadata(_, _)).Times(0);
++  EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_->decodeHeaders(headers, false));
++}
++
+ } // namespace HeaderToMetadataFilter
+ } // namespace HttpFilters
+ } // namespace Extensions

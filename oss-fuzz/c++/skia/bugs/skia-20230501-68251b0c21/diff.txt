@@ -1,0 +1,212 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index f0ce33aebd..ab496cc871 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -629,6 +629,7 @@ sksl_shared_tests = [
+   "shared/Ossfuzz37900.sksl",
+   "shared/Ossfuzz41000.sksl",
+   "shared/Ossfuzz50636.sksl",
++  "shared/Ossfuzz58483.sksl",
+   "shared/OutParams.sksl",
+   "shared/OutParamsAreDistinct.sksl",
+   "shared/OutParamsAreDistinctFromGlobal.sksl",
+diff --git a/resources/sksl/BUILD.bazel b/resources/sksl/BUILD.bazel
+index 96f21b0633..970211db04 100644
+--- a/resources/sksl/BUILD.bazel
++++ b/resources/sksl/BUILD.bazel
+@@ -941,6 +941,7 @@ skia_filegroup(
+         "shared/Ossfuzz37900.sksl",
+         "shared/Ossfuzz41000.sksl",
+         "shared/Ossfuzz50636.sksl",
++        "shared/Ossfuzz58483.sksl",
+         "shared/OutParams.sksl",
+         "shared/OutParamsAreDistinct.sksl",
+         "shared/OutParamsAreDistinctFromGlobal.sksl",
+diff --git a/resources/sksl/shared/Ossfuzz58483.sksl b/resources/sksl/shared/Ossfuzz58483.sksl
+new file mode 100644
+index 0000000000..bf18d069e7
+--- /dev/null
++++ b/resources/sksl/shared/Ossfuzz58483.sksl
+@@ -0,0 +1,4 @@
++half4 main(float2 p) {
++    (p /= 3).x;
++    return half4(1);
++}
+diff --git a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp b/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp
+index 7d3d9bae90..8732815d90 100644
+--- a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp
++++ b/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp
+@@ -334,23 +334,26 @@ void Builder::discard_stack(int32_t count) {
+                 }
+ 
+                 // A `copy_stack_to_slots_unmasked` op, followed immediately by a `discard_stack`
+-                // op, is interpreted as an unmasked stack pop. We can simplify pops in a variety of
+-                // ways. First, temporarily get rid of `copy_stack_to_slots_unmasked`.
+-                SlotRange dst{lastInstruction.fSlotA, lastInstruction.fImmA};
+-                fInstructions.pop_back();
++                // op with an equal number of slots, is interpreted as an unmasked stack pop.
++                // We can simplify pops in a variety of ways. First, temporarily get rid of
++                // `copy_stack_to_slots_unmasked`.
++                if (count == lastInstruction.fImmA) {
++                    SlotRange dst{lastInstruction.fSlotA, lastInstruction.fImmA};
++                    fInstructions.pop_back();
+ 
+-                // See if we can write this pop in a simpler way.
+-                this->simplifyPopSlotsUnmasked(&dst);
++                    // See if we can write this pop in a simpler way.
++                    this->simplifyPopSlotsUnmasked(&dst);
+ 
+-                // If simplification consumed the entire range, we're done!
+-                if (dst.count == 0) {
+-                    return;
+-                }
++                    // If simplification consumed the entire range, we're done!
++                    if (dst.count == 0) {
++                        return;
++                    }
+ 
+-                // Simplification did not consume the entire range. We are still responsible for
+-                // copying-back and discarding any remaining slots.
+-                this->copy_stack_to_slots_unmasked(dst);
+-                count = dst.count;
++                    // Simplification did not consume the entire range. We are still responsible for
++                    // copying-back and discarding any remaining slots.
++                    this->copy_stack_to_slots_unmasked(dst);
++                    count = dst.count;
++                }
+                 break;
+             }
+             default:
+diff --git a/tests/sksl/shared/Ossfuzz58483.asm.frag b/tests/sksl/shared/Ossfuzz58483.asm.frag
+new file mode 100644
+index 0000000000..37456f32e7
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz58483.asm.frag
+@@ -0,0 +1,47 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %_entrypoint_v "_entrypoint" %sk_Clockwise %sk_FragColor
++OpExecutionMode %_entrypoint_v OriginUpperLeft
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %sk_FragColor "sk_FragColor"
++OpName %_entrypoint_v "_entrypoint_v"
++OpName %main "main"
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++OpDecorate %sk_FragColor RelaxedPrecision
++OpDecorate %sk_FragColor Location 0
++OpDecorate %sk_FragColor Index 0
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%float = OpTypeFloat 32
++%v4float = OpTypeVector %float 4
++%_ptr_Output_v4float = OpTypePointer Output %v4float
++%sk_FragColor = OpVariable %_ptr_Output_v4float Output
++%void = OpTypeVoid
++%12 = OpTypeFunction %void
++%float_0 = OpConstant %float 0
++%v2float = OpTypeVector %float 2
++%16 = OpConstantComposite %v2float %float_0 %float_0
++%_ptr_Function_v2float = OpTypePointer Function %v2float
++%20 = OpTypeFunction %v4float %_ptr_Function_v2float
++%float_0_333333343 = OpConstant %float 0.333333343
++%float_1 = OpConstant %float 1
++%28 = OpConstantComposite %v4float %float_1 %float_1 %float_1 %float_1
++%_entrypoint_v = OpFunction %void None %12
++%13 = OpLabel
++%17 = OpVariable %_ptr_Function_v2float Function
++OpStore %17 %16
++%19 = OpFunctionCall %v4float %main %17
++OpStore %sk_FragColor %19
++OpReturn
++OpFunctionEnd
++%main = OpFunction %v4float None %20
++%21 = OpFunctionParameter %_ptr_Function_v2float
++%22 = OpLabel
++%23 = OpLoad %v2float %21
++%25 = OpVectorTimesScalar %v2float %23 %float_0_333333343
++OpStore %21 %25
++%26 = OpCompositeExtract %float %25 0
++OpReturnValue %28
++OpFunctionEnd
+diff --git a/tests/sksl/shared/Ossfuzz58483.glsl b/tests/sksl/shared/Ossfuzz58483.glsl
+new file mode 100644
+index 0000000000..fb60694f83
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz58483.glsl
+@@ -0,0 +1,6 @@
++
++out vec4 sk_FragColor;
++vec4 main() {
++    (p *= 0.333333343).x;
++    return vec4(1.0);
++}
+diff --git a/tests/sksl/shared/Ossfuzz58483.hlsl b/tests/sksl/shared/Ossfuzz58483.hlsl
+new file mode 100644
+index 0000000000..f1eb1e3352
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz58483.hlsl
+@@ -0,0 +1,27 @@
++static float4 sk_FragColor;
++
++struct SPIRV_Cross_Output
++{
++    float4 sk_FragColor : SV_Target0;
++};
++
++float4 main(inout float2 _21)
++{
++    _21 *= 0.3333333432674407958984375f;
++    return 1.0f.xxxx;
++}
++
++void frag_main()
++{
++    float2 _17 = 0.0f.xx;
++    float4 _19 = main(_17);
++    sk_FragColor = _19;
++}
++
++SPIRV_Cross_Output main()
++{
++    frag_main();
++    SPIRV_Cross_Output stage_output;
++    stage_output.sk_FragColor = sk_FragColor;
++    return stage_output;
++}
+diff --git a/tests/sksl/shared/Ossfuzz58483.metal b/tests/sksl/shared/Ossfuzz58483.metal
+new file mode 100644
+index 0000000000..8d63af5c96
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz58483.metal
+@@ -0,0 +1,15 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    half4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _out;
++    (void)_out;
++    (p *= 0.333333343).x;
++    _out.sk_FragColor = half4(1.0h);
++    return _out;
++}
+diff --git a/tests/sksl/shared/Ossfuzz58483.skrp b/tests/sksl/shared/Ossfuzz58483.skrp
+new file mode 100644
+index 0000000000..0f8f5ea509
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz58483.skrp
+@@ -0,0 +1,8 @@
++store_src_rg                   p = src.rg
++init_lane_masks                CondMask = LoopMask = RetMask = true
++copy_2_slots_unmasked          $0..1 = p
++splat_2_constants              $2..3 = 0x3EAAAAAB (0.333333343)
++mul_2_floats                   $0..1 *= $2..3
++copy_2_slots_unmasked          p = $0..1
++splat_4_constants              $0..3 = 0x3F800000 (1.0)
++load_src                       src.rgba = $0..3

@@ -1,0 +1,119 @@
+diff --cc autotest/gdrivers/zarr_driver.py
+index 099d286b06,099d286b06..118157eb8c
+--- a/autotest/gdrivers/zarr_driver.py
++++ b/autotest/gdrivers/zarr_driver.py
+@@@ -2600,65 -2600,65 +2600,3 @@@ def test_zarr_read_invalid_nczarr_dim()
+  
+      finally:
+          gdal.RmdirRecursive('/vsimem/test.zarr')
+--
+--
+--def test_zarr_read_test_overflow_in_AllocateWorkingBuffers_due_to_fortran():
+--
+--    if sys.maxsize < (1 << 32):
+--        pytest.skip()
+--
+--    try:
+--        gdal.Mkdir('/vsimem/test.zarr', 0)
+--
+--        j = { "chunks": [(1 << 32) - 1, (1 << 32) - 1],
+--              "compressor": None,
+--              "dtype": '!b1',
+--              "fill_value": None,
+--              "filters": None,
+--              "order": "F",
+--              "shape": [ 1, 1 ],
+--              "zarr_format": 2
+--        }
+--
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zarray', json.dumps(j))
+--
+--        ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
+--        assert ds
+--        rg = ds.GetRootGroup()
+--        ar = rg.OpenMDArray('test')
+--        with gdaltest.error_handler():
+--            assert ar.Read(count = [1,1]) is None
+--
+--    finally:
+--        gdal.RmdirRecursive('/vsimem/test.zarr')
+--
+--
+--def test_zarr_read_test_overflow_in_AllocateWorkingBuffers_due_to_type_change():
+--
+--    if sys.maxsize < (1 << 32):
+--        pytest.skip()
+--
+--    try:
+--        gdal.Mkdir('/vsimem/test.zarr', 0)
+--
+--        j = { "chunks": [(1 << 32) - 1, ((1 << 32) - 1) / 8],
+--              "compressor": None,
+--              "dtype": '<u8',
+--              "fill_value": None,
+--              "filters": None,
+--              "order": "C",
+--              "shape": [ 1, 1 ],
+--              "zarr_format": 2
+--        }
+--
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zarray', json.dumps(j))
+--
+--        ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
+--        assert ds
+--        rg = ds.GetRootGroup()
+--        ar = rg.OpenMDArray('test')
+--        with gdaltest.error_handler():
+--            assert ar.Read(count = [1,1]) is None
+--
+--    finally:
+--        gdal.RmdirRecursive('/vsimem/test.zarr')
+diff --cc gdal/frmts/zarr/zarr_array.cpp
+index ebdd0d8b40,ebdd0d8b40..3a68a73ad0
+--- a/gdal/frmts/zarr/zarr_array.cpp
++++ b/gdal/frmts/zarr/zarr_array.cpp
+@@@ -696,34 -696,34 +696,16 @@@ bool ZarrArray::AllocateWorkingBuffers(
+  
+      m_bAllocateWorkingBuffersDone = true;
+  
+--    size_t nSizeNeeded = m_nTileSize;
+++    GUIntBig nSizeNeeded = m_nTileSize;
+      if( m_bFortranOrder || m_oFiltersArray.Size() != 0 )
+--    {
+--        if( nSizeNeeded > std::numeric_limits<size_t>::max() / 2 )
+--        {
+--            CPLError(CE_Failure, CPLE_AppDefined, "Too large chunk size");
+--            return false;
+--        }
+          nSizeNeeded *= 2;
+--    }
+      if( NeedDecodedBuffer() )
+      {
+          size_t nDecodedBufferSize = m_oType.GetSize();
+          for( const auto& nBlockSize: m_anBlockSize )
+          {
+--            if( nDecodedBufferSize > std::numeric_limits<size_t>::max() /
+--                                        static_cast<size_t>(nBlockSize) )
+--            {
+--                CPLError(CE_Failure, CPLE_AppDefined, "Too large chunk size");
+--                return false;
+--            }
+              nDecodedBufferSize *= static_cast<size_t>(nBlockSize);
+          }
+--        if( nSizeNeeded > std::numeric_limits<size_t>::max() - nDecodedBufferSize )
+--        {
+--            CPLError(CE_Failure, CPLE_AppDefined, "Too large chunk size");
+--            return false;
+--        }
+          nSizeNeeded += nDecodedBufferSize;
+      }
+  
+@@@ -735,7 -735,7 +717,7 @@@
+                   "Zarr tile allocation would require " CPL_FRMT_GUIB " bytes. "
+                   "By default the driver limits to 1 GB. To allow that memory "
+                   "allocation, set the ZARR_ALLOW_BIG_TILE_SIZE configuration "
+--                 "option to YES.", static_cast<GUIntBig>(nSizeNeeded));
+++                 "option to YES.", nSizeNeeded);
+          return false;
+      }
+  

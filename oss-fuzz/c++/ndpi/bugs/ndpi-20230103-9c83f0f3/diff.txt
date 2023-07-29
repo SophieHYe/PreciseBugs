@@ -1,0 +1,82 @@
+diff --git a/src/lib/ndpi_main.c b/src/lib/ndpi_main.c
+index a6d32a6f..547550c4 100644
+--- a/src/lib/ndpi_main.c
++++ b/src/lib/ndpi_main.c
+@@ -538,6 +538,12 @@ void ndpi_set_proto_defaults(struct ndpi_detection_module_struct *ndpi_str,
+   }
+ 
+   name = ndpi_strdup(protoName);
++  if(!name) {
++#ifdef DEBUG
++    NDPI_LOG_ERR(ndpi_str, "[NDPI] %s/protoId=%d: mem allocation error\n", protoName, protoId);
++#endif
++    return;
++  }
+ 
+   if(ndpi_str->proto_defaults[protoId].protoName)
+     ndpi_free(ndpi_str->proto_defaults[protoId].protoName);
+diff --git a/src/lib/protocols/dns.c b/src/lib/protocols/dns.c
+index 48da46e3..d99e94e8 100644
+--- a/src/lib/protocols/dns.c
++++ b/src/lib/protocols/dns.c
+@@ -354,7 +354,9 @@ static int search_valid_dns(struct ndpi_detection_module_struct *ndpi_struct,
+       /* This is a good reply: we dissect it both for request and response */
+       
+       if(dns_header->num_queries > 0) {
++#ifdef DNS_DEBUG
+ 	u_int16_t rsp_type;
++#endif
+ 	u_int16_t num;
+ 
+ 	for(num = 0; num < dns_header->num_queries; num++) {
+@@ -374,7 +376,12 @@ static int search_valid_dns(struct ndpi_detection_module_struct *ndpi_struct,
+ 	    break;
+ 	  }
+ 
++	  /* To avoid warning: variable ‘rsp_type’ set but not used [-Wunused-but-set-variable] */
++#ifdef DNS_DEBUG
+ 	  rsp_type = get16(&x, packet->payload);
++#else
++	  get16(&x, packet->payload);
++#endif
+ 
+ #ifdef DNS_DEBUG
+ 	  printf("[DNS] [response (query)] response_type=%d\n", rsp_type);
+@@ -483,8 +490,9 @@ static int search_valid_dns(struct ndpi_detection_module_struct *ndpi_struct,
+ 	  as we need to update the 'x' offset
+ 	*/
+ 	if(dns_header->authority_rrs > 0) {
++#ifdef DNS_DEBUG
+ 	  u_int16_t rsp_type;
+-	  u_int32_t rsp_ttl;
++#endif
+ 	  u_int16_t num;
+ 
+ 	  for(num = 0; num < dns_header->authority_rrs; num++) {
+@@ -504,8 +512,12 @@ static int search_valid_dns(struct ndpi_detection_module_struct *ndpi_struct,
+ 	      break;
+ 	    }
+ 
++	    /* To avoid warning: variable ‘rsp_type’ set but not used [-Wunused-but-set-variable] */
++#ifdef DNS_DEBUG
+ 	    rsp_type = get16(&x, packet->payload);
+-	    rsp_ttl  = ntohl(*((u_int32_t*)&packet->payload[x+2]));
++#else
++	    get16(&x, packet->payload);
++#endif
+ 
+ #ifdef DNS_DEBUG
+ 	    printf("[DNS] [RRS response] response_type=%d\n", rsp_type);
+diff --git a/src/lib/third_party/src/ahocorasick.c b/src/lib/third_party/src/ahocorasick.c
+index 192735f9..70f56655 100644
+--- a/src/lib/third_party/src/ahocorasick.c
++++ b/src/lib/third_party/src/ahocorasick.c
+@@ -474,7 +474,7 @@ int ac_automata_search (AC_AUTOMATA_t * thiz,
+       } else {
+           curr = next;
+           position++;
+-          if(curr->final) {
++          if(curr->final && curr->matched_patterns) {
+               /* select best match */
+               match->match_map = ac_automata_exact_match(curr->matched_patterns,position,txt);
+               if(match->match_map) {

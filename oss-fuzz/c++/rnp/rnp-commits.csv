@@ -1,0 +1,605 @@
+1b7b0bae	152ab7c5	Wed Jun 28 12:20:12 2023 +0300	Fix CI for macOS nix (SIP)
+06a12f99	d81a554c	Tue Jun 20 17:29:11 2023 +0800	Fix nonexisting functions in documentation.
+d81a554c	7452cae1	Fri Jun 16 12:04:27 2023 +0800	Fix mentioned clang-format version to 11.0.0
+da691332	32149bea	Tue Jun 13 15:01:56 2023 +0300	Fix test_rnpcfg_get_expiration.
+32149bea	12133aad	Fri Jun 9 16:20:44 2023 +0400	Fix possible memory leak during ElGamal key generation with OpenSSL 3.0 backend.
+feed13c2	ca653c1f	Sun Jun 4 16:56:33 2023 +0800	Fix KBX parsing code.
+ed195f81	5323c062	Tue May 30 17:44:43 2023 +0300	Fix \'unused variable\' warnings in fuzzers.
+5323c062	a8e9663f	Tue May 30 17:44:43 2023 +0300	Fix Botan3 deprecations.
+59d02d41	872a6134	Tue May 30 20:59:35 2023 +0800	Fix oss-fuzz issue 58598: stop earlier on large amount of unknown packets.
+0a39b917	c3a54822	Fri May 26 00:42:50 2023 +0200	Fix test_cipher_aes_128_ocb() failure with Botan 3.
+b455faf2	f6aeed2b	Mon May 22 11:47:17 2023 +0300	Fixed secure_vector/secure_array for MSVC/Clang-cl debug configuration
+23535885	fce8f06e	Mon May 22 11:47:17 2023 +0300	Fixed failing CI test
+f0ede7e5	8f7b2f27	Wed May 10 01:01:26 2023 +0800	CMake: fix backend variable description.
+fd2169b9	45d69a6a	Sun Apr 30 12:44:36 2023 +0300	Fix oss-fuzz issue 27801: possible timeout during the packet dumping.
+45d69a6a	bed09d0e	Fri Apr 28 22:40:14 2023 +0300	Botan2 MacOS fix
+2da4a4e4	e2b2c49e	Wed Apr 19 23:23:15 2023 +0800	Fixed compiler and linker warnings on MacOS
+4ca3cebd	68edd18d	Sat Apr 15 11:34:05 2023 +0300	Fixed type mismatch on Windows
+a2cb2396	8722c279	Fri Apr 14 00:34:37 2023 +0800	Fix GCC 12.2 compilation issue (conflicting declaration).
+02c89528	ceff19e0	Tue Apr 11 18:48:41 2023 +0800	Fix \'Use of 32-bit time_t\' Coverity issues.
+ceff19e0	e759a224	Mon Apr 10 22:48:42 2023 +0900	Fixed typo
+e759a224	cadd1a19	Mon Apr 10 22:48:42 2023 +0900	Fixing configuration inconsistency on Windows with OpenSSL::applink
+b693a358	59bc0139	Mon Apr 3 23:12:11 2023 +0400	Fix nullptr, which could be passed as non-null parameter of closedir.
+59bc0139	7f848a9a	Sun Apr 2 17:54:05 2023 +0400	Fix typo with unnamed variable in stream-parse and update tests.
+7c436ea4	30e1ffb6	Fri Mar 31 12:11:07 2023 +0300	Fixed Clang/native Windows initialization issue, disabled CRT warnings for native Windows builds
+4aa420d2	51e7c47a	Sun Mar 26 14:23:14 2023 +0300	Fixed nix workflow
+d1915c1e	b24f9d2d	Thu Mar 23 15:11:24 2023 +0200	Temporary sexp version fixup
+3730262d	58497171	Fri Mar 17 11:52:22 2023 +0200	Fixed packaging tests
+8d435eaf	573894cd	Thu Feb 16 06:40:47 2023 +0400	AEAD: fix incorrect behaviour in case of different algos used for CEK/KEK.
+05871f08	97196618	Wed Jan 18 10:33:55 2023 +0800	Fix \'runtime error: null pointer passed as argument 2, which is declared to never be null\'.
+97196618	5b8b3295	Wed Jan 18 10:33:55 2023 +0800	Fix tests which changed behaviour due to added g23 format support.
+c28de84f	eb13f710	Wed Jan 11 23:05:44 2023 +0400	CI: Fix macOS 11 runner failure.
+2283172e	86d88509	Tue Jan 10 03:05:00 2023 +0400	Fixed status badges
+86d88509	a0e88bd7	Tue Jan 10 03:05:00 2023 +0400	Fixed bundler issue with deprecated --path option
+a0e88bd7	d04dfcb8	Tue Jan 10 03:05:00 2023 +0400	Fixed brew unlink failure for python
+d04dfcb8	793e5b38	Tue Jan 10 03:05:00 2023 +0400	Fixed bundler version issue with Ruby < 2.6.0
+793e5b38	2822845f	Tue Jan 10 03:05:00 2023 +0400	Fixed AEAD handling for protected key decryption (Botan only)
+13b5d4fe	444e5ca0	Fri Jan 6 17:31:07 2023 +0900	CI: Fix macOS runner\'s python upgrading failure.
+8558c9c3	b059c48e	Fri Jan 6 17:31:07 2023 +0900	Fix unneeded allocation failure check.
+172f8ee6	9e779126	Tue Dec 20 00:56:16 2022 +0900	Fix bunch of CodeQL Python warnings.
+476ee75a	4e8d4927	Wed Dec 14 22:30:18 2022 +0400	Fix shellcheck\'s SC2086 warnings.
+3c38d2cf	d41ddd46	Sat Nov 26 02:40:49 2022 +0800	Fix hang in delete_recursively() under the Windows/MSVC.
+28f20584	947f8c43	Fri Nov 4 16:12:08 2022 +0800	feat: clarify status of OCB license, fixes #1935
+947f8c43	bb007ce7	Fri Nov 4 16:11:47 2022 +0800	feat: add MIT license for sha1 collision detection code, fixes #1932
+cdccac3b	25787440	Tue Oct 25 01:00:11 2022 +0800	CLI: fix key location failure with 0x prefix/spaces/tabs.
+a9169e4e	c0f4c5e1	Mon Sep 19 18:21:42 2022 +0800	Fix docs for rnp_identifier_iterator_create().
+d2cd3603	aca5185a	Thu Jul 28 01:42:01 2022 +0400	Update cli_tests to GnuPG without Brainpool curves, and fix bunch of SonarLint warnings.
+d9b7b092	7db22d3f	Thu Jul 28 01:42:01 2022 +0400	Fix OpenSSL 3 RSA key validation issues.
+7db22d3f	712ac3de	Thu Jul 28 01:42:01 2022 +0400	Fix OpenSSL 3.0 compilation issues.
+adb0464b	f7571ccf	Thu Jun 9 19:54:03 2022 +0400	Fix CID 1489624: uninitialized variable.
+0335c52a	6eadb034	Mon May 23 15:34:13 2022 +0400	Fix description for rnp_op_generate_destroy().
+175e6c36	f83f5200	Wed May 11 06:06:56 2022 +0400	fix trivial spelling errors (non-substantive)
+5c380f78	4416956c	Sat May 7 10:04:16 2022 +0800	Fix typo --hom in test_rnpkeys_lists
+25cfe249	d14e3dd5	Thu May 5 23:18:12 2022 +0400	Fix unconditional use of /dev/tty in  stdin_getpass().
+5fd13b8f	bfd35a37	Thu May 5 16:08:13 2022 +0300	Fix incorrectly displayed warning message for non-x25519 ECC keys.
+c35c59e1	d0901bc6	Mon May 2 08:57:32 2022 +0800	Fix documentation mistype
+d6f871d6	52820759	Thu Apr 14 00:53:23 2022 +0800	Fix mistype
+8adffe21	63837dda	Wed Mar 30 10:54:49 2022 +0300	Fix "windows-msys2 / CC clang; GnuPG stable: build (#1794)
+3c75adc1	e4e028af	Wed Mar 16 21:44:46 2022 +0200	CID #1470703, #1470704, #1470705: fix uninitialized field.
+e4e028af	3bf20b20	Wed Mar 16 21:44:46 2022 +0200	CID #1470700: fix uninitalized variable.
+70154c38	a231aba4	Wed Mar 16 21:44:46 2022 +0200	Use std::string instead of fixed-size char array in rnp_selfsig_cert_info_t. Fix CID #1467008
+477e2598	6277102a	Mon Mar 14 22:57:24 2022 +0800	Fix edge case with missing crc24 and 3-byte last block.
+6fb0281f	d8fd2031	Thu Feb 17 21:49:05 2022 +0400	Fix Warning: direct access ... to global weak symbol when building rnp_tests.
+d8fd2031	4a40a89c	Tue Feb 15 20:38:50 2022 +0400	Limit number of allowed packet dump failures and fix tests.
+c7ca9e1b	73bace8f	Tue Feb 15 20:38:50 2022 +0400	Some minor documetations fixes.
+1edd4be2	82461c1c	Tue Feb 15 20:38:50 2022 +0400	Fix few CLang warnings.
+bb767d70	188b35b6	Wed Feb 9 02:02:36 2022 +0800	Fix not covered by tests packet dumping cases.
+a09f0df5	ba9bd83b	Thu Jan 27 07:30:12 2022 +0400	Fix few GCC warnings to not distract when looking at CI logs.
+9df1cbbd	a34f4b72	Thu Jan 20 21:33:47 2022 +0800	Fix g10 key algorithm extraction and refactor secret key decryption.
+6eebe5c9	ec2a79ee	Wed Jan 19 22:23:57 2022 +0800	Update GnuPG stable CI versions to LTS, and fix Cirrus CI build script.
+8deb3d8b	0858a117	Wed Jan 12 11:17:49 2022 +0800	Fix broken OpenSSL CI runs and corresponding undetected errors.
+359bffb2	2b858328	Wed Dec 15 05:34:58 2021 +0400	Increase FFI code coverage and fix issues found.
+19322b6d	972d0c71	Wed Dec 1 15:28:46 2021 +0800	ci/mac: Run `brew update` to try to fix brew formula errors
+9b7020bb	f1dd0383	Mon Nov 22 02:14:59 2021 +0400	fix mispell
+8da04451	b1bf0d47	Fri Nov 19 09:26:03 2021 +0800	Fix codecov uploads and use new non-bash uploader.
+57375470	73b349d6	Sun Nov 14 16:46:04 2021 +0800	Fixed backend version query for MSYS
+73b349d6	549fbb6e	Sun Nov 14 16:46:04 2021 +0800	Fixed msys build issues
+549fbb6e	42bf8912	Sun Nov 14 16:46:04 2021 +0800	Fixed msys/clang build issue
+917abc17	a128bcb4	Sun Nov 14 16:46:04 2021 +0800	ci: Fix botan2 version mismatch with cli outputs
+a128bcb4	0991e55d	Sun Nov 14 16:46:04 2021 +0800	ci: Fix i386 debian cmake installation
+0991e55d	aeef7956	Sun Nov 14 16:46:04 2021 +0800	ci: Fix OS-packager installation of botan2 for CentOS 8 and Ubuntu
+d6bb3dbc	36a361b3	Thu Nov 11 10:22:20 2021 +0800	Remove trailing spaces and fix indents in install_functions.inc.sh
+75a36698	4403efe5	Thu Nov 11 10:22:20 2021 +0800	Fix few CI shellcheck errors
+715d8bc2	c3eac178	Wed Nov 10 14:49:52 2021 +0800	Use std::string instead of fixed-size PATH_MAX buffer in pgp_dest_file_param_t.
+7c45aa30	0cb97eba	Tue Nov 9 11:33:44 2021 +0800	Fix few CI shellcheck errors.
+89c4efe3	7f3ee33d	Sun Oct 24 13:38:46 2021 +0300	Mark rnp_enable_debug/rnp_disable_debug FFI functions as deprecated.
+7f3ee33d	55ed2091	Sun Oct 24 13:38:46 2021 +0300	Remove RNP_DLOG, rnp_enable_debug() and all related code.
+3f7962a2	96cfc93c	Sun Oct 17 22:20:04 2021 +0400	Fix LGTM alerts for C++ code.
+96cfc93c	0b021880	Sun Oct 17 22:20:04 2021 +0400	Fix LGTM alerts for cli_tests.py and surrounding code.
+930acb79	a740df27	Sun Oct 17 22:16:09 2021 +0400	Add a way to specify backend for cli_tests, and fix test_rnpkeys_g10_list_order when Brainpool curves are not available.
+59e3437f	96efbe4a	Fri Oct 15 03:47:11 2021 -0700	Add shellcheck step to lint workflow + fix/suppress some issues
+4329ef91	6e8e4cd9	Wed Oct 13 17:31:03 2021 +0800	Fix some shellcheck issues
+6d5b8e9b	a9a1f1f2	Wed Oct 13 07:32:09 2021 +0200	fix default branch for ruby-rnp from master to main
+0623b71a	06a00a7a	Mon Oct 11 02:32:49 2021 +0400	Add CLI test for --edit-key command --check-cv25519-key / --fix-cv25519-key
+06a00a7a	13bb51db	Mon Oct 11 02:32:49 2021 +0400	Add command rnpkeys --edit-key to check and fix Curve25519 bits to the CLI.
+13bb51db	92f8e548	Mon Oct 11 02:32:49 2021 +0400	FFI: add functions to check/fix Curve25519 key tweaked bits.
+0c732725	09d7e652	Mon Oct 4 11:21:13 2021 +0800	Fix possible timeout on edge-case on signed cleartext parsing.
+0936fa3d	b40abe25	Sat Aug 28 09:39:36 2021 +0800	CID #1461596: Fix possible crash if invalid output path is specified during the verification.
+b40abe25	725ecb29	Sat Aug 28 09:39:36 2021 +0800	Fix invalid mpi bits check and add corresponding test.
+e1f02c9d	28e32e4f	Thu Aug 26 03:31:56 2021 +0800	CID #1437635: fix actual mpi bits calculation
+f3045bd0	a5b5e91c	Thu Aug 26 03:31:56 2021 +0800	CID #1461557: Fix incorrect output creation check.
+cdfd31b8	4906645a	Tue Aug 24 00:53:43 2021 +0400	Fix tests to run correctly with GnuPG 2.3.1 and up.
+7499c9af	a17c0e9c	Tue Aug 24 00:50:58 2021 +0400	Fix possible resource leak in cli_rnp_set_generate_params().
+82ac694c	e49b9409	Tue Aug 24 00:48:18 2021 +0400	cli_tests: specify recipient in gpg.sign(), and add list_keys() function for easier debugging.
+4edcab09	06f5b584	Thu Aug 19 13:26:57 2021 +0300	Fix Changelog formatting for vim
+06f5b584	6960d53c	Wed Aug 18 18:18:36 2021 +0800	Fix one implicit fallthrough warning, and consistent attribute.
+5fb6d7bb	53f6f9d0	Tue Aug 17 11:42:09 2021 +0300	Fix cmake warning with sm2, fixes 7923ede
+2363cf08	cfdcd3ad	Thu Aug 12 18:30:19 2021 +0300	OpenSSL: Fix RSA code to pad signature to the size of N.
+f6add514	907ac37b	Thu Aug 12 18:30:19 2021 +0300	OpenSSL backend: fix RSA key generation to avoid crashes.
+664e191c	34383fbd	Thu Aug 12 18:30:19 2021 +0300	Issue a warning instead of fatal error when building with OpenSSL backend in non-Debug mode.
+3c5e38cb	a1139b32	Thu Aug 12 18:30:19 2021 +0300	Fix ECDSA key check for OpenSSL backend.
+add2aea5	d8bc8c74	Tue Aug 10 16:37:38 2021 +0800	- Removed unnecessary python build for debian:9 job - Changed fetch depth from 0 (aka \'all\') to 1 - Removed "debug", "trace", "verbose" for different commands and actions - Changed custom checkout to actions/checkout@v1 for debian:9 job - Added PIC (\'position independed code\') compilation flag
+af3a8904	97fa4331	Mon Aug 9 22:47:59 2021 +0300	CI performance improvements: - Removed unnecessary python build for debian:9 job - Changed fetch depth from 0 (aka \'all\') to 1 - Removed "debug", "trace", "verbose" for different commands and actions - Changed custom checkout to actions/checkout@v1 for debian:9 job - Added PIC (\'position independed code) compilation flag
+cfd9c42d	650a0e06	Mon Aug 9 07:55:02 2021 +0800	Fixed cmake --build
+650a0e06	7272d2a4	Mon Aug 9 07:55:02 2021 +0800	Fixed build --config
+dac865dc	42a790ba	Sat Aug 7 13:11:30 2021 +0400	Fix comments in cli tests.
+595aabff	81be700b	Fri Jul 30 11:11:41 2021 +0800	Fix possible memory leak in rnp_armored_get_type().
+91eb2ab6	da62a707	Sun Jun 27 20:07:47 2021 +0400	Fix adding recipients.
+8b670f27	16ddeaa1	Wed Jun 23 14:11:22 2021 +0400	Fix incorrect key expiration calculation in case with direct-key sig and primary uid certification.
+92e6721a	404c413e	Mon Jun 7 11:34:45 2021 +0800	ci: Fix installation of cmake for CentOS 8
+a0b85267	81ba8a19	Tue May 25 22:11:41 2021 +0400	Fix updating sig.uid when deleting userid, and update tests accordingly.
+cecae12e	30a9950b	Tue May 25 22:11:41 2021 +0400	Fix pgp_key_t::is_expired() to correctly handle 32 bit overflow.
+eb077d21	99d134ee	Tue May 25 17:04:50 2021 +0800	ci: Fix unbound USER variable
+99d134ee	54082c08	Tue May 25 17:04:50 2021 +0800	ci: Fix rbenv configuration
+4e462bd2	63d17778	Wed May 19 02:14:37 2021 +0800	ci: Fix debian tests
+63d17778	5152e8ad	Wed May 19 02:14:37 2021 +0800	ci: Fix linux builds
+0c30f354	e93bbc7b	Tue Apr 27 12:18:27 2021 +0800	docs: Fix MSYS installation docs.
+f5544704	e654904b	Fri Apr 9 17:38:05 2021 +0800	Update man pages and packaging/bugreport email for version 15.0
+dd6550d7	2cba0b94	Sat Mar 27 17:23:21 2021 +0900	docs(develop): fix code review guide link
+0782f4e6	36e0d61c	Tue Mar 9 11:42:57 2021 +0200	Fix pkg-config.
+a1040255	ba901a52	Sun Mar 7 02:22:04 2021 +0400	Fix parameter to const in LOAD32LE
+c172aa2e	991792b1	Thu Mar 4 18:59:04 2021 +0200	Fix some typos in man pages.
+95126294	b05dd746	Thu Feb 18 02:49:05 2021 +0400	Fix Cirrus CI failure : ld-elf.so.1: /lib/libthr.so.3: version FBSD_1.6 required by /usr/local/lib/libruby25.so.25 not found
+34ca419f	3705eb55	Sat Jan 30 01:20:53 2021 +0800	Fix parsing blank lines with whitespace characters.
+e92c3ec0	3f611226	Fri Jan 29 19:09:48 2021 +0200	Fix a bunch of GCC warnings.
+bbc47b1d	23ac1059	Tue Jan 19 03:03:35 2021 +0800	Fix and update FFI documentation.
+2196f06a	c6072e50	Sat Dec 26 20:59:26 2020 +0400	Fix stripping CR characters on a 32k boundary.
+69b90f54	53a6588c	Wed Dec 23 13:29:05 2020 +0200	Fix homebrew python update problem for macOS GHA.
+23d20af4	906835e0	Thu Dec 3 14:34:43 2020 +0300	Fix CID 1437633: Error handling issues  (CHECKED_RETURN)
+906835e0	349a5057	Thu Dec 3 14:34:43 2020 +0300	Fix CID 1437634: Uninitialized variables  (UNINIT)
+349a5057	eb2d94a2	Thu Dec 3 14:34:43 2020 +0300	Fix CID 1437636: Uninitialized members  (UNINIT_CTOR)
+5b9332c3	8ee04f4a	Fri Nov 20 09:20:51 2020 +0800	Workaround to fix pinentry building on the latest GHA macOS.
+d690960b	e8011a07	Thu Nov 12 17:42:39 2020 +0300	Fix RNP-01-005 WP1: Literal packet parsing allows for Integer underflow (Low).
+b1d80ee7	32dc907a	Tue Oct 27 23:10:16 2020 +0200	Attempt to fix macOS brew update
+9da942ae	459f4ab5	Fri Oct 16 07:18:12 2020 +0800	macOS CI: fix homebrew openssl installation failure.
+602cfb99	7fbb6f78	Thu Oct 15 19:27:09 2020 +0300	Cirrus CI: Fix absence of eol symbol somewhere in sudoers.
+bcb3f0b9	273a7707	Thu Oct 15 20:23:12 2020 +0800	fix
+c3db6233	f7309fcc	Sun Oct 4 09:20:45 2020 +0800	Fix possible dearmoring error and add corresponding test.
+6c8ce136	96d2b2b2	Sat Sep 26 14:31:38 2020 +0400	Fix oss-fuzz 25489: rnp:fuzz_keyring_g10: Stack-overflow in parse_sexp
+96d2b2b2	c58b39c3	Sat Sep 26 14:29:07 2020 +0400	fix
+b9e32bfa	c10e33ec	Fri Sep 18 16:37:32 2020 +0300	Fix barely possible memory leak in rnp_input_from_memory().
+49a675e3	9a37fd8a	Sun Sep 13 20:48:31 2020 +0400	Fix possible crash of CLI utilities when HOME is not set.
+9a37fd8a	8aacb258	Fri Sep 11 16:42:27 2020 +0300	Fix oss-fuzz issue 25334: invalid enum value for pgp_revocation_type_t
+c4a8dfa3	6a5fb890	Wed Sep 9 21:27:06 2020 +0300	Fix oss-fuzz 25490: rnp:fuzz_keyring_g10: Invalid-bool-value in pgp_key_t::pgp_key_t
+6a5fb890	1c43db6d	Mon Sep 7 21:45:11 2020 +0400	Fix handling of 0 key expiration in key signatures.
+1c43db6d	a78cdb74	Mon Sep 7 21:42:12 2020 +0400	Fix oss-fuzz issue 25388: possible heap buffer overflow during parsing of kbx blob.
+a78cdb74	cfcd0dff	Mon Sep 7 21:42:12 2020 +0400	Fix oss-fuzz issue 25386 and slightly refactor parsing of the kbx header blob.
+d6477b0f	43006e3e	Tue Sep 1 14:05:55 2020 +0300	Fix issue 25302 in oss-fuzz: rnp:fuzz_keyring: Direct-leak in Botan::HashFunction::create
+43006e3e	e2c8bac2	Tue Sep 1 14:05:55 2020 +0300	Fix issue 25292 in oss-fuzz: rnp:fuzz_keyring: Stack-buffer-overflow in stream_write_key
+e2c8bac2	25ce4875	Tue Sep 1 14:05:55 2020 +0300	Fix incorrectly working file_to_vec(), and remove duplicate static function.
+25ce4875	7e43f79c	Tue Sep 1 14:05:55 2020 +0300	Fix expired key from test_stream_key_merge folder.
+7e43f79c	b64c48c6	Sun Aug 30 13:55:42 2020 +0300	Fix oss-fuzz 24579 & 24798: rnp:fuzz_dump: Invalid-enum-value in ...
+b64c48c6	f7e82b4e	Sun Aug 30 13:55:42 2020 +0300	Fix oss-fuzz 24597: rnp:fuzz_dump: Invalid-enum-value in get_packet_body_s2k
+f7e82b4e	9ad1e29f	Sun Aug 30 13:55:42 2020 +0300	Fix oss-fuzz 24796: rnp:fuzz_dump: Invalid-enum-value in parse_signature_material
+9ad1e29f	dc8911ba	Sun Aug 30 13:55:42 2020 +0300	Fix oss-fuzz 24616: rnp:fuzz_dump: Invalid-enum-value in dst_print_s2k
+dc8911ba	9ed12c73	Sun Aug 30 13:55:42 2020 +0300	Fix oss-fuzz 24581: rnp:fuzz_dump: Invalid-enum-value in stream_dump_packets_raw
+e0c1f8e6	97af1505	Fri Aug 28 18:56:47 2020 +0800	Fix memory leak in kbx blob parsing. Add test_fuzz_keyring_kbx, based on corresponding fuzzer, and input which reproduces leak.
+97af1505	0c4848b0	Fri Aug 28 18:56:47 2020 +0800	Fix crash in g10 key parsing, found by fuzzing.  Add test_fuzz_keyring_g10(), which uses keyring_g10.c fuzzer to reproduce found testcases.
+2bc4dace	e5fa2304	Fri Aug 28 18:56:47 2020 +0800	Correct validation of primary key binding signature, fixing memory leak as well.
+7278642e	0e875c8b	Fri Aug 28 18:56:47 2020 +0800	Fix linking issue for fuzz_keyring_g10.
+8315191a	ccce28fe	Tue Aug 25 09:13:07 2020 +0800	Fix hanging due to malformed packet header.
+ccce28fe	12238912	Tue Aug 25 09:13:07 2020 +0800	Fix possible AV during sexp parsing, and slightly refactor code.
+12238912	c9c49a7c	Tue Aug 25 09:13:07 2020 +0800	Fix rnp_key_store_t declaration to correctly initialize all fields.
+c9c49a7c	08c18814	Tue Aug 25 09:13:07 2020 +0800	Fix two possible AV during KBX keyring parsing.
+af6067a7	9e6946ed	Mon Aug 17 17:09:13 2020 +0300	Fix minor warning.
+56b1a130	bcb590c7	Mon Aug 17 17:09:13 2020 +0300	Use constructor instead of brace initialization to fix compilation issues with llvm7
+650b3bce	1ea785a3	Mon Aug 3 23:44:44 2020 +0300	Fix pgp_signature_t constructor.
+3626a9a5	552ce3bc	Sun Aug 2 14:33:16 2020 +0800	Fix memory leak during parsing of one-pass sig with invalid version.
+499dfaeb	9e662daf	Wed Jul 29 11:37:26 2020 +0300	Add test for memory leak, fixed with commit 13039c3
+9e662daf	544190ca	Tue Jul 28 15:44:08 2020 +0300	Fix homebrew CI problem for macOS.
+544190ca	62863a4c	Tue Jul 28 15:16:27 2020 +0800	Fix a memory leak that can occur due when unknown pk algorithm is specified.
+37463f90	d00f12fb	Tue Jul 21 16:55:51 2020 +0300	Fix long armor header processing and add corresponding test.
+c6b6ad55	d1453424	Wed Jul 15 11:16:01 2020 +0300	Fix duplicated CLI test func name, closes #1201
+e7a83f7a	abc77983	Tue Jul 7 19:24:57 2020 +0300	FFI: fix rnp_key_set_expiration() function to correctly search keys and update key/subkey expirations.
+7c5f88a8	d2d62883	Fri Jun 19 17:19:30 2020 +0300	Fix incorrect item deletion in rnp_key_store_remove_key().
+d2d62883	158daf36	Fri Jun 19 17:19:30 2020 +0300	Fix const version of rnp_key_store_get_key_by_grip() to match non-const one.
+556542f4	a721d31d	Wed Jun 17 16:19:51 2020 +0300	Fix pkgconfig libdir.
+1a622486	ace72c7a	Wed Jun 17 16:19:51 2020 +0300	install: Fix library name in pkg-config file.
+ace72c7a	0b58946c	Wed Jun 17 16:19:51 2020 +0300	install: Fix include directory.
+0a4b018e	6e74b752	Sun May 31 08:54:27 2020 +0800	ci: Fix Windows MSYS2.
+9cab350d	ebe2140c	Thu May 28 06:56:46 2020 -0400	Make pgp_revoke_t more C++ and fix possible crash when there is no revocation reason subpacket.
+63809fcc	41923107	Sun May 24 13:49:09 2020 +0300	tests: Fix up test_key_store_search_by_name.
+c8fec008	89116f0d	Sat May 16 22:22:53 2020 +0300	Fix secp521r1 b & n fields.
+c6eddb88	0a28a7e9	Sun May 3 19:24:42 2020 +0800	Fix MDC reading error and add correspodning test.
+2a79e067	2bc9467c	Sun Apr 26 15:03:06 2020 +0300	Fix subkey flags setting/add minor allocation check.
+9b9a564d	b7560f84	Sun Apr 26 15:03:06 2020 +0300	Fix incorrect subkey revocation signature generation.
+ba503062	a453468f	Thu Mar 12 08:06:36 2020 -0400	Fix possible rare failure in test_key_unlock_pgp() test.
+a453468f	d2cdd5d7	Mon Mar 9 22:37:35 2020 +0200	Fix typo in test_key_unlock_pgp()
+094b1323	2b147105	Sun Feb 16 10:33:23 2020 +0800	Fix memory leak in rnp_key_add_signature().
+5e515386	bc0eb5cb	Mon Jan 27 07:57:34 2020 -0500	Fixed incorrect constant names in rnp_unload_keys() description.
+2d28d7da	f22e0e76	Wed Jan 22 23:22:51 2020 -0800	ci: Fix GHA cache
+95cd0d79	01ae4806	Wed Jan 22 15:46:31 2020 +0400	fix memory leak in init_encrypted_src() discovered while working on #941
+e92cc189	8441c7db	Wed Jan 15 05:46:00 2020 -0500	CID #1484400: Fix possible NULL-access in rnp_output_to_armor().
+7a6f3dc7	ff3d286f	Wed Jan 15 05:46:00 2020 -0500	CID #1472498: fix possible memory leak in pgp_decrypt_seckey_pgp().
+b4f09011	ce8704c9	Wed Jan 15 05:46:00 2020 -0500	CID #1468154: fix incorrect NULL check in rnp_locate_key().
+b0b5b81d	cc33c9e7	Tue Jan 14 20:59:01 2020 +0800	Fix Keystore.test_generate_to_kbx test for recent changes.
+66f08e5a	8017915e	Tue Jan 14 20:59:01 2020 +0800	Fix rnpkeys key generation protection.
+c82b9294	3c8c3dbc	Mon Jan 13 18:53:22 2020 -0500	Fix naming of key_store_format_t and it\'s members.
+766dc471	a863b7fb	Fri Jan 3 07:50:15 2020 -0500	Add CLI test to cover debug dumping functions.
+cfaf6659	8a27077a	Mon Dec 23 22:58:51 2019 +0900	fix segfault on NULL src in copy_signature_packet(), return false when src is NULL
+8a27077a	dcc50de2	Mon Dec 23 22:58:51 2019 +0900	fix signature parsing, check result of signature_read_v3/v4 and reset res in order to properly fail on subsequent parsing errors
+0ba85ce8	778339f3	Mon Dec 16 21:58:11 2019 +0800	Fixes GCC compile warnings.
+778339f3	8e2d1546	Mon Dec 16 21:58:11 2019 +0800	Fixes GCC compile warnings.
+39da5aaa	a34ec52d	Sun Dec 8 13:01:34 2019 +0200	Fix cli_tests to run on MSYS/MinGW
+3b1db968	a7bb9c1d	Wed Dec 4 06:12:40 2019 -0800	Fix incorrect format modifier warning introduced in be6b88c3
+0b2dadd7	ce8a504f	Mon Dec 2 23:40:19 2019 +0800	bug fix: no absolute offset required
+715ccb37	3e39c28a	Fri Nov 29 08:28:16 2019 +0800	Fix generte_key_batch name.
+cf0983cd	175fcac2	Fri Nov 29 08:28:16 2019 +0800	Fix packet dumps to allow zero-based day numbers.
+175fcac2	dde57c2b	Fri Nov 29 08:28:16 2019 +0800	Fix pipe handles inheritability for Windows.
+a6dde6c8	e8a78fce	Fri Nov 29 08:28:16 2019 +0800	Fix test for no-permissions dir to work correctly under Windows.
+e8a78fce	a07d1103	Fri Nov 29 08:28:16 2019 +0800	Fix rename() call for Windows.
+1c744226	64dcb841	Tue Nov 26 09:39:35 2019 +0800	fixed large packet file according to the standard
+64dcb841	b1620829	Tue Nov 26 09:39:35 2019 +0800	correct handling of fixed-length literal packet
+369a687a	849c9a27	Tue Nov 12 06:16:48 2019 -0800	Fixes numerous \'Hash finalization failed\' message while running rnp_tests.
+b783e7b0	87cc628a	Sat Nov 9 20:56:53 2019 +0800	ci: Set CMake install prefix.
+99cb1d8a	298b72da	Thu Nov 7 13:21:08 2019 +0800	fixed large packet file according to the standard
+298b72da	79a1d02f	Thu Nov 7 13:21:08 2019 +0800	correct handling of fixed-length literal packet
+82340dfa	c1daa1fb	Mon Nov 4 13:35:05 2019 -0500	Fix test with correct key usage/comments.
+4599d687	c5a6c9db	Thu Oct 31 13:43:37 2019 -0400	docs: Fix yum repo URLs.
+af89f492	3e35c286	Sat Sep 7 10:37:40 2019 -0700	Fix possible crashes when input directory instead of file is specified.
+a5943382	bfe9ca19	Mon Aug 19 17:11:51 2019 +0800	tests: Fix delete_recursively on macos.
+e323cf09	d166cb9a	Mon Jul 29 11:40:10 2019 -0400	ci: Fix code coverage.
+c576aa6a	9bc7e2bb	Thu Jul 25 09:03:56 2019 -0700	Fix some memory leaks.
+55eea26b	f39e8571	Thu Jul 18 07:53:11 2019 +0800	ci: Fix permissions in cirrus *after* dependencies_cache.
+a4215f2a	2a2fd7df	Tue Jul 9 09:13:50 2019 +0800	Fix some warnings in tests.
+b1628679	cbd2129c	Fri Jun 28 10:41:12 2019 +0800	Fix RSA algorithm name and dump fingerprint for v3 keys.
+87b7d306	aaf755ed	Tue Jun 25 11:08:59 2019 -0400	FFI: add rnp_disable_debug() and allocation check to rnp_set_debug().
+d9039b24	caf4e644	Tue Jun 18 22:55:22 2019 +0800	FFI: fix error message.
+caf4e644	ee516b1d	Tue Jun 18 22:54:54 2019 +0800	FFI: add rnp_enable_debug() function.
+ee516b1d	2f69be2c	Sun Jun 16 10:14:54 2019 -0400	docs: Fix some typos in cpp-usage.adoc.
+e4f1215f	f7c21294	Wed May 15 17:48:02 2019 +0800	Fix GCC warning caused by wrong local variable type.
+c2dde959	e8f09497	Tue May 7 14:42:53 2019 -0400	Fix revocations memory leak.
+1a4f708e	c4677fe2	Sat Apr 27 02:30:19 2019 +0900	ffi: Fix to allow a NULL key server pref in key generation operation.
+807c0d68	ceccea85	Sat Apr 27 02:29:47 2019 +0900	Fix JSON-C 0.12 compatibility issues.
+8117bfdc	ebb220fe	Thu Apr 25 02:07:19 2019 +0900	Fix signature revocation reason crash.
+ebb220fe	4f9ac33f	Wed Apr 17 09:25:07 2019 +0800	Fix primary key protection in rnp_generate_key_ex.
+aac320dd	f4575aa7	Thu Apr 11 20:08:21 2019 +0800	Fix redumper crash and add test to avoid such problem in the future.
+f4575aa7	34f2dac4	Tue Apr 9 23:54:27 2019 +0800	Fix signed comparison warning in pgp-key.c/pgp_user_prefs_add_val().
+930984a9	1f59d771	Wed Mar 27 09:32:23 2019 -0400	docs(c-usage): Fix path to rnp2.h include
+1f59d771	b37c1e02	Wed Mar 27 09:32:23 2019 -0400	fix: Fix wrong location for the c-usage doc
+096c04f7	2836ce86	Wed Mar 27 09:32:23 2019 -0400	docs(develop/guide): Fix code listing syntax
+2d98ae21	6c1da24a	Wed Mar 27 09:32:23 2019 -0400	docs(cli-usage): Fix bad syntax
+5fd956fc	9a1093d4	Wed Mar 20 01:11:24 2019 +0800	Fix broken versioning when added as a git submodule.
+9a1093d4	5ff63fe2	Mon Mar 18 18:05:36 2019 +0800	Fix double-free with invalid armored headers.
+60a0272f	81e0fbd0	Sun Mar 3 11:58:30 2019 +0800	FFI: Some minor fixes.
+cf3731b7	eeda91bd	Sat Mar 2 00:16:29 2019 +0800	Fix pgp_user_prefs_add_val function: add items correctly, do not allow duplicates and add test for pgp_user_prefs_t.
+4e8a08e2	2d3b487e	Tue Feb 19 08:52:00 2019 +0800	ci: Fix LOCAL_INSTALLS directory.
+2d3b487e	d4f56197	Tue Feb 19 08:52:00 2019 +0800	ci: Fix get_os for macos.
+9520223a	e3e0f8af	Mon Jan 21 12:11:38 2019 +0800	Do not strip 0x prefix before calling rnp_key_store_get_key_by_name() - it is stripped in function.
+33dba861	193ead6c	Mon Jan 21 12:11:38 2019 +0800	Use bool as return type for rnp_get_debug/rnp_set_debug
+193ead6c	c476bd4b	Mon Jan 21 12:11:38 2019 +0800	Fix rnp_cfg_copy to append values instead of overwriting.
+8a3d7ef2	74802f1e	Thu Jan 10 15:33:13 2019 +0800	ci: Fix FreeBSD build.
+68f735d7	d3d0b80e	Mon Jan 7 12:49:16 2019 +0800	pgp_key_  prefix for userid manipulation functions
+36632e04	81830e68	Wed Dec 12 00:04:36 2018 +0800	Fix examples compilation issues with gcc
+9524efd2	6d62ea74	Wed Dec 12 00:04:36 2018 +0800	Fix JSON key generation test
+3fb70a5f	328a0e54	Tue Nov 13 16:17:21 2018 +0800	Operations test for x25519 key; tests memory leak fix.
+54d3a879	4354b11c	Fri Oct 19 22:23:09 2018 -0400	Fixed dumping of partial-length packets and corresponding test.
+4b850fac	0fa22558	Mon Oct 8 09:20:00 2018 -0400	Fix key algorithm selection for g10 eddsa key
+a422530e	520c56c7	Mon Oct 8 09:20:00 2018 -0400	Strip leading zero while reading g10 keys (and fix eddsa signing with g10 keys).
+44aaca6d	846865f6	Sat Oct 6 13:47:49 2018 +0300	Fix memory leak in tests
+d4aae904	b9076274	Sat Oct 6 13:47:49 2018 +0300	Another fix for SM2
+d69aa095	18ee7d3d	Sat Oct 6 13:47:49 2018 +0300	Style fix
+269866d6	8e634ce2	Sat Oct 6 13:54:14 2018 +0800	Test for key grip calculation; Fix for EdDSA key grip calculation.
+8e634ce2	b620a690	Sat Oct 6 13:54:14 2018 +0800	Fix error message for unknown g10 private key algorithm
+c6c1afc8	947a4dcf	Sat Oct 6 13:54:14 2018 +0800	Fixed key grip calculation for Elgamal/DSA keys
+6b3da297	550bcc06	Wed Sep 26 17:13:29 2018 +0300	Fix a couple of warnings
+8b0d2eb8	1f14613c	Sun Sep 16 11:55:00 2018 -0400	Automatically load public key from secret in FFI; Some key copying fixes for g10 keys.
+26824173	7788ee12	Sun Sep 16 11:55:00 2018 -0400	Fix copying of the subkey list during the key merge.
+026b64da	a791d77e	Mon Sep 10 17:48:43 2018 -0400	Use RNP_LOG and rnp_get_debug here
+fcba02da	dff81348	Fri Aug 17 20:13:03 2018 +0300	Fix a couple of warnings
+cc608e02	d3af023c	Sat Aug 11 08:04:31 2018 +0800	Fix key validation for invalid/expired signatures.
+3fdcc2a3	6a340398	Wed Jul 25 21:03:31 2018 +0300	docs(README): Fix typo (?) Allistair -> Alistair
+ea33ca47	7de132dd	Mon Jul 16 10:13:01 2018 -0400	Fix usage of g10 secret keys and corresponding tests.
+72f86f0f	e23352c6	Sat Jul 14 10:42:15 2018 -0400	Fix rnp_op_add_signature.
+78b1feba	88042d5f	Tue Jul 10 23:24:42 2018 +0300	Fix ffi key search by fingerprint.
+a57b36f6	fd1fcd74	Wed Jun 27 08:59:33 2018 -0400	docs: Fix release workflow tag push.
+fd029df6	8fd7c1e0	Sun Jun 24 23:51:56 2018 +0800	Fix memory leak in pgp_key_add_userid
+fa896f54	8e21e60d	Sun Jun 24 23:51:56 2018 +0800	Added test for buggy/truncated key loads to avoid memory leaks.
+a1fb42ac	311cac48	Sun Jun 24 12:50:56 2018 +0300	docs: Fix up release branch naming.
+6fa0c09f	b828170f	Sat Jun 23 10:09:16 2018 -0400	Fix library versioning.
+66793fbf	5036025c	Sat Jun 23 10:09:16 2018 -0400	Fix package description.
+5036025c	1eee7c3f	Sat Jun 23 02:00:24 2018 +0800	ci: Fix codecov after the CMake switchover.
+3f4838f1	a189f6de	Sat Jun 23 02:00:24 2018 +0800	ci: Remove some debugging aids.
+5aa7eb34	610eebdd	Sun Jun 17 11:31:07 2018 -0400	Fix read from uninitialized mem.
+5518c5ed	601927bc	Sun Jun 17 11:31:07 2018 -0400	Fix (finally)  C++ warnings and errors and applied clang-format
+601927bc	7b6e8ec1	Sun Jun 17 11:31:07 2018 -0400	Fix many more C++ warnings
+5c739e41	a6cb2aa6	Mon Jun 4 16:50:47 2018 -0400	Fix stack overflow in armoring code with long versions.
+a3ecee63	315009af	Mon Jun 4 16:50:47 2018 -0400	ci: Fix up cmocka install.
+568d6d55	b5dba73f	Sat May 19 08:31:55 2018 +0800	Fix incorrect key copying for g10 keys.
+120f7e1f	4c5289a7	Tue May 1 16:44:36 2018 -0400	Temporary fix for make install.
+e303fa72	568c0ee5	Mon Apr 30 10:51:30 2018 -0400	Fixes file decryption if there is no key for signature verification
+568c0ee5	813fa9db	Mon Apr 30 09:03:36 2018 -0400	Fixes hangs in zlib/bzip2 and adds corresponding tests
+99dcea54	600ae266	Mon Apr 30 12:26:22 2018 +0300	Fix crash in ffi when decrypting symmetric data.
+8a3a80c4	6dc41059	Mon Apr 30 12:26:22 2018 +0300	Fix rnp_key_unprotect to allow a NULL password parameter.
+a5eb10d2	aa2d1877	Mon Apr 23 11:48:01 2018 +0300	Fix pgp_keyid and pgp_fingerprint inconsistent return values.
+aa2d1877	daf04696	Mon Apr 23 11:48:01 2018 +0300	Fix null deref in src_read.
+daf04696	17604f42	Mon Apr 23 11:48:01 2018 +0300	Fix dead assignment in encrypted_add_recipient.
+0ef3e10d	151237c4	Mon Apr 23 11:48:01 2018 +0300	Fix a dead assignment in rnp_op_encrypt_add_password.
+151237c4	16d6cbc6	Mon Apr 23 11:48:01 2018 +0300	Fix leak in rnp_cfg_copy.
+16d6cbc6	803e75ae	Mon Apr 23 11:48:01 2018 +0300	Fix strdup on NULL ptr in rnp_list_keys_json.
+803e75ae	18346ffa	Mon Apr 23 11:48:01 2018 +0300	Fix leak in rnp_cmd.
+18346ffa	32de482a	Mon Apr 23 11:48:01 2018 +0300	Fix uninitialized access in fuzz_keys.
+32de482a	a05d0f32	Mon Apr 23 11:48:01 2018 +0300	Fix leak in conffile.
+a05d0f32	96960aae	Mon Apr 23 11:48:01 2018 +0300	Fix leak in G10 code.
+96960aae	61cb760d	Mon Apr 23 11:48:01 2018 +0300	Fix leak in pgp_sprint_key.
+61cb760d	d12ee713	Mon Apr 23 11:48:01 2018 +0300	Fix leak in rnp_getpass.
+d12ee713	1ccb248d	Mon Apr 23 11:48:01 2018 +0300	Fix leak in pgp_validate_key_sigs.
+1ccb248d	73744691	Mon Apr 23 11:48:01 2018 +0300	Fix some leaks in repgp.c
+73744691	44d4ae7f	Mon Apr 23 11:48:01 2018 +0300	Fix a leak in key generation.
+44d4ae7f	0dd62c72	Mon Apr 23 11:48:01 2018 +0300	Try to fix a leak reported by Coverity.
+0dd62c72	aa6a7357	Mon Apr 23 11:48:01 2018 +0300	Fix double free in stream_flush_packet_body.
+aa6a7357	60082355	Mon Apr 23 11:48:01 2018 +0300	tests: Fix use-after-free.
+60082355	7b9eeaba	Mon Apr 23 11:48:01 2018 +0300	tests: Fix uninitialized access in ask_expert_details.
+7b9eeaba	0bd32207	Mon Apr 23 11:48:01 2018 +0300	Fix uninitialized access in pgp_hash_t.
+3f72e928	9c373923	Mon Apr 23 11:48:01 2018 +0300	Fix G10 protected keys incorrectly marked as not protected.
+9c373923	9ba73221	Mon Apr 23 11:48:01 2018 +0300	Expand/fix error codes used during decryption.
+10976074	3d5e5337	Fri Apr 20 16:25:43 2018 +0300	Fix signature expiration off by 1s.
+f445ffad	ed1429fb	Fri Apr 20 16:25:43 2018 +0300	Fix rnp_input_from_callback.
+f0f33897	870b339d	Fri Apr 20 16:25:43 2018 +0300	Fix some inconsistent interfaces in the FFI.
+804c7b2c	3d14a4cf	Fri Mar 30 09:21:15 2018 +0900	Corrected usage of signature.hashed_data field; fixed saving of already existing v3 signature.
+6cbe4ea8	b3647352	Sun Mar 18 16:31:37 2018 +0300	cmocka test for FFI encrypt-and-sign; some corresponding fixes
+94166e94	3c286c4b	Thu Mar 15 16:07:19 2018 +0800	Fixed memory leaks in FFI signing/verification
+f73d87fd	c9bdcbe3	Wed Mar 14 09:38:14 2018 +0000	(elgamal) Fixes memory corruption
+71351632	2b4a5f38	Tue Mar 13 09:08:23 2018 -0400	ci: Minor fixes.
+a8204526	a2c60e53	Fri Mar 9 23:31:05 2018 +0000	Fix possible memory leak during signature writing
+8e708a6a	927aaaba	Fri Mar 2 22:03:11 2018 +0800	AEAD corner case fix: correctly reset previously initiated botan cipher if we have zero-size chunk
+7694465e	8921084e	Sat Feb 24 17:30:50 2018 +0300	Fix extra \'s\' in hexdump output
+9d0f2166	f49ff254	Wed Feb 21 08:10:36 2018 -0500	Fix leak when encrypted_decrypt_cfb_header fails to decrypt.
+f49ff254	c9a1ace6	Tue Feb 20 18:22:35 2018 +0300	ci: Enable more debug info, improve stack traces.
+ef3e5fd2	d3131a41	Tue Feb 13 10:56:20 2018 -0500	Fix leak in rnpkeys during key export.
+d3131a41	55fef32d	Tue Feb 13 10:56:20 2018 -0500	Fix leak in rnp_list_keys_json.
+55fef32d	98ccfe7d	Tue Feb 13 10:56:20 2018 -0500	Fix leak of cache for partial packet sources.
+98ccfe7d	96dc4e2e	Tue Feb 13 10:56:20 2018 -0500	Fix rnp_cfg_t leak in rnpkeys.
+96dc4e2e	eef32ae3	Tue Feb 13 10:56:20 2018 -0500	Fix memory leaks in test for validating key signatures.
+eef32ae3	321b994a	Tue Feb 13 10:56:20 2018 -0500	Fix a couple leaks in json keygen test.
+321b994a	75be2eb9	Tue Feb 13 10:56:20 2018 -0500	Fix a leak in the ffi encryption operation.
+75be2eb9	91d2d467	Tue Feb 13 10:56:20 2018 -0500	Fix some leaks in pgp_validate_key_sigs.
+82371229	66bf91b8	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak in parse_litdata.
+66bf91b8	1c7eea9c	Tue Feb 13 10:56:20 2018 -0500	Fix memory leaks in repgp_list_packets tests.
+1c7eea9c	d4db2ae8	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak in list test.
+d4db2ae8	eedebacc	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak with pgp_stream_t.
+eedebacc	48e722e9	Tue Feb 13 10:56:20 2018 -0500	Fix pgp_io_t mem leak in a few parse tests.
+48e722e9	db64e639	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak in test_key_add_userid test.
+db64e639	fdc50fcd	Tue Feb 13 10:56:20 2018 -0500	Fix memory leaks when decrypting seckey with incorrect password.
+fdc50fcd	87b9d253	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak in SM2 encryption.
+87b9d253	672a086e	Tue Feb 13 10:56:20 2018 -0500	Fix return type in sm2 test.
+308a3c7a	b12b0d88	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak with PGP seckey decryption.
+1d379ff4	3328633f	Tue Feb 13 10:56:20 2018 -0500	Fix memory leak with pgp_reader_pop.
+3328633f	804e7a9d	Tue Feb 13 10:56:20 2018 -0500	Fix a memory leak in pgp_key_unprotect.
+804e7a9d	5af50f2f	Tue Feb 13 06:52:53 2018 -0500	Fix up rnp_key_add_uid to handle locked keys and add uid to both keys.
+5af50f2f	71b2918d	Tue Feb 13 06:26:56 2018 -0500	Fix leaks in tests with ask_expert_details.
+14c2e757	bd990ee3	Wed Feb 7 16:29:01 2018 +0800	Some debug dumps during the data decryption.
+616f4581	79d1dc52	Wed Feb 7 16:29:01 2018 +0800	Fix rare edge cases in AEAD encrypted data processing
+86ea81e6	8da89f11	Wed Feb 7 16:29:01 2018 +0800	Fixed signed/unsigned comparison warnings
+b0ef3e68	0f07007c	Sun Feb 4 15:00:18 2018 +0000	(core) ECDH - encryption fix and cleanup
+0f07007c	4c0c2e93	Sun Feb 4 15:00:18 2018 +0000	(core) ECDH Fixes decryption
+43ea15cb	c60225ab	Sat Jan 27 02:11:10 2018 +0800	(core, tests) Fixes and cleanup in hash, ECDSA and DSA
+81e02542	afd249ad	Sat Jan 27 01:09:56 2018 +0800	AEAD CLI tests. Fixes and cleanup in AEAD
+7bdc0107	b14f5e8b	Thu Jan 25 09:05:20 2018 -0500	Fix buffer underflow in cleartext_process_line
+b14f5e8b	981f2041	Thu Jan 25 09:05:20 2018 -0500	Fix key generation test error; Reduced number of encryption test runs; Enabled debug info for CI
+02f3a9f3	5a247aa5	Thu Jan 25 10:41:46 2018 +0800	(librepgp) Fixes out-of-bound memory read and crash in stream reading
+39f85c17	ef49da62	Sun Jan 21 01:14:44 2018 +0000	Fix heap use-after-free in KBX.
+ef49da62	8791ad87	Sun Jan 21 01:14:02 2018 +0000	Fix uninitialized data use for armored writing.
+8791ad87	13e058b2	Sun Jan 21 01:13:16 2018 +0000	Fix uninitialized data used in G10 keys.
+e5465b6c	c2389353	Wed Jan 17 11:46:05 2018 +0300	Fix a bad pointer comparison
+7ff960d3	93a4bc69	Fri Dec 22 12:39:06 2017 -0500	Misc clang-format fixes.
+1e5df364	328604a4	Sun Dec 17 23:40:17 2017 +0300	Added rnp_initialize_io() method which replaces rnp_initialize_input/rnp_initialize_output and adds more consistent output stream creation; Some other fixes
+68a23179	2a59f70a	Sun Dec 10 22:57:54 2017 +0000	(core) Fixes potential memory leak in pem.c
+daad1c88	aa6b9609	Fri Dec 8 02:50:19 2017 -0500	Fix annoying erroneous message about disabled core dumps.
+8bc0a98c	050e4361	Thu Nov 30 21:19:44 2017 +0300	Fix premature success in rnp_key_store_add_keydata.
+1582091c	183ad96e	Sat Nov 25 15:04:24 2017 -0500	Fix wrongly used memchr; Coding style fixes.
+183ad96e	74783498	Sat Nov 25 15:04:24 2017 -0500	Use list instead of DYNARRAY; Some cleartext verification bugfixes
+bafac904	912a0b12	Sat Nov 25 13:10:43 2017 -0500	Fixed code to be compliant with -Wsign-compare
+3b26cbe3	de4165f4	Fri Nov 3 23:24:33 2017 -0400	Use RNP_LOG in pgp_block_size (when debugging).
+de4165f4	47a3d3c8	Fri Nov 3 23:24:27 2017 -0400	Fix return value in init_encrypted_src.
+47a3d3c8	82fb9562	Thu Nov 2 16:14:22 2017 -0400	Fixed wrong define name, which is actually big-endian.
+0a05a574	bb247db7	Wed Nov 1 20:33:24 2017 +0800	Fix init_file_dest return value.
+8df1781a	172f4e04	Mon Oct 30 18:01:42 2017 +0800	Another issue fix.
+172f4e04	de16ef38	Mon Oct 30 18:01:42 2017 +0800	Fixed few coverity issues.
+c89ab9c6	0b387c20	Sun Oct 29 17:46:42 2017 +0800	(core) Fix CRC24: Was finlizing wrong CRC state
+36bc7015	2ddfaa1a	Fri Oct 20 10:21:45 2017 +0800	Fixes ECDSA signing
+2d8ebea9	77cc9deb	Tue Oct 17 12:22:16 2017 +0300	Fixed SMALLSIZE to the previous value
+1b118a97	642fda26	Sun Oct 15 13:23:01 2017 -0400	Fixes #503
+dcb37d4a	3579027a	Sun Oct 15 13:46:10 2017 +0100	Fixes 64-bit alignment issue.
+81ba6da4	8bcc0844	Sun Oct 15 17:13:31 2017 +0800	Fix PGP keyring subsig loading, add tests.
+4db71fb6	6916a984	Sat Oct 7 11:35:18 2017 +0300	ffi: Fix rnp_detect_key_format KBX marker and expand tests.
+a0785ffa	c01aa0c3	Thu Oct 5 20:27:02 2017 -0400	ffi: Fix crash on key export.
+bddc0b4d	56b12d9f	Thu Oct 5 20:27:02 2017 -0400	Fix opendir leak in rnp_key_store.c (G10).
+fa3ad042	ade79c3d	Sun Oct 1 10:01:22 2017 -0400	Detached signatures, remove some debug printfs I forgot.
+de98415f	f8772252	Sun Oct 1 10:01:22 2017 -0400	Fix a small memory leak in pgp_key_t.
+22c8335f	acf86c51	Sun Oct 1 12:30:27 2017 +0800	Fix SM2 test
+494b2c6c	c5e04634	Sat Sep 30 21:58:01 2017 +0800	Fix rnp_strcasecmp.
+485d4601	b7d65564	Thu Sep 28 12:30:31 2017 -0400	repgp tests: Fixes commenting style
+b7d65564	ff6abe08	Thu Sep 28 12:30:31 2017 -0400	repgp: Fixes test. String provided to fopen() must be NULL-terminated
+b674966d	3d6ec2cd 7f9b976c	Wed Sep 27 15:21:34 2017 -0400	Merge pull request #472 from randombit/fix-decls
+3d6ec2cd	7582d515	Wed Sep 27 15:40:03 2017 +0800	Fixes according to PR comments
+7582d515	928634e7	Wed Sep 27 15:40:03 2017 +0800	Fixed some uninitialized error codes.
+928634e7	5a65bfff	Wed Sep 27 15:40:03 2017 +0800	Fixed dst write function to return rnp_result_t instead of void; Fixed non-initialized werr
+c613f86f	15e8a00d	Wed Sep 27 15:40:03 2017 +0800	Fixed some armouring and dearmouring issues; Enabled armoured symmetric encryption checks in cli_tests.py
+42764e3e	4f6210f2	Wed Sep 27 15:40:03 2017 +0800	Fixed dearmoring stream bugs
+a0ab6efa	99c2eb8f	Wed Sep 27 15:40:03 2017 +0800	Fixed pgp_errcode_t -> rnp_result_t
+99c2eb8f	3e47c794	Wed Sep 27 15:40:03 2017 +0800	Clang-formatted; Fixed some sizeof(typename_t)
+3e47c794	bb19519c	Wed Sep 27 15:40:03 2017 +0800	Added CLI tests for symmetric encryption; Fixed a bunch of bugs; Renamed some fields according to comments in PR.
+5525e4e4	03e2ef7b	Wed Sep 27 15:40:03 2017 +0800	Fixed problems with stdin/stdout input/output.
+6a54fb14	ed9b4aa3	Wed Sep 27 15:40:03 2017 +0800	Fixed two bugs.
+ed9b4aa3	a2467dd8	Wed Sep 27 15:40:03 2017 +0800	Some compilability/rebase-related fixes.
+95f93321	344dbe03	Wed Sep 27 15:40:03 2017 +0800	Finished encrypted source implementation; Some bugfixes and sequence processing code.
+30386869	ab934730	Wed Sep 27 15:40:03 2017 +0800	Added sym-decrypt command to rnp CLI; Bugfixes/improvements.
+4cce364b	05078942	Sat Sep 23 07:04:33 2017 +0800	Fix key import.
+7c029515	5b1fc8ff	Fri Sep 22 08:03:31 2017 +0100	repgp: Fixes indentation
+c0a693b8	223d12c5	Fri Sep 22 08:03:31 2017 +0100	repgp: Fixes error reporting when parsing PGP_PTAG_CT_SECRET_SUBKEY packet
+e106e7b0	78e3422a	Thu Sep 21 08:04:51 2017 +0800	Fix macOS GnuPG compile for GnuTLS
+3fc5ab02	3835c474	Mon Sep 11 21:52:57 2017 +0800	fixed coding style
+3835c474	b0e2d17d	Mon Sep 11 21:52:57 2017 +0800	fixed buffer overflow issue when setting homedir with long string
+00966fbb	35d48129	Mon Sep 11 12:28:03 2017 +0800	repgp: Fixes from code review
+35d48129	11a0b07d	Mon Sep 11 12:28:03 2017 +0800	repgp: Fixes build and old standing bug
+da060771	da95a4bc	Mon Sep 11 12:28:03 2017 +0800	repgp: Fixes comments and formatting
+1aa62bac	6a4183d1	Mon Sep 11 12:28:03 2017 +0800	Fix: Return false if memory for the stream can\'t be allocated
+58ba83ee	b15b3893	Mon Sep 11 12:28:03 2017 +0800	repgp: Removes REPGP_HANDLE_STD and fixes return values
+ba9b584f	74cfa3fb	Mon Sep 11 12:28:03 2017 +0800	repgp: Adds `repgp\' prefix to librepgp API functions
+d30cec79	67fb1d31	Sat Sep 2 18:00:32 2017 -0400	Fix SM2 session key packet length.
+daebfd42	3ae0b387	Fri Sep 1 02:31:19 2017 +0800	Fix incorrect seckey length calculation.
+1cf2b8d2	311c5505	Mon Aug 28 10:34:52 2017 +0300	Fix up KBX keystore format for subkeys.
+74706a6c	ba9e31e9	Sun Aug 27 18:13:37 2017 +0300	Some more minor fixes.
+ba9e31e9	986d68b8	Sun Aug 27 18:13:37 2017 +0300	Set custom prefix for temp directory for easier maintenance
+986d68b8	637cb94b	Sun Aug 27 18:13:37 2017 +0300	Some fixes in perf_tests.py to make it runable
+95b14597	a1192a26	Sun Aug 27 18:13:37 2017 +0300	Fixed hang in zlib decompression
+a1192a26	0e8ba730	Sun Aug 27 18:13:37 2017 +0300	Fixed clang-format issues.
+549493f1	c4a32f78	Sun Aug 27 18:13:37 2017 +0300	Attempt to fix the crash during .gpg directory removal.
+c4a32f78	f1861d47	Sun Aug 27 18:13:37 2017 +0300	Updated CLI tests with compression algorithm selection; Some refactoring for easier debugging
+f1861d47	03556751	Sun Aug 27 18:13:37 2017 +0300	Fixed hang in BZip2 decompression
+2e5325d4	30105626	Fri Aug 25 06:06:59 2017 +0800	Fixed cleartext signing and verification issues; Added tests for cleartext signing
+30105626	c2b98427	Fri Aug 25 06:06:59 2017 +0800	Fixed processing of cleartext data to correctly handle line endings and trailing spaces.
+c2b98427	ac32c222	Fri Aug 25 06:06:59 2017 +0800	Fixed dearmoring reader to correctly work with undefined length packets; Updated CLI tests with armored signed/encrypted messages
+ac32c222	5bcf8b78	Fri Aug 25 06:06:59 2017 +0800	Fixed erroneous return from the dearmoring reader.
+0fa111d8	f181e3bc	Tue Aug 22 14:09:54 2017 +0100	Fix decryption of V3 keys (#414)
+098efa30	b9c993a4	Sat Aug 19 03:11:20 2017 +0800	Fix secret subkey loading and add a simple test.
+358a58db	a99de558	Tue Aug 15 09:07:48 2017 -0400	350 pgp decrypt seckey bugs (#388)
+ac4c9edc	70fa75a7	Mon Aug 14 20:34:33 2017 +0100	Fix for incorrect output buffer offset handling in zlib_compressed_data_reader (#385)
+ffae0cfe	c1ad3b13	Mon Aug 14 13:26:47 2017 +0300	Added armoured signing test and updated debug output.
+11dcb0ff	ab7546e9	Sun Aug 13 21:56:21 2017 -0400	Fix #374 warning.
+7d06d456	869b75eb	Mon Aug 7 16:17:37 2017 +0100	Fix pgp_decrypt_seckey to handle subkeys as well. (#366)
+20cb9ad3	342fb125	Sun Aug 6 19:12:17 2017 +0100	Fix EDDSA random failures. (#357)
+35815b1c	b80a5db2	Sat Aug 5 10:06:55 2017 +0800	Added debug log to `rnp_key_store_add_keydata`
+895a5c66	2f0b6dc6	Thu Aug 3 03:00:25 2017 +0800	Fix subkey binding signatures hardcoded SHA1.
+26689d56	8d2130ed	Thu Aug 3 03:00:25 2017 +0800	Fix userid never being freed.
+8d2130ed	d9add5ad	Thu Aug 3 03:00:25 2017 +0800	Fix copy_packet/pgp_add_rawpacket to copy tag too.
+063e345d	0a68ab3a	Thu Aug 3 03:00:25 2017 +0800	Fix up some pgp key helper methods to work better with subkeys.
+1d6cc4f7	21f3136b 2128ed3c	Sun Jul 30 14:03:52 2017 +0400	Merge pull request #337 from riboseinc/dewyatt-misc-keyring-fixes
+2128ed3c	9bde6f31	Sat Jul 29 17:39:55 2017 -0400	Extract sig_free to pgp_sig_free and fix a few leaks.
+9bde6f31	09c30623	Sat Jul 29 17:39:45 2017 -0400	Add keyring loading helper macros and some fixes.
+19b28053	f81092a0	Sat Jul 29 13:59:28 2017 -0400	Fix incorrect SS_TRUST/CT_TRUST mixup.
+ccb0a5f9	4bc97aa5	Mon Jul 17 18:11:59 2017 +0100	Fixes #256: duplication of keys in keyring after the new key generation
+2355caa7	82c3d991	Sun Jul 16 14:23:31 2017 -0400	Fix remaining comments from PR 258 (#299)
+47262a26	cc1e0eea aaf4e957	Sat Jul 15 13:42:03 2017 +0100	Merge pull request #296 from flowher/refactoring_fixes
+ab5bbef2	f0f6fefe	Fri Jul 14 12:44:06 2017 +0800	Fixes #210: --output option doesn\'t work when input is stdin
+f0f6fefe	b97cc4af	Thu Jul 13 14:05:05 2017 +0800	Fix expiration time printing in psubkeybinding.
+3b1db98d	a47b7b59	Wed Jul 12 13:46:47 2017 +0100	rnpkeys: Fixes include paths
+511e1826	2778a831	Wed Jul 12 13:20:19 2017 +0100	Fixes (again) adjustment for hash algorithm and curve in ECDSA
+b97cc4af	8588872b 98cda593	Tue Jul 11 09:41:22 2017 +0100	Merge pull request #293 from flowher/fix_expert
+98cda593	8588872b	Tue Jul 11 08:32:24 2017 +0100	Fixes key generation in expert mode
+3d51326e	d10c7a56	Mon Jul 10 08:16:44 2017 +0800	Fix botan build options appending multiple times.
+bb5dafac	1c3a1cd6 0a3df280	Fri Jul 7 19:14:08 2017 +0100	Merge pull request #283 from riboseinc/dewyatt-fix-282-elgamal-leak
+0a3df280	86298b1d	Fri Jul 7 07:36:20 2017 -0400	Fix ElGamal seckey leak in pgp_seckey_free
+960c7057	b4684997 d54115e0	Fri Jul 7 11:49:37 2017 +0300	Merge pull request #281 from riboseinc/dewyatt-fix-280-uninitialized-read-rnp_cmd
+b4684997	86298b1d 53a1ed04	Fri Jul 7 16:48:36 2017 +0800	Merge pull request #279 from riboseinc/dewyatt-fix-278-key-store-subpkts
+d54115e0	86298b1d	Thu Jul 6 22:26:30 2017 -0400	Fix uninitialized variable read in rnp_cmd.
+53a1ed04	86298b1d	Thu Jul 6 22:16:29 2017 -0400	Fix memory leak and sig subpkt parsing issue with pgp keyrings.
+66d2c610	906d5d4c	Wed Jul 5 23:35:19 2017 +0400	Fix bug on test that was found by retrace incompletio
+2c6f82e5	dc9f1eab	Tue Jul 4 21:45:25 2017 +0100	Build fixer: JSON-C headers in rnpkeys
+dc9f1eab	a4309023	Tue Jul 4 21:42:15 2017 +0100	Fixes build: JSONC includes
+a4309023	d36938c0	Tue Jul 4 19:17:03 2017 +0100	Fix rnpv build
+d36938c0	5dbef031	Tue Jul 4 19:07:51 2017 +0100	Fixes build
+5dbef031	43ea58cc	Tue Jul 4 19:06:08 2017 +0100	Fixes build
+0ba69e2d	6f6e7400	Tue Jul 4 19:00:09 2017 +0100	Attempt to fix build
+6f6e7400	1ddfda7a	Tue Jul 4 18:59:46 2017 +0100	Attempt to fixe build
+c4c44fa5	c1241927	Tue Jul 4 18:53:35 2017 +0100	Attempt to fix build
+c1241927	76c249f4	Tue Jul 4 18:53:16 2017 +0100	Attempt to fixe build
+eeba7612	c7112cf4	Tue Jul 4 12:57:05 2017 +0300	Fixed constant name.
+98540c0c	6cfc2995	Mon Jul 3 17:35:55 2017 -0400	Code review fixes (#261)
+6cfc2995	961b28c0 b778d5e2	Mon Jul 3 12:58:46 2017 +0200	Merge pull request #267 from zgyarmati/32bit_fixes
+b778d5e2	961b28c0	Mon Jul 3 02:03:41 2017 +0200	fix build on 32 bit due to format char issue with uint32_t/long int, fixes #266
+9237986b	5b1b8c89	Sun Jul 2 14:45:30 2017 +0100	Attempt to fix build
+5b1b8c89	42406cf6	Sun Jul 2 14:41:00 2017 +0100	Attempt to fixe build
+7031531f	2d12680a	Fri Jun 30 20:09:30 2017 +0400	The code never frees pkt.u.sig.info.v4_hashed, fixed it
+2d12680a	2ddbb592	Fri Jun 30 19:59:54 2017 +0400	The code never frees the raw packet... Fixed it!
+084d82de	009662b1	Fri Jun 30 19:44:36 2017 +0400	Fix memory leak if pgp_reader_push can\'t allocate a memory
+009662b1	68b9e5ea	Fri Jun 30 19:44:09 2017 +0400	Fix memmory leak at pgp_sign_detached
+f9f1f7d9	ac0d1d2f	Fri Jun 30 19:44:09 2017 +0400	Fix few memory leaks
+c7112cf4	ffe212b8	Fri Jun 30 13:21:46 2017 +0300	Fixed some code formatting issues.
+b27be85a	006f7315	Fri Jun 30 09:52:34 2017 +0100	Fixes bug introduced in commit 8c3031d
+2b9d5792	b3316a82	Thu Jun 29 20:06:02 2017 +0300	Fixed checking of the default user id
+b3316a82	ea1eb788	Thu Jun 29 19:16:26 2017 +0300	Fixed cmocka tests to run correctly.
+ea1eb788	31744e82	Thu Jun 29 17:12:16 2017 +0300	Fixed cmocka tests to be compatible with new rnp interfaces.
+92dbca39	80280fdc	Thu Jun 29 14:40:11 2017 +0400	Fix one more crash
+97f7e391	0eb838ff	Thu Jun 29 09:23:50 2017 +0400	Few more fix of crash
+0eb838ff	2b2c223a	Wed Jun 28 19:15:04 2017 +0400	First fixing after retrace with memoryfuzzing
+56ded194	91df1f89	Wed Jun 28 17:39:04 2017 +0300	Fixed numerous compilation issues.
+38624d11	8b25f5f4	Mon Jun 26 10:04:43 2017 -0400	docs: Fix local testing instructions.
+8b25f5f4	965fb1b6 9036fb0e	Mon Jun 26 17:04:08 2017 +0800	Merge pull request #250 from flowher/ec_fixes
+9c90639f	d9cd714b	Sat Jun 24 16:26:21 2017 +0200	more fixes for coverity
+d9cd714b	b2532eca	Sat Jun 24 15:35:25 2017 +0200	fixing coverity issues.
+94c7fdb7	89d9f632	Wed Jun 21 23:03:12 2017 +0100	Fix key generation for ECDSA on P-521
+ded5a078	2daa2c43	Wed Jun 21 13:02:13 2017 +0300	Fixed signature verification test to correctly load the passphrase/reset rnp structure before the each operation.
+2daa2c43	11fa40f8	Wed Jun 21 12:44:22 2017 +0300	Fixed cmocka tests to correctly handle passphrase/reset context during the encryption test.
+aea62175	798b2724	Mon Jun 19 19:54:12 2017 +0300	Fixed freeing of context.
+798b2724	281d1b11	Mon Jun 19 19:10:11 2017 +0300	Fixed formatting with clang-format (some code which is not related to this issue was also affected).
+49fff10c	779fec5a	Sun Jun 18 16:11:22 2017 +0300	Fixed crash after the --list-packets command : pubring wass freed but did not set to NULL.
+779fec5a	b9f48fae	Sun Jun 18 15:14:59 2017 +0300	Fixed compilation issues.
+8b7841ac	31dd5fa4	Wed Jun 14 10:56:13 2017 +0100	Fix formating
+10921ed8	fe9fa7fb d2189f21	Wed Jun 14 09:08:24 2017 +0800	Merge pull request #215 from riboseinc/fix-logname
+75eb3f7e	41039af7	Tue Jun 13 13:36:03 2017 -0400	Use default json-c 0.11 since CVE fixes are back ported from 0.12
+8939a5ae	f255d928	Tue Jun 13 11:11:26 2017 +0800	Fix merge of #208
+b2cea37d	20468eca	Tue Jun 13 10:53:24 2017 +0800	Revert "Coverity Fixes "
+f716b426	c77ba12d	Mon Jun 12 18:02:00 2017 +0200	Fixed review comments.
+c77ba12d	14dc43d9	Sat Jun 10 11:53:21 2017 +0200	Fixed implementation for s2k
+14dc43d9	8aad7060	Sat Jun 10 11:50:32 2017 +0200	Fixed memory leak.
+45c3e1f0	0f075344	Fri Jun 9 17:41:54 2017 -0400	Fix various issues
+8aad7060	64c6ae58	Fri Jun 9 20:32:44 2017 +0200	Fixed a introduced bug;
+64c6ae58	1fa99fdf	Fri Jun 9 19:56:04 2017 +0200	Fixed compilation issues.
+1fa99fdf	f044583b	Fri Jun 9 19:39:50 2017 +0200	Fixed some more coverity issues.
+f044583b	4b72b2df	Fri Jun 9 18:44:26 2017 +0200	Fixed coverity issues.
+4b72b2df	9c66a9d5	Fri Jun 9 18:17:24 2017 +0200	Fixing coverity issues
+9c66a9d5	dfdf8fdb	Fri Jun 9 17:49:39 2017 +0200	Fixed coverity issues CID : 977749, 1440839, 977748
+dfdf8fdb	d7d4f12e	Fri Jun 9 17:36:24 2017 +0200	Fixed Coverity issue : CID 1433187
+d7d4f12e	e22a7119	Thu Jun 8 11:45:33 2017 -0400	fix potential varargs leak reported by coverity [CID 1440832]
+e22a7119	a3a04e2d	Thu Jun 8 10:28:09 2017 -0400	CID 1440832: Fixes resource leak
+a3a04e2d	a6074509	Thu Jun 8 09:51:48 2017 -0400	fix build on 32 bit by avoiding using %zu for unsigned long, fixes #193
+d2308ef8	acb042e2	Tue Jun 6 17:38:13 2017 -0400	Fixed memory leaks. (#183)
+a85273b3	379431b7	Tue Jun 6 20:23:00 2017 +0200	use vsnprintf/vsprintf instead of vasprintf, fixes #125
+7e8c1983	ee06f891	Mon Jun 5 13:28:45 2017 +0200	remove pgp_asprintf function definition, fixes #126
+d5513a6c	c7cac6d0	Thu Jun 1 00:13:58 2017 +0100	Fixes memory corruption in pgp_export_key (#161)
+5f14bc78	a71e4d15	Wed May 31 17:57:45 2017 -0400	Fix typo
+d7282792	ecb6b55c	Wed May 31 17:57:45 2017 -0400	Simplified code around debug level
+e6a5e4e3	d8fca52d	Wed May 31 18:38:51 2017 +0100	Fixes use-after-free in crypto.c
+a855ca18	f9cf1ce5 fd5a3a22	Tue May 30 08:15:09 2017 -0400	Merge pull request #147 from riboseinc/fix_gitignore
+01d3b86d	9cd16dbf	Tue May 30 15:22:49 2017 +0400	This code can\'t be build without json-c, fix it
+fd5a3a22	9cd16dbf	Tue May 30 15:21:54 2017 +0400	Fix typo at .gitignore
+781b48e1	67eec2ca	Sun May 28 23:20:32 2017 +0200	fix back "key_id" json key to "key id"
+05fd97ec	8d9425a6	Fri May 26 16:21:50 2017 -0400	Fix a memory leak in RSA key generation (#123)
+0fed4f98	2d21450e	Thu May 25 12:18:00 2017 -0400	Fix an invalid free in the block cipher code (GH #112)
+2d21450e	3dec3551	Thu May 25 09:47:13 2017 -0400	Fix a couple leaks regarding keyrings. pgp_keyring_free only frees the allocated data inside the keyring. The keyring structure itself should also be freed. We may have to revisit why rnp_generate_key frees the keyrings at some point.
+3dec3551	eb9f79d5	Thu May 25 09:41:28 2017 -0400	Fix a memory leak with pgp_seckey_free. A seckey also contains a pubkey, which has BNs that must be freed.
+eb9f79d5	728150f5	Thu May 25 09:38:16 2017 -0400	rnp_tests: Fix a couple of memory leaks.
+ea12af61	84841e8b	Wed May 24 14:54:10 2017 -0400	Fix memory leak in rnp_end. pgp_keyring_free only frees the internal keys member of the structure. The structure itself is allocated with calloc and must be freed here.
+84841e8b	de619521	Wed May 24 14:30:38 2017 -0400	Remove a debugging printf.
+3ab1c3cc	afaa0591	Tue May 23 01:44:14 2017 -0400	Fix rnp_set_homedir always failing. The logic wasn\'t right here so it would always return 0 in the else block.
+b3561e0a	c8de8ce5	Wed May 17 11:26:28 2017 -0400	Undo commit \'Remove (hopefully) legacy code from signature check\'. Apparently this was checking the PKCS encoding leading bytes and I was covering up a bug by removing this.
+2d62b5df	d8bd229e	Wed May 17 11:26:28 2017 -0400	Fix reliance on uninitialized out_length for RSA signing. This parameter is used as both input and output. If it were set to 0, for example, the botan signing call would correctly fail.
+d8bd229e	c40152e4	Wed May 17 11:26:28 2017 -0400	Fix RSA signatures.
+7de58bf7	88c317e4	Tue May 16 10:27:48 2017 -0400	Fix DSA signature verification.
+a5b13e1a	6372c550	Mon May 15 13:35:39 2017 -0400	Fix typo colon=>semicolon
+f31e47d9	22ecc8be	Mon May 8 11:31:10 2017 +0200	Commented out the failing test until the issues are fixed.
+5dbde1ce	7cd48537	Mon May 8 09:32:47 2017 +0200	Fixed `/home/max` dependency.
+cd8b5765	ceb6c5e2	Mon May 8 12:46:02 2017 +0800	-Fixed bug which lead to stalling of the build. -General clean-up
+30563648	8db6b288	Mon May 8 12:46:02 2017 +0800	fixed compilation error.
+8db6b288	d2c0828b	Mon May 8 12:45:57 2017 +0800	1. Added negative test case for homedir option. 2. Fixed the bug where certain user defined parameters were not used by the application; NOTE: this has an impact on the initialization of the RP. Needs careful consideration before merging changes.
+7cd48537	923f8405	Sun May 7 11:59:24 2017 +0200	-Fixed bug which lead to stalling of the build. -General clean-up
+df51f4c8	e0fee65c	Sat May 6 12:21:59 2017 -0400	ci: fix PR tests (#2) Since we\'re using \'set -u\' for this script, we have to give COVERITY_SCAN_BRANCH a default value if unset before the comparison.
+e0fee65c	d026f953	Sat May 6 11:45:46 2017 -0400	ci: fix PR tests Travis CI builds against PRs are showing green, but logs show that the build is not happening and an error is shown: "/home/travis/.travis/job_stages: line 53: [: !=: unary operator expected".
+6283f02f	153fbeb2	Sat May 6 14:15:24 2017 +0200	fixed compilation error.
+153fbeb2	94c751a0	Sat May 6 13:38:50 2017 +0200	1. Added negative test case for homedir option. 2. Fixed the bug where certain user defined parameters were not used by the application; NOTE: this has an impact on the initialization of the RP. Needs careful consideration before merging changes.
+dbb68529	6121b1ef	Thu May 4 15:22:15 2017 -0400	Attempt to fix coverity scan(#2).
+6121b1ef	415ca007	Thu May 4 14:53:36 2017 -0400	Attempt to fix coverity scan.
+c80b42b7	a29b0154	Fri May 5 01:14:07 2017 +0800	Attempt to fix Coverity by commenting out SSL certificate import.
+2c5fef49	9b79e8f4	Tue May 2 11:00:34 2017 -0400	Fix early bailout for some rnp cli commands.
+6360367d	7b9097df	Thu Apr 27 14:48:22 2017 +0800	Add proper configure flags for Botan, fixes issue #60.
+cbc048c0	ff1d8c05	Tue Apr 25 13:06:45 2017 +0800	Fix RPM build problems with extra bin/rnp_tests, missing /m4 directory, updated license file path
+b1a6d761	392f07f1	Mon Apr 24 18:10:56 2017 +0200	Fix markdown in readme...
+392f07f1	6a8965cc	Mon Apr 24 18:02:25 2017 +0200	update and document versioning, set current development version to 0.8.0~, fixes #40
+f04e8dd2	9ce9a13a	Sat Apr 15 12:37:25 2017 -0400	Fix review comments
+ac0c5085	cfc9a07c	Thu Apr 13 22:20:55 2017 +0900	Fix inherited copyright headers to show previous explicitly stated years.
+cfc9a07c	eddb3548	Thu Apr 13 22:14:14 2017 +0900	Fix renaming typos: rpn => rnp; RPN => RNP
+5cbea190	4df9962a	Thu Apr 13 10:30:25 2017 +0900	Fix dependencies installation and update README
+36c62d88	72288e5c	Wed Apr 12 16:23:25 2017 +0000	explicitly fail configure if cmocka or the other searched libs not found, fixes #39
+4c9f7514	3765d5f1	Fri Apr 7 16:20:41 2017 -0400	Fix RSA decrypt, also fix incorrect free in ElGamal code
+3765d5f1	6a4b4999	Fri Apr 7 09:40:26 2017 -0400	Fix AES block size definition, broke CFB
+2cf2122f	852ac15f d2a98575	Wed Apr 5 17:58:48 2017 +1000	Merge pull request #45 from shaunwheelhouse/rnpkeys-init-fix
+f4b5d119	14b298f4	Sun Apr 2 23:47:09 2017 +1000	The amount of hardcoded places where .gnupg appears is much larger than I thought but it has been changed for rnp and rnpkeys. Fixed a couple of immediate bugs regarding key paths and discovered more - key path handling is inconsistent throughout the application and needs a lot more work.
+14b298f4	460730e3	Sun Apr 2 23:03:51 2017 +1000	This is a fairly big change and there may be bugs. Among many miscellaneous style changes and casual refactoring changes have been applied re: #43.
+805a427f	852ac15f	Wed Mar 29 17:35:48 2017 +0200	build: use include paths relative to top_srcdir, fixes #31
+9848687f	5bcdb01c	Mon Mar 27 18:58:22 2017 +1100	Removed debugging perror().
+ab5eef4e	bfa92562	Sun Mar 26 22:39:01 2017 +0800	fix netpgpverify segfault when loading bad public key
+bfa92562	55f5c9cd	Sun Mar 26 13:27:18 2017 +0800	Fix: \'--help\' option doesn\'t actually work and gives out useless messages #6
+9194cf36	beb27645	Sat Mar 25 17:51:06 2017 +1100	Restored the empty keyring fix after trying to be a bit clever with git.
+62c82567	9c8a48c9	Sat Mar 25 00:49:05 2017 +1100	Split up and refactored lib/netpgp.c:netpgp_init while searching for the cause of the empty keyring bug.
+9c8a48c9	a0db9ef1 5730aa83	Fri Mar 24 22:28:21 2017 +1100	Merge pull request #1 from shaunwheelhouse/macos-homedir-bug
+5730aa83	953d4dcf	Fri Mar 24 22:17:22 2017 +1100	Temporarily patched the segfaulting bug in lib/netpgp.c:get_last_ring, refactored some of that code, added some documentation to the dynamic array macro.
+19cf5279	5c239bd6	Wed Mar 22 00:27:08 2017 +0800	Fix memory leak in decrypt_cb. Take ownership of existing pointers instead.
+5c239bd6	5f1c8431	Wed Mar 22 00:26:57 2017 +0800	Fix a random 1-byte overflow.
+9cdc90e3	a56f5410	Tue Mar 14 16:28:24 2017 +0800	Fix up rpmlint errors
+a56f5410	326fbbbc	Tue Mar 14 16:28:21 2017 +0800	Fix "Can\'t free 7 (0x7)" error.
+435f9fbd	4826c8af	Tue Mar 14 16:27:15 2017 +0800	Complete apparently unfinished pgp_sign_buf clearsign portion, fix memory leak.
+4826c8af	4e827130	Tue Mar 14 16:27:09 2017 +0800	Fix pgp_decrypt_file return value to better indicate success/failure.
+1a04057b	6f47e84a	Tue Mar 14 16:26:27 2017 +0800	readme: Fix instructions
+511cb542	c5869ede	Tue Mar 14 16:26:15 2017 +0800	fix hanging netpgpverify when pubring.gpg exists but is empty

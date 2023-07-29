@@ -1,0 +1,14 @@
+diff --git a/src/flac/encode.c b/src/flac/encode.c
+index 5d1ee484..5c03ec60 100644
+--- a/src/flac/encode.c
++++ b/src/flac/encode.c
+@@ -1520,7 +1520,9 @@ FLAC__bool EncoderSession_construct(EncoderSession *e, encode_options_t options,
+ 			e->fmt.flac.client_data.fatal_error = false;
+ 			break;
+ 		default:
++#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+ 			FLAC__ASSERT(0);
++#endif
+ 			/* double protection */
+ 			return false;
+ 	}

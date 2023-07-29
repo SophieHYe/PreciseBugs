@@ -1,0 +1,33 @@
+diff --git a/src/projections/omerc.cpp b/src/projections/omerc.cpp
+index e9b7b4a0..c33f6489 100644
+--- a/src/projections/omerc.cpp
++++ b/src/projections/omerc.cpp
+@@ -97,6 +97,10 @@ static PJ_LP e_inverse (PJ_XY xy, PJ *P) {          /* Ellipsoidal, inverse */
+         u = xy.y * Q->cosrot + xy.x * Q->sinrot + Q->u_0;
+     }
+     Qp = exp(- Q->BrA * v);
++    if( Qp == 0 ) {
++        proj_errno_set(P, PJD_ERR_INVALID_X_OR_Y);
++        return proj_coord_error().lp;
++    }
+     Sp = .5 * (Qp - 1. / Qp);
+     Tp = .5 * (Qp + 1. / Qp);
+     Vp = sin(Q->BrA * u);
+diff --git a/test/gie/builtins.gie b/test/gie/builtins.gie
+index 0855bec7..a4fb5055 100644
+--- a/test/gie/builtins.gie
++++ b/test/gie/builtins.gie
+@@ -3801,6 +3801,13 @@ expect  0.000898315 -0.001808739
+ accept  -200 -100
+ expect  -0.000898315 -0.001808739
+ 
++-------------------------------------------------------------------------------
++operation +proj=omerc   +R=1 +lat_0=1 +lat_1=2 +no_rot
++-------------------------------------------------------------------------------
++direction inverse
++accept  0 1e200
++expect  failure errno invalid_x_or_y
++
+ 
+ ===============================================================================
+ Ortelius Oval

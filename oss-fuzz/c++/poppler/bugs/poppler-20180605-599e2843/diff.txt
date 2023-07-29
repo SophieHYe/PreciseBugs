@@ -1,0 +1,12 @@
+diff --git a/poppler/JBIG2Stream.cc b/poppler/JBIG2Stream.cc
+index 5982ce8d..2ed787e0 100644
+--- a/poppler/JBIG2Stream.cc
++++ b/poppler/JBIG2Stream.cc
+@@ -1896,6 +1896,7 @@ GBool JBIG2Stream::readSymbolDictSeg(Guint segNum, Guint length,
+ 	}
+ 	for (k = 0; k < (Guint)bmSize; ++k) {
+ 	  if ((c = curStr->getChar()) == EOF) {
++	    memset(p, 0, bmSize - k);
+ 	    break;
+ 	  }
+ 	  *p++ = (Guchar)c;

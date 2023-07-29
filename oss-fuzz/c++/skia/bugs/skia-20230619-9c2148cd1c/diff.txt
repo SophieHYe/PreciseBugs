@@ -1,0 +1,291 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index a1ecbd06b2..a033fdc8b5 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -884,6 +884,8 @@ sksl_inliner_tests = [
+   "inliner/InlinerUsesTempVarForMultipleReturns.sksl",
+   "inliner/InlinerUsesTempVarForReturnsInsideBlockWithVar.sksl",
+   "inliner/IntrinsicNameCollision.sksl",
++  "inliner/ModifiedArrayParametersCannotBeInlined.sksl",
++  "inliner/ModifiedStructParametersCannotBeInlined.sksl",
+   "inliner/NoInline.sksl",
+   "inliner/Ossfuzz37994.sksl",
+   "inliner/ShortCircuitEvaluationsCannotInlineRightHandSide.sksl",
+diff --git a/resources/sksl/BUILD.bazel b/resources/sksl/BUILD.bazel
+index 56d5bdf4e6..6c3ab99a33 100644
+--- a/resources/sksl/BUILD.bazel
++++ b/resources/sksl/BUILD.bazel
+@@ -544,6 +544,8 @@ skia_filegroup(
+         "inliner/InlinerUsesTempVarForMultipleReturns.sksl",
+         "inliner/InlinerUsesTempVarForReturnsInsideBlockWithVar.sksl",
+         "inliner/IntrinsicNameCollision.sksl",
++        "inliner/ModifiedArrayParametersCannotBeInlined.sksl",
++        "inliner/ModifiedStructParametersCannotBeInlined.sksl",
+         "inliner/NoInline.sksl",
+         "inliner/Ossfuzz37994.sksl",
+         "inliner/ShortCircuitEvaluationsCannotInlineRightHandSide.sksl",
+diff --git a/resources/sksl/inliner/ModifiedArrayParametersCannotBeInlined.sksl b/resources/sksl/inliner/ModifiedArrayParametersCannotBeInlined.sksl
+new file mode 100644
+index 0000000000..7207c0c831
+--- /dev/null
++++ b/resources/sksl/inliner/ModifiedArrayParametersCannotBeInlined.sksl
+@@ -0,0 +1,26 @@
++uniform half4 colorGreen, colorRed;
++
++float sumArray(float a[5]) {
++    float sum = 0;
++    for (int i = 0; i < 5; ++i) {
++        sum += a[i];
++    }
++    return sum;
++}
++
++float sumArrayMutating(float a[5]) {
++    for (int i = 1; i < 5; ++i) {
++        a[0] += a[i];
++    }
++    return a[0];
++}
++
++half4 main(float2 coords) {
++    float data[5];
++    data[0] = 1;
++    data[1] = 2;
++    data[2] = 3;
++    data[3] = 4;
++    data[4] = 5;
++    return sumArray(data) == sumArrayMutating(data) ? colorGreen : colorRed;
++}
+diff --git a/resources/sksl/inliner/ModifiedStructParametersCannotBeInlined.sksl b/resources/sksl/inliner/ModifiedStructParametersCannotBeInlined.sksl
+new file mode 100644
+index 0000000000..33cab7007e
+--- /dev/null
++++ b/resources/sksl/inliner/ModifiedStructParametersCannotBeInlined.sksl
+@@ -0,0 +1,23 @@
++uniform half4 colorGreen, colorRed;
++
++struct S {
++    float a, b, c;
++};
++
++float sumStruct(S s) {
++    float sum = s.a;
++    sum += s.b;
++    sum += s.c;
++    return sum;
++}
++
++float sumStructMutating(S s) {
++    s.a += s.b;
++    s.a += s.c;
++    return s.a;
++}
++
++half4 main(float2 coords) {
++    S s = S(1, 2, 3);
++    return sumStruct(s) == sumStructMutating(s) ? colorGreen : colorRed;
++}
+diff --git a/src/sksl/SkSLInliner.cpp b/src/sksl/SkSLInliner.cpp
+index 742305257d..9eeaf9eac3 100644
+--- a/src/sksl/SkSLInliner.cpp
++++ b/src/sksl/SkSLInliner.cpp
+@@ -602,10 +602,13 @@ bool Inliner::isSafeToInline(const FunctionDefinition* functionDef, const Progra
+         return false;
+     }
+ 
+-    // We don't allow inlining a function with out parameters that are written to.
+-    // (See skia:11326 for rationale.)
+     for (const Variable* param : functionDef->declaration().parameters()) {
+-        if (param->modifiers().fFlags & Modifiers::Flag::kOut_Flag) {
++        // We don't allow inlining functions with parameters that are written-to, if they...
++        // - are `out` parameters (see skia:11326 for rationale.)
++        // - are arrays or structures (introducing temporary copies is non-trivial)
++        if ((param->modifiers().fFlags & Modifiers::Flag::kOut_Flag) ||
++            param->type().isArray() ||
++            param->type().isStruct()) {
+             ProgramUsage::VariableCounts counts = usage.get(*param);
+             if (counts.fWrite > 0) {
+                 return false;
+diff --git a/tests/SkSLTest.cpp b/tests/SkSLTest.cpp
+index 867a859b8a..2b68e1431c 100644
+--- a/tests/SkSLTest.cpp
++++ b/tests/SkSLTest.cpp
+@@ -570,6 +570,8 @@ SKSL_TEST(CPU | GPU,     kApiLevel_T, InlineWithUnmodifiedArgument,
+ SKSL_TEST(CPU | GPU,     kApiLevel_T, InlineWithUnnecessaryBlocks,                      "inliner/InlineWithUnnecessaryBlocks.sksl")
+ // TODO(tint:1932): GPU is disabled for now; test exposes a bug in the Tint SPIR-V Reader
+ SKSL_TEST(CPU,           kNextRelease,IntrinsicNameCollision,                           "inliner/IntrinsicNameCollision.sksl")
++SKSL_TEST(CPU | GPU,     kNextRelease,ModifiedArrayParametersCannotBeInlined,           "inliner/ModifiedArrayParametersCannotBeInlined.sksl")
++SKSL_TEST(CPU | GPU,     kNextRelease,ModifiedStructParametersCannotBeInlined,          "inliner/ModifiedStructParametersCannotBeInlined.sksl")
+ SKSL_TEST(CPU | GPU,     kApiLevel_T, NoInline,                                         "inliner/NoInline.sksl")
+ SKSL_TEST(CPU | GPU,     kApiLevel_T, ShortCircuitEvaluationsCannotInlineRightHandSide, "inliner/ShortCircuitEvaluationsCannotInlineRightHandSide.sksl")
+ SKSL_TEST(ES3 | GPU_ES3, kNever,      StaticSwitchInline,                               "inliner/StaticSwitch.sksl")
+diff --git a/tests/sksl/inliner/ModifiedArrayParametersCannotBeInlined.glsl b/tests/sksl/inliner/ModifiedArrayParametersCannotBeInlined.glsl
+new file mode 100644
+index 0000000000..a5a9940ff5
+--- /dev/null
++++ b/tests/sksl/inliner/ModifiedArrayParametersCannotBeInlined.glsl
+@@ -0,0 +1,23 @@
++
++out vec4 sk_FragColor;
++uniform vec4 colorGreen;
++uniform vec4 colorRed;
++float sumArrayMutating_ff(float a[5]) {
++    for (int i = 1;i < 5; ++i) {
++        a[0] += a[i];
++    }
++    return a[0];
++}
++vec4 main() {
++    float data[5];
++    data[0] = 1.0;
++    data[1] = 2.0;
++    data[2] = 3.0;
++    data[3] = 4.0;
++    data[4] = 5.0;
++    float _0_sum = 0.0;
++    for (int _1_i = 0;_1_i < 5; ++_1_i) {
++        _0_sum += data[_1_i];
++    }
++    return _0_sum == sumArrayMutating_ff(data) ? colorGreen : colorRed;
++}
+diff --git a/tests/sksl/inliner/ModifiedStructParametersCannotBeInlined.glsl b/tests/sksl/inliner/ModifiedStructParametersCannotBeInlined.glsl
+new file mode 100644
+index 0000000000..391c3d3ccc
+--- /dev/null
++++ b/tests/sksl/inliner/ModifiedStructParametersCannotBeInlined.glsl
+@@ -0,0 +1,21 @@
++
++out vec4 sk_FragColor;
++uniform vec4 colorGreen;
++uniform vec4 colorRed;
++struct S {
++    float a;
++    float b;
++    float c;
++};
++float sumStructMutating_fS(S s) {
++    s.a += s.b;
++    s.a += s.c;
++    return s.a;
++}
++vec4 main() {
++    S s = S(1.0, 2.0, 3.0);
++    float _0_sum = s.a;
++    _0_sum += s.b;
++    _0_sum += s.c;
++    return _0_sum == sumStructMutating_fS(s) ? colorGreen : colorRed;
++}
+diff --git a/tests/sksl/shared/Ossfuzz37466.asm.frag b/tests/sksl/shared/Ossfuzz37466.asm.frag
+index df3c814937..5144c543fb 100644
+--- a/tests/sksl/shared/Ossfuzz37466.asm.frag
++++ b/tests/sksl/shared/Ossfuzz37466.asm.frag
+@@ -4,33 +4,40 @@ OpMemoryModel Logical GLSL450
+ OpEntryPoint Fragment %main "main" %sk_Clockwise
+ OpExecutionMode %main OriginUpperLeft
+ OpName %sk_Clockwise "sk_Clockwise"
++OpName %foo_ff "foo_ff"
+ OpName %main "main"
+ OpName %y "y"
+-OpName %_0_v "_0_v"
+ OpDecorate %sk_Clockwise BuiltIn FrontFacing
+ OpDecorate %_arr_float_int_2 ArrayStride 16
+ %bool = OpTypeBool
+ %_ptr_Input_bool = OpTypePointer Input %bool
+ %sk_Clockwise = OpVariable %_ptr_Input_bool Input
+-%void = OpTypeVoid
+-%7 = OpTypeFunction %void
+ %float = OpTypeFloat 32
+ %int = OpTypeInt 32 1
+ %int_2 = OpConstant %int 2
+ %_arr_float_int_2 = OpTypeArray %float %int_2
+ %_ptr_Function__arr_float_int_2 = OpTypePointer Function %_arr_float_int_2
++%12 = OpTypeFunction %float %_ptr_Function__arr_float_int_2
+ %int_1 = OpConstant %int 1
+ %_ptr_Function_float = OpTypePointer Function %float
+ %int_0 = OpConstant %int 0
+-%main = OpFunction %void None %7
+-%8 = OpLabel
++%void = OpTypeVoid
++%22 = OpTypeFunction %void
++%foo_ff = OpFunction %float None %12
++%13 = OpFunctionParameter %_ptr_Function__arr_float_int_2
++%14 = OpLabel
++%16 = OpAccessChain %_ptr_Function_float %13 %int_1
++%18 = OpLoad %float %16
++%20 = OpAccessChain %_ptr_Function_float %13 %int_0
++OpStore %20 %18
++OpReturnValue %18
++OpFunctionEnd
++%main = OpFunction %void None %22
++%23 = OpLabel
+ %y = OpVariable %_ptr_Function__arr_float_int_2 Function
+-%_0_v = OpVariable %_ptr_Function__arr_float_int_2 Function
+-%16 = OpLoad %_arr_float_int_2 %y
+-OpStore %_0_v %16
+-%18 = OpAccessChain %_ptr_Function_float %_0_v %int_1
+-%20 = OpLoad %float %18
+-%22 = OpAccessChain %_ptr_Function_float %_0_v %int_0
+-OpStore %22 %20
++%26 = OpVariable %_ptr_Function__arr_float_int_2 Function
++%25 = OpLoad %_arr_float_int_2 %y
++OpStore %26 %25
++%27 = OpFunctionCall %float %foo_ff %26
+ OpReturn
+ OpFunctionEnd
+diff --git a/tests/sksl/shared/Ossfuzz37466.glsl b/tests/sksl/shared/Ossfuzz37466.glsl
+index 6e18a5d46f..4015b1831b 100644
+--- a/tests/sksl/shared/Ossfuzz37466.glsl
++++ b/tests/sksl/shared/Ossfuzz37466.glsl
+@@ -1,6 +1,8 @@
+ 
++float foo_ff(float v[2]) {
++    return v[0] = v[1];
++}
+ void main() {
+     float y[2];
+-    float _0_v[2] = y;
+-    _0_v[0] = _0_v[1];
++    foo_ff(y);
+ }
+diff --git a/tests/sksl/shared/Ossfuzz37466.hlsl b/tests/sksl/shared/Ossfuzz37466.hlsl
+index 513ff19b03..99ca5009fd 100644
+--- a/tests/sksl/shared/Ossfuzz37466.hlsl
++++ b/tests/sksl/shared/Ossfuzz37466.hlsl
+@@ -1,8 +1,15 @@
++float foo_ff(inout float _13[2])
++{
++    float _18 = _13[1];
++    _13[0] = _18;
++    return _18;
++}
++
+ void frag_main()
+ {
+     float y[2] = { 0.0f, 0.0f };
+-    float _RESERVED_IDENTIFIER_FIXUP_0_v[2] = y;
+-    _RESERVED_IDENTIFIER_FIXUP_0_v[0] = _RESERVED_IDENTIFIER_FIXUP_0_v[1];
++    float _26[2] = y;
++    float _27 = foo_ff(_26);
+ }
+ 
+ void main()
+diff --git a/tests/sksl/shared/Ossfuzz37466.metal b/tests/sksl/shared/Ossfuzz37466.metal
+index 3963a0f46f..6166483c14 100644
+--- a/tests/sksl/shared/Ossfuzz37466.metal
++++ b/tests/sksl/shared/Ossfuzz37466.metal
+@@ -6,11 +6,13 @@ struct Inputs {
+ struct Outputs {
+     half4 sk_FragColor [[color(0)]];
+ };
++float foo_ff(array<float, 2> v) {
++    return v[0] = v[1];
++}
+ fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
+     Outputs _out;
+     (void)_out;
+     array<float, 2> y;
+-    array<float, 2> _0_v = y;
+-    _0_v[0] = _0_v[1];
++    foo_ff(y);
+     return _out;
+ }

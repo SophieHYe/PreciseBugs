@@ -1,0 +1,17 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp b/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
+index fc1d5c1df0..5151874fea 100644
+--- a/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
++++ b/gdal/ogr/ogrsf_frmts/gtm/gtm.cpp
+@@ -339,7 +339,11 @@ bool GTM::isValid()
+         {
+             VSILFILE* pGTMFileOri = pGTMFile;
+             pGTMFile = fp;
+-            if (isValid())
++            char* pszFilenameOri = pszFilename;
++            pszFilename = pszGZIPFileName;
++            const bool bRet = isValid();
++            pszFilename = pszFilenameOri;
++            if (bRet)
+             {
+                 VSIFCloseL(pGTMFileOri);
+                 CPLFree(pszGZIPFileName);

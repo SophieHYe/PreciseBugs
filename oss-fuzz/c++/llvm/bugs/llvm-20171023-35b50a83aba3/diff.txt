@@ -1,0 +1,44 @@
+diff --git a/llvm/lib/Object/WasmObjectFile.cpp b/llvm/lib/Object/WasmObjectFile.cpp
+index 15a78df54024..86ce9c2209c2 100644
+--- a/llvm/lib/Object/WasmObjectFile.cpp
++++ b/llvm/lib/Object/WasmObjectFile.cpp
+@@ -178,14 +178,16 @@ static wasm::WasmTable readTable(const uint8_t *&Ptr) {
+ }
+ 
+ static Error readSection(WasmSection &Section, const uint8_t *&Ptr,
+-                         const uint8_t *Start) {
+-  // TODO(sbc): Avoid reading past EOF in the case of malformed files.
++                         const uint8_t *Start, const uint8_t *Eof) {
+   Section.Offset = Ptr - Start;
+   Section.Type = readVaruint7(Ptr);
+   uint32_t Size = readVaruint32(Ptr);
+   if (Size == 0)
+     return make_error<StringError>("Zero length section",
+                                    object_error::parse_failed);
++  if (Ptr + Size > Eof)
++    return make_error<StringError>("Section too large",
++                                   object_error::parse_failed);
+   Section.Content = ArrayRef<uint8_t>(Ptr, Size);
+   Ptr += Size;
+   return Error::success();
+@@ -221,7 +223,7 @@ WasmObjectFile::WasmObjectFile(MemoryBufferRef Buffer, Error &Err)
+ 
+   WasmSection Sec;
+   while (Ptr < Eof) {
+-    if ((Err = readSection(Sec, Ptr, getPtr(0))))
++    if ((Err = readSection(Sec, Ptr, getPtr(0), Eof)))
+       return;
+     if ((Err = parseSection(Sec)))
+       return;
+diff --git a/llvm/test/tools/llvm-objdump/Inputs/corrupt-section.wasm b/llvm/test/tools/llvm-objdump/Inputs/corrupt-section.wasm
+new file mode 100644
+index 000000000000..3bf45f715db6
+Binary files /dev/null and b/llvm/test/tools/llvm-objdump/Inputs/corrupt-section.wasm differ
+diff --git a/llvm/test/tools/llvm-objdump/wasm-corrupt-section.test b/llvm/test/tools/llvm-objdump/wasm-corrupt-section.test
+new file mode 100644
+index 000000000000..9ba7a7ef6bd4
+--- /dev/null
++++ b/llvm/test/tools/llvm-objdump/wasm-corrupt-section.test
+@@ -0,0 +1,2 @@
++# RUN: not llvm-objdump -h %p/Inputs/corrupt-section.wasm 2>&1 | FileCheck %s
++# CHECK: '{{.*}}corrupt-section.wasm': Section too large

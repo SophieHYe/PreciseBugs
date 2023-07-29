@@ -1,0 +1,12 @@
+diff --git a/libass/ass.c b/libass/ass.c
+index 1cb0d4c..e8cefc5 100644
+--- a/libass/ass.c
++++ b/libass/ass.c
+@@ -622,6 +622,7 @@ static int process_info_line(ASS_Track *track, char *str)
+     } else if (!strncmp(str, "Language:", 9)) {
+         char *p = str + 9;
+         while (*p && ass_isspace(*p)) p++;
++        free(track->Language);
+         track->Language = strndup(p, 2);
+     }
+     return 0;

@@ -1,0 +1,28 @@
+diff --git a/src/trace_processor/proto_trace_parser.cc b/src/trace_processor/proto_trace_parser.cc
+index 6a876bc33..108c34c5a 100644
+--- a/src/trace_processor/proto_trace_parser.cc
++++ b/src/trace_processor/proto_trace_parser.cc
+@@ -57,6 +57,9 @@ bool ParseSystraceTracePoint(base::StringView str, SystraceTracePoint* out) {
+   const char* s = str.data();
+   size_t len = str.size();
+ 
++  if (len < 2)
++    return false;
++
+   // If str matches '[BEC]\|[0-9]+[\|\n]' set tgid_length to the length of
+   // the number. Otherwise return false.
+   if (s[1] != '|' && s[1] != '\n')
+diff --git a/src/trace_processor/proto_trace_parser_unittest.cc b/src/trace_processor/proto_trace_parser_unittest.cc
+index b304c64d2..a71fd5844 100644
+--- a/src/trace_processor/proto_trace_parser_unittest.cc
++++ b/src/trace_processor/proto_trace_parser_unittest.cc
+@@ -496,6 +496,9 @@ TEST_F(ProtoTraceParserTest, LoadThreadPacket) {
+ 
+ TEST(SystraceParserTest, SystraceEvent) {
+   SystraceTracePoint result{};
++
++  ASSERT_FALSE(ParseSystraceTracePoint(base::StringView(""), &result));
++
+   ASSERT_TRUE(ParseSystraceTracePoint(base::StringView("B|1|foo"), &result));
+   EXPECT_EQ(result, (SystraceTracePoint{'B', 1, base::StringView("foo"), 0}));
+ 

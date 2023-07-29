@@ -1,0 +1,207 @@
+diff --git a/src/trace_processor/importers/common/track_tracker.cc b/src/trace_processor/importers/common/track_tracker.cc
+index 1950521e0..7c1599d3f 100644
+--- a/src/trace_processor/importers/common/track_tracker.cc
++++ b/src/trace_processor/importers/common/track_tracker.cc
+@@ -303,12 +303,19 @@ void TrackTracker::ReserveDescriptorChildTrack(uint64_t uuid,
+ }
+ 
+ base::Optional<TrackId> TrackTracker::GetDescriptorTrack(uint64_t uuid) {
++  return GetDescriptorTrackImpl(uuid);
++}
++
++base::Optional<TrackId> TrackTracker::GetDescriptorTrackImpl(
++    uint64_t uuid,
++    std::vector<uint64_t>* descendent_uuids) {
+   auto it = resolved_descriptor_tracks_.find(uuid);
+   if (it == resolved_descriptor_tracks_.end()) {
+     auto reservation_it = reserved_descriptor_tracks_.find(uuid);
+     if (reservation_it == reserved_descriptor_tracks_.end())
+       return base::nullopt;
+-    TrackId track_id = ResolveDescriptorTrack(uuid, reservation_it->second);
++    TrackId track_id =
++        ResolveDescriptorTrack(uuid, reservation_it->second, descendent_uuids);
+     resolved_descriptor_tracks_[uuid] = track_id;
+     return track_id;
+   }
+@@ -317,15 +324,44 @@ base::Optional<TrackId> TrackTracker::GetDescriptorTrack(uint64_t uuid) {
+ 
+ TrackId TrackTracker::ResolveDescriptorTrack(
+     uint64_t uuid,
+-    const DescriptorTrackReservation& reservation) {
++    const DescriptorTrackReservation& reservation,
++    std::vector<uint64_t>* descendent_uuids) {
++  static constexpr size_t kMaxAncestors = 10;
++
++  // Try to resolve any parent tracks recursively, too.
+   base::Optional<TrackId> parent_track_id;
+   if (reservation.parent_uuid) {
+-    // Ensure that parent track is resolved.
+-    parent_track_id = GetDescriptorTrack(reservation.parent_uuid);
+-    if (!parent_track_id) {
+-      PERFETTO_ELOG("Unknown parent track %" PRIu64 " for track %" PRIu64,
+-                    reservation.parent_uuid, uuid);
++    // Input data may contain loops or extremely long ancestor track chains. To
++    // avoid stack overflow in these situations, we keep track of the ancestors
++    // seen in the recursion.
++    std::unique_ptr<std::vector<uint64_t>> owned_descendent_uuids;
++    if (!descendent_uuids) {
++      owned_descendent_uuids.reset(new std::vector<uint64_t>());
++      descendent_uuids = owned_descendent_uuids.get();
+     }
++    descendent_uuids->push_back(uuid);
++
++    if (descendent_uuids->size() > kMaxAncestors) {
++      PERFETTO_ELOG(
++          "Too many ancestors in parent_track_uuid hierarchy at track %" PRIu64
++          " with parent %" PRIu64,
++          uuid, reservation.parent_uuid);
++    } else if (std::find(descendent_uuids->begin(), descendent_uuids->end(),
++                         reservation.parent_uuid) != descendent_uuids->end()) {
++      PERFETTO_ELOG(
++          "Loop detected in parent_track_uuid hierarchy at track %" PRIu64
++          " with parent %" PRIu64,
++          uuid, reservation.parent_uuid);
++    } else {
++      parent_track_id =
++          GetDescriptorTrackImpl(reservation.parent_uuid, descendent_uuids);
++      if (!parent_track_id) {
++        PERFETTO_ELOG("Unknown parent track %" PRIu64 " for track %" PRIu64,
++                      reservation.parent_uuid, uuid);
++      }
++    }
++
++    descendent_uuids->pop_back();
+   }
+ 
+   if (reservation.tid) {
+diff --git a/src/trace_processor/importers/common/track_tracker.h b/src/trace_processor/importers/common/track_tracker.h
+index 15c69559c..2f3b59c2c 100644
+--- a/src/trace_processor/importers/common/track_tracker.h
++++ b/src/trace_processor/importers/common/track_tracker.h
+@@ -238,8 +238,12 @@ class TrackTracker {
+     }
+   };
+ 
++  base::Optional<TrackId> GetDescriptorTrackImpl(
++      uint64_t uuid,
++      std::vector<uint64_t>* descendent_uuids = nullptr);
+   TrackId ResolveDescriptorTrack(uint64_t uuid,
+-                                 const DescriptorTrackReservation&);
++                                 const DescriptorTrackReservation&,
++                                 std::vector<uint64_t>* descendent_uuids);
+ 
+   static constexpr uint64_t kDefaultDescriptorTrackUuid = 0u;
+ 
+diff --git a/src/trace_processor/importers/proto/track_event_parser.cc b/src/trace_processor/importers/proto/track_event_parser.cc
+index d928a00d1..83349f7b8 100644
+--- a/src/trace_processor/importers/proto/track_event_parser.cc
++++ b/src/trace_processor/importers/proto/track_event_parser.cc
+@@ -463,7 +463,7 @@ class TrackEventParser::EventImporter {
+       case TrackEvent::TYPE_INSTANT:
+         return utid_ ? 'i' : 'n';
+       default:
+-        PERFETTO_FATAL("unexpected event type %d", event_.type());
++        PERFETTO_ELOG("unexpected event type %d", event_.type());
+         return 0;
+     }
+   }
+@@ -521,7 +521,7 @@ class TrackEventParser::EventImporter {
+     protozero::RepeatedFieldIterator<uint64_t> track_uuid_it;
+     if (event_.has_extra_counter_track_uuids()) {
+       track_uuid_it = event_.extra_counter_track_uuids();
+-    } else if (defaults_->has_extra_counter_track_uuids()) {
++    } else if (defaults_ && defaults_->has_extra_counter_track_uuids()) {
+       track_uuid_it = defaults_->extra_counter_track_uuids();
+     }
+ 
+@@ -881,7 +881,7 @@ class TrackEventParser::EventImporter {
+     }
+ 
+     if (legacy_event_.flow_direction()) {
+-      StringId value;
++      StringId value = kNullStringId;
+       switch (legacy_event_.flow_direction()) {
+         case LegacyEvent::FLOW_IN:
+           value = parser_->flow_direction_value_in_id_;
+@@ -893,8 +893,8 @@ class TrackEventParser::EventImporter {
+           value = parser_->flow_direction_value_inout_id_;
+           break;
+         default:
+-          PERFETTO_FATAL("Unknown flow direction: %d",
+-                         legacy_event_.flow_direction());
++          PERFETTO_ELOG("Unknown flow direction: %d",
++                        legacy_event_.flow_direction());
+           break;
+       }
+       inserter->AddArg(parser_->legacy_event_flow_direction_key_id_,
+diff --git a/src/trace_processor/importers/proto/track_event_tokenizer.cc b/src/trace_processor/importers/proto/track_event_tokenizer.cc
+index 772dd6e93..165eeffe9 100644
+--- a/src/trace_processor/importers/proto/track_event_tokenizer.cc
++++ b/src/trace_processor/importers/proto/track_event_tokenizer.cc
+@@ -250,7 +250,7 @@ void TrackEventTokenizer::TokenizeTrackEventPacket(
+     uint64_t track_uuid;
+     if (event.has_track_uuid()) {
+       track_uuid = event.track_uuid();
+-    } else if (defaults->has_track_uuid()) {
++    } else if (defaults && defaults->has_track_uuid()) {
+       track_uuid = defaults->track_uuid();
+     } else {
+       PERFETTO_DLOG(
+@@ -289,7 +289,7 @@ void TrackEventTokenizer::TokenizeTrackEventPacket(
+     protozero::RepeatedFieldIterator<uint64_t> track_uuid_it;
+     if (event.has_extra_counter_track_uuids()) {
+       track_uuid_it = event.extra_counter_track_uuids();
+-    } else if (defaults->has_extra_counter_track_uuids()) {
++    } else if (defaults && defaults->has_extra_counter_track_uuids()) {
+       track_uuid_it = defaults->extra_counter_track_uuids();
+     } else {
+       PERFETTO_DLOG(
+diff --git a/src/trace_processor/trace_database_integrationtest.cc b/src/trace_processor/trace_database_integrationtest.cc
+index 52c9a6159..69ee26170 100644
+--- a/src/trace_processor/trace_database_integrationtest.cc
++++ b/src/trace_processor/trace_database_integrationtest.cc
+@@ -219,6 +219,29 @@ TEST_F(TraceProcessorIntegrationTest, Clusterfuzz17805) {
+   ASSERT_TRUE(!LoadTrace("clusterfuzz_17805", 4096).ok());
+ }
+ 
++// Failing on DCHECKs during import because the traces aren't really valid.
++#if PERFETTO_DCHECK_IS_ON()
++#define MAYBE_Clusterfuzz20215 DISABLED_Clusterfuzz20215
++#define MAYBE_Clusterfuzz20292 DISABLED_Clusterfuzz20292
++#define MAYBE_Clusterfuzz21178 DISABLED_Clusterfuzz21178
++#else  // PERFETTO_DCHECK_IS_ON()
++#define MAYBE_Clusterfuzz20215 Clusterfuzz20215
++#define MAYBE_Clusterfuzz20292 Clusterfuzz20292
++#define MAYBE_Clusterfuzz21178 Clusterfuzz21178
++#endif  // PERFETTO_DCHECK_IS_ON()
++
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz20215) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_20215", 4096).ok());
++}
++
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz20292) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_20292", 4096).ok());
++}
++
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz21178) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_21178", 4096).ok());
++}
++
+ TEST_F(TraceProcessorIntegrationTest, RestoreInitialTables) {
+   ASSERT_TRUE(LoadTrace("android_sched_and_ps.pb").ok());
+ 
+diff --git a/tools/install-build-deps b/tools/install-build-deps
+index f8f0ff0be..5881320a0 100755
+--- a/tools/install-build-deps
++++ b/tools/install-build-deps
+@@ -146,8 +146,8 @@ BUILD_DEPS_HOST = [
+     # Example traces for regression tests.
+     (
+         'buildtools/test_data.zip',
+-        'https://storage.googleapis.com/perfetto/test-data-20200331-130927.zip',
+-        '80632f754293e47e1cfa1ff6bcf15d11d589a126',
++        'https://storage.googleapis.com/perfetto/test-data-20200423-125929.zip',
++        'b07767114b1854a00e372c2c910429077def0fa2',
+         'all',
+     ),
+ 

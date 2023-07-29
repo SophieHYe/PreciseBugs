@@ -1,0 +1,16 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+index 5ab13c5eed..683dd3f0ae 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+@@ -345,6 +345,11 @@ int NTFFileReader::Open( const char * pszFilenameIn )
+                           poCodeList->szValType );
+                 delete poCodeList;
+             }
++            else if( psAttDesc->poCodeList != NULL )
++            {
++                // Should not happen on sane files.
++                delete poCodeList;
++            }
+             else
+             {
+                 psAttDesc->poCodeList = poCodeList;

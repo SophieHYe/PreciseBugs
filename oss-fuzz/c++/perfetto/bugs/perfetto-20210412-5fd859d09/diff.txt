@@ -1,0 +1,27 @@
+diff --git a/src/profiling/memory/scoped_spinlock.h b/src/profiling/memory/scoped_spinlock.h
+index aeda611f8..90aaf712d 100644
+--- a/src/profiling/memory/scoped_spinlock.h
++++ b/src/profiling/memory/scoped_spinlock.h
+@@ -29,8 +29,8 @@ namespace perfetto {
+ namespace profiling {
+ 
+ struct Spinlock {
+-  std::atomic<bool> locked;
+-  std::atomic<bool> poisoned;
++  std::atomic<uint8_t> locked;
++  std::atomic<uint8_t> poisoned;
+ };
+ 
+ static_assert(sizeof(Spinlock) == 2, "spinlock size must be ABI independent");
+diff --git a/src/profiling/memory/shared_ring_buffer_fuzzer.cc b/src/profiling/memory/shared_ring_buffer_fuzzer.cc
+index d3c4bd56e..2a597a9d5 100644
+--- a/src/profiling/memory/shared_ring_buffer_fuzzer.cc
++++ b/src/profiling/memory/shared_ring_buffer_fuzzer.cc
+@@ -65,6 +65,7 @@ int FuzzRingBuffer(const uint8_t* data, size_t size) {
+   SharedRingBuffer::MetadataPage header = {};
+   memcpy(&header, data, sizeof(header));
+   header.spinlock.locked = false;
++  header.spinlock.poisoned = false;
+ 
+   PERFETTO_CHECK(ftruncate(*fd, static_cast<off_t>(total_size_pages *
+                                                    base::kPageSize)) == 0);

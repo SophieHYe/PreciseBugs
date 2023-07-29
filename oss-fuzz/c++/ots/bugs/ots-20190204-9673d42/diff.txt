@@ -1,0 +1,19 @@
+diff --git a/src/stat.cc b/src/stat.cc
+index bef438f..4ad14b3 100644
+--- a/src/stat.cc
++++ b/src/stat.cc
+@@ -309,8 +309,8 @@ bool OpenTypeSTAT::Serialize(OTSStream* out) {
+         return Error("Failed to write axis value");
+       }
+       for (unsigned j = 0; j < value.format4.axisValues.size(); j++) {
+-        if (!out->WriteU16(value.format4.axisValues[i].axisIndex) ||
+-            !out->WriteS32(value.format4.axisValues[i].value)) {
++        if (!out->WriteU16(value.format4.axisValues[j].axisIndex) ||
++            !out->WriteS32(value.format4.axisValues[j].value)) {
+           return Error("Failed to write axis value");
+         }
+       }
+diff --git a/tests/fonts/fuzzing/a37166581403c1fda5e5689d4e027a085e3186e8.ttf b/tests/fonts/fuzzing/a37166581403c1fda5e5689d4e027a085e3186e8.ttf
+new file mode 100644
+index 0000000..aa079e3
+Binary files /dev/null and b/tests/fonts/fuzzing/a37166581403c1fda5e5689d4e027a085e3186e8.ttf differ

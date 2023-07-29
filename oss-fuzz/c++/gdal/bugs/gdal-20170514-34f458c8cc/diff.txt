@@ -1,0 +1,184 @@
+diff --git a/gdal/ogr/ogr_geometry.h b/gdal/ogr/ogr_geometry.h
+index 04428fbee8..d297e872be 100644
+--- a/gdal/ogr/ogr_geometry.h
++++ b/gdal/ogr/ogr_geometry.h
+@@ -622,6 +622,8 @@ class CPL_DLL OGRSimpleCurve: public OGRCurve
+ 
+ class CPL_DLL OGRLineString : public OGRSimpleCurve
+ {
++    static OGRLinearRing*          CasterToLinearRing(OGRCurve* poCurve);
++
+   protected:
+ //! @cond Doxygen_Suppress
+     static OGRLineString* TransferMembersAndDestroy(
+@@ -683,6 +685,8 @@ class CPL_DLL OGRLineString : public OGRSimpleCurve
+ 
+ class CPL_DLL OGRLinearRing : public OGRLineString
+ {
++    static OGRLineString*       CasterToLineString( OGRCurve* poCurve );
++
+   protected:
+ //! @cond Doxygen_Suppress
+     friend class OGRPolygon;
+@@ -918,6 +922,8 @@ class CPL_DLL OGRCompoundCurve : public OGRCurve
+     OGRLineString* CurveToLineInternal( double dfMaxAngleStepSizeDegrees,
+                                         const char* const* papszOptions,
+                                         int bIsLinearRing ) const;
++    static OGRLineString* CasterToLineString( OGRCurve* poCurve );
++    static OGRLinearRing* CasterToLinearRing( OGRCurve* poCurve );
+ 
+   protected:
+ //! @cond Doxygen_Suppress
+diff --git a/gdal/ogr/ogrcircularstring.cpp b/gdal/ogr/ogrcircularstring.cpp
+index f35d3bdc52..b0ec08bae3 100644
+--- a/gdal/ogr/ogrcircularstring.cpp
++++ b/gdal/ogr/ogrcircularstring.cpp
+@@ -693,16 +693,32 @@ OGRCircularString::getLinearGeometry( double dfMaxAngleStepSizeDegrees,
+ /*                     GetCasterToLineString()                          */
+ /************************************************************************/
+ 
++static OGRLineString* CasterToLineString(OGRCurve* poGeom)
++{
++    CPLError(CE_Failure, CPLE_AppDefined,
++             "%s found. Conversion impossible", poGeom->getGeometryName());
++    delete poGeom;
++    return NULL;
++}
++
+ OGRCurveCasterToLineString OGRCircularString::GetCasterToLineString() const {
+-    return (OGRCurveCasterToLineString) OGRGeometry::CastToError;
++    return ::CasterToLineString;
+ }
+ 
+ /************************************************************************/
+ /*                        GetCasterToLinearRing()                       */
+ /************************************************************************/
+ 
++static OGRLinearRing* CasterToLinearRing(OGRCurve* poGeom)
++{
++    CPLError(CE_Failure, CPLE_AppDefined,
++             "%s found. Conversion impossible", poGeom->getGeometryName());
++    delete poGeom;
++    return NULL;
++}
++
+ OGRCurveCasterToLinearRing OGRCircularString::GetCasterToLinearRing() const {
+-    return (OGRCurveCasterToLinearRing) OGRGeometry::CastToError;
++    return ::CasterToLinearRing;
+ }
+ //! @endcond
+ 
+diff --git a/gdal/ogr/ogrcompoundcurve.cpp b/gdal/ogr/ogrcompoundcurve.cpp
+index 9765b9104a..cb30c9dc8c 100644
+--- a/gdal/ogr/ogrcompoundcurve.cpp
++++ b/gdal/ogr/ogrcompoundcurve.cpp
+@@ -810,16 +810,30 @@ OGRLinearRing* OGRCompoundCurve::CastToLinearRing( OGRCompoundCurve* poCC )
+ /*                     GetCasterToLineString()                          */
+ /************************************************************************/
+ 
++OGRLineString* OGRCompoundCurve::CasterToLineString( OGRCurve* poCurve )
++{
++    OGRCompoundCurve* poCC = dynamic_cast<OGRCompoundCurve*>(poCurve);
++    CPLAssert(poCC);
++    return OGRCompoundCurve::CastToLineString(poCC);
++}
++
+ OGRCurveCasterToLineString OGRCompoundCurve::GetCasterToLineString() const {
+-    return (OGRCurveCasterToLineString) OGRCompoundCurve::CastToLineString;
++    return OGRCompoundCurve::CasterToLineString;
+ }
+ 
+ /************************************************************************/
+ /*                        GetCasterToLinearRing()                       */
+ /************************************************************************/
+ 
++OGRLinearRing* OGRCompoundCurve::CasterToLinearRing( OGRCurve* poCurve )
++{
++    OGRCompoundCurve* poCC = dynamic_cast<OGRCompoundCurve*>(poCurve);
++    CPLAssert(poCC);
++    return OGRCompoundCurve::CastToLinearRing(poCC);
++}
++
+ OGRCurveCasterToLinearRing OGRCompoundCurve::GetCasterToLinearRing() const {
+-    return (OGRCurveCasterToLinearRing) OGRCompoundCurve::CastToLinearRing;
++    return OGRCompoundCurve::CasterToLinearRing;
+ }
+ //! @endcond
+ 
+diff --git a/gdal/ogr/ogrlinearring.cpp b/gdal/ogr/ogrlinearring.cpp
+index b6ba68512e..23bfa08c61 100644
+--- a/gdal/ogr/ogrlinearring.cpp
++++ b/gdal/ogr/ogrlinearring.cpp
+@@ -777,17 +777,31 @@ OGRLineString* OGRLinearRing::CastToLineString( OGRLinearRing* poLR )
+ /*                     GetCasterToLineString()                          */
+ /************************************************************************/
+ 
++OGRLineString* OGRLinearRing::CasterToLineString( OGRCurve* poCurve )
++{
++    OGRLinearRing* poLR = dynamic_cast<OGRLinearRing*>(poCurve);
++    CPLAssert(poLR);
++    return OGRLinearRing::CastToLinearRing(poLR);
++}
++
+ OGRCurveCasterToLineString OGRLinearRing::GetCasterToLineString() const
+ {
+-    return (OGRCurveCasterToLineString) OGRLinearRing::CastToLineString;
++    return OGRLinearRing::CasterToLineString;
+ }
+ 
+ /************************************************************************/
+ /*                        GetCasterToLinearRing()                       */
+ /************************************************************************/
+ 
++static OGRLinearRing* CasterToLinearRing(OGRCurve* poCurve)
++{
++    OGRLinearRing* poLR = dynamic_cast<OGRLinearRing*>(poCurve);
++    CPLAssert(poLR);
++    return poLR;
++}
++
+ OGRCurveCasterToLinearRing OGRLinearRing::GetCasterToLinearRing() const
+ {
+-    return (OGRCurveCasterToLinearRing) OGRGeometry::CastToIdentity;
++    return ::CasterToLinearRing;
+ }
+ //! @endcond
+diff --git a/gdal/ogr/ogrlinestring.cpp b/gdal/ogr/ogrlinestring.cpp
+index caefcb3658..aaffb5f085 100644
+--- a/gdal/ogr/ogrlinestring.cpp
++++ b/gdal/ogr/ogrlinestring.cpp
+@@ -2811,18 +2811,32 @@ OGRLinearRing* OGRLineString::CastToLinearRing( OGRLineString* poLS )
+ /*                     GetCasterToLineString()                          */
+ /************************************************************************/
+ 
++static OGRLineString* CasterToLineString(OGRCurve* poCurve)
++{
++    OGRLineString* poLS = dynamic_cast<OGRLineString*>(poCurve);
++    CPLAssert(poLS);
++    return poLS;
++}
++
+ OGRCurveCasterToLineString OGRLineString::GetCasterToLineString() const
+ {
+-    return (OGRCurveCasterToLineString) OGRGeometry::CastToIdentity;
++    return ::CasterToLineString;
+ }
+ 
+ /************************************************************************/
+ /*                        GetCasterToLinearRing()                       */
+ /************************************************************************/
+ 
++OGRLinearRing* OGRLineString::CasterToLinearRing(OGRCurve* poCurve)
++{
++    OGRLineString* poLS = dynamic_cast<OGRLineString*>(poCurve);
++    CPLAssert(poLS);
++    return OGRLineString::CastToLinearRing(poLS);
++}
++
+ OGRCurveCasterToLinearRing OGRLineString::GetCasterToLinearRing() const
+ {
+-    return (OGRCurveCasterToLinearRing) OGRLineString::CastToLinearRing;
++    return OGRLineString::CasterToLinearRing;
+ }
+ 
+ /************************************************************************/

@@ -1,0 +1,49 @@
+diff --git a/gdal/ogr/swq.h b/gdal/ogr/swq.h
+index 140120e74e..b36c1d268a 100644
+--- a/gdal/ogr/swq.h
++++ b/gdal/ogr/swq.h
+@@ -109,7 +109,8 @@ class swq_custom_func_registrar;
+ class swq_expr_node {
+ 
+     CPL_DISALLOW_COPY_ASSIGN(swq_expr_node)
+-
++    swq_expr_node* Evaluate( swq_field_fetcher pfnFetcher,
++                             void *record, int nRecLevel );
+ public:
+     swq_expr_node();
+ 
+diff --git a/gdal/ogr/swq_expr_node.cpp b/gdal/ogr/swq_expr_node.cpp
+index 161831b0ce..2eb20ffb7e 100644
+--- a/gdal/ogr/swq_expr_node.cpp
++++ b/gdal/ogr/swq_expr_node.cpp
+@@ -696,8 +696,21 @@ swq_expr_node *swq_expr_node::Clone()
+ swq_expr_node *swq_expr_node::Evaluate( swq_field_fetcher pfnFetcher,
+                                         void *pRecord )
+ 
++{
++    return Evaluate(pfnFetcher, pRecord, 0);
++}
++
++swq_expr_node *swq_expr_node::Evaluate( swq_field_fetcher pfnFetcher,
++                                        void *pRecord, int nRecLevel )
++
+ {
+     swq_expr_node *poRetNode = nullptr;
++    if( nRecLevel == 32 )
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "Too many recursion levels in expression to evaluate");
++        return nullptr;
++    }
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Duplicate ourselves if we are already a constant.               */
+@@ -734,7 +747,7 @@ swq_expr_node *swq_expr_node::Evaluate( swq_field_fetcher pfnFetcher,
+         else
+         {
+             swq_expr_node* poSubExprVal =
+-                papoSubExpr[i]->Evaluate(pfnFetcher, pRecord);
++                papoSubExpr[i]->Evaluate(pfnFetcher, pRecord, nRecLevel + 1);
+             if( poSubExprVal == nullptr )
+                 bError = true;
+             else

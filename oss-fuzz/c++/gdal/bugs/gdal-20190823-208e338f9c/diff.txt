@@ -1,0 +1,15 @@
+diff --git a/gdal/port/cpl_vsil_webhdfs.cpp b/gdal/port/cpl_vsil_webhdfs.cpp
+index 96a96c699f..8b74b71d56 100644
+--- a/gdal/port/cpl_vsil_webhdfs.cpp
++++ b/gdal/port/cpl_vsil_webhdfs.cpp
+@@ -901,8 +901,8 @@ vsi_l_offset VSIWebHDFSHandle::GetFileSize( bool bSetError )
+ 
+     CPLString osURL(m_pszURL);
+ 
+-    if( osURL.find("/webhdfs/v1") ==
+-        osURL.size() - strlen("/webhdfs/v1") &&
++    if( osURL.size() > strlen("/webhdfs/v1") &&
++        osURL.find("/webhdfs/v1") == osURL.size() - strlen("/webhdfs/v1") &&
+         std::count(osURL.begin(),
+                    osURL.end(),'/') == 4 )
+     {

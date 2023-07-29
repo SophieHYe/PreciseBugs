@@ -1,0 +1,15 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+index 056dd2fe88..3715206bf7 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+@@ -891,6 +891,10 @@ int NTFFileReader::ProcessAttRec( NTFRecord * poRecord,
+         {
+             CPLDebug( "NTF", "Couldn't translate attrec type `%2.2s'.",
+                       pszData + iOffset );
++            CSLDestroy(*ppapszTypes);
++            CSLDestroy(*ppapszValues);
++            *ppapszTypes = NULL;
++            *ppapszValues = NULL;
+             return FALSE;
+         }
+ 

@@ -1,0 +1,52 @@
+diff --git a/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp b/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
+index f995fdbd9..00cc910d1 100644
+--- a/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
++++ b/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
+@@ -1336,12 +1336,13 @@ p_dynamictypebuilder_t XMLParser::parseXMLMemberDynamicType(
+     {
+         if (!isArray)
+         {
+-            logError(XMLPARSER, "Failed creating " << memberType << ": " << memberName);
++            logError(XMLPARSER, "Failed creating " << memberType << ": " << (memberName ? memberName : ""));
+         }
+         else
+         {
+-            logError(XMLPARSER, "Failed creating " << memberType << " array: " << memberName);
++            logError(XMLPARSER, "Failed creating " << memberType << " array: " << (memberName ? memberName : ""));
+         }
++        return nullptr;
+     }
+ 
+     const char* memberTopicKey = p_root->Attribute(KEY);
+diff --git a/test/unittest/xmlparser/CMakeLists.txt b/test/unittest/xmlparser/CMakeLists.txt
+index 88480194a..1b9d0d292 100644
+--- a/test/unittest/xmlparser/CMakeLists.txt
++++ b/test/unittest/xmlparser/CMakeLists.txt
+@@ -64,6 +64,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/UDP_transport_descriptors_config.xml
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SHM_transport_descriptors_config.xml
+     ${CMAKE_CURRENT_BINARY_DIR}/SHM_transport_descriptors_config.xml
+     COPYONLY)
++file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/regressions" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+ 
+ ###################################  XMLProfileParserTests  ####################################################
+ set(XMLPROFILEPARSER_SOURCE
+diff --git a/test/unittest/xmlparser/XMLParserTests.cpp b/test/unittest/xmlparser/XMLParserTests.cpp
+index 2fa4e0650..0a8d0061c 100644
+--- a/test/unittest/xmlparser/XMLParserTests.cpp
++++ b/test/unittest/xmlparser/XMLParserTests.cpp
+@@ -55,6 +55,7 @@ TEST_F(XMLParserTests, regressions)
+     std::unique_ptr<BaseNode> root;
+ 
+     EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/12736.xml", root));
++    EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/13418.xml", root));
+ }
+ 
+ TEST_F(XMLParserTests, NoFile)
+diff --git a/test/unittest/xmlparser/regressions/13418.xml b/test/unittest/xmlparser/regressions/13418.xml
+new file mode 100644
+index 000000000..20e819b0a
+--- /dev/null
++++ b/test/unittest/xmlparser/regressions/13418.xml
+@@ -0,0 +1 @@
++<types><type><typedef type=""arrayDimensions=""/></type></types>
+\ No newline at end of file

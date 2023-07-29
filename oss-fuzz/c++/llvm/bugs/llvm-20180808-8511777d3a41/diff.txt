@@ -1,0 +1,37 @@
+diff --git a/llvm/lib/Object/WasmObjectFile.cpp b/llvm/lib/Object/WasmObjectFile.cpp
+index 4d4c887b2d97..1b32ae8afd9c 100644
+--- a/llvm/lib/Object/WasmObjectFile.cpp
++++ b/llvm/lib/Object/WasmObjectFile.cpp
+@@ -216,9 +216,16 @@ static Error readSection(WasmSection &Section,
+     return make_error<StringError>("Section too large",
+                                    object_error::parse_failed);
+   if (Section.Type == wasm::WASM_SEC_CUSTOM) {
+-    const uint8_t *NameStart = Ctx.Ptr;
+-    Section.Name = readString(Ctx);
+-    Size -= Ctx.Ptr - NameStart;
++    WasmObjectFile::ReadContext SectionCtx;
++    SectionCtx.Start = Ctx.Ptr;
++    SectionCtx.Ptr = Ctx.Ptr;
++    SectionCtx.End = Ctx.Ptr + Size;
++
++    Section.Name = readString(SectionCtx);
++
++    uint32_t SectionNameSize = SectionCtx.Ptr - SectionCtx.Start;
++    Ctx.Ptr += SectionNameSize;
++    Size -= SectionNameSize;
+   }
+   Section.Content = ArrayRef<uint8_t>(Ctx.Ptr, Size);
+   Ctx.Ptr += Size;
+diff --git a/llvm/test/Object/Inputs/WASM/string-outside-section.wasm b/llvm/test/Object/Inputs/WASM/string-outside-section.wasm
+new file mode 100644
+index 000000000000..56877704cfba
+Binary files /dev/null and b/llvm/test/Object/Inputs/WASM/string-outside-section.wasm differ
+diff --git a/llvm/test/Object/wasm-string-outside-section.test b/llvm/test/Object/wasm-string-outside-section.test
+new file mode 100644
+index 000000000000..5f618228dc96
+--- /dev/null
++++ b/llvm/test/Object/wasm-string-outside-section.test
+@@ -0,0 +1,3 @@
++RUN: not llvm-objdump -s %p/Inputs/WASM/string-outside-section.wasm 2>&1 | FileCheck %s
++
++CHECK: LLVM ERROR: EOF while reading string

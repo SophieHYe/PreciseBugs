@@ -1,0 +1,20 @@
+diff --git a/gdal/frmts/e00grid/e00read.c b/gdal/frmts/e00grid/e00read.c
+index 428bef876b..f023336abc 100644
+--- a/gdal/frmts/e00grid/e00read.c
++++ b/gdal/frmts/e00grid/e00read.c
+@@ -355,6 +355,7 @@ static void _ReadNextSourceLine(E00ReadPtr psInfo)
+             if (pszLine)
+             {
+                 strncpy(psInfo->szInBuf, pszLine, E00_READ_BUF_SIZE);
++                psInfo->szInBuf[E00_READ_BUF_SIZE-1] = '\0';
+             }
+             else
+             {
+@@ -371,6 +372,7 @@ static void _ReadNextSourceLine(E00ReadPtr psInfo)
+              */
+             int nLen;
+             nLen = (int)strlen(psInfo->szInBuf);
++            CPLAssert(nLen < E00_READ_BUF_SIZE);
+             while(nLen > 0 && (psInfo->szInBuf[nLen-1] == '\n' ||
+                                psInfo->szInBuf[nLen-1] == '\r'   ) )
+             {

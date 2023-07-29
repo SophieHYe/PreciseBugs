@@ -1,0 +1,93 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index bf9e17561d..14218803a6 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -569,6 +569,7 @@ sksl_rte_error_tests = [
+   "/sksl/runtime_errors/LoopInitializerErrors.rts",
+   "/sksl/runtime_errors/LoopStructureErrors.rts",
+   "/sksl/runtime_errors/Ossfuzz36655.rts",
++  "/sksl/runtime_errors/Ossfuzz38131.rts",
+   "/sksl/runtime_errors/ProgramTooLarge_FlatLoop.rts",
+   "/sksl/runtime_errors/ProgramTooLarge_Functions.rts",
+   "/sksl/runtime_errors/ProgramTooLarge_NestedLoops.rts",
+diff --git a/resources/sksl/runtime_errors/Ossfuzz38131.rts b/resources/sksl/runtime_errors/Ossfuzz38131.rts
+new file mode 100644
+index 0000000000..a3feb9f8b5
+--- /dev/null
++++ b/resources/sksl/runtime_errors/Ossfuzz38131.rts
+@@ -0,0 +1 @@
++s{int i;};
+\ No newline at end of file
+diff --git a/src/sksl/SkSLDSLParser.cpp b/src/sksl/SkSLDSLParser.cpp
+index effa48c313..f632975ca6 100644
+--- a/src/sksl/SkSLDSLParser.cpp
++++ b/src/sksl/SkSLDSLParser.cpp
+@@ -874,7 +874,7 @@ bool DSLParser::interfaceBlock(const dsl::DSLModifiers& modifiers) {
+     }
+     this->expect(Token::Kind::TK_SEMICOLON, "';'");
+     dsl::InterfaceBlock(modifiers, this->text(typeName), std::move(fields), instanceName,
+-                        arraySize);
++                        arraySize, this->position(typeName));
+     return true;
+ }
+ 
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index 3e841fd717..c623bf8b46 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -96,7 +96,7 @@ void IRGenerator::popSymbolTable() {
+ std::unique_ptr<Extension> IRGenerator::convertExtension(int offset, skstd::string_view name) {
+     if (this->programKind() != ProgramKind::kFragment &&
+         this->programKind() != ProgramKind::kVertex) {
+-        this->errorReporter().error(offset, "extensions are not allowed here");
++        this->errorReporter().error(offset, "extensions are not allowed in this kind of program");
+         return nullptr;
+     }
+ 
+@@ -365,7 +365,8 @@ StatementArray IRGenerator::convertVarDeclarations(const ASTNode& decls,
+ std::unique_ptr<ModifiersDeclaration> IRGenerator::convertModifiersDeclaration(const ASTNode& m) {
+     if (this->programKind() != ProgramKind::kFragment &&
+         this->programKind() != ProgramKind::kVertex) {
+-        this->errorReporter().error(m.fOffset, "layout qualifiers are not allowed here");
++        this->errorReporter().error(m.fOffset,
++                "layout qualifiers are not allowed in this kind of program");
+         return nullptr;
+     }
+ 
+@@ -767,7 +768,8 @@ void IRGenerator::scanInterfaceBlock(SkSL::InterfaceBlock& intf) {
+ std::unique_ptr<SkSL::InterfaceBlock> IRGenerator::convertInterfaceBlock(const ASTNode& intf) {
+     if (this->programKind() != ProgramKind::kFragment &&
+         this->programKind() != ProgramKind::kVertex) {
+-        this->errorReporter().error(intf.fOffset, "interface block is not allowed here");
++        this->errorReporter().error(intf.fOffset,
++                "interface blocks are not allowed in this kind of program");
+         return nullptr;
+     }
+ 
+diff --git a/src/sksl/dsl/DSLCore.cpp b/src/sksl/dsl/DSLCore.cpp
+index f3ac25627f..04b86b3b30 100644
+--- a/src/sksl/dsl/DSLCore.cpp
++++ b/src/sksl/dsl/DSLCore.cpp
+@@ -410,6 +410,12 @@ DSLStatement If(DSLExpression test, DSLStatement ifTrue, DSLStatement ifFalse, P
+ DSLGlobalVar InterfaceBlock(const DSLModifiers& modifiers,  skstd::string_view typeName,
+                             SkTArray<DSLField> fields, skstd::string_view varName, int arraySize,
+                             PositionInfo pos) {
++    SkSL::ProgramKind kind = DSLWriter::GetProgramConfig()->fKind;
++    if (kind != ProgramKind::kFragment &&
++        kind != ProgramKind::kVertex) {
++        DSLWriter::ReportError("interface blocks are not allowed in this kind of program", pos);
++        return DSLGlobalVar();
++    }
+     return DSLCore::InterfaceBlock(modifiers, typeName, std::move(fields), varName, arraySize, pos);
+ }
+ 
+diff --git a/tests/sksl/runtime_errors/Ossfuzz38131.skvm b/tests/sksl/runtime_errors/Ossfuzz38131.skvm
+new file mode 100644
+index 0000000000..59a77adf9d
+--- /dev/null
++++ b/tests/sksl/runtime_errors/Ossfuzz38131.skvm
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: interface blocks are not allowed in this kind of program
++1 error

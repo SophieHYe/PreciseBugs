@@ -1,0 +1,14 @@
+diff --git a/src/ucl_parser.c b/src/ucl_parser.c
+index abfcc3d..5c4f9df 100644
+--- a/src/ucl_parser.c
++++ b/src/ucl_parser.c
+@@ -395,6 +395,9 @@ ucl_check_variable (struct ucl_parser *parser, const char *ptr,
+ 			}
+ 			p ++;
+ 		}
++		if(p == end) {
++			(*out_len) ++;
++		}
+ 	}
+ 	else if (*ptr != '$') {
+ 		/* Not count escaped dollar sign */

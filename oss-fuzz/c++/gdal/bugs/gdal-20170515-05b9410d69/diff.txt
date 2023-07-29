@@ -1,0 +1,112 @@
+diff --git a/autotest/ogr/data/weird_empty_folders.kml b/autotest/ogr/data/weird_empty_folders.kml
+new file mode 100644
+index 0000000000..14829259b6
+--- /dev/null
++++ b/autotest/ogr/data/weird_empty_folders.kml
+@@ -0,0 +1,10 @@
++<kml>
++    <Document>
++        <Folder>
++            <kml>
++                <Document><Folder></Folder></Document>
++            </kml>
++            <Placemark></Placemark>
++        </Folder>
++    </Document>
++</kml>
+diff --git a/autotest/ogr/ogr_kml.py b/autotest/ogr/ogr_kml.py
+index b6ab12f400..60b1198904 100755
+--- a/autotest/ogr/ogr_kml.py
++++ b/autotest/ogr/ogr_kml.py
+@@ -854,6 +854,27 @@ def ogr_kml_read_truncated():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test fix for https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1591
++
++def ogr_kml_read_weird_empty_folders():
++
++    if not ogrtest.have_read_kml:
++        return 'skip'
++
++    ds = ogr.Open('data/weird_empty_folders.kml')
++    if ds.GetLayerCount() != 1:
++        gdaltest.post_reason('failed')
++        print(ds.GetLayerCount())
++        return 'fail'
++
++    if ds.GetLayer(0).GetFeatureCount() != 0:
++        gdaltest.post_reason('failed')
++        print(ds.GetLayer(0).GetFeatureCount())
++        return 'fail'
++
++    return 'success'
++
+ ###############################################################################
+ # Build tests runner
+ 
+@@ -880,6 +901,7 @@ gdaltest_list = [
+     ogr_kml_two_layers,
+     ogr_kml_read_folder_with_subfolder_placemark,
+     ogr_kml_read_truncated,
++    ogr_kml_read_weird_empty_folders,
+     ogr_kml_cleanup ]
+ 
+ if __name__ == '__main__':
+diff --git a/gdal/ogr/ogrsf_frmts/kml/kml.cpp b/gdal/ogr/ogrsf_frmts/kml/kml.cpp
+index 54b78fe478..fa1459bdbc 100644
+--- a/gdal/ogr/ogrsf_frmts/kml/kml.cpp
++++ b/gdal/ogr/ogrsf_frmts/kml/kml.cpp
+@@ -658,7 +658,7 @@ void KML::unregisterLayerIfMatchingThisNode(KMLNode* poNode)
+                         (nNumLayers_ - 1 - i) * sizeof(KMLNode*) );
+             }
+             nNumLayers_ --;
+-            continue;
++            break;
+         }
+         i++;
+     }
+diff --git a/gdal/ogr/ogrsf_frmts/kml/kmlnode.cpp b/gdal/ogr/ogrsf_frmts/kml/kmlnode.cpp
+index d873b07bf4..073d5d4a0e 100644
+--- a/gdal/ogr/ogrsf_frmts/kml/kmlnode.cpp
++++ b/gdal/ogr/ogrsf_frmts/kml/kmlnode.cpp
+@@ -303,6 +303,16 @@ int KMLNode::classify(KML* poKML, int nRecLevel)
+     return TRUE;
+ }
+ 
++
++void KMLNode::unregisterLayerIfMatchingThisNode(KML* poKML)
++{
++    for(std::size_t z = 0; z < countChildren(); z++)
++    {
++        getChild(z)->unregisterLayerIfMatchingThisNode(poKML);
++    }
++    poKML->unregisterLayerIfMatchingThisNode(this);
++}
++
+ void KMLNode::eliminateEmpty(KML* poKML)
+ {
+     for(kml_nodes_t::size_type z = 0; z < pvpoChildren_->size(); z++)
+@@ -311,7 +321,7 @@ void KMLNode::eliminateEmpty(KML* poKML)
+            && (poKML->isContainer((*pvpoChildren_)[z]->sName_)
+                || poKML->isFeatureContainer((*pvpoChildren_)[z]->sName_)))
+         {
+-            poKML->unregisterLayerIfMatchingThisNode((*pvpoChildren_)[z]);
++            (*pvpoChildren_)[z]->unregisterLayerIfMatchingThisNode(poKML);
+             delete (*pvpoChildren_)[z];
+             pvpoChildren_->erase(pvpoChildren_->begin() + z);
+             z--;
+diff --git a/gdal/ogr/ogrsf_frmts/kml/kmlnode.h b/gdal/ogr/ogrsf_frmts/kml/kmlnode.h
+index 61c999922d..3a986d7f75 100644
+--- a/gdal/ogr/ogrsf_frmts/kml/kmlnode.h
++++ b/gdal/ogr/ogrsf_frmts/kml/kmlnode.h
+@@ -110,6 +110,8 @@ private:
+ 
+     int nLayerNumber_;
+     int nNumFeatures_;
++
++    void unregisterLayerIfMatchingThisNode(KML* poKML);
+ };
+ 
+ #endif /* KMLNODE_H_INCLUDED */

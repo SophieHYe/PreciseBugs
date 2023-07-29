@@ -1,0 +1,13 @@
+diff --git a/src/ucl_util.c b/src/ucl_util.c
+index b00a347..17cd5e4 100644
+--- a/src/ucl_util.c
++++ b/src/ucl_util.c
+@@ -1919,7 +1919,7 @@ ucl_inherit_handler (const unsigned char *data, size_t len,
+ 
+ 	/* Some sanity checks */
+ 	if (parent == NULL || ucl_object_type (parent) != UCL_OBJECT) {
+-		ucl_create_err (&parser->err, "Unable to find inherited object %*.s",
++		ucl_create_err (&parser->err, "Unable to find inherited object %.*s",
+ 				(int)len, data);
+ 		return false;
+ 	}

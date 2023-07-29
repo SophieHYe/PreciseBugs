@@ -1,0 +1,50 @@
+diff --git a/resources/sksl/errors/InterfaceBlockWithNoMembers.sksl b/resources/sksl/errors/InterfaceBlockWithNoMembers.sksl
+index 6ccd513305..148f69a90c 100644
+--- a/resources/sksl/errors/InterfaceBlockWithNoMembers.sksl
++++ b/resources/sksl/errors/InterfaceBlockWithNoMembers.sksl
+@@ -1 +1,2 @@
++const S {};
+ testBlock {} x[2];
+diff --git a/src/sksl/SkSLDSLParser.cpp b/src/sksl/SkSLDSLParser.cpp
+index 79b16eab80..e261403e82 100644
+--- a/src/sksl/SkSLDSLParser.cpp
++++ b/src/sksl/SkSLDSLParser.cpp
+@@ -879,10 +879,6 @@ bool DSLParser::interfaceBlock(const dsl::DSLModifiers& modifiers) {
+         }
+         while (this->checkNext(Token::Kind::TK_COMMA));
+     }
+-    if (fields.empty()) {
+-        this->error(typeName, "interface block '" + this->text(typeName) +
+-                          "' must contain at least one member");
+-    }
+     skstd::string_view instanceName;
+     Token instanceNameToken;
+     SKSL_INT arraySize = 0;
+@@ -894,8 +890,13 @@ bool DSLParser::interfaceBlock(const dsl::DSLModifiers& modifiers) {
+         }
+     }
+     this->expect(Token::Kind::TK_SEMICOLON, "';'");
+-    dsl::InterfaceBlock(modifiers, this->text(typeName), std::move(fields), instanceName,
+-                        arraySize, this->position(typeName));
++    if (fields.empty()) {
++        this->error(typeName, "interface block '" + this->text(typeName) +
++                              "' must contain at least one member");
++    } else {
++        dsl::InterfaceBlock(modifiers, this->text(typeName), std::move(fields), instanceName,
++                            arraySize, this->position(typeName));
++    }
+     return true;
+ }
+ 
+diff --git a/tests/sksl/errors/InterfaceBlockWithNoMembers.glsl b/tests/sksl/errors/InterfaceBlockWithNoMembers.glsl
+index 2c39efa008..c41a5d367d 100644
+--- a/tests/sksl/errors/InterfaceBlockWithNoMembers.glsl
++++ b/tests/sksl/errors/InterfaceBlockWithNoMembers.glsl
+@@ -1,4 +1,5 @@
+ ### Compilation failed:
+ 
+-error: 1: interface block 'testBlock' must contain at least one member
+-1 error
++error: 1: interface block 'S' must contain at least one member
++error: 2: interface block 'testBlock' must contain at least one member
++2 errors

@@ -1,0 +1,36 @@
+diff --git a/ext/opcache/Optimizer/sccp.c b/ext/opcache/Optimizer/sccp.c
+index 0818a20e0b..64cfa67696 100644
+--- a/ext/opcache/Optimizer/sccp.c
++++ b/ext/opcache/Optimizer/sccp.c
+@@ -183,7 +183,8 @@ static void set_value(scdf_ctx *scdf, sccp_ctx *ctx, int var, zval *new) {
+ 	}
+ 
+ #if ZEND_DEBUG
+-	ZEND_ASSERT(zend_is_identical(value, new));
++	ZEND_ASSERT(zend_is_identical(value, new) ||
++		(Z_TYPE_P(value) == IS_DOUBLE && Z_TYPE_P(new) == IS_DOUBLE && isnan(Z_DVAL_P(value)) && isnan(Z_DVAL_P(new))));
+ #endif
+ }
+ 
+diff --git a/ext/opcache/tests/opt/sccp_036.phpt b/ext/opcache/tests/opt/sccp_036.phpt
+new file mode 100644
+index 0000000000..ce660ce1aa
+--- /dev/null
++++ b/ext/opcache/tests/opt/sccp_036.phpt
+@@ -0,0 +1,16 @@
++--TEST--
++SCCP 036: NAN handling
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function foo() {
++    $y=NAN;
++    for(;x;)for(;$y=1;);
++}
++?>
++DONE
++--EXPECT--
++DONE

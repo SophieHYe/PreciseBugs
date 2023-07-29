@@ -1,0 +1,13 @@
+diff --git a/libavcodec/scpr.c b/libavcodec/scpr.c
+index 465926af19..ba1f65f2e9 100644
+--- a/libavcodec/scpr.c
++++ b/libavcodec/scpr.c
+@@ -161,7 +161,7 @@ static int get_freq(RangeCoder *rc, unsigned total_freq, unsigned *freq)
+ 
+ static int decode0(GetByteContext *gb, RangeCoder *rc, unsigned cumFreq, unsigned freq, unsigned total_freq)
+ {
+-    int t;
++    unsigned t;
+ 
+     if (total_freq == 0)
+         return AVERROR_INVALIDDATA;

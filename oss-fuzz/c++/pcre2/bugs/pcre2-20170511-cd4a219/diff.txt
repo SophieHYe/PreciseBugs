@@ -1,0 +1,64 @@
+diff --git a/src/pcre2_intmodedep.h b/src/pcre2_intmodedep.h
+index b74cd9e..6bc9c09 100644
+--- a/src/pcre2_intmodedep.h
++++ b/src/pcre2_intmodedep.h
+@@ -793,7 +793,11 @@ typedef struct heapframe {
+ #endif
+ 
+   /* The rest have to be copied from the previous frame whenever a new frame
+-  becomes current. */
++  becomes current. The final field is specified as a large vector so that 
++  runtime array bound checks don't catch references to it. However, for any 
++  specific call to pcre2_match() the memory allocated for each frame structure 
++  allows for exactly the right size ovector for the number of capturing 
++  parentheses. */
+ 
+   PCRE2_SPTR eptr;           /* MUST BE FIRST */
+   PCRE2_SPTR start_match;    /* Can be adjusted by \K */
+@@ -802,7 +806,7 @@ typedef struct heapframe {
+   uint32_t capture_last;     /* Most recent capture */
+   PCRE2_SIZE last_group_offset;  /* Saved offset to most recent group frame */
+   PCRE2_SIZE offset_top;     /* Offset after highest capture */
+-  PCRE2_SIZE ovector[2];     /* Must be last in the structure */
++  PCRE2_SIZE ovector[10000]; /* Must be last in the structure */
+ } heapframe;
+ 
+ typedef char check_heapframe_size[
+diff --git a/src/pcre2_match.c b/src/pcre2_match.c
+index 373ee9e..87def5e 100644
+--- a/src/pcre2_match.c
++++ b/src/pcre2_match.c
+@@ -189,7 +189,7 @@ end of the backtrack frame, but when there are capturing parentheses the space
+ allocated is bigger so we want to be able to address more elements. Without the 
+ case, -fsanitize=undefined grumbles at this. */
+ 
+-#define Fovector           ((PCRE2_SIZE *)(F->ovector))
++#define Fovector           F->ovector
+ 
+ 
+ #ifdef DEBUG_FRAMES_DISPLAY
+@@ -6281,7 +6281,8 @@ The last of these is changed within the match() function if the frame vector
+ has to be expanded. We therefore put it into the match block so that it is
+ correct when calling match() more than once for non-anchored patterns. */
+ 
+-frame_size = sizeof(heapframe) + ((re->top_bracket - 1) * 2 * sizeof(PCRE2_SIZE));
++frame_size = offsetof(heapframe, ovector) + 
++  re->top_bracket * 2 * sizeof(PCRE2_SIZE);
+ 
+ /* Limits set in the pattern override the match context only if they are
+ smaller. */
+diff --git a/src/pcre2_pattern_info.c b/src/pcre2_pattern_info.c
+index c4ba38d..de21310 100644
+--- a/src/pcre2_pattern_info.c
++++ b/src/pcre2_pattern_info.c
+@@ -160,8 +160,8 @@ switch(what)
+   break;
+ 
+   case PCRE2_INFO_FRAMESIZE:
+-  *((size_t *)where) = sizeof(heapframe) +
+-    ((re->top_bracket - 1) * 2 * sizeof(PCRE2_SIZE));
++  *((size_t *)where) = offsetof(heapframe, ovector) +
++    re->top_bracket * 2 * sizeof(PCRE2_SIZE);
+   break;
+ 
+   case PCRE2_INFO_HASBACKSLASHC:

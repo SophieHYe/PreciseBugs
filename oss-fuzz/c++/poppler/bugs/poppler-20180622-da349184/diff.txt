@@ -1,0 +1,31 @@
+diff --git a/fofi/FoFiType1C.cc b/fofi/FoFiType1C.cc
+index 37694869..caa4b42b 100644
+--- a/fofi/FoFiType1C.cc
++++ b/fofi/FoFiType1C.cc
+@@ -2564,8 +2564,6 @@ int FoFiType1C::getOp(int pos, GBool charstring, GBool *ok) {
+   int b0, b1, nyb0, nyb1, x, i;
+ 
+   b0 = getU8(pos++, ok);
+-  op.isNum = gTrue;
+-  op.isFP = gFalse;
+ 
+   if (b0 == 28) {
+     x = getU8(pos++, ok);
+diff --git a/fofi/FoFiType1C.h b/fofi/FoFiType1C.h
+index 698dccd7..786f3e0e 100644
+--- a/fofi/FoFiType1C.h
++++ b/fofi/FoFiType1C.h
+@@ -124,10 +124,10 @@ struct Type1CPrivateDict {
+ };
+ 
+ struct Type1COp {
+-  GBool isNum;			// true -> number, false -> operator
+-  GBool isFP;			// true -> floating point number, false -> int
++  GBool isNum = gTrue;			// true -> number, false -> operator
++  GBool isFP = gFalse;			// true -> floating point number, false -> int
+   union {
+-    double num;			// if num is true
++    double num = 0;			// if num is true
+     int op;			// if num is false
+   };
+ };

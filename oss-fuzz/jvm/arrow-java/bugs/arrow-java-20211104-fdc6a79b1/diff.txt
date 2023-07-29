@@ -1,0 +1,218 @@
+diff --git a/cpp/src/arrow/array/array_list_test.cc b/cpp/src/arrow/array/array_list_test.cc
+index a503cbd51..34887ad26 100644
+--- a/cpp/src/arrow/array/array_list_test.cc
++++ b/cpp/src/arrow/array/array_list_test.cc
+@@ -25,6 +25,8 @@
+ 
+ #include "arrow/array.h"
+ #include "arrow/array/builder_nested.h"
++#include "arrow/array/util.h"
++#include "arrow/array/validate.h"
+ #include "arrow/buffer.h"
+ #include "arrow/status.h"
+ #include "arrow/testing/gtest_common.h"
+@@ -621,6 +623,7 @@ TEST_F(TestMapArray, Equality) {
+     }
+     ASSERT_OK(ib.AppendValues(equal_values.data(), equal_values.size()));
+     ASSERT_OK(builder_->Finish(out));
++    ASSERT_OK((*out)->ValidateFull());
+   }
+ 
+   // now an unequal one
+@@ -630,6 +633,7 @@ TEST_F(TestMapArray, Equality) {
+   }
+   ASSERT_OK(ib.AppendValues(unequal_values.data(), unequal_values.size()));
+   ASSERT_OK(builder_->Finish(&unequal_array));
++  ASSERT_OK(unequal_array->ValidateFull());
+ 
+   // Test array equality
+   EXPECT_TRUE(array->Equals(array));
+@@ -713,6 +717,57 @@ TEST_F(TestMapArray, BuildingStringToInt) {
+   ASSERT_ARRAYS_EQUAL(*actual, expected);
+ }
+ 
++TEST_F(TestMapArray, ValidateErrorNullStruct) {
++  ASSERT_OK_AND_ASSIGN(
++      auto values,
++      MakeArrayOfNull(struct_({field("key", utf8()), field("value", int32())}), 1));
++
++  Int32Builder offset_builder;
++  ASSERT_OK(offset_builder.AppendNull());
++  ASSERT_OK(offset_builder.Append(0));
++  ASSERT_OK_AND_ASSIGN(auto offsets, offset_builder.Finish());
++
++  ASSERT_OK_AND_ASSIGN(auto lists, ListArray::FromArrays(*offsets, *values));
++  ASSERT_OK(lists->ValidateFull());
++  ASSERT_EQ(lists->length(), 1);
++  ASSERT_EQ(lists->null_count(), 1);
++
++  // Make a Map ArrayData from the list array
++  // Note we can't construct a MapArray as that would crash with an assertion.
++  auto map_data = lists->data()->Copy();
++  map_data->type = map(utf8(), int32());
++  ASSERT_RAISES(Invalid, internal::ValidateArray(*map_data));
++}
++
++TEST_F(TestMapArray, ValidateErrorNullKey) {
++  StringBuilder key_builder;
++  ASSERT_OK(key_builder.AppendNull());
++  ASSERT_OK_AND_ASSIGN(auto keys, key_builder.Finish());
++
++  Int32Builder item_builder;
++  ASSERT_OK(item_builder.Append(42));
++  ASSERT_OK_AND_ASSIGN(auto items, item_builder.Finish());
++
++  ASSERT_OK_AND_ASSIGN(
++      auto values,
++      StructArray::Make({keys, items}, std::vector<std::string>{"key", "value"}));
++
++  Int32Builder offset_builder;
++  ASSERT_OK(offset_builder.Append(0));
++  ASSERT_OK(offset_builder.Append(1));
++  ASSERT_OK_AND_ASSIGN(auto offsets, offset_builder.Finish());
++
++  // The list array contains: [[null, 42]]
++  ASSERT_OK_AND_ASSIGN(auto lists, ListArray::FromArrays(*offsets, *values));
++  ASSERT_OK(lists->ValidateFull());
++
++  // Make a Map ArrayData from the list array
++  // Note we can't construct a MapArray as that would crash with an assertion.
++  auto map_data = lists->data()->Copy();
++  map_data->type = map(keys->type(), items->type());
++  ASSERT_RAISES(Invalid, internal::ValidateArray(*map_data));
++}
++
+ TEST_F(TestMapArray, FromArrays) {
+   std::shared_ptr<Array> offsets1, offsets2, offsets3, offsets4, keys, items;
+ 
+diff --git a/cpp/src/arrow/array/array_nested.h b/cpp/src/arrow/array/array_nested.h
+index 762ba24f2..97e470f55 100644
+--- a/cpp/src/arrow/array/array_nested.h
++++ b/cpp/src/arrow/array/array_nested.h
+@@ -284,9 +284,9 @@ class ARROW_EXPORT FixedSizeListArray : public Array {
+   std::shared_ptr<DataType> value_type() const;
+ 
+   // The following functions will not perform boundschecking
+-  int32_t value_offset(int64_t i) const {
++  int64_t value_offset(int64_t i) const {
+     i += data_->offset;
+-    return static_cast<int32_t>(list_size_ * i);
++    return list_size_ * i;
+   }
+   int32_t value_length(int64_t i = 0) const {
+     ARROW_UNUSED(i);
+diff --git a/cpp/src/arrow/array/validate.cc b/cpp/src/arrow/array/validate.cc
+index c66c4f53b..a19c37165 100644
+--- a/cpp/src/arrow/array/validate.cc
++++ b/cpp/src/arrow/array/validate.cc
+@@ -75,7 +75,10 @@ struct ValidateArrayImpl {
+ 
+   Status Visit(const LargeListType& type) { return ValidateListLike(type); }
+ 
+-  Status Visit(const MapType& type) { return ValidateListLike(type); }
++  Status Visit(const MapType& type) {
++    RETURN_NOT_OK(ValidateListLike(type));
++    return MapArray::ValidateChildData(data.child_data);
++  }
+ 
+   Status Visit(const FixedSizeListType& type) {
+     const ArrayData& values = *data.child_data[0];
+diff --git a/cpp/src/arrow/compute/kernels/scalar_nested.cc b/cpp/src/arrow/compute/kernels/scalar_nested.cc
+index aafaeb341..aeac0d747 100644
+--- a/cpp/src/arrow/compute/kernels/scalar_nested.cc
++++ b/cpp/src/arrow/compute/kernels/scalar_nested.cc
+@@ -56,12 +56,11 @@ Status ListValueLength(KernelContext* ctx, const ExecBatch& batch, Datum* out) {
+ }
+ 
+ Status FixedSizeListValueLength(KernelContext* ctx, const ExecBatch& batch, Datum* out) {
+-  using offset_type = typename FixedSizeListType::offset_type;
+   auto width = checked_cast<const FixedSizeListType&>(*batch[0].type()).list_size();
+   if (batch[0].kind() == Datum::ARRAY) {
+     const auto& arr = *batch[0].array();
+     ArrayData* out_arr = out->mutable_array();
+-    auto* out_values = out_arr->GetMutableValues<offset_type>(1);
++    auto* out_values = out_arr->GetMutableValues<int32_t>(1);
+     std::fill(out_values, out_values + arr.length, width);
+   } else {
+     const auto& arg0 = batch[0].scalar_as<FixedSizeListScalar>();
+diff --git a/cpp/src/arrow/compute/kernels/vector_nested.cc b/cpp/src/arrow/compute/kernels/vector_nested.cc
+index f4c61ba74..fb1087aa5 100644
+--- a/cpp/src/arrow/compute/kernels/vector_nested.cc
++++ b/cpp/src/arrow/compute/kernels/vector_nested.cc
+@@ -80,7 +80,8 @@ struct ListParentIndicesArray {
+     using offset_type = typename FixedSizeListType::offset_type;
+     const offset_type slot_length = type.list_size();
+     const int64_t values_length = slot_length * (input->length - input->GetNullCount());
+-    ARROW_ASSIGN_OR_RAISE(auto indices, ctx->Allocate(values_length * sizeof(int32_t)));
++    ARROW_ASSIGN_OR_RAISE(auto indices,
++                          ctx->Allocate(values_length * sizeof(offset_type)));
+     auto* out_indices = reinterpret_cast<offset_type*>(indices->mutable_data());
+     const auto* bitmap = input->GetValues<uint8_t>(0, 0);
+     for (int32_t i = 0; i < input->length; i++) {
+@@ -90,7 +91,7 @@ struct ListParentIndicesArray {
+         out_indices += slot_length;
+       }
+     }
+-    out = ArrayData::Make(int32(), values_length, {nullptr, std::move(indices)},
++    out = ArrayData::Make(int64(), values_length, {nullptr, std::move(indices)},
+                           /*null_count=*/0);
+     return Status::OK();
+   }
+@@ -113,8 +114,8 @@ struct ListParentIndicesArray {
+ Result<std::shared_ptr<DataType>> ListParentIndicesType(const DataType& input_type) {
+   switch (input_type.id()) {
+     case Type::LIST:
+-    case Type::FIXED_SIZE_LIST:
+       return int32();
++    case Type::FIXED_SIZE_LIST:
+     case Type::LARGE_LIST:
+       return int64();
+     default:
+diff --git a/cpp/src/arrow/compute/kernels/vector_nested_test.cc b/cpp/src/arrow/compute/kernels/vector_nested_test.cc
+index 28bb4bdfd..25bb8b62e 100644
+--- a/cpp/src/arrow/compute/kernels/vector_nested_test.cc
++++ b/cpp/src/arrow/compute/kernels/vector_nested_test.cc
+@@ -111,18 +111,18 @@ TEST(TestVectorNested, ListParentIndicesFixedSizeList) {
+   for (auto ty : {fixed_size_list(int16(), 2), fixed_size_list(uint32(), 2)}) {
+     {
+       auto input = ArrayFromJSON(ty, "[[0, null], null, [1, 2], [3, 4], [null, 5]]");
+-      auto expected = ArrayFromJSON(int32(), "[0, 0, 2, 2, 3, 3, 4, 4]");
++      auto expected = ArrayFromJSON(int64(), "[0, 0, 2, 2, 3, 3, 4, 4]");
+       CheckVectorUnary("list_parent_indices", input, expected);
+     }
+     {
+       // Test a chunked array
+       auto input =
+           ChunkedArrayFromJSON(ty, {"[[0, null], null, [1, 2]]", "[[3, 4], [null, 5]]"});
+-      auto expected = ChunkedArrayFromJSON(int32(), {"[0, 0, 2, 2]", "[3, 3, 4, 4]"});
++      auto expected = ChunkedArrayFromJSON(int64(), {"[0, 0, 2, 2]", "[3, 3, 4, 4]"});
+       CheckVectorUnary("list_parent_indices", input, expected);
+ 
+       input = ChunkedArrayFromJSON(ty, {});
+-      expected = ChunkedArrayFromJSON(int32(), {});
++      expected = ChunkedArrayFromJSON(int64(), {});
+       CheckVectorUnary("list_parent_indices", input, expected);
+     }
+   }
+diff --git a/cpp/src/arrow/type.h b/cpp/src/arrow/type.h
+index 23e6c7e9e..1df403b9e 100644
+--- a/cpp/src/arrow/type.h
++++ b/cpp/src/arrow/type.h
+@@ -927,7 +927,9 @@ class ARROW_EXPORT MapType : public ListType {
+ class ARROW_EXPORT FixedSizeListType : public BaseListType {
+  public:
+   static constexpr Type::type type_id = Type::FIXED_SIZE_LIST;
+-  using offset_type = int32_t;
++  // While the individual item size is 32-bit, the overall data size
++  // (item size * list length) may not fit in a 32-bit int.
++  using offset_type = int64_t;
+ 
+   static constexpr const char* type_name() { return "fixed_size_list"; }
+ 
+diff --git a/testing b/testing
+index a60b71526..a51d8788c 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit a60b715263d9bbf7e744527fb0c084b693f58043
++Subproject commit a51d8788cf34994ef88c81cffb11117a949350ef

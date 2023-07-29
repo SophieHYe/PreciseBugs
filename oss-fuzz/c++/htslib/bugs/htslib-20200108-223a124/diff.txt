@@ -1,0 +1,13 @@
+diff --git a/cram/cram_codecs.c b/cram/cram_codecs.c
+index 73859f8..7e692ff 100644
+--- a/cram/cram_codecs.c
++++ b/cram/cram_codecs.c
+@@ -1926,7 +1926,7 @@ cram_codec *cram_byte_array_stop_decode_init(char *data, int size,
+     c->u.byte_array_stop.stop = *cp++;
+     if (CRAM_MAJOR_VERS(version) == 1) {
+         c->u.byte_array_stop.content_id = cp[0] + (cp[1]<<8) + (cp[2]<<16)
+-            + (cp[3]<<24);
++            + ((unsigned int) cp[3]<<24);
+         cp += 4;
+     } else {
+         cp += safe_itf8_get((char *) cp, data + size,

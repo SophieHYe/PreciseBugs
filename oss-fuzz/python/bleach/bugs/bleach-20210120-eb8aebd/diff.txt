@@ -1,0 +1,35 @@
+diff --git a/bleach/html5lib_shim.py b/bleach/html5lib_shim.py
+index 7bfd581..9984b17 100644
+--- a/bleach/html5lib_shim.py
++++ b/bleach/html5lib_shim.py
+@@ -457,6 +457,8 @@ def convert_entity(value):
+ 
+     """
+     if value[0] == "#":
++        if len(value) < 2:
++            return None
+         if value[1] in ("x", "X"):
+             return six.unichr(int(value[2:], 16))
+         return six.unichr(int(value[1:], 10))
+diff --git a/tests/test_linkify.py b/tests/test_linkify.py
+index f3aca67..b5704a1 100644
+--- a/tests/test_linkify.py
++++ b/tests/test_linkify.py
+@@ -233,8 +233,15 @@ def test_tlds(data, expected):
+     assert linkify(data) == expected
+ 
+ 
+-def test_escaping():
+-    assert linkify("< unrelated") == "&lt; unrelated"
++@pytest.mark.parametrize(
++    "data,expected",
++    [
++        ("< unrelated", "&lt; unrelated"),
++        ("<U \x7f=&#;>", '<u \x7f="&amp;#;"></u>'),
++    ],
++)
++def test_escaping(data, expected):
++    assert linkify(data) == expected
+ 
+ 
+ def test_nofollow_off():

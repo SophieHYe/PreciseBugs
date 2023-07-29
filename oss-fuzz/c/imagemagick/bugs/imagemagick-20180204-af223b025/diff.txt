@@ -1,0 +1,13 @@
+diff --git a/MagickCore/property.c b/MagickCore/property.c
+index 685eabe87..b06d80be2 100644
+--- a/MagickCore/property.c
++++ b/MagickCore/property.c
+@@ -1742,6 +1742,8 @@ static MagickBooleanType GetXMPProperty(const Image *image,const char *property)
+   profile=GetImageProfile(image,"xmp");
+   if (profile == (StringInfo *) NULL)
+     return(MagickFalse);
++  if (GetStringInfoLength(profile) < 17)
++    return(MagickFalse);
+   if ((property == (const char *) NULL) || (*property == '\0'))
+     return(MagickFalse);
+   xmp_profile=StringInfoToString(profile);

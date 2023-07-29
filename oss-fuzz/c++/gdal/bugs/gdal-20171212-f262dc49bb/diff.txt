@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+index 3457dc4745..2df53de85e 100644
+--- a/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
++++ b/gdal/frmts/grib/degrib/g2clib/pdstemplates.c
+@@ -541,7 +541,7 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
+               }
+            }
+            else if ( number == 51 ) {
+-              new->extlen=list[15]*11;
++              new->extlen=list[15]*6; /* GDAL fix */
+               new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+               for (i=0;i<list[15];i++) {
+                  l=i*6;

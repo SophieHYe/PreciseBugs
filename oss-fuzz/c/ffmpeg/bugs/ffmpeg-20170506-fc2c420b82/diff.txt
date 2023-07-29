@@ -1,0 +1,13 @@
+diff --git a/libavcodec/mimic.c b/libavcodec/mimic.c
+index 0cc30ab0ed..61ce1ce584 100644
+--- a/libavcodec/mimic.c
++++ b/libavcodec/mimic.c
+@@ -262,7 +262,7 @@ static int vlc_decode_block(MimicContext *ctx, int num_coeffs, int qscale)
+ 
+         coeff = vlcdec_lookup[num_bits][value];
+         if (pos < 3)
+-            coeff <<= 4;
++            coeff *= 16;
+         else /* TODO Use >> 10 instead of / 1001 */
+             coeff = (coeff * qscale) / 1001;
+ 

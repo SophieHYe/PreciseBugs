@@ -1,0 +1,20 @@
+diff --git a/libavcodec/alac.c b/libavcodec/alac.c
+index c8c04223a0..82689da02a 100644
+--- a/libavcodec/alac.c
++++ b/libavcodec/alac.c
+@@ -397,13 +397,13 @@ static int decode_element(AVCodecContext *avctx, AVFrame *frame, int ch_index,
+     case 20: {
+         for (ch = 0; ch < channels; ch++) {
+             for (i = 0; i < alac->nb_samples; i++)
+-                alac->output_samples_buffer[ch][i] *= 1 << 12;
++                alac->output_samples_buffer[ch][i] *= 1U << 12;
+         }}
+         break;
+     case 24: {
+         for (ch = 0; ch < channels; ch++) {
+             for (i = 0; i < alac->nb_samples; i++)
+-                alac->output_samples_buffer[ch][i] *= 1 << 8;
++                alac->output_samples_buffer[ch][i] *= 1U << 8;
+         }}
+         break;
+     }

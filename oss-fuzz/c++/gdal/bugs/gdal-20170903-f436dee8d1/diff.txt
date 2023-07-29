@@ -1,0 +1,24 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp b/gdal/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
+index 48c9583228..f50d9a40e9 100644
+--- a/gdal/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dgn/ogrdgnlayer.cpp
+@@ -335,12 +335,18 @@ OGRFeature *OGRDGNLayer::ElementToFeature( DGNElemCore *psElement, int nRecLevel
+ 
+     pabyData = DGNGetLinkage( hDGN, psElement, iLink, NULL,
+                               anEntityNum + iLink, anMSLink + iLink, NULL );
+-    while( pabyData && nLinkCount < MAX_LINK )
++    while( pabyData )
+     {
+         iLink++;
+ 
+         if( anEntityNum[nLinkCount] != 0 || anMSLink[nLinkCount] != 0 )
++        {
+             nLinkCount++;
++            if( nLinkCount == MAX_LINK )
++            {
++                break;
++            }
++        }
+ 
+         anEntityNum[nLinkCount] = 0;
+         anMSLink[nLinkCount] = 0;

@@ -1,0 +1,681 @@
+diff --git a/gdal/frmts/daas/daasdataset.cpp b/gdal/frmts/daas/daasdataset.cpp
+index cf1b878380..d3271afb07 100644
+--- a/gdal/frmts/daas/daasdataset.cpp
++++ b/gdal/frmts/daas/daasdataset.cpp
+@@ -1071,7 +1071,7 @@ void GDALDAASDataset::ReadSRS(const CPLJSONObject& oProperties)
+     if( m_osSRSType == "urn" || m_osSRSType == "proj4" )
+     {
+         OGRSpatialReference oSRS;
+-        if( oSRS.SetFromUserInput(m_osSRSValue) == OGRERR_NONE )
++        if( oSRS.SetFromUserInput(m_osSRSValue, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+         {
+             OGR_SRSNode *poGEOGCS = oSRS.GetAttrNode("GEOGCS");
+             if( poGEOGCS != nullptr )
+@@ -1189,7 +1189,7 @@ bool GDALDAASDataset::SetupServerSideReprojection(const char* pszTargetSRS)
+     }
+ 
+     OGRSpatialReference oSRS;
+-    if( oSRS.SetFromUserInput(pszTargetSRS) != OGRERR_NONE )
++    if( oSRS.SetFromUserInput(pszTargetSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+     {
+         CPLError(CE_Failure, CPLE_AppDefined,
+                     "Invalid TARGET_SRS value");
+diff --git a/gdal/frmts/dimap/dimapdataset.cpp b/gdal/frmts/dimap/dimapdataset.cpp
+index a0fddc12dc..ba49677252 100644
+--- a/gdal/frmts/dimap/dimapdataset.cpp
++++ b/gdal/frmts/dimap/dimapdataset.cpp
+@@ -949,7 +949,7 @@ int DIMAPDataset::ReadImageInformation()
+     if( pszSRS != nullptr )
+     {
+         OGRSpatialReference oSRS;
+-        if( oSRS.SetFromUserInput( pszSRS ) == OGRERR_NONE )
++        if( oSRS.SetFromUserInput( pszSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+         {
+             if( nGCPCount > 0 )
+             {
+@@ -1442,7 +1442,7 @@ int DIMAPDataset::ReadImageInformation2()
+     if( pszSRS != nullptr )
+     {
+         OGRSpatialReference oSRS;
+-        if( oSRS.SetFromUserInput( pszSRS ) == OGRERR_NONE )
++        if( oSRS.SetFromUserInput( pszSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+         {
+             if( nGCPCount > 0 )
+             {
+diff --git a/gdal/frmts/eeda/eedadataset.cpp b/gdal/frmts/eeda/eedadataset.cpp
+index 16b76db746..ef159ae3b6 100644
+--- a/gdal/frmts/eeda/eedadataset.cpp
++++ b/gdal/frmts/eeda/eedadataset.cpp
+@@ -558,7 +558,7 @@ OGRFeature* GDALEEDALayer::GetNextRawFeature()
+             if( !osSRS.empty() )
+             {
+                 OGRSpatialReference oSRS;
+-                oSRS.SetFromUserInput(osSRS);
++                oSRS.SetFromUserInput(osSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+                 const char* pszAuthName = oSRS.GetAuthorityName(nullptr);
+                 const char* pszAuthCode = oSRS.GetAuthorityCode(nullptr);
+                 if( pszAuthName && pszAuthCode )
+diff --git a/gdal/frmts/grib/gribcreatecopy.cpp b/gdal/frmts/grib/gribcreatecopy.cpp
+index eba4fd4d40..555c4f4694 100644
+--- a/gdal/frmts/grib/gribcreatecopy.cpp
++++ b/gdal/frmts/grib/gribcreatecopy.cpp
+@@ -184,7 +184,7 @@ GRIB2Section3Writer::GRIB2Section3Writer( VSILFILE* fpIn,
+     poSrcDS(poSrcDSIn)
+ {
+     oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-    oSRS.SetFromUserInput( poSrcDS->GetProjectionRef() );
++    oSRS.importFromWkt( poSrcDS->GetProjectionRef() );
+     pszProjection = oSRS.GetAttrValue("PROJECTION");
+ 
+     poSrcDS->GetGeoTransform(adfGeoTransform);
+@@ -2453,7 +2453,7 @@ GRIBDataset::CreateCopy( const char * pszFilename, GDALDataset *poSrcDS,
+     }
+ 
+     OGRSpatialReference oSRS;
+-    oSRS.SetFromUserInput(poSrcDS->GetProjectionRef());
++    oSRS.importFromWkt(poSrcDS->GetProjectionRef());
+     if( oSRS.IsProjected() )
+     {
+         const char *pszProjection = oSRS.GetAttrValue("PROJECTION");
+diff --git a/gdal/frmts/gtiff/cogdriver.cpp b/gdal/frmts/gtiff/cogdriver.cpp
+index 4a6557e8b5..069c7009b8 100644
+--- a/gdal/frmts/gtiff/cogdriver.cpp
++++ b/gdal/frmts/gtiff/cogdriver.cpp
+@@ -164,7 +164,7 @@ bool COGGetWarpingCharacteristics(GDALDataset* poSrcDS,
+ 
+         // "Normalize" SRS as AUTH:CODE
+         OGRSpatialReference oTargetSRS;
+-        oTargetSRS.SetFromUserInput(osTargetSRS);
++        oTargetSRS.SetFromUserInput(osTargetSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+         const char* pszAuthCode = oTargetSRS.GetAuthorityCode(nullptr);
+         const char* pszAuthName = oTargetSRS.GetAuthorityName(nullptr);
+         if( pszAuthName && pszAuthCode )
+@@ -180,7 +180,7 @@ bool COGGetWarpingCharacteristics(GDALDataset* poSrcDS,
+     void* hTransformArg = nullptr;
+ 
+     OGRSpatialReference oTargetSRS;
+-    oTargetSRS.SetFromUserInput(osTargetSRS);
++    oTargetSRS.SetFromUserInput(osTargetSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+     const char* pszAuthCode = oTargetSRS.GetAuthorityCode(nullptr);
+     const int nEPSGCode = pszAuthCode ? atoi(pszAuthCode) : 0;
+ 
+diff --git a/gdal/frmts/gtiff/geotiff.cpp b/gdal/frmts/gtiff/geotiff.cpp
+index f007add1d6..4bc27d47c3 100644
+--- a/gdal/frmts/gtiff/geotiff.cpp
++++ b/gdal/frmts/gtiff/geotiff.cpp
+@@ -14932,7 +14932,7 @@ void GTiffDataset::LoadGeoreferencingAndPamIfNeeded()
+ /* -------------------------------------------------------------------- */
+         if( pszTabWKT != nullptr && m_oSRS.IsEmpty() )
+         {
+-            m_oSRS.SetFromUserInput(pszTabWKT);
++            m_oSRS.importFromWkt(pszTabWKT);
+             m_bLookedForProjection = true;
+         }
+ 
+diff --git a/gdal/frmts/hdf4/hdf4multidim.cpp b/gdal/frmts/hdf4/hdf4multidim.cpp
+index be0c72fca9..a7ec53be49 100644
+--- a/gdal/frmts/hdf4/hdf4multidim.cpp
++++ b/gdal/frmts/hdf4/hdf4multidim.cpp
+@@ -2757,7 +2757,7 @@ std::shared_ptr<OGRSpatialReference> HDF4SDSArray::GetSpatialRef() const
+         if( !osProjection.empty() )
+         {
+             auto poSRS(std::make_shared<OGRSpatialReference>());
+-            poSRS->SetFromUserInput(osProjection.c_str());
++            poSRS->SetFromUserInput(osProjection.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+             poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+             if( poSRS->GetDataAxisToSRSAxisMapping() == std::vector<int>{ 2, 1 } )
+                 poSRS->SetDataAxisToSRSAxisMapping({ 1, 2 });
+diff --git a/gdal/frmts/hfa/hfadataset.cpp b/gdal/frmts/hfa/hfadataset.cpp
+index 012086f137..541d8b7a57 100644
+--- a/gdal/frmts/hfa/hfadataset.cpp
++++ b/gdal/frmts/hfa/hfadataset.cpp
+@@ -5186,7 +5186,7 @@ CPLErr HFADataset::ReadProjection()
+         pszPE_COORDSYS = HFAGetPEString(hHFA);
+     if( pszPE_COORDSYS != nullptr
+         && strlen(pszPE_COORDSYS) > 0
+-        && oSRS.SetFromUserInput(pszPE_COORDSYS) == OGRERR_NONE )
++        && oSRS.SetFromUserInput(pszPE_COORDSYS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+     {
+         CPLFree(pszPE_COORDSYS);
+ 
+diff --git a/gdal/frmts/mrf/marfa_dataset.cpp b/gdal/frmts/mrf/marfa_dataset.cpp
+index 8b4d79fd69..70ff21d21f 100644
+--- a/gdal/frmts/mrf/marfa_dataset.cpp
++++ b/gdal/frmts/mrf/marfa_dataset.cpp
+@@ -1245,7 +1245,7 @@ CPLErr MRFDataset::Initialize(CPLXMLNode* config)
+ 
+     OGRSpatialReference oSRS;
+     const char* pszRawProjFromXML = CPLGetXMLValue(config, "GeoTags.Projection", "");
+-    if (strlen(pszRawProjFromXML) == 0 || oSRS.SetFromUserInput(pszRawProjFromXML) != OGRERR_NONE)
++    if (strlen(pszRawProjFromXML) == 0 || oSRS.SetFromUserInput(pszRawProjFromXML, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE)
+         SetProjection("");
+     else {
+         char* pszRawProj = nullptr;
+diff --git a/gdal/frmts/ogcapi/gdalogcapidataset.cpp b/gdal/frmts/ogcapi/gdalogcapidataset.cpp
+index 3d2b488eba..883f315991 100644
+--- a/gdal/frmts/ogcapi/gdalogcapidataset.cpp
++++ b/gdal/frmts/ogcapi/gdalogcapidataset.cpp
+@@ -1208,7 +1208,7 @@ bool OGCAPIDataset::InitWithCoverageAPI(GDALOpenInfo* poOpenInfo,
+             srsName.resize(srsName.find("&2="));
+         }
+ 
+-        if( oSRS.SetFromUserInput( srsName.c_str() ) == OGRERR_NONE )
++        if( oSRS.SetFromUserInput( srsName.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+         {
+             if( oSRS.EPSGTreatsAsLatLong() || oSRS.EPSGTreatsAsNorthingEasting() )
+             {
+@@ -1640,7 +1640,7 @@ bool OGCAPIDataset::InitWithTilesAPI(GDALOpenInfo* poOpenInfo,
+     if( tms == nullptr )
+         return false;
+ 
+-    if( m_oSRS.SetFromUserInput(tms->crs().c_str()) != OGRERR_NONE )
++    if( m_oSRS.SetFromUserInput(tms->crs().c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+         return false;
+     const bool bInvertAxis =
+             m_oSRS.EPSGTreatsAsLatLong() != FALSE ||
+diff --git a/gdal/frmts/pds/pds4dataset.cpp b/gdal/frmts/pds/pds4dataset.cpp
+index c481b30338..c1396c52ac 100644
+--- a/gdal/frmts/pds/pds4dataset.cpp
++++ b/gdal/frmts/pds/pds4dataset.cpp
+@@ -2095,7 +2095,7 @@ void PDS4Dataset::WriteGeoreferencing(CPLXMLNode* psCart,
+     double adfX[4] = {0};
+     double adfY[4] = {0};
+     OGRSpatialReference oSRS;
+-    oSRS.SetFromUserInput(pszWKT);
++    oSRS.SetFromUserInput(pszWKT, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+     CPLString osPrefix;
+     const char* pszColon = strchr(psCart->pszValue, ':');
+     if( pszColon )
+@@ -4353,7 +4353,7 @@ GDALDataset* PDS4Dataset::CreateCopy( const char *pszFilename,
+             CPLString osExistingProj4;
+             if( pszExistingSRS && pszExistingSRS[0] )
+             {
+-                oExistingSRS.SetFromUserInput(pszExistingSRS);
++                oExistingSRS.SetFromUserInput(pszExistingSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+                 char* pszExistingProj4 = nullptr;
+                 oExistingSRS.exportToProj4(&pszExistingProj4);
+                 if( pszExistingProj4 )
+@@ -4363,7 +4363,7 @@ GDALDataset* PDS4Dataset::CreateCopy( const char *pszFilename,
+             CPLString osSrcProj4;
+             if( pszSrcSRS && pszSrcSRS[0] )
+             {
+-                oSrcSRS.SetFromUserInput(pszSrcSRS);
++                oSrcSRS.SetFromUserInput(pszSrcSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+                 char* pszSrcProj4 = nullptr;
+                 oSrcSRS.exportToProj4(&pszSrcProj4);
+                 if( pszSrcProj4 )
+diff --git a/gdal/frmts/plmosaic/plmosaicdataset.cpp b/gdal/frmts/plmosaic/plmosaicdataset.cpp
+index 2477261ead..67bced59c2 100644
+--- a/gdal/frmts/plmosaic/plmosaicdataset.cpp
++++ b/gdal/frmts/plmosaic/plmosaicdataset.cpp
+@@ -827,7 +827,7 @@ int PLMosaicDataset::OpenMosaic()
+     }
+ 
+     OGRSpatialReference oSRS;
+-    oSRS.SetFromUserInput(pszSRS);
++    oSRS.SetFromUserInput(pszSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+     oSRS.exportToWkt(&pszWKT);
+ 
+     json_object* poQuadDownload = CPL_json_object_object_get(
+diff --git a/gdal/frmts/raw/rrasterdataset.cpp b/gdal/frmts/raw/rrasterdataset.cpp
+index cf6084c8ad..2f59bae112 100644
+--- a/gdal/frmts/raw/rrasterdataset.cpp
++++ b/gdal/frmts/raw/rrasterdataset.cpp
+@@ -323,7 +323,7 @@ CPLErr RRASTERRasterBand::SetNoDataValue(double dfNoData)
+ /*                             GetMinMax()                              */
+ /************************************************************************/
+ 
+-template<class T> 
++template<class T>
+ static void GetMinMax(const T* buffer, int nBufXSize, int nBufYSize,
+                       GSpacing nPixelSpace, GSpacing nLineSpace,
+                       double dfNoDataValue,
+@@ -561,7 +561,7 @@ void RRASTERDataset::RewriteHeader()
+     if( !m_osProjection.empty() )
+     {
+         OGRSpatialReference oSRS;
+-        oSRS.SetFromUserInput(m_osProjection);
++        oSRS.SetFromUserInput(m_osProjection, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+         char* pszProj4 = nullptr;
+         oSRS.exportToProj4(&pszProj4);
+         if( pszProj4 )
+@@ -1328,7 +1328,7 @@ GDALDataset *RRASTERDataset::Open( GDALOpenInfo * poOpenInfo )
+                 for( int i = 0; i < aosRatNames.size(); i++ )
+                 {
+                     poDS->m_poRAT->CreateColumn(
+-                        aosRatNames[i], 
++                        aosRatNames[i],
+                         EQUAL(aosRatTypes[i], "integer") ?  GFT_Integer :
+                         EQUAL(aosRatTypes[i], "numeric") ?  GFT_Real :
+                                                             GFT_String,
+diff --git a/gdal/frmts/rda/rdadataset.cpp b/gdal/frmts/rda/rdadataset.cpp
+index 59fe58a558..d5de6f60eb 100644
+--- a/gdal/frmts/rda/rdadataset.cpp
++++ b/gdal/frmts/rda/rdadataset.cpp
+@@ -1306,7 +1306,7 @@ bool GDALRDADataset::ReadGeoreferencing()
+     CPLString osSRS =
+         GetJsonString(poObj, "spatialReferenceSystemCode", true, bError);
+     OGRSpatialReference oSRS;
+-    if( !osSRS.empty() && oSRS.SetFromUserInput(osSRS) == OGRERR_NONE )
++    if( !osSRS.empty() && oSRS.SetFromUserInput(osSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+     {
+         char* pszWKT = nullptr;
+         oSRS.exportToWkt(&pszWKT);
+diff --git a/gdal/frmts/vrt/vrtdataset.cpp b/gdal/frmts/vrt/vrtdataset.cpp
+index 631ffe9e04..8328206307 100644
+--- a/gdal/frmts/vrt/vrtdataset.cpp
++++ b/gdal/frmts/vrt/vrtdataset.cpp
+@@ -483,7 +483,7 @@ CPLErr VRTDataset::XMLInit( CPLXMLNode *psTree, const char *pszVRTPathIn )
+         if( m_poSRS )
+             m_poSRS->Release();
+         m_poSRS = new OGRSpatialReference();
+-        m_poSRS->SetFromUserInput( CPLGetXMLValue(psSRSNode, nullptr, "") );
++        m_poSRS->SetFromUserInput( CPLGetXMLValue(psSRSNode, nullptr, ""), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS );
+         const char* pszMapping =
+             CPLGetXMLValue(psSRSNode, "dataAxisToSRSAxisMapping", nullptr);
+         if( pszMapping )
+diff --git a/gdal/frmts/vrt/vrtmultidim.cpp b/gdal/frmts/vrt/vrtmultidim.cpp
+index bb2b9da658..ea4290fcfe 100644
+--- a/gdal/frmts/vrt/vrtmultidim.cpp
++++ b/gdal/frmts/vrt/vrtmultidim.cpp
+@@ -922,7 +922,7 @@ std::shared_ptr<VRTMDArray> VRTMDArray::Create(const std::shared_ptr<VRTGroup>&
+     if( psSRSNode )
+     {
+         poSRS = std::unique_ptr<OGRSpatialReference>(new OGRSpatialReference());
+-        poSRS->SetFromUserInput( CPLGetXMLValue(psSRSNode, nullptr, "") );
++        poSRS->SetFromUserInput( CPLGetXMLValue(psSRSNode, nullptr, ""), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS );
+         const char* pszMapping =
+             CPLGetXMLValue(psSRSNode, "dataAxisToSRSAxisMapping", nullptr);
+         if( pszMapping )
+diff --git a/gdal/frmts/wcs/wcsdataset100.cpp b/gdal/frmts/wcs/wcsdataset100.cpp
+index 4fbf29cc48..261d7864eb 100644
+--- a/gdal/frmts/wcs/wcsdataset100.cpp
++++ b/gdal/frmts/wcs/wcsdataset100.cpp
+@@ -269,7 +269,7 @@ bool WCSDataset100::ExtractGridInfo()
+     {
+         OGRSpatialReference oSRS;
+ 
+-        if( oSRS.SetFromUserInput( pszNativeCRSs ) == OGRERR_NONE )
++        if( oSRS.SetFromUserInput( pszNativeCRSs, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+         {
+             CPLFree( pszProjection );
+             oSRS.exportToWkt( &pszProjection );
+@@ -305,7 +305,7 @@ bool WCSDataset100::ExtractGridInfo()
+     {
+         OGRSpatialReference oSRS;
+ 
+-        if( oSRS.SetFromUserInput( pszProjOverride ) != OGRERR_NONE )
++        if( oSRS.SetFromUserInput( pszProjOverride, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) != OGRERR_NONE )
+         {
+             CPLError( CE_Failure, CPLE_AppDefined,
+                       "<SRS> element contents not parsable:\n%s",
+@@ -331,7 +331,7 @@ bool WCSDataset100::ExtractGridInfo()
+ 
+     if( pszProjection && strlen(pszProjection) > 0 && osCRS == "" )
+     {
+-        oSRS.SetFromUserInput( pszProjection );
++        oSRS.SetFromUserInput( pszProjection, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS );
+         const char *pszAuth = oSRS.GetAuthorityName(nullptr);
+ 
+         if( pszAuth != nullptr && EQUAL(pszAuth,"EPSG") )
+diff --git a/gdal/frmts/wcs/wcsdataset110.cpp b/gdal/frmts/wcs/wcsdataset110.cpp
+index 4be1f35a8f..5f43895312 100644
+--- a/gdal/frmts/wcs/wcsdataset110.cpp
++++ b/gdal/frmts/wcs/wcsdataset110.cpp
+@@ -499,7 +499,7 @@ bool WCSDataset110::ExtractGridInfo()
+     {
+         OGRSpatialReference oSRS;
+ 
+-        if( oSRS.SetFromUserInput( pszProjOverride ) != OGRERR_NONE )
++        if( oSRS.SetFromUserInput( pszProjOverride, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) != OGRERR_NONE )
+         {
+             CPLError( CE_Failure, CPLE_AppDefined,
+                       "<SRS> element contents not parsable:\n%s",
+diff --git a/gdal/frmts/wcs/wcsutils.cpp b/gdal/frmts/wcs/wcsutils.cpp
+index 1aeb821adb..4be8f548d7 100644
+--- a/gdal/frmts/wcs/wcsutils.cpp
++++ b/gdal/frmts/wcs/wcsutils.cpp
+@@ -822,7 +822,7 @@ bool CRS2Projection(const CPLString &crs, OGRSpatialReference *sr, char **projec
+     }
+     OGRSpatialReference local_sr;
+     OGRSpatialReference *sr_pointer = sr != nullptr ? sr : &local_sr;
+-    if (sr_pointer->SetFromUserInput(crs2) == OGRERR_NONE) {
++    if (sr_pointer->SetFromUserInput(crs2, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE) {
+         sr_pointer->exportToWkt(projection);
+         return true;
+     }
+diff --git a/gdal/frmts/wms/wmsdriver.cpp b/gdal/frmts/wms/wmsdriver.cpp
+index 4a94daa8cb..d18fb56008 100644
+--- a/gdal/frmts/wms/wmsdriver.cpp
++++ b/gdal/frmts/wms/wmsdriver.cpp
+@@ -91,7 +91,7 @@ CPLXMLNode * GDALWMSDatasetGetConfigFromURL(GDALOpenInfo *poOpenInfo)
+         VersionStringToInt(osVersion.c_str())>= VersionStringToInt("1.3.0") )
+     {
+         OGRSpatialReference oSRS;
+-        oSRS.SetFromUserInput(osCRS);
++        oSRS.SetFromUserInput(osCRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+         oSRS.AutoIdentifyEPSG();
+         if( oSRS.EPSGTreatsAsLatLong() || oSRS.EPSGTreatsAsNorthingEasting() )
+         {
+@@ -611,7 +611,7 @@ static CPLXMLNode* GDALWMSDatasetGetConfigFromArcGISJSON(const char* pszURL,
+     if( nWKID < 0 && !osWKT.empty() )
+     {
+         OGRSpatialReference oSRS;
+-        oSRS.SetFromUserInput(osWKT);
++        oSRS.importFromWkt(osWKT);
+         oSRS.morphFromESRI();
+ 
+         int nEntries = 0;
+diff --git a/gdal/frmts/wms/wmsutils.cpp b/gdal/frmts/wms/wmsutils.cpp
+index 735ad433d1..c7b6a53493 100644
+--- a/gdal/frmts/wms/wmsutils.cpp
++++ b/gdal/frmts/wms/wmsutils.cpp
+@@ -47,7 +47,7 @@ CPLString ProjToWKT(const CPLString &proj) {
+     }
+     else
+     {
+-        if (sr.SetFromUserInput(proj.c_str()) != OGRERR_NONE) return srs;
++        if (sr.SetFromUserInput(proj.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE) return srs;
+     }
+     sr.exportToWkt(&wkt);
+     srs = wkt;
+diff --git a/gdal/frmts/wmts/wmtsdataset.cpp b/gdal/frmts/wmts/wmtsdataset.cpp
+index 58cdd76be4..62bd19c126 100644
+--- a/gdal/frmts/wmts/wmtsdataset.cpp
++++ b/gdal/frmts/wmts/wmtsdataset.cpp
+@@ -650,7 +650,7 @@ int WMTSDataset::ReadTMS(CPLXMLNode* psContents,
+             return FALSE;
+         }
+         oTMS.osSRS = pszSupportedCRS;
+-        if( oTMS.oSRS.SetFromUserInput(FixCRSName(pszSupportedCRS)) != OGRERR_NONE )
++        if( oTMS.oSRS.SetFromUserInput(FixCRSName(pszSupportedCRS), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+         {
+             CPLError(CE_Failure, CPLE_AppDefined, "Cannot parse CRS '%s'",
+                      pszSupportedCRS);
+@@ -1544,7 +1544,7 @@ GDALDataset* WMTSDataset::Open(GDALOpenInfo* poOpenInfo)
+                 for(; oIter != aoMapBoundingBox.end(); ++oIter )
+                 {
+                     OGRSpatialReference oSRS;
+-                    if( oSRS.SetFromUserInput(FixCRSName(oIter->first)) == OGRERR_NONE )
++                    if( oSRS.SetFromUserInput(FixCRSName(oIter->first), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+                     {
+                         OGRSpatialReference oWGS84;
+                         oWGS84.SetFromUserInput(SRS_WKT_WGS84_LAT_LONG);
+@@ -1611,7 +1611,7 @@ GDALDataset* WMTSDataset::Open(GDALOpenInfo* poOpenInfo)
+             {
+                 OGRSpatialReference oSRS;
+                 oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-                if( oSRS.SetFromUserInput(FixCRSName(oIter->first)) == OGRERR_NONE )
++                if( oSRS.SetFromUserInput(FixCRSName(oIter->first), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+                 {
+                     // Check if this doesn't match the most precise tile matrix
+                     // by densifying its contour
+@@ -1848,7 +1848,7 @@ GDALDataset* WMTSDataset::Open(GDALOpenInfo* poOpenInfo)
+         if( !osProjection.empty() )
+         {
+             OGRSpatialReference oSRS;
+-            if( oSRS.SetFromUserInput(osProjection) == OGRERR_NONE )
++            if( oSRS.SetFromUserInput(osProjection, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+             {
+                 char* pszWKT = nullptr;
+                 oSRS.exportToWkt(&pszWKT);
+diff --git a/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp b/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
+index c07a5177c6..7eea7dfa6e 100644
+--- a/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/csv/ogrcsvlayer.cpp
+@@ -962,7 +962,7 @@ void OGRCSVLayer::BuildFeatureDefn( const char *pszNfdcGeomField,
+             {
+                 OGRSpatialReference *poSRS = new OGRSpatialReference();
+                 poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-                if( poSRS->SetFromUserInput((const char *)pabyRet) ==
++                if( poSRS->SetFromUserInput((const char *)pabyRet, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) ==
+                     OGRERR_NONE )
+                 {
+                     poFeatureDefn->GetGeomFieldDefn(0)->SetSpatialRef(poSRS);
+diff --git a/gdal/ogr/ogrsf_frmts/filegdb/FGdbLayer.cpp b/gdal/ogr/ogrsf_frmts/filegdb/FGdbLayer.cpp
+index 373324b616..17b647a6e6 100644
+--- a/gdal/ogr/ogrsf_frmts/filegdb/FGdbLayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/filegdb/FGdbLayer.cpp
+@@ -2019,7 +2019,7 @@ static CPLXMLNode* XMLSpatialReference(OGRSpatialReference* poSRS, char** papszO
+                         break;
+                     }
+                     OGRSpatialReference oSRS_FromESRI;
+-                    if( oSRS_FromESRI.SetFromUserInput(pszESRI_WKT) == OGRERR_NONE &&
++                    if( oSRS_FromESRI.importFromWkt(pszESRI_WKT) == OGRERR_NONE &&
+                         poSRSClone->IsSame(&oSRS_FromESRI) )
+                     {
+                         /* Potential match found */
+diff --git a/gdal/ogr/ogrsf_frmts/flatgeobuf/ogrflatgeobuflayer.cpp b/gdal/ogr/ogrsf_frmts/flatgeobuf/ogrflatgeobuflayer.cpp
+index 28a0a1ec4e..28e212ac8a 100644
+--- a/gdal/ogr/ogrsf_frmts/flatgeobuf/ogrflatgeobuflayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/flatgeobuf/ogrflatgeobuflayer.cpp
+@@ -126,7 +126,7 @@ OGRFlatGeobufLayer::OGRFlatGeobufLayer(
+         } else if( org && code != 0 ) {
+             CPLString osCode;
+             osCode.Printf("%s:%d", org->c_str(), code);
+-            if( m_poSRS->SetFromUserInput(osCode.c_str()) != OGRERR_NONE &&
++            if( m_poSRS->SetFromUserInput(osCode.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE &&
+                 !wkt.empty() )
+             {
+                 m_poSRS->importFromWkt(wkt.c_str());
+diff --git a/gdal/ogr/ogrsf_frmts/geojson/ogrgeojsonreader.cpp b/gdal/ogr/ogrsf_frmts/geojson/ogrgeojsonreader.cpp
+index e6cfe0d20b..3d685cbd30 100644
+--- a/gdal/ogr/ogrsf_frmts/geojson/ogrgeojsonreader.cpp
++++ b/gdal/ogr/ogrsf_frmts/geojson/ogrgeojsonreader.cpp
+@@ -1105,7 +1105,7 @@ OGRFeature* OGRGeoJSONReader::GetNextFeature(OGRGeoJSONLayer* poLayer)
+         }
+         if( bFinished && bJSonPLikeWrapper_ && nRead - nSkip > 0 )
+             nRead --;
+-        if( !poStreamingParser_->Parse( 
++        if( !poStreamingParser_->Parse(
+                             reinterpret_cast<const char*>(pabyBuffer_ + nSkip),
+                             nRead - nSkip, bFinished ) ||
+             poStreamingParser_->ExceptionOccurred() )
+@@ -1466,7 +1466,7 @@ OGRSpatialReference* OGRGeoJSONReadSpatialReference( json_object* poObj )
+ 
+             poSRS = new OGRSpatialReference();
+             poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-            if( OGRERR_NONE != poSRS->SetFromUserInput( pszName ) )
++            if( OGRERR_NONE != poSRS->SetFromUserInput( pszName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) )
+             {
+                 delete poSRS;
+                 poSRS = nullptr;
+diff --git a/gdal/ogr/ogrsf_frmts/gml/gmlutils.cpp b/gdal/ogr/ogrsf_frmts/gml/gmlutils.cpp
+index 1a0cb171eb..2c53308ff7 100644
+--- a/gdal/ogr/ogrsf_frmts/gml/gmlutils.cpp
++++ b/gdal/ogr/ogrsf_frmts/gml/gmlutils.cpp
+@@ -109,7 +109,7 @@ bool GML_IsSRSLatLongOrder(const char *pszSRSName)
+     else if( !EQUALN(pszSRSName, "EPSG:", 5) )
+     {
+         OGRSpatialReference oSRS;
+-        if(oSRS.SetFromUserInput(pszSRSName) == OGRERR_NONE)
++        if(oSRS.SetFromUserInput(pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE)
+         {
+             if(oSRS.EPSGTreatsAsLatLong() || oSRS.EPSGTreatsAsNorthingEasting())
+                 return true;
+@@ -166,7 +166,7 @@ class SRSCache
+         oLastDesc.bAxisInvert = GML_IsSRSLatLongOrder(osSRSName.c_str());
+         oLastDesc.poSRS = new OGRSpatialReference();
+         oLastDesc.poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-        if( oLastDesc.poSRS->SetFromUserInput(osSRSName.c_str()) !=
++        if( oLastDesc.poSRS->SetFromUserInput(osSRSName.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) !=
+             OGRERR_NONE )
+         {
+             delete oLastDesc.poSRS;
+@@ -248,7 +248,7 @@ OGRGeometry* GML_BuildOGRGeometryFromList(
+                                 wkbMultiPolygon)
+                     {
+                         OGRMultiPolygon *poGeomColl = poGeom->toMultiPolygon();
+-                        for( auto&& poMember: poSubGeom->toMultiPolygon() ) 
++                        for( auto&& poMember: poSubGeom->toMultiPolygon() )
+                         {
+                             poGeomColl->addGeometry(poMember);
+                         }
+diff --git a/gdal/ogr/ogrsf_frmts/gml/ogrgmldatasource.cpp b/gdal/ogr/ogrsf_frmts/gml/ogrgmldatasource.cpp
+index 8baa114183..c7316f6c0a 100644
+--- a/gdal/ogr/ogrsf_frmts/gml/ogrgmldatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/gml/ogrgmldatasource.cpp
+@@ -1549,7 +1549,7 @@ OGRGMLLayer *OGRGMLDataSource::TranslateGMLSchema( GMLFeatureClass *poClass )
+         poSRS = new OGRSpatialReference();
+         poSRS->SetAxisMappingStrategy(
+             m_bInvertAxisOrderIfLatLong ? OAMS_TRADITIONAL_GIS_ORDER : OAMS_AUTHORITY_COMPLIANT);
+-        if (poSRS->SetFromUserInput(pszSRSName) != OGRERR_NONE)
++        if (poSRS->SetFromUserInput(pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE)
+         {
+             delete poSRS;
+             poSRS = nullptr;
+@@ -1564,7 +1564,7 @@ OGRGMLLayer *OGRGMLDataSource::TranslateGMLSchema( GMLFeatureClass *poClass )
+             poSRS = new OGRSpatialReference();
+             poSRS->SetAxisMappingStrategy(
+                 m_bInvertAxisOrderIfLatLong ? OAMS_TRADITIONAL_GIS_ORDER : OAMS_AUTHORITY_COMPLIANT);
+-            if (poSRS->SetFromUserInput(pszSRSName) != OGRERR_NONE)
++            if (poSRS->SetFromUserInput(pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE)
+             {
+                 delete poSRS;
+                 poSRS = nullptr;
+@@ -1640,7 +1640,7 @@ OGRGMLLayer *OGRGMLDataSource::TranslateGMLSchema( GMLFeatureClass *poClass )
+             OGRSpatialReference* poSRS2 = new OGRSpatialReference();
+             poSRS2->SetAxisMappingStrategy(
+                 m_bInvertAxisOrderIfLatLong ? OAMS_TRADITIONAL_GIS_ORDER : OAMS_AUTHORITY_COMPLIANT);
+-            if( poSRS2->SetFromUserInput(osSRSName.c_str()) == OGRERR_NONE )
++            if( poSRS2->SetFromUserInput(osSRSName.c_str(), OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) == OGRERR_NONE )
+             {
+                 oField.SetSpatialRef(poSRS2);
+             }
+@@ -2896,7 +2896,7 @@ void OGRGMLDataSource::FindAndParseTopElements(VSILFILE *fp)
+                                 const char* pszSRSName = CPLGetXMLValue(psCur, "srsName", nullptr);
+                                 if( pszSRSName )
+                                 {
+-                                    m_oStandaloneGeomSRS.SetFromUserInput(pszSRSName);
++                                    m_oStandaloneGeomSRS.SetFromUserInput(pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS);
+                                     m_oStandaloneGeomSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+                                     if( GML_IsSRSLatLongOrder(pszSRSName) )
+                                         m_poStandaloneGeom->swapXY();
+diff --git a/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp b/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
+index d07235ebfc..14a613c2ae 100644
+--- a/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
++++ b/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
+@@ -2867,7 +2867,7 @@ void GMLASReader::ProcessGeometry(CPLXMLNode* psRoot)
+                                 new OGRSpatialReference();
+                 poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+ 
+-                if( poSRS->SetFromUserInput( pszSRSName ) == OGRERR_NONE )
++                if( poSRS->SetFromUserInput( pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+                 {
+                     m_oMapGeomFieldDefnToSRSName[poGeomFieldDefn] = pszSRSName;
+                     poGeomFieldDefn->SetSpatialRef(poSRS);
+@@ -2902,7 +2902,7 @@ void GMLASReader::ProcessGeometry(CPLXMLNode* psRoot)
+             if( oIter == m_oMapSRSNameToInvertedAxis.end() )
+             {
+                 OGRSpatialReference oSRS;
+-                oSRS.SetFromUserInput( pszSRSName );
++                oSRS.SetFromUserInput( pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS );
+                 bSwapXY = !STARTS_WITH_CI(pszSRSName, "EPSG:") &&
+                     (CPL_TO_BOOL(oSRS.EPSGTreatsAsLatLong()) ||
+                      CPL_TO_BOOL(oSRS.EPSGTreatsAsNorthingEasting()));
+@@ -2925,7 +2925,7 @@ void GMLASReader::ProcessGeometry(CPLXMLNode* psRoot)
+         {
+             bool bReprojectionOK = false;
+             OGRSpatialReference oSRS;
+-            if( oSRS.SetFromUserInput( pszSRSName ) == OGRERR_NONE )
++            if( oSRS.SetFromUserInput( pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS ) == OGRERR_NONE )
+             {
+                 OGRCoordinateTransformation* poCT =
+                     OGRCreateCoordinateTransformation( &oSRS,
+diff --git a/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackagedatasource.cpp b/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackagedatasource.cpp
+index fbee821835..2118118758 100644
+--- a/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackagedatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/gpkg/ogrgeopackagedatasource.cpp
+@@ -425,7 +425,7 @@ OGRSpatialReference* GDALGeoPackageDataset::GetSpatialRef(int iSrsId,
+           atoi(pszOrganizationCoordsysID) == iSrsId &&
+           GDALGPKGImportFromEPSG(poSpatialRef, atoi(pszOrganizationCoordsysID))
+           == OGRERR_NONE) &&
+-        poSpatialRef->SetFromUserInput(pszWkt) != OGRERR_NONE )
++        poSpatialRef->importFromWkt(pszWkt) != OGRERR_NONE )
+     {
+         CPLError( CE_Warning, CPLE_AppDefined,
+                   "Unable to parse srs_id '%d' well-known text '%s'",
+diff --git a/gdal/ogr/ogrsf_frmts/nas/ogrnasdatasource.cpp b/gdal/ogr/ogrsf_frmts/nas/ogrnasdatasource.cpp
+index dfcdc3ec88..8f7dbfb3a8 100644
+--- a/gdal/ogr/ogrsf_frmts/nas/ogrnasdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/nas/ogrnasdatasource.cpp
+@@ -262,7 +262,7 @@ OGRNASLayer *OGRNASDataSource::TranslateNASSchema( GMLFeatureClass *poClass )
+                 }
+             }
+ 
+-            if (poSRS->SetFromUserInput(pszSRSName) != OGRERR_NONE)
++            if (poSRS->SetFromUserInput(pszSRSName, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE)
+             {
+                 CPLDebug( "NAS", "Failed to translate srsName='%s'",
+                         pszSRSName );
+diff --git a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
+index a2995fd385..7eec8b5ad6 100644
+--- a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtdatasource.cpp
+@@ -44,7 +44,7 @@
+ #include "ogr_core.h"
+ #include "ogr_feature.h"
+ #include "ogr_spatialref.h"
+-#include "ogrlayerpool.h" 
++#include "ogrlayerpool.h"
+ #include "ogrunionlayer.h"
+ #include "ogrwarpedlayer.h"
+ #include "ogrsf_frmts.h"
+@@ -278,7 +278,7 @@ OGRLayer *OGRVRTDataSource::InstantiateWarpedLayer(
+     {
+         poSrcSRS = new OGRSpatialReference();
+         poSrcSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-        if( poSrcSRS->SetFromUserInput(pszSourceSRS) != OGRERR_NONE )
++        if( poSrcSRS->SetFromUserInput(pszSourceSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+         {
+             delete poSrcSRS;
+             poSrcSRS = nullptr;
+@@ -294,7 +294,7 @@ OGRLayer *OGRVRTDataSource::InstantiateWarpedLayer(
+ 
+     OGRSpatialReference *poTargetSRS = new OGRSpatialReference();
+     poTargetSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-    if( poTargetSRS->SetFromUserInput(pszTargetSRS) != OGRERR_NONE )
++    if( poTargetSRS->SetFromUserInput(pszTargetSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+     {
+         delete poTargetSRS;
+         poTargetSRS = nullptr;
+@@ -404,7 +404,7 @@ OGRLayer *OGRVRTDataSource::InstantiateUnionLayer(
+             OGRSpatialReference oSRS;
+             oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+ 
+-            if( oSRS.SetFromUserInput(pszLayerSRS) != OGRERR_NONE )
++            if( oSRS.SetFromUserInput(pszLayerSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+             {
+                 CPLError(CE_Failure, CPLE_AppDefined,
+                          "Failed to import LayerSRS `%s'.", pszLayerSRS);
+@@ -531,7 +531,7 @@ OGRLayer *OGRVRTDataSource::InstantiateUnionLayer(
+                     OGRSpatialReference oSRS;
+                     oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+ 
+-                    if( oSRS.SetFromUserInput(pszSRS) != OGRERR_NONE )
++                    if( oSRS.SetFromUserInput(pszSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+                     {
+                         CPLError(CE_Failure, CPLE_AppDefined,
+                                  "Failed to import SRS `%s'.", pszSRS);
+diff --git a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
+index 0c8e479f40..587b7bd913 100644
+--- a/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/vrt/ogrvrtlayer.cpp
+@@ -248,7 +248,7 @@ bool OGRVRTLayer::FastInitialize( CPLXMLNode *psLTreeIn,
+             OGRSpatialReference oSRS;
+             oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+ 
+-            if( oSRS.SetFromUserInput(pszLayerSRS) != OGRERR_NONE )
++            if( oSRS.SetFromUserInput(pszLayerSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+             {
+                 CPLError(CE_Failure, CPLE_AppDefined,
+                          "Failed to import LayerSRS `%s'.", pszLayerSRS);
+@@ -474,7 +474,7 @@ bool OGRVRTLayer::ParseGeometryField(CPLXMLNode *psNode,
+             OGRSpatialReference oSRS;
+             oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+ 
+-            if( oSRS.SetFromUserInput(pszSRS) != OGRERR_NONE )
++            if( oSRS.SetFromUserInput(pszSRS, OGRSpatialReference::SET_FROM_USER_INPUT_LIMITATIONS) != OGRERR_NONE )
+             {
+                 CPLError(CE_Failure, CPLE_AppDefined,
+                          "Failed to import SRS `%s'.", pszSRS);

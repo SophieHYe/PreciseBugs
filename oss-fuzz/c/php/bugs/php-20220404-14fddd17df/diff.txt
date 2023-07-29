@@ -1,0 +1,50 @@
+diff --git a/Zend/tests/bug63882_2.phpt b/Zend/tests/bug63882_2.phpt
+new file mode 100644
+index 0000000000..c457a7ad45
+--- /dev/null
++++ b/Zend/tests/bug63882_2.phpt
+@@ -0,0 +1,23 @@
++--TEST--
++Bug #63882_2 (arsort crash on recursion)
++--FILE--
++<?php
++$token = array();
++$conditions = array();
++for ($i = 0; $i <= 2; $i++) {
++    $tokens = $conditions;
++    $a[0] =& $a;
++    $a = unserialize(serialize($GLOBALS));
++    $a[0] =& $a;
++    $a = unserialize(serialize($GLOBALS));
++    $a[0] =& $a;
++    foreach($a as $v) {
++        if ($v == 1) {
++            arsort($a);
++        }
++    }
++}
++?>
++DONE
++--EXPECT--
++DONE
+diff --git a/Zend/zend_hash.c b/Zend/zend_hash.c
+index 5f878b2154..cf0f9e5b33 100644
+--- a/Zend/zend_hash.c
++++ b/Zend/zend_hash.c
+@@ -2551,6 +2551,16 @@ ZEND_API void ZEND_FASTCALL zend_hash_sort_ex(HashTable *ht, sort_func_t sort, b
+ 		ht->nNumUsed = i;
+ 	}
+ 
++	if (!(HT_FLAGS(ht) & HASH_FLAG_PACKED)) {
++		/* We broke the hash colisions chains overriding Z_NEXT() by Z_EXTRA().
++		 * Reset the hash headers table as well to avoid possilbe inconsistent
++		 * access on recursive data structures.
++	     *
++	     * See Zend/tests/bug63882_2.phpt
++		 */
++		HT_HASH_RESET(ht);
++	}
++
+ 	sort((void *)ht->arData, ht->nNumUsed, sizeof(Bucket), (compare_func_t) compar,
+ 			(swap_func_t)(renumber? zend_hash_bucket_renum_swap :
+ 				((HT_FLAGS(ht) & HASH_FLAG_PACKED) ? zend_hash_bucket_packed_swap : zend_hash_bucket_swap)));

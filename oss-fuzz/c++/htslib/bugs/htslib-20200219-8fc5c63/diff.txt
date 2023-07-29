@@ -1,0 +1,36 @@
+diff --git a/cram/cram_io.c b/cram/cram_io.c
+index 59777cc..3db14bd 100644
+--- a/cram/cram_io.c
++++ b/cram/cram_io.c
+@@ -3852,9 +3852,9 @@ cram_slice *cram_read_slice(cram_fd *fd) {
+     for (i = 0; i < n; i++) {
+         if (s->block[i]->content_type != EXTERNAL)
+             continue;
+-        int v = s->block[i]->content_id;
+-        if (v < 0 || v >= 256)
+-            v = 256 + (v > 0 ? v % 251 : (-v) % 251);
++        uint32_t v = s->block[i]->content_id;
++        if (v >= 256)
++            v = 256 + v % 251;
+         s->block_by_id[v] = s->block[i];
+     }
+ 
+diff --git a/cram/cram_io.h b/cram/cram_io.h
+index b1eccd6..3f83eab 100644
+--- a/cram/cram_io.h
++++ b/cram/cram_io.h
+@@ -477,10 +477,11 @@ char *cram_content_type2str(enum cram_content_type t);
+ 
+ static inline cram_block *cram_get_block_by_id(cram_slice *slice, int id) {
+   //fprintf(stderr, "%d\t%p\n", id, slice->block_by_id);
+-    if (slice->block_by_id && id >= 0 && id < 256) {
+-        return slice->block_by_id[id];
++    uint32_t v = id;
++    if (slice->block_by_id && v < 256) {
++        return slice->block_by_id[v];
+     } else {
+-        int v = 256 + (id > 0 ? id % 251 : (-id) % 251);
++        v = 256 + v % 251;
+         if (slice->block_by_id &&
+             slice->block_by_id[v] &&
+             slice->block_by_id[v]->content_id == id)

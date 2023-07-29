@@ -1,0 +1,226 @@
+diff --cc autotest/gdrivers/zarr_driver.py
+index cf32ce9f06,cf32ce9f06..52bd2a074f
+--- a/autotest/gdrivers/zarr_driver.py
++++ b/autotest/gdrivers/zarr_driver.py
+@@@ -2239,74 -2239,74 +2239,3 @@@ def test_zarr_read_too_large_tile_size(
+      finally:
+          gdal.RmdirRecursive('/vsimem/test.zarr')
+  
+--
+--def test_zarr_read_recursive_array_loading():
+--
+--    try:
+--        gdal.Mkdir('/vsimem/test.zarr', 0)
+--
+--        j = { "zarr_format": 2 }
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zgroup', json.dumps(j))
+--
+--        j = { "chunks": [1],
+--              "compressor": None,
+--              "dtype": '!b1',
+--              "fill_value": None,
+--              "filters": None,
+--              "order": "C",
+--              "shape": [ 1 ],
+--              "zarr_format": 2
+--        }
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/a/.zarray', json.dumps(j))
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/b/.zarray', json.dumps(j))
+--
+--        j = { "_ARRAY_DIMENSIONS": ["b"] }
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/a/.zattrs', json.dumps(j))
+--
+--        j = { "_ARRAY_DIMENSIONS": ["a"] }
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/b/.zattrs', json.dumps(j))
+--
+--        ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
+--        assert ds is not None
+--        with gdaltest.error_handler():
+--            ar = ds.GetRootGroup().OpenMDArray('a')
+--            assert ar
+--            assert gdal.GetLastErrorMsg() == 'Attempt at recursively loading /vsimem/test.zarr/a/.zarray'
+--    finally:
+--        gdal.RmdirRecursive('/vsimem/test.zarr')
+--
+--
+--def test_zarr_read_too_deep_array_loading():
+--
+--    try:
+--        gdal.Mkdir('/vsimem/test.zarr', 0)
+--
+--        j = { "zarr_format": 2 }
+--        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zgroup', json.dumps(j))
+--
+--        j = { "chunks": [1],
+--              "compressor": None,
+--              "dtype": '!b1',
+--              "fill_value": None,
+--              "filters": None,
+--              "order": "C",
+--              "shape": [ 1 ],
+--              "zarr_format": 2
+--        }
+--
+--        N = 33
+--        for i in range(N):
+--            gdal.FileFromMemBuffer('/vsimem/test.zarr/%d/.zarray' % i, json.dumps(j))
+--
+--        for i in range(N-1):
+--            j = { "_ARRAY_DIMENSIONS": ["%d" % (i+1)] }
+--            gdal.FileFromMemBuffer('/vsimem/test.zarr/%d/.zattrs' % i, json.dumps(j))
+--
+--        ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
+--        assert ds is not None
+--        with gdaltest.error_handler():
+--            ar = ds.GetRootGroup().OpenMDArray('0')
+--            assert ar
+--            assert gdal.GetLastErrorMsg() == 'Too deep call stack in LoadArray()'
+--    finally:
+--        gdal.RmdirRecursive('/vsimem/test.zarr')
+diff --cc gdal/frmts/zarr/zarr.h
+index 5023ea6a08,5023ea6a08..27b92ae8f4
+--- a/gdal/frmts/zarr/zarr.h
++++ b/gdal/frmts/zarr/zarr.h
+@@@ -36,8 -36,8 +36,6 @@@
+  #include "memmultidim.h"
+  
+  #include <array>
+--#include <map>
+--#include <set>
+  
+  /************************************************************************/
+  /*                            ZarrDataset                               */
+@@@ -288,8 -288,8 +286,7 @@@ public
+                                           const std::string& osZarrayFilename,
+                                           const CPLJSONObject& oRoot,
+                                           bool bLoadedFromZMetadata,
+--                                         const CPLJSONObject& oAttributes,
+--                                         std::set<std::string>& oSetFilenamesInLoading) const;
+++                                         const CPLJSONObject& oAttributes) const;
+      void RegisterArray(const std::shared_ptr<ZarrArray>& array) const;
+  
+      void SetUpdatable(bool bUpdatable) { m_bUpdatable = bUpdatable; }
+diff --cc gdal/frmts/zarr/zarr_array.cpp
+index 22a5c2eb61,22a5c2eb61..290157bfa4
+--- a/gdal/frmts/zarr/zarr_array.cpp
++++ b/gdal/frmts/zarr/zarr_array.cpp
+@@@ -2482,46 -2482,46 +2482,8 @@@ std::shared_ptr<ZarrArray> ZarrGroupBas
+                                                  const std::string& osZarrayFilename,
+                                                  const CPLJSONObject& oRoot,
+                                                  bool bLoadedFromZMetadata,
+--                                                const CPLJSONObject& oAttributesIn,
+--                                                std::set<std::string>& oSetFilenamesInLoading) const
+++                                                const CPLJSONObject& oAttributesIn) const
+  {
+--    // Prevent too deep or recursive array loading
+--    if( oSetFilenamesInLoading.find(osZarrayFilename) != oSetFilenamesInLoading.end() )
+--    {
+--        CPLError(CE_Failure, CPLE_AppDefined,
+--                 "Attempt at recursively loading %s", osZarrayFilename.c_str());
+--        return nullptr;
+--    }
+--    if( oSetFilenamesInLoading.size() == 32 )
+--    {
+--        CPLError(CE_Failure, CPLE_AppDefined,
+--                 "Too deep call stack in LoadArray()");
+--        return nullptr;
+--    }
+--
+--    struct SetFilenameAdder
+--    {
+--        std::set<std::string>& m_oSetFilenames;
+--        std::string m_osFilename;
+--
+--        SetFilenameAdder(std::set<std::string>& oSetFilenamesIn,
+--                         const std::string& osFilename):
+--             m_oSetFilenames(oSetFilenamesIn),
+--             m_osFilename(osFilename)
+--        {
+--            m_oSetFilenames.insert(osFilename);
+--        }
+--
+--        ~SetFilenameAdder()
+--        {
+--            m_oSetFilenames.erase(m_osFilename);
+--        }
+--    };
+--
+--    // Add osZarrayFilename to oSetFilenamesInLoading during the scope
+--    // of this function call.
+--    SetFilenameAdder filenameAdder(oSetFilenamesInLoading, osZarrayFilename);
+--
+      const bool isZarrV2 = dynamic_cast<const ZarrGroupV2*>(this) != nullptr;
+  
+      if( isZarrV2 )
+@@@ -2674,7 -2674,7 +2636,7 @@@
+  
+      const auto FindDimension = [this, &aoDims, &oAttributes, &osUnit,
+                                  bLoadedFromZMetadata, &osArrayName,
+--                                &osZarrayFilename, &oSetFilenamesInLoading,
+++                                &osZarrayFilename,
+                                  isZarrV2](
+                                          const std::string& osDimName,
+                                          std::shared_ptr<GDALDimension>& poDim,
+@@@ -2750,8 -2750,8 +2712,7 @@@
+                              osArrayFilenameDim,
+                              oDoc.GetRoot(),
+                              false,
+--                            CPLJSONObject(),
+--                            oSetFilenamesInLoading);
+++                            CPLJSONObject());
+                      }
+                  }
+                  else
+diff --cc gdal/frmts/zarr/zarr_group.cpp
+index 9524fd2df7,9524fd2df7..1f56d4ab35
+--- a/gdal/frmts/zarr/zarr_group.cpp
++++ b/gdal/frmts/zarr/zarr_group.cpp
+@@@ -266,9 -266,9 +266,7 @@@ std::shared_ptr<GDALMDArray> ZarrGroupV
+              if( !oDoc.Load(osZarrayFilename) )
+                  return nullptr;
+              const auto oRoot = oDoc.GetRoot();
+--            std::set<std::string> oSetFilenamesInLoading;
+--            return LoadArray(osName, osZarrayFilename, oRoot, false,
+--                             CPLJSONObject(), oSetFilenamesInLoading);
+++            return LoadArray(osName, osZarrayFilename, oRoot, false, CPLJSONObject());
+          }
+      }
+  
+@@@ -380,9 -380,9 +378,7 @@@ std::shared_ptr<GDALMDArray> ZarrGroupV
+          if( !oDoc.Load(osFilename) )
+              return nullptr;
+          const auto oRoot = oDoc.GetRoot();
+--        std::set<std::string> oSetFilenamesInLoading;
+--        return LoadArray(osName, osFilename, oRoot, false,
+--                         CPLJSONObject(), oSetFilenamesInLoading);
+++        return LoadArray(osName, osFilename, oRoot, false, CPLJSONObject());
+      }
+  
+      return nullptr;
+@@@ -510,10 -510,10 +506,8 @@@ void ZarrGroupV2::InitFromZMetadata(con
+                                  osArrayName.c_str(), nullptr),
+                  ".zarray",
+                  nullptr);
+--        std::set<std::string> oSetFilenamesInLoading;
+          poBelongingGroup->LoadArray(
+--                    osArrayName, osZarrayFilename, oArray, true,
+--                    oAttributes, oSetFilenamesInLoading);
+++                    osArrayName, osZarrayFilename, oArray, true, oAttributes);
+      };
+  
+      struct ArrayDesc
+diff --cc gdal/frmts/zarr/zarrdriver.cpp
+index 80a7d5a93c,80a7d5a93c..f3a396c66e
+--- a/gdal/frmts/zarr/zarrdriver.cpp
++++ b/gdal/frmts/zarr/zarrdriver.cpp
+@@@ -105,9 -105,9 +105,8 @@@ GDALDataset* ZarrDataset::OpenMultidim(
+              return nullptr;
+          const auto oRoot = oDoc.GetRoot();
+          const std::string osArrayName(CPLGetBasename(osFilename.c_str()));
+--        std::set<std::string> oSetFilenamesInLoading;
+          if( !poRG->LoadArray(osArrayName, osZarrayFilename, oRoot,
+--                             false, CPLJSONObject(), oSetFilenamesInLoading) )
+++                             false, CPLJSONObject()) )
+              return nullptr;
+  
+          return poDS.release();

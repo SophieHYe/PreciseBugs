@@ -1,0 +1,134 @@
+diff --git a/source/common/http/conn_manager_impl.cc b/source/common/http/conn_manager_impl.cc
+index f10d3052c5..2d19400b62 100644
+--- a/source/common/http/conn_manager_impl.cc
++++ b/source/common/http/conn_manager_impl.cc
+@@ -2419,7 +2419,11 @@ void ConnectionManagerImpl::ActiveStreamDecoderFilter::requestDataDrained() {
+ void ConnectionManagerImpl::ActiveStreamDecoderFilter::
+     onDecoderFilterBelowWriteBufferLowWatermark() {
+   ENVOY_STREAM_LOG(debug, "Read-enabling downstream stream due to filter callbacks.", parent_);
+-  parent_.response_encoder_->getStream().readDisable(false);
++  // If the state is destroyed, the codec's stream is already torn down. On
++  // teardown the codec will unwind any remaining read disable calls.
++  if (!parent_.state_.destroyed_) {
++    parent_.response_encoder_->getStream().readDisable(false);
++  }
+   parent_.connection_manager_.stats_.named_.downstream_flow_control_resumed_reading_total_.inc();
+ }
+ 
+diff --git a/test/integration/BUILD b/test/integration/BUILD
+index f4d8ff9263..10a3d147de 100644
+--- a/test/integration/BUILD
++++ b/test/integration/BUILD
+@@ -497,6 +497,7 @@ envoy_cc_test(
+     tags = ["fails_on_windows"],
+     deps = [
+         ":http_protocol_integration_lib",
++        "//test/integration/filters:backpressure_filter_config_lib",
+         "//test/test_common:test_time_lib",
+         "@envoy_api//envoy/config/bootstrap/v3:pkg_cc_proto",
+         "@envoy_api//envoy/extensions/filters/network/http_connection_manager/v3:pkg_cc_proto",
+diff --git a/test/integration/filters/BUILD b/test/integration/filters/BUILD
+index 1f320a04a6..950370da9e 100644
+--- a/test/integration/filters/BUILD
++++ b/test/integration/filters/BUILD
+@@ -52,6 +52,20 @@ envoy_cc_test_library(
+     ],
+ )
+ 
++envoy_cc_test_library(
++    name = "backpressure_filter_config_lib",
++    srcs = [
++        "backpressure_filter.cc",
++    ],
++    deps = [
++        "//include/envoy/http:filter_interface",
++        "//include/envoy/registry",
++        "//include/envoy/server:filter_config_interface",
++        "//source/extensions/filters/http/common:pass_through_filter_lib",
++        "//test/extensions/filters/http/common:empty_http_filter_config_lib",
++    ],
++)
++
+ envoy_cc_test_library(
+     name = "clear_route_cache_filter_lib",
+     srcs = [
+diff --git a/test/integration/filters/backpressure_filter.cc b/test/integration/filters/backpressure_filter.cc
+new file mode 100644
+index 0000000000..1d6f8ce92b
+--- /dev/null
++++ b/test/integration/filters/backpressure_filter.cc
+@@ -0,0 +1,42 @@
++#include <string>
++
++#include "envoy/http/filter.h"
++#include "envoy/registry/registry.h"
++#include "envoy/server/filter_config.h"
++
++#include "extensions/filters/http/common/pass_through_filter.h"
++
++#include "test/extensions/filters/http/common/empty_http_filter_config.h"
++
++namespace Envoy {
++
++// A filter that buffers the entire request/response, then doubles
++// the content of the filter buffer.
++class BackpressureFilter : public Http::PassThroughFilter {
++public:
++  void onDestroy() override { decoder_callbacks_->onDecoderFilterBelowWriteBufferLowWatermark(); }
++
++  Http::FilterHeadersStatus decodeHeaders(Http::RequestHeaderMap&, bool) override {
++    decoder_callbacks_->onDecoderFilterAboveWriteBufferHighWatermark();
++    return Http::FilterHeadersStatus::Continue;
++  }
++};
++
++class BackpressureConfig : public Extensions::HttpFilters::Common::EmptyHttpFilterConfig {
++public:
++  BackpressureConfig() : EmptyHttpFilterConfig("backpressure-filter") {}
++
++  Http::FilterFactoryCb createFilter(const std::string&,
++                                     Server::Configuration::FactoryContext&) override {
++    return [](Http::FilterChainFactoryCallbacks& callbacks) -> void {
++      callbacks.addStreamFilter(std::make_shared<::Envoy::BackpressureFilter>());
++    };
++  }
++};
++
++// perform static registration
++static Registry::RegisterFactory<BackpressureConfig,
++                                 Server::Configuration::NamedHttpFilterConfigFactory>
++    register_;
++
++} // namespace Envoy
+diff --git a/test/integration/idle_timeout_integration_test.cc b/test/integration/idle_timeout_integration_test.cc
+index 0591d125be..8c906aa51a 100644
+--- a/test/integration/idle_timeout_integration_test.cc
++++ b/test/integration/idle_timeout_integration_test.cc
+@@ -184,6 +184,27 @@ TEST_P(IdleTimeoutIntegrationTest, PerStreamIdleTimeoutAfterDownstreamHeaders) {
+   EXPECT_THAT(waitForAccessLog(access_log_name_), HasSubstr("stream_idle_timeout"));
+ }
+ 
++// Per-stream idle timeout with reads disabled.
++TEST_P(IdleTimeoutIntegrationTest, PerStreamIdleTimeoutWithLargeBuffer) {
++  config_helper_.addFilter(R"EOF(
++  name: backpressure-filter
++  )EOF");
++  enable_per_stream_idle_timeout_ = true;
++  initialize();
++
++  fake_upstreams_[0]->set_allow_unexpected_disconnects(true);
++  codec_client_ = makeHttpConnection(makeClientConnection((lookupPort("http"))));
++  auto response = codec_client_->makeHeaderOnlyRequest(default_request_headers_);
++  response->waitForEndStream();
++  EXPECT_TRUE(response->complete());
++
++  // Make sure that for HTTP/1.1 reads are enabled even though the first request
++  // ended in the "backed up" state.
++  auto response2 = codec_client_->makeHeaderOnlyRequest(default_request_headers_);
++  response2->waitForEndStream();
++  EXPECT_TRUE(response2->complete());
++}
++
+ // Per-stream idle timeout after having sent downstream head request.
+ TEST_P(IdleTimeoutIntegrationTest, PerStreamIdleTimeoutHeadRequestAfterDownstreamHeadRequest) {
+   enable_per_stream_idle_timeout_ = true;

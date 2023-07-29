@@ -1,0 +1,14 @@
+diff --git a/MagickCore/utility.c b/MagickCore/utility.c
+index 75d36558c..0e3c008f1 100644
+--- a/MagickCore/utility.c
++++ b/MagickCore/utility.c
+@@ -1363,7 +1363,8 @@ MagickExport void GetPathComponent(const char *path,PathType type,
+     case SubimagePath:
+     {
+       *component='\0';
+-      if (subimage_length != 0)
++      if ((subimage_length != 0) &&
++          (magick_length+subimage_offset) < strlen(path))
+         (void) CopyMagickString(component,path+magick_length+subimage_offset,
+           subimage_length);
+       break;

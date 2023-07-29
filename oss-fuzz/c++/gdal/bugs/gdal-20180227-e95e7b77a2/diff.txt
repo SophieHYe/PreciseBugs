@@ -1,0 +1,220 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h b/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
+index 236f81c70c..b64826da96 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogr_dxf.h
+@@ -59,6 +59,33 @@ public:
+     std::vector<OGRDXFFeature *> apoFeatures;
+ };
+ 
++/************************************************************************/
++/*                         OGRDXFFeatureQueue                           */
++/************************************************************************/
++
++class OGRDXFFeatureQueue
++{
++        std::queue<OGRDXFFeature *> apoFeatures;
++        size_t                      nFeaturesSize = 0;
++
++        static size_t GetFeatureSize(OGRFeature* poFeature);
++
++    public:
++        OGRDXFFeatureQueue() {}
++
++        void                push( OGRDXFFeature* poFeature );
++
++        OGRDXFFeature*      front() const { return apoFeatures.front(); }
++
++        void                pop();
++
++        bool empty() const { return apoFeatures.empty(); }
++
++        size_t size() const { return apoFeatures.size(); }
++
++        size_t GetFeaturesSize() const { return nFeaturesSize; }
++};
++
+ /************************************************************************/
+ /*                          OGRDXFBlocksLayer                           */
+ /************************************************************************/
+@@ -74,7 +101,7 @@ class OGRDXFBlocksLayer : public OGRLayer
+     std::map<CPLString,DXFBlockDefinition>::iterator oIt;
+     CPLString           osBlockName;
+ 
+-    std::queue<OGRDXFFeature *> apoPendingFeatures;
++    OGRDXFFeatureQueue apoPendingFeatures;
+ 
+   public:
+     explicit OGRDXFBlocksLayer( OGRDXFDataSource *poDS );
+@@ -266,7 +293,7 @@ class OGRDXFLayer : public OGRLayer
+ 
+     std::set<CPLString> oIgnoredEntities;
+ 
+-    std::queue<OGRDXFFeature*> apoPendingFeatures;
++    OGRDXFFeatureQueue  apoPendingFeatures;
+     void                ClearPendingFeatures();
+ 
+     void                TranslateGenericProperty( OGRDXFFeature *poFeature,
+@@ -315,7 +342,7 @@ class OGRDXFLayer : public OGRLayer
+     OGRDXFFeature *     InsertBlockInline( const CPLString& osBlockName,
+                                            OGRDXFInsertTransformer oTransformer,
+                                            OGRDXFFeature* const poFeature,
+-                                           std::queue<OGRDXFFeature *>& apoExtraFeatures,
++                                           OGRDXFFeatureQueue& apoExtraFeatures,
+                                            const bool bInlineNestedBlocks,
+                                            const bool bMergeGeometry );
+     OGRDXFFeature *     InsertBlockReference( const CPLString& osBlockName,
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
+index 06b34a35e7..77767444cb 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_leader.cpp
+@@ -873,7 +873,7 @@ OGRDXFFeature *OGRDXFLayer::TranslateMLEADER()
+         else
+         {
+             // Insert the block inline.
+-            std::queue<OGRDXFFeature *> apoExtraFeatures;
++            OGRDXFFeatureQueue apoExtraFeatures;
+             try
+             {
+                 poBlockFeature = InsertBlockInline( osBlockName,
+@@ -1127,7 +1127,7 @@ void OGRDXFLayer::InsertArrowhead( OGRDXFFeature* const poFeature,
+     if( osBlockHandle != "" )
+         osBlockName = poDS->GetBlockNameByRecordHandle( osBlockHandle );
+ 
+-    std::queue<OGRDXFFeature *> apoExtraFeatures;
++    OGRDXFFeatureQueue apoExtraFeatures;
+ 
+     // If the block doesn't exist, we need to fall back to the
+     // default arrowhead.
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfblockslayer.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfblockslayer.cpp
+index 45c3b6b5aa..88c43d03c3 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxfblockslayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxfblockslayer.cpp
+@@ -82,8 +82,9 @@ void OGRDXFBlocksLayer::ResetReading()
+     iNextFID = 0;
+     while (!apoPendingFeatures.empty())
+     {
+-        delete apoPendingFeatures.front();
++        OGRDXFFeature* poFeature = apoPendingFeatures.front();
+         apoPendingFeatures.pop();
++        delete poFeature;
+     }
+     oIt = poDS->GetBlockMap().begin();
+ }
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+index f260bacab8..4d2d5dabf8 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxflayer.cpp
+@@ -41,6 +41,42 @@
+ 
+ CPL_CVSID("$Id$")
+ 
++
++/************************************************************************/
++/*                                push()                               */
++/************************************************************************/
++
++void OGRDXFFeatureQueue::push( OGRDXFFeature* poFeature )
++{
++    nFeaturesSize += GetFeatureSize(poFeature);
++    apoFeatures.push( poFeature );
++}
++
++/************************************************************************/
++/*                                 pop()                                */
++/************************************************************************/
++
++void OGRDXFFeatureQueue::pop()
++{
++    CPLAssert( !apoFeatures.empty() );
++    OGRDXFFeature* poFeature = apoFeatures.front();
++    nFeaturesSize -= GetFeatureSize(poFeature);
++    apoFeatures.pop();
++}
++
++/************************************************************************/
++/*                           GetFeatureSize()                           */
++/************************************************************************/
++
++size_t OGRDXFFeatureQueue::GetFeatureSize(OGRFeature* poFeature)
++{
++    size_t nSize = 0;
++    OGRGeometry* poGeom = poFeature->GetGeometryRef();
++    if( poGeom )
++        nSize += poGeom->WkbSize();
++    return nSize;
++}
++
+ /************************************************************************/
+ /*                            OGRDXFLayer()                             */
+ /************************************************************************/
+@@ -86,8 +122,9 @@ void OGRDXFLayer::ClearPendingFeatures()
+ {
+     while( !apoPendingFeatures.empty() )
+     {
+-        delete apoPendingFeatures.front();
++        OGRDXFFeature* poFeature = apoPendingFeatures.front();
+         apoPendingFeatures.pop();
++        delete poFeature;
+     }
+ }
+ 
+@@ -2872,7 +2909,7 @@ OGRDXFFeature *OGRDXFLayer::InsertBlockReference(
+ OGRDXFFeature *OGRDXFLayer::InsertBlockInline( const CPLString& osBlockName,
+     OGRDXFInsertTransformer oTransformer,
+     OGRDXFFeature* const poFeature,
+-    std::queue<OGRDXFFeature *>& apoExtraFeatures,
++    OGRDXFFeatureQueue& apoExtraFeatures,
+     const bool bInlineRecursively,
+     const bool bMergeGeometry )
+ {
+@@ -2922,7 +2959,7 @@ OGRDXFFeature *OGRDXFLayer::InsertBlockInline( const CPLString& osBlockName,
+     if( bMergeGeometry )
+         poMergedGeometry = new OGRGeometryCollection();
+ 
+-    std::queue<OGRDXFFeature *> apoInnerExtraFeatures;
++    OGRDXFFeatureQueue apoInnerExtraFeatures;
+ 
+     for( unsigned int iSubFeat = 0;
+         iSubFeat < poBlock->apoFeatures.size();
+@@ -3244,9 +3281,10 @@ OGRDXFFeature *OGRDXFLayer::TranslateINSERT()
+ /*      Perform the actual block insertion.                             */
+ /* -------------------------------------------------------------------- */
+ 
+-    for( int iRow = 0; iRow < nRowCount; iRow++ )
++    bool bLimitReached = false;
++    for( int iRow = 0; !bLimitReached && iRow < nRowCount; iRow++ )
+     {
+-        for( int iColumn = 0; iColumn < nColumnCount; iColumn++ )
++        for( int iColumn = 0; !bLimitReached && iColumn < nColumnCount; iColumn++ )
+         {
+             TranslateINSERTCore( poTemplateFeature, osBlockName, oTransformer,
+                 iColumn * dfColumnSpacing * cos( oTransformer.dfAngle ) +
+@@ -3256,16 +3294,15 @@ OGRDXFFeature *OGRDXFLayer::TranslateINSERT()
+                 papszAttribs, apoAttribs );
+ 
+             // Prevent excessive memory usage with an arbitrary limit
+-            if( apoPendingFeatures.size() > 100000 )
++            if( apoPendingFeatures.size() > 100000 ||
++                apoPendingFeatures.GetFeaturesSize() > 100*1024*1024  )
+             {
+                 CPLError( CE_Warning, CPLE_AppDefined,
+                     "Too many features generated by MInsertBlock. "
+                     "Some features have been omitted." );
+-                break;
++                bLimitReached = true;
+             }
+         }
+-        if( apoPendingFeatures.size() > 100000 )
+-            break;
+     }
+ 
+     CSLDestroy(papszAttribs);
+@@ -3307,7 +3344,7 @@ void OGRDXFLayer::TranslateINSERTCore(
+     // Otherwise, try inlining the contents of this block
+     else
+     {
+-        std::queue<OGRDXFFeature *> apoExtraFeatures;
++        OGRDXFFeatureQueue apoExtraFeatures;
+         try
+         {
+             poFeature = InsertBlockInline( osBlockName,

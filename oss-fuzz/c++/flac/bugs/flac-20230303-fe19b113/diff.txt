@@ -1,0 +1,12 @@
+diff --git a/src/flac/encode.c b/src/flac/encode.c
+index 920a8410..576d0ef8 100644
+--- a/src/flac/encode.c
++++ b/src/flac/encode.c
+@@ -1490,6 +1490,7 @@ FLAC__bool EncoderSession_construct(EncoderSession *e, encode_options_t options,
+ #else
+ 	e->old_clock_t = 0;
+ #endif
++	e->compression_ratio = 0.0;
+ 
+ 	memset(&e->info, 0, sizeof(e->info));
+ 

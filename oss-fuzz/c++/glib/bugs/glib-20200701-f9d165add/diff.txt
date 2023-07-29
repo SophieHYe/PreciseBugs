@@ -1,0 +1,38 @@
+diff --git a/glib/guri.c b/glib/guri.c
+index de9f43875..4c55b5bb4 100644
+--- a/glib/guri.c
++++ b/glib/guri.c
+@@ -253,10 +253,11 @@ uri_decoder (gchar       **out,
+     {
+       if (*s == '%')
+         {
+-          if (!g_ascii_isxdigit (s[1]) ||
++          if (s + 2 >= end ||
++              !g_ascii_isxdigit (s[1]) ||
+               !g_ascii_isxdigit (s[2]))
+             {
+-              /* % followed by non-hex; this is an error */
++              /* % followed by non-hex or the end of the string; this is an error */
+               if (flags & G_URI_FLAGS_PARSE_STRICT)
+                 {
+                   g_set_error_literal (error, G_URI_ERROR, parse_error,
+diff --git a/glib/tests/uri.c b/glib/tests/uri.c
+index 71bfad289..4e0f07366 100644
+--- a/glib/tests/uri.c
++++ b/glib/tests/uri.c
+@@ -378,6 +378,7 @@ test_uri_unescape_bytes (gconstpointer test_data)
+     {
+       { "%00%00", 2, (const guint8 *) "\x00\x00" },
+       { "%%", -1, NULL },
++      { "%", -1, NULL },
+     };
+   gsize i;
+ 
+@@ -1284,6 +1285,7 @@ test_uri_parse_params (gconstpointer test_data)
+       { "%00=foo", '&', FALSE, -1, { NULL, }},
+       { "p1=%00", '&', FALSE, -1, { NULL, }},
+       { "p1=foo&P1=bar", '&', TRUE, 1, { "p1", "bar", NULL, }},
++      { "=%", '&', FALSE, 1, { "", "%", NULL, }},
+     };
+   gsize i;
+ 

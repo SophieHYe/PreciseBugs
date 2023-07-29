@@ -1,0 +1,13 @@
+diff --git a/src/imageformats/rgb.cpp b/src/imageformats/rgb.cpp
+index d09fadf..4dcde6c 100644
+--- a/src/imageformats/rgb.cpp
++++ b/src/imageformats/rgb.cpp
+@@ -153,7 +153,7 @@ bool SGIImage::getRow(uchar *dest)
+         }
+ 
+         if (*_pos++ & 0x80) {
+-            for (; i < _xsize && n--; i++) {
++            for (; i < _xsize && _pos < _data.end() && n--; i++) {
+                 *dest++ = *_pos;
+                 _pos += _bpc;
+             }

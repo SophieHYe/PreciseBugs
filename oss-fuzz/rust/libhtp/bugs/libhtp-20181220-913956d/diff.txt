@@ -1,0 +1,52 @@
+diff --git a/htp/bstr.c b/htp/bstr.c
+index c127790..35002f9 100644
+--- a/htp/bstr.c
++++ b/htp/bstr.c
+@@ -390,7 +390,7 @@ int bstr_util_cmp_mem_nocase(const void *_data1, size_t len1, const void *_data2
+ 
+ int64_t bstr_util_mem_to_pint(const void *_data, size_t len, int base, size_t *lastlen) {
+     const unsigned char *data = (unsigned char *) _data;
+-    int64_t rval = 0, tval = 0, tflag = 0;
++    int64_t rval = 0, tflag = 0;
+     size_t i = 0;
+ 
+     *lastlen = i;
+@@ -424,23 +424,15 @@ int64_t bstr_util_mem_to_pint(const void *_data, size_t len, int base, size_t *l
+         }
+ 
+         if (tflag) {
+-            rval *= base;
+-
+-            if (tval > rval) {
++            if (((INT64_MAX - d) / base) < rval) {
+                 // Overflow
+                 return -2;
+             }
+ 
++            rval *= base;
+             rval += d;
+-
+-            if (tval > rval) {
+-                // Overflow
+-                return -2;
+-            }
+-
+-            tval = rval;
+         } else {
+-            tval = rval = d;
++            rval = d;
+             tflag = 1;
+         }
+     }
+diff --git a/test/test_bstr.cpp b/test/test_bstr.cpp
+index 1b8cb83..791affa 100644
+--- a/test/test_bstr.cpp
++++ b/test/test_bstr.cpp
+@@ -494,6 +494,7 @@ TEST(BstrTest, ToPint) {
+     EXPECT_EQ(-2, bstr_util_mem_to_pint("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 40, 16, &lastlen));
+     EXPECT_EQ(0x7fffffffffffffffLL, bstr_util_mem_to_pint("7fffffffffffffff", 16, 16, &lastlen));
+     EXPECT_EQ(-2, bstr_util_mem_to_pint("9223372036854775808", 19, 10, &lastlen));
++    EXPECT_EQ(-2, bstr_util_mem_to_pint("555555555555555555555555555555", 30, 10, &lastlen));
+     EXPECT_EQ(0xabc, bstr_util_mem_to_pint("abc", 3, 16, &lastlen));
+     EXPECT_EQ(4, lastlen);
+     EXPECT_EQ(0xabc, bstr_util_mem_to_pint("ABC", 3, 16, &lastlen));

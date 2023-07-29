@@ -1,0 +1,14 @@
+diff --git a/coders/pix.c b/coders/pix.c
+index e0f43baad..cc2b9eb8d 100644
+--- a/coders/pix.c
++++ b/coders/pix.c
+@@ -157,6 +157,9 @@ static Image *ReadPIXImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       if (image->scene >= (image_info->scene+image_info->number_scenes-1))
+         break;
+     status=SetImageExtent(image,image->columns,image->rows,exception);
++    if (status == MagickFalse)
++      return(DestroyImageList(image));
++    status=ResetImagePixels(image,exception);
+     if (status == MagickFalse)
+       return(DestroyImageList(image));
+     /*

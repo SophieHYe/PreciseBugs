@@ -1,0 +1,55 @@
+diff --git a/ext/opcache/jit/zend_jit_trace.c b/ext/opcache/jit/zend_jit_trace.c
+index 172e2efdf2..9df3ac8dab 100644
+--- a/ext/opcache/jit/zend_jit_trace.c
++++ b/ext/opcache/jit/zend_jit_trace.c
+@@ -1095,6 +1095,17 @@ static int is_checked_guard(const zend_ssa *tssa, const zend_op **ssa_opcodes, u
+ 					  && (tssa->var_info[tssa->ops[idx].op2_use].type & MAY_BE_REF)) {
+ 						return 0;
+ 					}
++					if (!(tssa->var_info[tssa->ops[idx].op1_use].type & (MAY_BE_LONG|MAY_BE_DOUBLE))) {
++						return 0;
++					}
++					if (opline->op2_type == IS_CONST) {
++						zval *zv = RT_CONSTANT(opline, opline->op2);
++						if (Z_TYPE_P(zv) != IS_LONG && Z_TYPE_P(zv) != IS_DOUBLE) {
++							return 0;
++						}
++					} else if (!(tssa->var_info[tssa->ops[idx].op2_use].type & (MAY_BE_LONG|MAY_BE_DOUBLE))) {
++						return 0;
++					}
+ 					return 1;
+ 				}
+ 			}
+diff --git a/ext/opcache/tests/jit/assign_op_009.phpt b/ext/opcache/tests/jit/assign_op_009.phpt
+new file mode 100644
+index 0000000000..0bf95abe34
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_op_009.phpt
+@@ -0,0 +1,27 @@
++--TEST--
++JIT ASSIGN_OP: 009 incorrect guard motion out of the loop
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function foo() {
++	$x = $a = $c = 0;
++    for($cnt=0;$cnt<6;$cnt++) {
++        $a *= $a;
++        for ($i = 0; $i <= .1; !$j++)
++            for ($i = 0; $i <= .1; !$i++)
++                for ($i = 0; $i << .1; !$i++);
++        $x != $a ?: $c;
++        $a = "3566715245541";
++    }
++}
++@foo();
++@foo();
++@foo();
++?>
++DONE
++--EXPECT--
++DONE

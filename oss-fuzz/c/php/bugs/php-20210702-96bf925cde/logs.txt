@@ -1,0 +1,1 @@
+commit 96bf925cde2af891e9fca761ffecbfebef6a0d30Author: Nikita Popov <nikita.ppv@gmail.com>Date:   Fri Jul 2 11:15:31 2021 +0200    Fix return value of wrong fucntion by-ref assign        We should be using the result of zend_assign_to_variable() here,    which will deref prior to potential freeing.        Fixes oss-fuzz #29899.

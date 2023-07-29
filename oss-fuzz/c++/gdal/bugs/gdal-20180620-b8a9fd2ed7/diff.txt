@@ -1,0 +1,93 @@
+diff --git a/gdal/frmts/nitf/nitfdataset.cpp b/gdal/frmts/nitf/nitfdataset.cpp
+index 92423164ba..f82f82f9fc 100644
+--- a/gdal/frmts/nitf/nitfdataset.cpp
++++ b/gdal/frmts/nitf/nitfdataset.cpp
+@@ -749,7 +749,8 @@ GDALDataset *NITFDataset::OpenInternal( GDALOpenInfo * poOpenInfo,
+     {
+         GUIntBig nJPEGStart = psFile->pasSegmentInfo[iSegment].nSegmentStart;
+ 
+-        poDS->nQLevel = poDS->ScanJPEGQLevel( &nJPEGStart );
++        bool bError = false;
++        poDS->nQLevel = poDS->ScanJPEGQLevel( &nJPEGStart, &bError );
+ 
+         CPLString osDSName;
+ 
+@@ -3383,7 +3384,7 @@ CPLErr NITFDataset::IBuildOverviews( const char *pszResampling,
+ /*      they are inline).                                               */
+ /************************************************************************/
+ 
+-int NITFDataset::ScanJPEGQLevel( GUIntBig *pnDataStart )
++int NITFDataset::ScanJPEGQLevel( GUIntBig *pnDataStart, bool *pbError )
+ 
+ {
+     if( VSIFSeekL( psFile->fp, *pnDataStart,
+@@ -3391,6 +3392,7 @@ int NITFDataset::ScanJPEGQLevel( GUIntBig *pnDataStart )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+                   "Seek error to jpeg data stream." );
++        *pbError = true;
+         return 0;
+     }
+ 
+@@ -3400,6 +3402,7 @@ int NITFDataset::ScanJPEGQLevel( GUIntBig *pnDataStart )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+                   "Read error to jpeg data stream." );
++        *pbError = true;
+         return 0;
+     }
+ 
+@@ -3415,8 +3418,12 @@ int NITFDataset::ScanJPEGQLevel( GUIntBig *pnDataStart )
+         nOffset++;
+ 
+     if( nOffset >= sizeof(abyHeader) - 23 )
++    {
++        *pbError = true;
+         return 0;
++    }
+ 
++    *pbError = false;
+     *pnDataStart += nOffset;
+ 
+     if( nOffset > 0 )
+@@ -3443,7 +3450,12 @@ CPLErr NITFDataset::ScanJPEGBlocks()
+ {
+     GUIntBig nJPEGStart =
+         psFile->pasSegmentInfo[psImage->iSegment].nSegmentStart;
+-    nQLevel = ScanJPEGQLevel( &nJPEGStart );
++    bool bError = false;
++    nQLevel = ScanJPEGQLevel( &nJPEGStart, &bError );
++    if( bError )
++    {
++        return CE_Failure;
++    }
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Allocate offset array                                           */
+@@ -3581,10 +3593,11 @@ CPLErr NITFDataset::ReadJPEGBlock( int iBlockX, int iBlockY )
+                 if (panJPEGBlockOffset[i] != -1 && panJPEGBlockOffset[i] != UINT_MAX)
+                 {
+                     GUIntBig nOffset = panJPEGBlockOffset[i];
+-                    nQLevel = ScanJPEGQLevel(&nOffset);
++                    bool bError = false;
++                    nQLevel = ScanJPEGQLevel(&nOffset, &bError);
+                     /* The beginning of the JPEG stream should be the offset */
+                     /* from the panBlockStart table */
+-                    if (nOffset != (GUIntBig)panJPEGBlockOffset[i])
++                    if (bError || nOffset != (GUIntBig)panJPEGBlockOffset[i])
+                     {
+                         CPLError(CE_Failure, CPLE_AppDefined,
+                                  "JPEG block doesn't start at expected offset");
+diff --git a/gdal/frmts/nitf/nitfdataset.h b/gdal/frmts/nitf/nitfdataset.h
+index e5b8f313f9..519e1544ba 100644
+--- a/gdal/frmts/nitf/nitfdataset.h
++++ b/gdal/frmts/nitf/nitfdataset.h
+@@ -100,7 +100,7 @@ class NITFDataset final: public GDALPamDataset
+     GByte       *pabyJPEGBlock;
+     int          nQLevel;
+ 
+-    int          ScanJPEGQLevel( GUIntBig *pnDataStart );
++    int          ScanJPEGQLevel( GUIntBig *pnDataStart, bool *pbError );
+     CPLErr       ScanJPEGBlocks();
+     CPLErr       ReadJPEGBlock( int, int );
+     void         CheckGeoSDEInfo();

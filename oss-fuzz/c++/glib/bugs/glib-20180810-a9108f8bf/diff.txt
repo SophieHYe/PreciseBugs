@@ -1,0 +1,36 @@
+diff --git a/glib/gvariant-parser.c b/glib/gvariant-parser.c
+index 233a19f7c..335c71425 100644
+--- a/glib/gvariant-parser.c
++++ b/glib/gvariant-parser.c
+@@ -197,7 +197,8 @@ token_stream_prepare (TokenStream *stream)
+       break;
+ 
+     case 'b':
+-      if (stream->stream[1] == '\'' || stream->stream[1] == '"')
++      if (stream->stream + 1 != stream->end &&
++          (stream->stream[1] == '\'' || stream->stream[1] == '"'))
+         {
+           for (end = stream->stream + 2; end != stream->end; end++)
+             if (*end == stream->stream[1] || *end == '\0' ||
+diff --git a/glib/tests/gvariant.c b/glib/tests/gvariant.c
+index 5aac3de53..de8e42d0b 100644
+--- a/glib/tests/gvariant.c
++++ b/glib/tests/gvariant.c
+@@ -3892,6 +3892,17 @@ test_parse_failures (void)
+     "string 4",                 "7-8:",            "can not parse as",
+     "\x0a",                     "1:",              "expected value",
+     "((",                       "2:",              "expected value",
++    "(b",                       "1:",              "expected value",
++    "b'",                       "0-2:",            "unterminated string constant",
++    "b\"",                      "0-2:",            "unterminated string constant",
++    "b'a",                      "0-3:",            "unterminated string constant",
++    "b\"a",                     "0-3:",            "unterminated string constant",
++    "b'\\",                     "0-3:",            "unterminated string constant",
++    "b\"\\",                    "0-3:",            "unterminated string constant",
++    "b'\\'",                    "0-4:",            "unterminated string constant",
++    "b\"\\\"",                  "0-4:",            "unterminated string constant",
++    "b'\\'a",                   "0-5:",            "unterminated string constant",
++    "b\"\\\"a",                 "0-5:",            "unterminated string constant",
+   };
+   gint i;
+ 

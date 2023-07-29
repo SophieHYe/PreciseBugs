@@ -1,0 +1,12 @@
+diff --git a/gcore/gdaljp2structure.cpp b/gcore/gdaljp2structure.cpp
+index 7cce5d2fcc..d1ec58e8ee 100644
+--- a/gcore/gdaljp2structure.cpp
++++ b/gcore/gdaljp2structure.cpp
+@@ -1192,6 +1192,7 @@ static CPLXMLNode* DumpJPK2CodeStream(CPLXMLNode* psBox,
+         CPLXMLNode* psLastChild = nullptr;
+         if( VSIFReadL(pabyMarkerData, nMarkerSize - 2, 1, fp) != 1 )
+         {
++            psMarker = CreateCurrentMarker();
+             AddError(psMarker, psLastChild, psDumpContext,
+                      "Cannot read marker data", nOffset);
+             break;

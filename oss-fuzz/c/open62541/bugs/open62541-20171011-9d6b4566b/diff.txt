@@ -1,0 +1,87 @@
+diff --git a/src/server/ua_server_binary.c b/src/server/ua_server_binary.c
+index 4a03f9e1d..733abe7d3 100644
+--- a/src/server/ua_server_binary.c
++++ b/src/server/ua_server_binary.c
+@@ -14,6 +14,15 @@
+ #include "ua_types_generated_handling.h"
+ #include "ua_securitypolicy_none.h"
+ 
++
++#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++// store the authentication token and session ID so we can help fuzzing by setting
++// these values in the next request automatically
++UA_NodeId unsafe_fuzz_authenticationToken = {
++        0, UA_NODEIDTYPE_NUMERIC, {0}
++};
++#endif
++
+ /********************/
+ /* Helper Functions */
+ /********************/
+@@ -394,9 +403,21 @@ processMSG(UA_Server *server, UA_SecureChannel *channel,
+         Service_CreateSession(server, channel,
+             (const UA_CreateSessionRequest *)request,
+                               (UA_CreateSessionResponse *)response);
++        #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++		// store the authentication token and session ID so we can help fuzzing by setting
++        // these values in the next request automatically
++        UA_CreateSessionResponse *res = (UA_CreateSessionResponse *)response;
++        UA_NodeId_copy(&res->authenticationToken, &unsafe_fuzz_authenticationToken);
++		#endif
+         goto send_response;
+     }
+ 
++    #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++	// set the authenticationToken from the create session request to help fuzzing cover more lines
++    if (!UA_NodeId_isNull(&unsafe_fuzz_authenticationToken))
++        UA_NodeId_copy(&unsafe_fuzz_authenticationToken, &requestHeader->authenticationToken);
++    #endif
++
+     /* Find the matching session */
+     session = UA_SecureChannel_getSession(channel, &requestHeader->authenticationToken);
+     if(!session)
+@@ -492,6 +513,14 @@ send_response:
+     /* Clean up */
+     UA_deleteMembers(request, requestType);
+     UA_deleteMembers(response, responseType);
++
++	#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++	// when using the forced anonymous session there may be some members added to the
++    // session which will not be cleaned up in the normal way.
++	if (session && session->sessionId.identifierType == UA_NODEIDTYPE_GUID &&
++            UA_Guid_equal(&session->sessionId.identifier.guid, &UA_GUID_NULL))
++        UA_Session_deleteMembersCleanup(session, server);
++	#endif
+     return retval;
+ }
+ 
+diff --git a/src/ua_securechannel.c b/src/ua_securechannel.c
+index edf09ac16..f48f69039 100644
+--- a/src/ua_securechannel.c
++++ b/src/ua_securechannel.c
+@@ -821,13 +821,11 @@ checkAsymHeader(UA_SecureChannel *const channel,
+ static UA_StatusCode
+ checkSymHeader(UA_SecureChannel *const channel,
+                const UA_UInt32 tokenId) {
+-    #ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+     if(tokenId != channel->securityToken.tokenId) {
+         if(tokenId != channel->nextSecurityToken.tokenId)
+             return UA_STATUSCODE_BADSECURECHANNELTOKENUNKNOWN;
+         return UA_SecureChannel_revolveTokens(channel);
+     }
+-    #endif
+ 
+     return UA_STATUSCODE_GOOD;
+ }
+@@ -884,6 +882,11 @@ UA_SecureChannel_processChunk(UA_SecureChannel *channel, UA_ByteString *chunk,
+         if(retval != UA_STATUSCODE_GOOD)
+             return retval;
+ 
++        #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++        // let's help fuzzing by setting the correct tokenId
++        symmetricSecurityHeader.tokenId = channel->securityToken.tokenId;
++        #endif
++
+         retval = checkSymHeader(channel, symmetricSecurityHeader.tokenId);
+         if(retval != UA_STATUSCODE_GOOD)
+             return retval;

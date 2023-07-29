@@ -1,0 +1,34 @@
+diff --git a/Zend/tests/traits/precedence_unknown_class.phpt b/Zend/tests/traits/precedence_unknown_class.phpt
+new file mode 100644
+index 0000000000..212cba34e4
+--- /dev/null
++++ b/Zend/tests/traits/precedence_unknown_class.phpt
+@@ -0,0 +1,15 @@
++--TEST--
++Unknown class in absolute trait precedence reference
++--FILE--
++<?php
++
++trait T {}
++class C {
++    use T {
++        WrongClass::method insteadof C;
++    }
++}
++
++?>
++--EXPECTF--
++Fatal error: Could not find trait WrongClass in %s on line %d
+diff --git a/Zend/zend_inheritance.c b/Zend/zend_inheritance.c
+index ba2610e6ab..a78a0bd4f7 100644
+--- a/Zend/zend_inheritance.c
++++ b/Zend/zend_inheritance.c
+@@ -1816,7 +1816,7 @@ static void zend_traits_init_trait_structures(zend_class_entry *ce, zend_class_e
+ 			lc_trait_name = zend_string_tolower(cur_method_ref->class_name);
+ 			trait = zend_hash_find_ptr(EG(class_table), lc_trait_name);
+ 			zend_string_release_ex(lc_trait_name, 0);
+-			if (!trait && !(trait->ce_flags & ZEND_ACC_LINKED)) {
++			if (!trait || !(trait->ce_flags & ZEND_ACC_LINKED)) {
+ 				zend_error_noreturn(E_COMPILE_ERROR, "Could not find trait %s", ZSTR_VAL(cur_method_ref->class_name));
+ 			}
+ 			zend_check_trait_usage(ce, trait, traits);

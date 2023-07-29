@@ -1,0 +1,57 @@
+diff --git a/autotest/osr/osr_esri.py b/autotest/osr/osr_esri.py
+index 33625ef743..4e91aac8ec 100755
+--- a/autotest/osr/osr_esri.py
++++ b/autotest/osr/osr_esri.py
+@@ -1533,6 +1533,18 @@ def osr_esri_32():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test morphing invalid PROJCS WKT does not crash
++
++def osr_esri_33():
++
++    sr = osr.SpatialReference()
++    sr.ImportFromWkt('PROJCS[]')
++    sr.MorphFromESRI()
++    sr.MorphToESRI()
++
++    return 'success'
++
+ ###############################################################################
+ #
+ 
+@@ -1569,9 +1581,9 @@ gdaltest_list = [
+     osr_esri_30,
+     osr_esri_31,
+     osr_esri_32,
++    osr_esri_33,
+     None ]
+ 
+-
+ if __name__ == '__main__':
+ 
+     gdaltest.setup_run( 'osr_esri' )
+diff --git a/gdal/ogr/ogr_srs_esri.cpp b/gdal/ogr/ogr_srs_esri.cpp
+index ef13255dc5..b3ec3a0c7b 100644
+--- a/gdal/ogr/ogr_srs_esri.cpp
++++ b/gdal/ogr/ogr_srs_esri.cpp
+@@ -2220,11 +2220,13 @@ OGRErr OGRSpatialReference::morphFromESRI()
+                               const_cast<char **>(apszProjMapping+1),
+                               2 );
+     pszProjection = GetAttrValue("PROJECTION");
+-
+-    RemapPNamesBasedOnProjCSAndPName(
+-        this, pszProjection,
+-        const_cast<char **>(apszParamNameMapping),
+-        false /* from ESRI */ );
++    if( pszProjection )
++    {
++        RemapPNamesBasedOnProjCSAndPName(
++            this, pszProjection,
++            const_cast<char **>(apszParamNameMapping),
++            false /* from ESRI */ );
++    }
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Translate DATUM keywords that are misnamed.                     */

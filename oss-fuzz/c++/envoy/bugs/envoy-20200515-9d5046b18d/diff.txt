@@ -1,0 +1,289 @@
+diff --git a/source/common/access_log/access_log_formatter.cc b/source/common/access_log/access_log_formatter.cc
+index 6ea62a7dd1..d1bfc98133 100644
+--- a/source/common/access_log/access_log_formatter.cc
++++ b/source/common/access_log/access_log_formatter.cc
+@@ -231,7 +231,7 @@ std::vector<FormatterProviderPtr> AccessLogFormatParser::parse(const std::string
+   std::vector<FormatterProviderPtr> formatters;
+   static constexpr absl::string_view DYNAMIC_META_TOKEN{"DYNAMIC_METADATA("};
+   static constexpr absl::string_view FILTER_STATE_TOKEN{"FILTER_STATE("};
+-  const std::regex command_w_args_regex(R"EOF(%([A-Z]|_)+(\([^\)]*\))?(:[0-9]+)?(%))EOF");
++  const std::regex command_w_args_regex(R"EOF(^%([A-Z]|_)+(\([^\)]*\))?(:[0-9]+)?(%))EOF");
+ 
+   static constexpr absl::string_view PLAIN_SERIALIZATION{"PLAIN"};
+   static constexpr absl::string_view TYPED_SERIALIZATION{"TYPED"};
+@@ -245,7 +245,7 @@ std::vector<FormatterProviderPtr> AccessLogFormatParser::parse(const std::string
+ 
+       std::smatch m;
+       const std::string search_space = format.substr(pos);
+-      if (!(std::regex_search(search_space, m, command_w_args_regex) || m.position() == 0)) {
++      if (!std::regex_search(search_space, m, command_w_args_regex)) {
+         throw EnvoyException(
+             fmt::format("Incorrect configuration: {}. Couldn't find valid command at position {}",
+                         format, pos));
+diff --git a/test/BUILD b/test/BUILD
+index 41cf8c14bc..a3cd553d30 100644
+--- a/test/BUILD
++++ b/test/BUILD
+@@ -23,9 +23,6 @@ envoy_cc_test_library(
+         "test_runner.h",
+     ],
+     hdrs = ["test_listener.h"],
+-    external_deps = [
+-        "abseil_symbolize",
+-    ],
+     deps = [
+         "//source/common/common:logger_lib",
+         "//source/common/common:thread_lib",
+@@ -37,8 +34,5 @@ envoy_cc_test_library(
+         "//test/test_common:environment_lib",
+         "//test/test_common:global_lib",
+         "//test/test_common:printers_lib",
+-    ] + select({
+-        "//bazel:disable_signal_trace": [],
+-        "//conditions:default": ["//source/common/signal:sigaction_lib"],
+-    }),
++    ],
+ )
+diff --git a/test/benchmark/BUILD b/test/benchmark/BUILD
+index 7bfc766727..96d08112c0 100644
+--- a/test/benchmark/BUILD
++++ b/test/benchmark/BUILD
+@@ -12,11 +12,9 @@ envoy_cc_test_library(
+     name = "main",
+     srcs = ["main.cc"],
+     external_deps = [
+-        "abseil_symbolize",
+         "benchmark",
+     ],
+-    deps = select({
+-        "//bazel:disable_signal_trace": [],
+-        "//conditions:default": ["//source/common/signal:sigaction_lib"],
+-    }),
++    deps = [
++        "//test/test_common:environment_lib",
++    ],
+ )
+diff --git a/test/benchmark/main.cc b/test/benchmark/main.cc
+index ae39333d72..7afdf85e65 100644
+--- a/test/benchmark/main.cc
++++ b/test/benchmark/main.cc
+@@ -1,23 +1,12 @@
+ // NOLINT(namespace-envoy)
+ // This is an Envoy driver for benchmarks.
++#include "test/test_common/environment.h"
+ 
+ #include "benchmark/benchmark.h"
+ 
+-#ifdef ENVOY_HANDLE_SIGNALS
+-#include "common/signal/signal_action.h"
+-#endif
+-
+-#include "absl/debugging/symbolize.h"
+-
+ // Boilerplate main(), which discovers benchmarks and runs them.
+ int main(int argc, char** argv) {
+-#ifndef __APPLE__
+-  absl::InitializeSymbolizer(argv[0]);
+-#endif
+-#ifdef ENVOY_HANDLE_SIGNALS
+-  // Enabled by default. Control with "bazel --define=signal_trace=disabled"
+-  Envoy::SignalAction handle_sigs;
+-#endif
++  Envoy::TestEnvironment::initializeTestMain(argv[0]);
+ 
+   benchmark::Initialize(&argc, argv);
+   if (benchmark::ReportUnrecognizedArguments(argc, argv)) {
+diff --git a/test/common/access_log/BUILD b/test/common/access_log/BUILD
+index 06da33256f..836975e9ae 100644
+--- a/test/common/access_log/BUILD
++++ b/test/common/access_log/BUILD
+@@ -36,7 +36,6 @@ envoy_cc_fuzz_test(
+ envoy_cc_test(
+     name = "access_log_formatter_test",
+     srcs = ["access_log_formatter_test.cc"],
+-    tags = ["fails_on_windows"],
+     deps = [
+         "//source/common/access_log:access_log_formatter_lib",
+         "//source/common/common:utility_lib",
+@@ -109,5 +108,4 @@ envoy_cc_benchmark_binary(
+ envoy_benchmark_test(
+     name = "access_log_formatter_speed_test_benchmark_test",
+     benchmark_binary = "access_log_formatter_speed_test",
+-    tags = ["fails_on_windows"],
+ )
+diff --git a/test/common/access_log/access_log_formatter_test.cc b/test/common/access_log/access_log_formatter_test.cc
+index 0de62f0887..fe852ad2a2 100644
+--- a/test/common/access_log/access_log_formatter_test.cc
++++ b/test/common/access_log/access_log_formatter_test.cc
+@@ -1988,6 +1988,7 @@ TEST(AccessLogFormatterTest, ParserFailures) {
+       "%REQ(valid)% %NOT_VALID%",
+       "%REQ(FIRST?SECOND%",
+       "%%",
++      "%%HOSTNAME%PROTOCOL%",
+       "%protocol%",
+       "%REQ(TEST):%",
+       "%REQ(TEST):3q4%",
+diff --git a/test/fuzz/main.cc b/test/fuzz/main.cc
+index 98e30e63cb..d1c98eb6ee 100644
+--- a/test/fuzz/main.cc
++++ b/test/fuzz/main.cc
+@@ -54,13 +54,8 @@ INSTANTIATE_TEST_SUITE_P(CorpusExamples, FuzzerCorpusTest, testing::ValuesIn(tes
+ } // namespace Envoy
+ 
+ int main(int argc, char** argv) {
+-#ifndef __APPLE__
+-  absl::InitializeSymbolizer(argv[0]);
+-#endif
+-#ifdef ENVOY_HANDLE_SIGNALS
+-  // Enabled by default. Control with "bazel --define=signal_trace=disabled"
+-  Envoy::SignalAction handle_sigs;
+-#endif
++  Envoy::TestEnvironment::initializeTestMain(argv[0]);
++
+   // Expected usage: <test path> <corpus paths..> [other gtest flags]
+   RELEASE_ASSERT(argc >= 2, "");
+   // Consider any file after the test path which doesn't have a - prefix to be a corpus entry.
+diff --git a/test/main.cc b/test/main.cc
+index 42bc71b05e..eae6c3fc4f 100644
+--- a/test/main.cc
++++ b/test/main.cc
+@@ -5,43 +5,13 @@
+ #include "test/test_common/utility.h"
+ #include "test/test_runner.h"
+ 
+-#include "absl/debugging/symbolize.h"
+-
+-#ifdef ENVOY_HANDLE_SIGNALS
+-#include "common/signal/signal_action.h"
+-#endif
+-
+ #include "tools/cpp/runfiles/runfiles.h"
+ 
+-#if defined(WIN32)
+-static void NoopInvalidParameterHandler(const wchar_t* expression, const wchar_t* function,
+-                                        const wchar_t* file, unsigned int line,
+-                                        uintptr_t pReserved) {
+-  return;
+-}
+-#endif
+-
+ using bazel::tools::cpp::runfiles::Runfiles;
+ // The main entry point (and the rest of this file) should have no logic in it,
+ // this allows overriding by site specific versions of main.cc.
+ int main(int argc, char** argv) {
+-#if defined(WIN32)
+-  _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+-
+-  _set_invalid_parameter_handler(NoopInvalidParameterHandler);
+-
+-  WSADATA wsa_data;
+-  const WORD version_requested = MAKEWORD(2, 2);
+-  RELEASE_ASSERT(WSAStartup(version_requested, &wsa_data) == 0, "");
+-#endif
+-
+-#ifndef __APPLE__
+-  absl::InitializeSymbolizer(argv[0]);
+-#endif
+-#ifdef ENVOY_HANDLE_SIGNALS
+-  // Enabled by default. Control with "bazel --define=signal_trace=disabled"
+-  Envoy::SignalAction handle_sigs;
+-#endif
++  Envoy::TestEnvironment::initializeTestMain(argv[0]);
+ 
+   // Create a Runfiles object for runfiles lookup.
+   // https://github.com/bazelbuild/bazel/blob/master/tools/cpp/runfiles/runfiles_src.h#L32
+diff --git a/test/test_common/BUILD b/test/test_common/BUILD
+index b735d28613..57e72caf50 100644
+--- a/test/test_common/BUILD
++++ b/test/test_common/BUILD
+@@ -25,6 +25,7 @@ envoy_cc_test_library(
+     hdrs = ["environment.h"],
+     external_deps = [
+         "abseil_optional",
++        "abseil_symbolize",
+         "bazel_runfiles",
+     ],
+     deps = [
+@@ -39,7 +40,10 @@ envoy_cc_test_library(
+         "//source/common/network:utility_lib",
+         "//source/server:options_lib",
+         "//test/common/runtime:utility_lib",
+-    ],
++    ] + select({
++        "//bazel:disable_signal_trace": [],
++        "//conditions:default": ["//source/common/signal:sigaction_lib"],
++    }),
+ )
+ 
+ envoy_cc_test_library(
+diff --git a/test/test_common/environment.cc b/test/test_common/environment.cc
+index 87377b7022..99b88671f3 100644
+--- a/test/test_common/environment.cc
++++ b/test/test_common/environment.cc
+@@ -17,11 +17,16 @@
+ #include "common/common/utility.h"
+ #include "common/filesystem/directory.h"
+ 
++#ifdef ENVOY_HANDLE_SIGNALS
++#include "common/signal/signal_action.h"
++#endif
++
+ #include "server/options_impl.h"
+ 
+ #include "test/test_common/file_system_for_test.h"
+ #include "test/test_common/network_utility.h"
+ 
++#include "absl/debugging/symbolize.h"
+ #include "absl/strings/match.h"
+ #include "gtest/gtest.h"
+ #include "spdlog/spdlog.h"
+@@ -188,6 +193,31 @@ std::string TestEnvironment::getCheckedEnvVar(const std::string& var) {
+   return optional.value();
+ }
+ 
++void TestEnvironment::initializeTestMain(char* program_name) {
++#ifdef WIN32
++  _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
++
++  _set_invalid_parameter_handler([](const wchar_t* expression, const wchar_t* function,
++                                    const wchar_t* file, unsigned int line,
++                                    uintptr_t pReserved) {});
++
++  WSADATA wsa_data;
++  const WORD version_requested = MAKEWORD(2, 2);
++  RELEASE_ASSERT(WSAStartup(version_requested, &wsa_data) == 0, "");
++#endif
++
++#ifdef __APPLE__
++  UNREFERENCED_PARAMETER(program_name);
++#else
++  absl::InitializeSymbolizer(program_name);
++#endif
++
++#ifdef ENVOY_HANDLE_SIGNALS
++  // Enabled by default. Control with "bazel --define=signal_trace=disabled"
++  static Envoy::SignalAction handle_sigs;
++#endif
++}
++
+ void TestEnvironment::initializeOptions(int argc, char** argv) {
+   argc_ = argc;
+   argv_ = argv;
+diff --git a/test/test_common/environment.h b/test/test_common/environment.h
+index ed9886ef63..50c097a9ad 100644
+--- a/test/test_common/environment.h
++++ b/test/test_common/environment.h
+@@ -22,6 +22,13 @@ public:
+ 
+   using ParamMap = std::unordered_map<std::string, std::string>;
+ 
++  /**
++   * Perform common initialization steps needed to run a test binary. This
++   * method should be called first in all test main functions.
++   * @param program_name argv[0] test program is invoked with
++   */
++  static void initializeTestMain(char* program_name);
++
+   /**
+    * Initialize command-line options for later access by tests in getOptions().
+    * @param argc number of command-line args.

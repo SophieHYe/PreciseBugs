@@ -1,0 +1,13 @@
+diff --git a/src/pj_apply_gridshift.c b/src/pj_apply_gridshift.c
+index 45887abd..7d9ac94b 100644
+--- a/src/pj_apply_gridshift.c
++++ b/src/pj_apply_gridshift.c
+@@ -273,7 +273,7 @@ int proj_hgrid_init(PJ* P, const char *grids) {
+ ***********************************************/
+ 
+     /* prepend "s" to the "grids" string to allow usage with pj_param */
+-    char *sgrids = (char *) pj_malloc( (strlen(grids)+1) *sizeof(char) );
++    char *sgrids = (char *) pj_malloc( (strlen(grids)+1+1) *sizeof(char) );
+     sprintf(sgrids, "%s%s", "s", grids);
+ 
+     if (P->gridlist == NULL) {

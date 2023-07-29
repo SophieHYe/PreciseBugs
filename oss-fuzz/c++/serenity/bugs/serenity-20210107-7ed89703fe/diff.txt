@@ -1,0 +1,32 @@
+diff --git a/Libraries/LibCrypto/BigInt/SignedBigInteger.cpp b/Libraries/LibCrypto/BigInt/SignedBigInteger.cpp
+index fbfd372ff9..c0699018e6 100644
+--- a/Libraries/LibCrypto/BigInt/SignedBigInteger.cpp
++++ b/Libraries/LibCrypto/BigInt/SignedBigInteger.cpp
+@@ -113,11 +113,11 @@ FLATTEN SignedBigInteger SignedBigInteger::minus(const SignedBigInteger& other)
+     // -x - -y = y - x
+     if (m_unsigned_data < other.m_unsigned_data) {
+         // The result will be positive.
+-        return SignedBigInteger { m_unsigned_data.minus(other.m_unsigned_data) };
++        return SignedBigInteger { other.m_unsigned_data.minus(m_unsigned_data), true };
+     }
+     // The result will be either zero, or negative.
+     // y - x = - (x - y)
+-    return { other.m_unsigned_data.minus(m_unsigned_data), true };
++    return SignedBigInteger { m_unsigned_data.minus(other.m_unsigned_data) };
+ }
+ 
+ FLATTEN SignedBigInteger SignedBigInteger::plus(const UnsignedBigInteger& other) const
+diff --git a/Libraries/LibJS/Tests/builtins/BigInt/bigint-minus.js b/Libraries/LibJS/Tests/builtins/BigInt/bigint-minus.js
+new file mode 100644
+index 0000000000..5d88f85ce2
+--- /dev/null
++++ b/Libraries/LibJS/Tests/builtins/BigInt/bigint-minus.js
+@@ -0,0 +1,8 @@
++describe("minus behavior", () => {
++    test("the basics", () => {
++        expect(3n - 4n).toBe(-1n);
++        expect(3n - -4n).toBe(7n);
++        expect(-3n - -4n).toBe(-1n);
++        expect(-3n - 4n).toBe(-7n);
++    });
++});

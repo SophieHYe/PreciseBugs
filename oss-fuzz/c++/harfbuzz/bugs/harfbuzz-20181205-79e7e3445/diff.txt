@@ -1,0 +1,38 @@
+diff --cc src/hb-ot-cff1-table.hh
+index aac66d87c,39da8fa7a..05394038a
+--- a/src/hb-ot-cff1-table.hh
++++ b/src/hb-ot-cff1-table.hh
+@@@ -392,15 -392,15 +392,13 @@@ struct Charset1_2 
+      return 0;
+    }
+  
+--  inline hb_codepoint_t get_glyph (hb_codepoint_t sid, unsigned int num_glyphs) const
+++  inline hb_codepoint_t get_glyph (hb_codepoint_t sid) const
+    {
+      if (sid == 0) return 0;
+      hb_codepoint_t  glyph = 1;
+      for (unsigned int i = 0;; i++)
+      {
+--      if (glyph >= num_glyphs)
+--      	return 0;
+--      if ((ranges[i].first <= sid) && (sid <= ranges[i].first + ranges[i].nLeft))
+++      if ((ranges[i].first <= sid) && sid <= ranges[i].first + ranges[i].nLeft)
+  	return glyph + (sid - ranges[i].first);
+        glyph += (ranges[i].nLeft + 1);
+      }
+@@@ -552,9 -552,9 +550,9 @@@ struct Charset 
+      if (format == 0)
+        return u.format0.get_glyph (sid, num_glyphs);
+      else if (format == 1)
+--      return u.format1.get_glyph (sid, num_glyphs);
+++      return u.format1.get_glyph (sid);
+      else
+--      return u.format2.get_glyph (sid, num_glyphs);
+++      return u.format2.get_glyph (sid);
+    }
+  
+    HBUINT8       format;
+diff --cc test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5700264032468992
+index 82a462bc4,82a462bc4..000000000
+deleted file mode 100644,100644
+Binary files differ

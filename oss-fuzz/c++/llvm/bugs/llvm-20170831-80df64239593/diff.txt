@@ -1,0 +1,36 @@
+diff --git a/llvm/lib/BinaryFormat/Magic.cpp b/llvm/lib/BinaryFormat/Magic.cpp
+index b19a07a9066b..e9b8df93b902 100644
+--- a/llvm/lib/BinaryFormat/Magic.cpp
++++ b/llvm/lib/BinaryFormat/Magic.cpp
+@@ -182,7 +182,7 @@ file_magic llvm::identify_magic(StringRef Magic) {
+     break;
+ 
+   case 'M': // Possible MS-DOS stub on Windows PE file
+-    if (startswith(Magic, "MZ")) {
++    if (startswith(Magic, "MZ") && Magic.size() >= 0x3c + 4) {
+       uint32_t off = read32le(Magic.data() + 0x3c);
+       // PE/COFF file, either EXE or DLL.
+       if (off < Magic.size() &&
+diff --git a/llvm/unittests/BinaryFormat/TestFileMagic.cpp b/llvm/unittests/BinaryFormat/TestFileMagic.cpp
+index 68b3ade00954..ca4ca9a27281 100644
+--- a/llvm/unittests/BinaryFormat/TestFileMagic.cpp
++++ b/llvm/unittests/BinaryFormat/TestFileMagic.cpp
+@@ -80,6 +80,7 @@ const char windows_resource[] =
+     "\x00\x00\x00\x00\x020\x00\x00\x00\xff\xff\x00\x00\xff\xff\x00\x00";
+ const char macho_dynamically_linked_shared_lib_stub[] =
+     "\xfe\xed\xfa\xce........\x00\x00\x00\x09............";
++const char ms_dos_stub_broken[] = "\x4d\x5a\x20\x20";
+ 
+ TEST_F(MagicTest, Magic) {
+   struct type {
+@@ -108,7 +109,9 @@ TEST_F(MagicTest, Magic) {
+       DEFINE(macho_dynamically_linked_shared_lib_stub),
+       DEFINE(macho_dsym_companion),
+       DEFINE(macho_kext_bundle),
+-      DEFINE(windows_resource)
++      DEFINE(windows_resource),
++      {"ms_dos_stub_broken", ms_dos_stub_broken, sizeof(ms_dos_stub_broken),
++       file_magic::unknown},
+ #undef DEFINE
+   };
+ 

@@ -1,0 +1,281 @@
+diff --git a/libclamav/fmap.c b/libclamav/fmap.c
+index fccb39cb8..75295fea7 100644
+--- a/libclamav/fmap.c
++++ b/libclamav/fmap.c
+@@ -125,7 +125,7 @@ fmap_t *fmap_check_empty(int fd, off_t offset, size_t len, int *empty, const cha
+         *empty = 1;
+         return NULL;
+     }
+-    if (!CLI_ISCONTAINED(0, st.st_size, offset, len)) {
++    if (!CLI_ISCONTAINED_0_TO(st.st_size, offset, len)) {
+         cli_warnmsg("fmap: attempted oof mapping\n");
+         return NULL;
+     }
+@@ -187,7 +187,7 @@ fmap_t *fmap_check_empty(int fd, off_t offset, size_t len, int *empty, const cha
+         *empty = 1;
+         return NULL;
+     }
+-    if (!CLI_ISCONTAINED(0, st.st_size, offset, len)) {
++    if (!CLI_ISCONTAINED_0_TO(st.st_size, offset, len)) {
+         cli_warnmsg("fmap: attempted oof mapping\n");
+         return NULL;
+     }
+@@ -274,8 +274,8 @@ fmap_t *fmap_duplicate(cl_fmap_t *map, size_t offset, size_t length, const char
+            We do not need to keep track of the original length of the OG fmap */
+         duplicate_map->real_len = duplicate_map->nested_offset + duplicate_map->len;
+ 
+-        if (!CLI_ISCONTAINED2(map->nested_offset, map->len,
+-                              duplicate_map->nested_offset, duplicate_map->len)) {
++        if (!CLI_ISCONTAINED_2(map->nested_offset, map->len,
++                               duplicate_map->nested_offset, duplicate_map->len)) {
+             size_t len1, len2;
+             len1 = map->nested_offset + map->len;
+             len2 = duplicate_map->nested_offset + duplicate_map->len;
+@@ -506,6 +506,8 @@ static void fmap_aging(fmap_t *m)
+             m->paged -= avail;
+         }
+     }
++#else
++    UNUSEDPARAM(m);
+ #endif
+ }
+ 
+@@ -649,7 +651,7 @@ static const void *handle_need(fmap_t *m, size_t at, size_t len, int lock)
+         return NULL;
+ 
+     at += m->nested_offset;
+-    if (!CLI_ISCONTAINED(0, m->real_len, at, len))
++    if (!CLI_ISCONTAINED(m->nested_offset, m->len, at, len))
+         return NULL;
+ 
+     fmap_aging(m);
+@@ -698,7 +700,7 @@ static void handle_unneed_off(fmap_t *m, size_t at, size_t len)
+     }
+ 
+     at += m->nested_offset;
+-    if (!CLI_ISCONTAINED(0, m->real_len, at, len)) {
++    if (!CLI_ISCONTAINED(m->nested_offset, m->len, at, len)) {
+         cli_warnmsg("fmap: attempted oof unneed\n");
+         return;
+     }
+@@ -719,6 +721,8 @@ static void unmap_mmap(fmap_t *m)
+     if (munmap((void *)m->data, len) == -1) /* munmap() failed */
+         cli_warnmsg("funmap: unable to unmap memory segment at address: %p with length: %zu\n", (void *)m->data, len);
+     fmap_unlock;
++#else
++    UNUSEDPARAM(m);
+ #endif
+ }
+ 
+@@ -743,7 +747,7 @@ static const void *handle_need_offstr(fmap_t *m, size_t at, size_t len_hint)
+     if (!len_hint || len_hint > m->real_len - at)
+         len_hint = m->real_len - at;
+ 
+-    if (!CLI_ISCONTAINED(0, m->real_len, at, len_hint))
++    if (!CLI_ISCONTAINED(m->nested_offset, m->len, at, len_hint))
+         return NULL;
+ 
+     fmap_aging(m);
+@@ -783,7 +787,7 @@ static const void *handle_gets(fmap_t *m, char *dst, size_t *at, size_t max_len)
+     size_t len    = MIN(max_len - 1, m->len - *at);
+     size_t fullen = len;
+ 
+-    if (!len || !CLI_ISCONTAINED(0, m->real_len, m->nested_offset + *at, len))
++    if (!len || !CLI_ISCONTAINED_0_TO(m->len, *at, len))
+         return NULL;
+ 
+     fmap_aging(m);
+@@ -799,7 +803,7 @@ static const void *handle_gets(fmap_t *m, char *dst, size_t *at, size_t max_len)
+             return NULL;
+ 
+         if (i == first_page) {
+-            scanat = m->nested_offset + *at % m->pgsz;
++            scanat = (m->nested_offset + *at) % m->pgsz;
+             scansz = MIN(len, m->pgsz - scanat);
+         } else {
+             scanat = 0;
+@@ -889,7 +893,7 @@ static const void *mem_need(fmap_t *m, size_t at, size_t len, int lock)
+         return NULL;
+     }
+     at += m->nested_offset;
+-    if (!CLI_ISCONTAINED(0, m->real_len, at, len)) {
++    if (!CLI_ISCONTAINED(m->nested_offset, m->len, at, len)) {
+         return NULL;
+     }
+ 
+@@ -913,7 +917,7 @@ static const void *mem_need_offstr(fmap_t *m, size_t at, size_t len_hint)
+     if (!len_hint || len_hint > m->real_len - at)
+         len_hint = m->real_len - at;
+ 
+-    if (!CLI_ISCONTAINED(0, m->real_len, at, len_hint))
++    if (!CLI_ISCONTAINED(m->nested_offset, m->len, at, len_hint))
+         return NULL;
+ 
+     if (memchr(ptr, 0, len_hint))
+@@ -927,7 +931,7 @@ static const void *mem_gets(fmap_t *m, char *dst, size_t *at, size_t max_len)
+     char *endptr = NULL;
+     size_t len   = MIN(max_len - 1, m->len - *at);
+ 
+-    if (!len || !CLI_ISCONTAINED(0, m->real_len, m->nested_offset + *at, len))
++    if (!len || !CLI_ISCONTAINED_0_TO(m->len, *at, len))
+         return NULL;
+ 
+     if ((endptr = memchr(src, '\n', len))) {
+@@ -996,8 +1000,7 @@ cl_error_t fmap_dump_to_file(fmap_t *map, const char *filepath, const char *tmpd
+             prefix            = malloc(prefix_len);
+             if (NULL == prefix) {
+                 cli_errmsg("fmap_dump_to_file: Failed to allocate memory for tempfile prefix.\n");
+-                if (NULL != filebase)
+-                    free(filebase);
++                free(filebase);
+                 return CL_EMEM;
+             }
+             snprintf(prefix, prefix_len, "%s.%zu-%zu", filebase, start_offset, end_offset);
+diff --git a/libclamav/ishield.c b/libclamav/ishield.c
+index e056dc3d5..cacee6068 100644
+--- a/libclamav/ishield.c
++++ b/libclamav/ishield.c
+@@ -224,7 +224,7 @@ int cli_scanishield_msi(cli_ctx *ctx, off_t off)
+         off += sizeof(fb);
+         fb.fname[sizeof(fb.fname) - 1] = '\0';
+         csize                          = le64_to_host(fb.csize);
+-        if (!CLI_ISCONTAINED(0, map->len, off, csize)) {
++        if (!CLI_ISCONTAINED_0_TO(map->len, off, csize)) {
+             cli_dbgmsg("ishield-msi: next stream is out of file, giving up\n");
+             return CL_CLEAN;
+         }
+diff --git a/libclamav/others.h b/libclamav/others.h
+index 7e27cfbd5..a2e884a7b 100644
+--- a/libclamav/others.h
++++ b/libclamav/others.h
+@@ -98,13 +98,31 @@ extern uint8_t cli_always_gen_section_hash;
+      (size_t)(sb) < (size_t)(bb) + (size_t)(bb_size))
+ 
+ /*
+- * CLI_ISCONTAINED2(bb, bb_size, sb, sb_size) checks if sb (small buffer) is
++ * CLI_ISCONTAINED_0_TO(bb_size, sb, sb_size) checks if sb (small offset) is
++ * within bb (big offset) where the big offset always starts at 0.
++ *
++ * bb and sb are offsets for the main buffer and the
++ * sub-buffer respectively, and bb_size and sb_size are their sizes
++ *
++ * The macro can be used to protect against wraps.
++ *
++ * CLI_ISCONTAINED_0_TO is the same as CLI_ISCONTAINED except that `bb` is gone
++ * and assumed ot be zero.
++ */
++#define CLI_ISCONTAINED_0_TO(bb_size, sb, sb_size)            \
++    ((size_t)(bb_size) > 0 && (size_t)(sb_size) > 0 &&        \
++     (size_t)(sb_size) <= (size_t)(bb_size) &&                \
++     (size_t)(sb) + (size_t)(sb_size) <= (size_t)(bb_size) && \
++     (size_t)(sb) < (size_t)(bb_size))
++
++/*
++ * CLI_ISCONTAINED_2(bb, bb_size, sb, sb_size) checks if sb (small buffer) is
+  * within bb (big buffer).
+  *
+- * CLI_ISCONTAINED2 is the same as CLI_ISCONTAINED except that it allows for
++ * CLI_ISCONTAINED_2 is the same as CLI_ISCONTAINED except that it allows for
+  * small-buffers with sb_size == 0.
+  */
+-#define CLI_ISCONTAINED2(bb, bb_size, sb, sb_size)                           \
++#define CLI_ISCONTAINED_2(bb, bb_size, sb, sb_size)                          \
+     ((size_t)(bb_size) > 0 &&                                                \
+      (size_t)(sb_size) <= (size_t)(bb_size) &&                               \
+      (size_t)(sb) >= (size_t)(bb) &&                                         \
+diff --git a/libclamav/pe.c b/libclamav/pe.c
+index e527f5ee1..bb85aa137 100644
+--- a/libclamav/pe.c
++++ b/libclamav/pe.c
+@@ -3483,7 +3483,7 @@ int cli_scanpe(cli_ctx *ctx)
+ 
+             CLI_UNPSIZELIMITS("cli_scanpe: Upack", MAX(MAX(dsize, ssize), peinfo->sections[1].ursz));
+ 
+-            if (!CLI_ISCONTAINED(0, dsize, peinfo->sections[1].rva - off, peinfo->sections[1].ursz) || (upack && !CLI_ISCONTAINED(0, dsize, peinfo->sections[2].rva - peinfo->sections[0].rva, ssize)) || ssize > dsize) {
++            if (!CLI_ISCONTAINED_0_TO(dsize, peinfo->sections[1].rva - off, peinfo->sections[1].ursz) || (upack && !CLI_ISCONTAINED_0_TO(dsize, peinfo->sections[2].rva - peinfo->sections[0].rva, ssize)) || ssize > dsize) {
+                 cli_dbgmsg("cli_scanpe: Upack: probably malformed pe-header, skipping to next unpacker\n");
+                 break;
+             }
+@@ -5175,12 +5175,12 @@ int cli_peheader(fmap_t *map, struct cli_exe_info *peinfo, uint32_t opts, cli_ct
+             } else {
+ 
+                 /* If a section is truncated, adjust it's size value */
+-                if (!CLI_ISCONTAINED(0, fsize, section->raw, section->rsz)) {
++                if (!CLI_ISCONTAINED_0_TO(fsize, section->raw, section->rsz)) {
+                     cli_dbgmsg("cli_peheader: PE Section %d raw+rsz extends past the end of the file by %lu bytes\n", section_pe_idx, (section->raw + section->rsz) - fsize);
+                     section->rsz = fsize - section->raw;
+                 }
+ 
+-                if (!CLI_ISCONTAINED(0, fsize, section->uraw, section->ursz)) {
++                if (!CLI_ISCONTAINED_0_TO(fsize, section->uraw, section->ursz)) {
+                     cli_dbgmsg("cli_peheader: PE Section %d uraw+ursz extends past the end of the file by %lu bytes\n", section_pe_idx, (section->uraw + section->ursz) - fsize);
+                     section->ursz = fsize - section->uraw;
+                 }
+diff --git a/libclamav/scanners.c b/libclamav/scanners.c
+index 6b84f6bd1..039072532 100644
+--- a/libclamav/scanners.c
++++ b/libclamav/scanners.c
+@@ -4066,8 +4066,8 @@ cl_error_t cli_magic_scan(cli_ctx *ctx, cli_file_t type)
+     cli_file_t dettype = 0;
+     uint8_t typercg    = 1;
+     size_t hashed_size;
+-    unsigned char *hash = NULL;
+-    bitset_t *old_hook_lsig_matches;
++    unsigned char *hash             = NULL;
++    bitset_t *old_hook_lsig_matches = NULL;
+     const char *filetype;
+     int cache_clean = 0;
+ #if HAVE_JSON
+@@ -5085,7 +5085,7 @@ cl_error_t cli_magic_scan_nested_fmap_type(cl_fmap_t *map, size_t offset, size_t
+             cli_dbgmsg("cli_magic_scan_nested_fmap_type: Small data (%u bytes)\n", (unsigned int)length);
+             return CL_CLEAN;
+         }
+-        if (!CLI_ISCONTAINED(0, map->len, offset, length)) {
++        if (!CLI_ISCONTAINED_0_TO(map->len, offset, length)) {
+             cli_dbgmsg("cli_magic_scan_nested_fmap_type: map error occurred [%zu, %zu] not within [0, %zu]\n", offset, length, map->len);
+             return CL_CLEAN;
+         }
+diff --git a/libclamav/tnef.c b/libclamav/tnef.c
+index 761b44ac2..2cd8e78d8 100644
+--- a/libclamav/tnef.c
++++ b/libclamav/tnef.c
+@@ -268,7 +268,7 @@ tnef_message(fmap_t *map, off_t *pos, uint16_t type, uint16_t tag, int32_t lengt
+ 
+     /*cli_dbgmsg("%lu %lu\n", (long)(offset + length), ftell(fp));*/
+ 
+-    if (!CLI_ISCONTAINED2(0, fsize, offset, length)) {
++    if (!CLI_ISCONTAINED_2(0, fsize, offset, length)) {
+         cli_dbgmsg("TNEF: Incorrect length field in tnef_message\n");
+         return -1;
+     }
+@@ -344,7 +344,7 @@ tnef_attachment(fmap_t *map, off_t *pos, uint16_t type, uint16_t tag, int32_t le
+ 
+     /*cli_dbgmsg("%lu %lu\n", (long)(offset + length), ftell(fp));*/
+ 
+-    if (!CLI_ISCONTAINED2(0, fsize, (off_t)offset, (off_t)length)) {
++    if (!CLI_ISCONTAINED_2(0, fsize, (off_t)offset, (off_t)length)) {
+         cli_dbgmsg("TNEF: Incorrect length field in tnef_attachment\n");
+         return -1;
+     }
+diff --git a/libclamav/unzip.c b/libclamav/unzip.c
+index eae6cbf98..f823d509a 100644
+--- a/libclamav/unzip.c
++++ b/libclamav/unzip.c
+@@ -1171,7 +1171,7 @@ cl_error_t cli_unzip(cli_ctx *ctx)
+             continue;
+         if (cli_readint32(ptr) == ZIP_MAGIC_CENTRAL_DIRECTORY_RECORD_END) {
+             uint32_t chptr = cli_readint32(&ptr[16]);
+-            if (!CLI_ISCONTAINED(0, fsize, chptr, SIZEOF_CENTRAL_HEADER)) continue;
++            if (!CLI_ISCONTAINED_0_TO(fsize, chptr, SIZEOF_CENTRAL_HEADER)) continue;
+             coff = chptr;
+             break;
+         }
+@@ -1445,7 +1445,7 @@ cl_error_t unzip_search(cli_ctx *ctx, fmap_t *map, struct zip_requests *requests
+             continue;
+         if (cli_readint32(ptr) == ZIP_MAGIC_CENTRAL_DIRECTORY_RECORD_END) {
+             uint32_t chptr = cli_readint32(&ptr[16]);
+-            if (!CLI_ISCONTAINED(0, fsize, chptr, SIZEOF_CENTRAL_HEADER)) continue;
++            if (!CLI_ISCONTAINED_0_TO(fsize, chptr, SIZEOF_CENTRAL_HEADER)) continue;
+             coff = chptr;
+             break;
+         }

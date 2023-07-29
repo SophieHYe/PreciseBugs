@@ -1,0 +1,24 @@
+diff --git a/src/core/SkPoint.cpp b/src/core/SkPoint.cpp
+index 3c6086cb18..cb53b65e88 100644
+--- a/src/core/SkPoint.cpp
++++ b/src/core/SkPoint.cpp
+@@ -151,13 +151,17 @@ bool SkPointPriv::SetLengthFast(SkPoint* pt, float length) {
+ ///////////////////////////////////////////////////////////////////////////////
+ 
+ SkScalar SkPointPriv::DistanceToLineBetweenSqd(const SkPoint& pt, const SkPoint& a,
+-                                           const SkPoint& b,
+-                                           Side* side) {
++                                               const SkPoint& b,
++                                               Side* side) {
+ 
+     SkVector u = b - a;
+     SkVector v = pt - a;
+ 
+     SkScalar uLengthSqd = LengthSqd(u);
++    // Degenerate line, return distancesqd to point A
++    if (uLengthSqd < SK_ScalarNearlyZero*SK_ScalarNearlyZero) {
++        return LengthSqd(v);
++    }
+     SkScalar det = u.cross(v);
+     if (side) {
+         SkASSERT(-1 == kLeft_Side &&

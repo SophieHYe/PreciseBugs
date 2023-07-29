@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+index b4684d3747..4ccf049f4a 100644
+--- a/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
++++ b/gdal/ogr/ogrsf_frmts/openfilegdb/filegdbtable.cpp
+@@ -778,6 +778,8 @@ int FileGDBTable::Open(const char* pszFilename,
+     returnErrorIf(VSIFReadL( abyHeader, 14, 1, fpTable ) != 1 );
+     nFieldDescLength = GetUInt32(abyHeader, 0);
+ 
++    returnErrorIf(nOffsetFieldDesc >
++                    std::numeric_limits<GUIntBig>::max() - nFieldDescLength);
+     nOffsetHeaderEnd = nOffsetFieldDesc + nFieldDescLength;
+ 
+     returnErrorIf(nFieldDescLength > 10 * 1024 * 1024 || nFieldDescLength < 10 );

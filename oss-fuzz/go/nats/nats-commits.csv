@@ -1,0 +1,1583 @@
+b'45beab1f	0421c65c bbfeb2a8	Tue Jul 25 06:56:23 2023 -0700	Fix typo from internal function (#4337)
+bbfeb2a8	80fb29f9	Sat Jul 22 20:40:26 2023 -0700	Fix typo on internal function
+244dda80	360f807c	Tue Jul 18 11:29:59 2023 -0700	Fix bug that would race around check for last sequence per subject
+6cdb0c78	abb47c95	Fri Jul 14 17:03:21 2023 +0100	Wait for current in `TestJetStreamClusterStreamUpdateSyncBug` so in-flight state changes aren\'t lost
+2765e534	ce2dcd33	Fri Jun 9 15:09:15 2023 -0700	Fix test and update copyright
+ce2dcd33	81154c40	Fri Jun 9 14:43:59 2023 -0700	Fix for properly distributed queue requests over multiple leafnode connections.
+9eeffbcf	d3bde2c6	Thu Jun 8 18:45:03 2023 -0700	Fix performance issues with checkAckFloor.
+df5df3ce	64e3bf82 5141b87d	Mon Jun 5 13:02:05 2023 -0700	Panic fixes (#4214)
+f71c4951	27a8b96e	Mon Jun 5 15:27:45 2023 +0300	Fix client panic on absent server field
+64e3bf82	e1f8064e 132567de	Sun Jun 4 13:29:53 2023 -0700	Fix PurgeEx replay with sequence & keep succeeds (#4213)
+132567de	e1f8064e	Sun Jun 4 11:56:28 2023 +0200	Fix PurgeEx replay with sequence & keep succeeds
+238282d9	22c97d67	Sat Jun 3 13:58:15 2023 -0700	Fix some data races detected in internal testing
+27a8b96e	4f2c9a51	Fri Jun 2 13:19:22 2023 +0300	different panic fixes
+734895ae	87f17fcf	Tue May 16 12:20:18 2023 -0700	Fix test flapper
+9434110c	ee38f8bb 3602ff51	Mon May 15 15:40:12 2023 -0700	[FIXED] Additional fix for #3734. (#4166)
+3602ff51	584ea85d	Mon May 15 15:30:55 2023 -0700	Additional fix for #3734.
+7e9a427d	92c70712	Sun May 14 13:19:30 2023 -0400	Fix workflow structure
+d293af1d	a982bbcb	Sat May 13 12:57:05 2023 -0700	Fix to service imports reporting for Accountz() when import subject is mapped into different local subject.
+421775a3	c31e710d	Fri May 12 20:22:07 2023 -0700	Fix to allow sorting by rtt for connz.
+0c13f174	c5eb46cb	Fri May 12 15:07:00 2023 -0700	Fixed cap mistake in comment
+90d10636	fc64c611	Fri May 12 14:19:37 2023 -0700	Fix for #4149 to allow proper user filtering on connz for other user types.
+da8aeac9	ae73e6a5	Wed May 3 21:00:17 2023 -0700	Fix flapper
+7afe76ca	95e4f2df	Wed May 3 15:21:26 2023 -0600	Fixed Sublist.RemoveBatch to remove subs present, even if one isn\'t
+95e4f2df	840c264f	Wed May 3 14:35:06 2023 -0600	Fixed accounts configuration reload
+840c264f	b61e411b	Wed May 3 14:09:02 2023 -0600	Cleanup use of s.opts and fixed some lock (deadlock/inversion) issues
+b61e411b	8cb32930 938ffcba	Tue May 2 18:12:56 2023 -0700	Fix race in reload and gateway sublist check (#4127)
+938ffcba	91607d84	Tue May 2 17:51:53 2023 -0700	Fix race in reload and gateway sublist check
+f5ac5a4d	1eed0e8c	Mon May 1 13:22:06 2023 -0700	Fix for a bug that could leave a raft node running when stopping a stream. This can happen when we reset a stream internally and the stream had a prior snapshot.
+ac27fd04	d107ba35	Fri Apr 28 17:57:03 2023 -0700	Fix data race
+59e21074	a66ac8cb	Thu Apr 27 07:19:56 2023 -0700	Fix test flapper
+3340179b	cae91b8c	Mon Apr 24 22:22:27 2023 -0700	Fix flapper
+c2649bed	b0d98df7 f1f5a59e	Mon Apr 24 22:17:30 2023 -0700	fix some comments (#4099)
+f1f5a59e	b0d98df7	Tue Apr 25 11:28:59 2023 +0800	fix some comments
+b0d98df7	0e2eccd1 d9cc8b03	Fri Apr 21 22:33:08 2023 -0700	fix formatting of raft debug log (#4090)
+d9cc8b03	0e2eccd1	Sat Apr 22 07:07:08 2023 +0200	fix formatting of raft debug log
+2ece00b0	bf286744	Fri Apr 21 15:33:48 2023 +0100	Buffer re-use in WebSocket code, fix race conditions
+9a3e0b78	77097809	Mon Apr 17 06:40:09 2023 -0700	Fix for a data race when setting up service import subscriptions.
+d62ccc77	33f23be1 dea7fc04	Mon Apr 17 00:59:56 2023 -0700	Fix nsc in nightly (#4063)
+dea7fc04	33f23be1	Mon Apr 17 00:07:01 2023 -0700	Fix nsc in nightly
+2ee73f8a	816cd82f 034975e7	Sat Apr 15 10:47:13 2023 -0700	[FIXED] Fix for a regression in behavior. (#4057)
+034975e7	816cd82f	Sat Apr 15 10:00:44 2023 -0700	Fix for a regression in behavior, needed to make sure when we went back to 1 entry for a subject we cleared firstNeedsUpdate.
+26994655	e8816566 a66c67ba	Fri Apr 14 12:18:04 2023 -0700	Fix stream sourcing & mirroring overlap errors (#4052)
+a66c67ba	89fc7e32	Fri Apr 14 21:00:11 2023 +0200	Fix stream sourcing & mirroring overlap errors
+bafd585c	69b427bc	Thu Apr 13 18:40:06 2023 -0700	Fix data race
+3602b388	96fe9338 a4833d08	Thu Apr 13 16:21:53 2023 -0700	Fix raft log debug reloading (#4047)
+a4833d08	96fe9338	Thu Apr 13 14:57:04 2023 -0700	Fix raft log debug reloading
+a92bb9fe	f41e5d86	Wed Apr 12 11:48:22 2023 -0700	Fix bad unlock which could cause crash
+4fcc2ff4	2a03d9df 1e2bba4c	Wed Apr 12 11:43:50 2023 -0700	Fix FirstSeq not being updated with filestore when purging subject (#4042)
+2a03d9df	31a22697 692f384f	Wed Apr 12 13:27:52 2023 +0200	Fix consumer reply subject escaping (#4040)
+1e2bba4c	31a22697	Wed Apr 12 10:46:16 2023 +0200	Fix FirstSeq not being updated with filestore when purging subject
+692f384f	31a22697	Wed Apr 12 09:22:08 2023 +0200	Fix consumer reply subject escaping
+623f2d52	80a57a3d	Sun Apr 9 08:13:20 2023 -0700	Fix flapping test
+aee73a9c	313dd424	Sat Apr 8 21:58:54 2023 -0700	Fix flapping test
+b78ec39b	35bb7c17	Sat Apr 8 15:04:30 2023 -0700	Fix data race and simplify logic
+ffc49b8f	3be25fde	Sat Apr 8 08:13:31 2023 -0700	Fix flapping test and data race in test
+83f08999	d02d5953	Fri Apr 7 07:30:03 2023 -0700	Fix data race
+d02d5953	bb2da435	Fri Apr 7 07:18:30 2023 -0700	Fix data race
+33451e5d	f02f3794 a60f6238	Thu Apr 6 10:45:29 2023 -0700	Fix for API data race. (#4030)
+a60f6238	dee5229f	Thu Apr 6 10:39:30 2023 -0700	Fix flapping test since claims not processed inline now
+dee5229f	7547093b	Thu Apr 6 10:37:31 2023 -0700	Fix data race
+81541361	d14968cb 5ae83b79	Wed Apr 5 20:16:22 2023 -0700	Alternative fix for issue 4014, where we always send pings on ROUTER connections (#4016)
+5ae83b79	94278e73	Wed Apr 5 13:03:46 2023 +0100	Alternative fix for issue 4014, where we always send pings on ROUTER connections, updating c.lastIn timestamp on receiving client data or ping
+3036bb8b	b14a400d	Tue Apr 4 14:43:46 2023 -0700	Fix for test
+b14a400d	3551c7b2	Tue Apr 4 14:36:16 2023 -0700	Fix for debugSubscribers and claims test
+7d3ec51d	59175c49	Mon Apr 3 14:46:59 2023 -0700	Fix for flapping test
+59175c49	b806a8e7	Mon Apr 3 14:46:57 2023 -0700	Fix for a datarace
+5afcb6c1	b2b3ed9a	Sun Apr 2 19:06:42 2023 -0700	Fix for flapping test, network proxy more accurate now so rtt needed to be tweaked
+ff3f102c	d5ac4d28	Sun Apr 2 16:30:13 2023 -0700	Fix for datarace in healthcheck
+d5ac4d28	64b22011	Sun Apr 2 16:18:23 2023 -0700	Fix for flapping test, can return invalid sequence as well
+a8bd2793	874b2b2e	Sun Apr 2 03:53:11 2023 -0700	Fix concurrent map bug on preAcks. Use monitor check for streams like consumers. Make sure to stop raft layer if exiting monitorConsumer early. Allow consumers to force a snapshot on leadership change.
+e2839e9e	fbaeaf90	Sun Apr 2 03:52:43 2023 -0700	Fix for flapper
+78628813	5359d232 a4df4f87	Thu Mar 30 15:45:16 2023 -0600	Fixed some tests (#4005)
+a4df4f87	5359d232	Thu Mar 30 15:02:59 2023 -0600	Fixed some tests
+873ab0f6	fbc90adf	Wed Mar 29 18:55:41 2023 -0700	Fix for flapping test
+02702e46	9cc66c0f c5468283	Wed Mar 29 17:09:44 2023 -0700	[IMPROVEMENT] General stability and bug fixes. (#3999)
+a9a4df85	35d1a774	Wed Mar 29 12:44:08 2023 -0700	Fix for flapping test
+182bf6cb	6d430414	Wed Mar 29 12:43:46 2023 -0700	Bug fixes and general stability improvements.
+6d430414	ec89823e	Wed Mar 29 12:43:42 2023 -0700	Bug fixes and general stability improvements.
+0c1301ec	5a16f984	Sun Mar 19 10:52:52 2023 -0700	Fix for data race
+5a16f984	3e8e0ea4	Sun Mar 19 10:41:59 2023 -0700	Fixed an off by one bug that under certain circumstances could cause large consumer replica states. This could lead to instability in the system.
+f0e15854	1cfb1b0c	Fri Mar 17 13:14:43 2023 -0700	Fix flapping test
+1cfb1b0c	5c437a23 4647e14b	Fri Mar 17 09:42:19 2023 +0000	Merge pull request #3978 from nats-io/neil/encfix
+8dbfbbe5	531fadd3	Wed Mar 15 17:23:51 2023 -0700	Fix test
+54da8b4f	c1373d66	Wed Mar 15 11:44:56 2023 +0100	fix uses for embedded action in nightly build
+c1373d66	84de2a3b da7a8b63	Tue Mar 14 17:30:25 2023 -0700	Merge pull request #3964 from nats-io/ocsp-leaf-fixes
+f8914788	dd9851f8	Tue Mar 14 14:07:18 2023 -0700	Fix leaf client connection failing in ocsp setup
+d3c8fdde	a8f33d59	Tue Mar 14 21:43:17 2023 +0100	fix path to actions file
+3ecf55bc	07bc964d 5a1878b0	Tue Mar 14 06:52:11 2023 -0700	Merge pull request #3960 from nats-io/fix-3953
+5a1878b0	07bc964d	Mon Mar 13 17:13:49 2023 -0700	Fix for workqueue stream scaling up and not removing acked messages. Make sure when scaling up streams that are workqueue or interest policy that consumers scale as well.
+c1af5850	6db06d11 df282a22	Fri Mar 3 16:52:20 2023 +0100	Merge pull request #3942 from nats-io/jarema/fix-pull-consumer-timeout
+df282a22	6db06d11	Fri Mar 3 14:49:04 2023 +0100	Fix Pull Consumer not sending request timeout
+6db06d11	15011f1a 8f1ca99f	Thu Mar 2 12:23:38 2023 -0800	Merge pull request #3939 from nats-io/fix-jsz-mon-test
+8f1ca99f	15011f1a	Thu Mar 2 10:41:30 2023 -0800	Fix flaky test TestMonitorJsz/raftgroups
+deddf8f0	ca193772	Wed Mar 1 07:58:01 2023 -0800	Fix since we have two streams and order in slice not guaranteed
+ebe08040	65f2cf24	Wed Mar 1 06:24:51 2023 -0800	Attempt to fix flapper again
+baca7bd7	9f158068	Wed Mar 1 04:58:01 2023 -0800	Fix for test flapper
+8f7a8810	4a7d73b8 d9933b1f	Tue Feb 28 21:58:24 2023 -0800	Merge pull request #3926 from nats-io/fix-3924
+d9933b1f	95ed4718	Tue Feb 28 20:43:46 2023 -0800	Fix for MQTT Spec 4.7.2-1
+724160eb	bab10c1e	Tue Feb 28 14:30:23 2023 -0800	Fix flapping tests
+6bda358f	3807441f	Tue Feb 28 13:24:18 2023 -0800	Fix tests that made assumptions about single server processing.
+adbb50fc	b19fe508	Tue Feb 28 11:45:31 2023 -0800	Fixed dios capacity to 4 due to testing under heavy load.
+daadbc07	bca45c28 10c2c387	Tue Feb 28 16:51:04 2023 +0100	Merge pull request #3919 from nats-io/jarema/fix-service-export-nil-pointer
+10c2c387	bca45c28	Tue Feb 28 15:36:37 2023 +0100	Fix panic if serviceExport is nil
+bca45c28	1db3934b 8732022d	Tue Feb 28 11:43:57 2023 +0100	Merge pull request #3918 from nats-io/jarema/fix-claims-update-with-headers
+8732022d	1db3934b	Tue Feb 28 11:09:18 2023 +0100	Fix JWT claims update if headers are passed in request
+60787065	97213096	Mon Feb 27 18:56:55 2023 -0800	Fixup test for new parameters
+87a18468	8169a117 ea2bfad8	Thu Feb 23 22:44:45 2023 -0800	Merge pull request #3907 from nats-io/raft-fix
+ea2bfad8	79df099c	Thu Feb 23 22:19:37 2023 -0800	Fixed bug where snapshot would not compact through applied. This mean a subsequent request for exactly applied would return that entry only not the full state snapshot. Fixed bug where we would not snapshot when we should.
+8169a117	79df099c 02ba7845	Thu Feb 23 16:41:26 2023 -0800	Merge pull request #3861 from nats-io/jarema/fix-scaleup-with-maxage
+02ba7845	79df099c	Fri Feb 24 00:46:02 2023 +0100	Fix new replicas late MaxAge expiry
+18b5aca4	53cf6635 3c64d076	Mon Feb 20 19:17:39 2023 -0700	Merge pull request #3892 from nats-io/consumer-fixes
+53cf6635	7e67ec5b 2a9f085d	Mon Feb 20 18:23:40 2023 -0700	Merge pull request #3893 from nats-io/raft-fixes
+2a9f085d	e028b723 7e67ec5b	Mon Feb 20 15:43:46 2023 -0700	Merge branch \'main\' into raft-fixes
+05695d30	5c6b3b62	Mon Feb 20 10:27:29 2023 +0100	Fixed a bug where partition was used with multiple wildcard token position
+6c9a9fb4	5c6b3b62	Sun Feb 19 14:21:53 2023 -0800	Fixed bug that would lose ack pending state during partial stream purge. General code cleanup to be more correct.
+8fc34596	b3f0dbdd beb179ec	Sun Feb 19 09:45:17 2023 -0700	Merge pull request #3886 from nats-io/process-connect-fix-main
+b3f0dbdd	9de8c085 06fd81d0	Sun Feb 19 08:51:37 2023 -0700	Merge pull request #3884 from nats-io/fix-consumer-cleanup
+06fd81d0	9de8c085	Sun Feb 19 06:08:43 2023 -0800	Fixed a bug where a named consumer under interest policy was spinning up inactive threshold timers in all replicas not just the leader.
+6a62ac45	6a4c61e1	Sat Feb 18 11:12:15 2023 -0800	Fix for merge conflict
+01fa89a0	689d521c	Sat Feb 18 09:46:52 2023 -0800	Fix for deleting consumers on restarts and non-fatal update errors.
+689d521c	52e5995a 2d794d09	Fri Feb 17 15:53:36 2023 -0700	Merge pull request #3878 from nats-io/test-fix
+2d794d09	52e5995a	Fri Feb 17 14:23:34 2023 -0800	Fix to flapping test to make sure we do not quickly blow away all consumer state.
+32b5ec16	345496f3	Thu Feb 16 07:16:19 2023 +0400	Fixed test to correspond to new limit of 1024.
+4452f64d	345496f3	Wed Feb 15 17:23:48 2023 -0800	Fix TestJetStreamParallelConsumerCreation race
+ba0b1f8b	7afddb3a	Mon Feb 13 09:45:50 2023 +0000	Fix stack overflow panic in reverse entry check when inbox ends with wildcard
+7afddb3a	72bce6cf 0da2a150	Fri Feb 10 08:16:57 2023 -0700	Merge pull request #3860 from nats-io/compact-subjects-fix
+72bce6cf	9f5e1509 e6dc1858	Thu Feb 9 21:34:20 2023 -0700	Merge pull request #3859 from nats-io/fix-service
+e6dc1858	9f5e1509	Thu Feb 9 18:53:40 2023 -0800	Small fix to nats-server-hardened.service
+f4a80838	6d94b418 b22ed47a	Sat Feb 4 23:20:08 2023 -0700	Merge pull request #3844 from nats-io/snapshots-fix
+b22ed47a	9c02be24	Sat Feb 4 13:55:41 2023 -0800	Use fast state in case many interior deletes and small fix for staticcheck
+9c02be24	6d94b418	Sat Feb 4 13:46:06 2023 -0800	Various fixes for snapshots.
+5d9a3a10	4744ff34 46af9798	Thu Feb 2 07:48:00 2023 -0800	Merge pull request #3838 from nats-io/jarema/fix-consumers-after-purge
+46af9798	4744ff34	Thu Feb 2 16:27:32 2023 +0100	Fix current consumers not getting messages after purge
+73d389e4	d40c4c6f e9a983c8	Wed Feb 1 21:44:10 2023 -0800	Merge pull request #3837 from nats-io/snapshot-fix
+1252653c	d9aa69c3 836848ca	Mon Jan 30 19:59:32 2023 -0800	Merge pull request #3829 from nats-io/jarema/fix-message-after-update
+740ec2f8	e7d73136 598e2724	Mon Jan 30 19:49:51 2023 -0800	Merge pull request #3832 from nats-io/deadlock-fix
+598e2724	e7d73136	Mon Jan 30 19:10:19 2023 -0800	Fix possible deadlock on dataloss
+6058056e	fd371781	Mon Jan 30 17:54:18 2023 -0800	Minor fixes and optimizations for snapshots.
+e7d73136	fd371781 13372508	Mon Jan 30 17:18:33 2023 -0800	Merge pull request #3830 from nats-io/shutdown-fix
+13372508	fd371781	Mon Jan 30 15:29:42 2023 -0800	Fix for isGroupLeaderless when JS not available (due to shutdown)
+836848ca	bcd53ba5	Mon Jan 30 20:47:17 2023 +0100	Fix Consumer not getting messages after filter update
+64096e5e	f4e6481c	Fri Jan 27 13:19:44 2023 -0800	Fix for flapping test
+3d78459a	d0a7a816	Thu Jan 26 09:09:30 2023 -0800	Fixup for bad merge
+a5cbd0b0	bcd53ba5	Wed Jan 25 18:16:33 2023 -0800	Fixed a bug that would not properly process updates on a stream on restart.
+4a3c27a2	f62d9290	Wed Jan 25 17:58:57 2023 -0800	Fix MQTT test for consumer replica override.
+bcd53ba5	3380fe1c c89883b6	Tue Jan 24 07:12:53 2023 -0800	Merge pull request #3808 from nats-io/jarema/fix-not-assigning-sig-sub
+c89883b6	f836b75e	Tue Jan 24 12:26:22 2023 +0100	Fix assigning signal subscription to consumer
+68b45702	f836b75e	Sat Jan 21 16:01:44 2023 -0800	Fix for filtered state for all subjects when the first sequence(s) are deleted.
+03803738	7d0aa4be	Thu Jan 12 10:31:32 2023 +0900	Fix some typos in code comment
+2808bbe9	1d53b47b d9cb1e62	Mon Jan 2 12:52:39 2023 -0800	Merge pull request #3756 from nats-io/fix_3734
+d9cb1e62	1d53b47b	Sat Dec 31 18:50:46 2022 -0800	Fix for #3734
+14d0ba1c	7042fc16	Fri Dec 30 20:00:08 2022 +0000	Fix some lint errors after move to `golangci-lint`
+71b90673	51678dd8 861f9812	Thu Dec 29 15:39:25 2022 -0800	Merge pull request #3751 from nats-io/leaf-wc-fix
+51678dd8	d44362f6 1477b675	Mon Dec 26 08:14:32 2022 -0800	Merge pull request #3744 from nats-io/fix-3704-compat
+860c0329	d937e92d a85318bc	Thu Dec 15 07:26:47 2022 -0800	Merge pull request #3717 from nats-io/fix-3652
+47c87eb7	6ff03574	Wed Dec 14 16:16:08 2022 -0800	fix and test for clustered mem store asset no-quorum if leader restarted
+1a55eb5a	5f9a69e4	Wed Dec 14 07:19:05 2022 -0800	Fix for condition after restart where first seq was wrong and reported zero timestamp and expiration stopped working.
+c2188a40	dcd7ffdc c0ca398b	Tue Dec 13 10:03:56 2022 -0800	Merge pull request #3709 from nats-io/zero-bug
+63ab132f	ad69e1c5 17484bd7	Mon Dec 12 12:49:25 2022 -0800	Merge pull request #3707 from nats-io/zb-fix
+17484bd7	fa67c50b	Mon Dec 12 13:12:36 2022 -0500	Fix test
+566d1adf	5b42cda4	Sat Dec 10 07:34:32 2022 -0500	Fix /healthz?js-enabled=true behavior
+7907950a	5baf9026	Wed Dec 7 16:19:33 2022 +0000	Fix for #3682: do not delay PINGs for GATEWAY or solicited LEAF connections, to ensure failover of leaf node connections
+8021ee8d	bfd7d7f9 2f274382	Tue Dec 6 17:39:23 2022 -0800	Merge pull request #3691 from nats-io/ut-test-fix-2
+29b614a0	d410fce4	Tue Dec 6 16:08:45 2022 -0800	Fix flapping test
+6df92f40	d410fce4	Tue Dec 6 15:53:03 2022 -0800	Fix to reenable JetStream for account when reenabled
+e847f959	0cc44995 894115b8	Tue Dec 6 14:27:30 2022 -0800	Merge pull request #3688 from nats-io/fix-3535
+894115b8	0cc44995	Tue Dec 6 14:16:20 2022 -0800	Fix for server panic when consumer state was not decoded correctly.
+2f61a9b1	ef27d4d5 74c37323	Tue Dec 6 09:12:41 2022 -0800	Merge pull request #3681 from nats-io/ut-test-fix
+76657870	c4c87612 5f7c8e21	Mon Dec 5 16:19:23 2022 -0800	Merge pull request #3679 from nats-io/fix-3677
+5f7c8e21	c4c87612	Sun Dec 4 19:13:51 2022 -0800	Fixed issues with multiple concurrent stream create requests.
+b45b439a	dde34cea 5e8c1993	Mon Nov 21 15:51:25 2022 -0800	Merge pull request #3658 from nats-io/fix-3657
+97742f2f	d6f243f3 fe57c687	Thu Nov 17 07:27:19 2022 -0800	Merge pull request #3649 from nats-io/fix-3645-2
+fe57c687	d6f243f3	Thu Nov 17 06:52:26 2022 -0800	Make sure header keys do not have additional prefixes.
+74a16b00	aeba3768 49faba9e	Wed Nov 16 17:22:35 2022 -0700	Merge pull request #3640 from nats-io/fix_3639
+46032f25	e44612ff 6cb7f68e	Wed Nov 16 12:12:02 2022 -0800	Merge pull request #3635 from nats-io/fix-3630
+e44612ff	d98d0278 9f6db719	Tue Nov 15 17:05:40 2022 -0700	Merge pull request #3634 from nats-io/fix-concurrent-write
+9f6db719	d98d0278	Tue Nov 15 16:26:35 2022 -0700	Fix concurrent map write
+0f79b913	c94a260c 6ffa6d1e	Tue Nov 15 12:24:10 2022 -0700	Merge pull request #3631 from nats-io/fix_3626
+b3b7772b	3c6fa828 9e36918f	Mon Nov 14 17:12:12 2022 -0700	Merge pull request #3627 from nats-io/fix_3623
+b76b6a1f	39185c11 47dd97e3	Mon Nov 14 08:40:13 2022 -0800	Merge pull request #3620 from nats-io/fix-3612
+47dd97e3	a64c41a7	Sun Nov 13 17:32:38 2022 -0800	Fix logic bug that would prevent some messages from being deleted on an interest based stream.
+4dab6ce9	304744ce	Wed Nov 9 19:44:22 2022 -0800	Fix test timing
+d8a4b56b	ef00281b c6031382	Sat Nov 5 14:23:24 2022 -0700	Merge pull request #3610 from nats-io/fix-3499
+c6031382	ef00281b	Sat Nov 5 13:56:45 2022 -0700	Fix for #3499
+3e467fc1	c9fd7768 c16ccd34	Thu Nov 3 16:25:00 2022 -0600	Merge pull request #3606 from nats-io/fix_3559
+c9fd7768	edf0fe31 72ff2edb	Thu Nov 3 13:05:47 2022 -0700	Merge pull request #3605 from nats-io/fix-3606
+72ff2edb	0f8aa114	Thu Nov 3 12:46:41 2022 -0700	Fix for #3603.
+edf0fe31	0f8aa114 91c84c03	Thu Nov 3 12:57:36 2022 -0600	Merge pull request #3604 from nats-io/fix_3191
+4f252d3e	a0719ec7 fe588dc9	Fri Oct 28 14:34:38 2022 -0600	Merge pull request #3592 from nats-io/fix_flapper
+fe588dc9	a0719ec7	Fri Oct 28 13:45:58 2022 -0600	Fixing a flapper
+d8999299	6a2b59bf 8f6d55a8	Thu Oct 27 11:07:11 2022 -0500	Merge pull request #3582 from nats-io/fix
+6a2b59bf	8cc87c98 b3e04319	Thu Oct 27 10:03:23 2022 -0600	Merge pull request #3583 from nats-io/fix_3581
+ff2cd1d7	15dc72db	Tue Oct 25 14:35:20 2022 -0700	Fixed test and bug that would override consumer replicas.
+7041b19d	37e876c7 f8aa3ac1	Mon Oct 17 17:18:21 2022 -0600	Merge pull request #3567 from nats-io/fix_3516
+4247cf93	7a5471e5 5df93f9c	Mon Oct 17 12:08:07 2022 -0600	Merge pull request #3566 from nats-io/js_fix_flapper
+5df93f9c	7a5471e5	Mon Oct 17 11:35:47 2022 -0600	Fix a test that would sometimes fail
+19ff7f5f	0ef889d5 bec51ed5	Fri Oct 14 16:01:44 2022 -0600	Merge pull request #3561 from nats-io/fix_3550
+11cc165c	3269c506 dde94987	Thu Oct 13 16:30:57 2022 -0600	Merge pull request #3552 from nats-io/fix_3547
+04c4cce4	ccfc818e a98af54d	Mon Oct 10 17:28:22 2022 -0600	Merge pull request #3543 from nats-io/fix_flappers_update_cov_go
+a98af54d	25e82d7d	Mon Oct 10 16:42:43 2022 -0600	Fix some flappers and update Go version for nightly code coverage
+cf71adb9	d9bf82bb c3adf787	Mon Oct 10 13:34:30 2022 -0600	Merge pull request #3538 from nats-io/fix_import_own_export
+d9bf82bb	0fd2649f 1a278f90	Mon Oct 10 12:28:43 2022 -0600	Merge pull request #3536 from nats-io/fix_main_help
+207195c6	b7a5163d 57a35943	Thu Oct 6 17:01:38 2022 -0600	Merge pull request #3529 from nats-io/js_fix_fs_filtered_purge
+04a5c0be	37ca9722	Wed Oct 5 17:14:41 2022 +0300	fix to  bug  #3522 - update usage guide message in main.go
+348b3d40	9f4513c9 3472f6ae	Wed Oct 5 07:12:27 2022 -0600	Merge pull request #3519 from nats-io/fix_3516
+0d14ec20	98de9136 fef702a6	Thu Sep 29 06:33:52 2022 -0700	Merge pull request #3510 from nats-io/consumer-names-paging-bug
+fef702a6	98de9136	Thu Sep 29 06:14:00 2022 -0700	[FIXED] bug in consumer names paging, did not honor limits and returned duplicate results.
+8247ecbf	c93c2648 e151cfcd	Tue Sep 27 15:33:38 2022 -0600	Merge pull request #3502 from nats-io/fix_3493
+970e2c81	74c0b18f 3babdda3	Mon Sep 26 12:40:01 2022 -0600	Merge pull request #3497 from nats-io/fix/protocol-error-byte-formatting
+7e1bc543	52d7b481	Thu Sep 22 04:57:05 2022 -0700	Fix for #3848.
+ca302890	dc2e4b71 378fed16	Fri Sep 16 15:23:09 2022 -0600	Merge pull request #3477 from nats-io/js_fix_panic_on_peer_remove
+e9ce118c	a41af2bd	Wed Sep 14 13:58:49 2022 +0530	Fix peer randomisation when creating consumers groups for replica=1
+a41af2bd	6e729f13 a1f90b87	Fri Sep 9 14:39:19 2022 -0600	Merge pull request #3463 from nats-io/jnm/fix_mapping_split
+a1f90b87	925f57cc	Fri Sep 9 12:42:03 2022 -0700	Fixes mishandling of an edge condition in the {{Split()}} subject mapping function
+dedf21d4	b32814d5	Thu Sep 8 11:56:57 2022 -0700	Fix for issue #3455
+b69ffe24	c008410c	Thu Sep 8 11:28:23 2022 -0600	Fixed some tests
+c19d3907	6c3902e2 8c1c6951	Wed Sep 7 19:50:16 2022 -0600	Merge pull request #3451 from nats-io/js_fix_migrate_ephemerals
+35d7e9f2	434bc347 16eb2af0	Tue Sep 6 09:16:45 2022 -0600	Merge pull request #3440 from nats-io/fix_1066
+434bc347	1a9b3c49 6ebbb4a4	Sat Sep 3 20:37:38 2022 -0600	Merge pull request #3436 from nats-io/fix_lexer_convenient_number
+6ebbb4a4	1a9b3c49	Sat Sep 3 20:02:25 2022 -0600	Fixed lexer changes made in #3434
+1a9b3c49	c4b5ca7c 86d20aa5	Fri Sep 2 20:51:00 2022 -0600	Merge pull request #3434 from nats-io/fix_3431
+86d20aa5	c4b5ca7c	Fri Sep 2 18:15:04 2022 -0600	[FIXED] Parsing of strings starting with numbers and K/G/etc.. suffix
+cc225106	62f91c1d c8af84d3	Wed Aug 31 17:06:30 2022 -0600	Merge pull request #3428 from nats-io/fix_3420
+840310bf	ce8608a8 5f0ecef6	Tue Aug 30 05:48:48 2022 -0700	Merge pull request #3416 from nats-io/fss-double-bug
+6be29120	eb08080e e837a255	Mon Aug 29 17:45:30 2022 -0700	Merge pull request #3413 from nats-io/fss-bug
+eb08080e	dc46f18b 9d1e773e	Mon Aug 29 14:29:28 2022 -0600	Merge pull request #3412 from nats-io/fix_sys_client_gw
+dc46f18b	d73ca7d4 06778cbd	Sat Aug 27 13:33:39 2022 -0700	Merge pull request #3408 from nats-io/pdp/fix-ca-expiry
+14a7bf89	284e3513 e851fdb6	Wed Aug 24 14:54:00 2022 -0600	Merge pull request #3399 from nats-io/fix_code_cov_timeout
+284e3513	f5ba1173 03ac1f25	Wed Aug 24 14:28:01 2022 -0600	Merge pull request #3387 from nats-io/fix_3317
+547bf054	eae3ffa8 ef71087d	Tue Aug 23 16:27:27 2022 -0700	Merge pull request #3394 from nats-io/fs-bug
+ef71087d	36f443dc	Tue Aug 23 15:46:57 2022 -0700	Fixed a bug that would not track per subject info for streams that were mirrors or sources.
+a43c1e38	4dd4b42e	Tue Aug 23 01:16:06 2022 -0700	fix signing key template processing dropping allow (#3390)
+c02d1ad6	4a2287a5	Mon Aug 22 14:30:00 2022 -0700	fix consumer subject validation on recovery (#3389)
+c3044565	e6ae36cb	Mon Aug 22 09:52:05 2022 -0600	Fixed possible panic in monitorStream
+e6ae36cb	6bf50dbb	Fri Aug 19 17:16:53 2022 -0700	Fix bad sys request for different account (#3382)
+904b7aee	c61465b3	Wed Aug 17 17:16:03 2022 -0700	fixed consumer source update receiving upstream msgs (#3364)
+3739e500	81a80169 9c9de656	Wed Aug 17 15:10:42 2022 -0700	Merge pull request #3378 from nats-io/meta-cleanup-fix
+c67d6aad	4b4de20c	Tue Aug 16 19:00:41 2022 -0700	fix jwt template ordering issue and error message (#3373)
+4b4de20c	56a80779 02ecda53	Tue Aug 16 19:13:49 2022 -0600	Merge pull request #3365 from nats-io/fix_3361
+7de44978	f0b098af	Tue Aug 16 17:05:49 2022 -0600	Install consumer snapshot on clean exit and few other fixes
+c6af1ecc	b7ee1774	Tue Aug 16 09:07:05 2022 -0700	Fix typo in comment
+d8d25d9b	76219f8e 00345cac	Thu Aug 11 16:41:53 2022 -0600	Merge pull request #3363 from nats-io/fix_3362
+76219f8e	4ceee46b	Thu Aug 11 01:46:30 2022 +0200	fix unit test (#3359)
+4ceee46b	f1d42646 68e74e1d	Wed Aug 10 16:25:26 2022 -0600	Merge pull request #3358 from nats-io/js_fix_direct_get_msg_timestamp_formatting
+1f428310	f1d42646	Wed Aug 10 12:53:08 2022 -0600	Fixed message timestamp formatting for direct message get feature
+c6e37cf7	7015e46d	Wed Aug 10 19:01:21 2022 +0200	Fix race between stream stop and monitorStream (#3350)
+7015e46d	2cf28684	Wed Aug 10 18:48:18 2022 +0200	fix move cancel issue where tags and peers diverge (#3354)
+2cf28684	5588c3d0	Wed Aug 10 18:47:19 2022 +0200	fixed consumer restart on source filter update (#3355)
+f168f5c9	9a92d10c 6bc82bb4	Tue Aug 9 17:55:02 2022 -0500	Merge pull request #3353 from nats-io/fix-datarace
+a5119008	5a050fc1	Mon Aug 8 11:06:10 2022 -0600	Fix up some processing during account purge to fix flapping tests
+b927b228	3d68835e 653b739f	Fri Aug 5 15:02:43 2022 -0600	Merge pull request #3345 from nats-io/fix_flapper
+441c0979	3d68835e	Fri Aug 5 14:17:43 2022 -0600	Fixed flapping test
+3d68835e	d90854a4 88424a89	Fri Aug 5 13:29:33 2022 -0600	Merge pull request #3344 from nats-io/fix_ioutil
+f208b866	2120be64 7baf7bd8	Fri Aug 5 10:20:04 2022 -0600	Merge pull request #3335 from nats-io/fix_3331
+3c9a7cc6	be54b08a	Fri Aug 5 09:55:37 2022 -0600	Move to Go 1.19, remote io/util, fix data race and a flapper
+b8038396	daaaad5e b6208c77	Thu Aug 4 18:59:35 2022 -0600	Merge pull request #3338 from nats-io/fix_qunsub_leak
+5df91797	3aeba043 fe1feeba	Thu Aug 4 09:45:28 2022 -0600	Merge pull request #3332 from nats-io/fix_js_cluster_test_name
+fe1feeba	3aeba043	Thu Aug 4 09:09:52 2022 -0600	Fixed JS cluster prefix name for Travis run
+22b91238	ed2cb280 37c923c2	Wed Aug 3 08:52:52 2022 -0600	Merge pull request #3323 from nats-io/js_raft_move_warn_to_debug
+37c923c2	8ae0757e	Tue Aug 2 18:06:39 2022 -0600	Downgrade a RAFT warning to debug
+b6b74609	588a8fcc 6460519c	Sun Jul 31 12:43:28 2022 -0600	Merge pull request #3315 from nats-io/fix_3313
+588a8fcc	32ffc025 71796951	Sun Jul 31 11:43:17 2022 -0700	Merge pull request #3314 from nats-io/enc_dsnap_bug
+32ffc025	05a7aaff f397e158	Fri Jul 29 17:25:18 2022 -0600	Merge pull request #3311 from nats-io/fix_nightly_docker
+746b44a0	58a3b204	Thu Jul 28 17:58:25 2022 -0600	Fixed TLS test so it passes on macOS
+258bd424	23c475e0 5786d2d9	Wed Jul 27 18:50:53 2022 -0600	Merge pull request #3297 from nats-io/js_fix_panic
+88203dd5	23c475e0	Wed Jul 27 16:51:10 2022 -0600	Fixed a panic when consumer is closed
+23c475e0	15382d97 d0ee9a12	Wed Jul 27 16:19:56 2022 -0600	Merge pull request #3296 from nats-io/js_fix_subj_string_race
+880e8546	15382d97	Wed Jul 27 14:39:34 2022 -0600	Fixed data race between UpdateConfif() and subjString
+04ffed48	6212087f	Tue Jul 26 22:01:03 2022 +0200	fix peer tracking by removing peers before scaledown (#3289)
+6212087f	fe370955	Tue Jul 26 21:49:04 2022 +0200	fix race by locking arround o.isLeader (#3291)
+fe370955	cb97cbea 1a6c5f1c	Tue Jul 26 08:57:17 2022 -0600	Merge pull request #3288 from nats-io/debug_test_failure
+a3e62f00	918ce307 2871dcb2	Thu Jul 21 16:06:41 2022 -0600	Merge pull request #3265 from abegaj/fix-max-deliver-update
+918ce307	a02a617c	Thu Jul 21 22:18:59 2022 +0200	fix and improve unit test (#3281)
+a02a617c	231fdea6 1da5ecfb	Thu Jul 21 10:53:47 2022 -0600	Merge pull request #3280 from nats-io/fix_3273
+51b6d523	45b14903	Thu Jul 21 00:51:26 2022 +0200	Fix raft issue where pindex of follower was off by 1 (#3277)
+62bf8ce7	302f85dc	Tue Jul 19 21:38:58 2022 +0200	fix jwt unit test by ensuring activation issue time is bigger than expiration (#3275)
+302f85dc	e753e897 6de64667	Mon Jul 18 15:02:09 2022 -0700	Merge pull request #3271 from nats-io/repub-fix-srcignored
+89b5e872	2c7d04f0	Mon Jul 18 18:42:03 2022 +0200	Move and cancel fixes (#3270)
+ae9f872e	b145952e	Fri Jul 15 21:25:29 2022 -0700	Fix static code check violation on two unit tests and normalize unit test values to ADR-28.
+b145952e	00a38dc9	Fri Jul 15 13:50:35 2022 -0700	Fix and test for RePub src ignored at runtime.
+f241a929	da305f20 50c561a0	Mon Jul 11 10:26:50 2022 -0600	Merge pull request #3256 from nats-io/fix_test_causing_flappers
+50c561a0	da305f20	Mon Jul 11 10:00:03 2022 -0600	Fixed a test that was causing others to flap
+9c55e67a	7ab25618 f0ee56cf	Fri Jul 8 02:23:59 2022 +0200	Merge pull request #3248 from nats-io/fix-uniqe-tag-stream-update
+333e2fc2	c49d0813	Thu Jul 7 13:42:41 2022 -0700	Fix for stalled catchup in endless cycle on EOF trying to retrieve catchup msg.
+f0ee56cf	7ab25618	Thu Jul 7 21:22:55 2022 +0200	Fix unique_tag issue with stream replica increase
+c49d0813	be789c62	Thu Jul 7 09:05:50 2022 -0700	Fix data race
+a831185a	de3a90cb 509eec4b	Thu Jul 7 03:54:10 2022 +0200	Merge pull request #3234 from nats-io/stream-move-fix-first-commit-only
+70be4b77	f8939b40	Thu Jul 7 03:32:13 2022 +0200	fixes peer removal, simplifies move, more tests
+697811cd	90caf12d 04c6d617	Wed Jul 6 12:04:50 2022 -0600	Merge pull request #3242 from nats-io/fix_3239
+90caf12d	722ae548	Wed Jul 6 09:11:31 2022 -0700	Attempt to fix flapping test
+722ae548	0c9ed8c1	Wed Jul 6 09:11:22 2022 -0700	Fix data race
+28e84633	7cf814de	Sat Jul 2 08:46:19 2022 -0700	Allow maxprocs to debug log after start banner
+7cf814de	b7d94e1b 97ad346c	Sat Jul 2 08:35:44 2022 -0700	Merge pull request #3236 from ripienaar/json_tag_fix
+97ad346c	b7d94e1b	Sat Jul 2 11:51:50 2022 +0200	fix json tag for meta stream move
+b0580cdf	88d5062f	Tue Jun 28 18:45:33 2022 -0700	Fix some spellings
+dff1a336	10e1d055	Wed Jun 29 00:05:00 2022 +0200	[Fixed] race on unlocked cfg access (#3223)
+558293e0	cedf08a1	Tue Jun 28 18:05:57 2022 +0100	Fix the lock
+aabaf6f1	b0c4ec69	Tue Jun 28 18:36:13 2022 +0200	[fixed] reload related races (#3222)
+e02016db	92cd7821	Mon Jun 27 16:05:03 2022 -0700	Fix race
+4de1766f	cc197771	Fri Jun 24 09:43:42 2022 -0700	Fix TLS tests and allow older test certs for now
+1adb3ae3	a8300157	Mon Jun 13 18:02:57 2022 -0700	Fix for data race - issue 3188
+d8e5bcec	8c76a1e5 6cc14ff8	Wed Jun 1 12:22:39 2022 -0700	Merge pull request #3159 from nats-io/kv-fs-race-bug
+a52f1261	1c984d40	Wed May 25 13:25:45 2022 -0600	Bump version to v2.8.4-beta.2 and fix flapper
+d69394ef	7bdd6799	Wed May 25 09:27:34 2022 -0700	Fix spurious 408s under load and move processing of acks to their own Go routine.
+752c0ade	7bdd6799 46f7f7bf	Tue May 24 15:53:20 2022 -0700	Merge pull request #3148 from nats-io/max_msgs_per_num_pending_bug
+68792b67	8ca3d2f7	Wed May 18 16:36:07 2022 -0600	Fix new MQTT test flapper
+bcecae42	2cb2a8eb	Thu May 12 15:45:29 2022 -0700	Fix for #3119
+7da46d54	56d06fd8 5c3be1ee	Wed May 11 13:15:06 2022 -0600	Merge pull request #3118 from nats-io/fix_3117
+17cc2052	f87c7d84 c4adf0ff	Tue May 10 14:38:47 2022 -0600	Merge pull request #3112 from nats-io/fix_3108
+6507cba2	fbc9e162	Sat May 7 12:42:56 2022 -0700	Fix for race on recovery
+fbc9e162	f20fe2c2	Sat May 7 09:25:32 2022 -0700	Fix for panic due to not loaded cache during compact
+92755d33	94b9c9b4	Mon May 2 14:51:19 2022 -0600	Fixed GithubAction code coverage to handle test panics
+ea6a43ea	0d928c03 e0f5fcff	Thu Apr 28 17:08:00 2022 -0700	Merge pull request #3088 from nats-io/tr-fix
+e0f5fcff	0d928c03	Thu Apr 28 15:50:28 2022 -0700	Fix for subject transforms and JetStream delivery subjects.
+5b8c9179	2b1c3374 d4d37e67	Thu Apr 28 14:55:56 2022 -0600	Merge pull request #3087 from nats-io/fix_fs_compact_and_write_index
+d520a27c	98138540	Wed Apr 27 03:32:08 2022 -0400	[fixed] step down timing, consumer stream seqno, clear redelivery (#3079)
+f702e279	d056e310	Tue Apr 26 19:22:19 2022 -0700	Fix for a consumer recovery issue. Also update healthz to check all assets that are assigned, not just running.
+f4115b68	243851af 363849bf	Thu Apr 21 11:27:04 2022 -0600	Merge pull request #3067 from nats-io/js_fix_mirror_dedup
+e3eb25d2	df61a335 b9463b32	Wed Apr 20 23:22:25 2022 -0600	Merge pull request #3066 from nats-io/js_fix_stream_mirror
+df61a335	254c9708 9975a38c	Wed Apr 20 23:20:41 2022 -0600	Merge pull request #3061 from nats-io/js_fix_stream_source
+5cc4d0ca	254c9708	Thu Apr 21 10:19:35 2022 +0530	fix for CVE-2022-27191 * our CVE scanner has detected crypto go module vulnerability in nats exporter this PR fixes that issue by updating the module version
+254c9708	9db2e914	Wed Apr 20 19:23:21 2022 -0400	Fix subject renaming for leaf connections and queue subs (#3062)
+9db2e914	ff5d6097	Wed Apr 20 13:58:30 2022 -0400	Fixes issue on restart where mirror config was invalid (#3060)
+e2ab9d7c	d15d04be 9f9732ad	Wed Apr 20 09:36:09 2022 -0700	Merge pull request #3059 from nats-io/move-fix
+d15d04be	69ea1ab5 730d8921	Wed Apr 20 08:42:33 2022 -0600	Merge pull request #3058 from nats-io/fix_3009_2
+322115be	af1a80d7	Mon Apr 18 15:58:10 2022 -0400	[fixed] On config reload js got disabled, when previously set via command line arg
+79b4374d	b3fe3037	Mon Apr 18 01:53:48 2022 -0400	[Fixed] limits enforcement issues (#3046)
+7752a5be	ad1ced63	Sat Apr 16 15:09:36 2022 -0400	Fixed mixed mode server without JS dropping js export on jwt update (#3044)
+55f8982e	1b0a5d9e	Sat Apr 16 05:08:12 2022 -0700	Fix flapping test
+d5ed5b1d	2a8b1237	Fri Apr 15 13:38:12 2022 -0700	fix
+aa23a919	12730af5	Fri Apr 15 13:24:55 2022 -0700	Fix test that should have been fixed following FC tweak
+a6b62f61	0e841d4a	Thu Apr 14 18:06:25 2022 -0600	Fix test that should have been fixed following FC tweak
+08d1507c	e06e0a24 c1a17e89	Wed Apr 13 13:00:51 2022 -0600	Merge pull request #3031 from nats-io/fix_3024
+c1a17e89	c92dc0dc	Wed Apr 13 09:55:24 2022 -0600	Fixed JetStream flapper
+1ba617bb	37a34035	Tue Apr 12 18:56:28 2022 -0600	Fixed data race with RAFT node election timer
+3bd8ee84	04db6b09	Tue Apr 12 16:18:38 2022 -0700	Fix description for Wipe
+5dfcc5e9	ce650937	Mon Apr 11 22:50:25 2022 -0700	Fix for flapping WAL test
+13e5ab10	4f837362	Mon Apr 11 14:04:09 2022 -0400	fix js nex interest check where leaf node masked gw subj propagation (#3016)
+c3612b57	37cbac99	Sun Apr 10 13:02:03 2022 -0700	Fixes for some flapping tests
+2510d671	cd7f16f2	Sat Apr 9 11:55:04 2022 -0700	Skip flapper for now, will fix in separate PR
+f4c23023	3485dcf2	Thu Apr 7 12:16:18 2022 -0400	fix sleep in unit test to ensure updates have propagated (#3012)
+7fa26763	9e6f9659	Thu Apr 7 09:22:51 2022 -0600	Fixed comment typos and some rewording
+d9da66d6	5f4f813c	Tue Apr 5 12:25:55 2022 -0400	returns -1 for new unlimited/unset limits and tests/fixes info counts (#3002)
+268a29e7	569328bc	Mon Apr 4 19:24:09 2022 -0400	fix unit test that did not fail when header was modified (#3000)
+569328bc	b7bc842c	Mon Apr 4 17:40:19 2022 -0400	fix crash on shutdown with meta being nil (#2999)
+e8b118ba	ee1341fa 29ea280f	Mon Apr 4 12:27:27 2022 -0600	Merge pull request #2997 from nats-io/fix_2995
+241bf5df	d4e2fde4	Thu Mar 31 18:03:06 2022 -0400	Fixed wrong error check (#2986)
+34650e9d	96aa5eee	Thu Mar 31 10:05:34 2022 -0600	Fixed data race and some flappers
+f207f907	520aa322 7bb7309f	Wed Mar 30 19:39:15 2022 -0600	Merge pull request #2981 from nats-io/fix_2980
+3933c1f3	14451531	Wed Mar 30 18:12:57 2022 -0400	Fixes #2969, on reload stream import was not removed for js streams
+76b56b6b	f388839c	Tue Mar 29 19:15:40 2022 -0700	Fix for a flapping test
+f388839c	bfc1462f e9b9c398	Tue Mar 29 19:37:00 2022 -0600	Merge pull request #2974 from nats-io/fix_races_and_some_tests
+607858f2	9ee03aed	Tue Mar 29 18:02:49 2022 -0700	Improved consumer snapshot logic in clustered mode and disk usage. Also fixed a bug that could cause memory based replicated consumers to no longer work after snapshots and server restarts.
+98c1f0ec	953dad44	Tue Mar 29 19:02:41 2022 -0600	Fixed some data race and some flappers
+0c5f3688	26c6dcdc	Mon Mar 28 20:47:54 2022 -0400	[ADDED] Tiered limits and fix limit issues on updates (#2945)
+f82eda30	909c6754	Mon Mar 28 17:46:01 2022 -0600	Fix map init
+929f849b	004e5ce2 25886e88	Mon Mar 28 14:13:10 2022 -0600	Merge pull request #2966 from nats-io/fix_2941
+004e5ce2	0b8aa472 7607d377	Mon Mar 28 12:18:20 2022 -0700	Merge pull request #2958 from nats-io/fix_2955
+5e5aab37	27cfd22f	Mon Mar 28 10:15:23 2022 -0700	Additional improvements to memory pooling and management. Also logic fix for firstMatching that did unnecessary work when matching all.
+963cc8af	27cfd22f 6ad93d9b	Mon Mar 28 08:59:39 2022 -0600	Merge pull request #2957 from nats-io/fix_flappers
+6b379329	27cfd22f	Sat Mar 26 07:26:46 2022 -0700	Fix for #2955. When scaling up a stream with existing messages the existing messages were not being replicated.
+6ad93d9b	27cfd22f	Fri Mar 25 18:24:17 2022 -0600	Fix some flappers
+27cfd22f	3f6d3c49 5e89374e	Fri Mar 25 13:21:57 2022 -0600	Merge pull request #2951 from nats-io/fix_2912
+3f6d3c49	ef981be8 91bdcc30	Fri Mar 25 13:21:46 2022 -0600	Merge pull request #2954 from nats-io/fix_server_version_check
+ef981be8	0b54a55e eaf5de05	Fri Mar 25 13:21:35 2022 -0600	Merge pull request #2956 from nats-io/fix_msg_copy_with_go_routines
+eaf5de05	edcddfae	Fri Mar 25 12:51:52 2022 -0600	Fixed data race caused by moving some code inside startGoRoutine
+2438c965	7e4a4c8f	Fri Mar 25 14:48:15 2022 -0400	Fix update of R1 Consumer in clustered setup.
+5e89374e	4739eebf	Fri Mar 25 12:21:51 2022 -0600	Fixed another possible lock inversion consumer->stream
+1d38a73b	7a9c2336	Thu Mar 24 18:39:28 2022 -0700	Fix for version comparison
+e9bf972c	9d6525c8 8d4ff4bc	Tue Mar 22 16:11:04 2022 -0600	Merge pull request #2946 from nats-io/fix_ipqueue_unregister
+8d4ff4bc	9d6525c8	Tue Mar 22 15:21:01 2022 -0600	Fixed panic on stream create failure (with filestore)
+9d6525c8	60773be0 897c229f	Tue Mar 22 14:38:42 2022 -0600	Merge pull request #2943 from nats-io/fix_2926
+f11f7a61	33cfc748 68da3e82	Mon Mar 21 12:29:57 2022 -0600	Merge pull request #2938 from nats-io/fix_2920
+ac52ecd9	a23b1b73	Thu Mar 17 19:53:33 2022 -0600	Fixing flapper
+a4e795c9	69d26560	Thu Mar 17 17:38:32 2022 -0700	Attempt to fix flapper
+7d9bb32c	fe6d7b30	Thu Mar 17 12:18:22 2022 -0600	Fix a flapper
+0cb0f6d3	9a2da9ed 3216eb5e	Wed Mar 9 11:55:50 2022 -0700	Merge pull request #2914 from nats-io/fix_2913
+5a97ee6b	3538aea3 0fae8067	Wed Mar 9 10:31:49 2022 -0700	Merge pull request #2911 from nats-io/fix_lock_inversions
+3538aea3	7a98563c dde235a9	Wed Mar 9 10:30:50 2022 -0700	Merge pull request #2915 from nats-io/fix_atomic_unaligned
+d0c18310	24067d73	Mon Mar 7 21:22:41 2022 -0500	Fixed lock inversion by not using account lock to get the name
+54da7586	d52f6078 196319b1	Sun Mar 6 10:54:58 2022 -0700	Merge pull request #2887 from nats-io/fix_2886
+be3e2995	037e3c6b 85b3f8a7	Sun Mar 6 10:18:50 2022 -0700	Merge pull request #2902 from nats-io/gw_fix_race_set_first_ping_timer
+adfcfdb7	77bce193 b759ff48	Fri Mar 4 14:38:03 2022 -0800	Merge pull request #2900 from nats-io/fss-recover-bug
+1b5f651c	77bce193	Fri Mar 4 10:48:10 2022 -0800	Fixed bug that would not recover a stream after non-clean shutdown with deleted messages.
+ad6020ae	30009fdd	Fri Mar 4 08:53:16 2022 -0800	Fix for #2885.
+97612c0f	804ce102	Thu Mar 3 15:09:01 2022 -0700	Fix test by using AckSync() to avoid flapping
+4aaf76e2	9010f354 55ffde72	Thu Feb 10 18:24:51 2022 -0700	Merge pull request #2863 from nats-io/fix_cons_dc_count
+55ffde72	9010f354	Thu Feb 10 17:33:53 2022 -0700	Fixed consumer dlv count and num pending wrong due to redeliveries
+c13a84cf	d50febee	Tue Feb 8 13:29:38 2022 -0800	Fixed a bug that would calculate the first sequence of a filteredPending incorrectly.
+55b7f11c	664e8b92	Sat Feb 5 20:15:48 2022 -0800	Fixed flow control stall under specific conditions of message size.
+d97968e5	b23ed778 8fce45df	Tue Feb 1 13:14:44 2022 -0800	Merge pull request #2835 from nats-io/consumer_pending_bug
+b23ed778	0d158728 30c431a9	Mon Jan 31 17:48:47 2022 -0700	Merge pull request #2834 from nats-io/fix_backoff
+0d158728	74c0fdc3 ae8eedb8	Mon Jan 31 13:58:12 2022 -0800	Merge pull request #2824 from nats-io/fix-nodeinfo
+fa814f7c	6b690bd5	Mon Jan 31 08:36:37 2022 -0800	Fixed behavior for when MaxMsgsPerSubject is set and DiscardNew is also set.
+8815072e	b38ced51	Sun Jan 30 14:54:24 2022 -0800	Fix flapping test
+275d4262	617e1fb7	Sun Jan 30 09:45:05 2022 -0800	Fix for #2828. The original design of the consumer and the subsequent store did not allow updates. Now that we do, we need to store the new config into our storage layer.
+26b692ee	c324863b 609a9ba2	Wed Jan 26 15:44:53 2022 -0700	Merge pull request #2823 from nats-io/fix_nightly_2
+c324863b	7cf537e5 5d6e9606	Wed Jan 26 15:20:21 2022 -0700	Merge pull request #2822 from nats-io/fix_nightly
+5d6e9606	7cf537e5	Wed Jan 26 14:58:11 2022 -0700	Fix nightly to have proper git commit and move to Go 1.17
+c5cc81bc	274ec6db	Tue Jan 25 15:02:47 2022 -0500	Fix collectRevocations
+fa12d096	5e71c907	Tue Jan 25 13:48:12 2022 -0500	Fix jwt based user/activation token revocation and revocation granularity
+d3326843	56870e4d	Mon Jan 24 13:01:25 2022 -0800	Fixed data race and fuxed bug that we would not clear our waiting queue when a leader stepped down.
+ae43b24b	dcadf664	Fri Jan 21 10:09:10 2022 -0800	Fixed #2810. Do not warn about password for internally generated no auth user when just system account assigned to non-default.
+7f572983	4d3b3da3	Thu Jan 20 18:06:29 2022 -0800	The 2.7 update broke the one-shot pull consumer fetch behavior due to change and a fix to a bug that allowed it to work before.
+c82b583d	4d3b3da3	Thu Jan 20 15:29:17 2022 -0800	Fix race condition in HTTP monitoring shutdown (#2805)
+4d3b3da3	297b4439 f6acc9d2	Thu Jan 20 15:57:47 2022 -0700	Merge pull request #2803 from nats-io/fix_acc_deadlock
+297b4439	bb87a650 c76bf812	Thu Jan 13 20:11:04 2022 -0700	Merge pull request #2790 from nats-io/fix_goreleaser_config
+c76bf812	bb87a650	Thu Jan 13 19:02:41 2022 -0700	Fixed goreleaser ldflags
+70b1f5c9	f268aad0	Thu Jan 13 16:58:19 2022 -0700	Fix goreleaser script invocation - bump to rc2
+3ce22adb	29c40c87	Thu Jan 13 13:14:05 2022 -0700	Fixed some tests
+103f7104	43eff407	Wed Jan 12 20:03:26 2022 -0800	Fixed consumer info num pending bug.
+4aa6c62b	d956d6d3	Wed Jan 12 18:03:24 2022 -0500	Fix non used error
+fbcf1aba	4c640113 b2b33110	Thu Dec 30 08:38:25 2021 -0800	Merge pull request #2766 from kfabryczny/fix_doc_link
+b2b33110	4c640113	Thu Dec 30 14:04:12 2021 +0100	FIX: Fix broken link to monitoring documentation
+fe5f47f4	3e8b6628	Wed Dec 22 16:18:00 2021 -0500	Fixed system account issue where the wrong struct got updated
+6810e488	3e8b6628 3053039f	Mon Dec 20 09:45:50 2021 -0700	Merge pull request #2750 from nats-io/fix_2745
+575bb4ee	ad4e14ff 8e5dff3e	Wed Dec 15 12:15:32 2021 -0700	Merge pull request #2747 from nats-io/fix_tls_map_check
+ad4e14ff	de3e7cab 69525f30	Tue Dec 14 16:13:23 2021 -0700	Merge pull request #2744 from nats-io/fix_no_auth_check
+1146e66f	628251d1	Mon Dec 13 11:51:33 2021 +0100	fixes a nil panic on jsz
+0ba2544c	dd735f4a	Wed Dec 8 19:33:35 2021 -0500	removed suffix from "missing" list
+be066b7a	f55ee219 1b887813	Wed Dec 8 17:16:51 2021 -0700	Merge pull request #2738 from nats-io/fix_2720
+67c34527	893b4154 833f823e	Mon Dec 6 16:11:17 2021 -0700	Merge pull request #2734 from nats-io/fix_2514
+4f37cbdd	df581337 40c0f031	Tue Nov 30 12:56:56 2021 -0700	Merge pull request #2714 from nats-io/fix_2713
+7aec33e6	60c48356 72ad68fa	Fri Nov 19 09:21:52 2021 -0800	Merge pull request #2704 from nats-io/memstore-bug
+72ad68fa	60c48356	Fri Nov 19 09:13:43 2021 -0800	[FIXED] Bug in memstore that when setting max msgs per subject to 1 would not work properly.
+2c53e975	8ac1ca0e 1552e6fd	Sat Nov 13 11:27:04 2021 -0800	Merge pull request #2688 from nats-io/latency-tracking-bug
+1552e6fd	c13d14cf	Fri Nov 12 17:47:35 2021 -0800	Fix for staticcheck shadow issue
+65d098f5	8ac1ca0e	Fri Nov 12 17:37:15 2021 -0800	Fix for latency tracking bug.
+8ac1ca0e	91d6531b 27d1a50b	Wed Nov 10 09:33:25 2021 -0700	Merge pull request #2684 from nats-io/fix_2679
+2221dbe6	a27de5a6	Mon Nov 8 20:27:35 2021 -0500	fixed unit test where after a server shutdown no quorum existed
+a27de5a6	f9782c12 cd54b402	Thu Nov 4 15:37:41 2021 -0700	Merge pull request #2678 from nats-io/race-fix-undo
+cd54b402	0d2261bb	Thu Nov 4 15:36:03 2021 -0700	Undo race fix which could cause deadlock
+0d2261bb	804696dd 7ef0cc56	Thu Nov 4 15:11:37 2021 -0700	Merge pull request #2677 from nats-io/race-fix
+7ef0cc56	804696dd	Thu Nov 4 15:09:40 2021 -0700	Fix for race on js.cluster status
+ee3009e1	fe3abafa 5ead954f	Thu Nov 4 13:58:56 2021 -0700	Merge pull request #2674 from nats-io/fix-2670
+501ebc07	530ea6a5	Wed Nov 3 15:22:33 2021 -0400	Altered jwt unit tests to not use localhost and prefixed tests with TestJWT
+ae999aab	6987480a c78d700e	Tue Nov 2 15:39:30 2021 -0700	Merge pull request #2669 from nats-io/fix-2658
+6987480a	1097ac92 1af3ab1b	Tue Nov 2 15:34:08 2021 -0700	Merge pull request #2668 from nats-io/fix-2666
+c78d700e	1097ac92	Tue Nov 2 15:23:15 2021 -0700	Fix for #2658
+1af3ab1b	1097ac92	Tue Nov 2 14:38:22 2021 -0700	Fix for #2666
+1097ac92	2ce09f0d 14469ccf	Tue Nov 2 08:50:55 2021 -0700	Merge pull request #2665 from nats-io/fix-2662
+14469ccf	2ce09f0d	Mon Nov 1 18:04:37 2021 -0700	Fix for #2662.
+3a14a984	862c0c64	Thu Oct 28 08:33:48 2021 -0700	Fix for a bug that did not properly decode redelivered state for consumers from a filestore.
+0f7cdb00	03a4f2b2	Wed Oct 27 15:07:59 2021 -0700	Fix for #2633
+7aacba4b	fc6df0fb	Wed Oct 27 13:46:43 2021 -0400	tests: don\'t allocate fixed ports from random range
+d4b0b38a	694e9016	Tue Oct 26 20:09:00 2021 -0700	Fix for #2642
+694e9016	0bd38bd4	Tue Oct 26 13:36:58 2021 -0600	Fixed flapper
+678469b4	81ccce94	Mon Oct 25 13:12:37 2021 -0700	Fix for #2644
+c4a3a4c9	5ce7cfa9	Tue Oct 19 16:56:20 2021 -0400	fix timer not being stopped prior to reset
+8f64b999	5ce7cfa9	Tue Oct 19 15:58:22 2021 -0400	Fixed memory leak caused by retained client and conn of timer
+78991445	ed97718f	Tue Oct 19 11:15:47 2021 +0200	Fix #2630
+040258dc	3fbf9ddc	Mon Oct 18 17:53:56 2021 -0700	Fix for #2628 #2629 issues
+3fbf9ddc	f7c3ac5e 39159436	Thu Oct 14 10:30:21 2021 -0700	Merge pull request #2623 from nats-io/fix-2622
+06168083	f7c3ac5e	Thu Oct 14 09:25:21 2021 -0700	Fix for #2622.
+433a3e7c	fe0836ac cd23c70a	Tue Oct 12 15:13:55 2021 -0600	Merge pull request #2619 from nats-io/fix_js_race
+cd23c70a	fe0836ac	Tue Oct 12 14:25:46 2021 -0600	Fixed data race in setSourceConsumer
+cbbab295	f8a8367e f254c110	Tue Oct 12 08:46:42 2021 -0700	Merge pull request #2616 from nats-io/fix_2611
+8951bc54	03d48cf7	Tue Oct 12 07:26:13 2021 -0700	Fix for stream purge where purge would remove all pending messages for a filtered consumer.
+03d48cf7	5e1276c2 1075206c	Mon Oct 11 19:13:57 2021 -0700	Merge pull request #2614 from dtest11/fix_param
+555d2211	41a9d082 0937b848	Mon Oct 11 08:25:03 2021 -0700	Merge pull request #2610 from dtest11/fix_doc
+0937b848	41a9d082	Mon Oct 11 23:19:56 2021 +0800	fix go doc: DenyRules
+41a9d082	4e885f0b 9efa11ba	Thu Oct 7 07:23:33 2021 -0700	Merge pull request #2601 from nats-io/rollup-fix-2
+208146aa	3f12216f 25647a1f	Wed Oct 6 13:12:55 2021 -0600	Merge pull request #2598 from nats-io/fix_2587
+5ff751af	74988e68 df2147bc	Mon Oct 4 12:54:57 2021 -0700	Merge pull request #2593 from nats-io/rollup-fix
+df2147bc	74988e68	Mon Oct 4 10:01:36 2021 -0700	Fix for rollups and filtered purge
+74988e68	c9eeab1d d34b8fdd	Thu Sep 30 13:48:13 2021 -0600	Merge pull request #2590 from nats-io/fix_2588
+38a853f0	377a46ee 98ef6cb0	Wed Sep 29 23:58:47 2021 +0200	Merge pull request #2583 from ripienaar/fix_msg_get_audit
+98ef6cb0	377a46ee	Wed Sep 29 17:36:38 2021 +0200	fixes the msg get audit event
+3379b3b6	c91f0fec	Tue Sep 28 14:28:03 2021 -0400	[fixed] missing support for header in some request handler
+3c537824	7d389169 7b257559	Thu Sep 23 10:14:39 2021 -0600	Merge pull request #2567 from nats-io/fix_flapper
+23e8dc99	7d389169	Thu Sep 23 09:36:46 2021 -0600	Fix corrupt wal test that was flapping
+93dc39dc	a3be36fc	Wed Sep 22 17:24:33 2021 -0600	Fixed other MQTT test that was setting JWT mem but not disk limits
+b0d487fe	944b90d4	Wed Sep 22 16:51:34 2021 -0600	Fix MQTT test that was not setting MaxStore
+944b90d4	060beff9	Wed Sep 22 15:28:43 2021 -0700	Fix for no storage limits
+eab45b40	3a4fd2bf	Wed Sep 22 10:59:02 2021 -0700	Fix for deadlock with stream mirrors or sources where origin is interest or workqueue policy.
+95343721	a6f95e98	Tue Sep 21 08:53:12 2021 -0700	Fix for #2551
+052bb7ca	63c24284 a6f95e98	Tue Sep 21 08:16:51 2021 -0700	Merge to fix conflicts
+de851e51	e69c6164	Tue Sep 21 08:02:11 2021 -0700	Fix for #2548
+12bb4603	e69c6164	Mon Sep 20 18:41:37 2021 -0700	Fix RAFT WAL repair.
+d91a0061	9918f169	Thu Sep 16 11:59:52 2021 -0700	Fix for data race around c.echo
+6a5ac92e	765d39a2	Wed Sep 15 09:01:03 2021 +0200	fix error code for JSStreamHeaderExceedsMaximumErr
+765d39a2	777e3236	Tue Sep 14 17:47:14 2021 -0700	Fix flapping test
+ebc58101	20574ffa	Tue Sep 14 14:17:49 2021 -0700	Fixed a condition where JetStream assets could be created in multiple leafnodes. Also added in optional Domain to StreamInfo.
+6e705c2d	2495180d 8d41daf6	Mon Sep 13 14:45:20 2021 -0600	Merge pull request #2519 from nats-io/fix_2510
+02097dc4	b3c19b9d 8575b334	Mon Sep 13 07:50:30 2021 -0700	Merge pull request #2517 from andrey-shalamov/fixed-queue-group-memory-leak
+8575b334	b3c19b9d	Mon Sep 13 15:22:05 2021 +0300	fixed queue group memory leak
+f7537102	9e5526cc	Thu Sep 9 09:53:22 2021 -0700	Fix for issue #2488.
+dadc3b9f	874c79fe	Wed Sep 8 15:02:09 2021 -0700	Fixed a bug when an interest retention stream with noack consumers is in clustered mode. We were not properly propagating the ack state and proper cleanup of the stream messages.
+29eaa9c6	3aa8e63b	Sun Sep 5 16:36:23 2021 -0700	Fixed bug that could lead to perceived message loss.
+ba36aa45	44c57a57	Wed Sep 1 18:03:14 2021 -0600	Fix some timing and bump server version
+d809b024	2539bbb9	Wed Sep 1 07:04:50 2021 -0700	Fix for Issue #2397
+2539bbb9	e49eb664 80ebf2d7	Tue Aug 31 15:27:57 2021 -0600	Merge pull request #2479 from nats-io/fix_js_deadlock_and_race
+32646f82	41a253da f46c4174	Thu Aug 26 09:51:55 2021 -0600	Merge pull request #2472 from miraculli/fix_2445
+ab946adc	be17afb0	Thu Aug 26 08:09:55 2021 +0200	quickfix for #2445
+41a253da	295280c6	Wed Aug 25 18:10:09 2021 -0400	fix daisy chained leaf node subject propagation issue. (#2468)
+bbc4e434	5dfdac28	Wed Aug 25 13:44:30 2021 -0700	Fixed creating raft groups when we had a js->s lock pattern.
+5dfdac28	be17afb0 5523a337	Wed Aug 25 13:04:38 2021 -0700	Merge pull request #2470 from nats-io/fix_2469
+5523a337	da577e20	Wed Aug 25 11:45:07 2021 -0700	Fix for test
+6294c0b0	4a50ba87	Tue Aug 24 20:30:34 2021 -0700	Fixes for reversing perms on the hub side of a leafnode.
+2e40bdd5	104e2168	Tue Aug 24 14:29:44 2021 -0400	[fixed] error print on re adding existing system import
+752fd295	9f3dfc0b	Tue Aug 24 07:52:29 2021 -0700	Consumer num pending fixes for multiple matches and merging.
+7dcd75aa	f8d503fa 038be717	Thu Aug 19 16:30:06 2021 -0600	Merge pull request #2455 from nats-io/fix_2454
+2ec87a56	01d45bb9	Mon Aug 16 21:05:12 2021 -0400	fixed unit tests where SequencePair comparisons fail due to time last_active
+23e30b0b	bf8fdf13 d7a124ba	Mon Aug 16 08:37:20 2021 -0600	Merge pull request #2442 from nats-io/fix_ln_wss
+969c5638	75ae7c60	Sun Aug 15 11:31:55 2021 -0700	Fix for flapper
+944dd248	9f50b66a	Sat Aug 14 17:39:51 2021 -0700	Fix for tests
+cdb5a563	b095870c	Sat Aug 14 15:26:27 2021 -0700	Fix for flapping test
+b095870c	8cda9461	Sat Aug 14 15:09:42 2021 -0700	Fixed a leak of internal clients for JetStream consumers.
+b6c0412d	14572b08	Sat Aug 14 13:35:04 2021 -0700	More fixes for some flapping tests
+14572b08	9d712321	Sat Aug 14 13:07:46 2021 -0700	Fixed and moved large purge test to no race
+c90dc48b	9405b77e	Sat Aug 14 11:44:17 2021 -0700	Fix for flapper
+db9fd45b	f4297bc8	Thu Aug 12 12:57:50 2021 -0400	[fixed] issue where js overwrote leafnode remotes permissions from creds
+e62192d2	a11e4340 98f7d63b	Thu Aug 12 07:07:05 2021 -0700	Merge pull request #2434 from nats-io/fixes
+98f7d63b	c9875e09	Thu Aug 12 06:14:19 2021 -0700	Fix for data race and corruption
+c9875e09	a11e4340	Thu Aug 12 06:13:47 2021 -0700	Fix for a flapper
+54443312	c781256d	Wed Aug 11 16:53:58 2021 -0700	Fix for flapper
+b511f3fd	52cfce24	Tue Aug 10 14:03:44 2021 -0400	fixed unit test to require fc export as well
+cb6b3975	52cfce24	Tue Aug 10 06:46:48 2021 -0700	Fix for #2423
+633763a2	52cfce24	Tue Aug 10 06:36:08 2021 -0700	Fix for #2420
+8e5314b6	149ed38b	Sat Aug 7 16:58:25 2021 -0700	Fix for subscription leak.
+40c21934	7112ae06	Fri Aug 6 14:58:25 2021 -0700	Fix for #2416
+b517229c	7112ae06	Fri Aug 6 14:44:00 2021 -0700	Fix for #2417
+ff1a3be2	0462c350 29398149	Wed Aug 4 17:00:16 2021 -0600	Merge pull request #2413 from nats-io/fix_max_payload_check
+883e2876	f417d20c b5e3f8d3	Wed Aug 4 08:07:44 2021 -0700	Merge pull request #2407 from jnmoyne/fix-max-max-payload-value
+09012f08	f417d20c	Wed Aug 4 07:07:29 2021 -0700	Fix for #2401.
+398ae95a	8d2faadb	Tue Aug 3 22:17:49 2021 -0700	Various bug fixes and improvements to filestore consumer stores.
+154bc407	aaba459d	Tue Aug 3 15:46:40 2021 -0700	Fix for reentrant read lock on a stream that once anyone else wanted the write lock would deadlock.
+067ef19c	3c6618d4	Sun Aug 1 17:28:59 2021 -0700	Fix for #2392. We were not resetting the pending timer properly during stream purge.
+925a6fe6	19bfef59	Sun Aug 1 14:57:47 2021 -0700	Fix for #2388. Leafnodes with no JS can seamlessly access a HUB with JS.
+19bfef59	22af59f7 170b0570	Fri Jul 30 15:37:23 2021 -0700	Merge pull request #2390 from nats-io/deliver-last-per-bug
+170b0570	22af59f7	Fri Jul 30 15:19:01 2021 -0700	Off by one bug (surprise) that would skip first new message on deliver last per subject.
+22af59f7	e6049d47 4e92b0ed	Fri Jul 30 12:49:50 2021 -0700	Merge pull request #2387 from nats-io/expire-on-start-fixes
+534df9a1	c3ba9f03 6bd565c5	Wed Jul 28 16:30:35 2021 -0700	Merge pull request #2382 from nats-io/interest-policy-bug
+d89aa258	a40ea298	Tue Jul 27 19:15:09 2021 -0400	[fixed] crash in unit test caused by *ConsumerStore.State() return nil, nil
+a40ea298	7c07b4e4	Tue Jul 27 18:42:19 2021 -0400	[fixed] jetstream unique server name requirement across domains (#2378)
+c7f70775	ba4a271c	Tue Jul 27 12:46:44 2021 -0400	[fixed] updated jwt library to avoid an error when counting tokens
+6cd3ad6e	ba4a271c 24584a0b	Tue Jul 27 18:45:01 2021 +0200	Merge pull request #2374 from ripienaar/errt_fix
+24584a0b	ba4a271c	Tue Jul 27 18:17:07 2021 +0200	fix error replacements in consumer validation
+0a33f040	06ac80cd	Thu Jul 22 16:46:57 2021 -0400	fix performance by changing signature of tokenizeSubjectIntoSlice
+ddd665b0	e8fea67b	Thu Jul 22 09:52:12 2021 -0400	[fixed] subscription on wildcard import that is not a subset
+1d4243b5	aa2873b6	Mon Jul 19 11:42:28 2021 -0400	[fixed] tls timeout now accepts units
+aa2873b6	d8cc38d2 a7e0eeaf	Tue Jul 13 17:06:01 2021 -0600	Merge pull request #2362 from nats-io/remove_debug_printstack
+a7e0eeaf	d8cc38d2	Tue Jul 13 16:49:44 2021 -0600	Removed debug.PrintStack() from apiDispatch [ci skip]
+18fca15d	73142054 225df046	Sun Jul 11 10:09:46 2021 -0700	Merge pull request #2357 from nats-io/num-pending-bug
+225df046	359a4d98	Sat Jul 10 12:37:08 2021 -0700	Fix for a consumer\'s num pending being stuck at 1.
+065049e0	63371981	Thu Jul 8 07:42:40 2021 -0700	Fix for flapper
+63371981	c68ffe5a	Thu Jul 8 07:02:09 2021 -0700	Fix for multiple concurrent ephemeral consumer requests in clustered mode with max consumers set.
+894f26d1	c68ffe5a	Thu Jul 8 06:13:36 2021 -0700	Fix for #2352
+fcb3382f	315e658a	Tue Jul 6 16:46:36 2021 -0400	[fixed] CONNS system endpoint which had issues with header and empty msg
+b582b13a	df3eccbd	Tue Jul 6 14:20:16 2021 -0600	Fixed another flapper
+df3eccbd	710d0c3a	Tue Jul 6 13:55:28 2021 -0600	Fix yet another flapper
+710d0c3a	d5f5a744	Tue Jul 6 12:44:08 2021 -0600	Fixed another flapper
+d5f5a744	57cfba09	Tue Jul 6 12:20:03 2021 -0600	Fixed some tests
+6eef31c0	5f7d8be4	Tue Jul 6 10:14:43 2021 -0700	Fixed peer info reports that had large last active values. Also put in safety for lag going upside down as well.
+a72ca8a9	73b2beb2	Thu Jul 1 19:00:52 2021 -0400	[fixed] header handling in system services
+4e6fe87c	73b2beb2	Thu Jul 1 16:55:00 2021 -0600	Fix version
+ad4685c8	c2c146c9	Wed Jun 30 19:30:37 2021 -0700	Fix for crash in test run
+c2c146c9	907fef49	Wed Jun 30 19:10:31 2021 -0700	Fix for #2329.
+cbb97a4f	63479ff8	Sun Jun 27 10:52:03 2021 -0700	Fix for Go client behavior change
+22b60bdb	5083b362 545230bd	Fri Jun 25 13:56:12 2021 -0700	Merge pull request #2317 from nats-io/dn-bug
+cf59e4c9	23ec1daa d7933631	Tue Jun 22 16:36:08 2021 -0600	Merge pull request #2305 from nats-io/fix_missing_unlock
+364d9600	3185658f a39b5495	Tue Jun 22 09:29:56 2021 -0600	Merge pull request #2301 from nats-io/fix_2282
+2e145196	4d76a0d5	Tue Jun 22 07:38:30 2021 -0700	Fix for extended purge by sequence.
+4d76a0d5	6129562b 18933641	Mon Jun 21 13:34:48 2021 -0600	Merge pull request #2300 from nats-io/fix_2287
+89d930fd	60bd178a	Sun Jun 20 10:34:27 2021 -0700	Updates and fixes to PurgeEx
+e7fd6961	36f2dbed	Fri Jun 18 07:47:19 2021 -0700	Fix data race condition
+c75d97a0	9f6ba90d	Fri Jun 18 07:03:51 2021 -0700	Fix for #2290
+9f6ba90d	0069f752	Thu Jun 17 19:10:05 2021 -0400	[fixing] leafnode missing retry and service export interest propagation (#2288)
+83389db2	2caf2303	Thu Jun 10 11:55:16 2021 -0400	[fixed] hanging leaf node connection when account can\'t be found (#2267)
+14d3cc6b	eec9cb84 c45f4f03	Wed Jun 9 16:47:08 2021 -0600	Merge pull request #2274 from nats-io/fix_2273
+8a712daf	376b60d2 308be7ec	Tue Jun 8 16:07:43 2021 -0600	Merge pull request #2268 from nats-io/fix_2265
+59b27a7a	3ab2a1eb 30fae4f9	Mon Jun 7 09:11:51 2021 -0700	Merge pull request #2261 from nats-io/leaf_fixups
+639d07bc	ee9d10f4	Wed May 26 17:30:31 2021 +0200	typo fix, report highest number
+0d6b0227	252558ca	Mon May 24 14:05:42 2021 -0700	Fix for varz JetStream usage showing total account usage vs server usage.
+748b7c32	9d867889	Mon May 24 16:44:14 2021 -0400	[fixed] deletion of js mappings on account jwt update
+8888ab51	11539ecd	Mon May 24 09:53:31 2021 -0700	Fix for #2243. We were not allowing replicated acks processing for workqueues properly, only interest retention.
+308355a2	b7e1f66b	Mon May 24 08:21:41 2021 -0700	Fix for #2242.
+a5269717	b7e1f66b	Sun May 23 11:28:48 2021 -0700	Fix for corrupting a message when extending an existing header.
+89476279	b5ea80dd b93f5975	Thu May 20 18:17:01 2021 -0400	Merge pull request #2237 from nats-io/error-on-bad-api-prefix
+b93f5975	b5ea80dd	Thu May 20 18:01:49 2021 -0400	[fixed] issue with invalid api prefix for source/mirror
+b5ea80dd	6f6f22e9 69e9c6cd	Thu May 20 15:21:19 2021 -0600	Merge pull request #2236 from nats-io/fix_2226
+c1542ac9	a4b10cd6 3ed10f4d	Thu May 20 09:43:12 2021 -0600	Merge pull request #2224 from BlizzTom/http-req-stats-panic-fix
+4bde91e9	8b50094f	Thu May 20 07:31:55 2021 -0700	Fix a data race.
+a14f07f8	9ccc8433	Wed May 19 19:09:49 2021 -0700	Fix flapping test
+592066ed	64593db9	Wed May 19 11:36:20 2021 -0700	Fixed issue that we would stage snapshot restore in temporary storage. This did not work when using our default docker image which does not have /tmp by default.
+3ed10f4d	49b62624	Tue May 18 17:06:42 2021 -0700	[Fixed] Always initialize httpReqStats
+511db9ef	808f7305	Thu May 13 16:11:48 2021 -0400	clarifying js prefixes
+89dec1f9	df8835d2 a2945179	Wed May 12 16:16:24 2021 -0600	Merge pull request #2216 from nats-io/pdp/fix-jetstream-relocate
+060f2ec1	dd91bc8b	Wed May 12 12:32:56 2021 -0700	Fix stream source lookup and add in optional External to StreamSourceInfo.
+452bec8e	408e009e	Wed May 12 13:16:10 2021 -0400	Don\'t fix dir perms yet, punt to separate issue
+dd91bc8b	30191ada 58344c66	Wed May 12 08:56:21 2021 -0700	Merge pull request #2206 from nats-io/sd_fix
+bc9ac880	a4061f45 854cc15d	Wed May 12 09:13:40 2021 -0600	Merge pull request #2211 from nats-io/fix_2207
+6e17b7a3	310105fb	Wed May 12 07:51:53 2021 -0700	Fix for #2213
+908b5ec3	310105fb	Wed May 12 06:49:11 2021 -0700	Fix for #2205
+854cc15d	da91b062	Tue May 11 19:36:46 2021 -0600	Fixed typos and updates checkOrigin() doc
+494ddeec	51071c8a	Tue May 11 13:12:10 2021 -0700	Fix for #2202
+51071c8a	9fee6c69 06fc2f3f	Tue May 11 07:54:51 2021 -0700	Merge pull request #2201 from nats-io/bug_fixes
+9fee6c69	6c6c4b9c 25bf4703	Tue May 11 08:47:48 2021 -0600	Merge pull request #2203 from nats-io/fix_flappers
+bad9fba8	6c6c4b9c	Mon May 10 19:24:58 2021 -0700	Fix for store directory on disk prior to 2.2.3 without the \'jetstream\' directory.
+06fc2f3f	bbb94467	Mon May 10 17:29:24 2021 -0700	Fix data race
+bbb94467	09c4f584	Mon May 10 17:01:31 2021 -0700	Fix for failing test, we needed to account for consumers having filtered subjects configured but not really being filtered.
+25bf4703	09c4f584	Mon May 10 16:54:33 2021 -0600	Fixed flappers
+09c4f584	b828e017	Mon May 10 10:44:07 2021 -0700	Bump version and skip test for now, will fix in followup PR.
+f74bb53c	70a2521f	Fri May 7 12:21:35 2021 -0700	Remove debug
+57395bba	7be65553	Fri May 7 09:13:18 2021 -0700	Fixed bug that could cause raft group to spin trying to catchup.
+35a60289	c7e043b2	Fri May 7 06:01:52 2021 -0700	Fixed mirror/source streams from work queues. Fixed deadlock with no-ack consumers on interest retention streams.
+2002ea1e	50d5875a	Thu May 6 18:46:32 2021 -0600	Another test fix
+50d5875a	0c74a850	Thu May 6 18:46:32 2021 -0600	Fix test
+f5eb8bef	84993765	Thu May 6 18:46:32 2021 -0600	Fixed some tests to manually close account resolver
+bfd0e002	c8d2132e	Thu May 6 18:45:27 2021 -0600	Fix data race
+bd9a7827	7022b59b	Wed May 5 07:04:24 2021 -0700	Fixed issue when limiting bytes with an unlimited account that would always fail.
+61bf08fd	0fd60f65	Tue May 4 23:04:51 2021 -0400	[fixed] decorated jwt parsing issue by using same functionality of jwt
+2881e4a1	0fd60f65	Tue May 4 20:48:14 2021 -0600	[FIXED] MQTT fixes and improvements
+2fd89621	53a14eb5 ffccc2e1	Thu Apr 29 15:51:10 2021 -0600	Merge pull request #2167 from nats-io/fix_tls_cmdline_ciphers
+01ff1b76	e2e3de99	Wed Apr 28 19:32:16 2021 -0600	Fixed comments
+a67704e2	4430a55e	Mon Apr 26 20:50:56 2021 -0400	[fixed] crash when using nats-resolver without system account (#2162)
+ae4374fc	96546040	Thu Apr 22 20:35:00 2021 -0400	fix unit test crashing when leader was nil caused by quorum reformation
+486df983	96546040	Thu Apr 22 12:47:21 2021 -0400	close tempfiles, fix path print
+96546040	b0292e40 d0fd62c8	Thu Apr 22 09:27:43 2021 -0600	Merge pull request #2151 from nats-io/fix_2126
+c9c70dea	34188478	Wed Apr 21 16:17:58 2021 -0700	Fix race
+c9ab7ce8	ea21e869	Wed Apr 21 14:26:52 2021 -0700	Fix for data race when disabling JS running out of resources
+ea21e869	2a047bef 32f1a58b	Wed Apr 21 13:54:32 2021 -0600	Merge pull request #2136 from nats-io/fix_leafnode_puballowed_race
+a9607573	a3f66508 d31041ec	Wed Apr 21 06:58:34 2021 -0700	Merge pull request #2139 from nats-io/cfix
+a181238c	a3f66508	Wed Apr 21 06:54:54 2021 -0700	Fix for consumer on restore being deleted
+4d112af6	902b9dec	Tue Apr 20 20:08:14 2021 -0400	Fix account resolver lock ordering on shutdown
+5aa3dd77	0a3e54c8	Tue Apr 20 13:35:48 2021 -0700	Put back direct consumer subject prefix
+0a3e54c8	fe3537d4	Tue Apr 20 12:13:07 2021 -0700	Fix subscription leaks for mirrors and sources for streams as well as flow control subjects for consumers.
+820c76d3	6e973a8d	Mon Apr 19 11:43:43 2021 -0700	Fix flapper
+b73be528	8f079295	Mon Apr 19 13:10:49 2021 -0400	[fixed] only become observer if the leaf config has raft not restricted (#2125)
+6a7f3a31	8f079295	Fri Apr 16 13:56:54 2021 -0700	Cleanup error handling, fix deadlock in test
+b3e355c2	35bf0e8c	Thu Apr 15 20:13:57 2021 -0400	[fixed] sub ref count issue across leaf node connections
+7964f572	c5917756 56d0d9ec	Thu Apr 15 12:06:07 2021 -0600	Merge pull request #2123 from nats-io/fix_gw_si
+6e1205b6	c5917756	Thu Apr 15 11:37:43 2021 -0600	Cleanup some tests + GetTLSConnectionState() race fix
+c5917756	311b3cd7 2976a78f	Thu Apr 15 10:36:15 2021 -0700	Merge pull request #2121 from nats-io/mb-close-fix
+2976a78f	14627434	Thu Apr 15 09:16:02 2021 -0700	js: msgblock close fix
+f3f04e64	14627434	Thu Apr 15 06:34:12 2021 -0700	Fix flapper
+c92cb97a	564d4121 1ccb5572	Wed Apr 14 16:47:24 2021 -0600	Merge pull request #2117 from nats-io/fix-fail-parent-test
+1ccb5572	d04c1f8e	Wed Apr 14 14:45:11 2021 -0700	Fix calling FailNow in parent test
+f6a82a7c	56963584	Tue Apr 13 11:46:03 2021 -0700	When messages were no longer available in an upstream stream a mirror could wedge and not resolve. This fixes that scenario by detecting the situation and inserting skip msgs to catch up.
+9486722e	8645935c	Mon Apr 12 20:09:55 2021 -0400	[fixing] subscription issue when subscribing to a super set of deny_import
+c63f1d78	a7db58c8 bbb03af4	Mon Apr 12 11:19:09 2021 -0700	Merge pull request #2104 from nats-io/pbug2
+f893345b	a7db58c8	Mon Apr 12 11:16:31 2021 -0700	Pull based consumers when deleted were not removing messages from an interest based stream. Fix for #2097.
+a7db58c8	9d8ea6b6 8daf6e49	Mon Apr 12 10:54:50 2021 -0700	Merge pull request #2103 from wallyqs/sigterm-fix
+9d8ea6b6	66b0c5c2 c369a26c	Mon Apr 12 09:59:36 2021 -0600	Merge pull request #2102 from nats-io/fix_leafnode_flapper
+c369a26c	32734960	Mon Apr 12 09:31:33 2021 -0600	Fixed leafnode flapper
+32734960	69269c56 e0eaf704	Sun Apr 11 10:46:48 2021 -0700	Merge pull request #2099 from nats-io/pbug
+e0eaf704	2bc4bf19	Sat Apr 10 12:46:31 2021 -0700	Partial fix for #2068.
+27d8b939	e438d2f5	Fri Apr 9 16:49:24 2021 -0700	Updated based on comments that the one fix was actually a misconfiguration.
+5d1f36dd	112257d0	Fri Apr 9 16:53:06 2021 -0400	[Fixed] leaf node subscription permission negotiation.
+3c051d46	666eea5b	Thu Apr 8 18:03:14 2021 -0700	Fix flappers
+6fef6456	666eea5b 452685b9	Thu Apr 8 17:53:06 2021 -0600	Merge pull request #2088 from nats-io/fix_leafnode_first_ping
+666eea5b	1c368973 a7e5853a	Thu Apr 8 16:10:04 2021 -0600	Merge pull request #2087 from nats-io/fix_tmp_pid_file
+1c368973	7030b0eb ce342669	Thu Apr 8 14:48:56 2021 -0700	Merge pull request #2086 from alexpantyukhin/fix_max_bytes_check_memstore
+a7e5853a	7030b0eb	Thu Apr 8 15:08:23 2021 -0600	Fixed expected pid path in options
+ce342669	0bdd8f84	Thu Apr 8 23:54:10 2021 +0400	fix for memstore storeRawMsg be consistent with filestore
+deb015ec	36e18c20	Thu Apr 8 11:47:59 2021 -0700	Fix for #2083 to release ack pending when messages expire or hit max redeliveries.
+a5440f4a	16941c78 bfb48212	Wed Apr 7 15:38:42 2021 -0700	Merge pull request #2080 from nats-io/compact_bug
+2664e964	12a90403	Tue Apr 6 12:43:10 2021 -0400	[fixed] issue with concurrent account fetch when account was incomplete (#2067)
+fbaae34e	b154c3d9 8a4e1f68	Fri Apr 2 15:44:34 2021 -0600	Merge pull request #2061 from nats-io/fix_mqtt
+b154c3d9	edee54b0	Fri Apr 2 17:38:57 2021 -0400	[Fixed] remote subscription leak for leafnodes caused by auto unsubscribe
+2009578e	44ada49b	Fri Apr 2 08:42:37 2021 -0700	Fix data race
+c6bb9b06	bea180d1	Thu Apr 1 07:09:10 2021 -0700	Fix test since we moved from 500 to 404
+cd602231	da5c0849	Wed Mar 31 19:22:19 2021 -0400	[Fixed] missing unlock and added a warning trace (#2054)
+ceca86a7	da5c0849	Wed Mar 31 11:23:31 2021 -0700	Fix for #1976
+e390958b	17836014	Tue Mar 30 21:46:39 2021 -0400	Updated go client for unit tests and fixing test
+17836014	0650b772 5ec0c35a	Tue Mar 30 14:44:44 2021 -0700	Merge pull request #2051 from wallyqs/fix-user-revokation-test
+5ec0c35a	0650b772	Tue Mar 30 14:19:15 2021 -0700	Fix to authentication revoked test
+0650b772	cb312254	Tue Mar 30 13:46:03 2021 -0700	Fix test, needed prefix
+bb7a8a5f	14a826fb	Tue Mar 30 11:47:24 2021 -0700	Introduced default max ack pending for ack explicit. Fixed a bug that would introduce performance degradation for durable consumers R>1.
+778313cc	874e13f5 9c036778	Mon Mar 29 19:07:05 2021 -0600	Merge pull request #2047 from nats-io/fix_ws_random_port_display
+874e13f5	ad9e1207 6095e8f4	Mon Mar 29 09:25:04 2021 -0700	Merge pull request #2036 from nats-io/fix-race
+03aee098	9f753a24	Sat Mar 27 14:01:51 2021 -0400	[Added] error when mirror/source stream prefix overlaps with stream subs (#2041)
+9f753a24	b7321098	Fri Mar 26 19:24:01 2021 -0400	[fixed] issue where verify_and_map: true in leaf node config was not used (#2038)
+b7321098	36677d63 b17f38e3	Fri Mar 26 17:23:18 2021 -0600	Merge pull request #2040 from nats-io/ws_fix
+0f0698fb	2e0c4e86 8ebf2515	Fri Mar 26 12:59:20 2021 +0100	Merge pull request #2035 from ripienaar/nightly_fix
+8ebf2515	2e0c4e86	Fri Mar 26 12:51:18 2021 +0100	fix nightly builds
+c05ff97d	da7b7f9f	Thu Mar 25 18:09:35 2021 -0700	Fixes based on PR feedback
+282def10	6cd6c380	Thu Mar 25 17:07:34 2021 -0700	Fix data race
+06803daf	2ed53035	Wed Mar 24 09:46:54 2021 -0700	Tweak seq tracking for flow control, also fixup code
+6f8c0f91	a75e8f8c	Mon Mar 22 20:31:28 2021 -0700	Fix broken test
+a75e8f8c	0a48911c	Mon Mar 22 20:06:38 2021 -0700	Fix for an issue with multiple restarts that showed stalled and sometimes lost streams.
+3619b186	0a48911c	Mon Mar 22 20:48:10 2021 -0400	[fixed] version parsing issue that got tripped by extra .
+022c5b4a	5c0aecee	Mon Mar 22 11:13:51 2021 -0700	Fix for bad behavior with flow control and multiple sources streams. Allow chaining of sources and mirrors with filtered consumers.
+a4119e13	fcd4d0b7	Sat Mar 20 17:46:59 2021 -0700	Fix for new data race detected
+2d46c112	25d99931	Sat Mar 20 15:05:41 2021 -0700	Make sure to not interrupt flow control unless we miss. Fix deadlock for mirrors.
+faa6dc85	14a896fe	Sat Mar 20 11:16:40 2021 -0700	Fix for flapping test
+cfe2f448	04a9d510	Sat Mar 20 08:44:18 2021 -0700	Fix for when gateways were dropped and we did not detect interest returning. Fix for leaked subscription when retrying the source consumers. Better suppression of old messages from old direct consumers.
+04a9d510	61771e88	Sat Mar 20 07:15:36 2021 -0700	Fix for data race
+358ac6a9	702e17d4	Thu Mar 18 11:09:28 2021 -0700	Fix for race detector
+2e9ae92b	d7403ea3	Tue Mar 16 13:57:28 2021 -0700	Fix for #2011 and atomics on 32bit systems.
+eb1a91d5	b01cdf61	Sun Mar 14 19:37:14 2021 -0400	[fixed] private import issue by pulling in up to date jwt library
+a205f8f2	e2710425	Sun Mar 14 15:31:29 2021 -0700	Fix for updating peers and quorum sizes.
+775afd01	50726495	Sun Mar 14 15:16:56 2021 -0700	Fix for JS reload and exports
+e079d75d	1eaa2f75	Sun Mar 14 12:26:30 2021 -0700	Fixes for index first from idx file
+5f78a441	a2cdbdff	Sun Mar 14 11:38:22 2021 -0700	Fixed several bugs.
+d4e4c37e	cbbe6dc9	Sun Mar 14 06:18:50 2021 -0700	Test fixes
+0425056c	3c85df0a	Sun Mar 14 05:38:25 2021 -0700	Fix deadlock
+45f2df2b	ef883812 5edb8b11	Sat Mar 13 16:22:21 2021 -0700	Merge pull request #2000 from nats-io/fix_ephemeral_cleanup_with_gw
+6241ef2d	6c7d4af2	Sat Mar 13 18:04:46 2021 -0500	fix deadlock
+a3a35c0d	18d0a0f9	Sat Mar 13 16:28:24 2021 -0500	Updated raft processing and dealing with remove peer. Made sure to not remove us if we were remapped after the peer removal. Fixed some raft behaviors.
+60817932	4af86bec	Thu Mar 11 23:28:57 2021 -0800	raft: Fixes to cluster size check for streams
+efdb80cc	6a0debbb	Fri Mar 12 01:51:28 2021 -0500	More unit test fixes
+b316cccf	4af86bec	Thu Mar 11 19:44:47 2021 -0500	Fixed a quorum formation issue that caused truncation
+27f51d40	709335f1	Wed Mar 10 15:16:31 2021 -0700	Fix ephemeral consumer delete in single cluster
+5a3c5720	32c686d7 9bfea58b	Tue Mar 9 20:51:35 2021 -0500	Merge pull request #1984 from nats-io/fix-connect-flapper
+9bfea58b	52c4ab60	Tue Mar 9 15:52:31 2021 -0500	Fix unit test that received an extra connect message
+52c4ab60	233f5bed ccec4a6a	Tue Mar 9 13:23:25 2021 -0700	Merge pull request #1982 from nats-io/fix_idle_hbs_and_js_remote_unsubs
+ccec4a6a	ea9abc5e	Tue Mar 9 12:08:47 2021 -0700	Fixed consumer idle hearbeats and JS route/GWs unsubscribes
+bea37b08	4d1fc3a4	Mon Mar 8 19:57:18 2021 -0500	fixing crash when disabling already shut down client
+278c0efc	9a615500	Sun Mar 7 00:12:31 2021 -0800	Fix check from next request msg
+0b3c6864	ff989843	Fri Mar 5 17:19:51 2021 -0800	Fixes for data races and some locking.
+dd8acb1a	34f66748	Fri Mar 5 12:00:19 2021 -0800	Fixed a bug where we were not determing clustered state so were straight processing msgs from routes. Cleaned up lseq and clseq code.
+507eb25d	75b0455e	Fri Mar 5 09:18:20 2021 -0800	Fix for not placing checksum back properly on manual check restore
+e523e8f8	051a5c40	Thu Mar 4 09:37:09 2021 -0800	Fix based on feedback
+d7201a11	18ee2b7a	Wed Mar 3 20:12:10 2021 -0800	Better handling on out of disk. Suppress some stream and consumer bad results since they delete the asset. Allow rehup to re-enable JetStream. Various bug fixes and improvements.
+18ee2b7a	86d12b90	Wed Mar 3 20:07:39 2021 -0800	Changes to handle short writes. Bug fixes to truncation.
+86d12b90	1b8fa93b	Wed Mar 3 20:06:35 2021 -0800	Fixed leaking info sub
+e7e75603	f82ba22b	Wed Mar 3 19:15:28 2021 -0700	Switch Gateway JS accounts to interest-only mode + some other fixes
+9ae189e3	b6c52693 0f53bf65	Wed Mar 3 16:05:53 2021 -0700	Merge pull request #1959 from nats-io/fix_nodeinfo_race
+2187c0d2	b6c52693	Wed Mar 3 16:01:22 2021 -0500	[Fixed] missing export jsAllApi on system account update
+0f53bf65	b6c52693	Wed Mar 3 13:28:45 2021 -0700	Fixed data race with nodeInfo
+e4d458c3	af6b5d85	Wed Mar 3 06:52:56 2021 -0800	Make consumer processing of next message not inline if non client connection. Also fixed a bug with processing ack floors.
+4f2db7d1	0b8c070d	Tue Mar 2 20:21:44 2021 -0500	Fixed linter issues
+27090975	2e7fdf2e	Tue Mar 2 07:19:18 2021 -0800	Fix for leaked subs on non-leader change
+22749fb1	1a58fc23	Mon Mar 1 16:47:19 2021 -0800	Fix data race, stabilize usage test
+0a6958b9	df77724a	Sun Feb 28 17:35:09 2021 -0800	Fix some flapping tests
+0d29b076	09467bd9	Sun Feb 28 05:16:04 2021 -0800	Tweaked buffered channels, moved locks for snapshots. Also placed debug for inline processing of append entries. This is for removal of that inline.
+f5cbd55b	6a03ab96	Sun Feb 28 05:14:25 2021 -0800	Fixed data corruption bug, optimized Compact(). Also trim fs.blks slice appropriately to avoid unbound growth.
+0f69e485	e5c87741	Thu Feb 25 18:25:16 2021 -0800	Bug check err, check for out of space on catchup
+b13ef6b9	44b08c53	Thu Feb 25 17:53:20 2021 -0800	Track write errors. Fixed a few bugs.
+a9ab41f1	7ef3e5b6	Thu Feb 25 15:01:47 2021 -0800	Fix lock bug, capture write errors and report better
+c7d203db	b7a5587b	Wed Feb 24 20:51:28 2021 -0800	Fixed bug where followers WAL would not snapshot/compact. Tweaked write and sync params.
+78bdc346	bec42c04	Wed Feb 24 08:44:34 2021 -0800	General stability improvements. Fixes to subscription state not cleaning up.
+8fe8b835	09e3d26f	Tue Feb 23 14:08:17 2021 -0800	Fixes for flapping tests
+c39641c2	0487ce48	Tue Feb 23 10:57:05 2021 -0800	Tweak hb and election times, fix unsubscribe leak
+2e4a892c	7486b268	Tue Feb 23 00:42:31 2021 -0500	[fixes] crash in checkJetStreamExports when there is no system account
+eafc6b7a	e81b2085	Fri Feb 19 00:11:41 2021 -0500	[fixed] LeafNode sending message using stream\'s import subject.
+b4100263	d58e6805	Thu Feb 18 16:16:41 2021 -0500	[fixed] out of range issue in processMsgResults during subject rewrite
+89fe3b05	700726c7	Thu Feb 18 08:41:09 2021 -0800	various bug fixes, wal/snapshot stability
+84ae705c	546f7a98 8598de6d	Tue Feb 16 11:05:25 2021 -0700	Merge pull request #1915 from nats-io/fix_1912
+546f7a98	50e9a8b6 3521d4c4	Tue Feb 16 15:29:39 2021 +0100	Merge pull request #1914 from ripienaar/nightly_fix
+4759560e	7facbc99	Fri Feb 12 19:58:02 2021 -0800	Fixed raft bug on catchup logic with external snapshots
+d70ae1fb	579737a5	Thu Feb 11 18:52:37 2021 -0800	Fix for interest policy based retention for streams in clusters.
+579737a5	49c3729a	Thu Feb 11 18:13:24 2021 -0800	General fixes, stability improvements
+55886616	fa8a95a0	Thu Feb 11 11:16:00 2021 -0800	Fix for index mismatch on first seq
+c67f1526	f93695a6	Mon Feb 8 21:10:20 2021 -0500	fix jsz when server is not started in cluster mode and fix landing page (#1901)
+f93695a6	aeef06b6	Mon Feb 8 16:57:20 2021 -0800	Fix test that was broken
+7da6529f	b79a4afc c99608fa	Mon Feb 8 08:02:25 2021 -0700	Merge pull request #1895 from nats-io/startfix
+c99608fa	7ae8d66c	Mon Feb 8 07:00:52 2021 -0800	Fix for some test flappers
+594defa1	15355d78	Mon Feb 8 06:32:05 2021 -0800	Fix for crash in test
+d732c8fe	92d64c2b	Sun Feb 7 11:26:54 2021 -0700	Fixed bug that would prevent queue subs to ack messages
+6ac7b238	c11a7335	Sun Feb 7 05:52:10 2021 -0800	Test fix for delay in lost quorum adv
+04c8fac8	0ee93b49 493425e8	Thu Feb 4 13:47:56 2021 -0700	Merge pull request #1887 from nats-io/fixes
+226638a4	01ad02cc 6eeb9d23	Wed Feb 3 20:43:02 2021 -0700	Merge pull request #1884 from nats-io/jsc_del_cons_fix
+6eeb9d23	01ad02cc	Wed Feb 3 20:12:06 2021 -0700	Fixed some issues with JS consumers
+0dfac6b5	bbada324 6baf6988	Wed Feb 3 15:13:51 2021 -0700	Merge pull request #1880 from nats-io/erase-bug
+eb429022	bbada324	Wed Feb 3 13:58:13 2021 -0800	There was a bug when a messages was erased and we expired the cache we would not properly re-index. We need to clear the erase bit to properly set fseq in the cache structure.
+e5c1d65f	50d6074c	Mon Feb 1 19:39:08 2021 -0800	Added in JS disable per server on reload. Also removing peerw from a stream and leader stepdown for streams and consumers. Various bug fixes, stability improvments.
+c9c9bee3	ffc20e95 ac0a1ee8	Mon Feb 1 13:51:43 2021 -0700	Merge pull request #1873 from nats-io/fix_websocket_compression
+ac0a1ee8	ffc20e95	Mon Feb 1 12:10:37 2021 -0700	Fixed compression http header request/response
+2b0717bd	c116e966	Sat Jan 30 14:00:26 2021 -0800	Make debug not error since we recover
+9b20d5c8	be393995	Sat Jan 30 13:22:27 2021 -0800	Fixed bug on raft inline cacthup when apply channel was full.
+5490c496	36c4de87	Fri Jan 29 19:37:30 2021 -0800	Fixed a bug that on restore of single streams in clustered mode would subscribe to the stream subjects twice.
+36c4de87	e763d904 302ea010	Fri Jan 29 19:15:32 2021 -0700	Merge pull request #1868 from nats-io/js-breaks-imports-fix
+302ea010	8bd290c7	Fri Jan 29 18:12:57 2021 -0800	Fix for data race
+e763d904	51c7582d fccdb8ca	Fri Jan 29 19:00:34 2021 -0700	Merge pull request #1861 from nats-io/js-list-request-fix
+8bd290c7	2761bbf2	Fri Jan 29 17:51:14 2021 -0800	Fix for #1864.
+4575d362	c9e0eb6c e0487b95	Thu Jan 28 18:08:09 2021 -0700	Merge pull request #1860 from nats-io/fix_invalid_subject_match
+fccdb8ca	c9e0eb6c	Thu Jan 28 16:17:01 2021 -0800	js: consumer list request fix
+6480a45f	c9e0eb6c	Thu Jan 28 13:20:15 2021 -0800	Fix for data race, don\'t need to check here
+76fdaea7	4f62724f 6d273074	Wed Jan 27 18:55:21 2021 -0700	Merge pull request #1856 from nats-io/fix
+6d273074	4f62724f	Wed Jan 27 17:44:42 2021 -0800	Fix for broken stream restore functionality
+0377caf8	b4a80498 a9b8948a	Wed Jan 27 15:41:57 2021 -0700	Merge pull request #1853 from nats-io/rfix
+c0ae7196	b4a80498	Tue Jan 26 19:26:03 2021 -0800	Don\'t load entry for snapshot, fix data race
+fa972cf3	dea9effa 054319a6	Tue Jan 26 16:18:07 2021 -0700	Merge pull request #1851 from nats-io/split_bug
+054319a6	695539c9	Tue Jan 26 14:59:13 2021 -0800	Fix for split vote bug
+b07e176b	dce81400	Tue Jan 26 15:55:00 2021 -0700	Fixed typo in new const name
+695539c9	9716aa8b 3e8d2952	Tue Jan 26 15:29:59 2021 -0700	Merge pull request #1849 from nats-io/raft_fixes
+d1b7bc67	0fe9209b af57f557	Tue Jan 26 14:25:09 2021 -0700	Merge pull request #1848 from nats-io/fix_some_flappers
+af57f557	0fe9209b	Tue Jan 26 14:23:49 2021 -0700	Fixing some flappers (leafnode and mqtt)
+c8a75e1e	76058c5e	Mon Jan 25 16:15:28 2021 -0800	test fixes
+c7c86c79	5148bbf8	Mon Jan 25 10:25:47 2021 -0800	Attempt to fix flapper
+5148bbf8	7b1e84c0	Mon Jan 25 10:04:21 2021 -0800	Fixes based on PR feedback, cleanup
+7b1e84c0	117607ef	Mon Jan 25 08:47:37 2021 -0800	Fixed raft bug that would cause entries to be missed on restart with leader HB trigger. Also added in creation times to stream and consumer assignments to make them consistent.
+117607ef	a72ddedb	Sun Jan 24 21:21:02 2021 -0800	Fix for race and test for issue R.I. was seeing in nightly. Also fixed flappers.
+a72ddedb	9c858d19	Sun Jan 24 19:48:33 2021 -0800	Fix for issue with stream info and R=1 and fix for a flapper
+34caf5aa	ecb6e787 d1d2d5b2	Sat Jan 23 12:14:49 2021 -0700	Merge pull request #1838 from nats-io/fixes
+d1d2d5b2	cb2433c2	Sat Jan 23 10:09:44 2021 -0800	Fix for consumer names list in clustered mode
+cb2433c2	ecb6e787	Sat Jan 23 10:04:43 2021 -0800	Fix for cluster info with R=1
+a43a69a4	227901a5	Fri Jan 22 11:04:06 2021 -0800	Fix for interest only, broken test
+e7414a0b	8dc1c42f	Wed Jan 20 12:00:22 2021 -0800	Fix data race
+8dc1c42f	9949904a	Wed Jan 20 11:58:31 2021 -0800	Bump version, remove spurious debug prints
+9949904a	4c965323	Wed Jan 20 11:58:31 2021 -0800	Fix data race
+4c965323	7c0b6faf	Wed Jan 20 11:58:31 2021 -0800	Additional stabilizations for split votes, general fixes
+55d75073	fed4c0cc	Wed Jan 20 11:58:31 2021 -0800	Fix based on feedback from Ivan
+114076a3	7d1a4778 f5df2090	Wed Jan 20 12:53:02 2021 -0700	Merge pull request #1828 from nats-io/fix_1827
+f5df2090	7d1a4778	Wed Jan 20 12:42:14 2021 -0700	Fixed SIGSEGV when sending update for unknown stream
+7d1a4778	a59110ad a1f01174	Wed Jan 20 10:34:57 2021 -0700	Merge pull request #1826 from nats-io/fix_consumer_loop_delivery_exit
+a1f01174	c4a284b5	Wed Jan 20 10:05:15 2021 -0700	Fixed consumer sending to nil channel on shutdown/leader change.
+c4a284b5	51a321e7	Tue Jan 19 17:39:32 2021 -0700	Fix stop of consumer\'s delivery loop
+5479a8e8	8d568d41	Sun Jan 17 13:19:11 2021 -0800	Fix for segfault
+367d0003	de1bf362 754e31a3	Fri Jan 15 18:26:38 2021 -0700	Merge pull request #1815 from nats-io/jscfix
+de1bf362	18749644 ef38abe7	Fri Jan 15 18:22:18 2021 -0700	Merge pull request #1816 from nats-io/fix_gw_hash
+18749644	7286033a c9bba7d1	Fri Jan 15 18:22:02 2021 -0700	Merge pull request #1812 from nats-io/leafnode_fixes
+754e31a3	7286033a	Fri Jan 15 17:02:38 2021 -0800	Routes send subscriptions by utilizing random clients from an account. There was a bug where the client chosen under the $SYS account could have a different account.
+ef38abe7	7286033a	Fri Jan 15 17:32:04 2021 -0700	Fixed gateway reply mapping following changes in JetStream clustering
+7286033a	2bf7b10d 4b84decc	Fri Jan 15 12:18:00 2021 -0700	Merge pull request #1813 from nats-io/fixes
+0d78bce9	e321df19	Fri Jan 15 12:00:34 2021 -0700	Fixed some leafnode issues introduced from JS cluster work
+f1af3829	e321df19	Thu Jan 14 18:47:44 2021 -0500	Fixing latency sharing which was overwritten
+2cb5f1b3	c14076b1	Thu Jan 14 16:59:57 2021 -0500	Fix flapping unit test and incorporate more review comments
+4b84decc	36f0dd58	Thu Jan 14 12:59:12 2021 -0800	Fix for race
+36f0dd58	e321df19	Thu Jan 14 12:25:42 2021 -0800	Fix data race
+e321df19	a07b5cd1 6c422930	Thu Jan 14 11:56:40 2021 -0700	Merge pull request #1804 from nats-io/fix_import_cycle_detection
+6c422930	a07b5cd1	Thu Jan 14 11:27:36 2021 -0700	Fixed service import cycle detection that broke with JS clustering
+1b0e7401	491b3c34	Thu Jan 14 07:28:14 2021 -0800	Fix for race
+9d9f0f70	14e3319b	Thu Jan 14 07:02:20 2021 -0800	Fix for race on setting term
+14e3319b	ab2a6457	Thu Jan 14 06:59:36 2021 -0800	Fix for no raft node
+ab2a6457	b68d7066	Thu Jan 14 06:54:08 2021 -0800	Fix for various flappers
+4bfe9d4c	37cf7584	Thu Jan 14 05:56:05 2021 -0800	Fixes to PR.
+c4b2c62e	25ea8973 23f8e3d5	Wed Jan 13 22:32:28 2021 -0700	Merge pull request #1802 from nats-io/fix_sublist_notification
+23f8e3d5	25ea8973	Wed Jan 13 20:59:36 2021 -0700	Fixed sublist notification
+25ea8973	0d34688c 7b116379	Wed Jan 13 08:06:17 2021 -0700	Merge pull request #1801 from nats-io/fix_1786
+0d34688c	b88cbe2e f50c655e	Mon Jan 11 14:28:28 2021 -0700	Merge pull request #1800 from nats-io/fix_1799
+4649f9e6	4699779f	Tue Jan 5 20:07:19 2021 -0500	[fixed] timeout in configuration lexer found by oss-fuzz (#1792)
+32b5a16d	de1e4928	Tue Jan 5 18:25:41 2021 -0500	[fixed] two minor configuration lexer issues found by oss-fuzz
+d56ba231	e04d3d5a d24e9b75	Wed Dec 30 11:19:12 2020 -0700	Merge pull request #1785 from nats-io/fix_gw_implicit_reconnect
+d24e9b75	e04d3d5a	Mon Dec 28 12:28:55 2020 -0700	Fixed GW implicit reconnection
+e04d3d5a	f09992a8 14aecb22	Mon Dec 21 12:41:53 2020 -0700	Merge pull request #1782 from nats-io/fix_1781
+14aecb22	f09992a8	Mon Dec 21 11:53:24 2020 -0700	Fixed headers support for inbound leafnode connection
+c1c94010	eb403ed4 be6289be	Mon Dec 14 08:22:30 2020 -0800	Merge pull request #1775 from nats-io/idx_short_bug
+eb403ed4	e7106df7 a3f7e97f	Mon Dec 14 08:20:55 2020 -0800	Merge pull request #1773 from nats-io/cycle_wc_bug
+be6289be	d5f255b9	Sun Dec 13 11:59:50 2020 -0800	Fix for https://github.com/nats-io/jetstream/issues/406
+ced28eca	d5f255b9	Sun Dec 13 10:29:34 2020 -0800	Fix flapper
+542cf3c8	7e21fa6f 9f345ac4	Sat Dec 12 10:51:35 2020 -0700	Merge pull request #1772 from nats-io/fix_some_flappers
+399ff898	2d2f8526	Fri Dec 11 19:27:23 2020 -0700	Fixed debug num subs tests
+2d2f8526	ce5f9d66	Fri Dec 11 18:15:49 2020 -0700	Add fix for TestLeafNodeLoop and others
+ce5f9d66	7e21fa6f	Fri Dec 11 17:30:33 2020 -0700	Fixed some flappers
+25a5fa62	c199bec7 cf8a44da	Tue Dec 8 17:12:53 2020 -0700	Merge pull request #1741 from nats-io/fix-issuer-same-as-account
+e1b590db	ed7865c4 dc2eebcd	Fri Dec 4 10:12:40 2020 -0700	Merge pull request #1764 from nats-io/fix-lru
+f5fd5e4f	8e095759	Thu Dec 3 21:14:04 2020 -0500	fix test timing issue and flapper caused by unnecessary pop/push
+a97e84d8	6d426d7b 0f7d18d6	Wed Dec 2 16:29:39 2020 -0800	Merge pull request #1760 from nats-io/jsbug
+0f7d18d6	9b107c0f	Wed Dec 2 16:18:00 2020 -0800	Fixes https://github.com/nats-io/jetstream/issues/396
+cf9ba928	67425d23	Wed Dec 2 17:00:47 2020 -0700	Fixed some MQTT tests
+ac4890ac	1dba6418	Mon Nov 30 20:08:44 2020 -0700	Fixed flapper
+7e27042e	5168e3b1	Mon Nov 30 16:11:50 2020 -0800	Fix for #1736
+5168e3b1	ebe63db3 77aead80	Mon Nov 30 14:08:50 2020 -0700	Merge pull request #1755 from nats-io/fix_1751
+0e8e85c5	5d8b9eb6 cceab9a4	Wed Nov 25 17:16:21 2020 -0700	Merge pull request #1749 from nats-io/fix_gw_system_account
+5d8b9eb6	de0c992c f69b199e	Wed Nov 25 14:17:02 2020 -0800	Merge pull request #1748 from nats-io/fs_consumer_bug
+f69b199e	bcf295dd	Wed Nov 25 13:31:46 2020 -0800	Fixed bug restoring consumer state.
+bc6c4331	acaffb33	Tue Nov 24 23:04:50 2020 -0500	FreeBSD fixes: %cpu scale; no-cgo for amd64
+acaffb33	2e28de50 406dc7ee	Tue Nov 24 17:14:26 2020 -0700	Merge pull request #1746 from nats-io/fix_ln_race
+406dc7ee	2e28de50	Tue Nov 24 15:42:30 2020 -0700	Fixed data race on leafnode check for remote cluster
+2e28de50	120b031f 88475014	Tue Nov 24 15:40:58 2020 -0700	Merge pull request #1745 from nats-io/fix_1743
+b0461e39	a0dc9ea3	Tue Nov 24 12:47:41 2020 -0500	Fixed comment
+637717a9	c0bc788c f155c75d	Tue Nov 24 09:22:11 2020 -0700	Merge pull request #1738 from nats-io/fix_1730
+3c0cc648	c0bc788c	Mon Nov 23 17:38:34 2020 -0600	fixed testing of the user issuer against the account id (Name) - was set to Issuer instead added some tests.
+0279e00b	39e96984	Mon Nov 23 07:34:24 2020 -0800	Fix for flapper
+bcb77715	b528b1f7	Sun Nov 22 10:24:32 2020 -0800	Fix race
+2e3c2267	a0c4c5cb	Sat Nov 21 13:13:08 2020 -0800	Fix for service import cycles
+f24aec4a	74642e02	Fri Nov 20 13:57:34 2020 -0500	Incorporating comments and fixed an issue where code was not invoked
+a3af4915	bfd388e8 55b0f8d8	Thu Nov 19 09:06:28 2020 -0700	Merge pull request #1725 from nats-io/fix_1722
+28d8a4be	f7f994ec d358aadd	Tue Nov 17 15:22:02 2020 -0800	Merge pull request #1721 from nats-io/fsfix2
+d358aadd	5e9bad5b	Tue Nov 17 15:04:57 2020 -0800	Fixes for filestore not remember first sequence when all messages deleted.
+c851b39b	e57f6c9d 28cb4e8c	Fri Nov 13 18:24:16 2020 -0800	Merge pull request #1709 from nats-io/removebug
+28cb4e8c	e57f6c9d	Fri Nov 13 17:05:24 2020 -0800	Fix bug when removing the same message from a stream.
+3a6411ab	1a1aca0c 2696749b	Thu Nov 12 14:02:24 2020 -0800	Merge pull request #1707 from nats-io/fsfix
+2696749b	cd03482c	Thu Nov 12 13:58:34 2020 -0800	fix
+cd03482c	1a1aca0c	Thu Nov 12 13:38:08 2020 -0800	Fixed bug when returning wrong error from LoadMsg and a race condition
+958c0484	c6e2aa0b a733c120	Wed Nov 11 18:11:11 2020 -0800	Merge pull request #1703 from nats-io/fix
+a733c120	c6e2aa0b	Wed Nov 11 18:07:51 2020 -0800	Fix flapper, be pedantic about signaling on delivery subject update
+11e6df0c	55419c29 21a35546	Tue Nov 10 12:49:26 2020 -0800	Merge pull request #1699 from nats-io/idx_bug2
+398ef78a	dc40ba61	Thu Nov 5 18:10:52 2020 -0800	Fix flappers
+8b56ea3b	0965a20b 67b1a334	Thu Nov 5 07:30:51 2020 -0800	Merge pull request #1693 from nats-io/pcache_bug
+67b1a334	5a6bb375	Wed Nov 4 20:01:53 2020 -0800	Fix for partial cache overwrite bug.
+debf474a	e0c79ede d729beb2	Sun Nov 1 13:37:15 2020 -0800	Merge pull request #1688 from nats-io/fix2
+65caff18	c5657d75	Sun Nov 1 12:06:45 2020 -0800	Fix for flapper and additional consumer perf test
+93ebcafc	5270f2da	Sat Oct 31 12:08:55 2020 -0700	Update to write architecture and bug fixes and stability improvements.
+cce7195a	5adce5c0	Thu Oct 29 13:14:17 2020 -0700	Fixed bug that would not properly handle wildcard streams with interest retention and filtered consumers.
+3f433ab8	5adce5c0 04450f2d	Thu Oct 29 13:34:13 2020 -0600	Merge pull request #1681 from nats-io/fix_js_ebit
+283c632d	225e2266	Wed Oct 28 18:58:42 2020 -0700	Updates based on PR feedback and fix for merge regression with pending PR
+6d76156b	773ac7fb c88ac568	Mon Oct 26 14:25:21 2020 -0600	Merge pull request #1673 from nats-io/fix_no_advertise_doc
+c88ac568	ced31507	Mon Oct 26 10:41:57 2020 -0600	Fixed no_advertise comment in `nats-server -help`
+98aa87fb	59e3779b 46a49698	Thu Oct 22 10:55:19 2020 -0600	Merge pull request #1665 from nats-io/fix_test
+b27655b9	16cb6822 c2c04b6c	Thu Oct 22 09:06:39 2020 -0600	Merge pull request #1663 from nats-io/fix-lru-timing
+c2c04b6c	16cb6822	Thu Oct 22 02:23:15 2020 -0400	Fix timing issue in unit test
+c907245b	16cb6822	Wed Oct 21 18:29:22 2020 -0400	Adding more debugging information to accountz
+f83280cc	20ccf52c	Mon Oct 19 18:42:10 2020 -0400	Fixed account update issue where signing key (and thus issuer) changes
+5a5dbb9d	d6e420a9	Mon Oct 19 16:38:42 2020 -0400	Fix nil deref when account is in bad/incomplete state
+d6e420a9	2a956709 9bd088e0	Mon Oct 19 11:09:46 2020 -0600	Merge pull request #1652 from nats-io/fix_leafnode_accept_panic
+04ffe3b0	d0201d8b	Thu Oct 15 20:03:44 2020 -0700	Allow mapping destinations that introduce message loss (debugging, chaos monkey)
+e225acd1	96bf8185	Thu Oct 15 14:02:39 2020 -0700	Fix race accessing c.acc checking for mappings
+e846dab4	a12a133b 33a93915	Thu Oct 15 15:01:46 2020 -0600	Merge pull request #1646 from wallyqs/ws-err-typo-fix
+33a93915	a12a133b	Thu Oct 15 13:42:22 2020 -0700	Fix typo in websocket err message
+2bfb8b12	93b54b23	Thu Oct 15 15:36:50 2020 -0400	[Fixed] revocation check for activations used current time instead of jwt issue time
+f2106ab9	fe7fd92c	Thu Oct 15 11:27:31 2020 +0200	fix npe for offsets larger than items
+fe7fd92c	99cb1fb3 26cd1f99	Tue Oct 13 19:21:24 2020 -0600	Merge pull request #1641 from nats-io/fix_gw_shadow_subs
+60c8cbd1	a4c68521	Tue Oct 13 01:30:03 2020 -0400	Fixed crash on non existing directory
+fec5b7fd	618cde90 db44b589	Fri Oct 9 12:57:15 2020 -0600	Merge pull request #1635 from nats-io/sys-acc-rev-fix
+387e1e1e	f9bff102	Tue Oct 6 21:45:34 2020 -0400	[Fixed] revocation check used current time instead of jwt issue time
+8a9f6eaf	a75be04b	Fri Oct 2 12:58:59 2020 -0700	Additional fixes to interest retention based streams and offline durables with redelivery.
+a75be04b	eff27e26	Thu Oct 1 21:24:40 2020 -0700	Various fixes for this PR.
+4e055d7b	f3e6cd12	Tue Sep 29 14:36:04 2020 -0400	Fixing test race condition
+3977ea04	7f44d075	Tue Sep 29 10:01:47 2020 -0600	Fixed possible panic on consumer.Delete() during server Shutdown()
+9129d7b6	5506b96b	Mon Sep 28 15:56:50 2020 -0700	Set to 1 if no acks received, fixes #1619
+d343ba78	2792fd2e	Sat Sep 26 17:12:18 2020 -0400	Fix event ordering issue caused by re-locking
+3d2b6522	63cc9a09	Thu Sep 24 18:49:32 2020 -0400	[Fixed] race condition where account conns timer was disabled too soon
+9b7c472c	1dd0c066 2605ae71	Tue Sep 22 17:27:01 2020 -0600	Merge pull request #1607 from nats-io/fix_leafnode_loop_detected
+a10a2e96	04ec5086 04f96813	Fri Sep 18 13:56:39 2020 -0600	Merge pull request #1594 from nats-io/fix_websocket_auth
+bd920c42	54016011	Thu Sep 10 17:47:33 2020 -0600	Fix dirstore code and speed up some tests
+9f41002f	5cd11bf7 f0c14420	Wed Sep 9 12:15:01 2020 -0700	Merge pull request #1593 from nats-io/go1.15-fixes
+26f49718	5cd11bf7	Wed Sep 9 04:43:23 2020 -0700	Fix all certs for Go 1.15 SAN and CN changes
+d6ab6799	a3c5fd45	Fri Sep 4 17:14:51 2020 -0400	Fixing unit test
+2ba9c97f	3faa2e76	Thu Sep 3 07:54:07 2020 -0700	Fix test flapper
+3faa2e76	cdbea93a	Wed Sep 2 17:18:28 2020 -0700	Fix for #1580
+846b2b5c	9d1526cb	Tue Aug 25 00:36:14 2020 -0400	Fix flapping test and limit channel recv when there is an error
+32615b4c	12ecadd9	Mon Aug 24 11:49:50 2020 -0400	Update jwtv2 and fix test that embedded jwtv2 operators
+7cc01130	48c87c14 92970316	Tue Aug 18 16:50:45 2020 -0600	Merge pull request #1565 from nats-io/fix_panic_on_conn_close_early
+fe549a19	74bdf385 3a61a0ce	Tue Aug 18 11:24:07 2020 -0700	Merge pull request #1564 from nats-io/js_state_fix
+2381d734	91335525	Mon Aug 17 13:44:22 2020 -0400	Incorporating suggestions and fixes
+3a61a0ce	d3055016	Mon Aug 17 10:35:07 2020 -0700	Fix for https://github.com/nats-io/jetstream/issues/297
+ae2411c0	400b044e	Mon Aug 10 19:40:36 2020 +0300	fix absolute url in monitoring menu
+22833c8d	94fee0eb	Mon Aug 3 14:59:00 2020 -0600	Fix sysSubscribe races
+33d41c74	60f9256d 96ccf915	Fri Jul 31 09:11:31 2020 -0600	Merge pull request #1545 from nats-io/fix_1543
+37692d2c	99921725	Mon Jul 27 17:36:55 2020 -0400	[Fixed] Skip fetch when a non config based account resolver is used
+aa67270e	9514576b dbf962f9	Thu Jul 23 12:40:38 2020 -0600	Merge pull request #1530 from nats-io/fix_1527
+70769b1d	449f7f15 48b2335c	Wed Jul 22 09:55:45 2020 -0500	Merge pull request #1524 from nats-io/jsfix
+48b2335c	449f7f15	Wed Jul 22 07:35:38 2020 -0700	Fix for stream delete with many consumers - https://github.com/nats-io/jetstream/issues/260
+4a4a36f9	8312f3fb b9764db4	Thu Jul 16 12:56:02 2020 -0600	Merge pull request #1517 from nats-io/fix_1515
+4d495104	bfe4eb68	Thu Jul 9 17:55:14 2020 -0600	Fixed no_responders use of sendProtoNow()
+edb611fa	bfe4eb68	Thu Jul 9 14:33:08 2020 -0700	Fix config reload when no changes for leafnode remotes
+bfe4eb68	84a0229a 2c8bf520	Wed Jul 8 14:59:25 2020 -0600	Merge pull request #1506 from nats-io/fix_1505
+84a0229a	735e06b9 4ea3f9c5	Wed Jul 8 14:40:56 2020 -0600	Merge pull request #1507 from nats-io/fix_duplicate_sub
+735e06b9	5cf858e4 aecdca87	Tue Jul 7 05:38:21 2020 -0700	Merge pull request #1503 from nats-io/jsbug
+5cf858e4	33deee8a 9288283d	Mon Jul 6 18:35:18 2020 -0600	Merge pull request #1504 from nats-io/fix_accept_loop_bug
+9288283d	33deee8a	Mon Jul 6 17:03:19 2020 -0600	Fixed accept loops that could leave connections opened
+aecdca87	33deee8a	Mon Jul 6 14:59:05 2020 -0700	Pending timers could go negative, this is a fix for #1502
+33deee8a	774da7f0 27540ee2	Fri Jul 3 11:47:58 2020 -0600	Merge pull request #1501 from nats-io/fix_test
+27540ee2	774da7f0	Fri Jul 3 11:30:48 2020 -0600	Fixed some flappers
+774da7f0	1004bd5c 342acb0f	Wed Jul 1 16:11:36 2020 -0600	Merge pull request #1499 from nats-io/fix_async_client_tests
+342acb0f	1004bd5c	Wed Jul 1 15:53:08 2020 -0600	Fixed async client tests
+a1ade271	f41171c1 2a799e7f	Fri Jun 26 11:25:40 2020 -0700	Merge pull request #1496 from nats-io/lnfix
+ae93c5cf	1a590eea e1adb58b	Fri Jun 26 10:31:38 2020 -0700	Merge pull request #1494 from nats-io/cnfix
+e1adb58b	1a590eea	Fri Jun 26 09:48:54 2020 -0700	Support clustername change on reload, fixes #1492
+12040224	f13c4748	Thu Jun 18 21:04:34 2020 -0700	Fix for #1486
+f13c4748	9bf85aca 53a990f4	Thu Jun 18 17:02:20 2020 -0600	Merge pull request #1485 from nats-io/fix_flapper
+53a990f4	9bf85aca	Thu Jun 18 16:13:17 2020 -0600	Fixed flapper
+9bf85aca	05fa11ba 95462cde	Thu Jun 18 14:07:33 2020 -0700	Merge pull request #1483 from nats-io/fs_bug
+95462cde	a13402cd	Thu Jun 18 14:02:11 2020 -0700	Fix for memory expiration and age timer
+a13402cd	fa744fdc	Thu Jun 18 12:14:25 2020 -0700	Run expiration only once at a time and double check cache, fixes #1482
+498e625f	7545ff1c b36672a6	Fri Jun 12 17:04:16 2020 -0600	Merge pull request #1475 from nats-io/fix_leafnode_solicit_failure_race
+b36672a6	61cccbce	Fri Jun 12 16:51:40 2020 -0600	Fixed flapper
+7545ff1c	02eb98c3 d6de05f4	Fri Jun 12 13:51:38 2020 -0600	Merge pull request #1473 from nats-io/fix_1451
+d6de05f4	67d26388	Fri Jun 12 13:04:05 2020 -0600	Fixed a test with data race
+02eb98c3	e9679523 d2a8282a	Fri Jun 12 10:14:03 2020 -0600	Merge pull request #1470 from nats-io/fix_websocket_auth_override_and_perf
+e9679523	240e72b9 b60d5e67	Fri Jun 12 10:13:08 2020 -0600	Merge pull request #1471 from nats-io/fix_ping_test
+b60d5e67	240e72b9	Fri Jun 12 10:03:47 2020 -0600	Fixed TestPing test
+240e72b9	967bb660 c1a43729	Thu Jun 11 16:33:01 2020 -0700	Merge pull request #1469 from nats-io/fix-typo
+c1a43729	967bb660	Thu Jun 11 16:31:09 2020 -0700	Fix maintainers typo
+ec5caa69	bfe52fdb b9bd5c2d	Tue Jun 9 16:08:50 2020 -0600	Merge pull request #1464 from nats-io/fix_flapper
+b9bd5c2d	bfe52fdb	Tue Jun 9 15:34:52 2020 -0600	Fixed flappers
+6413fcd9	ede25f65 cd6d71de	Mon Jun 8 12:07:47 2020 -0600	Merge pull request #1460 from nats-io/fix_1459
+82968f64	19fcafa1 25bd5ca3	Fri Jun 5 11:11:26 2020 -0600	Merge pull request #1455 from nats-io/fix_ln_sub_interest_propagation
+326f6c2e	eed381d6 04271d7e	Fri Jun 5 04:07:50 2020 -0700	Merge pull request #1452 from ripienaar/nightly_fix
+04271d7e	eed381d6	Fri Jun 5 12:21:36 2020 +0200	fix nightly schedule
+52f2289b	30bc47b8 5fe60d30	Wed Jun 3 16:52:30 2020 -0600	Merge pull request #1447 from nats-io/fix_conn_close_trace
+fc0a0b8c	1e149f40 d5180025	Tue Jun 2 11:41:14 2020 -0600	Merge pull request #1444 from nats-io/fix_flapper
+d5180025	1e149f40	Tue Jun 2 13:31:41 2020 -0400	Fix flapper by making the channel buffered
+0d2ca9ba	201c535e	Tue Jun 2 06:19:04 2020 -0700	Fix race, can\'t clear direct memory since shared
+920dd426	c57b8612	Tue Jun 2 13:51:50 2020 +0200	fix argument order in snapshots
+b5dfb984	d6e72105	Mon Jun 1 18:34:18 2020 -0700	Fixes for race detections under GHA
+f8d6dd99	169de0ff	Mon Jun 1 13:30:34 2020 -0700	Fix JetStream benchmark test
+f6ce8337	5271be49	Mon Jun 1 11:37:06 2020 -0700	Fix flapper
+5271be49	adc066e3	Mon Jun 1 09:21:22 2020 -0700	Fix race for snapshots
+adc066e3	78aa2488 c27f717e	Mon Jun 1 09:48:08 2020 -0600	Merge pull request #1438 from nats-io/fix_logfile_size_limit_and_reopen
+4d62a723	e584d4ef	Sun May 31 07:50:50 2020 -0700	Allow redelivery for AckAll policy, general upgrades to pending beahviors. Fixes #1436
+2bbe9011	c25e8d4b 44e78a1f	Fri May 29 17:56:42 2020 -0600	Merge pull request #1433 from nats-io/fix_tests
+44e78a1f	c25e8d4b	Fri May 29 17:47:08 2020 -0600	Fixed some tests
+10e49ca1	f6a9d3bc	Thu May 28 14:19:11 2020 -0700	Fix more flappers
+c1848a99	5b5edc4b	Thu May 28 22:54:20 2020 +0200	First check $ prefix
+4ca05d97	625129f2	Thu May 28 13:43:15 2020 -0700	Fix gap test from flapping
+625129f2	b51bae5b	Thu May 28 13:23:00 2020 -0700	Fix flapper test where no messages to receive at end
+b51bae5b	f859edaf b0e43b6a	Thu May 28 14:06:56 2020 -0600	Merge pull request #1427 from nats-io/fix_flappers
+b0e43b6a	f859edaf	Thu May 28 13:41:02 2020 -0600	Fix flappers
+5d949bf1	5512b45c e9805a31	Thu May 28 11:16:28 2020 -0600	Merge pull request #1424 from nats-io/fix_1421
+4f0055a6	fa59cff1	Wed May 27 20:15:25 2020 -0700	Fix for checksum hash race
+4c91b69c	68473bfc 54aa40b3	Tue May 26 09:01:04 2020 -0700	Merge pull request #1413 from nats-io/fix_flappers
+2a829ec3	f02ec860	Mon May 25 08:37:47 2020 -0700	Force fixed capacity to not allow append to underlying buffer
+f02ec860	e5d6bf0c	Mon May 25 07:30:58 2020 -0700	Fix race when active state has not been updated yet
+57d8cdb1	9dae2cd8	Mon May 25 06:58:23 2020 -0700	Fix flapper, wait for subs to propagate
+9dae2cd8	79ea95fe	Mon May 25 06:58:23 2020 -0700	Fixed flapper, will fix bug in other PR
+79ea95fe	b26d389d	Mon May 25 06:58:23 2020 -0700	Fix flapper, wait for sub to propagate
+d20efffc	7d575e3a	Mon May 25 06:58:23 2020 -0700	Fix TestNoRaceRouteCache test
+ea31c663	413884d8	Mon May 25 06:58:23 2020 -0700	Fix for flapper
+e976e630	f0bfbd17	Mon May 25 06:58:23 2020 -0700	Fixing some flappers
+76772e4a	0e3c7319 5dba3cdd	Fri May 22 17:14:13 2020 -0600	Merge pull request #1412 from nats-io/fix_gw_implicit_reconnect_race
+3e5d0c34	131e2763	Wed May 20 15:23:39 2020 -0700	Fix for test failure when racing against double deletes
+c9f78d6f	476e339c	Tue May 19 16:38:19 2020 -0700	Fixes post rebasing with master
+476e339c	99d1e56a	Tue May 19 16:36:08 2020 -0700	Race detection fix
+dae309ee	7b6352c9	Tue May 19 14:33:06 2020 -0700	Fix flapper, wait for no clients
+3b33eb3c	67e49148	Tue May 19 14:33:06 2020 -0700	Fix flapper
+67e49148	019c105c	Tue May 19 14:33:06 2020 -0700	Fix for race in selectMsgBlock
+019c105c	f5ceab33	Tue May 19 14:33:06 2020 -0700	Updates based on feedback, more tests, few bug fixes
+ce26c651	45a4d929	Tue May 19 14:33:06 2020 -0700	fix the type hint for msg_get
+70670fab	54f45850	Tue May 19 14:33:06 2020 -0700	consistency fix on stream template list response
+e9b9788f	e4c15d86	Tue May 19 14:33:06 2020 -0700	Various bug fixes, fixes for flappers
+e4c15d86	585fa8cc	Tue May 19 14:33:06 2020 -0700	Fix for data race
+5fa50392	37b89886	Tue May 19 14:27:45 2020 -0700	minor fix for json keys on consumer lists
+40900ca1	5256781b	Tue May 19 14:27:45 2020 -0700	Fixes for Template subject API
+a5dbc20e	a7f1bca5	Tue May 19 14:26:46 2020 -0700	Fix for test failure
+016331c2	78fdeb66	Tue May 19 14:24:31 2020 -0700	Fix race condition
+ffae57e2	7f458282	Tue May 19 14:20:02 2020 -0700	Fold replay original logic into main loop, fixed pull bug on replay original
+2d94caee	4a30f593	Tue May 19 14:18:34 2020 -0700	Fix for https://github.com/nats-io/jetstream/issues/144
+4a30f593	0b970130	Tue May 19 14:18:34 2020 -0700	Fix for https://github.com/nats-io/jetstream/issues/143
+0b970130	3c1dcd24	Tue May 19 14:18:34 2020 -0700	Allow filter subjects to have wildcards. Fix for https://github.com/nats-io/jetstream/issues/136
+faea8f93	4774d41f	Tue May 19 14:18:34 2020 -0700	small fix for race
+4774d41f	ade58bea	Tue May 19 14:18:34 2020 -0700	Fixes for filestore consistency on server restarts under heavy load with purge operations
+3d80ff71	5e9f487b	Tue May 19 14:16:03 2020 -0700	Fix for queue subscribers as consumers
+5e9f487b	4a46a92c	Tue May 19 14:16:03 2020 -0700	Fixes for test and locking, bumped version
+6cd07c7c	623fa5cc	Tue May 19 14:16:03 2020 -0700	Fixed improper field pass to Fatalf()
+7d5fddee	20acaadf	Tue May 19 14:16:03 2020 -0700	Fix for test
+d0652539	685efc36	Tue May 19 14:16:03 2020 -0700	Fix for filestore age timer bug
+cd052a42	e703d62b	Tue May 19 14:16:03 2020 -0700	Fix for non-js msg failed delivery stopping normal subscribers
+c9da1ca6	47c28b2f	Tue May 19 14:16:03 2020 -0700	fix purge export subject
+a7d7b6ff	e3be6f45	Tue May 19 14:16:03 2020 -0700	Fix for writing messages after restart and delivery count suppression on max
+5efdf636	05ca8f43	Tue May 19 14:15:11 2020 -0700	Fix case where request for next msg times out
+cd8cd3a9	58d98d42	Tue May 19 14:15:11 2020 -0700	fix MsgSetInfo json keys
+de781a29	d5676e50	Tue May 19 14:15:11 2020 -0700	Fixed Memory() for Windows
+ca5b58e2	0aa80dc7	Tue May 19 14:15:11 2020 -0700	Bug fix for original replay with no initial interest, README updates
+3e6a8f30	72c0d316	Tue May 19 14:15:11 2020 -0700	markdup fixes
+72c0d316	317c17e7	Tue May 19 14:15:11 2020 -0700	Intro doc for techpreview, bug fixes to jsm
+c650b1bc	543b304b	Tue May 19 14:15:11 2020 -0700	API fix and rebase fix
+0d44a615	e1270396	Tue May 19 14:15:11 2020 -0700	More debug info on startup and restore
+613d65c5	e8f465ea	Tue May 19 14:12:28 2020 -0700	Erased msg recovery, bug fix on linux for idx file, LoadMsg vs Lookup
+09c1acc3	dd116fcf	Tue May 19 14:06:29 2020 -0700	Fix message expiration
+80b4857c	81fabde7 46f880bc	Fri May 8 12:01:57 2020 -0600	Merge pull request #1385 from nats-io/fix_close_conn
+f7db844c	9fe4146d 1cf21fc4	Wed Apr 15 15:36:17 2020 -0600	Merge pull request #1347 from nats-io/fix_leafnode_test_flappers
+1cf21fc4	9fe4146d	Wed Apr 15 15:15:26 2020 -0600	Fix some leafnode test flappers
+9fe4146d	9af6dcd1 c54f41ac	Tue Apr 14 16:23:00 2020 -0600	Merge pull request #1346 from nats-io/fix_flapper
+c54f41ac	9af6dcd1	Tue Apr 14 13:27:17 2020 -0600	Fixed flapper test
+9af6dcd1	dda10463 a301d673	Tue Apr 14 11:46:14 2020 -0700	Merge pull request #1345 from nats-io/ln_restart_bug
+aff10aa1	dda10463	Tue Apr 14 09:26:35 2020 -0700	Fix for #1344
+dda10463	2b1fe8f2 dc553560	Mon Apr 13 15:33:54 2020 -0700	Merge pull request #1343 from nats-io/fix_gw_hub_ln_interest_propagation
+ef85a1b8	e8ce7388	Fri Apr 10 17:30:03 2020 -0700	Fix for #1336
+84b634eb	84841a35 f9d9ac19	Fri Apr 10 11:19:18 2020 -0700	Merge pull request #1335 from nats-io/stream_bug
+f9d9ac19	090abc93	Fri Apr 10 10:49:05 2020 -0700	Use prefix to make sure we use right subject
+090abc93	84841a35	Fri Apr 10 10:36:20 2020 -0700	Fix for stream imports and leafnodes, #1332
+84841a35	96d4b4d8 e843a27b	Fri Apr 10 08:51:31 2020 -0700	Merge pull request #1334 from nats-io/leafnode_bug
+e843a27b	64bcf9f2	Fri Apr 10 08:35:09 2020 -0700	When a responder was on a leaf node and the requestor was connected to the same server as the leafnode we did not propagate the service reply wildcard properly. This fixes that.
+d70426d3	699502de	Thu Apr 9 08:48:04 2020 -0700	Do prefix test to avoid read lock if possible
+b46a011c	6d92410a d1276ad0	Thu Mar 19 17:30:51 2020 -0600	Merge pull request #1316 from nats-io/fix_1313
+6d5ac0a5	cbc0e584 5eebf02e	Mon Mar 9 10:29:39 2020 -0600	Merge pull request #1307 from nats-io/debug_travis_tag
+5eebf02e	cbc0e584	Mon Mar 9 10:13:32 2020 -0600	Fixed TestVersionMatchesTag test
+59a2102f	d28ae249	Fri Mar 6 12:17:13 2020 -0500	Fixed RUnlock
+f5bd07b3	34e4c64e	Wed Mar 4 13:54:15 2020 -0500	[FIXED] trace/debug/sys_log reload will affect existing clients
+51596b7b	6465afd0 6f341868	Wed Mar 4 08:33:24 2020 -0700	Merge pull request #1298 from nats-io/fix_nobuf_reuse_on_partial
+6465afd0	08d1da45 ed125593	Tue Mar 3 09:11:18 2020 -0700	Merge pull request #1291 from nats-io/warning-debug
+9539199b	6bd6757c	Mon Mar 2 15:09:52 2020 -0500	Fixed help text and variable naming
+bb432f47	62bacf10 7ab9c76f	Wed Feb 26 15:18:09 2020 -0700	Merge pull request #1287 from nats-io/fix_bench_tests
+7ab9c76f	62bacf10	Wed Feb 26 12:12:18 2020 -0700	Fixed benchmark tests to be able to run with Go 1.13+
+c18a5a25	d1d34d26	Mon Feb 24 19:37:25 2020 -0500	Fixing typos, copyright date and changed type in log.go/Error func
+62bacf10	dbb08321 37291df2	Wed Feb 19 19:32:29 2020 -0700	Merge pull request #1283 from nats-io/fix_flappers
+37291df2	156bf7b3	Wed Feb 19 17:33:16 2020 -0700	Fixed yet another flapper
+8e4b4491	a5b3cf2e	Wed Feb 19 13:19:08 2020 -0700	Fixed flappers
+82a27594	db83b8a5	Mon Feb 17 20:22:52 2020 -0500	Fix unreliable test
+c22b2c09	59f99c12 a6874b21	Mon Feb 10 18:13:49 2020 -0700	Merge pull request #1276 from nats-io/fix_lame_duck_mode_shutdown
+308037e8	b1fc364a 47b08335	Tue Jan 28 13:36:09 2020 -0700	Merge pull request #1264 from nats-io/fix_tlssavename
+643e73c0	1553a784	Wed Jan 22 11:25:09 2020 -0800	Fix for #1256, mixed IP and DNS for cluster and TLS with leafnodes
+687571b4	1553a784 20768b72	Wed Jan 22 10:03:17 2020 -0700	Merge pull request #1260 from nats-io/fix_conn_addr_ipv6
+e94f1b7a	e758c7be	Fri Jan 17 12:09:39 2020 -0700	Remove debug trace in writeLoop
+e758c7be	1f91dab5 bd28a015	Tue Jan 14 18:45:06 2020 -0700	Merge pull request #1249 from nats-io/fix_sublist_issubsetmatch
+856f4710	f66f9c02 bdd7fa86	Fri Jan 10 12:55:42 2020 -0700	Merge pull request #1243 from nats-io/fix_stall_duration
+971d2350	f66f9c02	Fri Jan 10 11:21:38 2020 -0700	Fixed client stalled duration computation and added back Gosched()
+f66f9c02	0335f1de c097357b	Thu Jan 9 18:24:17 2020 -0700	Merge pull request #1242 from nats-io/fix_multiple_switch_to_interestonly_mode
+98e07a74	9fb55bf3 99d8eb4c	Mon Jan 6 15:19:02 2020 -0700	Merge pull request #1239 from nats-io/fix_1229
+4a4e1222	a2ebf085	Mon Dec 16 17:47:22 2019 -0600	Fix to testing for equal stream imports
+ffc3c0da	5f110924	Mon Dec 9 22:08:59 2019 +0100	Fixed #1144, qsub performance improvements
+5f110924	764eeef5 b78ca2f6	Wed Dec 4 21:15:58 2019 -0700	Merge pull request #1210 from nats-io/fix_system_events
+b78ca2f6	764eeef5	Wed Dec 4 20:55:55 2019 -0700	Fixes for system events
+ab943723	8b90c966 ae99fc3a	Wed Dec 4 17:14:26 2019 -0700	Merge pull request #1208 from nats-io/fix_staticcheck_reports
+ae99fc3a	8b90c966	Wed Dec 4 17:04:58 2019 -0700	Fixed issues reported by staticcheck
+8b90c966	19301590 a0f8bd11	Tue Nov 26 17:09:28 2019 -0700	Merge pull request #1204 from nats-io/fix_acc_unsub_service_reply
+f046949c	63138509	Thu Nov 21 17:16:51 2019 -0700	Fix ExpandPath test
+4ab5bc7b	4f12e9f9 977c290b	Mon Nov 18 13:53:45 2019 -0700	Merge pull request #1198 from nats-io/fix_clone_msg_args
+2eee43bf	006a2a94 e0bc81d0	Sun Nov 17 17:58:32 2019 -0700	Merge pull request #1195 from nats-io/fix_leaf_gw_sub
+9c7adf69	d5a8f0ef 0bfd0309	Sat Nov 16 18:27:29 2019 -0700	Merge pull request #1191 from nats-io/acc_locking_fixes
+abc7074d	747ba1dc	Sat Nov 16 14:03:03 2019 -0800	Fix race
+954a7804	d046f794	Fri Nov 15 17:11:52 2019 -0800	Fix possible panic on nil sublist.
+d85f9a93	d046f794	Fri Nov 15 17:24:50 2019 -0700	Fixed bug with duplicate route and GW replies
+33308205	b8b40876	Thu Nov 14 13:29:17 2019 -0800	Fixed a bug where we leaked service imports. Also prior this would have leaked subscriptions as well.
+b8b40876	6caef1bb 3e5ede1d	Mon Nov 11 17:49:49 2019 -0700	Merge pull request #1184 from nats-io/allow_system_connection_publish_gw_prefix
+3e5ede1d	6caef1bb	Mon Nov 11 17:43:14 2019 -0700	Relax check on reserved GW prefix for system clients
+6caef1bb	ba91669d b561bde3	Mon Nov 11 15:57:29 2019 -0700	Merge pull request #1183 from nats-io/fix_reply_across_gw
+cacfb4a0	8a8695d0	Fri Nov 8 19:07:57 2019 -0700	Fix some gateway tests
+eb1c2ab7	2706a155 17a7d0d8	Wed Oct 30 20:36:07 2019 -0600	Merge pull request #1175 from nats-io/fix_1174
+ef710923	636ff956 0da1afaf	Wed Oct 30 20:33:30 2019 -0600	Merge pull request #1178 from nats-io/fix_1176
+0da1afaf	636ff956	Wed Oct 30 20:10:37 2019 -0600	Fixed data race
+636ff956	fe27aec1 51f83220	Tue Oct 29 19:27:05 2019 -0600	Merge pull request #1172 from nats-io/fix_ln_loop_detection_race
+51f83220	fe27aec1	Tue Oct 29 19:09:21 2019 -0600	Fix race introduced in #1170
+fe27aec1	72846827 6bcb7177	Tue Oct 29 18:35:20 2019 -0600	Merge pull request #1170 from nats-io/fix_detect_leafnode_loop
+72846827	e126a1f9 e3009ffb	Tue Oct 29 17:34:50 2019 -0600	Merge pull request #1171 from nats-io/fix_lat_flapper
+e3009ffb	e126a1f9	Tue Oct 29 17:03:48 2019 -0600	Fix latency test flapper.
+e126a1f9	b76daf77 280c4327	Tue Oct 29 15:07:52 2019 -0600	Merge pull request #1169 from nats-io/fix_monitor_link
+b76daf77	d20f76cb 07bf4a49	Tue Oct 29 15:07:25 2019 -0600	Merge pull request #1168 from nats-io/fix_panic_on_leafnode_users_no_account
+22c927a4	d304c9b1 75ec78c2	Thu Oct 24 17:10:53 2019 -0600	Merge pull request #1165 from nats-io/fix_gw_not_using_new_urls
+d304c9b1	daabd4df 27ee8b80	Thu Oct 24 16:17:42 2019 -0600	Merge pull request #1164 from nats-io/fix_account_nil_dereference
+27ee8b80	daabd4df	Thu Oct 24 15:07:06 2019 -0600	Fixed nil dereference reported by staticcheck
+9ec4efa1	116ae2a9 9192a1f4	Wed Oct 16 10:48:10 2019 -0700	Merge pull request #1160 from nats-io/bug
+9192a1f4	116ae2a9	Wed Oct 16 10:29:13 2019 -0700	Fix for panic on #1159, do not allow wildcards in stream import prefix
+9a003ba0	c155be57	Tue Oct 15 23:55:13 2019 +0800	fix string trim func usage in pse
+fac004cf	4a9040e8 18a1702b	Tue Oct 1 11:43:08 2019 -0600	Merge pull request #1147 from nats-io/fix_leafnode_auth
+0360f46c	7fe47ace	Thu Sep 19 17:16:36 2019 -0700	fixes based on PR updates
+0419fd58	256ad4ac 731941a1	Thu Sep 19 16:13:41 2019 -0600	Merge pull request #1135 from nats-io/fix_response_perms
+731941a1	256ad4ac	Thu Sep 19 14:42:38 2019 -0600	Fixed ResponsePermissions
+6a70f36e	43324271 20a925ae	Wed Sep 18 12:59:28 2019 -0600	Merge pull request #1131 from nats-io/fix_acc_lookup
+b98b75b1	0ede25e0 52430c30	Tue Sep 17 09:45:53 2019 -0700	Merge pull request #1127 from nats-io/sysdebug
+52430c30	8fdf6a4e	Tue Sep 17 09:37:35 2019 -0700	System level services for debugging.
+0ede25e0	5eebc42f eb56ad22	Tue Sep 17 09:01:01 2019 -0600	Merge pull request #1129 from nats-io/fix-1128
+5eebc42f	8fdf6a4e 15201a19	Fri Sep 13 15:11:02 2019 -0600	Merge pull request #1126 from nats-io/fix_acc_lock_issue
+15201a19	6f1c5d11	Fri Sep 13 14:30:00 2019 -0600	Fixed a lock inversion issue with account
+d125f06e	d19b13d0 effa30ce	Wed Sep 11 14:48:11 2019 -0600	Merge pull request #1121 from nats-io/fix_max_pending
+d19b13d0	390afecd 4253b31d	Tue Sep 10 18:31:13 2019 -0600	Merge pull request #1119 from nats-io/fix_1117
+8ca58c7d	8a0120d1 2a8973a6	Thu Aug 29 13:32:37 2019 -0600	Merge pull request #1110 from nats-io/fix_flush_outbound
+2a8973a6	8a0120d1	Thu Aug 29 12:59:27 2019 -0600	Fixed flushOutbound
+5518cbe0	452a9857 7ca87239	Mon Aug 26 09:17:36 2019 -0600	Merge pull request #1106 from nats-io/fix_leafnode
+92799132	2959b982	Thu Aug 22 21:36:37 2019 +0800	Cleanup: fix some typos in code comment
+77c63dbc	02acbb64	Tue Aug 20 17:07:22 2019 -0600	Fix flappers
+02acbb64	25e15d71 2f48ad51	Tue Aug 20 15:14:29 2019 -0600	Merge pull request #1102 from nats-io/fix_sub_close
+2f48ad51	25e15d71	Tue Aug 20 14:39:23 2019 -0600	Fixed subscription close
+e230e7fd	fc8087da	Thu Aug 15 09:06:56 2019 -0600	Attempt at fixing flapper again
+09954eee	c185a881	Thu Aug 15 22:12:57 2019 +0800	cleanup: fix word errors in errors.go
+93313a14	c185a881	Wed Aug 14 23:52:49 2019 -0700	Fix for flapping test
+5c776d43	a11524c5	Tue Aug 13 19:59:28 2019 -0700	Fix typo
+a11524c5	56203000 c20afd40	Tue Aug 13 20:36:22 2019 -0600	Merge pull request #1092 from nats-io/fix_duplicate_conn_close
+35c96713	8f5bc503	Tue Aug 6 15:55:33 2019 -0700	fixes based on feedback
+1d6c5807	d749954b	Mon Jul 22 17:17:43 2019 -0700	Fix for #1065 (leaked subscribers from dq subs across routes)
+d749954b	6a40503f 273e5af0	Wed Jul 17 16:15:33 2019 -0700	Merge pull request #1078 from nats-io/fix-leaf-user-signer
+273e5af0	6a40503f	Wed Jul 17 16:03:55 2019 -0400	Fixed an issue where the leaf authentication was not checking for account/signers, so user JWTs signed by a signer failed authentication.
+253263cf	8d46d37d 0873b46f	Fri Jul 12 19:31:23 2019 -0600	Merge pull request #1074 from nats-io/fix_ln_urls_in_info
+a61d32a8	d997dea8	Wed Jul 10 09:57:43 2019 -0700	Test for staggered leafnodes and sub/pub. Verifies fix for #1066
+a6cef5b5	e11a9595	Mon Jul 1 12:03:45 2019 -0700	spaces fix
+ce22bc87	769f9e44	Mon Jul 1 11:14:21 2019 -0700	Make ReadOperatorJWT public for embedded use case. Fixes #1050
+0f20592f	100d0d2b	Sat Jun 29 19:11:02 2019 -0700	Made leafnode connect a Debugf to be consistent, added first connect Noticef.
+6f49f76e	1bd5cede	Fri Jun 21 08:58:18 2019 -0700	Fix for #1043 [ci skip]
+61e062df	be4f0a93	Tue Jun 4 09:44:07 2019 -0600	fix nats.go dependency
+2a8e630b	9bb357e3	Sat Jun 1 16:43:54 2019 -0700	Fix for leafnode and dq selection over GWs
+3cf6f6a5	1c193452	Fri May 31 11:22:02 2019 -0700	Bug fix for service import with leafnodes and gws
+cba2462a	1c193452 37f4e712	Thu May 30 19:09:02 2019 -0600	Merge pull request #1027 from nats-io/fix_gw_race
+37f4e712	1c193452	Thu May 30 18:43:01 2019 -0600	Fixed race due to use of byte slice instead of string
+da938dcb	14ade43d	Thu May 30 14:30:35 2019 -0700	Cleaned up debug and fixed test
+14ade43d	376eee46	Thu May 30 10:34:38 2019 -0700	Fix for unix time flapper
+eb668914	44554057 a94fe78c	Wed May 29 14:20:58 2019 -0700	Merge pull request #1020 from nats-io/bug
+8b78b97a	66f5325c 7f262090	Wed May 29 15:00:49 2019 -0600	Merge pull request #1021 from nats-io/fix_acc_conn_update_timer
+7f262090	66f5325c	Wed May 29 14:28:26 2019 -0600	Fixed setting timer for account connection updates
+874f06a2	bd589fb2	Wed May 29 13:19:58 2019 -0700	Fix bugs on reloadAuthorization
+4ed08dde	a16a5344 b325cf1e	Sun May 26 18:23:06 2019 -0600	Merge pull request #1013 from nats-io/fix_gw_qinterest_loss
+a16a5344	7e11b982 ce1e6def	Sun May 26 18:16:27 2019 -0600	Merge pull request #1014 from nats-io/fix_flappers
+ce1e6def	7e11b982	Sun May 26 17:17:08 2019 -0600	Fix flappers
+b325cf1e	7e11b982	Sat May 25 16:27:00 2019 -0600	Fixed loss of queue subscription interest across Gateways in some cases
+795c1cf9	d779a0bd 48c3f7f8	Fri May 24 10:08:14 2019 -0600	Merge pull request #1011 from nats-io/fix_flappers
+48c3f7f8	d779a0bd	Fri May 24 09:53:35 2019 -0600	Fixed some flappers
+68e3fb63	698d9e64 97ee89cc	Wed May 22 12:40:23 2019 -0600	Merge pull request #1008 from nats-io/fix_gw_panic
+67bb08af	c00226af	Tue May 21 15:12:31 2019 -0700	Fixes for a few flappers.
+8a614b49	19ef4e47	Tue May 21 11:37:15 2019 -0700	Fix for reload race on global account
+565efbbb	edf0e39b 1eff7bc1	Mon May 13 12:32:34 2019 -0600	Merge pull request #994 from nats-io/fix_gw_test_race
+edf0e39b	a0c9907e 616b840c	Mon May 13 13:24:43 2019 -0500	Merge pull request #993 from nats-io/dockerfile-fixes
+1eff7bc1	a0c9907e	Mon May 13 11:49:29 2019 -0600	Fixed gateway test race report
+616b840c	a0c9907e	Mon May 13 12:29:47 2019 -0500	Fixes to alpine Dockerfile
+19bb4863	6584a9a8 c0142113	Thu May 9 16:06:06 2019 -0600	Merge pull request #989 from nats-io/fix_varz
+c0142113	6584a9a8	Thu May 9 14:33:04 2019 -0600	[FIXED] Changes to Varz content and fixed race conditions
+74c71f9c	220330d5 5e01570a	Thu May 2 16:07:32 2019 -0600	Merge pull request #981 from nats-io/fix_config_reload_leafnode_issue
+5e01570a	220330d5	Thu May 2 15:49:56 2019 -0600	Fixed failed configuration reload due to present of leafnode with TLS
+220330d5	be02d760 434501c3	Thu May 2 15:35:14 2019 -0600	Merge pull request #979 from nats-io/fix_leafnode_tls_rootca
+5292ec15	be02d760	Thu May 2 14:22:51 2019 -0700	Various fixes, init smap for leafnodes with gateways too
+434501c3	be02d760	Thu May 2 15:06:08 2019 -0600	Fixed LeafNode failed to create TLS connection when CA needed
+1d736ccc	628c3732	Wed May 1 15:08:20 2019 -0700	Make sure we use correct MSG prefix when mixing between leafnodes and routes.
+628c3732	f04fb377 dce9d672	Wed May 1 14:13:05 2019 -0600	Merge pull request #976 from nats-io/fix_panic_with_leafnodes_and_gws
+dce9d672	f04fb377	Wed May 1 13:40:17 2019 -0600	Fixed panic with leafnode and gateway when no interest registered
+0e5472a1	2d0abd66 ff357d83	Fri Apr 26 11:41:35 2019 -0700	Merge pull request #973 from nats-io/revert-891-include-parsing-fixes
+26929d3e	f320f318	Tue Apr 23 18:56:27 2019 -0700	Fixed description
+f320f318	bfe83aff ba7b6219	Tue Apr 23 17:28:42 2019 -0700	Fixed merge conflict
+bb4e8ae0	2a7b2a95	Mon Apr 22 20:00:21 2019 -0600	Gateways: Fix race for request reply
+ac49f715	f17c5142	Thu Apr 18 10:31:23 2019 -0600	Fixed invocations of startGoRoutine (continued)
+f17c5142	b1d0ec10 bf078621	Thu Apr 18 09:59:39 2019 -0600	Merge pull request #961 from nats-io/fix_start_go_routine_calls
+bf078621	b1d0ec10	Thu Apr 18 09:51:56 2019 -0600	Fixed invocations of startGoRoutine
+bfef3bd5	bda267ec	Wed Apr 17 14:37:09 2019 -0700	Fix for service import processing across routes for leaf nodes
+8f35c645	0c8bf0ee 288f00ff	Wed Apr 17 13:40:46 2019 -0600	Merge pull request #957 from nats-io/fix_955
+288f00ff	0c8bf0ee	Wed Apr 17 13:02:41 2019 -0600	Fixed panic when server needs to send message to more than 8 routes
+e2ee8127	1777e2d1 6eb06ea7	Mon Apr 15 12:30:10 2019 -0500	Merge pull request #948 from nats-io/fix_readme_typo
+58b21e39	031267df 44fc27f1	Tue Apr 9 17:24:10 2019 -0600	Merge pull request #935 from nats-io/fix-mkpasswd
+44fc27f1	98161722	Tue Apr 9 16:41:37 2019 -0600	Fix mkpasswd on windows
+19c4ccec	81eb0653	Mon Mar 25 15:15:11 2019 -0700	Better handling of inline info, bug fix for gw and leafnode interest ref count
+92f9f7ed	bacb73a4	Mon Mar 25 11:48:22 2019 -0700	Fixes for comments
+f68f9b10	c783d56c 566d29d0	Sun Feb 24 22:20:07 2019 -0800	Merge pull request #915 from huynq0911/fix_some_typos
+c783d56c	8362bda0 d26323cb	Sun Feb 24 22:19:23 2019 -0800	Merge pull request #914 from huynq0911/fix_http_https
+566d29d0	8362bda0	Mon Feb 25 12:56:38 2019 +0700	Fix some typos
+fe3289b1	a733e678 235e7f99	Thu Feb 7 16:07:22 2019 -0700	Merge pull request #900 from nats-io/fix_budget_flush
+235e7f99	a733e678	Thu Feb 7 15:01:08 2019 -0700	Fixed use of flush budget for connections other than ROUTER
+46a26611	09a4b050 441d865c	Wed Feb 6 11:57:40 2019 -0800	Merge pull request #891 from wallyqs/include-parsing-fixes
+cfa0685b	ae80c4e9 42f45ce5	Sun Feb 3 00:13:09 2019 -0800	Merge pull request #895 from nats-io/fix_possible_writeloop_stall
+e4a4c98a	a4741c52	Fri Feb 1 17:20:04 2019 -0800	Fix logging public nkey on auth violation
+a4741c52	39fdcd99 2e9fe694	Thu Jan 31 10:06:21 2019 -0700	Merge pull request #890 from nats-io/fix_account_lookup_race
+2e9fe694	39fdcd99	Thu Jan 31 09:25:40 2019 -0700	Fixed possible race when looking/registering an account
+934b28de	75a489a3	Wed Jan 30 18:31:32 2019 -0800	Don\'t allow overruns for message payloads, fixes #884
+75a489a3	ed94bd9f c3a441f6	Mon Jan 28 17:30:39 2019 -0800	Merge pull request #887 from wallyqs/config-parser-bugs
+c3a441f6	ed94bd9f	Mon Jan 28 17:26:22 2019 -0800	Fix dangling bracket and parens eof bugs in config parser
+530b63a5	4de8d48b	Thu Jan 24 21:24:20 2019 -0700	Fix for #883
+8361155f	526c49de d654b184	Mon Jan 14 19:53:34 2019 -0700	Merge pull request #879 from nats-io/fix_logtime_reload
+d654b184	526c49de	Mon Jan 14 19:18:00 2019 -0700	Fixed reload of boolean flags
+7d6b9144	a9735def	Fri Jan 11 10:58:26 2019 -0800	Fix race, bump version to RC1
+2186827c	c3104896 d8817a37	Thu Jan 10 09:31:06 2019 -0700	Merge pull request #874 from nats-io/fix_logtime_reload
+c3104896	b53b71c6 b075c001	Thu Jan 10 09:16:16 2019 -0700	Merge pull request #872 from nats-io/fix_mem_usage_on_tls_failure
+b53b71c6	93f7deb6 ae239dc3	Thu Jan 10 09:09:48 2019 -0700	Merge pull request #873 from nats-io/fix_data_race
+ae239dc3	93f7deb6	Wed Jan 9 18:41:48 2019 -0700	Fixed data race
+a59d9a88	cc5873cd	Wed Dec 19 15:14:58 2018 -0800	Fix for export updates moving from private to public not working
+cc5873cd	da05c45d	Wed Dec 19 13:19:00 2018 -0800	Added start time to Statsz from server. Added in more debug for imports processing. Changed subs reporting for Statsz.
+da05c45d	0fec4ff5 a4fa06aa	Wed Dec 19 12:28:39 2018 -0700	Merge pull request #863 from nats-io/fix_tls_tests
+a4fa06aa	0fec4ff5	Wed Dec 19 12:08:46 2018 -0700	Fixed TLS tests to work with new go-nats behavior
+3349129c	1418b482 4719c618	Tue Dec 11 08:39:37 2018 -0700	Merge pull request #855 from nats-io/gw_fix_service_imports
+4b70cdfc	1418b482	Tue Dec 11 00:27:40 2018 -0800	Fix Gateways with Service Imports
+28984597	f4fda531 efd891d2	Sat Dec 8 16:51:05 2018 -0800	Merge pull request #853 from nats-io/perf_fix
+efd891d2	f4fda531	Sat Dec 8 17:44:32 2018 -0700	Fix performance degradation introduced by GW code
+e2af8286	4a0a0d2d 6eaa1dc3	Fri Dec 7 18:00:43 2018 -0700	Merge pull request #850 from nats-io/gw_fix_address_gossip
+17f8d187	001be75d c57ff0e2	Fri Dec 7 10:17:06 2018 -0700	Merge pull request #849 from nats-io/fix_lock_inversion
+c57ff0e2	001be75d	Fri Dec 7 09:15:05 2018 -0700	Fixed possible deadlock when updating route permissions
+4bea6e00	08380a38	Thu Dec 6 15:32:29 2018 -0800	Test conditional fix
+18bca560	c3a658e1	Thu Dec 6 10:57:39 2018 -0800	Added server version and cluster name to statsz. Fixed account connection accounting sending after local connections is 0.
+f3f62356	a95fa1a8	Wed Dec 5 16:00:30 2018 -0800	fixes
+afc3a45a	05b6403a 5f493862	Tue Dec 4 21:22:01 2018 -0700	Merge pull request #836 from nats-io/fix_misleading_tls_timeout_error
+4f8100eb	522d4bc5	Tue Dec 4 19:25:59 2018 -0700	Fix config reload that failed because of Gateways
+2c5ca431	10113393 0ba58724	Mon Dec 3 19:06:27 2018 -0700	Merge pull request #829 from nats-io/gw_fix_setting_default_tls_timeout
+0ba58724	10113393	Mon Dec 3 18:20:15 2018 -0700	Fixing setting of default gateway TLS Timeout
+e8aec2d7	a2ec5468	Mon Dec 3 14:13:07 2018 -0800	PR comment fixes
+05f9a49f	54d50520	Mon Dec 3 19:25:45 2018 +0100	Fix ErrAuthentication comment
+deb4d966	8a662a57 f011db47	Thu Nov 29 14:36:57 2018 -0700	Merge pull request #820 from nats-io/gw_fix_race_issue
+f011db47	8a662a57	Thu Nov 29 14:22:56 2018 -0700	Fixed race issue with lookup/update of the sent no-interest map
+16e9bbaf	8d05ed82	Thu Nov 29 12:54:07 2018 -0800	Fixes for PR comments
+8a662a57	04c95285 60462b2a	Thu Nov 29 08:22:48 2018 -0700	Merge pull request #818 from nats-io/fix_flapper
+60462b2a	04c95285	Wed Nov 28 19:16:35 2018 -0700	Fixed gateway flapper
+04c95285	7ef7fdfc cfc5ec4d	Wed Nov 28 18:34:50 2018 -0700	Merge pull request #817 from nats-io/fix_ld_mode
+cfc5ec4d	e1a4cbaf	Wed Nov 28 18:25:15 2018 -0700	Fixed test and remove grace period from total duration.
+74f789c9	111a821d d78b1ae4	Wed Nov 28 13:39:52 2018 -0700	Merge pull request #815 from nats-io/fix_gw_issues
+d78b1ae4	111a821d	Wed Nov 28 13:15:47 2018 -0700	Fixed issue with gateways
+6b23e40a	43bd71cd	Fri Nov 23 16:04:58 2018 -0800	Fix for AddExport and unexport server funcs that require lock
+43bd71cd	a2e310ff	Wed Nov 21 20:08:19 2018 -0800	fixes for PR comments, MaxControlLine update for tests
+a2e310ff	0ee714ce	Wed Nov 21 19:22:04 2018 -0800	Vendor jwt, fixes for nkey, jwt changes
+7b25c089	5180a7fb 49105b72	Thu Nov 8 19:41:21 2018 -0700	Merge pull request #798 from nats-io/fix_account_race_on_reload
+49105b72	5180a7fb	Thu Nov 8 18:12:04 2018 -0700	Fix data race on config reload with routes and accounts
+4a8cb26a	1817b354	Thu Nov 8 17:06:45 2018 -0700	Fixed a flapper
+15bdfbb4	96e2e005	Wed Nov 7 19:50:45 2018 -0800	Fix for #793
+96e2e005	b46d3fbc 0c112799	Wed Nov 7 16:55:03 2018 -0700	Merge pull request #795 from nats-io/fix_trace_race
+0c112799	b46d3fbc	Wed Nov 7 16:33:30 2018 -0700	Fixed data race with client trace flag
+3dde5b5a	b2ec5b3a	Tue Nov 6 20:06:18 2018 -0800	megacheck fix
+1ce1a434	2e579b82	Tue Nov 6 15:00:21 2018 -0800	Fix for #792
+ea5a6d95	40589481	Wed Oct 31 20:28:44 2018 -0700	Updates for comments, some golint fixes
+ec3115ad	47963303	Thu Oct 25 09:30:13 2018 -0700	Fix double trace
+e8928b7e	77548d49	Tue Oct 23 17:45:08 2018 -0700	Fix conf parser hang on dangling quote
+3b0b1391	71eb6d80 a0fe8fd0	Fri Oct 12 18:28:18 2018 -0700	Merge pull request #776 from wallyqs/connect-pass-regex-fixes
+a0fe8fd0	71eb6d80	Fri Oct 12 17:00:41 2018 -0700	Fixes to remove traced password
+05bfeddb	ce95e5a8	Mon Oct 8 11:24:14 2018 -0700	Fix comment
+ce95e5a8	3438468c	Mon Oct 8 09:53:41 2018 -0700	Cleanup of shadowed subscriptions, fixes #772
+21ee7ed8	2b0e5b07	Sat Oct 6 14:04:14 2018 -0700	Fixes #770
+18cb7ed4	18a62cdb	Wed Oct 3 15:02:49 2018 -0700	Fix position reporting of variables and bcrypt values
+11ef828c	e78828ce eab4af02	Wed Oct 3 14:04:14 2018 -0600	Merge pull request #765 from nats-io/fix_account_users
+eab4af02	e78828ce	Wed Oct 3 13:28:18 2018 -0600	Fixed accounts users loading
+97ab2d62	a065d132 2a1811b6	Thu Sep 27 09:38:55 2018 -0600	Merge pull request #757 from nats-io/fix_flappers
+2a1811b6	a065d132	Wed Sep 26 15:58:48 2018 -0600	Fixed flappers
+a065d132	64e69a1b 7337eb6b	Sun Sep 16 10:42:42 2018 -0600	Merge pull request #752 from wallyqs/redacted-pass-regex-fix
+7337eb6b	662f71ed	Thu Sep 13 12:49:00 2018 -0700	Fix regex matching group for removing password
+2ee18d6c	08977d78 deec3b82	Fri Sep 7 13:55:02 2018 -0600	Merge pull request #742 from nats-io/fix_flappers
+deec3b82	08977d78	Fri Sep 7 11:56:21 2018 -0600	Fixed flappers
+b15377b4	1b6b5b67 8f480f3f	Wed Sep 5 18:10:50 2018 -0600	Merge pull request #736 from nats-io/fix_flappers
+8f480f3f	bc693ad8	Wed Sep 5 17:22:15 2018 -0600	Fixed flapping tests
+c2602167	c6a71aec 5e21ca93	Wed Sep 5 10:43:36 2018 -0600	Merge pull request #733 from nats-io/fix_ports_file
+2ce3aba4	eed4fbc1	Wed Sep 5 09:33:01 2018 -0600	Bump version and fix megacheck report
+1cdf39d7	73242710 7e39d093	Mon Aug 27 19:16:35 2018 -0600	Merge pull request #727 from nats-io/fix_route_permissions
+73242710	c926b56d 156224a8	Mon Aug 27 19:05:57 2018 -0600	Merge pull request #728 from nats-io/fix_sublist_cache_flapper
+156224a8	c926b56d	Mon Aug 27 15:01:38 2018 -0600	Fix sublist cache flapping test
+7e39d093	c926b56d	Mon Aug 27 14:43:32 2018 -0600	Fixed crash related to route permissions after allow/deny feature
+ab9e4c7d	d21ac8de	Mon Aug 27 12:28:32 2018 -0600	Fix for wildcard cache addition
+8b723c42	a2b5acfd b1bb181f	Thu Aug 16 11:41:14 2018 -0600	Merge pull request #721 from nats-io/fix_url_comparison
+a2b5acfd	6608e9ac d98d51c8	Wed Aug 15 22:44:59 2018 -0700	Merge pull request #720 from nats-io/fix_reload_cluster_auth
+bd972a9a	2b58a121	Mon Jul 2 11:46:40 2018 -0700	fixes
+d30afb22	43b99144	Sat Jun 30 07:15:38 2018 -0700	Remove insecure flag, cert fixed [ci skip]
+cd834a36	1aa928a8	Fri Jun 29 17:44:01 2018 -0700	Added more sort options, fixed some broken ones.
+719deacc	a573a5da	Thu Jun 28 13:14:18 2018 -0700	Fixes #686
+a573a5da	3b6386f3 aff1dcf0	Wed Jun 27 18:14:36 2018 -0600	Merge pull request #694 from nats-io/fix_tests
+aff1dcf0	3b6386f3	Wed Jun 27 17:26:49 2018 -0600	Fix some tests
+f692c0ef	cb1c2e73	Tue Jun 26 19:54:12 2018 -0600	Add debug info for failed RTT test
+093ced68	c092c3d1	Tue Jun 26 19:31:04 2018 -0600	Fix for TestClosedConnsAccounting() test
+4a07a605	c35607cd	Tue Jun 26 16:50:14 2018 -0500	Fixes and changes as per review
+d435fb9a	bf3bc817	Thu Jun 21 20:23:39 2018 -0600	Remove some debug statements
+3f39c244	17fecd4c	Thu Jun 21 17:37:40 2018 -0700	Fixes for comments
+c218d9b0	f9f78a2b	Wed Jun 20 22:41:05 2018 -0700	Fix for #278
+240e21ac	37352edf	Tue Jun 19 22:32:50 2018 -0700	Fix restart of server
+37352edf	5598d5c7	Tue Jun 19 16:42:39 2018 -0700	Fixes #681
+844f3761	d603c53f	Mon Jun 11 15:11:03 2018 -0700	Performance optimizations, beta3, fixes to various tests.
+1b073571	f687937a	Fri Jun 8 10:45:00 2018 -0500	fix reviewer comments Update to gnatsd/README.md clarifying single-user and token-based authentication issue #316 [ci skip]
+955d8ee6	3e2e8c9c	Mon Jun 4 17:45:05 2018 -0700	require 1.9 or above, bug fix in test
+3e2e8c9c	d3213df7	Mon Jun 4 17:45:05 2018 -0700	Fixed bug reusing test sub
+d3213df7	26dafe46	Mon Jun 4 17:45:05 2018 -0700	Fix data race
+504ae06a	523bddd3	Tue May 22 15:39:50 2018 -0500	Update to gnatsd/README.md fixing authorization section addressing issue #662 "_INBOX.>" permission [ci skip]
+523bddd3	e453d78f	Tue May 22 14:41:04 2018 -0500	Update to gnatsd/README.md fixing authorization section addressing issue #662 "_INBOX.>" permission [ci skip]
+e453d78f	99b6bb30	Mon May 21 11:21:46 2018 -0500	Update to gnatsd/README.md fixing authorization section addressing issue #662 "_INBOX.>" permission
+b0ebdbed	9d11587e	Mon Apr 9 09:14:21 2018 -0600	Fixed typo
+add6d793	c587035a 705d8f5f	Fri Mar 23 14:41:51 2018 -0600	Merge pull request #656 from nats-io/fix_lastactivity_test
+705d8f5f	c587035a	Fri Mar 23 14:20:16 2018 -0600	Fix last activity monitoring test
+c16a1dbc	8d539a4b 6f998329	Fri Mar 16 16:01:38 2018 -0600	Merge pull request #638 from nats-io/fix_632
+4aa04a66	982643ad 920cdddf	Thu Mar 15 17:55:39 2018 -0600	Merge pull request #644 from nats-io/fix-reload-open-files
+982643ad	1aef9730 3bfb2d7c	Thu Mar 15 15:48:30 2018 -0600	Merge pull request #641 from nats-io/fix_sublist_race
+bc59ad6b	508ce2bc	Tue Mar 13 19:12:41 2018 -0600	Fix capitalization in log statement
+9d7dda11	dd3dccc5 1bd40f98	Fri Mar 9 14:42:50 2018 -0700	Merge branch \'VidScale-master\' into fix_632
+fa662bbf	4768a863 999e0299	Tue Mar 6 11:32:51 2018 -0700	Merge pull request #634 from nats-io/fix_connect_urls
+461ab96a	33db08e1	Mon Mar 5 20:03:46 2018 -0700	Additional fix to #631
+791bfd4c	a35d98ee	Mon Mar 5 18:36:24 2018 +0200	[#632] - fix a race condition causing messages to be lost with non-zero max_msgs in a cluster
+33db08e1	3b582645 aeca31ce	Sun Mar 4 14:54:54 2018 -0700	Merge pull request #631 from nats-io/fix_connect_urls_notification_with_explicit_routes
+b4744385	2d75c83a	Wed Feb 28 14:19:36 2018 -0700	Restore megacheck since upstream error is now fixed
+163ba3f6	f39cd53d acf4a31e	Mon Feb 26 09:12:58 2018 -0700	Merge pull request #608 from nats-io/fix_issue_447
+68b7aa01	f39cd53d	Wed Feb 21 17:29:21 2018 -0600	[ADD] Added `github.com/nats-io/gnatsd/server.GITHASH` compile variable which allows for linker to inject the githash that gnatsd was built from. See https://husobee.github.io/golang/compile/time/variables/2015/12/03/compile-time-const.html. The githash is exposed on server startup (debug) and on /varz.
+0bcc360d	f39cd53d	Wed Feb 21 17:26:41 2018 -0600	[ADD] Added `github.com/nats-io/gnatsd/server.GITHASH` compile variable which allows for linker to inject the githash that gnatsd was built from. See https://husobee.github.io/golang/compile/time/variables/2015/12/03/compile-time-const.html. The githash is exposed on server startup (debug) and on /varz.
+6852298e	cde2aa6d	Mon Nov 27 15:34:15 2017 -0500	draft of fix for issue #447. allows advertising separate host:ports to client.
+cde2aa6d	7a4f7bbf 6fad293a	Fri Nov 17 12:31:58 2017 -0700	Merge pull request #604 from nats-io/fix_connz_tls_handshake
+7a4f7bbf	99f718fd	Fri Nov 17 12:21:05 2017 -0700	Fix megacheck
+99f718fd	92c4481d 22cff99e	Fri Nov 17 12:17:20 2017 -0700	Merge pull request #603 from nats-io/fix_http_servers_timeout
+22cff99e	92c4481d	Wed Nov 8 14:58:10 2017 -0700	[Fixed] Profiling and Monitoring timeout issues
+b83c9d1c	26ff94c2 d4695d5e	Mon Sep 25 13:01:43 2017 -0600	Merge pull request #592 from nats-io/fix_unknown_cipher_name
+0c3d4ce7	114bd5ee 8ec1f77a	Fri Sep 8 10:12:54 2017 -0600	Merge pull request #573 from nats-io/fix_sublist_insert_remove
+c7fc8765	7bb563df 713b1c57	Thu Aug 31 15:19:25 2017 -0500	Merge pull request #572 from nats-io/perms_cache_fix
+713b1c57	7bb563df	Thu Aug 31 14:00:30 2017 -0500	Fix permissions cache pruning
+10fd640a	2de6622f 0cc49ece	Thu Aug 24 20:26:12 2017 -0600	Merge pull request #561 from nats-io/fix_issue_558
+51457231	4ccbd2e3	Fri Jul 21 12:42:41 2017 +0300	Fix subscriptions zombie at autounsubscribe on cluster
+9ff62e21	1fa136b2	Wed Jul 19 11:59:05 2017 -0600	Fix typos
+c1e29595	d26bef4e 2befd973	Wed Jul 19 11:58:10 2017 -0600	Merge pull request #547 from nats-io/fix_duplicate_route_handling
+2befd973	69891d37	Wed Jul 19 10:42:18 2017 -0600	Fixed DATA RACE and ensure route is not created/accepted on shutdown
+69891d37	0e2882d7	Wed Jul 19 09:02:25 2017 -0600	Fix import ordering
+d26bef4e	9a44c208 9cddf0fc	Tue Jul 18 19:18:00 2017 -0600	Merge pull request #544 from nats-io/fix_win_docker
+d0a2661c	8a1ac816 136355f2	Tue Jul 11 11:12:34 2017 -0500	Merge pull request #536 from nats-io/fix_symlink_garbage
+136355f2	10c70cb5 8a1ac816	Tue Jul 11 10:39:43 2017 -0500	Merge branch \'master\' of github.com:nats-io/gnatsd into fix_symlink_garbage
+28d4420a	f246c094	Tue Jul 11 09:06:00 2017 -0600	Fixed some config reload cluster tests
+f246c094	8f52f53a dea34307	Mon Jul 10 19:38:48 2017 -0500	Merge pull request #533 from nats-io/fix_comment
+dea34307	317a04f1 8f52f53a	Mon Jul 10 19:00:49 2017 -0500	Merge branch \'master\' of github.com:nats-io/gnatsd into fix_comment
+8f52f53a	5f1275c5 cae6b0b2	Mon Jul 10 17:26:15 2017 -0600	Merge pull request #532 from nats-io/fix_windows
+cae6b0b2	ca1b3485	Mon Jul 10 16:33:19 2017 -0600	Some fixes
+317a04f1	b6e43c0d	Mon Jul 10 12:32:12 2017 -0500	Fix error in test comment
+ca1b3485	b6e43c0d	Mon Jul 10 12:21:01 2017 -0500	Fix "error opening file" errors in tests for Windows
+335da2ca	7d6414dc	Fri Jul 7 12:31:04 2017 -0600	Fixed missing `then`
+43a4b738	6a0830fb 70b3b185	Thu Jul 6 09:56:17 2017 -0500	Merge pull request #528 from nats-io/fix_some_tests
+70b3b185	6a0830fb	Wed Jul 5 18:57:15 2017 -0600	Fix some tests
+de2f4076	19d17b2a	Tue Jun 27 13:56:03 2017 -0500	Fix signal table in README
+19d17b2a	99015c41	Tue Jun 27 12:58:13 2017 -0500	Fix unit test
+4eea6f15	15ac5921	Mon Jun 26 17:39:17 2017 -0500	Fix custom windows service control code
+a0f32a15	88c864b2	Thu Jun 22 17:03:59 2017 -0500	Fix grammatical mistake in docstring
+718bda4a	f719d7af	Tue Jun 20 10:28:55 2017 -0500	Fix routes reload test
+f719d7af	06d9aa77	Mon Jun 19 16:29:45 2017 -0500	Fix races in reload tests
+06d9aa77	f98e327b	Mon Jun 19 15:14:31 2017 -0500	Fix race condition
+f98e327b	2ea1afd8	Mon Jun 19 15:02:02 2017 -0500	Fix test config
+6e3f58f4	ac04d555	Wed Jun 14 10:38:21 2017 -0500	Fix tests and cleanup log output
+855ca705	7a8fc9b3 00d0e3d7	Fri Jun 9 08:02:57 2017 -0700	Merge pull request #510 from nats-io/fix_test_logoutput
+482b6a9e	16278f0c 6bdc9062	Fri Jun 9 06:55:36 2017 -0700	Merge pull request #507 from nats-io/fix_opts_copy
+00d0e3d7	5a1ab910	Thu Jun 8 10:55:43 2017 -0500	Fix leaking log output in unit tests
+f2a9cc8c	2fff19d3	Thu Jun 8 11:37:23 2017 -0400	fixed go fmt\'ing
+648b7367	30db4be9	Wed Jun 7 17:40:17 2017 -0500	Fix data race
+5d36a779	a309994d	Wed Jun 7 16:54:40 2017 -0500	Fix Options Clone
+710b9920	2d324e6e	Wed Jun 7 09:51:46 2017 -0500	Fix 1.6 build
+7db8a494	04f46e55	Wed Jun 7 15:43:11 2017 +0200	fix windows build
+04f46e55	2b7ab35e 687a20be	Tue Jun 6 13:12:50 2017 -0700	Merge pull request #503 from nats-io/debug_reload
+687a20be	2b7ab35e	Tue Jun 6 11:30:06 2017 -0500	Implement config reload support for debug
+cba3170c	4e1b3827 d2fd0b71	Mon Jun 5 10:15:55 2017 -0700	Merge pull request #502 from nats-io/fix_test_race
+43ee0ce6	b95dd5df	Wed May 31 12:52:20 2017 -0500	Fix unit tests
+1acdd237	4cef2ddd 513c0a09	Wed May 24 23:58:56 2017 -0500	Merge pull request #497 from nats-io/fix_specify_http_and_https_ports
+4cef2ddd	0415221f a87050c5	Thu May 18 14:07:27 2017 -0600	Merge pull request #492 from nats-io/fix_negative_offset_limit_panic
+0415221f	01d2f1d1 fa50a2c1	Thu May 18 10:25:18 2017 -0500	Merge pull request #493 from nats-io/auth_timeout_tls_fix
+a94b5e0f	55404c70 aac1e74e	Thu Apr 27 15:05:34 2017 -0700	Merge pull request #479 from nats-io/fix_script_code_cov
+aac1e74e	55404c70	Thu Apr 27 09:19:01 2017 -0600	Fix code coverage script (remove auth package that no longer exists)
+f7ba3d17	ddd1b472	Fri Apr 21 09:21:33 2017 -0700	Correct invocation of misspell with fixes
+0fa0003c	45d523e8	Thu Apr 20 16:55:44 2017 -0700	Fixes for routes test with bcrypt and auth
+45d523e8	eae08346	Thu Apr 20 13:26:59 2017 -0700	Fixups for auth always being checked now
+e35c4204	64dcdd6a 67a4a376	Fri Apr 7 12:01:35 2017 -0700	Merge pull request #471 from nats-io/fix_issue_470
+e1abaa51	42a539f1 a0245fc0	Fri Mar 24 09:30:47 2017 -0700	Merge pull request #459 from nats-io/fix_ping_to_tls_conn
+8926fa0f	80490020	Thu Mar 23 20:41:38 2017 -0700	Fix unconvert checks in server
+2e7682a4	902fb621 a8045165	Wed Mar 22 22:31:57 2017 -0700	Merge pull request #455 from nats-io/fix_gosimple_error
+a8045165	902fb621	Wed Mar 22 22:52:33 2017 -0600	Fix gosimple report
+19e6216c	a4fc1b64	Wed Mar 22 19:08:37 2017 -0700	Remove -DV from non debugging sections in readme
+a4fc1b64	902fb621	Wed Mar 22 16:54:18 2017 -0700	Fixups to readme
+4fa3b946	9dd2f7cb efbd423e	Fri Mar 3 14:44:28 2017 -0500	Merge pull request #445 from nats-io/fix-monitoring-data-races
+c9d90734	04645832	Tue Feb 21 15:30:15 2017 -0700	Fix staticcheck error found moving to go 1.8
+37ce2501	4a82610a 3316f4be	Thu Feb 2 14:48:28 2017 -0500	Merge pull request #431 from nats-io/fix_staticcheck_error
+3316f4be	4a82610a	Thu Feb 2 11:50:56 2017 -0700	Fix staticcheck report
+0d45f49d	63d6ef95 27bfed54	Tue Jan 24 18:44:20 2017 -0800	Merge pull request #423 from nats-io/fix_staticcheck_errors
+27bfed54	63d6ef95	Tue Jan 24 19:34:17 2017 -0700	Fixed errors found by staticcheck
+e402ddda	85a3032b 6e9e491c	Mon Jan 9 09:57:50 2017 -0800	Merge pull request #417 from nats-io/win-container-test-fixes
+0598bfa3	6bc93893 afb3dc9f	Thu Dec 8 13:16:41 2016 -0800	Merge pull request #400 from nats-io/fix_travis
+afb3dc9f	6bc93893	Thu Dec 8 10:35:31 2016 -0700	Fixed Travis check for 1.7 and some cleanup
+606f8e95	8fbacaae	Fri Dec 2 14:36:52 2016 -0800	fixup for main
+2b79c6c6	843d8452 ff2d6d19	Thu Dec 1 18:30:07 2016 -0800	Merge pull request #393 from wallyqs/fix-flag-args
+5bed783f	95336c87	Thu Dec 1 14:15:01 2016 +0100	Fix link to go-nats client REAME.md
+6f9e4d65	5c69f82d	Sun Nov 20 17:39:04 2016 -0800	Added support for integer suffixes, e.g. 1k, 8mb
+30197b04	cd0712cc 64552924	Tue Nov 15 12:08:09 2016 -0800	Merge pull request #374 from nats-io/fix_staticcheck_reports
+64552924	cd0712cc	Tue Nov 15 12:54:36 2016 -0700	Fix staticcheck reported issues
+2c7f1fa6	10cd7aa1 49976372	Thu Oct 20 14:07:08 2016 -0700	Merge pull request #363 from nats-io/fix_tls_config_copy
+8da901fc	8caed5ee 9f758bbd	Thu Oct 6 08:50:55 2016 -0700	Merge pull request #360 from nats-io/fix_setlogger
+44d18c3a	8caed5ee	Wed Oct 5 17:56:25 2016 -0600	[FIXED] SetLogger to be able set debug/trace to 0
+8caed5ee	e41d360e ad620607	Mon Sep 12 23:29:46 2016 -0400	Merge pull request #353 from bentranter/fix-non-ascii-quotes-in-html
+ad620607	e41d360e	Mon Sep 12 11:03:19 2016 -0400	Fix non-ASCII quotes in HTML
+e41d360e	c7e699ac 8f7f6e9f	Thu Aug 25 17:44:11 2016 -0500	Merge pull request #337 from nats-io/fix_tls_verify
+859949e7	14f5d091 811e0868	Wed Aug 17 23:04:33 2016 -0500	Merge pull request #332 from nats-io/fix_race_on_unsub
+14f5d091	638e249d e6039e0a	Wed Aug 17 06:31:02 2016 +0200	Merge pull request #328 from nats-io/fix_concurrent_monitor_poll
+a31e6b2b	29b31010 3b841204	Fri Aug 12 15:20:36 2016 -0700	Merge pull request #324 from nats-io/fix_route_ipv6
+29b31010	62923be3 fc7d92a0	Fri Aug 12 15:19:43 2016 -0700	Merge pull request #325 from nats-io/fix_link_local
+5e68e38c	a2c747a8 5185f10f	Thu Aug 4 18:20:50 2016 -0600	Merge pull request #319 from nats-io/fix_cluster_override
+1ac073d4	9a19e5a6 ab962bf0	Mon Jul 25 08:23:01 2016 -0700	Merge pull request #313 from nats-io/fix-typo
+ab962bf0	9a19e5a6	Mon Jul 25 08:50:29 2016 -0600	Fix typo in tls parameter doc and readme.
+d95765f0	fa4d3da2 d21210e0	Mon Jul 18 14:12:29 2016 -0500	Merge pull request #311 from nats-io/fix_pse_test
+ab11e04b	d31d9f41	Mon Jul 11 12:16:21 2016 -0700	Fixes for gofmt -s
+73a6b8ef	065ea554	Tue Jun 28 16:19:32 2016 -0700	Punctuation fix
+065ea554	1e4dc91a	Tue Jun 28 12:20:25 2016 -0700	Fixed typo
+67ed61c8	49e5dfd7	Fri Jun 17 09:59:39 2016 -0700	fixups for PR comments
+248bd8d3	a55b7c27	Thu Jun 16 21:46:54 2016 -0700	bug fix for _SYS.
+86e883ce	8e81a180	Thu Jun 9 12:49:34 2016 -0700	Down bump for bug fix release
+8e81a180	60db74f7	Thu Jun 9 12:27:11 2016 -0700	Fix for #288
+674109b9	249173d3	Mon Jun 6 21:27:45 2016 +0200	Fix possible authentication timeout after accepting CONNECT proto
+0cc17ede	178174bf 2bec28e1	Mon May 23 21:09:04 2016 -0700	Merge pull request #285 from nats-io/fix_test_http_host
+178174bf	7d79fa1e d46a17d2	Mon May 23 21:07:47 2016 -0700	Merge pull request #284 from nats-io/fix_deadlines
+d46a17d2	188f7bf8	Mon May 23 20:15:26 2016 -0600	Fix test
+2bec28e1	7d79fa1e	Mon May 23 20:05:09 2016 -0600	Fix test
+188f7bf8	7d79fa1e	Mon May 23 19:57:54 2016 -0600	Fix possible blocking on socket write or connection close (when using TLS)
+d4d2f5ae	dcb02f93	Sun May 22 13:40:50 2016 -0700	Fix flapper test
+1eb12a15	074c8ce9	Thu May 19 17:14:48 2016 +0200	fix concurrent map access
+074c8ce9	d932f568 13d67569	Wed May 18 12:16:59 2016 -0700	Merge pull request #279 from nats-io/fix_readme
+13d67569	d932f568	Wed May 18 13:14:10 2016 -0600	Fix command line parameters for clustering doc [ci skip]
+e1bd6f7e	26caad27 a8ff707a	Wed May 11 16:17:02 2016 -0700	Merge pull request #271 from nats-io/fix_info_arg
+a8ff707a	26caad27	Wed May 11 15:51:29 2016 -0600	Fix INFO_ARG parsing
+1ebf8969	b5a13653	Tue May 3 16:51:23 2016 -0700	Fixup for default options
+cd07cc37	4b20f9d9 bb81a37c	Tue Apr 26 17:16:34 2016 -0700	Merge pull request #260 from nats-io/fix_flapper
+bb81a37c	4b20f9d9	Tue Apr 26 18:14:01 2016 -0600	Fix flapping test
+603011d0	12fdd5de 7a437471	Fri Apr 22 18:36:37 2016 -0700	Merge pull request #252 from nats-io/fix_win_build
+12fdd5de	e45072f4 3691d144	Fri Apr 22 18:28:31 2016 -0700	Merge pull request #256 from nats-io/fix_data_race
+3691d144	3850b053	Fri Apr 22 18:06:38 2016 -0600	Fix missing capture of remoteID in removeClient
+3850b053	91b69f1f	Fri Apr 22 17:28:41 2016 -0600	Fix data race
+acddee9c	dc906fdd	Fri Apr 22 17:10:33 2016 -0600	Fix flapping test
+bff36036	f81d57c0	Thu Apr 21 18:34:24 2016 -0600	Fix Windows build
+4f333416	3e2c3714	Fri Apr 15 15:46:29 2016 -0700	Revert race on interest graph since it could cause dropped interest propogation, fix test instead
+3e2c3714	dda20f22	Fri Apr 15 13:16:13 2016 -0700	Fix race in interest propogation to new routes
+6ce89066	768f23b5	Sun Apr 3 14:40:45 2016 -0700	race fix
+fc3e345e	a4c46694	Thu Mar 31 07:34:13 2016 -0700	gosimple fixes
+a4c46694	f23f5551	Thu Mar 31 07:33:36 2016 -0700	gosimple fixes
+f23f5551	4b9bb4b9	Thu Mar 31 07:28:40 2016 -0700	gosimple fixes
+3a6e5ce5	3dd490a4 76324844	Wed Mar 23 15:11:29 2016 -0700	Merge pull request #229 from nats-io/fix_pong
+76324844	3dd490a4	Wed Mar 23 14:30:44 2016 -0700	Fixed handling of unprompted PONG protocols
+3dd490a4	50a14ac1	Sun Mar 20 16:06:28 2016 -1000	Go Report Card fixes
+50a14ac1	efce5d56	Sun Mar 20 15:57:43 2016 -1000	Modified debug and server id
+efce5d56	ebe6bcdb 2baac478	Tue Mar 15 14:52:09 2016 -0700	Merge pull request #224 from nats-io/fix-lint-issues
+ebe6bcdb	adb2a059 6263c66a	Tue Mar 8 08:00:26 2016 +0200	Merge pull request #222 from nats-io/fixes_for_windows
+6263c66a	adb2a059	Mon Mar 7 18:47:20 2016 -0700	Fixed code and tests to run on Windows
+49a7f229	d63b7ead	Mon Feb 29 22:08:49 2016 -0800	gofmt -s fixes
+7a13d68b	7a7cbfa8 3ea41279	Mon Feb 29 10:58:27 2016 -0800	Merge pull request #215 from nats-io/fix_route_discovery
+7c0a3b49	7a7cbfa8	Wed Feb 24 19:44:25 2016 -0700	Fix cluster formation when servers connect quickly
+b34d6eac	8e5f925b	Wed Feb 24 09:38:28 2016 -0800	ID prefix, print debug server ID on startup, bumped version
+7becd0ce	cba523ba	Tue Feb 23 21:32:48 2016 -0700	Fix ports for cluster bcrypt auth config files in server package
+4d3d070b	50988b74 ce79f524	Thu Feb 11 16:38:22 2016 -0800	Merge pull request #203 from nats-io/fix_route_ip
+ce79f524	fc38a833	Thu Feb 11 17:20:33 2016 -0700	Fix scheme for routes returned
+fc38a833	cef87212	Thu Feb 11 13:29:34 2016 -0700	Fix wrong check for error
+cef87212	50988b74	Thu Feb 11 11:23:41 2016 -0700	Fix route url to use remote IP instead of configured url when sending in INFO protocol.
+112413a4	d77f4161	Wed Feb 10 14:19:54 2016 -0700	Fix infinite server attempt to connect route to itself
+e5f0dabe	08b8dd79	Mon Feb 8 20:46:22 2016 -0700	Reduce memory allocations + fix c.NumConns that may have been wrong.
+08b8dd79	ecec51a7	Mon Feb 8 15:51:41 2016 -0700	Fix test to check Idle instead of relying on client id.
+d22b52b2	1a067133 b6292d6d	Mon Feb 8 12:18:14 2016 -0800	Merge pull request #198 from nats-io/fix_parallel_monitor_tests
+b6292d6d	945fb099	Mon Feb 8 09:33:39 2016 -0700	Fix monitor port usage for parallel tests.
+945fb099	1a067133	Mon Feb 8 09:30:44 2016 -0700	Fix missing return after Fatalf() calls.
+d7c8e6bc	ddda4abb	Sat Feb 6 07:09:13 2016 -0800	Fix races in monitoring
+703f928a	9702156d	Fri Feb 5 05:58:09 2016 -0800	Fix race on last activity
+6b4f6f20	7c89bc05 0540df47	Wed Feb 3 22:10:48 2016 -0800	Merge pull request #190 from nats-io/fix_race_monitor
+1d6dafc6	7c89bc05	Wed Feb 3 21:26:26 2016 -0700	Fix race on connz monitor (issue #189)
+76970a7c	ed7a0b18 eb0eabff	Wed Feb 3 18:51:26 2016 -0800	Merge pull request #188 from nats-io/fix_server_start_check
+437458e1	0a4da78f	Wed Feb 3 18:08:52 2016 -0700	Fix completeConnection + fix monitor test.
+0a4da78f	ed7a0b18	Wed Feb 3 15:01:00 2016 -0700	Fix code that checks that server is started + route test
+59a52ed8	2553ad7c	Sun Jan 10 09:14:26 2016 -0800	Documentation updates, minor fixes
+10e0093e	270bda9a	Sun Dec 20 06:02:01 2015 +0100	Fixed "golint ." issues
+d2a21daf	2031f0cb 964c277c	Tue Dec 8 14:25:55 2015 -0700	Merge pull request #159 from nats-io/fix_test
+a0cdd30b	58902330	Tue Dec 8 09:43:50 2015 -0700	Fix test that was failing on Windows.
+5036bbbf	58902330	Mon Dec 7 19:44:12 2015 -0700	Fix TLS issue where server started to receive TLS data on non TLS connection.
+1851ffa1	15cd10e8	Mon Dec 7 18:22:53 2015 -0700	Temporary fix for Travis issues on new GCE
+15cd10e8	5148f18c c1ebd4ef	Sun Dec 6 22:40:51 2015 -0800	Merge pull request #155 from wallyqs/fix-proto-snippet
+c1ebd4ef	5148f18c	Sun Dec 6 22:05:35 2015 -0800	Fix and tests for proto snippet function
+edfbd590	850da72a	Thu Dec 3 12:46:20 2015 -0800	fixes
+6b8e8d89	8fca9640	Mon Nov 30 18:29:53 2015 -0800	Use smaller cost function for test, fix race
+c56b3677	0ff1b55f	Fri Nov 20 16:08:13 2015 -0700	Fixed formatting
+5753e94b	200f2d95 97da4663	Wed Nov 18 22:08:27 2015 -0800	Merge pull request #140 from nats-io/fix-races
+97da4663	200f2d95	Wed Nov 18 20:39:56 2015 -0700	Fix races, add a test and adjust others.
+b6283536	1145d9c7	Tue Nov 17 21:36:18 2015 -0700	Fix possible non-propagation of subscription interest to routed server.
+17d23136	1145d9c7	Tue Nov 17 20:58:54 2015 -0700	Fix handling of duplicate SUB protocol.
+7b80d2e0	ea9216ab	Mon Oct 19 15:10:51 2015 +0200	Removed setBytes and fixed printout padding
+6b1843a8	27b27157	Sun Oct 4 01:45:38 2015 -0400	Fix port info
+45564dbd	7620f4ac	Thu Sep 17 19:02:00 2015 -0700	race fixes, go1.5 on travis
+8fb92dc7	a0ad3c7a	Wed Aug 26 23:04:10 2015 -0700	Fix parser bug around MSG protocol.
+ffa21f37	e8d736eb	Sun Aug 23 13:40:35 2015 -0700	fix race
+eed8b6cf	47994eaf	Sun Aug 23 13:23:02 2015 -0700	Fix for #111
+b15cde42	2f83e989 c226f749	Fri Aug 21 21:57:17 2015 -0700	Merge pull request #109 from olegshaldybin/fix-off-by-one
+c226f749	2f83e989	Fri Aug 21 17:10:24 2015 -0700	Fix off-by-one in matchLiteral
+3dc7bc2e	7071a951	Sat Aug 15 18:55:02 2015 -0400	Fix format
+3c513b6a	5cf02d76	Sat Aug 15 18:13:01 2015 -0400	Fix format
+a09f4208	65114552	Fri Aug 7 22:18:13 2015 -0700	Fix small typo
+cb47c2e4	afc1bb05	Thu Aug 6 01:01:29 2015 -0700	fixup for collapsed struct
+bb0e6429	0a0f3222	Thu Aug 6 00:20:17 2015 -0700	Fixed race condition
+ad25bb32	44c72fd0	Thu Jul 23 00:04:45 2015 +0000	Add more helper types for sorting and fix test
+44c72fd0	d9a98e11	Tue Jul 21 22:54:17 2015 +0000	Make the sort options constants and minor fixes
+4dd23e0f	e1bfe207	Tue Jul 14 14:55:36 2015 -0700	Added slow consumers to varz, fixed reporting bug
+96bab330	1c4a9be8	Fri Jun 19 12:08:11 2015 -0700	fixed import paths
+1c4a9be8	48c5bdf4	Fri Jun 19 11:46:13 2015 -0700	fixups for repo move
+5a2898e4	c1537a5b	Tue Jun 16 16:38:08 2015 -0700	Fix for CGO and 1.4
+d9c7392c	ed9d7337	Tue Jun 16 12:48:50 2015 -0700	race fixes, tests
+d98089a6	d932ac56	Mon Jun 15 18:46:31 2015 -0700	fixed some race conditions
+b6dc5477	7f794ad7 1b39a9fe	Wed Apr 8 09:14:44 2015 -0700	Merge pull request #83 from apcera/fix-split-msg
+1b39a9fe	7f794ad7	Tue Apr 7 22:23:48 2015 -0700	Fix sid for split messages
+d6fc17ed	27589747 02c311a1	Mon Mar 16 14:45:47 2015 -0700	Merge pull request #78 from tgregory/align-fix
+3808c728	27589747	Thu Mar 12 17:46:21 2015 +0300	Go\'s atomic align bug workaround.
+27589747	99f1ea29	Fri Jan 16 11:58:21 2015 -0800	Fixed logging bugs, added in additional tracing
+b2eca2ce	7b6fd2b4	Fri Jan 9 19:02:56 2015 -0800	pid prefix optional, fixup tests
+651d169d	eaf20c26	Fri Jan 9 18:47:16 2015 -0800	Changes to trace logging output, bug fixes
+48f6086f	b7932fdd	Thu Dec 18 20:15:12 2014 -0800	Fixed some debug logging
+54ac589d	8a1a1925	Tue Nov 25 23:38:58 2014 +0100	Client: missing Debugf, Noticef and Tracef methods
+8a1a1925	314ff511	Tue Nov 25 23:21:35 2014 +0100	fixing fatalf behaviour
+65ff5545	7341e4b4	Sun Nov 16 08:58:36 2014 -0800	Better split buffer testing for CONNECT, fixes issue #63.
+1dc2f95a	bc848471 5623b583	Wed Oct 29 12:04:50 2014 -0700	Merge pull request #59 from apcera/log-vet-fixes
+7fb53586	0d2688d3 738227a7	Tue Oct 7 22:06:13 2014 -0700	Merge pull request #56 from apcera/fix-coveralls-report
+d85225e5	502ba2e4	Mon Oct 6 22:11:13 2014 +0200	fixing http test, disabling keepalive
+1c6947ad	9dc875b8	Thu Sep 18 21:35:26 2014 -0700	Fix log calls
+8ccf0a8b	dacf0e03	Tue Aug 12 23:06:01 2014 -0700	Fix gofmt issues
+dacf0e03	39e70501	Tue Aug 12 23:03:38 2014 -0700	Fix Travis to properly fail the build on go fmt and go vet.
+c01c3e15	7e198fb2 afc9f622	Thu Jul 31 11:14:39 2014 -0700	Merge pull request #34 from simonleung8/selfReferenceFix
+bfe88c33	13d256b8	Thu Jul 24 16:01:28 2014 -0700	test fixups for 1.3, add in test for leaked route Go routines
+13d256b8	c0941c99	Thu Jul 24 08:03:04 2014 -0700	Fix minor races, add in 1.3 to testing, bump version
+e172f4bd	cd565148	Wed Apr 30 14:18:42 2014 -0700	Fixed issue #29 with subscriptions leaking across routes on auto-unsubscribe
+edc49b79	efa5629e	Thu Feb 6 19:24:11 2014 -0800	Fixes issues #21 and #22
+efa5629e	6eb1dd24	Sun Feb 2 16:01:46 2014 -0800	Proper link to Fowler algorithm, fixes #23
+6eb1dd24	ddb54bb1 0e471532	Wed Jan 8 21:26:50 2014 -0800	Merge pull request #19 from apcera/match_iteral_bug
+c3603654	ddb54bb1	Tue Jan 7 18:35:18 2014 -0800	Fix for MatchLiteral bug, report #18
+e01bd2a6	e7cc9c08	Thu Dec 12 14:39:51 2013 -0800	go fmt fix
+4af2395e	8f5518d5	Thu Dec 12 14:37:15 2013 -0800	go vet fixes for 1.2
+8f5518d5	6cbe5154	Thu Dec 12 14:17:58 2013 -0800	fixup for change to go vet
+c9fd57ad	7df7d988	Thu Dec 12 13:59:05 2013 -0800	fix for race in test
+04e3ca89	713df34e	Thu Dec 12 13:35:23 2013 -0800	travis fixups
+eb5c550f	4b3c8bc1	Thu Dec 12 13:11:37 2013 -0800	Fixed slice panic on MSG_ARG split buffer
+f811705e	da2a40a8 071b0177	Sat Oct 19 08:39:16 2013 -0700	Merge pull request #12 from klobucar/readme-fixes
+b32bc384	a50f5674	Fri Oct 18 12:53:47 2013 -0700	Fixes for reflective solicited routes
+e6b5c41e	7302d17c	Wed Aug 21 08:51:25 2013 -0700	fixed problem with parsing arrays
+6ab5d6a3	1d4e02fe	Mon Aug 19 15:09:41 2013 -0700	Fixed msg payload accounting, made http monitoring work in Go routines
+8fa31873	cb6a71fb	Mon Aug 19 12:14:29 2013 -0700	Attach /r/n to msg to avoid extra write. Fix auth checks
+13864700	4a8faf1d	Sat Aug 3 12:58:10 2013 -0700	Fixed bug where connection closed before sendInfo
+cf0f3020	377ade5e	Fri Aug 2 16:52:54 2013 -0700	log file support, data race fixes
+8026c3e9	1faadcd0	Tue Jul 30 18:44:57 2013 -0700	Fix data read race
+f015b7ca	43810e37	Tue Jul 30 11:31:08 2013 -0700	Make gnatsd build, fixes
+43810e37	bca2ccd7	Tue Jul 30 11:26:26 2013 -0700	Fixup for correct timeout opts
+d6357e63	ec4a46c9	Mon Jul 29 17:01:06 2013 -0700	Place MSG prefix in header, avoid append
+5ab044e2	dd99fd12	Sun Jul 28 09:36:30 2013 -0700	Removed debug stuff
+4193d6e1	1efeaa83	Sat Jul 27 23:50:07 2013 -0700	fixes, auth checks
+3ef0c232	e937168c	Sat Jul 27 13:32:57 2013 -0700	Fixed bug with block comments inside maps
+19a9b07b	ec391c9f	Wed Jul 17 09:22:22 2013 -0500	Fixup tests for changes to export functions
+bfee3686	411ad06d	Tue Jun 25 18:26:41 2013 -0500	Fixed bugs handling edge cases with auto-unsubscribe
+33fdc527	57e61f4b	Wed Jun 12 00:12:52 2013 -0700	Fixed data races
+ef2902ee	94a7d558	Tue Jun 11 22:32:17 2013 -0700	Fix data races
+ffbca0e4	fac20c79	Fri May 31 09:22:32 2013 -0700	Fix for travis setup changes
+fac20c79	7e3a1e46	Fri May 31 09:11:22 2013 -0700	Fix for travis setup changes
+7e3a1e46	d7684e4b	Fri May 31 09:03:40 2013 -0700	Fix for travis setup changes
+d7684e4b	37b3d912	Fri May 31 08:37:52 2013 -0700	Fix for travis setup changes
+37b3d912	0af6ae24	Fri May 31 08:36:04 2013 -0700	Fix for travis setup changes
+0af6ae24	2bdb8734	Fri May 31 08:12:51 2013 -0700	Fix bug that caused crash in go 1.1
+2bdb8734	c6dcc8e9	Mon Apr 22 13:52:45 2013 -0700	Fixing CEO\'s bugs
+6ec668df	d41c7959	Sun Mar 24 12:45:56 2013 -0700	Removed item debug print
+1e7c43e9	ff244836	Tue Feb 5 17:50:57 2013 -0800	Fix 2 for Travis
+ff244836	0ae60a45	Tue Feb 5 17:45:05 2013 -0800	Fixes for Travis changes
+be917e73	6b2e2e82	Tue Jan 22 10:26:56 2013 -0800	fix for go version print
+516f95fa	21079c9c	Mon Dec 10 09:47:51 2012 -0800	Proto fix for transition to args, proto err returns
+6ed2a692	3e3ac69e	Tue Nov 20 15:03:03 2012 -0800	Added fixme for queue sub perf
+bd43e276	6aee0919	Tue Nov 20 14:55:48 2012 -0800	Fixed queue sub logic for multiple queue groups
+a8a2c09d	30883c7c	Tue Nov 20 13:09:57 2012 -0800	Add in clone pub args, fix state cleanup
+0e2ae6c9	e3ef2fea	Tue Nov 13 19:25:51 2012 -0800	Fixed bad comments
+990de955	fd5d1973	Tue Nov 13 19:03:33 2012 -0800	Fixed bug that incorrectly used len comparison on first in chain
+fd5d1973	3ea6f64c	Tue Nov 13 17:58:43 2012 -0800	Fixed bug where Set for existing was not replacing
+3ea6f64c	c3eba763	Tue Nov 13 11:39:31 2012 -0800	more default options, fixed tests
+0f7e410b	332f47b5	Wed Nov 7 17:07:55 2012 -0800	Added stats, fixed matchLiteral bug
+1d35ccae	ce2c48e7	Wed Nov 7 14:32:26 2012 -0800	added fixme, moved declarations, gofmt
+c68ca0ff	566251b0	Wed Nov 7 13:36:15 2012 -0800	bugfix for key comparisons > DWSZ
+fca8f944	e74572df	Tue Nov 6 16:02:02 2012 -0800	Added AllKeys(), fixed bugs

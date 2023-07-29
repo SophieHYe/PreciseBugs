@@ -108,6 +108,7 @@ def create_bug_entry(nvd_vul: Mapping[str, any], pre_version_file_contents: Sequ
     return data_format.BugEntry(
         buggy_code=pre_version_file_contents,
         fixing_code=post_version_file_contents,
+        filenames=changed_filenames,
         buggy_code_start_loc=buggy_code_start_loc,
         buggy_code_end_loc=buggy_code_end_loc,
         fixing_code_start_loc=fixing_code_start_loc,

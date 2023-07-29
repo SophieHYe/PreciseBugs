@@ -1,0 +1,62 @@
+diff --git a/vcl/workben/fftester.cxx b/vcl/workben/fftester.cxx
+index 66b51a5d38e1..42c2447564e7 100644
+--- a/vcl/workben/fftester.cxx
++++ b/vcl/workben/fftester.cxx
+@@ -42,6 +42,7 @@
+ #include <vcl/wmf.hxx>
+ #include <vcl/wrkwin.hxx>
+ #include <fltcall.hxx>
++#include <filter/TiffReader.hxx>
+ #include <osl/file.hxx>
+ #include <osl/module.hxx>
+ #include <tools/stream.hxx>
+@@ -308,18 +309,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+         }
+         else if (strcmp(argv[2], "tif") == 0)
+         {
+-            static PFilterCall pfnImport(nullptr);
+-            if (!pfnImport)
+-            {
+-                osl::Module aLibrary;
+-                aLibrary.loadRelative(&thisModule, "libgielo.so");
+-                pfnImport = reinterpret_cast<PFilterCall>(
+-                    aLibrary.getFunctionSymbol("itiGraphicImport"));
+-                aLibrary.release();
+-            }
+             Graphic aGraphic;
+             SvFileStream aFileStream(out, StreamMode::READ);
+-            ret = static_cast<int>((*pfnImport)(aFileStream, aGraphic, nullptr));
++            ret = static_cast<int>(ImportTiffGraphicImport(aFileStream, aGraphic));
+         }
+         else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
+         {
+diff --git a/vcl/workben/tiffuzzer.cxx b/vcl/workben/tiffuzzer.cxx
+index 2ca83d7b05d8..14dcf42ecf89 100644
+--- a/vcl/workben/tiffuzzer.cxx
++++ b/vcl/workben/tiffuzzer.cxx
+@@ -9,6 +9,7 @@
+ 
+ #include <tools/stream.hxx>
+ #include <vcl/FilterConfigItem.hxx>
++#include <filter/TiffReader.hxx>
+ #include "commonfuzzer.hxx"
+ 
+ #include <config_features.h>
+@@ -39,8 +40,6 @@ extern "C" void* lo_get_custom_widget_func(const char*)
+     return nullptr;
+ }
+ 
+-extern "C" bool itiGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+-
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+@@ -53,7 +52,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+     {
+         SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
+         Graphic aGraphic;
+-        (void)itiGraphicImport(aStream, aGraphic, nullptr);
++        (void)ImportTiffGraphicImport(aStream, aGraphic);
+     }
+     catch (...)
+     {

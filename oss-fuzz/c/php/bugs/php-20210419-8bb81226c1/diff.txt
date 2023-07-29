@@ -1,0 +1,28 @@
+diff --git a/Zend/tests/debug_print_backtrace_from_main.phpt b/Zend/tests/debug_print_backtrace_from_main.phpt
+new file mode 100644
+index 0000000000..82f75742c7
+--- /dev/null
++++ b/Zend/tests/debug_print_backtrace_from_main.phpt
+@@ -0,0 +1,7 @@
++--TEST--
++Calling debug_print_backtrace() from main script
++--FILE--
++<?php
++debug_print_backtrace();
++?>
++--EXPECT--
+diff --git a/Zend/zend_builtin_functions.c b/Zend/zend_builtin_functions.c
+index 7db8f5fec0..55a1357e2b 100644
+--- a/Zend/zend_builtin_functions.c
++++ b/Zend/zend_builtin_functions.c
+@@ -1715,7 +1715,9 @@ ZEND_FUNCTION(debug_print_backtrace)
+ 	zval_ptr_dtor(&backtrace);
+ 
+ 	smart_str_0(&str);
+-	ZEND_WRITE(ZSTR_VAL(str.s), ZSTR_LEN(str.s));
++	if (str.s) {
++		ZEND_WRITE(ZSTR_VAL(str.s), ZSTR_LEN(str.s));
++	}
+ 	smart_str_free(&str);
+ }
+ 

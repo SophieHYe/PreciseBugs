@@ -1,0 +1,33 @@
+diff --git a/src/sksl/SkSLDefines.h b/src/sksl/SkSLDefines.h
+index da226f470f..21aa7a6b7f 100644
+--- a/src/sksl/SkSLDefines.h
++++ b/src/sksl/SkSLDefines.h
+@@ -18,9 +18,9 @@
+ #endif // SKSL_STANDALONE
+ 
+ #ifdef SKSL_STANDALONE
+-#define SkASSERT(x)
+-#define SkAssertResult(x) x
+-#define SkDEBUGCODE(x)
++#define SkASSERT(x) if (!(x)) abort();
++#define SkAssertResult(x) if (!(x)) abort();
++#define SkDEBUGCODE(...) __VA_ARGS__
+ #else
+ #include "SkTypes.h"
+ #endif
+diff --git a/src/sksl/SkSLSPIRVCodeGenerator.cpp b/src/sksl/SkSLSPIRVCodeGenerator.cpp
+index c68859424e..c851db98e7 100644
+--- a/src/sksl/SkSLSPIRVCodeGenerator.cpp
++++ b/src/sksl/SkSLSPIRVCodeGenerator.cpp
+@@ -3201,7 +3201,10 @@ void SPIRVCodeGenerator::writeInstructions(const Program& program, OutputStream&
+             main = entry.first;
+         }
+     }
+-    SkASSERT(main);
++    if (!main) {
++        fErrors.error(0, "program does not contain a main() function");
++        return;
++    }
+     for (auto entry : fVariableMap) {
+         const Variable* var = entry.first;
+         if (var->fStorage == Variable::kGlobal_Storage &&

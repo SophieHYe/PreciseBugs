@@ -1,0 +1,85 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 3c1bd885ec..28dcebce53 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -128,6 +128,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz40479.sksl",
+   "/sksl/errors/Ossfuzz40660.sksl",
+   "/sksl/errors/Ossfuzz44045.sksl",
++  "/sksl/errors/Ossfuzz44096.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowInlinedLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+@@ -279,6 +280,7 @@ sksl_spirv_tests = [
+   "/sksl/errors/LayoutInStruct.sksl",
+   "/sksl/errors/Ossfuzz36850.sksl",
+   "/sksl/errors/Ossfuzz37469.sksl",
++  "/sksl/errors/Ossfuzz44096.sksl",
+   "/sksl/errors/UndefinedFunction.sksl",
+   "/sksl/errors/UnusedInterfaceBlock.sksl",
+ ]
+diff --git a/resources/sksl/errors/Ossfuzz44096.sksl b/resources/sksl/errors/Ossfuzz44096.sksl
+new file mode 100644
+index 0000000000..a7757d5f2e
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz44096.sksl
+@@ -0,0 +1 @@
++void main() { half x; ++x * sk_SecondaryFragColor; }
+diff --git a/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp b/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
+index af0bfb08e8..52e18d3e9a 100644
+--- a/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
++++ b/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
+@@ -3083,9 +3083,6 @@ void SPIRVCodeGenerator::writeGlobalVar(ProgramKind kind, const VarDeclaration&
+         SkASSERT(!fProgram.fConfig->fSettings.fFragColorIsInOut);
+         return;
+     }
+-    if (var.modifiers().fLayout.fBuiltin == SK_SECONDARYFRAGCOLOR_BUILTIN) {
+-        return;
+-    }
+     if (this->isDead(var)) {
+         return;
+     }
+@@ -3095,13 +3092,20 @@ void SPIRVCodeGenerator::writeGlobalVar(ProgramKind kind, const VarDeclaration&
+         fTopLevelUniforms.push_back(&varDecl);
+         return;
+     }
++    // Add this global to the variable map.
+     const Type& type = var.type();
++    SpvId id = this->nextId(&type);
++    fVariableMap[&var] = id;
++    if (var.modifiers().fLayout.fBuiltin == SK_SECONDARYFRAGCOLOR_BUILTIN) {
++        // sk_SecondaryFragColor corresponds to gl_SecondaryFragColorEXT, which isn't supposed to
++        // appear in a SPIR-V program (it's only valid in ES2). Report an error.
++        fContext.fErrors->error(varDecl.fLine, "sk_SecondaryFragColor is not allowed in SPIR-V");
++        return;
++    }
+     Layout layout = var.modifiers().fLayout;
+     if (layout.fSet < 0 && storageClass == SpvStorageClassUniformConstant) {
+         layout.fSet = fProgram.fConfig->fSettings.fDefaultUniformSet;
+     }
+-    SpvId id = this->nextId(&type);
+-    fVariableMap[&var] = id;
+     SpvId typeId = this->getPointerType(type, storageClass);
+     this->writeInstruction(SpvOpVariable, typeId, id, storageClass, fConstantBuffer);
+     this->writeInstruction(SpvOpName, id, var.name(), fNameBuffer);
+diff --git a/tests/sksl/errors/Ossfuzz44096.asm.frag b/tests/sksl/errors/Ossfuzz44096.asm.frag
+new file mode 100644
+index 0000000000..77a8c8c8ee
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz44096.asm.frag
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 9: sk_SecondaryFragColor is not allowed in SPIR-V
++1 error
+diff --git a/tests/sksl/errors/Ossfuzz44096.glsl b/tests/sksl/errors/Ossfuzz44096.glsl
+new file mode 100644
+index 0000000000..358c6f5e37
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz44096.glsl
+@@ -0,0 +1,5 @@
++
++void main() {
++    float x;
++    ++x * gl_SecondaryFragColorEXT;
++}

@@ -1,0 +1,102 @@
+diff --git a/autotest/gcore/pixfun.py b/autotest/gcore/pixfun.py
+index 23b87d7508..798e044c92 100755
+--- a/autotest/gcore/pixfun.py
++++ b/autotest/gcore/pixfun.py
+@@ -28,6 +28,8 @@
+ # DEALINGS IN THE SOFTWARE.
+ ###############################################################################
+ 
++import math
++
+ import gdaltest
+ import pytest
+ 
+@@ -436,6 +438,25 @@ def test_pixfun_inv_r():
+     assert numpy.alltrue(data == 1. / refdata)
+ 
+ 
++def test_pixfun_inv_r_zero():
++
++    ds = gdal.Open("""<VRTDataset rasterXSize="1" rasterYSize="1">
++  <VRTRasterBand dataType="Float64" band="1" subClass="VRTDerivedRasterBand">
++    <Description>Inverse</Description>
++    <PixelFunctionType>inv</PixelFunctionType>
++    <SourceTransferType>Float64</SourceTransferType>
++    <ComplexSource>
++      <SourceFilename relativeToVRT="0">data/float32.tif</SourceFilename>
++      <SourceBand>1</SourceBand>
++      <ScaleOffset>0</ScaleOffset>
++      <ScaleRatio>0</ScaleRatio>
++    </ComplexSource>
++  </VRTRasterBand>
++</VRTDataset>""")
++    data = ds.GetRasterBand(1).ReadAsArray()
++    assert math.isinf(data[0][0])
++
++
+ ###############################################################################
+ # Verify computation of the inverse of a complex datasets.
+ 
+@@ -457,6 +478,26 @@ def test_pixfun_inv_c():
+     assert numpy.alltrue(abs(delta.imag) < 1e-13)
+ 
+ 
++def test_pixfun_inv_c_zero():
++
++    ds = gdal.Open("""<VRTDataset rasterXSize="1" rasterYSize="1">
++  <VRTRasterBand dataType="CFloat64" band="1" subClass="VRTDerivedRasterBand">
++    <Description>Inverse</Description>
++    <PixelFunctionType>inv</PixelFunctionType>
++    <SourceTransferType>CFloat64</SourceTransferType>
++    <ComplexSource>
++      <SourceFilename relativeToVRT="0">data/float32.tif</SourceFilename>
++      <SourceBand>1</SourceBand>
++      <ScaleOffset>0</ScaleOffset>
++      <ScaleRatio>0</ScaleRatio>
++    </ComplexSource>
++  </VRTRasterBand>
++</VRTDataset>""")
++    data = ds.GetRasterBand(1).ReadAsArray()
++    assert math.isinf(data[0][0].real)
++    assert math.isinf(data[0][0].imag)
++
++
+ ###############################################################################
+ # Verify intensity computation of a complex dataset.
+ 
+diff --git a/gdal/frmts/vrt/pixelfunctions.cpp b/gdal/frmts/vrt/pixelfunctions.cpp
+index 43320ba132..8f54a8e814 100644
+--- a/gdal/frmts/vrt/pixelfunctions.cpp
++++ b/gdal/frmts/vrt/pixelfunctions.cpp
+@@ -31,6 +31,8 @@
+ #include "gdal.h"
+ #include "vrtdataset.h"
+ 
++#include <limits>
++
+ CPL_CVSID("$Id$")
+ 
+ static CPLErr RealPixelFunc( void **papoSources, int nSources, void *pData,
+@@ -658,7 +660,9 @@ static CPLErr InvPixelFunc( void **papoSources, int nSources, void *pData,
+                 const double dfReal = SRCVAL(pReal, eSrcType, ii);
+                 const double dfImag = SRCVAL(pImag, eSrcType, ii);
+                 const double dfAux = dfReal * dfReal + dfImag * dfImag;
+-                const double adfPixVal[2] = { dfReal / dfAux, -dfImag / dfAux };
++                const double adfPixVal[2] = {
++                    dfAux == 0 ? std::numeric_limits<double>::infinity() : dfReal / dfAux,
++                    dfAux == 0 ? std::numeric_limits<double>::infinity() : -dfImag / dfAux };
+ 
+                 GDALCopyWords(
+                     adfPixVal, GDT_CFloat64, 0,
+@@ -674,8 +678,10 @@ static CPLErr InvPixelFunc( void **papoSources, int nSources, void *pData,
+             for( int iCol = 0; iCol < nXSize; ++iCol, ++ii ) {
+                 // Source raster pixels may be obtained with SRCVAL macro.
+                 // Not complex.
++                const double dfVal = SRCVAL(papoSources[0], eSrcType, ii);
+                 const double dfPixVal =
+-                    1.0 / SRCVAL(papoSources[0], eSrcType, ii);
++                    dfVal == 0 ? std::numeric_limits<double>::infinity() :
++                    1.0 / dfVal;
+ 
+                 GDALCopyWords(
+                     &dfPixVal, GDT_Float64, 0,

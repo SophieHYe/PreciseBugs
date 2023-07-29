@@ -1,0 +1,132 @@
+diff --cc src/txmempool.cpp
+index b2417190c,b2417190c..65c8b4ea6
+--- a/src/txmempool.cpp
++++ b/src/txmempool.cpp
+@@@ -14,9 -14,9 +14,7 @@@
+  #include <policy/policy.h>
+  #include <policy/settings.h>
+  #include <reverse_iterator.h>
+--#include <util/check.h>
+  #include <util/moneystr.h>
+--#include <util/overflow.h>
+  #include <util/system.h>
+  #include <util/time.h>
+  #include <validationinterface.h>
+@@@ -84,7 -84,7 +82,6 @@@ CTxMemPoolEntry::CTxMemPoolEntry(const 
+        entryHeight{entry_height},
+        spendsCoinbase{spends_coinbase},
+        sigOpCost{sigops_cost},
+--      m_modified_fee{nFee},
+        lockPoints{lp},
+        nSizeWithDescendants{GetTxSize()},
+        nModFeesWithDescendants{nFee},
+@@@ -92,11 -92,11 +89,11 @@@
+        nModFeesWithAncestors{nFee},
+        nSigOpCostWithAncestors{sigOpCost} {}
+  
+--void CTxMemPoolEntry::UpdateModifiedFee(CAmount fee_diff)
+++void CTxMemPoolEntry::UpdateFeeDelta(CAmount newFeeDelta)
+  {
+--    nModFeesWithDescendants = SaturatingAdd(nModFeesWithDescendants, fee_diff);
+--    nModFeesWithAncestors = SaturatingAdd(nModFeesWithAncestors, fee_diff);
+--    m_modified_fee = SaturatingAdd(m_modified_fee, fee_diff);
+++    nModFeesWithDescendants += newFeeDelta - feeDelta;
+++    nModFeesWithAncestors += newFeeDelta - feeDelta;
+++    feeDelta = newFeeDelta;
+  }
+  
+  void CTxMemPoolEntry::UpdateLockPoints(const LockPoints& lp)
+@@@ -438,7 -438,7 +435,7 @@@ void CTxMemPoolEntry::UpdateDescendantS
+  {
+      nSizeWithDescendants += modifySize;
+      assert(int64_t(nSizeWithDescendants) > 0);
+--    nModFeesWithDescendants = SaturatingAdd(nModFeesWithDescendants, modifyFee);
+++    nModFeesWithDescendants += modifyFee;
+      nCountWithDescendants += modifyCount;
+      assert(int64_t(nCountWithDescendants) > 0);
+  }
+@@@ -447,7 -447,7 +444,7 @@@ void CTxMemPoolEntry::UpdateAncestorSta
+  {
+      nSizeWithAncestors += modifySize;
+      assert(int64_t(nSizeWithAncestors) > 0);
+--    nModFeesWithAncestors = SaturatingAdd(nModFeesWithAncestors, modifyFee);
+++    nModFeesWithAncestors += modifyFee;
+      nCountWithAncestors += modifyCount;
+      assert(int64_t(nCountWithAncestors) > 0);
+      nSigOpCostWithAncestors += modifySigOps;
+@@@ -486,10 -486,10 +483,8 @@@ void CTxMemPool::addUnchecked(const CTx
+      // Update transaction for any feeDelta created by PrioritiseTransaction
+      CAmount delta{0};
+      ApplyDelta(entry.GetTx().GetHash(), delta);
+--    // The following call to UpdateModifiedFee assumes no previous fee modifications
+--    Assume(entry.GetFee() == entry.GetModifiedFee());
+      if (delta) {
+--        mapTx.modify(newit, [&delta](CTxMemPoolEntry& e) { e.UpdateModifiedFee(delta); });
+++        mapTx.modify(newit, [&delta](CTxMemPoolEntry& e) { e.UpdateFeeDelta(delta); });
+      }
+  
+      // Update cachedInnerUsage to include contained transaction's usage.
+@@@ -922,10 -922,10 +917,10 @@@ void CTxMemPool::PrioritiseTransaction(
+      {
+          LOCK(cs);
+          CAmount &delta = mapDeltas[hash];
+--        delta = SaturatingAdd(delta, nFeeDelta);
+++        delta += nFeeDelta;
+          txiter it = mapTx.find(hash);
+          if (it != mapTx.end()) {
+--            mapTx.modify(it, [&nFeeDelta](CTxMemPoolEntry& e) { e.UpdateModifiedFee(nFeeDelta); });
+++            mapTx.modify(it, [&delta](CTxMemPoolEntry& e) { e.UpdateFeeDelta(delta); });
+              // Now update all ancestors' modified fees with descendants
+              setEntries setAncestors;
+              uint64_t nNoLimit = std::numeric_limits<uint64_t>::max();
+diff --cc src/txmempool.h
+index 6320378c0,6320378c0..f5d5abc62
+--- a/src/txmempool.h
++++ b/src/txmempool.h
+@@@ -101,7 -101,7 +101,7 @@@ private
+      const unsigned int entryHeight; //!< Chain height when entering the mempool
+      const bool spendsCoinbase;      //!< keep track of transactions that spend a coinbase
+      const int64_t sigOpCost;        //!< Total sigop cost
+--    CAmount m_modified_fee;         //!< Used for determining the priority of the transaction for mining in a block
+++    CAmount feeDelta{0};            //!< Used for determining the priority of the transaction for mining in a block
+      LockPoints lockPoints;     //!< Track the height and time at which tx was final
+  
+      // Information about descendants of this transaction that are in the
+@@@ -131,7 -131,7 +131,7 @@@ public
+      std::chrono::seconds GetTime() const { return std::chrono::seconds{nTime}; }
+      unsigned int GetHeight() const { return entryHeight; }
+      int64_t GetSigOpCost() const { return sigOpCost; }
+--    CAmount GetModifiedFee() const { return m_modified_fee; }
+++    CAmount GetModifiedFee() const { return nFee + feeDelta; }
+      size_t DynamicMemoryUsage() const { return nUsageSize; }
+      const LockPoints& GetLockPoints() const { return lockPoints; }
+  
+@@@ -139,8 -139,8 +139,9 @@@
+      void UpdateDescendantState(int64_t modifySize, CAmount modifyFee, int64_t modifyCount);
+      // Adjusts the ancestor state
+      void UpdateAncestorState(int64_t modifySize, CAmount modifyFee, int64_t modifyCount, int64_t modifySigOps);
+--    // Updates the modified fees with descendants/ancestors.
+--    void UpdateModifiedFee(CAmount fee_diff);
+++    // Updates the fee delta used for mining priority score, and the
+++    // modified fees with descendants/ancestors.
+++    void UpdateFeeDelta(CAmount newFeeDelta);
+      // Update the LockPoints after a reorg
+      void UpdateLockPoints(const LockPoints& lp);
+  
+diff --cc test/sanitizer_suppressions/ubsan
+index 67ef51289,67ef51289..e6cfe5f81
+--- a/test/sanitizer_suppressions/ubsan
++++ b/test/sanitizer_suppressions/ubsan
+@@@ -1,10 -1,10 +1,10 @@@
+  # -fsanitize=undefined suppressions
+  # =================================
+--# The suppressions would be `sanitize-type:ClassName::MethodName`,
+++# This would be `signed-integer-overflow:CTxMemPool::PrioritiseTransaction`,
+  # however due to a bug in clang the symbolizer is disabled and thus no symbol
+  # names can be used.
+  # See https://github.com/google/sanitizers/issues/1364
+--
+++signed-integer-overflow:txmempool.cpp
+  # https://github.com/bitcoin/bitcoin/pull/21798#issuecomment-829180719
+  signed-integer-overflow:policy/feerate.cpp
+  

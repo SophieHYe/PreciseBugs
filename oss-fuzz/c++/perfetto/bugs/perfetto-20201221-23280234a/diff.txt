@@ -1,0 +1,97 @@
+diff --git a/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc b/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
+index 8dd2c9a6f..7d03af657 100644
+--- a/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
++++ b/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
+@@ -165,7 +165,7 @@ std::unique_ptr<GlobalNodeGraph> MemoryTrackerSnapshotParser::GenerateGraph(
+ void MemoryTrackerSnapshotParser::EmitRows(int64_t ts,
+                                            GlobalNodeGraph& graph,
+                                            LevelOfDetail level_of_detail) {
+-  IdNodeMap id_node_table;
++  IdNodeMap id_node_map;
+ 
+   // For now, we use the existing global instant event track for chrome events,
+   // since memory dumps are global.
+@@ -189,7 +189,7 @@ void MemoryTrackerSnapshotParser::EmitRows(int64_t ts,
+             ->Insert(process_row)
+             .id;
+     EmitMemorySnapshotNodeRows(*(it_process.second->root()),
+-                               proc_snapshot_row_id, id_node_table);
++                               proc_snapshot_row_id, id_node_map);
+   }
+ 
+   // For each snapshot nodes from shared_memory_graph will be associated
+@@ -204,15 +204,21 @@ void MemoryTrackerSnapshotParser::EmitRows(int64_t ts,
+           ->Insert(fake_process_row)
+           .id;
+   EmitMemorySnapshotNodeRows(*(graph.shared_memory_graph()->root()),
+-                             fake_proc_snapshot_row_id, id_node_table);
++                             fake_proc_snapshot_row_id, id_node_map);
+ 
+-  for (const auto& it_edge : graph.edges()) {
++  for (const auto& edge : graph.edges()) {
+     tables::MemorySnapshotEdgeTable::Row edge_row;
+-    edge_row.source_node_id = static_cast<tables::MemorySnapshotNodeTable::Id>(
+-        id_node_table.find(it_edge.source()->id())->second);
+-    edge_row.target_node_id = static_cast<tables::MemorySnapshotNodeTable::Id>(
+-        id_node_table.find(it_edge.target()->id())->second);
+-    edge_row.importance = static_cast<uint32_t>(it_edge.priority());
++    auto source_it = id_node_map.find(edge.source()->id());
++    if (source_it == id_node_map.end())
++      continue;
++    edge_row.source_node_id =
++        static_cast<tables::MemorySnapshotNodeTable::Id>(source_it->second);
++    auto target_it = id_node_map.find(edge.target()->id());
++    if (target_it == id_node_map.end())
++      continue;
++    edge_row.target_node_id =
++        static_cast<tables::MemorySnapshotNodeTable::Id>(target_it->second);
++    edge_row.importance = static_cast<uint32_t>(edge.priority());
+     context_->storage->mutable_memory_snapshot_edge_table()->Insert(edge_row);
+   }
+ }
+diff --git a/src/trace_processor/trace_database_integrationtest.cc b/src/trace_processor/trace_database_integrationtest.cc
+index a7067e7a6..e963b54cb 100644
+--- a/src/trace_processor/trace_database_integrationtest.cc
++++ b/src/trace_processor/trace_database_integrationtest.cc
+@@ -266,6 +266,7 @@ TEST_F(TraceProcessorIntegrationTest, Clusterfuzz17805) {
+ #define MAYBE_Clusterfuzz21890 DISABLED_Clusterfuzz21890
+ #define MAYBE_Clusterfuzz23053 DISABLED_Clusterfuzz23053
+ #define MAYBE_Clusterfuzz28338 DISABLED_Clusterfuzz28338
++#define MAYBE_Clusterfuzz28766 DISABLED_Clusterfuzz28766
+ #else  // PERFETTO_DCHECK_IS_ON()
+ #define MAYBE_Clusterfuzz20215 Clusterfuzz20215
+ #define MAYBE_Clusterfuzz20292 Clusterfuzz20292
+@@ -273,6 +274,7 @@ TEST_F(TraceProcessorIntegrationTest, Clusterfuzz17805) {
+ #define MAYBE_Clusterfuzz21890 Clusterfuzz21890
+ #define MAYBE_Clusterfuzz23053 Clusterfuzz23053
+ #define MAYBE_Clusterfuzz28338 Clusterfuzz28338
++#define MAYBE_Clusterfuzz28766 Clusterfuzz28766
+ #endif  // PERFETTO_DCHECK_IS_ON()
+ 
+ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz20215) {
+@@ -299,6 +301,10 @@ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz28338) {
+   ASSERT_TRUE(LoadTrace("clusterfuzz_28338", 4096).ok());
+ }
+ 
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz28766) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_28766", 4096).ok());
++}
++
+ TEST_F(TraceProcessorIntegrationTest, RestoreInitialTables) {
+   ASSERT_TRUE(LoadTrace("android_sched_and_ps.pb").ok());
+ 
+diff --git a/tools/install-build-deps b/tools/install-build-deps
+index ee58f9d04..f17a8f0df 100755
+--- a/tools/install-build-deps
++++ b/tools/install-build-deps
+@@ -217,8 +217,8 @@ BUILD_DEPS_HOST = [
+     # Example traces for regression tests.
+     Dependency(
+         'buildtools/test_data.zip',
+-        'https://storage.googleapis.com/perfetto/test-data-20201207-131703.zip',
+-        '2c894eee8e19cb3247dd0aff14e7c4b14c09c305988e901f852fb004ea2e6716',
++        'https://storage.googleapis.com/perfetto/test-data-20201221-112454.zip',
++        'bdb45847b3bfc3f12f10be69e669187e114944ca1ea386a455b0f31d3b1b2c1c',
+         'all',
+     ),
+ 

@@ -1,0 +1,15 @@
+diff --git a/poppler/JBIG2Stream.cc b/poppler/JBIG2Stream.cc
+index a1d84891..a2f72fc0 100644
+--- a/poppler/JBIG2Stream.cc
++++ b/poppler/JBIG2Stream.cc
+@@ -771,7 +771,9 @@ void JBIG2Bitmap::combine(JBIG2Bitmap *bitmap, int x, int y, unsigned int combOp
+     } else {
+         x0 = 0;
+     }
+-    x1 = x + bitmap->w;
++    if (unlikely(checkedAdd(x, bitmap->w, &x1))) {
++        return;
++    }
+     if (x1 > w) {
+         x1 = w;
+     }

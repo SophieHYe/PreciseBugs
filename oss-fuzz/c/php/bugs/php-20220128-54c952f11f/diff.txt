@@ -1,0 +1,52 @@
+diff --git a/ext/opcache/jit/zend_jit_trace.c b/ext/opcache/jit/zend_jit_trace.c
+index f4fe85f336..840a5610f9 100644
+--- a/ext/opcache/jit/zend_jit_trace.c
++++ b/ext/opcache/jit/zend_jit_trace.c
+@@ -4624,14 +4624,16 @@ static const void *zend_jit_trace(zend_jit_trace_rec *trace_buffer, uint32_t par
+ 							break;
+ 						}
+ 						op2_addr = OP2_REG_ADDR();
++						op2_info = OP2_INFO();
+ 						if (ra
+ 						 && ssa_op->op2_def >= 0
+-						 && !ssa->vars[ssa_op->op2_def].no_val) {
++						 && (!ssa->vars[ssa_op->op2_def].no_val
++						  || (zend_jit_trace_type_to_info(STACK_MEM_TYPE(stack, EX_VAR_TO_NUM(opline->op2.var))) & MAY_BE_ANY) !=
++						      (op2_info & MAY_BE_ANY))) {
+ 							op2_def_addr = OP2_DEF_REG_ADDR();
+ 						} else {
+ 							op2_def_addr = op2_addr;
+ 						}
+-						op2_info = OP2_INFO();
+ 						CHECK_OP2_TRACE_TYPE();
+ 						op1_info = OP1_INFO();
+ 						if ((op1_info & (MAY_BE_ANY|MAY_BE_UNDEF|MAY_BE_GUARD)) == MAY_BE_LONG
+diff --git a/ext/opcache/tests/jit/assign_050.phpt b/ext/opcache/tests/jit/assign_050.phpt
+new file mode 100644
+index 0000000000..21fcf9ef79
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_050.phpt
+@@ -0,0 +1,23 @@
++--TEST--
++JIT ASSIGN: incorrect type store elimination
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--FILE--
++<?php
++function foo($a) {
++    $b = $a;
++    $b =! $a = $a + $b & $b & $b = $b = $a = $a + $b & $a += $a;
++    $b = $b = $a = $a + $b & $b & $b = $a = $a + $b = $b = $a = $a + $b = $a += $a;
++}
++
++for ($i = 0; $i < 3; $i++) {
++    @foo(39087589046889428661);
++}
++?>
++DONE
++--EXPECT--
++DONE

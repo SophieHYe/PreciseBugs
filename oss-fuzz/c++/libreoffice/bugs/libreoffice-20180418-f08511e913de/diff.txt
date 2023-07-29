@@ -1,0 +1,13 @@
+diff --git a/sfx2/source/appl/appinit.cxx b/sfx2/source/appl/appinit.cxx
+index 348ad2b4c1b8..1c2d49d0f230 100644
+--- a/sfx2/source/appl/appinit.cxx
++++ b/sfx2/source/appl/appinit.cxx
+@@ -142,7 +142,7 @@ Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceName
+ }
+ 
+ 
+-typedef bool ( *PFunc_getSpecialCharsForEdit)( vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
++typedef bool ( *PFunc_getSpecialCharsForEdit)( vcl::Window* const i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
+ 
+ 
+ // Lazy binding of the GetSpecialCharsForEdit function as it resides in

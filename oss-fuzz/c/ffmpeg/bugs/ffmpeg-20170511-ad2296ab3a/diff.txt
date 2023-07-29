@@ -1,0 +1,96 @@
+diff --git a/libavcodec/aacdec_fixed.c b/libavcodec/aacdec_fixed.c
+index acb8178337..e3c68a9767 100644
+--- a/libavcodec/aacdec_fixed.c
++++ b/libavcodec/aacdec_fixed.c
+@@ -180,7 +180,7 @@ static void subband_scale(int *dst, int *src, int scale, int offset, int len)
+     }
+     else {
+         s = s + 32;
+-        round = 1 << (s-1);
++        round = 1U << (s-1);
+         for (i=0; i<len; i++) {
+             out = (int)((int64_t)((int64_t)src[i] * c + round) >> s);
+             dst[i] = out * ssign;
+diff --git a/libavcodec/aacdec_template.c b/libavcodec/aacdec_template.c
+index b20855b99d..d034ae4feb 100644
+--- a/libavcodec/aacdec_template.c
++++ b/libavcodec/aacdec_template.c
+@@ -2796,9 +2796,9 @@ static void spectral_to_sample(AACContext *ac, int samples)
+                     int j;
+                     /* preparation for resampler */
+                     for(j = 0; j<samples; j++){
+-                        che->ch[0].ret[j] = (int32_t)av_clipl_int32((int64_t)che->ch[0].ret[j]<<7)+0x8000;
++                        che->ch[0].ret[j] = (int32_t)av_clip64((int64_t)che->ch[0].ret[j]<<7, INT32_MIN, INT32_MAX-0x8000)+0x8000;
+                         if(type == TYPE_CPE)
+-                            che->ch[1].ret[j] = (int32_t)av_clipl_int32((int64_t)che->ch[1].ret[j]<<7)+0x8000;
++                            che->ch[1].ret[j] = (int32_t)av_clip64((int64_t)che->ch[1].ret[j]<<7, INT32_MIN, INT32_MAX-0x8000)+0x8000;
+                     }
+                 }
+ #endif /* USE_FIXED */
+diff --git a/libavcodec/sbrdsp_fixed.c b/libavcodec/sbrdsp_fixed.c
+index f4e3de0c71..fb9aba4e8d 100644
+--- a/libavcodec/sbrdsp_fixed.c
++++ b/libavcodec/sbrdsp_fixed.c
+@@ -34,8 +34,9 @@
+ static SoftFloat sbr_sum_square_c(int (*x)[2], int n)
+ {
+     SoftFloat ret;
+-    int64_t accu = 0;
+-    int i, nz, round;
++    uint64_t accu = 0, round;
++    int i, nz;
++    unsigned u;
+ 
+     for (i = 0; i < n; i += 2) {
+         // Larger values are inavlid and could cause overflows of accu.
+@@ -49,22 +50,22 @@ static SoftFloat sbr_sum_square_c(int (*x)[2], int n)
+         accu += (int64_t)x[i + 1][1] * x[i + 1][1];
+     }
+ 
+-    i = (int)(accu >> 32);
+-    if (i == 0) {
++    u = accu >> 32;
++    if (u == 0) {
+         nz = 1;
+     } else {
+-        nz = 0;
+-        while (FFABS(i) < 0x40000000) {
+-            i <<= 1;
++        nz = -1;
++        while (u < 0x80000000U) {
++            u <<= 1;
+             nz++;
+         }
+         nz = 32 - nz;
+     }
+ 
+-    round = 1 << (nz-1);
+-    i = (int)((accu + round) >> nz);
+-    i >>= 1;
+-    ret = av_int2sf(i, 15 - nz);
++    round = 1ULL << (nz-1);
++    u = ((accu + round) >> nz);
++    u >>= 1;
++    ret = av_int2sf(u, 15 - nz);
+ 
+     return ret;
+ }
+@@ -107,7 +108,8 @@ static void sbr_qmf_deint_neg_c(int *v, const int *src)
+ 
+ static av_always_inline SoftFloat autocorr_calc(int64_t accu)
+ {
+-        int nz, mant, expo, round;
++        int nz, mant, expo;
++        unsigned round;
+         int i = (int)(accu >> 32);
+         if (i == 0) {
+             nz = 1;
+@@ -120,7 +122,7 @@ static av_always_inline SoftFloat autocorr_calc(int64_t accu)
+             nz = 32-nz;
+         }
+ 
+-        round = 1 << (nz-1);
++        round = 1U << (nz-1);
+         mant = (int)((accu + round) >> nz);
+         mant = (mant + 0x40)>>7;
+         mant <<= 6;

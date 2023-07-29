@@ -1,0 +1,37 @@
+diff --git a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+index 4d9fd18d71e7..453f506d7980 100644
+--- a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
++++ b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+@@ -5276,9 +5276,9 @@ static SDValue extractShiftForRotate(SelectionDAG &DAG, SDValue OppShift,
+ 
+   // Compute the shift amount we need to extract to complete the rotate.
+   const unsigned VTWidth = ShiftedVT.getScalarSizeInBits();
+-  APInt NeededShiftAmt = VTWidth - OppShiftCst->getAPIntValue();
+-  if (NeededShiftAmt.isNegative())
++  if (OppShiftCst->getAPIntValue().ugt(VTWidth))
+     return SDValue();
++  APInt NeededShiftAmt = VTWidth - OppShiftCst->getAPIntValue();
+   // Normalize the bitwidth of the two mul/udiv/shift constant operands.
+   APInt ExtractFromAmt = ExtractFromCst->getAPIntValue();
+   APInt OppLHSAmt = OppLHSCst->getAPIntValue();
+diff --git a/llvm/test/CodeGen/X86/combine-rotates.ll b/llvm/test/CodeGen/X86/combine-rotates.ll
+index 24d3beb41f6b..93fc78743575 100644
+--- a/llvm/test/CodeGen/X86/combine-rotates.ll
++++ b/llvm/test/CodeGen/X86/combine-rotates.ll
+@@ -341,3 +341,16 @@ define <4 x i32> @rotate_demanded_bits_3(<4 x i32>, <4 x i32>) {
+   %9 = or <4 x i32> %5, %8
+   ret <4 x i32> %9
+ }
++
++; OSS Fuzz: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9935
++define i32 @fuzz9935() {
++; CHECK-LABEL: fuzz9935:
++; CHECK:       # %bb.0:
++; CHECK-NEXT:    movl $-1, %eax
++; CHECK-NEXT:    retq
++  %1 = trunc i40 549755813887 to i32
++  %2 = mul i32 %1, %1
++  %3 = lshr i32 %2, %1
++  %4 = or i32 %3, %2
++  ret i32 %4
++}

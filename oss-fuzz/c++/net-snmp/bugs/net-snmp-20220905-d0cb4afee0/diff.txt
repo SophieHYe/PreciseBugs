@@ -1,0 +1,13 @@
+diff --git a/testing/fuzzing/snmp_e2e_fuzzer.c b/testing/fuzzing/snmp_e2e_fuzzer.c
+index 031e5d3d68..0743d9beff 100644
+--- a/testing/fuzzing/snmp_e2e_fuzzer.c
++++ b/testing/fuzzing/snmp_e2e_fuzzer.c
+@@ -119,6 +119,8 @@ LLVMFuzzerTestOneInput(const uint8_t * data, size_t size)
+     fuzz_fake_pcap(fuzz_buf, size);
+ 
+     snmp_close(ss);
++    /* To do: register session 'ss' properly and remove the call below. */
++    netsnmp_cleanup_session(ss);
+     free(ss);
+     free(fuzz_buf);
+ 

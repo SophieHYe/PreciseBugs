@@ -1,0 +1,13 @@
+diff --git a/bin/oss-fuzz-build.sh b/bin/oss-fuzz-build.sh
+index 5cc1325c6980..07c4db955242 100755
+--- a/bin/oss-fuzz-build.sh
++++ b/bin/oss-fuzz-build.sh
+@@ -10,7 +10,7 @@ fi
+ export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-blacklist.txt"
+ #similarly force the -fsanitize etc args in as well as pthread to get
+ #things to link successfully during the build
+-export LDFLAGS="$CFLAGS -lpthread"
++export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
+ 
+ cd $WORK
+ $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC

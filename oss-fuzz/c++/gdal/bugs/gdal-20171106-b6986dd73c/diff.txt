@@ -1,0 +1,12 @@
+diff --git a/gdal/gcore/rasterio.cpp b/gdal/gcore/rasterio.cpp
+index d613fd2b7d..690fb5d835 100644
+--- a/gdal/gcore/rasterio.cpp
++++ b/gdal/gcore/rasterio.cpp
+@@ -1544,6 +1544,7 @@ CPLErr GDALDataset::RasterIOResampled(
+             GDALClose(poMEMDS);
+             CPLFree(pChunk);
+             CPLFree(pabyChunkNoDataMask);
++            CPLFree(papoDstBands);
+             return CE_Failure;
+         }
+ 

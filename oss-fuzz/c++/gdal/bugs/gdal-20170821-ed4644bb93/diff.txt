@@ -1,0 +1,310 @@
+diff --git a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
+index 9a5f55859c..d6464838fd 100644
+--- a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
++++ b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.cpp
+@@ -71,6 +71,7 @@ namespace Selafin {
+         nMinyIndex(-1),
+         nMaxyIndex(-1),
+         bTreeUpdateNeeded(true),
++        nFileSize(0),
+         fp(NULL),
+         pszFilename(NULL),
+         pszTitle(NULL),
+@@ -372,11 +373,11 @@ namespace Selafin {
+         return 1;
+     }
+ 
+-    int read_intarray(VSILFILE *fp,int *&panData,bool bDiscard) {
++    int read_intarray(VSILFILE *fp,int *&panData,int nFileSize,bool bDiscard) {
+         int nLength=0;
+         read_integer(fp,nLength);
+         panData = NULL;
+-        if (nLength<0 || nLength+1<=0) {
++        if (nLength<0 || nLength+1<=0 || nLength/4 > nFileSize) {
+             CPLError(CE_Failure,CPLE_FileIO,"%s",SELAFIN_ERROR_MESSAGE);
+             return -1;
+         }
+@@ -443,10 +444,10 @@ namespace Selafin {
+         return 1;
+     }
+ 
+-    int read_floatarray(VSILFILE *fp,double **papadfData,bool bDiscard) {
++    int read_floatarray(VSILFILE *fp,double **papadfData,int nFileSize,bool bDiscard) {
+         int nLength=0;
+         read_integer(fp,nLength);
+-        if (nLength<0 || nLength+1<=0) {
++        if (nLength<0 || nLength+1<=0 || nLength/4 > nFileSize) {
+             CPLError(CE_Failure,CPLE_FileIO,"%s",SELAFIN_ERROR_MESSAGE);
+             return -1;
+         }
+@@ -487,24 +488,28 @@ namespace Selafin {
+         return 1;
+     }
+ 
+-    Header *read_header(VSILFILE *fp,const char *pszFilename) {
+-        // Get the total file size (used later to estimate the number of time steps)
++    void Header::UpdateFileSize()
++    {
+         VSIFSeekL(fp,0,SEEK_END);
+-        int nFileSize = (int)VSIFTellL(fp);
++        nFileSize = VSIFTellL(fp);
+         VSIRewindL(fp);
++    }
++
++    Header *read_header(VSILFILE *fp,const char *pszFilename) {
+         // Save the filename
+         Header *poHeader=new Header();
+         poHeader->fp=fp;
++        poHeader->UpdateFileSize();
+         poHeader->pszFilename=CPLStrdup(pszFilename);
+         int *panTemp = NULL;
+         // Read the title
+-        int nLength = read_string(fp,poHeader->pszTitle,nFileSize);
++        int nLength = read_string(fp,poHeader->pszTitle,poHeader->nFileSize);
+         if (nLength==0) {
+             delete poHeader;
+             return NULL;
+         }
+         // Read the array of 2 integers, with the number of variables at the first position
+-        nLength=read_intarray(fp,panTemp);
++        nLength=read_intarray(fp,panTemp,poHeader->nFileSize);
+         if (nLength!=2) {
+             delete poHeader;
+             CPLFree(panTemp);
+@@ -519,7 +524,7 @@ namespace Selafin {
+             return NULL;
+         }
+         if( poHeader->nVar > 1000000 &&
+-            nFileSize / static_cast<int>(sizeof(int)) < poHeader->nVar)
++            poHeader->nFileSize / sizeof(int) < static_cast<unsigned>(poHeader->nVar))
+         {
+             poHeader->nVar = 0;
+             delete poHeader;
+@@ -534,7 +539,7 @@ namespace Selafin {
+             return NULL;
+         }
+         for (int i=0;i<poHeader->nVar;++i) {
+-            nLength=read_string(fp,poHeader->papszVariables[i],nFileSize);
++            nLength=read_string(fp,poHeader->papszVariables[i],poHeader->nFileSize);
+             if (nLength==0) {
+                 poHeader->nVar = i;
+                 delete poHeader;
+@@ -548,7 +553,7 @@ namespace Selafin {
+             }
+         }
+         // Read an array of 10 integers
+-        nLength=read_intarray(fp,panTemp);
++        nLength=read_intarray(fp,panTemp,poHeader->nFileSize);
+         if (nLength<10) {
+             delete poHeader;
+             CPLFree(panTemp);
+@@ -561,7 +566,7 @@ namespace Selafin {
+         for (size_t i=4;i<9;++i) poHeader->anUnused[i-2]=panTemp[i];
+         // If the last integer was 1, read an array of 6 integers with the starting date
+         if (panTemp[9]==1) {
+-            nLength=read_intarray(fp,poHeader->panStartDate);
++            nLength=read_intarray(fp,poHeader->panStartDate,poHeader->nFileSize);
+             if (nLength<6) {
+                 delete poHeader;
+                 CPLFree(panTemp);
+@@ -570,7 +575,7 @@ namespace Selafin {
+         }
+         CPLFree(panTemp);
+         // Read an array of 4 integers with the number of elements, points and points per element
+-        nLength=read_intarray(fp,panTemp);
++        nLength=read_intarray(fp,panTemp,poHeader->nFileSize);
+         if (nLength<4) {
+             delete poHeader;
+             CPLFree(panTemp);
+@@ -586,7 +591,7 @@ namespace Selafin {
+         }
+         CPLFree(panTemp);
+         // Read the connectivity table as an array of nPointsPerElement*nElements integers, and check if all point numbers are valid
+-        nLength=read_intarray(fp,poHeader->panConnectivity);
++        nLength=read_intarray(fp,poHeader->panConnectivity,poHeader->nFileSize);
+         if (nLength!=poHeader->nElements*poHeader->nPointsPerElement) {
+             delete poHeader;
+             return NULL;
+@@ -598,14 +603,14 @@ namespace Selafin {
+             }
+         }
+         // Read the array of nPoints integers with the border points
+-        nLength=read_intarray(fp,poHeader->panBorder);
++        nLength=read_intarray(fp,poHeader->panBorder,poHeader->nFileSize);
+         if (nLength!=poHeader->nPoints) {
+             delete poHeader;
+             return NULL;
+         }
+         // Read two arrays of nPoints floats with the coordinates of each point
+         for (size_t i=0;i<2;++i) {
+-            read_floatarray(fp,poHeader->paadfCoords+i);
++            read_floatarray(fp,poHeader->paadfCoords+i,poHeader->nFileSize);
+             if (nLength<poHeader->nPoints) {
+                 delete poHeader;
+                 return NULL;
+@@ -617,7 +622,7 @@ namespace Selafin {
+         // Update the size of the header and calculate the number of time steps
+         poHeader->setUpdated();
+         int nPos=poHeader->getPosition(0);
+-        poHeader->nSteps=(nFileSize-nPos)/(poHeader->getPosition(1)-nPos);
++        poHeader->nSteps=(poHeader->nFileSize-nPos)/(poHeader->getPosition(1)-nPos);
+         return poHeader;
+     }
+ 
+diff --git a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.h b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.h
+index 8ad83f5393..b80a38c964 100644
+--- a/gdal/ogr/ogrsf_frmts/selafin/io_selafin.h
++++ b/gdal/ogr/ogrsf_frmts/selafin/io_selafin.h
+@@ -45,6 +45,7 @@ class Header {
+         int nMaxyIndex;    //!< Index of the point at the northern border of the bounding box
+         bool bTreeUpdateNeeded;  //!< Tell if the quad tree has to be updated
+     public:
++        vsi_l_offset nFileSize;  //!< Size (in bytes) of the file
+         //size_t nRefCount;   //!< Number of references to this object
+         VSILFILE *fp;   //!< Pointer to the file with the layers
+         char *pszFilename;  //!< Name of the Selafin file
+@@ -127,6 +128,8 @@ class Header {
+          * \param nIndex Index of the point which has to be removed
+          */
+         void removePoint(int nIndex);
++
++        void UpdateFileSize();
+ };
+ 
+ #ifdef notdef
+@@ -226,7 +229,7 @@ int write_string(VSILFILE *fp,char *pszData,size_t nLength=0);
+  * \param bDiscard If true, the function does not attempt to save the value read in the variable nData, but only advances in the file as it should. Default value is false.
+  * \return Number of elements in array read, -1 if an error occurred
+  */
+-int read_intarray(VSILFILE *fp,int *&panData,bool bDiscard=false);
++int read_intarray(VSILFILE *fp,int *&panData,int nFileSize,bool bDiscard=false);
+ 
+ /**
+  * \brief Write an array of integers to a Selafin file
+@@ -273,7 +276,7 @@ int write_float(VSILFILE *fp,double dfData);
+  * \param bDiscard If true, the function does not attempt to save the value read in the variable nData, but only advances in the file as it should. Default value is false.
+  * \return Number of elements in array read, -1 if an error occurred
+  */
+-int read_floatarray(VSILFILE *fp,double **papadfData,bool bDiscard=false);
++int read_floatarray(VSILFILE *fp,double **papadfData,int nFileSize,bool bDiscard=false);
+ 
+ /**
+  * \brief Write an array of floats to a Selafin file
+diff --git a/gdal/ogr/ogrsf_frmts/selafin/ogrselafindatasource.cpp b/gdal/ogr/ogrsf_frmts/selafin/ogrselafindatasource.cpp
+index 3da130e056..895c2a5b63 100644
+--- a/gdal/ogr/ogrsf_frmts/selafin/ogrselafindatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/selafin/ogrselafindatasource.cpp
+@@ -612,7 +612,7 @@ OGRErr OGRSelafinDataSource::DeleteLayer( int iLayer ) {
+         {
+             int nTemp = 0;
+             if (VSIFSeekL(poHeader->fp,poHeader->getPosition(i+1)+12,SEEK_SET)!=0 ||
+-                (nTemp=Selafin::read_floatarray(poHeader->fp,&dfValues)) !=poHeader->nPoints ||
++                (nTemp=Selafin::read_floatarray(poHeader->fp,&dfValues,poHeader->nFileSize)) !=poHeader->nPoints ||
+                 VSIFSeekL(poHeader->fp,poHeader->getPosition(i)+12,SEEK_SET)!=0 ||
+                 Selafin::write_floatarray(poHeader->fp,dfValues,poHeader->nPoints)==0) {
+                 CPLError( CE_Failure, CPLE_FileIO, "Could not update Selafin file %s.\n",pszName);
+diff --git a/gdal/ogr/ogrsf_frmts/selafin/ogrselafinlayer.cpp b/gdal/ogr/ogrsf_frmts/selafin/ogrselafinlayer.cpp
+index 29ff65c896..803d545173 100644
+--- a/gdal/ogr/ogrsf_frmts/selafin/ogrselafinlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/selafin/ogrselafinlayer.cpp
+@@ -288,6 +288,7 @@ OGRErr OGRSelafinLayer::ISetFeature(OGRFeature *poFeature) {
+         }
+     }
+     VSIFFlushL(poHeader->fp);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -402,7 +403,7 @@ OGRErr OGRSelafinLayer::ICreateFeature(OGRFeature *poFeature) {
+         for( int j = 0; j < poHeader->nVar; ++j )
+         {
+             double *padfValues = NULL;
+-            if (Selafin::read_floatarray(poHeader->fp,&padfValues)==-1) {
++            if (Selafin::read_floatarray(poHeader->fp,&padfValues,poHeader->nFileSize)==-1) {
+                 VSIFCloseL(fpNew);
+                 VSIUnlink(pszTempfile);
+                 return OGRERR_FAILURE;
+@@ -429,6 +430,7 @@ OGRErr OGRSelafinLayer::ICreateFeature(OGRFeature *poFeature) {
+     // If everything went fine, we overwrite the new file with the content of the old one. This way, even if something goes bad, we can still recover the layer. The copy process is format-agnostic.
+     MoveOverwrite(poHeader->fp,fpNew);
+     VSIUnlink(pszTempfile);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -488,7 +490,7 @@ OGRErr OGRSelafinLayer::CreateField(OGRFieldDefn *poField,
+         }
+         double *padfValues = NULL;
+         for (int j=0;j<poHeader->nVar-1;++j) {
+-            if (Selafin::read_floatarray(poHeader->fp,&padfValues)==-1) {
++            if (Selafin::read_floatarray(poHeader->fp,&padfValues,poHeader->nFileSize)==-1) {
+                 VSIFCloseL(fpNew);
+                 VSIUnlink(pszTempfile);
+                 return OGRERR_FAILURE;
+@@ -513,6 +515,7 @@ OGRErr OGRSelafinLayer::CreateField(OGRFieldDefn *poField,
+     }
+     MoveOverwrite(poHeader->fp,fpNew);
+     VSIUnlink(pszTempfile);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -557,7 +560,7 @@ OGRErr OGRSelafinLayer::DeleteField(int iField) {
+         }
+         for (int j=0;j<poHeader->nVar;++j) {
+             double *padfValues = NULL;
+-            if (Selafin::read_floatarray(poHeader->fp,&padfValues)==-1) {
++            if (Selafin::read_floatarray(poHeader->fp,&padfValues,poHeader->nFileSize)==-1) {
+                 VSIFCloseL(fpNew);
+                 VSIUnlink(pszTempfile);
+                 return OGRERR_FAILURE;
+@@ -575,6 +578,7 @@ OGRErr OGRSelafinLayer::DeleteField(int iField) {
+     }
+     MoveOverwrite(poHeader->fp,fpNew);
+     VSIUnlink(pszTempfile);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -618,7 +622,7 @@ OGRErr OGRSelafinLayer::ReorderFields(int *panMap) {
+             return OGRERR_FAILURE;
+         }
+         for (int j=0;j<poHeader->nVar;++j) {
+-            if (VSIFSeekL(poHeader->fp,poHeader->getPosition(i,-1,panMap[j]),SEEK_SET)!=0 || Selafin::read_floatarray(poHeader->fp,&padfValues)==-1) {
++            if (VSIFSeekL(poHeader->fp,poHeader->getPosition(i,-1,panMap[j]),SEEK_SET)!=0 || Selafin::read_floatarray(poHeader->fp,&padfValues,poHeader->nFileSize)==-1) {
+                 VSIFCloseL(fpNew);
+                 VSIUnlink(pszTempfile);
+                 return OGRERR_FAILURE;
+@@ -634,6 +638,7 @@ OGRErr OGRSelafinLayer::ReorderFields(int *panMap) {
+     }
+     MoveOverwrite(poHeader->fp,fpNew);
+     VSIUnlink(pszTempfile);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -658,6 +663,7 @@ OGRErr OGRSelafinLayer::AlterFieldDefn(int iField,
+     if (VSIFSeekL(poHeader->fp,88+16+40*iField,SEEK_SET)!=0) return OGRERR_FAILURE;
+     if (Selafin::write_string(poHeader->fp,poHeader->papszVariables[iField],32)==0) return OGRERR_FAILURE;
+     VSIFFlushL(poHeader->fp);
++    poHeader->UpdateFileSize();
+     return OGRERR_NONE;
+ }
+ 
+@@ -705,7 +711,7 @@ OGRErr OGRSelafinLayer::DeleteFeature(GIntBig nFID) {
+         }
+         for (int j=0;j<poHeader->nVar;++j) {
+             double *padfValues = NULL;
+-            if (Selafin::read_floatarray(poHeader->fp,&padfValues)==-1) {
++            if (Selafin::read_floatarray(poHeader->fp,&padfValues,poHeader->nFileSize)==-1) {
+                 VSIFCloseL(fpNew);
+                 VSIUnlink(pszTempfile);
+                 return OGRERR_FAILURE;
+@@ -726,6 +732,7 @@ OGRErr OGRSelafinLayer::DeleteFeature(GIntBig nFID) {
+     // If everything went fine, we overwrite the new file with the content of the old one. This way, even if something goes bad, we can still recover the layer. The copy process is format-agnostic.
+     MoveOverwrite(poHeader->fp,fpNew);
+     VSIUnlink(pszTempfile);
++    poHeader->UpdateFileSize();
+ 
+     return OGRERR_NONE;
+ }

@@ -1,0 +1,153 @@
+diff --git a/plugins/ua_accesscontrol_default.c b/plugins/ua_accesscontrol_default.c
+index 5d1b3d127..68c31b9b7 100644
+--- a/plugins/ua_accesscontrol_default.c
++++ b/plugins/ua_accesscontrol_default.c
+@@ -177,35 +177,40 @@ static void deleteMembers_default(UA_AccessControl *ac) {
+                     &UA_TYPES[UA_TYPES_USERTOKENPOLICY]);
+ 
+     AccessControlContext *context = (AccessControlContext*)ac->context;
+-    for(size_t i = 0; i < context->usernamePasswordLoginSize; i++) {
+-        UA_String_deleteMembers(&context->usernamePasswordLogin[i].username);
+-        UA_String_deleteMembers(&context->usernamePasswordLogin[i].password);
++
++    if (context) {
++        for(size_t i = 0; i < context->usernamePasswordLoginSize; i++) {
++            UA_String_deleteMembers(&context->usernamePasswordLogin[i].username);
++            UA_String_deleteMembers(&context->usernamePasswordLogin[i].password);
++        }
++        if(context->usernamePasswordLoginSize > 0)
++            UA_free(context->usernamePasswordLogin);
++        UA_free(ac->context);
+     }
+-    if(context->usernamePasswordLoginSize > 0)
+-        UA_free(context->usernamePasswordLogin);
+-    UA_free(ac->context);
+ }
+ 
+-UA_AccessControl
+-UA_AccessControl_default(UA_Boolean allowAnonymous, size_t usernamePasswordLoginSize,
++UA_StatusCode
++UA_AccessControl_default(UA_AccessControl *ac,
++                         UA_Boolean allowAnonymous, size_t usernamePasswordLoginSize,
+                          const UA_UsernamePasswordLogin *usernamePasswordLogin) {
++    ac->deleteMembers = deleteMembers_default;
++    ac->activateSession = activateSession_default;
++    ac->closeSession = closeSession_default;
++    ac->getUserRightsMask = getUserRightsMask_default;
++    ac->getUserAccessLevel = getUserAccessLevel_default;
++    ac->getUserExecutable = getUserExecutable_default;
++    ac->getUserExecutableOnObject = getUserExecutableOnObject_default;
++    ac->allowAddNode = allowAddNode_default;
++    ac->allowAddReference = allowAddReference_default;
++    ac->allowDeleteNode = allowDeleteNode_default;
++    ac->allowDeleteReference = allowDeleteReference_default;
++
+     AccessControlContext *context = (AccessControlContext*)
+-        UA_malloc(sizeof(AccessControlContext));
++            UA_malloc(sizeof(AccessControlContext));
++    if (!context)
++        return UA_STATUSCODE_BADOUTOFMEMORY;
+     memset(context, 0, sizeof(AccessControlContext));
+-    UA_AccessControl ac;
+-    memset(&ac, 0, sizeof(ac));
+-    ac.context = context;
+-    ac.deleteMembers = deleteMembers_default;
+-    ac.activateSession = activateSession_default;
+-    ac.closeSession = closeSession_default;
+-    ac.getUserRightsMask = getUserRightsMask_default;
+-    ac.getUserAccessLevel = getUserAccessLevel_default;
+-    ac.getUserExecutable = getUserExecutable_default;
+-    ac.getUserExecutableOnObject = getUserExecutableOnObject_default;
+-    ac.allowAddNode = allowAddNode_default;
+-    ac.allowAddReference = allowAddReference_default;
+-    ac.allowDeleteNode = allowDeleteNode_default;
+-    ac.allowDeleteReference = allowDeleteReference_default;
++    ac->context = context;
+ 
+     /* Allow anonymous? */
+     context->allowAnonymous = allowAnonymous;
+@@ -215,7 +220,7 @@ UA_AccessControl_default(UA_Boolean allowAnonymous, size_t usernamePasswordLogin
+         context->usernamePasswordLogin = (UA_UsernamePasswordLogin*)
+             UA_malloc(usernamePasswordLoginSize * sizeof(UA_UsernamePasswordLogin));
+         if(!context->usernamePasswordLogin)
+-            return ac;
++            return UA_STATUSCODE_BADOUTOFMEMORY;
+         context->usernamePasswordLoginSize = usernamePasswordLoginSize;
+         for(size_t i = 0; i < usernamePasswordLoginSize; i++) {
+             UA_String_copy(&usernamePasswordLogin[i].username, &context->usernamePasswordLogin[i].username);
+@@ -229,26 +234,32 @@ UA_AccessControl_default(UA_Boolean allowAnonymous, size_t usernamePasswordLogin
+         policies++;
+     if(usernamePasswordLoginSize > 0)
+         policies++;
+-    ac.userTokenPoliciesSize = 0;
+-    ac.userTokenPolicies = (UA_UserTokenPolicy *)
++    ac->userTokenPoliciesSize = 0;
++    ac->userTokenPolicies = (UA_UserTokenPolicy *)
+         UA_Array_new(policies, &UA_TYPES[UA_TYPES_USERTOKENPOLICY]);
+-    if(!ac.userTokenPolicies)
+-        return ac;
+-    ac.userTokenPoliciesSize = policies;
++    if(!ac->userTokenPolicies)
++        return UA_STATUSCODE_BADOUTOFMEMORY;
++    ac->userTokenPoliciesSize = policies;
+ 
+     policies = 0;
+     if(allowAnonymous) {
+-        ac.userTokenPolicies[policies].tokenType = UA_USERTOKENTYPE_ANONYMOUS;
+-        ac.userTokenPolicies[policies].policyId = UA_STRING_ALLOC(ANONYMOUS_POLICY);
++        ac->userTokenPolicies[policies].tokenType = UA_USERTOKENTYPE_ANONYMOUS;
++        ac->userTokenPolicies[policies].policyId = UA_STRING_ALLOC(ANONYMOUS_POLICY);
++        if (!ac->userTokenPolicies[policies].policyId.data)
++            return UA_STATUSCODE_BADOUTOFMEMORY;
+         policies++;
+     }
+ 
+     if(usernamePasswordLoginSize > 0) {
+-        ac.userTokenPolicies[policies].tokenType = UA_USERTOKENTYPE_USERNAME;
+-        ac.userTokenPolicies[policies].policyId = UA_STRING_ALLOC(USERNAME_POLICY);
++        ac->userTokenPolicies[policies].tokenType = UA_USERTOKENTYPE_USERNAME;
++        ac->userTokenPolicies[policies].policyId = UA_STRING_ALLOC(USERNAME_POLICY);
++        if (!ac->userTokenPolicies[policies].policyId.data)
++            return UA_STATUSCODE_BADOUTOFMEMORY;
+         /* No encryption of username/password supported at the moment */
+-        ac.userTokenPolicies[policies].securityPolicyUri =
++        ac->userTokenPolicies[policies].securityPolicyUri =
+             UA_STRING_ALLOC("http://opcfoundation.org/UA/SecurityPolicy#None");
++        if (!ac->userTokenPolicies[policies].securityPolicyUri.data)
++            return UA_STATUSCODE_BADOUTOFMEMORY;
+     }
+-    return ac;
++    return UA_STATUSCODE_GOOD;
+ }
+diff --git a/plugins/ua_accesscontrol_default.h b/plugins/ua_accesscontrol_default.h
+index 9be0af4d3..c9bb7b1a0 100644
+--- a/plugins/ua_accesscontrol_default.h
++++ b/plugins/ua_accesscontrol_default.h
+@@ -20,8 +20,8 @@ typedef struct {
+ 
+ /* Default access control. The log-in can be anonymous or username-password. A
+  * logged-in user has all access rights. */
+-UA_EXPORT UA_AccessControl
+-UA_AccessControl_default(UA_Boolean allowAnonymous,
++UA_EXPORT UA_StatusCode
++UA_AccessControl_default(UA_AccessControl *ac, UA_Boolean allowAnonymous,
+                          size_t usernamePasswordLoginSize,
+                          const UA_UsernamePasswordLogin *usernamePasswordLogin);
+ 
+diff --git a/plugins/ua_config_default.c b/plugins/ua_config_default.c
+index 441e5eb4e..b53c09162 100644
+--- a/plugins/ua_config_default.c
++++ b/plugins/ua_config_default.c
+@@ -247,7 +247,11 @@ createDefaultConfig(void) {
+     conf->nodeLifecycle.destructor = NULL;
+ 
+     /* Access Control. Anonymous Login only. */
+-    conf->accessControl = UA_AccessControl_default(true, usernamePasswordsSize, usernamePasswords);
++    if (UA_AccessControl_default(&conf->accessControl, true, usernamePasswordsSize,
++    		usernamePasswords) != UA_STATUSCODE_GOOD) {
++    	UA_ServerConfig_delete(conf);
++    	return NULL;
++    }
+ 
+     /* Relax constraints for the InformationModel */
+     conf->relaxEmptyValueConstraint = true; /* Allow empty values */

@@ -1,0 +1,12 @@
+diff --git a/coders/png.c b/coders/png.c
+index d4bab3a26..457db712e 100644
+--- a/coders/png.c
++++ b/coders/png.c
+@@ -1966,6 +1966,7 @@ static int read_user_chunk_callback(png_struct *ping, png_unknown_chunkp chunk)
+             s+=6;
+             i=6;
+             SetStringInfoLength(profile,chunk->size);
++            p=GetStringInfoDatum(profile);
+           }
+         }
+ 

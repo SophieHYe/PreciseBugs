@@ -1,0 +1,100 @@
+diff --git a/MagickCore/cache.c b/MagickCore/cache.c
+index 21bcf4efe..1b030a0d3 100644
+--- a/MagickCore/cache.c
++++ b/MagickCore/cache.c
+@@ -1612,8 +1612,8 @@ static Cache GetImagePixelCache(Image *image,const MagickBooleanType clone,
+   length=GetImageListLength(image);
+   if (AcquireMagickResource(ListLengthResource,length) == MagickFalse)
+     {
+-      (void) ThrowMagickException(exception,GetMagickModule(),ImageError,
+-        "ListLengthExceedsLimit","`%s'",image->filename);
++      (void) ThrowMagickException(exception,GetMagickModule(),
++        ResourceLimitError,"ListLengthExceedsLimit","`%s'",image->filename);
+       return((Cache) NULL);
+     }
+   LockSemaphoreInfo(image->semaphore);
+diff --git a/coders/xcf.c b/coders/xcf.c
+index c45d78bbe..a257b2fa8 100644
+--- a/coders/xcf.c
++++ b/coders/xcf.c
+@@ -57,6 +57,7 @@
+ #include "MagickCore/property.h"
+ #include "MagickCore/quantize.h"
+ #include "MagickCore/quantum-private.h"
++#include "MagickCore/resource_.h"
+ #include "MagickCore/static.h"
+ #include "MagickCore/string_.h"
+ #include "MagickCore/module.h"
+@@ -1315,6 +1316,8 @@ static Image *ReadXCFImage(const ImageInfo *image_info,ExceptionInfo *exception)
+             break;
+           }
+     } while (foundAllLayers == MagickFalse);
++    if (AcquireMagickResource(ListLengthResource,number_layers) == MagickFalse)
++      ThrowReaderException(ResourceLimitError,"ListLengthExceedsLimit");
+     doc_info.number_layers=number_layers;
+     offset=SeekBlob(image,oldPos,SEEK_SET); /* restore the position! */
+     if (offset < 0)
+diff --git a/config/english.xml b/config/english.xml
+index 81bec7651..23041d51c 100644
+--- a/config/english.xml
++++ b/config/english.xml
+@@ -515,9 +515,6 @@
+         <message name="LeftAndRightImageSizesDiffer">
+           left and right image sizes differ
+         </message>
+-        <message name="ListLengthExceedsLimit">
+-          list length exceeds limit
+-        </message>
+         <message name="NegativeOrZeroImageSize">
+           negative or zero image size
+         </message>
+@@ -1015,12 +1012,15 @@
+     <resource>
+       <limit>
+         <error>
+-          <message name="PixelCacheAllocationFailed">
+-            pixel cache allocation failed
++          <message name="ListLengthExceedsLimit">
++            list length exceeds limit
+           </message>
+           <message name="MemoryAllocationFailed">
+             memory allocation failed
+           </message>
++          <message name="PixelCacheAllocationFailed">
++            pixel cache allocation failed
++          </message>
+           <message name="TooManyObjects">
+             too many objects
+           </message>
+diff --git a/config/francais.xml b/config/francais.xml
+index 5e94ab57f..3ce9c076f 100644
+--- a/config/francais.xml
++++ b/config/francais.xml
+@@ -525,9 +525,6 @@
+         <message name="LeftAndRightImageSizesDiffer">
+           différences dans les tailles des images gauche et droite
+         </message>
+-        <message name="ListLengthExceedsLimit">
+-          list length exceeds limit
+-        </message>
+         <message name="NegativeOrZeroImageSize">
+           Taille d'image négative ou nulle
+         </message>
+@@ -1006,12 +1003,15 @@
+     <resource>
+       <limit>
+         <error>
+-          <message name="PixelCacheAllocationFailed">
+-            Échec allocation du cache pixel
++          <message name="ListLengthExceedsLimit">
++            list length exceeds limit
+           </message>
+           <message name="MemoryAllocationFailed">
+             Échec allocation mémoire
+           </message>
++          <message name="PixelCacheAllocationFailed">
++            Échec allocation du cache pixel
++          </message>
+           <message name="TooManyObjects">
+             too many objects
+           </message>

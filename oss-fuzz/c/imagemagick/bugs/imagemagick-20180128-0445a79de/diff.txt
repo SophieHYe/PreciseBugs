@@ -1,0 +1,28 @@
+diff --git a/MagickCore/xml-tree.c b/MagickCore/xml-tree.c
+index 7718c2910..a25a67c49 100644
+--- a/MagickCore/xml-tree.c
++++ b/MagickCore/xml-tree.c
+@@ -1789,8 +1789,8 @@ static MagickBooleanType ParseInternalDoctype(XMLTreeRoot *root,char *xml,
+                    (n != (char *) NULL) &&
+                    (strcmp(n,root->attributes[i][0]) != 0))
+               i++;
+-            while ((*(n=xml+strspn(xml+1,XMLWhitespace)+1) != '\0') &&
+-                   (*n != '>'))
++            xml++;
++            while ((*(n=xml+strspn(xml,XMLWhitespace)) != '\0') && (*n != '>'))
+             {
+               xml=n+strcspn(n,XMLWhitespace);
+               if (*xml != '\0')
+diff --git a/coders/wpg.c b/coders/wpg.c
+index e57a5d5f9..1c2788382 100644
+--- a/coders/wpg.c
++++ b/coders/wpg.c
+@@ -791,6 +791,8 @@ static Image *ExtractPostscript(Image *image,const ImageInfo *image_info,
+   if(magic_info->name == (char *) NULL) goto FINISH_UNL;
+ 
+   (void) strncpy(clone_info->magick,magic_info->name,MagickPathExtent-1);
++  if (LocaleCompare(image_info->magick,clone_info->magick) == 0)
++    (void) strcpy(clone_info->magick,"PS");
+ 
+     /* Read nested image */
+   /*FormatString(clone_info->filename,"%s:%s",magic_info->name,postscript_file);*/

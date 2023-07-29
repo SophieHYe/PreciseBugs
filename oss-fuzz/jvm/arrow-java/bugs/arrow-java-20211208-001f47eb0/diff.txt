@@ -1,0 +1,27 @@
+diff --git a/cpp/src/arrow/util/bit_stream_utils.h b/cpp/src/arrow/util/bit_stream_utils.h
+index 3a9c05425..6a1a3025e 100644
+--- a/cpp/src/arrow/util/bit_stream_utils.h
++++ b/cpp/src/arrow/util/bit_stream_utils.h
+@@ -324,11 +324,12 @@ inline int BitReader::GetBatch(int num_bits, T* v, int batch_size) {
+   int max_bytes = max_bytes_;
+   const uint8_t* buffer = buffer_;
+ 
+-  uint64_t needed_bits = num_bits * batch_size;
++  const int64_t needed_bits = num_bits * static_cast<int64_t>(batch_size);
+   constexpr uint64_t kBitsPerByte = 8;
+-  uint64_t remaining_bits = (max_bytes - byte_offset) * kBitsPerByte - bit_offset;
++  const int64_t remaining_bits =
++      static_cast<int64_t>(max_bytes - byte_offset) * kBitsPerByte - bit_offset;
+   if (remaining_bits < needed_bits) {
+-    batch_size = static_cast<int>(remaining_bits) / num_bits;
++    batch_size = static_cast<int>(remaining_bits / num_bits);
+   }
+ 
+   int i = 0;
+diff --git a/testing b/testing
+index d6c7b9d67..83ada4ec0 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit d6c7b9d670f3cc3af4a27e043749300b9d27addf
++Subproject commit 83ada4ec0f2cfe36f4168628d7f470e6199e663a

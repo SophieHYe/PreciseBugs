@@ -1,0 +1,49 @@
+diff --git a/compiler-rt/lib/fuzzer/FuzzerInternal.h b/compiler-rt/lib/fuzzer/FuzzerInternal.h
+index 31f54eaa478a..a732ca87b0f3 100644
+--- a/compiler-rt/lib/fuzzer/FuzzerInternal.h
++++ b/compiler-rt/lib/fuzzer/FuzzerInternal.h
+@@ -91,6 +91,7 @@ public:
+ 
+   void HandleMalloc(size_t Size);
+   static void MaybeExitGracefully();
++  static int InterruptExitCode();
+   std::string WriteToOutputCorpus(const Unit &U);
+ 
+ private:
+diff --git a/compiler-rt/lib/fuzzer/FuzzerLoop.cpp b/compiler-rt/lib/fuzzer/FuzzerLoop.cpp
+index f095757229e9..00f5ed7743b6 100644
+--- a/compiler-rt/lib/fuzzer/FuzzerLoop.cpp
++++ b/compiler-rt/lib/fuzzer/FuzzerLoop.cpp
+@@ -262,6 +262,11 @@ void Fuzzer::MaybeExitGracefully() {
+   _Exit(0);
+ }
+ 
++int Fuzzer::InterruptExitCode() {
++  assert(F);
++  return F->Options.InterruptExitCode;
++}
++
+ void Fuzzer::InterruptCallback() {
+   Printf("==%lu== libFuzzer: run interrupted; exiting\n", GetPid());
+   PrintFinalStats();
+diff --git a/compiler-rt/lib/fuzzer/FuzzerUtilLinux.cpp b/compiler-rt/lib/fuzzer/FuzzerUtilLinux.cpp
+index 981f9a8b429f..7e22f0e9fe8f 100644
+--- a/compiler-rt/lib/fuzzer/FuzzerUtilLinux.cpp
++++ b/compiler-rt/lib/fuzzer/FuzzerUtilLinux.cpp
+@@ -11,6 +11,7 @@
+ #if LIBFUZZER_LINUX || LIBFUZZER_NETBSD || LIBFUZZER_FREEBSD ||                \
+     LIBFUZZER_EMSCRIPTEN
+ #include "FuzzerCommand.h"
++#include "FuzzerInternal.h"
+ 
+ #include <stdlib.h>
+ #include <sys/types.h>
+@@ -25,6 +26,8 @@ int ExecuteCommand(const Command &Cmd) {
+   int exit_code = system(CmdLine.c_str());
+   if (WIFEXITED(exit_code))
+     return WEXITSTATUS(exit_code);
++  if (WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGINT)
++    return Fuzzer::InterruptExitCode();
+   return exit_code;
+ }
+ 

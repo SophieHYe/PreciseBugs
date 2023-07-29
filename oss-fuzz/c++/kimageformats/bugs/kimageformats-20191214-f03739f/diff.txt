@@ -1,0 +1,28 @@
+diff --git a/src/imageformats/pic.cpp b/src/imageformats/pic.cpp
+index c901e31..22bd8b4 100644
+--- a/src/imageformats/pic.cpp
++++ b/src/imageformats/pic.cpp
+@@ -130,9 +130,7 @@ static QDataStream &operator>> (QDataStream &s, QList<PicChannel> &channels)
+         PicChannel channel;
+         s >> chained;
+         s >> channel.size;
+-        quint8 encoding;
+-        s >> encoding;
+-        channel.encoding = PicChannelEncoding(encoding);
++        s >> channel.encoding;
+         s >> channel.code;
+         channels << channel;
+         ++count;
+diff --git a/src/imageformats/pic_p.h b/src/imageformats/pic_p.h
+index b8ea054..ed9dc8b 100644
+--- a/src/imageformats/pic_p.h
++++ b/src/imageformats/pic_p.h
+@@ -119,7 +119,7 @@ struct PicHeader {
+  */
+ struct PicChannel {
+     quint8 size; /**< Bits per component per pixel. */
+-    PicChannelEncoding encoding; /**< How the channel's data is encoded. */
++    quint8 encoding; /**< How the channel's data is encoded. */
+     quint8 code; /**< Flag field to describe which components are encoded in
+                       this channel. */
+ 

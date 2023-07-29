@@ -1,0 +1,24 @@
+diff --git a/src/bloaty.cc b/src/bloaty.cc
+index dd55811..f6097c7 100644
+--- a/src/bloaty.cc
++++ b/src/bloaty.cc
+@@ -996,6 +996,15 @@ void RangeSink::AddRange(const char* analyzer, string_view name,
+     }
+   }
+ 
++  if (vmaddr + vmsize < vmaddr) {
++    THROWF("Overflow in vm range, vmaddr=$0, vmsize=$1", vmaddr, vmsize);
++  }
++
++  if (fileoff + filesize < fileoff) {
++    THROWF("Overflow in file range, fileoff=$0, filesize=$1", fileoff,
++           filesize);
++  }
++
+   for (auto& pair : outputs_) {
+     const std::string label = pair.second->Munge(name);
+     uint64_t common = std::min(vmsize, filesize);
+diff --git a/tests/testdata/fuzz_corpus/a69662c2423b5a1d1859f7981c9e88c4f821b0b7 b/tests/testdata/fuzz_corpus/a69662c2423b5a1d1859f7981c9e88c4f821b0b7
+new file mode 100644
+index 0000000..4ab5e91
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/a69662c2423b5a1d1859f7981c9e88c4f821b0b7 differ

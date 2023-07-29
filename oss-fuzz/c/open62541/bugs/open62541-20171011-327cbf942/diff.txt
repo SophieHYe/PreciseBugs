@@ -1,0 +1,16 @@
+diff --git a/src/server/ua_securechannel_manager.c b/src/server/ua_securechannel_manager.c
+index 37cd4dd90..873c8412e 100644
+--- a/src/server/ua_securechannel_manager.c
++++ b/src/server/ua_securechannel_manager.c
+@@ -180,6 +180,11 @@ UA_StatusCode
+ UA_SecureChannelManager_renew(UA_SecureChannelManager* cm, UA_SecureChannel *channel,
+                               const UA_OpenSecureChannelRequest* request,
+                               UA_OpenSecureChannelResponse* response) {
++    if(channel->state != UA_SECURECHANNELSTATE_OPEN) {
++        UA_LOG_ERROR_CHANNEL(cm->server->config.logger, channel,
++                             "Called renew on channel which is not open");
++        return UA_STATUSCODE_BADINTERNALERROR;
++    }
+     /* If no security token is already issued */
+     if(channel->nextSecurityToken.tokenId == 0) {
+         channel->nextSecurityToken.channelId = channel->securityToken.channelId;

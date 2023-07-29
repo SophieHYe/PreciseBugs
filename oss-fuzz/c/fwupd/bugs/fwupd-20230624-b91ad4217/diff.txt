@@ -1,0 +1,63 @@
+diff --git a/libfwupdplugin/fu-efi-device-path-list.c b/libfwupdplugin/fu-efi-device-path-list.c
+index c87c3edde..6624e9c41 100644
+--- a/libfwupdplugin/fu-efi-device-path-list.c
++++ b/libfwupdplugin/fu-efi-device-path-list.c
+@@ -20,6 +20,8 @@ struct _FuEfiDevicePathList {
+ 
+ G_DEFINE_TYPE(FuEfiDevicePathList, fu_efi_device_path_list, FU_TYPE_FIRMWARE)
+ 
++#define FU_EFI_DEVICE_PATH_MAX_CHILDREN 1000u
++
+ static gboolean
+ fu_efi_device_path_list_parse(FuFirmware *firmware,
+ 			      GBytes *fw,
+@@ -29,9 +31,21 @@ fu_efi_device_path_list_parse(FuFirmware *firmware,
+ {
+ 	gsize bufsz = 0;
+ 	const guint8 *buf = g_bytes_get_data(fw, &bufsz);
++
+ 	while (offset < g_bytes_get_size(fw)) {
+ 		g_autoptr(FuEfiDevicePath) efi_dp = NULL;
+ 		g_autoptr(GByteArray) st_dp = NULL;
++		g_autoptr(GPtrArray) imgs = fu_firmware_get_images(firmware);
++
++		/* sanity check */
++		if (imgs->len > FU_EFI_DEVICE_PATH_MAX_CHILDREN) {
++			g_set_error(error,
++				    G_IO_ERROR,
++				    G_IO_ERROR_INVALID_DATA,
++				    "invalid DEVICE_PATH count, limit is %u",
++				    FU_EFI_DEVICE_PATH_MAX_CHILDREN);
++			return FALSE;
++		}
+ 
+ 		/* parse the header so we can work out what GType to create */
+ 		st_dp = fu_struct_efi_device_path_parse(buf, bufsz, offset, error);
+diff --git a/libfwupdplugin/fu-efi-load-option.c b/libfwupdplugin/fu-efi-load-option.c
+index abe5929e7..e964523b2 100644
+--- a/libfwupdplugin/fu-efi-load-option.c
++++ b/libfwupdplugin/fu-efi-load-option.c
+@@ -25,6 +25,8 @@ struct _FuEfiLoadOption {
+ 
+ G_DEFINE_TYPE(FuEfiLoadOption, fu_efi_load_option, FU_TYPE_FIRMWARE)
+ 
++#define FU_EFI_LOAD_OPTION_DESCRIPTION_SIZE_MAX 0x1000u /* bytes */
++
+ /**
+  * fu_efi_load_option_get_optional_data:
+  * @self: a #FuEfiLoadOption
+@@ -122,6 +124,14 @@ fu_efi_load_option_parse(FuFirmware *firmware,
+ 	/* parse UTF-16 description */
+ 	for (; offset < bufsz; offset += 2) {
+ 		guint16 tmp = 0;
++		if (buf_utf16->len > FU_EFI_LOAD_OPTION_DESCRIPTION_SIZE_MAX) {
++			g_set_error(error,
++				    G_IO_ERROR,
++				    G_IO_ERROR_INVALID_DATA,
++				    "description was too long, limit is 0x%x chars",
++				    FU_EFI_LOAD_OPTION_DESCRIPTION_SIZE_MAX / 2);
++			return FALSE;
++		}
+ 		if (!fu_memread_uint16_safe(buf, bufsz, offset, &tmp, G_LITTLE_ENDIAN, error))
+ 			return FALSE;
+ 		if (tmp == 0)

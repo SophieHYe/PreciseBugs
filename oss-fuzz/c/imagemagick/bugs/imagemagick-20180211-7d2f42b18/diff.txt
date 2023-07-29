@@ -1,0 +1,12 @@
+diff --git a/MagickCore/constitute.c b/MagickCore/constitute.c
+index baef49528..bf38b18df 100644
+--- a/MagickCore/constitute.c
++++ b/MagickCore/constitute.c
+@@ -696,6 +696,7 @@ MagickExport Image *ReadImage(const ImageInfo *image_info,
+         RectangleInfo
+           geometry;
+ 
++        SetGeometry(next,&geometry);
+         flags=ParseAbsoluteGeometry(read_info->extract,&geometry);
+         if ((next->columns != geometry.width) ||
+             (next->rows != geometry.height))

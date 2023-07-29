@@ -1,0 +1,13 @@
+diff --git a/gdal/port/cpl_quad_tree.cpp b/gdal/port/cpl_quad_tree.cpp
+index 75b3339aa1..ddf0040e50 100644
+--- a/gdal/port/cpl_quad_tree.cpp
++++ b/gdal/port/cpl_quad_tree.cpp
+@@ -194,7 +194,7 @@ int CPLQuadTreeGetAdvisedMaxDepth(int nExpectedFeatures)
+     int nMaxDepth = 0;
+     int nMaxNodeCount = 1;
+ 
+-    while( nMaxNodeCount*4 < nExpectedFeatures )
++    while( nMaxNodeCount < nExpectedFeatures / 4 )
+     {
+         nMaxDepth += 1;
+         nMaxNodeCount = nMaxNodeCount * 2;

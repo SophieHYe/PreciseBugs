@@ -1,0 +1,12 @@
+diff --git a/src/imageformats/xcf.cpp b/src/imageformats/xcf.cpp
+index 3cbd06b..1044f3e 100644
+--- a/src/imageformats/xcf.cpp
++++ b/src/imageformats/xcf.cpp
+@@ -451,6 +451,7 @@ bool XCFImageFormat::loadImageProperties(QDataStream &xcf_io, XCFImage &xcf_imag
+                 return false;
+             }
+ 
++            xcf_image.palette = QVector<QRgb>();
+             xcf_image.palette.reserve(xcf_image.num_colors);
+ 
+             for (int i = 0; i < xcf_image.num_colors; i++) {

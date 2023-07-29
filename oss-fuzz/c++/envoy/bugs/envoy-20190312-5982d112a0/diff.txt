@@ -1,0 +1,83 @@
+diff --git a/source/common/upstream/upstream_impl.h b/source/common/upstream/upstream_impl.h
+index 878f8163c0..417d3d8a7c 100644
+--- a/source/common/upstream/upstream_impl.h
++++ b/source/common/upstream/upstream_impl.h
+@@ -69,17 +69,25 @@ public:
+       const envoy::api::v2::endpoint::Endpoint::HealthCheckConfig& health_check_config,
+       uint32_t priority)
+       : cluster_(cluster), hostname_(hostname), address_(dest_address),
+-        health_check_address_(health_check_config.port_value() == 0
+-                                  ? dest_address
+-                                  : Network::Utility::getAddressWithPort(
+-                                        *dest_address, health_check_config.port_value())),
+         canary_(Config::Metadata::metadataValue(metadata, Config::MetadataFilters::get().ENVOY_LB,
+                                                 Config::MetadataEnvoyLbKeys::get().CANARY)
+                     .bool_value()),
+         metadata_(std::make_shared<envoy::api::v2::core::Metadata>(metadata)),
+         locality_(locality), stats_{ALL_HOST_STATS(POOL_COUNTER(stats_store_),
+                                                    POOL_GAUGE(stats_store_))},
+-        priority_(priority) {}
++        priority_(priority) {
++    if (health_check_config.port_value() != 0 &&
++        dest_address->type() != Network::Address::Type::Ip) {
++      // Setting the health check port to non-0 only works for IP-type addresses. Setting the port
++      // for a pipe address is a misconfiguration. Throw an exception.
++      throw EnvoyException(
++          fmt::format("Invalid host configuration: non-zero port for non-IP address"));
++    }
++    health_check_address_ =
++        health_check_config.port_value() == 0
++            ? dest_address
++            : Network::Utility::getAddressWithPort(*dest_address, health_check_config.port_value());
++  }
+ 
+   // Upstream::HostDescription
+   bool canary() const override { return canary_; }
+diff --git a/test/common/upstream/upstream_impl_test.cc b/test/common/upstream/upstream_impl_test.cc
+index e37e04d5ac..9d9fa09b6e 100644
+--- a/test/common/upstream/upstream_impl_test.cc
++++ b/test/common/upstream/upstream_impl_test.cc
+@@ -866,6 +866,23 @@ TEST(HostImplTest, HealthFlags) {
+   EXPECT_EQ(Host::Health::Unhealthy, host->health());
+ }
+ 
++// Test that it's not possible to do a HostDescriptionImpl with a unix
++// domain socket host and a health check config with non-zero port.
++// This is a regression test for oss-fuzz issue
++// https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=11095
++TEST(HostImplTest, HealthPipeAddress) {
++  EXPECT_THROW_WITH_MESSAGE(
++      {
++        std::shared_ptr<MockClusterInfo> info{new NiceMock<MockClusterInfo>()};
++        envoy::api::v2::endpoint::Endpoint::HealthCheckConfig config;
++        config.set_port_value(8000);
++        HostDescriptionImpl descr(info, "", Network::Utility::resolveUrl("unix://foo"),
++                                  envoy::api::v2::core::Metadata::default_instance(),
++                                  envoy::api::v2::core::Locality().default_instance(), config, 1);
++      },
++      EnvoyException, "Invalid host configuration: non-zero port for non-IP address");
++}
++
+ class StaticClusterImplTest : public testing::Test, public UpstreamImplTestBase {};
+ 
+ TEST_F(StaticClusterImplTest, InitialHosts) {
+diff --git a/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5742573780467712 b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5742573780467712
+new file mode 100644
+index 0000000000..672c449b26
+--- /dev/null
++++ b/test/server/server_corpus/clusterfuzz-testcase-minimized-server_fuzz_test-5742573780467712
+@@ -0,0 +1 @@
++static_resources {   clusters {     name: " "     connect_timeout {       nanos: 4     }     load_assignment {       cluster_name: " "       endpoints {         lb_endpoints {           endpoint {             address {               pipe {                 path: " "               }             }             health_check_config {               port_value: 2             }           }         }       }     }   } } 
+\ No newline at end of file
+diff --git a/tools/spelling_dictionary.txt b/tools/spelling_dictionary.txt
+index 34a034702a..80345ddc7e 100644
+--- a/tools/spelling_dictionary.txt
++++ b/tools/spelling_dictionary.txt
+@@ -522,6 +522,7 @@ mem
+ memcpy
+ midp
+ milli
++misconfiguration
+ misconfigured
+ mixin
+ mkdir

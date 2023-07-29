@@ -1,0 +1,13 @@
+diff --git a/agent/snmp_agent.c b/agent/snmp_agent.c
+index 858d0738b8..89cb02a784 100644
+--- a/agent/snmp_agent.c
++++ b/agent/snmp_agent.c
+@@ -570,7 +570,7 @@ get_set_cache(netsnmp_agent_session *asp)
+              * yyy-rks: investigate when/why sometimes they match,
+              * sometimes they don't.
+              */
+-            if(asp->requests->agent_req_info != asp->reqinfo) {
++            if(asp->requests && asp->requests->agent_req_info != asp->reqinfo) {
+                 /*
+                  * - one don't match case: agentx subagents. prev asp & reqinfo
+                  *   freed, request reqinfo ptrs not cleared.

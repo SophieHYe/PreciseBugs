@@ -1,0 +1,125 @@
+// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package google.api.envoy.http.service_control;
+
+import "api/envoy/http/service_control/requirement.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/duration.proto";
+import "validate/validate.proto";
+import "api/envoy/http/common/base.proto";
+
+message ServiceControlCallingConfig {
+  // In case of failing to connect to service control service, the requests
+  // are allowed if this field is true. The default is true.
+  google.protobuf.BoolValue network_fail_open = 1;
+
+  // The timeout in millisecond for the Check call. If not set,
+  // the default is 1000.
+  google.protobuf.UInt32Value check_timeout_ms = 2;
+
+  // The timeout in millisecond for the Quota call. If not set,
+  // the default is 1000.
+  google.protobuf.UInt32Value quota_timeout_ms = 3;
+
+  // The timeout in millisecond for the Report call. If not set,
+  // the default is 2000.
+  google.protobuf.UInt32Value report_timeout_ms = 4;
+
+  // The retry times for the Check call. If not set, the default is 3.
+  google.protobuf.UInt32Value check_retries = 5;
+
+  // The retry times for the Quota call. If not set, the default is 1.
+  google.protobuf.UInt32Value quota_retries = 6;
+
+  // The retry times for the Report call. If not set, the default is 5.
+  google.protobuf.UInt32Value report_retries = 7;
+}
+// Per service config.
+message Service {
+  // The service name for the Google Service Control
+  string service_name = 1 [(validate.rules).string.min_bytes = 1];
+
+  // The service config id
+  string service_config_id = 2 [(validate.rules).string.min_bytes = 1];
+
+  // The producer project id
+  string producer_project_id = 3 [(validate.rules).string.min_bytes = 1];
+
+  // Some of service config fields needed by Envoy filter.
+  // Not easy to import the googleapis/google/api/service.proto
+  // Use any to work around it.
+  google.protobuf.Any service_config = 4;
+
+  // The protocol of the backend, either "grpc", "http1", or "http2"
+  string backend_protocol = 5;
+
+  // The array of request headers demanded to be logged
+  repeated string log_request_headers = 6;
+
+  // The array of response headers demanded to be logged
+  repeated string log_response_headers = 7;
+
+  // Minimum amount of time (milliseconds) between sending intermediate
+  // reports on a stream.
+  uint64 min_stream_report_interval_ms = 8;
+
+  // The array of jwt payloads demanded to be logged
+  repeated string log_jwt_payloads = 9;
+
+  // The field name for jwt payload passed into metadata
+  string jwt_payload_metadata_name = 10;
+}
+
+message GcpAttributes {
+  // GCP Project ID
+  string project_id = 1;
+  // The zone where the GCP proxy is running (e.g. us-west-1)
+  string zone = 2;
+  // Platform where the GCP Proxy is running: GAE_FLEX, GKE, GCE, or UNKNOWN
+  string platform = 3;
+}
+
+message FilterConfig {
+  // A list of services supported on this Envoy server.
+  repeated Service services = 1;  // ref:multi-service
+
+  // The requirement rules for incoming requests.
+  repeated Requirement requirements = 2;
+
+  // GCP-related attributes.
+  GcpAttributes gcp_attributes = 3;
+
+  oneof access_token {
+    // The Instance Metadata Server uri used to fetch access token from Instance
+    // Metadata Server.
+    api.envoy.http.common.HttpUri imds_token = 4;
+
+    // The local path or inline content of the service account json file used to
+    // generate access token.
+    api.envoy.http.common.DataSource service_account_secret = 5;
+
+    // Information used to fetch access token from Google Cloud IAM.
+    api.envoy.http.common.IamTokenInfo iam_token = 6;
+  }
+
+  // The service control call configuration.
+  ServiceControlCallingConfig sc_calling_config = 7;
+
+  // The Http uri to call service control
+  api.envoy.http.common.HttpUri service_control_uri = 8;
+}

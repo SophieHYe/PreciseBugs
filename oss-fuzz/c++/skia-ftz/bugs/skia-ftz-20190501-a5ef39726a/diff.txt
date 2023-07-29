@@ -1,0 +1,358 @@
+diff --git a/bench/PolyUtilsBench.cpp b/bench/PolyUtilsBench.cpp
+index 0b4537650c..6e71a3083b 100644
+--- a/bench/PolyUtilsBench.cpp
++++ b/bench/PolyUtilsBench.cpp
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include "bench/Benchmark.h"
++#include "include/core/SkRect.h"
+ #include "src/utils/SkPolyUtils.h"
+ 
+ class PolyUtilsBench : public Benchmark {
+@@ -70,9 +71,13 @@ protected:
+             case Type::kOffsetSimple:
+                 if (SkIsSimplePolygon(poly.begin(), poly.count())) {
+                     SkTDArray<SkPoint> result;
++                    SkRect bounds;
++                    bounds.setBounds(poly.begin(), poly.count());
+                     for (int i = 0; i < loops; i++) {
+-                        (void)SkOffsetSimplePolygon(poly.begin(), poly.count(), 10, &result);
+-                        (void)SkOffsetSimplePolygon(poly.begin(), poly.count(), -10, &result);
++                        (void)SkOffsetSimplePolygon(poly.begin(), poly.count(), bounds, 10,
++                                                    &result);
++                        (void)SkOffsetSimplePolygon(poly.begin(), poly.count(), bounds, -10,
++                                                    &result);
+                     }
+                 }
+                 break;
+diff --git a/fuzz/FuzzPolyUtils.cpp b/fuzz/FuzzPolyUtils.cpp
+index af3457b904..9a9d3883b7 100644
+--- a/fuzz/FuzzPolyUtils.cpp
++++ b/fuzz/FuzzPolyUtils.cpp
+@@ -17,6 +17,8 @@ DEF_FUZZ(PolyUtils, fuzz) {
+     for (int index = 0; index < count; ++index) {
+         fuzz->next(&polygon[index].fX, &polygon[index].fY);
+     }
++    SkRect bounds;
++    bounds.setBoundsCheck(polygon, count);
+ 
+     ignoreResult(SkGetPolygonWinding(polygon, count));
+     ignoreResult(SkIsConvexPolygon(polygon, count));
+@@ -29,7 +31,7 @@ DEF_FUZZ(PolyUtils, fuzz) {
+ 
+     SkScalar offset;
+     fuzz->next(&offset);
+-    ignoreResult(SkOffsetSimplePolygon(polygon, count, offset, &output));
++    ignoreResult(SkOffsetSimplePolygon(polygon, count, bounds, offset, &output));
+ 
+     SkAutoSTMalloc<64, uint16_t> indexMap(count);
+     for (int index = 0; index < count; ++index) {
+diff --git a/gm/polygonoffset.cpp b/gm/polygonoffset.cpp
+index 909dddc6da..f70ebb0fee 100644
+--- a/gm/polygonoffset.cpp
++++ b/gm/polygonoffset.cpp
+@@ -561,7 +561,9 @@ protected:
+             if (fConvexOnly) {
+                 result = SkInsetConvexPolygon(data.get(), numPts, offset, &offsetPoly);
+             } else {
+-                result = SkOffsetSimplePolygon(data.get(), numPts, offset, &offsetPoly);
++                SkRect bounds;
++                bounds.setBoundsCheck(data.get(), numPts);
++                result = SkOffsetSimplePolygon(data.get(), numPts, bounds, offset, &offsetPoly);
+             }
+             if (result) {
+                 SkPath path;
+diff --git a/src/utils/SkPolyUtils.cpp b/src/utils/SkPolyUtils.cpp
+index ee1ae1e32f..86212f1e93 100644
+--- a/src/utils/SkPolyUtils.cpp
++++ b/src/utils/SkPolyUtils.cpp
+@@ -1052,16 +1052,16 @@ bool SkIsSimplePolygon(const SkPoint* polygon, int polygonSize) {
+         return false;
+     }
+ 
+-    // need to be able to represent all the vertices in the 16-bit indices
+-    if (polygonSize > std::numeric_limits<uint16_t>::max()) {
+-        return false;
+-    }
+-
+     // If it's convex, it's simple
+     if (SkIsConvexPolygon(polygon, polygonSize)) {
+         return true;
+     }
+ 
++    // practically speaking, it takes too long to process large polygons
++    if (polygonSize > 2048) {
++        return false;
++    }
++
+     SkTDPQueue <Vertex, Vertex::Left> vertexQueue(polygonSize);
+     for (int i = 0; i < polygonSize; ++i) {
+         Vertex newVertex;
+@@ -1146,7 +1146,8 @@ static bool is_reflex_vertex(const SkPoint* inputPolygonVerts, int winding, SkSc
+     return (side*winding*offset < 0);
+ }
+ 
+-bool SkOffsetSimplePolygon(const SkPoint* inputPolygonVerts, int inputPolygonSize, SkScalar offset,
++bool SkOffsetSimplePolygon(const SkPoint* inputPolygonVerts, int inputPolygonSize,
++                           const SkRect& bounds, SkScalar offset,
+                            SkTDArray<SkPoint>* offsetPolygon, SkTDArray<int>* polygonIndices) {
+     if (inputPolygonSize < 3) {
+         return false;
+@@ -1161,6 +1162,12 @@ bool SkOffsetSimplePolygon(const SkPoint* inputPolygonVerts, int inputPolygonSiz
+         return false;
+     }
+ 
++    // can't inset more than the half bounds of the polygon
++    if (offset > SkTMin(SkTAbs(SK_ScalarHalf*bounds.width()),
++                        SkTAbs(SK_ScalarHalf*bounds.height()))) {
++        return false;
++    }
++
+     // offsetting close to zero just returns the original poly
+     if (SkScalarNearlyZero(offset)) {
+         for (int i = 0; i < inputPolygonSize; ++i) {
+diff --git a/src/utils/SkPolyUtils.h b/src/utils/SkPolyUtils.h
+index a7b3b793fc..6c3403e733 100644
+--- a/src/utils/SkPolyUtils.h
++++ b/src/utils/SkPolyUtils.h
+@@ -13,6 +13,8 @@
+ #include "include/core/SkPoint.h"
+ #include "include/private/SkTDArray.h"
+ 
++struct SkRect;
++
+ /**
+  * Generates a polygon that is inset a constant from the boundary of a given convex polygon.
+  *
+@@ -33,6 +35,7 @@ bool SkInsetConvexPolygon(const SkPoint* inputPolygonVerts, int inputPolygonSize
+  *
+  * @param inputPolygonVerts  Array of points representing the vertices of the original polygon.
+  * @param inputPolygonSize  Number of vertices in the original polygon.
++ * @param bounds Bounding rectangle for the original polygon.
+  * @param offset How far we wish to offset the polygon.
+  *   Positive values indicate insetting, negative values outsetting.
+  * @param offsetPolgon  The resulting offset polygon, if any.
+@@ -40,7 +43,7 @@ bool SkInsetConvexPolygon(const SkPoint* inputPolygonVerts, int inputPolygonSize
+  * @return true if an offset simple polygon exists, false otherwise.
+  */
+ bool SkOffsetSimplePolygon(const SkPoint* inputPolygonVerts, int inputPolygonSize,
+-                           SkScalar offset, SkTDArray<SkPoint>* offsetPolygon,
++                           const SkRect& bounds, SkScalar offset, SkTDArray<SkPoint>* offsetPolygon,
+                            SkTDArray<int>* polygonIndices = nullptr);
+ 
+ /**
+diff --git a/src/utils/SkShadowTessellator.cpp b/src/utils/SkShadowTessellator.cpp
+index a43a33740d..6dc7a75adf 100644
+--- a/src/utils/SkShadowTessellator.cpp
++++ b/src/utils/SkShadowTessellator.cpp
+@@ -25,7 +25,7 @@
+  */
+ class SkBaseShadowTessellator {
+ public:
+-    SkBaseShadowTessellator(const SkPoint3& zPlaneParams, bool transparent);
++    SkBaseShadowTessellator(const SkPoint3& zPlaneParams, const SkRect& bounds, bool transparent);
+     virtual ~SkBaseShadowTessellator() {}
+ 
+     sk_sp<SkVertices> releaseVertices() {
+@@ -99,6 +99,7 @@ protected:
+     SkTDArray<SkPoint>   fClipPolygon;
+     SkTDArray<SkVector>  fClipVectors;
+ 
++    SkRect              fPathBounds;
+     SkPoint             fCentroid;
+     SkScalar            fArea;
+     SkScalar            fLastArea;
+@@ -155,8 +156,10 @@ static SkScalar perp_dot(const SkPoint& p0, const SkPoint& p1, const SkPoint& p2
+     return v0.cross(v1);
+ }
+ 
+-SkBaseShadowTessellator::SkBaseShadowTessellator(const SkPoint3& zPlaneParams, bool transparent)
++SkBaseShadowTessellator::SkBaseShadowTessellator(const SkPoint3& zPlaneParams, const SkRect& bounds,
++                                                 bool transparent)
+         : fZPlaneParams(zPlaneParams)
++        , fPathBounds(bounds)
+         , fCentroid({0, 0})
+         , fArea(0)
+         , fLastArea(0)
+@@ -559,7 +562,7 @@ bool SkBaseShadowTessellator::computeConcaveShadow(SkScalar inset, SkScalar outs
+     SkTDArray<SkPoint> umbraPolygon;
+     SkTDArray<int> umbraIndices;
+     umbraIndices.setReserve(fPathPolygon.count());
+-    if (!SkOffsetSimplePolygon(&fPathPolygon[0], fPathPolygon.count(), inset,
++    if (!SkOffsetSimplePolygon(&fPathPolygon[0], fPathPolygon.count(), fPathBounds, inset,
+                                &umbraPolygon, &umbraIndices)) {
+         // TODO: figure out how to handle this case
+         return false;
+@@ -570,7 +573,7 @@ bool SkBaseShadowTessellator::computeConcaveShadow(SkScalar inset, SkScalar outs
+     SkTDArray<int> penumbraIndices;
+     penumbraPolygon.setReserve(umbraPolygon.count());
+     penumbraIndices.setReserve(umbraPolygon.count());
+-    if (!SkOffsetSimplePolygon(&fPathPolygon[0], fPathPolygon.count(), -outset,
++    if (!SkOffsetSimplePolygon(&fPathPolygon[0], fPathPolygon.count(), fPathBounds, -outset,
+                                &penumbraPolygon, &penumbraIndices)) {
+         // TODO: figure out how to handle this case
+         return false;
+@@ -904,12 +907,14 @@ SkAmbientShadowTessellator::SkAmbientShadowTessellator(const SkPath& path,
+                                                        const SkMatrix& ctm,
+                                                        const SkPoint3& zPlaneParams,
+                                                        bool transparent)
+-        : INHERITED(zPlaneParams, transparent) {
++        : INHERITED(zPlaneParams, path.getBounds(), transparent) {
+     // Set base colors
+-    auto baseZ = heightFunc(path.getBounds().centerX(), path.getBounds().centerY());
++    auto baseZ = heightFunc(fPathBounds.centerX(), fPathBounds.centerY());
+     // umbraColor is the interior value, penumbraColor the exterior value.
+     auto outset = SkDrawShadowMetrics::AmbientBlurRadius(baseZ);
+     auto inset = outset * SkDrawShadowMetrics::AmbientRecipAlpha(baseZ) - outset;
++    inset = SkScalarPin(inset, 0, SkTMin(path.getBounds().width(),
++                                         path.getBounds().height()));
+ 
+     if (!this->computePathPolygon(path, ctm)) {
+         return;
+@@ -999,7 +1004,7 @@ SkSpotShadowTessellator::SkSpotShadowTessellator(const SkPath& path, const SkMat
+                                                  const SkPoint3& zPlaneParams,
+                                                  const SkPoint3& lightPos, SkScalar lightRadius,
+                                                  bool transparent)
+-    : INHERITED(zPlaneParams, transparent) {
++    : INHERITED(zPlaneParams, path.getBounds(), transparent) {
+ 
+     // Compute the blur radius, scale and translation for the spot shadow.
+     SkMatrix shadowTransform;
+diff --git a/tests/OffsetSimplePolyTest.cpp b/tests/OffsetSimplePolyTest.cpp
+index 965a9c9e57..b6e7d97d34 100644
+--- a/tests/OffsetSimplePolyTest.cpp
++++ b/tests/OffsetSimplePolyTest.cpp
+@@ -34,16 +34,20 @@ DEF_TEST(OffsetSimplePoly, reporter) {
+     *rrectPoly.push() = SkPoint::Make(-100 - 4.330127f, 50 + 2.5f);
+     *rrectPoly.push() = SkPoint::Make(-100 - 3.535534f, 50 + 3.535534f);
+     *rrectPoly.push() = SkPoint::Make(-100 - 2.5f, 50 + 4.330127f);
++    SkRect bounds;
++    bounds.setBoundsCheck(rrectPoly.begin(), rrectPoly.count());
++
+     REPORTER_ASSERT(reporter, SkIsConvexPolygon(rrectPoly.begin(), rrectPoly.count()));
+ 
+     // inset a little
+     SkTDArray<SkPoint> offsetPoly;
+-    bool result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), 3, &offsetPoly);
++    bool result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), bounds, 3,
++                                        &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsConvexPolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+     // inset to rect
+-    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), 10, &offsetPoly);
++    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), bounds, 10, &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsConvexPolygon(offsetPoly.begin(), offsetPoly.count()));
+     REPORTER_ASSERT(reporter, offsetPoly.count() == 4);
+@@ -56,7 +60,7 @@ DEF_TEST(OffsetSimplePoly, reporter) {
+ 
+     // just to full inset
+     // fails, but outputs a line segment
+-    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), 55, &offsetPoly);
++    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), bounds, 55, &offsetPoly);
+     REPORTER_ASSERT(reporter, !result);
+     REPORTER_ASSERT(reporter, !SkIsConvexPolygon(offsetPoly.begin(), offsetPoly.count()));
+     REPORTER_ASSERT(reporter, offsetPoly.count() == 2);
+@@ -66,7 +70,7 @@ DEF_TEST(OffsetSimplePoly, reporter) {
+     }
+ 
+     // past full inset
+-    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), 75, &offsetPoly);
++    result = SkOffsetSimplePolygon(rrectPoly.begin(), rrectPoly.count(), bounds, 75, &offsetPoly);
+     REPORTER_ASSERT(reporter, !result);
+ 
+     // troublesome case
+@@ -98,11 +102,13 @@ DEF_TEST(OffsetSimplePoly, reporter) {
+     *clippedRRectPoly.push() = SkPoint::Make(381.195313f, 432.207275f);
+     *clippedRRectPoly.push() = SkPoint::Make(377.312134f, 432.947998f);
+     *clippedRRectPoly.push() = SkPoint::Make(342.289948f, 432.947998f);
++    bounds.setBoundsCheck(clippedRRectPoly.begin(), clippedRRectPoly.count());
++
+     REPORTER_ASSERT(reporter, SkIsConvexPolygon(clippedRRectPoly.begin(),
+                                                 clippedRRectPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(clippedRRectPoly.begin(), clippedRRectPoly.count(), 32.3699417f,
+-                                   &offsetPoly);
++    result = SkOffsetSimplePolygon(clippedRRectPoly.begin(), clippedRRectPoly.count(), bounds,
++                                   32.3699417f, &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsConvexPolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+@@ -122,51 +128,53 @@ DEF_TEST(OffsetSimplePoly, reporter) {
+     *starPoly.push() = SkPoint::Make(-28.86f, 0.0f);
+     *starPoly.push() = SkPoint::Make(-43.30f, -25.0f);
+     *starPoly.push() = SkPoint::Make(-14.43f, -25.0f);
++    bounds.setBoundsCheck(starPoly.begin(), starPoly.count());
++
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(starPoly.begin(), starPoly.count()));
+ 
+     // try a variety of distances
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), 0.1f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, 0.1f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), 5.665f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, 5.665f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), 28,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, 28,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+     // down to a point
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), 28.866f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, 28.866f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, !result);
+ 
+     // and past
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), 50.5f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, 50.5f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, !result);
+ 
+     // and now out
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), -0.1f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, -0.1f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), -5.6665f,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, -5.6665f,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), -50,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, -50,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+ 
+-    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), -100,
++    result = SkOffsetSimplePolygon(starPoly.begin(), starPoly.count(), bounds, -100,
+                                    &offsetPoly);
+     REPORTER_ASSERT(reporter, result);
+     REPORTER_ASSERT(reporter, SkIsSimplePolygon(offsetPoly.begin(), offsetPoly.count()));
+diff --git a/tests/ShadowTest.cpp b/tests/ShadowTest.cpp
+index ff4def414e..240758b9c3 100644
+--- a/tests/ShadowTest.cpp
++++ b/tests/ShadowTest.cpp
+@@ -42,7 +42,7 @@ void tessellate_shadow(skiatest::Reporter* reporter, const SkPath& path, const S
+     verts = SkShadowTessellator::MakeAmbient(path, ctm, heightParams, false);
+     check_result(reporter, verts, expectVerts, expectSuccess);
+ 
+-    verts = SkShadowTessellator::MakeSpot(path, ctm, heightParams, {0, 0, 128}, 128.f, false);
++    verts = SkShadowTessellator::MakeSpot(path, ctm, heightParams, {0, 0, 128}, 128.f, true);
+     check_result(reporter, verts, expectVerts, expectSuccess);
+ 
+     verts = SkShadowTessellator::MakeSpot(path, ctm, heightParams, {0, 0, 128}, 128.f, false);

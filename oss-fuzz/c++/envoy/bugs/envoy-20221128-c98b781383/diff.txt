@@ -1,0 +1,766 @@
+diff --git a/mobile/library/common/extensions/filters/http/platform_bridge/BUILD b/mobile/library/common/extensions/filters/http/platform_bridge/BUILD
+index 33fff76eaf..d76bd92bf3 100644
+--- a/mobile/library/common/extensions/filters/http/platform_bridge/BUILD
++++ b/mobile/library/common/extensions/filters/http/platform_bridge/BUILD
+@@ -32,6 +32,7 @@ envoy_cc_extension(
+         "//library/common/data:utility_lib",
+         "//library/common/http:header_utility_lib",
+         "//library/common/http:internal_headers_lib",
++        "//library/common/stream_info:extra_stream_info_lib",
+         "//library/common/types:c_types_lib",
+         "@envoy//envoy/common:scope_tracker_interface",
+         "@envoy//envoy/http:filter_interface",
+diff --git a/mobile/library/common/extensions/filters/http/platform_bridge/filter.cc b/mobile/library/common/extensions/filters/http/platform_bridge/filter.cc
+index 774f906ec1..d107d718c7 100644
+--- a/mobile/library/common/extensions/filters/http/platform_bridge/filter.cc
++++ b/mobile/library/common/extensions/filters/http/platform_bridge/filter.cc
+@@ -15,6 +15,7 @@
+ #include "library/common/extensions/filters/http/platform_bridge/c_type_definitions.h"
+ #include "library/common/http/header_utility.h"
+ #include "library/common/http/headers.h"
++#include "library/common/stream_info/extra_stream_info.h"
+ 
+ namespace Envoy {
+ namespace Extensions {
+@@ -193,7 +194,7 @@ envoy_final_stream_intel PlatformBridgeFilter::finalStreamIntel() {
+   // FIXME: Stream handle cannot currently be set from the filter context.
+   envoy_final_stream_intel final_stream_intel;
+   memset(&final_stream_intel, 0, sizeof(final_stream_intel));
+-  // TODO(alyssawilk) set stream intel from a shared helper function.
++  setFinalStreamIntel(decoder_callbacks_->streamInfo(), final_stream_intel);
+   return final_stream_intel;
+ }
+ 
+diff --git a/mobile/library/common/http/BUILD b/mobile/library/common/http/BUILD
+index 1b28005d0b..22fcf0b4a6 100644
+--- a/mobile/library/common/http/BUILD
++++ b/mobile/library/common/http/BUILD
+@@ -39,7 +39,6 @@ envoy_cc_library(
+         "@envoy//source/common/http:header_map_lib",
+         "@envoy//source/common/http:headers_lib",
+         "@envoy//source/common/http:utility_lib",
+-        "@envoy//source/common/stream_info:utility_lib",
+     ],
+ )
+ 
+diff --git a/mobile/library/common/http/client.cc b/mobile/library/common/http/client.cc
+index 9d23ee9d63..d01b294e27 100644
+--- a/mobile/library/common/http/client.cc
++++ b/mobile/library/common/http/client.cc
+@@ -7,7 +7,6 @@
+ #include "source/common/http/header_map_impl.h"
+ #include "source/common/http/headers.h"
+ #include "source/common/http/utility.h"
+-#include "source/common/stream_info/utility.h"
+ 
+ #include "library/common/bridge/utility.h"
+ #include "library/common/buffer/bridge_fragment.h"
+@@ -19,29 +18,6 @@
+ 
+ namespace Envoy {
+ namespace Http {
+-namespace {
+-
+-void setFromOptional(uint64_t& to_set, const absl::optional<MonotonicTime>& time) {
+-  if (time.has_value()) {
+-    to_set = std::chrono::duration_cast<std::chrono::milliseconds>(time.value().time_since_epoch())
+-                 .count();
+-  }
+-}
+-
+-void setFromOptional(long& to_set, absl::optional<std::chrono::nanoseconds> time, long offset) {
+-  if (time.has_value()) {
+-    to_set = offset + std::chrono::duration_cast<std::chrono::milliseconds>(time.value()).count();
+-  }
+-}
+-
+-void setFromOptional(long& to_set, const absl::optional<MonotonicTime>& time) {
+-  if (time.has_value()) {
+-    to_set = std::chrono::duration_cast<std::chrono::milliseconds>(time.value().time_since_epoch())
+-                 .count();
+-  }
+-}
+-
+-} // namespace
+ 
+ /**
+  * IMPORTANT: stream closure semantics in envoy mobile depends on the fact that the HCM fires a
+@@ -184,29 +160,6 @@ void Client::DirectStreamCallbacks::sendTrailersToBridge(const ResponseTrailerMa
+   onComplete();
+ }
+ 
+-void Client::DirectStreamCallbacks::setFinalStreamIntel(envoy_final_stream_intel& final_intel) {
+-  memset(&final_intel, 0, sizeof(envoy_final_stream_intel));
+-
+-  final_intel.request_start_ms = direct_stream_.latency_info_.request_start_ms;
+-  if (direct_stream_.latency_info_.upstream_info_) {
+-    const StreamInfo::UpstreamTiming& timing =
+-        direct_stream_.latency_info_.upstream_info_->upstreamTiming();
+-    setFromOptional(final_intel.sending_start_ms, timing.first_upstream_tx_byte_sent_);
+-    setFromOptional(final_intel.sending_end_ms, timing.last_upstream_tx_byte_sent_);
+-    setFromOptional(final_intel.response_start_ms, timing.first_upstream_rx_byte_received_);
+-    setFromOptional(final_intel.connect_start_ms, timing.upstream_connect_start_);
+-    setFromOptional(final_intel.connect_end_ms, timing.upstream_connect_complete_);
+-    setFromOptional(final_intel.ssl_start_ms, timing.upstream_connect_complete_);
+-    setFromOptional(final_intel.ssl_end_ms, timing.upstream_handshake_complete_);
+-  }
+-  final_intel.dns_start_ms = direct_stream_.latency_info_.dns_start_ms;
+-  final_intel.dns_end_ms = direct_stream_.latency_info_.dns_end_ms;
+-  final_intel.request_end_ms = direct_stream_.latency_info_.request_end_ms;
+-  final_intel.socket_reused = 0; // TODO(alyssawilk) set.
+-  final_intel.sent_byte_count = direct_stream_.latency_info_.sent_byte_count;
+-  final_intel.received_byte_count = direct_stream_.latency_info_.received_byte_count;
+-}
+-
+ void Client::DirectStreamCallbacks::resumeData(int32_t bytes_to_send) {
+   ASSERT(explicit_flow_control_);
+   ASSERT(bytes_to_send > 0);
+@@ -236,6 +189,8 @@ void Client::DirectStreamCallbacks::resumeData(int32_t bytes_to_send) {
+ 
+ void Client::DirectStreamCallbacks::closeStream() {
+   remote_end_stream_received_ = true;
++  // Latch stream intel on stream completion, as the stream info will go away.
++  direct_stream_.saveFinalStreamIntel();
+ 
+   auto& client = direct_stream_.parent_;
+   auto stream = client.getStream(direct_stream_.stream_handle_, ALLOW_ONLY_FOR_OPEN_STREAMS);
+@@ -245,6 +200,7 @@ void Client::DirectStreamCallbacks::closeStream() {
+     size_t erased = client.streams_.erase(direct_stream_.stream_handle_);
+     ASSERT(erased == 1, "closeStream should always remove one entry from the streams map");
+   }
++  direct_stream_.request_decoder_ = nullptr;
+ }
+ 
+ void Client::DirectStreamCallbacks::onComplete() {
+@@ -257,9 +213,7 @@ void Client::DirectStreamCallbacks::onComplete() {
+     http_client_.stats().stream_failure_.inc();
+   }
+ 
+-  envoy_final_stream_intel final_intel;
+-  setFinalStreamIntel(final_intel);
+-  bridge_callbacks_.on_complete(streamIntel(), final_intel, bridge_callbacks_.context);
++  bridge_callbacks_.on_complete(streamIntel(), finalStreamIntel(), bridge_callbacks_.context);
+ }
+ 
+ void Client::DirectStreamCallbacks::onError() {
+@@ -286,9 +240,8 @@ void Client::DirectStreamCallbacks::onError() {
+             direct_stream_.stream_handle_);
+   http_client_.stats().stream_failure_.inc();
+ 
+-  envoy_final_stream_intel final_intel;
+-  setFinalStreamIntel(final_intel);
+-  bridge_callbacks_.on_error(error_.value(), streamIntel(), final_intel, bridge_callbacks_.context);
++  bridge_callbacks_.on_error(error_.value(), streamIntel(), finalStreamIntel(),
++                             bridge_callbacks_.context);
+ }
+ 
+ void Client::DirectStreamCallbacks::onSendWindowAvailable() {
+@@ -301,9 +254,10 @@ void Client::DirectStreamCallbacks::onCancel() {
+ 
+   ENVOY_LOG(debug, "[S{}] dispatching to platform cancel stream", direct_stream_.stream_handle_);
+   http_client_.stats().stream_cancel_.inc();
+-  envoy_final_stream_intel final_intel;
+-  setFinalStreamIntel(final_intel);
+-  bridge_callbacks_.on_cancel(streamIntel(), final_intel, bridge_callbacks_.context);
++  // Attempt to latch the latest stream info. This will be a no-op if the stream
++  // is already complete.
++  direct_stream_.saveFinalStreamIntel();
++  bridge_callbacks_.on_cancel(streamIntel(), finalStreamIntel(), bridge_callbacks_.context);
+ }
+ 
+ void Client::DirectStreamCallbacks::onHasBufferedData() {
+@@ -324,6 +278,10 @@ envoy_stream_intel Client::DirectStreamCallbacks::streamIntel() {
+   return direct_stream_.stream_intel_;
+ }
+ 
++envoy_final_stream_intel& Client::DirectStreamCallbacks::finalStreamIntel() {
++  return direct_stream_.envoy_final_stream_intel_;
++}
++
+ void Client::DirectStream::saveLatestStreamIntel() {
+   const auto& info = request_decoder_->streamInfo();
+   if (info.upstreamInfo()) {
+@@ -331,30 +289,13 @@ void Client::DirectStream::saveLatestStreamIntel() {
+   }
+   stream_intel_.stream_id = static_cast<uint64_t>(stream_handle_);
+   stream_intel_.attempt_count = info.attemptCount().value_or(0);
+-  saveFinalStreamIntel();
+ }
+ 
+ void Client::DirectStream::saveFinalStreamIntel() {
+-  const auto& info = request_decoder_->streamInfo();
+-  latency_info_.request_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+-                                       info.startTimeMonotonic().time_since_epoch())
+-                                       .count();
+-  latency_info_.sent_byte_count = info.bytesSent();
+-  latency_info_.received_byte_count = info.bytesReceived();
+-  StreamInfo::TimingUtility timing(info);
+-  setFromOptional(latency_info_.request_end_ms, timing.lastDownstreamRxByteReceived(),
+-                  latency_info_.request_start_ms);
+-  setFromOptional(latency_info_.dns_start_ms,
+-                  request_decoder_->streamInfo().downstreamTiming().getValue(
+-                      "envoy.dynamic_forward_proxy.dns_start_ms"));
+-  setFromOptional(latency_info_.dns_end_ms,
+-                  request_decoder_->streamInfo().downstreamTiming().getValue(
+-                      "envoy.dynamic_forward_proxy.dns_end_ms"));
+-  // TODO(alyssawilk) sort out why upstream info is problematic for cronvoy tests.
+-  return;
+-  if (info.upstreamInfo().has_value()) {
+-    latency_info_.upstream_info_ = request_decoder_->streamInfo().upstreamInfo();
++  if (!request_decoder_ || !parent_.getStream(stream_handle_, ALLOW_ONLY_FOR_OPEN_STREAMS)) {
++    return;
+   }
++  StreamInfo::setFinalStreamIntel(request_decoder_->streamInfo(), envoy_final_stream_intel_);
+ }
+ 
+ envoy_error Client::DirectStreamCallbacks::streamError() {
+@@ -390,7 +331,7 @@ void Client::DirectStream::resetStream(StreamResetReason reason) {
+   // This seems in line with other codec implementations, and so the assumption is that this is in
+   // line with upstream expectations.
+   // TODO(goaway): explore an upstream fix to get the HCM to clean up ActiveStream itself.
+-  saveFinalStreamIntel();
++  saveFinalStreamIntel(); // Take a snapshot now in case the stream gets destroyed.
+   runResetCallbacks(reason);
+   if (!parent_.getStream(stream_handle_, GetStreamFilters::ALLOW_FOR_ALL_STREAMS)) {
+     // We don't assert here, because Envoy will issue a stream reset if a stream closes remotely
+diff --git a/mobile/library/common/http/client.h b/mobile/library/common/http/client.h
+index 7029224ae1..0860736790 100644
+--- a/mobile/library/common/http/client.h
++++ b/mobile/library/common/http/client.h
+@@ -37,17 +37,6 @@ struct HttpClientStats {
+   ALL_HTTP_CLIENT_STATS(GENERATE_COUNTER_STRUCT)
+ };
+ 
+-struct LatencyInfo {
+-  long request_start_ms = 0;
+-  long request_end_ms = 0;
+-  long dns_start_ms = 0;
+-  long dns_end_ms = 0;
+-  long sent_byte_count = 0;
+-  long received_byte_count = 0;
+-  // Latest latency info received from StreamInfo.
+-  std::shared_ptr<StreamInfo::UpstreamInfo> upstream_info_{};
+-};
+-
+ /**
+  * Manages HTTP streams, and provides an interface to interact with them.
+  */
+@@ -177,7 +166,7 @@ private:
+     // than bytes_to_send.
+     void resumeData(int32_t bytes_to_send);
+ 
+-    void setFinalStreamIntel(envoy_final_stream_intel& final_intel);
++    void setFinalStreamIntel(StreamInfo::StreamInfo& stream_info);
+ 
+   private:
+     bool hasBufferedData() { return response_data_.get() && response_data_->length() != 0; }
+@@ -185,6 +174,7 @@ private:
+     void sendDataToBridge(Buffer::Instance& data, bool end_stream);
+     void sendTrailersToBridge(const ResponseTrailerMap& trailers);
+     envoy_stream_intel streamIntel();
++    envoy_final_stream_intel& finalStreamIntel();
+     envoy_error streamError();
+ 
+     DirectStream& direct_stream_;
+@@ -287,7 +277,7 @@ private:
+     bool explicit_flow_control_ = false;
+     // Latest intel data retrieved from the StreamInfo.
+     envoy_stream_intel stream_intel_{-1, -1, 0};
+-    LatencyInfo latency_info_;
++    envoy_final_stream_intel envoy_final_stream_intel_;
+     StreamInfo::BytesMeterSharedPtr bytes_meter_;
+   };
+ 
+diff --git a/mobile/library/common/stream_info/BUILD b/mobile/library/common/stream_info/BUILD
+index 44ce2e8600..234996748f 100644
+--- a/mobile/library/common/stream_info/BUILD
++++ b/mobile/library/common/stream_info/BUILD
+@@ -13,5 +13,6 @@ envoy_cc_library(
+         "//library/common/network:configurator_lib",
+         "//library/common/types:c_types_lib",
+         "@envoy//envoy/stream_info:stream_info_interface",
++        "@envoy//source/common/stream_info:utility_lib",
+     ],
+ )
+diff --git a/mobile/library/common/stream_info/extra_stream_info.cc b/mobile/library/common/stream_info/extra_stream_info.cc
+index 558a833d03..50cc1122cb 100644
+--- a/mobile/library/common/stream_info/extra_stream_info.cc
++++ b/mobile/library/common/stream_info/extra_stream_info.cc
+@@ -4,10 +4,55 @@
+ 
+ namespace Envoy {
+ namespace StreamInfo {
++namespace {
++
++void setFromOptional(uint64_t& to_set, const absl::optional<MonotonicTime>& time) {
++  if (time.has_value()) {
++    to_set = std::chrono::duration_cast<std::chrono::milliseconds>(time.value().time_since_epoch())
++                 .count();
++  }
++}
++
++void setFromOptional(uint64_t& to_set, absl::optional<std::chrono::nanoseconds> time, long offset) {
++  if (time.has_value()) {
++    to_set = offset + std::chrono::duration_cast<std::chrono::milliseconds>(time.value()).count();
++  }
++}
++
++} // namespace
+ 
+ const std::string& ExtraStreamInfo::key() {
+   CONSTRUCT_ON_FIRST_USE(std::string, "envoy_mobile.extra_stream_info");
+ }
+ 
++void setFinalStreamIntel(StreamInfo& stream_info, envoy_final_stream_intel& final_intel) {
++  if (stream_info.upstreamInfo()) {
++    const auto& upstream_info = stream_info.upstreamInfo();
++    const UpstreamTiming& timing = upstream_info->upstreamTiming();
++    setFromOptional(final_intel.sending_start_ms, timing.first_upstream_tx_byte_sent_);
++    setFromOptional(final_intel.sending_end_ms, timing.last_upstream_tx_byte_sent_);
++    setFromOptional(final_intel.response_start_ms, timing.first_upstream_rx_byte_received_);
++    setFromOptional(final_intel.connect_start_ms, timing.upstream_connect_start_);
++    setFromOptional(final_intel.connect_end_ms, timing.upstream_connect_complete_);
++    setFromOptional(final_intel.ssl_start_ms, timing.upstream_connect_complete_);
++    setFromOptional(final_intel.ssl_end_ms, timing.upstream_handshake_complete_);
++    final_intel.socket_reused = upstream_info->upstreamNumStreams() > 1;
++  }
++  final_intel.request_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
++                                     stream_info.startTimeMonotonic().time_since_epoch())
++                                     .count();
++  TimingUtility timing(stream_info);
++  setFromOptional(final_intel.request_end_ms, timing.lastDownstreamRxByteReceived(),
++                  final_intel.request_start_ms);
++  setFromOptional(final_intel.dns_start_ms, stream_info.downstreamTiming().getValue(
++                                                "envoy.dynamic_forward_proxy.dns_start_ms"));
++  setFromOptional(final_intel.dns_end_ms, stream_info.downstreamTiming().getValue(
++                                              "envoy.dynamic_forward_proxy.dns_end_ms"));
++  if (stream_info.getUpstreamBytesMeter()) {
++    final_intel.sent_byte_count = stream_info.getUpstreamBytesMeter()->wireBytesSent();
++    final_intel.received_byte_count = stream_info.getUpstreamBytesMeter()->wireBytesReceived();
++  }
++}
++
+ } // namespace StreamInfo
+ } // namespace Envoy
+diff --git a/mobile/library/common/stream_info/extra_stream_info.h b/mobile/library/common/stream_info/extra_stream_info.h
+index 5d53c1b89f..5cb0ecbc8b 100644
+--- a/mobile/library/common/stream_info/extra_stream_info.h
++++ b/mobile/library/common/stream_info/extra_stream_info.h
+@@ -2,6 +2,8 @@
+ 
+ #include "envoy/stream_info/filter_state.h"
+ 
++#include "source/common/stream_info/utility.h"
++
+ #include "library/common/network/configurator.h"
+ #include "library/common/types/c_types.h"
+ 
+@@ -13,6 +15,9 @@ struct ExtraStreamInfo : public FilterState::Object {
+   static const std::string& key();
+ };
+ 
++// Set fields in final_intel based on stream_info.
++void setFinalStreamIntel(StreamInfo& stream_info, envoy_final_stream_intel& final_intel);
++
+ using ExtraStreamInfoPtr = std::unique_ptr<ExtraStreamInfo>;
+ 
+ } // namespace StreamInfo
+diff --git a/mobile/test/common/http/client_test.cc b/mobile/test/common/http/client_test.cc
+index 33f6467ef0..21c9a5b099 100644
+--- a/mobile/test/common/http/client_test.cc
++++ b/mobile/test/common/http/client_test.cc
+@@ -122,7 +122,7 @@ public:
+ 
+   void createStream() {
+     ON_CALL(dispatcher_, isThreadSafe()).WillByDefault(Return(true));
+-    ON_CALL(request_decoder_, streamInfo()).WillByDefault(ReturnRef(stream_info_));
++    ON_CALL(*request_decoder_, streamInfo()).WillByDefault(ReturnRef(stream_info_));
+ 
+     // Grab the response encoder in order to dispatch responses on the stream.
+     // Return the request decoder to make sure calls are dispatched to the decoder via the
+@@ -130,7 +130,7 @@ public:
+     EXPECT_CALL(api_listener_, newStream(_, _))
+         .WillOnce(Invoke([&](ResponseEncoder& encoder, bool) -> RequestDecoder& {
+           response_encoder_ = &encoder;
+-          return request_decoder_;
++          return *request_decoder_;
+         }));
+     http_client_.startStream(stream_, bridge_callbacks_, explicit_flow_control_);
+   }
+@@ -143,7 +143,8 @@ public:
+   }
+ 
+   MockApiListener api_listener_;
+-  NiceMock<MockRequestDecoder> request_decoder_;
++  std::unique_ptr<NiceMock<MockRequestDecoder>> request_decoder_{
++      std::make_unique<NiceMock<MockRequestDecoder>>()};
+   NiceMock<StreamInfo::MockStreamInfo> stream_info_;
+   ResponseEncoder* response_encoder_{};
+   NiceMock<Event::MockProvisionalDispatcher> dispatcher_;
+@@ -181,7 +182,7 @@ TEST_P(ClientTest, SetDestinationClusterUpstreamProtocol) {
+   };
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers1), false));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers1), false));
+   http_client_.sendHeaders(stream_, c_headers1, false);
+ 
+   // Setting ALPN
+@@ -200,7 +201,7 @@ TEST_P(ClientTest, SetDestinationClusterUpstreamProtocol) {
+   };
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers_alpn), true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers_alpn), true));
+   http_client_.sendHeaders(stream_, c_headers_alpn, true);
+ 
+   // Setting http1.
+@@ -219,7 +220,7 @@ TEST_P(ClientTest, SetDestinationClusterUpstreamProtocol) {
+   };
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers4), true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(HeaderMapEqual(&expected_headers4), true));
+   http_client_.sendHeaders(stream_, c_headers4, true);
+ 
+   // Encode response headers.
+@@ -242,7 +243,7 @@ TEST_P(ClientTest, BasicStreamHeaders) {
+   // Send request headers.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode response headers.
+@@ -280,7 +281,7 @@ TEST_P(ClientTest, BasicStreamData) {
+   // test data functionality.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeData(BufferStringEqual("request body"), true));
++  EXPECT_CALL(*request_decoder_, decodeData(BufferStringEqual("request body"), true));
+   http_client_.sendData(stream_, c_data, true);
+   resumeDataIfExplicitFlowControl(20);
+ 
+@@ -317,7 +318,7 @@ TEST_P(ClientTest, BasicStreamTrailers) {
+   // wants to test trailers functionality.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeTrailers_(_));
++  EXPECT_CALL(*request_decoder_, decodeTrailers_(_));
+   http_client_.sendTrailers(stream_, c_trailers);
+   resumeDataIfExplicitFlowControl(20);
+ 
+@@ -351,13 +352,13 @@ TEST_P(ClientTest, MultipleDataStream) {
+   // Send request headers.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, false));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, false));
+   http_client_.sendHeaders(stream_, c_headers, false);
+ 
+   // Send request data.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeData(BufferStringEqual("request body"), false));
++  EXPECT_CALL(*request_decoder_, decodeData(BufferStringEqual("request body"), false));
+   http_client_.sendData(stream_, c_data, false);
+   // The buffer is not full: expect an on_send_window_available call in explicit_flow_control mode.
+   EXPECT_EQ(cc_.on_send_window_available_calls, explicit_flow_control_ ? 1 : 0);
+@@ -365,7 +366,7 @@ TEST_P(ClientTest, MultipleDataStream) {
+   // Send second request data.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeData(BufferStringEqual("request body2"), true));
++  EXPECT_CALL(*request_decoder_, decodeData(BufferStringEqual("request body2"), true));
+   http_client_.sendData(stream_, c_data2, true);
+   // The stream is done: no further on_send_window_available calls should happen.
+   EXPECT_EQ(cc_.on_send_window_available_calls, explicit_flow_control_ ? 1 : 0);
+@@ -398,7 +399,7 @@ TEST_P(ClientTest, EmptyDataWithEndStream) {
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+   // Send request headers.
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -436,7 +437,7 @@ TEST_P(ClientTest, MultipleStreams) {
+   // Send request headers.
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream1, c_headers, true);
+ 
+   // Start stream2.
+@@ -523,7 +524,7 @@ TEST_P(ClientTest, EnvoyLocalError) {
+   envoy_headers c_headers = defaultRequestHeaders();
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode response headers. A non-200 code triggers an on_error callback chain. In particular, a
+@@ -605,7 +606,7 @@ TEST_P(ClientTest, RemoteResetAfterStreamStart) {
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+   envoy_headers c_headers = defaultRequestHeaders();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode response headers.
+@@ -637,7 +638,7 @@ TEST_P(ClientTest, StreamResetAfterOnComplete) {
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+   envoy_headers c_headers = defaultRequestHeaders();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode response headers.
+@@ -681,7 +682,7 @@ TEST_P(ClientTest, Encode100Continue) {
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+   envoy_headers c_headers = defaultRequestHeaders();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode 100 continue should blow up.
+@@ -699,7 +700,7 @@ TEST_P(ClientTest, EncodeMetadata) {
+   EXPECT_CALL(dispatcher_, pushTrackedObject(_));
+   EXPECT_CALL(dispatcher_, popTrackedObject(_));
+   envoy_headers c_headers = defaultRequestHeaders();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, c_headers, true);
+ 
+   // Encode response headers.
+@@ -729,7 +730,7 @@ TEST_P(ClientTest, NullAccessors) {
+   EXPECT_CALL(api_listener_, newStream(_, _))
+       .WillOnce(Invoke([&](ResponseEncoder& encoder, bool) -> RequestDecoder& {
+         response_encoder_ = &encoder;
+-        return request_decoder_;
++        return *request_decoder_;
+       }));
+   http_client_.startStream(stream, bridge_callbacks, explicit_flow_control_);
+ 
+@@ -745,7 +746,7 @@ TEST_P(ExplicitFlowControlTest, ShortRead) {
+ 
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -755,6 +756,11 @@ TEST_P(ExplicitFlowControlTest, ShortRead) {
+   // Test partial reads. Get 5 bytes but only pass 3 up.
+   Buffer::OwnedImpl response_data("12345");
+   response_encoder_->encodeData(response_data, true);
++
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
++
+   resumeDataIfExplicitFlowControl(3);
+   EXPECT_EQ("123", cc_.body_data_);
+   ASSERT_EQ(cc_.on_complete_calls, 0);
+@@ -770,7 +776,7 @@ TEST_P(ExplicitFlowControlTest, DataArrivedWhileBufferNonempty) {
+ 
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -786,6 +792,9 @@ TEST_P(ExplicitFlowControlTest, DataArrivedWhileBufferNonempty) {
+ 
+   Buffer::OwnedImpl response_data2("678910");
+   response_encoder_->encodeData(response_data2, true);
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
+ 
+   resumeDataIfExplicitFlowControl(20);
+   EXPECT_EQ("12345678910", cc_.body_data_);
+@@ -797,7 +806,7 @@ TEST_P(ExplicitFlowControlTest, ResumeBeforeDataArrives) {
+ 
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -810,6 +819,9 @@ TEST_P(ExplicitFlowControlTest, ResumeBeforeDataArrives) {
+   // When data arrives it should be immediately passed up
+   Buffer::OwnedImpl response_data("12345");
+   response_encoder_->encodeData(response_data, true);
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
+   EXPECT_EQ("12345", cc_.body_data_);
+   ASSERT_EQ(cc_.on_complete_calls, true);
+ }
+@@ -820,7 +832,7 @@ TEST_P(ExplicitFlowControlTest, ResumeWithFin) {
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+   // Send request headers.
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -839,6 +851,9 @@ TEST_P(ExplicitFlowControlTest, ResumeWithFin) {
+   EXPECT_CALL(dispatcher_, deferredDelete_(_));
+   Buffer::OwnedImpl response_data2("");
+   response_encoder_->encodeData(response_data2, true);
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
+   ASSERT_EQ(cc_.on_data_calls, 2);
+   EXPECT_EQ("response body", cc_.body_data_);
+   // Ensure that the callbacks on the bridge_callbacks_ were called.
+@@ -851,7 +866,7 @@ TEST_P(ExplicitFlowControlTest, ResumeWithDataAndTrailers) {
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+   // Send request headers.
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers, data, and trailers.
+@@ -862,6 +877,9 @@ TEST_P(ExplicitFlowControlTest, ResumeWithDataAndTrailers) {
+   response_encoder_->encodeData(response_data, false);
+   TestResponseTrailerMapImpl response_trailers{{"x-test-trailer", "test_trailer"}};
+   response_encoder_->encodeTrailers(response_trailers);
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
+ 
+   // On the resume call, the data should be passed up, but not the trailers.
+   resumeDataIfExplicitFlowControl(20);
+@@ -883,7 +901,7 @@ TEST_P(ExplicitFlowControlTest, CancelWithStreamComplete) {
+ 
+   // Create a stream, and set up request_decoder_ and response_encoder_
+   createStream();
+-  EXPECT_CALL(request_decoder_, decodeHeaders_(_, true));
++  EXPECT_CALL(*request_decoder_, decodeHeaders_(_, true));
+   http_client_.sendHeaders(stream_, defaultRequestHeaders(), true);
+ 
+   // Encode response headers and data.
+@@ -893,6 +911,9 @@ TEST_P(ExplicitFlowControlTest, CancelWithStreamComplete) {
+   // When data arrives it should be buffered to send up
+   Buffer::OwnedImpl response_data("12345");
+   response_encoder_->encodeData(response_data, true);
++  // The stream is closed from Envoy's perspective. Make sure sanitizers will catch
++  // any access to the decoder.
++  request_decoder_.reset();
+   ASSERT_EQ(cc_.on_complete_calls, false);
+ 
+   MockStreamCallbacks stream_callbacks;
+diff --git a/mobile/test/common/stream_info/BUILD b/mobile/test/common/stream_info/BUILD
+new file mode 100644
+index 0000000000..3962f63707
+--- /dev/null
++++ b/mobile/test/common/stream_info/BUILD
+@@ -0,0 +1,16 @@
++load("@envoy//bazel:envoy_build_system.bzl", "envoy_cc_test", "envoy_package")
++
++licenses(["notice"])  # Apache 2
++
++envoy_package()
++
++envoy_cc_test(
++    name = "extra_stream_info_test",
++    srcs = ["extra_stream_info_test.cc"],
++    repository = "@envoy",
++    deps = [
++        "//library/common/stream_info:extra_stream_info_lib",
++        "@envoy//source/common/stream_info:stream_info_lib",
++        "@envoy//test/test_common:simulated_time_system_lib",
++    ],
++)
+diff --git a/mobile/test/common/stream_info/extra_stream_info_test.cc b/mobile/test/common/stream_info/extra_stream_info_test.cc
+new file mode 100644
+index 0000000000..5cee34a25f
+--- /dev/null
++++ b/mobile/test/common/stream_info/extra_stream_info_test.cc
+@@ -0,0 +1,72 @@
++#include "source/common/stream_info/stream_info_impl.h"
++
++#include "test/test_common/simulated_time_system.h"
++
++#include "gmock/gmock.h"
++#include "gtest/gtest.h"
++#include "library/common/stream_info/extra_stream_info.h"
++
++namespace Envoy {
++namespace StreamInfo {
++
++class FinalIntelTest : public testing::Test {
++public:
++  FinalIntelTest() {
++    memset(&final_intel_, 0, sizeof(envoy_final_stream_intel));
++    memset(&expected_intel_, 0, sizeof(envoy_final_stream_intel));
++  }
++
++  void checkEquality(envoy_final_stream_intel& a, envoy_final_stream_intel& b) {
++    EXPECT_EQ(a.sending_start_ms, b.sending_start_ms);
++    EXPECT_EQ(a.sending_end_ms, b.sending_end_ms);
++    EXPECT_EQ(a.connect_start_ms, b.connect_start_ms);
++    EXPECT_EQ(a.connect_end_ms, b.connect_end_ms);
++    EXPECT_EQ(a.ssl_start_ms, b.ssl_start_ms);
++    EXPECT_EQ(a.ssl_end_ms, b.ssl_end_ms);
++    EXPECT_EQ(a.socket_reused, b.socket_reused);
++    EXPECT_EQ(a.request_start_ms, b.request_start_ms);
++    EXPECT_EQ(a.request_end_ms, b.request_end_ms);
++    EXPECT_EQ(a.dns_start_ms, b.dns_start_ms);
++    EXPECT_EQ(a.dns_end_ms, b.dns_end_ms);
++    EXPECT_EQ(a.sent_byte_count, b.sent_byte_count);
++    EXPECT_EQ(a.received_byte_count, b.received_byte_count);
++  }
++
++  Event::SimulatedTimeSystem test_time_;
++  StreamInfoImpl stream_info_{test_time_.timeSystem(), nullptr};
++  envoy_final_stream_intel final_intel_;
++  envoy_final_stream_intel expected_intel_;
++};
++
++TEST_F(FinalIntelTest, Unset) {
++  setFinalStreamIntel(stream_info_, final_intel_);
++  checkEquality(final_intel_, expected_intel_);
++}
++
++TEST_F(FinalIntelTest, Set) {
++  stream_info_.setUpstreamInfo(std::make_shared<UpstreamInfoImpl>());
++  auto upstream_info = stream_info_.upstreamInfo();
++  auto& timing = upstream_info->upstreamTiming();
++
++  timing.first_upstream_tx_byte_sent_ = MonotonicTime(std::chrono::milliseconds(100));
++  expected_intel_.sending_start_ms = 100;
++  timing.last_upstream_tx_byte_sent_ = MonotonicTime(std::chrono::milliseconds(200));
++  expected_intel_.sending_end_ms = 200;
++  timing.first_upstream_rx_byte_received_ = MonotonicTime(std::chrono::milliseconds(300));
++  expected_intel_.response_start_ms = 300;
++  timing.upstream_connect_start_ = MonotonicTime(std::chrono::milliseconds(400));
++  expected_intel_.connect_start_ms = 400;
++  timing.upstream_connect_complete_ = MonotonicTime(std::chrono::milliseconds(500));
++  expected_intel_.connect_end_ms = 500;
++  expected_intel_.ssl_start_ms = 500;
++  timing.upstream_handshake_complete_ = MonotonicTime(std::chrono::milliseconds(600));
++  expected_intel_.ssl_end_ms = 600;
++
++  upstream_info->setUpstreamNumStreams(5);
++  expected_intel_.socket_reused = 1;
++  setFinalStreamIntel(stream_info_, final_intel_);
++  checkEquality(final_intel_, expected_intel_);
++}
++
++} // namespace StreamInfo
++} // namespace Envoy

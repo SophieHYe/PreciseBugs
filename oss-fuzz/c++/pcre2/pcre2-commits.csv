@@ -1,0 +1,471 @@
+a352584	29d65e0	Sat Apr 15 15:40:21 2023 +0100	Fix typo in ChangeLog and increase size of buffer in pcre2test to avoid compiler warning.
+a8558f2	2c08b61	Tue Apr 11 12:55:01 2023 +0000	Fix wrong test
+2c08b61	6454934	Tue Apr 11 12:42:36 2023 +0000	Fix an invalid match of ascii word classes when invalid utf is enabled
+f5cfe2a	47f86d5	Tue Mar 7 17:28:33 2023 +0000	Re-arrange code to avoid jump into a block that bypassed its initialization in the debugging printint module.
+8c9a529	26d5cd9	Mon Feb 6 17:08:09 2023 +0000	Fix \\b and \\B with PCRE2_EXTRA_ASCII_BSW in the interpreters
+fc56fd7	a608946	Thu Feb 2 17:19:45 2023 +0000	Further ASCII tests and minor bugfix plus ChangeLog update
+fcceddc	69d6b24	Wed Jan 25 12:49:36 2023 +0000	Fix minor typo
+69d6b24	fa5ec50	Wed Jan 25 09:37:30 2023 +0000	Fix minor memory check bug in pcre2test
+3fdb19c	d73a949	Thu Jan 19 09:29:49 2023 +0000	Fix inadvertent missing test update
+7846880	5d8a8bb	Thu Dec 1 10:40:01 2022 +0100	jit: fix pcre2_jit_free_unused_memory() if sljit not using allocator (#165)
+3a1ad41	8e254fa	Thu Aug 11 18:13:18 2022 +0100	Remove the previous change to the GitHub action which tried running the pcre2grep test under bash because this didn\'t fix what went wrong with the locale test for Alpine Linux. Looks like Alpine doesn\'t have locale support, so try skipping the test (well, in practice mocking up the output) when there is no locale suport.
+1f5e47b	95e7696	Wed Aug 10 16:22:12 2022 +0100	Fixed missing/misplaced PCRE2_CALL_CONVENTION macros in functions prototypes (#139)
+95e7696	1692936	Wed Aug 10 16:08:34 2022 +0100	Improve LCOV coverage statistics and fix bugs that showed up in pcre2grep while doing this.
+1343bdf	d90fb23	Wed Jul 27 18:00:40 2022 +0100	Fix overlooked comment edit
+4851890	3e52db5	Thu Jul 14 05:25:39 2022 +0200	Fixed an issue in the backtracking optimization of character repeats in JIT (#135)
+3e52db5	4804b00	Fri Jul 8 10:01:46 2022 +0100	doc: fix various typos (#132)
+5271b53	45af120	Wed Jun 8 17:05:24 2022 +0100	Fix compiler warning in pcre2test
+45af120	187b7ba	Wed May 18 12:16:00 2022 +0200	Fixed race condition that occurs when initializing the executable_allocator_is_working variable in the pcre2_jit_compile function (#91)
+15a82c3	51a5fcd	Sat Apr 30 09:46:50 2022 +0100	doc: mostly wording issues, but more importantly a fixed group link (#114)
+c630e86	77ce1ff	Sun Apr 24 16:16:49 2022 +0100	Fix integer promotion causing a warning in MSVC (#111)
+fedf4d9	8ebf9ef	Fri Apr 22 17:51:31 2022 +0100	Fix recent documentation error
+d07c967	4279abb	Thu Apr 14 19:09:40 2022 +0000	Fix recursion issue in JIT
+03654e7	d4fa336	Sat Mar 26 08:03:11 2022 +0000	Fixed an issue affecting recursions in JIT
+d4fa336	50a51cb	Thu Mar 24 05:34:42 2022 +0000	Fix incorrect value reading in JIT.
+50a51cb	f7a7341	Wed Mar 23 07:53:58 2022 +0000	Fixed a unicode properrty matching issue in JIT
+111cd47	fdd9479	Wed Jan 26 12:15:11 2022 +0000	Fix typo `with-match-limit_depth` -> `with-match-limit-depth` (#83)
+fdd9479	419e3c6	Wed Jan 26 08:37:18 2022 +0000	Fix incorrect compiling when [Aa] etc. are quantified
+e85a81e	504ff06	Fri Jan 14 12:37:24 2022 +0000	Correct CMakeLists.txt for MSVC debugger file names
+504ff06	360a84e	Fri Jan 14 12:24:23 2022 +0000	Fix overrun bug in recent property name parsing change
+06d3a66	87571b5	Tue Jan 11 09:21:27 2022 +0000	Fix bug in modifier listing
+534b476	31fb2e5	Tue Jan 4 16:59:03 2022 +0000	RunGrepTest: Fix tests 132 and 133 when srcdir is relative (#71)
+435140a	c24047f	Mon Jan 3 15:49:26 2022 +0000	Fix script extension support on jit (#69)
+af2637e	98e7d70	Mon Dec 27 11:57:28 2021 +0000	Fix parameter types in the pcre2serialize man page (#63)
+4514ddd	944f0e1	Wed Dec 22 16:55:30 2021 +0000	Split generated tables from fixed tables
+1c41a5b	4243515	Tue Dec 14 15:52:24 2021 +0000	Fix minor issues raised by Clang sanitize
+587b942	c8d31f1	Sat Nov 27 16:27:49 2021 +0000	doc: formatting/typo fixes to documentation (#47)
+adf76fa	d144199	Fri Nov 26 17:31:35 2021 +0000	pcre2grep: fix build for Hurd (#52)
+1ed34b9	f19e846	Tue Nov 9 17:12:50 2021 +0000	Update version to 10.40-RC1 and fix consequent version test issue.
+f19e846	7db8784	Tue Nov 9 17:12:13 2021 +0000	Update ChangeLog for GitHub #35 fix.
+072717a	35fee41	Sat Oct 30 11:25:12 2021 +0100	Fix very minor typos in documentation: redundant spaces.
+128c503	bf2c8cc	Fri Oct 29 16:07:53 2021 +0100	fix building on ancient compilers (#32)
+c99f073	794470b	Fri Oct 29 12:33:20 2021 +0100	Documentation minor text fixes.
+179c5d2	e7af7ef ec0755b	Mon Oct 18 17:07:18 2021 +0100	Merge pull request #27 from ltrzesniewski/fix-convert-doc
+ec0755b	dc5f966	Sun Oct 17 19:29:44 2021 +0200	Fix option name in pcre2convert docs
+e7af7ef	0612ed7 51ec2c9	Wed Oct 6 11:55:58 2021 +0100	Merge pull request #22 from PhilipHazel/early_fail_fix
+51ec2c9	0612ed7	Tue Oct 5 16:41:13 2021 +0000	Fix incorrect detection of alternatives in first character search.
+507e4dc	dc5f966	Tue Sep 14 16:10:20 2021 +0100	Fix incorrect loop counter reset when setting lookbehind lengths (ClusterFuzz 38653).
+15b692f	4ccef16	Fri Aug 27 09:14:11 2021 +0100	Fix typo.
+d70da76	a5389db	Mon Jun 14 10:53:18 2021 +0000	Fix some documentation typos.
+a5389db	3d80cf5	Fri Jun 4 12:55:49 2021 +0000	Fix invalid single character repetition issues in JIT.
+2c4d394	b6acebe	Thu Feb 18 09:46:08 2021 +0000	Fix \\K within recursion bug in interpreter.
+2502984	4cfa216	Sun Feb 7 16:43:00 2021 +0000	Fix RunGrepTest\'s handling of binary zeros on Solaris by using /usr/xpg4/bin/tr instead of tr if /usr/xpg4/bin/tr exists.
+8144ae0	166e576	Mon Feb 1 17:56:12 2021 +0000	Fix some numerical checking bugs, Bugzilla 2690.
+166e576	c246f53	Thu Jan 14 17:14:58 2021 +0000	Another CMake patch for Windows, fixes #2688.
+027c937	7eb23f4	Mon Jan 4 17:17:48 2021 +0000	Update RunGrepTest to use tr for handling binary zeros instead of sed, which it is hoped with increase portability. Bugzilla #2681.
+6a9900c	9e15c97	Thu Dec 3 15:41:54 2020 +0000	Fixed a Windows CMake testing issue, as advised by Daniel Richard G.
+9e15c97	d19789c	Sun Nov 22 15:16:05 2020 +0000	Fix bug in RunTest: not reporting failure in test 2, and fix bugs in RunTest and RunTest.bat causing test 2 to fail when not building in source directory.
+d19789c	000bbf2	Fri Nov 13 08:04:06 2020 +0000	Fix ARM64 compilation warning in JIT.
+2451870	37b76d8	Tue Oct 27 08:16:04 2020 +0000	Fixed a word boundary check bug in JIT when partial matching is enabled.
+92554d1	6d4936d	Fri Oct 9 15:25:27 2020 +0000	Fix binary zero issue (Bugzilla #2628) in RunGrepTest.
+fff544a	deffc39	Tue Oct 6 08:04:40 2020 +0000	Fix potential memory leak in error situation in recent new code.
+3bdc76e	f8cbb1f	Sat Sep 19 03:49:32 2020 +0000	Fixed a bug in character set matching when JIT is enabled.
+f8cbb1f	0cf247f	Tue Sep 15 14:36:23 2020 +0000	Fix Bugzilla #2642: no match bug in 8-bit mode for caseless invalid utf matching.
+a2f0fd0	5652d41	Mon Sep 14 15:39:39 2020 +0000	Update pcre2test to check delimiters after #perltest and fix some in test 1.
+5652d41	384620a	Sun Sep 13 15:56:32 2020 +0000	Fix delimiters in tests 1 and 4 for correct Perl behaviour (Bugzilla #2641). Also move \\K in lookaround tests to test 2 (Perl no longer supports).
+3d31769	0ad89ab	Wed Jul 15 04:35:32 2020 +0000	Fix an early fail optimization issue and a buffer overread in JIT.
+0ad89ab	ed489f9	Mon Jun 29 15:35:49 2020 +0000	Fix read overflow for invalid VERSION test with one fractional digit at the end of a pattern. Fixes ClusterFuzz 23779.
+ed489f9	3faff02	Mon Jun 22 15:51:19 2020 +0000	Fix Windows debug builds (Bugzilla #2600) using CMake.
+b55dba8	fda3221	Fri Jun 5 15:58:28 2020 +0000	Allow spaces in directory name in CMake build (fixes #2588).
+e44976f	e0c6029	Mon Jun 1 16:36:00 2020 +0000	Patch for CMakeLists.txt by Wolfgang Stoeggl fixes several things; see Bugzilla #2584/
+e0c6029	5dfe817	Fri May 29 14:20:23 2020 +0000	Fix inifinite loop when a single byte newline is searched in JIT.
+5dfe817	e73119c	Tue May 26 15:18:35 2020 +0000	Fix previous commit: include CET_CFLAGS in 16-bit and 32-bit builds under AutoTools.
+d4e4533	ce558bb	Fri Apr 24 16:05:36 2020 +0000	Fix documentation typos and upgrade documentation checking script.
+ca55d0b	8b3f8af	Thu Apr 23 15:41:23 2020 +0000	Avoid using [-1] as a suffix in pcre2test as it can provoke a compiler warning.
+f988433	8057c3c	Tue Mar 24 17:25:58 2020 +0000	Fix resource leak in pcre2test introduced by recent patch.
+0d0d954	21c40e6	Fri Mar 6 09:23:10 2020 +0000	Fix issues in the early fail optimization.
+3155a69	305e273	Wed Feb 26 16:53:39 2020 +0000	Fix bugs in new UCP casing code for back references and characters with more than 2 cases.
+68f9c49	3be5380	Tue Feb 25 16:47:36 2020 +0000	Fix bug introduced in recent UCP changes (writing outside starting code unit bitmap for non-UTF caseless character U+00DF).
+3be5380	4e8f13c	Mon Feb 24 17:29:00 2020 +0000	Fix bad lookbehind compilation when preceded by a DEFINE group.
+f50ee03	a3057bb	Mon Feb 24 15:39:56 2020 +0000	Fix bug in UTF-16 checker returning wrong offset for missing low surrogate.
+c21bd97	eedd9d8	Thu Feb 20 07:42:47 2020 +0000	Fix a crash which occurs when the character type of an invalid UTF character is decoded in JIT.
+a57787b	29c0d64	Sun Feb 16 17:46:40 2020 +0000	Fix problems with new PCRE2_SUBSTITUTE_MATCHED code.
+697cf5f	d71dc30	Mon Feb 10 10:18:01 2020 +0000	Fix control verb chain restoration issue in JIT.
+d71dc30	ed8a314	Fri Jan 31 10:09:38 2020 +0000	Fix compiler warning on ARM64 with JIT.
+3a6b494	9e960f5	Sun Jan 26 15:31:27 2020 +0000	Fix bug in processing (?(DEFINE)...) within lookbehind assertions.
+bf4cd82	03720de	Sat Jan 11 15:28:15 2020 +0000	Fix *THEN verbs in lookahead assertions in JIT.
+6707614	279128c	Sun Dec 29 11:50:37 2019 +0000	Fix typo!
+880aac5	2632526	Sat Dec 7 16:00:53 2019 +0000	Fix the too early access of the fields of a compiled pattern in JIT.
+2632526	f5286d8	Fri Nov 29 11:03:10 2019 +0000	Fix ARMv5 JIT improper handling of labels right after a constant pool.
+af45f41	26fc863	Tue Nov 19 12:25:32 2019 +0000	Fixed the incorrect computation of jump sizes on x86 CPUs in JIT.
+3c86981	6f41a5a	Sat Nov 16 17:30:07 2019 +0000	Fix sometimes failing caseless non-ASCII matching in assertion.
+6f41a5a	9323fa3	Tue Nov 12 13:10:44 2019 +0000	ARM64 first character fixes by Sebastian Pop.
+1838261	ae9208a	Wed Nov 6 14:00:21 2019 +0000	JIT ARM64 fixes by Sebastian Pop.
+7ecc9cd	f768448	Wed Oct 16 17:12:13 2019 +0000	Fix error offset bug introduced at 1176.
+90ae0ae	2a0faa2	Tue Oct 15 15:23:31 2019 +0000	Fix minor test issues and tidies/updates for 10.34-RC1 testing release.
+97acc05	70b0deb	Sun Oct 6 03:36:20 2019 +0000	Fix use after free and compilation error in JIT.
+3787601	e69a614	Thu Sep 26 16:10:30 2019 +0000	Fix typo.
+78fae97	bf15267	Tue Sep 10 13:22:08 2019 +0000	Mend bug introduced in previous patch. Fixes crash detected by ClusterFuzz 17101.
+7bbdc58	963b570	Fri Sep 6 16:08:45 2019 +0000	Fix pessimizing optimization of start-of-match code units in the interpreters.
+45b219e	1e5e9aa	Mon Aug 26 16:28:26 2019 +0000	Fix bug introduced in commit 1133. Lookbehinds that follow a condition were not always properly handled.
+71eb916	ce751bf	Sat Aug 10 11:34:50 2019 +0000	Fix allusedtext bug, rightmost consulted character incorrect in negative lookaheads.
+59c7c5d	81ad928	Sat Aug 3 08:30:40 2019 +0000	Fix incorrect computation of group length when one branch exceeded 65535.
+630e4bb	c0ed5a3	Thu Aug 1 16:42:36 2019 +0000	Fix typo in test data comment.
+9319b5b	fe2df37	Sun Jul 28 15:58:24 2019 +0000	Correct tables argument data type for pcre2_set_character_tables() and fix documentation for pcre2_maketables().
+f7e2116	c84a06c	Mon Jul 22 11:05:19 2019 +0000	Documentation typo fixes.
+c84a06c	344056b	Sun Jul 21 16:48:13 2019 +0000	Update definition of partial match and fix \\z and \\Z (as documented).
+c30815f	f5b35e7	Thu Jul 18 17:20:29 2019 +0000	Fix bug in recent patch for lookbehinds within lookaheads. Fixes ClusterFuzz 15933.
+046c5cd	66811c6	Tue Jul 16 15:06:21 2019 +0000	Fix lookbehind within lookahead within lookbehind misbehaviour bug.
+66811c6	4677b1b	Mon Jul 15 16:04:13 2019 +0000	Fix oversights in recent non-atomic assertions patch. Fixes ClusterFuzz 15837.
+2e06fdc	a5c6010	Thu Jul 4 17:01:53 2019 +0000	Check for integer overflow when computing lookbehind lengths. Fixes Clusterfuzz issue 13656.
+4866bd3	c0d0ee5	Fri Jun 28 16:58:08 2019 +0000	Fix bugs in recent patch for setting the maximum lookbehind.
+c0d0ee5	434e3f7	Wed Jun 26 16:13:28 2019 +0000	Fix partial matching bug in pcre2_dfa_match().
+ef79b97	3b2fa4d	Tue Jun 18 16:07:43 2019 +0000	Fix minimum length bug for patterns containing (*ACCEPT).
+0d1ab85	300bf6e	Sat Jun 15 15:51:07 2019 +0000	Fix pcre2grep -o bug when ovector overflows; add option to adjust the limit; raise the default limit; give error if -o requests an uncaptured parens.
+300bf6e	49f174e	Fri Jun 14 15:44:57 2019 +0000	Another fix to the recent (*ACCEPT) patch. Fixes clusterfuzz 15242.
+f0c06ee	306f2b9	Tue Jun 11 07:37:29 2019 +0000	Fix minor oversight in previous patch. Fixes clusterfuzz 15199.
+5850cc5	16c046c	Sat May 25 16:31:38 2019 +0000	Fix previous patch for non-JIT compilation.
+342c16e	e118e60	Mon May 13 16:38:18 2019 +0000	Forgot this file in previous commit. Fixes JIT non-UTF bug.
+e118e60	a31c548	Mon May 13 16:26:17 2019 +0000	Fix crash when \\X is used without UTF in JIT.
+a31c548	274efb8	Sat May 11 11:43:39 2019 +0000	Fix typo.
+16de900	4e4f273	Mon Apr 22 12:39:38 2019 +0000	Implement a check on the number of capturing parentheses, which for some reason has never existed. This fixes ClusterFuzz issue 14376.
+e85de98	590f65f	Mon Mar 11 17:29:08 2019 +0000	Fix crash in pcre2_substitute() with NULL match context.
+473d8f9	4fd8932	Fri Mar 1 16:19:49 2019 +0000	Fix --enable-jit=auto for out-of-tree builds.
+4fd8932	740a979	Sat Feb 16 11:58:37 2019 +0000	Try to fix CMake old policy warning issue.
+740a979	4bb683e	Thu Feb 14 16:07:14 2019 +0000	Fix two identical documentation typos.
+f2e1cea	8c8deae	Wed Feb 13 16:48:30 2019 +0000	Fix overflow bug in new /u code. Fixes ClusterFuzz 13073.
+d90de8b	45959f1	Thu Feb 7 17:59:37 2019 +0000	Previout bug-fix was bad. This properly fixes an overrun while reading a Unicode group name.
+45959f1	4d17f4b	Thu Feb 7 17:29:50 2019 +0000	Fix small bug in new Unicode group name logic.
+a657d4c	ae913fb	Sun Feb 3 14:49:39 2019 +0000	Fix warning when compiled without Unicode support.
+86349f8	f33fc9b	Tue Jan 29 14:34:59 2019 +0000	Fix bug in VERSION conditional test in DFA matching.
+d38c7f7	7de013b	Thu Jan 17 11:47:59 2019 +0000	Fix word boundary in JIT compiler. Patch by Mike Munday.
+7de013b	8f165d3	Fri Jan 4 16:41:32 2019 +0000	Fix issues with BAD_ESCAPE_IS_LITERAL in character classes.
+5bec7dd	ed63958	Thu Dec 13 13:23:59 2018 +0000	Fix MAP_JIT issues on Mac. Patch by Carlo Arenas.
+0b64d9c	9e4e6fe	Tue Nov 27 16:00:58 2018 +0000	Fix non-recognition of anchoring when preceded by (*MARK) etc.
+cd73c93	24b592e	Sat Nov 17 16:59:39 2018 +0000	Fix two instances of <= 0 being applied to unsigned integers.
+9a9fdf3	87a9887	Sun Oct 28 17:24:24 2018 +0000	Fix teeny typo.
+951bc4b	c796bb8	Mon Oct 22 16:47:55 2018 +0000	Fix heap limit checking overflow bug in pcre2_dfa_match().
+c796bb8	9968924	Sun Oct 21 15:06:43 2018 +0000	Fix typos and obsolescences in comments.
+9968924	8a0dd89	Sat Oct 20 09:28:02 2018 +0000	Fix zero-repeated subroutine call at start of pattern bug, which recorded an incorrect first code unit.
+4642f82	f90ce1a	Wed Oct 17 16:44:22 2018 +0000	Fix typo.
+971f885	2ba2264	Mon Oct 15 11:01:24 2018 +0000	Fix typos in code for alphabetic ranges in EBCDIC environments.
+cda4780	866750f	Wed Oct 3 15:41:47 2018 +0000	Fix bugs of omission in new script run code.
+8800191	3b3dc09	Fri Sep 21 07:24:34 2018 +0000	Fix an xclass matching issue in JIT.
+80adf9d	aa26877	Tue Sep 18 10:19:14 2018 +0000	Fix subject buffer overread in JIT. Found by Yunho Kim.
+a0188b9	7035170	Mon Sep 17 08:09:51 2018 +0000	Fix more invalid UTF issues revealed by new tests in the JIT compiler.
+ab30606	3e6f016	Mon Sep 10 17:34:19 2018 +0000	Fix small bug in pcre2grep (no effect other than a sanitizer warning).
+80c57b5	6636628	Thu Sep 6 15:59:11 2018 +0000	Minor code fix to avoid static analyzer complaint.
+59c2175	50f0de6	Sun Sep 2 16:53:29 2018 +0000	Fix anchoring bug in conditionals with only one branch.
+a8f00b3	6c63199	Wed Aug 29 08:26:29 2018 +0000	Fix typo in Makefile.am, which caused testoutput8-16-4 to be omitted from tarballs.
+5d12e53	1c6f2fc	Tue Aug 21 11:27:35 2018 +0000	Minor code fix to get rid of Coverity warning (I hope).
+6e6bb40	91a6a3a	Fri Aug 17 14:45:35 2018 +0000	Fix bad auto-possessification of certain types of class.
+9332d4b	c722bf2	Sat Aug 4 08:20:18 2018 +0000	Fix dynamic options changing bug.
+7754812	7d97c22	Sun Jul 22 15:43:00 2018 +0000	Add more tests for further ClusterFuzz issues, all were fixed by the previous patch; they just crashed in different ways. The fixed issues are ClusterFuzz numbers 9522, 9534, 9535, 9541, 9542. The bug was a new one, introduced by a recent code update (never in a release).
+7d97c22	5ea9f6b	Sun Jul 22 15:19:43 2018 +0000	Fix oversight in recent OP_COMMIT_ARG update.
+192b82c	635d04f	Sat Jul 21 14:34:51 2018 +0000	Allow :NAME on (*ACCEPT), (*FAIL), and (*COMMIT) and fix bug with (*MARK) followed by (*ACCEPT) in an assertion. More small updates to perltest.sh.
+666e94c	d01c822	Mon Jul 16 15:24:32 2018 +0000	Fixed atomic group backtracking bug.
+614e144	b053ad9	Wed Jul 11 09:48:32 2018 +0000	Fix typo.
+50aa696	b229437	Mon Jul 2 12:26:04 2018 +0000	Fix bug in VERSION number reading.
+b229437	1c79bdf	Mon Jul 2 11:23:45 2018 +0000	Ignore qualifiers on lookaheads within lookbehinds when checking for a fixed length.
+1c79bdf	462f25d	Mon Jul 2 10:54:03 2018 +0000	Fix global search/replace in pcre2test and pcre2_substitute() when the pattern matches an empty string, but never at the starting offset.
+4d2eef1	b87a1b5	Sat Jun 30 13:13:47 2018 +0000	Fix typo.
+89c2a02	9de1a27	Fri Jun 22 16:29:56 2018 +0000	Fix bug when \\K is used in a lookbehind in a substitute pattern.
+8f571cf	c817f94	Fri Jun 22 14:58:09 2018 +0000	Fix typo in previous.
+fa58ac6	3fb01b0	Wed May 30 15:42:23 2018 +0000	Fix typos.
+7ccd0fa	6f6d443	Mon Mar 19 08:15:52 2018 +0000	MIPS-JIT compiler fix: flags were not preserved for fast return.
+ee7e093	04919e9	Sun Feb 25 12:12:48 2018 +0000	A small fix to pcre2grep to avoid compiler warnings for -Wformat-overflow=2.
+b26aa36	553bf8a	Mon Feb 19 17:26:33 2018 +0000	Fix \\C bug with repeated character classes in UTF-8 mode.
+af9bcb7	aff7710	Mon Feb 19 16:55:47 2018 +0000	Fix pcre2test -C to correctly show what \\R matches.
+aff7710	7eae1c5	Mon Feb 19 14:49:42 2018 +0000	Fix the value passed back for POSIX unset groups when REG_STARTEND has a non-zero starting offset, and make pcre2test show relevant POSIX unset groups.
+53a5884	7a5b962	Wed Jan 31 17:53:56 2018 +0000	Fix auto-possessification bug at the end of a capturing group that is called recursively.
+7a5b962	958cd14	Tue Jan 16 16:50:40 2018 +0000	Increment dummy ovector size in internal structures to avoid spurious array bound checker warnings. This fixes oss-fuzz 5415.
+a6237da	940627c	Fri Jan 12 17:55:47 2018 +0000	Fix problem when compiling without Unicode support.
+940627c	1e0f88b	Wed Jan 10 09:28:03 2018 +0000	Fix a typo in JIT and add a test.
+807f370	7a6e8a4	Mon Jan 1 14:54:06 2018 +0000	Previous FIRSTLINE patch was broken. Fix it.
+7a6e8a4	800d884	Mon Jan 1 14:12:35 2018 +0000	Fix PCRE2_FIRSTLINE bug when a pattern match starts with the first code unit of a newline sequence.
+911d43c	07de1b1	Tue Dec 26 15:10:04 2017 +0000	Fix \\K issues in pcre2grep.
+3458a2e	59d85d7	Tue Dec 12 16:23:01 2017 +0000	Fix infelicity in not finding a first character inside a non-assertive group within a positive assertion.
+59d85d7	1a81b73	Tue Dec 12 15:01:51 2017 +0000	Fix incorrect first matching character when a backreference with zero minimum repeat starts a pattern (possibly after assertions).
+77513bf	28e73c6	Thu Nov 30 08:15:28 2017 +0000	Fix after JIT compiler update.
+f93d278	2881730	Thu Nov 23 07:54:39 2017 +0000	Fix pcre2_jit_match early check.
+2543ba8	76814d9	Mon Nov 13 17:12:55 2017 +0000	Fix crash for --line-buffered with a .gz or .bz2 file in pcre2grep.
+76814d9	1cc5351	Mon Nov 13 16:52:39 2017 +0000	Fix multiple multiline matching issues in pcre2grep.
+3636691	76e1ce0	Sun Oct 29 16:58:38 2017 +0000	Fix oss-fuzz bugs 3852 and 3891 (same bug); mis-closing external captures by *ACCEPT inside assertions.
+13fe976	3a55923	Sun Oct 22 16:17:44 2017 +0000	Fix memory leak issue introduced in last bug fix in pcre2grep.
+3a55923	71d0ee7	Fri Oct 20 16:51:59 2017 +0000	Fix pcre2grep recursive file name length issue.
+14edec2	8bbf2b1	Mon Sep 25 15:05:29 2017 +0000	Fix typos in documentation.
+8bbf2b1	897d547	Mon Sep 18 15:51:44 2017 +0000	Fixed a small memory leak in pcre2test (convert contexts).
+3cd616c	72716c1	Mon Aug 28 14:59:04 2017 +0000	Fix typo in VMS code in pcre2test.
+18d7627	6a42f68	Sat Aug 12 16:22:52 2017 +0000	Fix "maybe uninitialized" warning.
+0ba5272	464d037	Tue Jul 25 15:27:30 2017 +0000	Fix bug in /xx implementation.
+4f37764	b8a935f	Sat Jun 17 15:36:22 2017 +0000	Document configuration for SELinux execmem allocator and fix CMake usage.
+76a57bd	69eab9c	Sat Jun 17 11:32:06 2017 +0000	Convert pcre2grep to use new pcre2_compile() options, thereby fixing two minor (?) bugs.
+6679349	c4fac10	Fri Jun 16 10:27:02 2017 +0000	Fix a match offset check in JIT.
+e4c86e2	8e4b992	Sat Jun 3 16:42:58 2017 +0000	Fix matching offsets from regexec() in the POSIX wrapper when called with REG_STARTEND and a starting offset greater than zero.
+c0902e1	a16919c	Tue May 30 10:42:57 2017 +0000	Make pcre2_dfa_match() take notice of the match limit, to catch patterns that use too much resource. This should fix oss-fuzz 1761.
+4404c8c	cfe289c	Mon May 29 16:23:52 2017 +0000	Fix CMakelists.txt missing new convert file.
+cfe289c	3f83148	Mon May 29 16:21:11 2017 +0000	Fix pcre2test buffer size issue for convert calls in non-8-bit modes.
+3f83148	b317bdc	Sun May 28 04:05:58 2017 +0000	Fix alnum parsing in glob conversion.
+3f96e07	3d80fa4	Sat May 27 15:49:29 2017 +0000	Fix lookbehind with zero-length branch in DFA matching. Fixes oss-fuzz 1959.
+fef4de5	231a800	Tue May 23 16:47:29 2017 +0000	Fix potential NULL dereference in new code for surrogate escapes, discovered by Coverity Scan.
+0e62218	e36e582	Mon May 22 18:06:55 2017 +0000	Screw down the depth limit for DFA matching in the fuzzer function. Fixes OSS-fuzz 1761 (I hope).
+f8256af	7927ac0	Sun May 14 12:04:13 2017 +0000	Experimental conversion: fix POSIX BRE starting ^*.
+cd4a219	ab1e3c9	Thu May 11 16:28:54 2017 +0000	A better fix for oss-fuzz 1465.
+ab1e3c9	1909bf0	Wed May 10 18:21:03 2017 +0000	Refactor to avoid sanitize warnings when accessing the variable size ovector in the backtracking frame. Fixes oss-fuzz issue 1465. Also make -bigstack in RunTest allocate a 64Mb stack for use with clang sanitizing.
+1909bf0	3813b51	Wed May 10 16:44:33 2017 +0000	Refactor to avoid picky compiler warnings. Fixes oss-fuzz issue 1454.
+3813b51	7ca875b	Wed May 10 15:42:13 2017 +0000	Correct fix for experimental POSIX pattern translation.
+7ca875b	660811e	Tue May 9 10:44:50 2017 +0000	Fix bug in experimental conversion code.
+764e23e	4655d89	Mon May 8 15:07:34 2017 +0000	Fix typos in macros for experimental convert functions.
+587011e	ba1c759	Sun May 7 15:55:41 2017 +0000	Fix memory leak in pcre2test (found by Coverity Scan).
+382b64b	6e943e5	Sat May 6 16:56:07 2017 +0000	Fix crash when more than one kind of "push" was set in pcre2test.
+584f35c	3dca43f	Tue Apr 18 14:37:01 2017 +0000	Improve prefix character scanning in JIT.
+41d1c6d	e21268b	Sun Apr 16 16:49:11 2017 +0000	Tidies and minor bug fix resulting from Coverity Scan issues.
+bd511d3	0cb5a91	Wed Apr 12 13:48:11 2017 +0000	Fix valgrind warnings for unset padding at the end of the pcre2_real_code structure.
+3b8672b	14989bd	Tue Apr 11 14:53:26 2017 +0000	Fix ACCEPT issue with ENDANCHORED.
+2b36600	59c4618	Wed Apr 5 15:40:06 2017 +0000	Fix typo and remove extraneous blank lines.
+0757041	fcd0c39	Tue Apr 4 11:37:21 2017 +0000	Fix non-passing of mark values out of recursions.
+fcd0c39	7c32d95	Mon Apr 3 18:02:07 2017 +0000	Fix capturing in conditional negative assertions ended with (*ACCEPT).
+a073581	bdac9df	Fri Mar 31 15:51:41 2017 +0000	Fix buglet in recent update for showing malloc/free at match time.
+bdac9df	f7e077c	Fri Mar 31 05:40:37 2017 +0000	Fix character type detection when 32-bit and UCP are enabled but UTF is not in JIT.
+649ae8f	935183d	Sat Mar 25 15:19:49 2017 +0000	Fix bug introduced at 10.21: use memory allocator from the pattern if no context is supplied to pcre2_match().
+45ddeb7	d5ca2de	Thu Mar 23 17:54:58 2017 +0000	Fix issues with (*VERB)s inside recursive subroutine calls.
+d5ca2de	de307ea	Wed Mar 22 15:12:06 2017 +0000	Fix misbehaving DFA match for possessively repeated character class (Bugzilla 2086).
+cde5f12	338a37e	Tue Mar 21 17:46:21 2017 +0000	Fix 32-bit error buffer size bug in pcre2test (Bugzilla 2079).
+a122f42	e105a0f	Tue Mar 21 16:31:54 2017 +0000	Fix NULL deference if pcre2_callout_enumerate() is called with a NULL pattern when Unicode support is available (Bugzilla 2076).
+e105a0f	8e4eb8d	Tue Mar 21 16:25:01 2017 +0000	Fix memory leak when deserializing invalid data (Bugzilla 2075).
+ca75518	31455a7	Tue Mar 21 16:09:57 2017 +0000	Fix pcre2grep Windows problem for new output-colouring code when not under mingw (Bugzilla 2067).
+31455a7	20cafac	Tue Mar 21 12:22:58 2017 +0000	Minor pcre2test code fix for framesize modifier and documentation update.
+d6faa55	77ef3e6	Sun Mar 19 18:34:27 2017 +0000	Fix pcre2test bug for global match with zero terminated subject.
+d7da2dc	ee1f790	Thu Mar 16 17:17:47 2017 +0000	Fix crash for forward reference in lookbehind with PCRE2_ANCHORED. Fixes oss-fuzz issue 865.
+26e92bc	143c136	Fri Mar 10 16:34:54 2017 +0000	Fix crash for pattern with very many captures. Fixes oss-fuzz issue 783.
+143c136	69fee50	Fri Mar 10 15:53:49 2017 +0000	Fix oss-fuzz issue 781: read from bad memory when fewer capturing parens than space in the external ovector.
+53bf29d	f6f7c91	Fri Feb 24 18:25:32 2017 +0000	Fix 32-bit non-UTF property test crash.
+36973c0	388ffac	Sun Feb 12 13:54:45 2017 +0000	Fix new test (119) for running in non-source directly.
+388ffac	0299bba	Sun Feb 12 13:30:38 2017 +0000	Fix bug in most recent fix for pcre2grep.
+0299bba	8a3a452	Fri Feb 10 17:39:29 2017 +0000	Fix previously broken fix for pcre2grep with -Mo matching strings that cross line boundaries.
+3fb194a	7ab91fd	Fri Feb 10 16:33:15 2017 +0000	Cache group minima to speed up studying of pathological patterns. Fixes oss-fuzz #557.
+7ab91fd	2f1e99e	Wed Feb 8 17:03:30 2017 +0000	Reduce recursion limit for auto-possessify to reduce stack usage at compile time. Fixes oss-fuzz issue 553.
+4311f49	56a8ada	Tue Jan 31 17:15:30 2017 +0000	Fix \\g+ bug when the number that follows is too big.
+56a8ada	ca1ecd4	Tue Jan 17 15:21:11 2017 +0000	Fix warnings in 32-bit environments.
+6332aa1	1226e2e	Wed Jan 11 17:02:27 2017 +0000	Fix pcre2test mishandling "end before start" return with POSIX interface.
+1226e2e	27eab0b	Wed Jan 11 16:40:35 2017 +0000	Fix hyphen after \\E after POSIX class causing an error.
+5a15ad5	b5f1050	Sun Jan 1 12:13:17 2017 +0000	Fix very minor typo.
+9fca0de	396a7c7	Sat Dec 31 17:43:42 2016 +0000	Fix typos.
+f18bfd1	f42fb67	Sat Dec 31 14:04:25 2016 +0000	Fix Windows test script.
+25dbe14	664cc44	Thu Dec 29 16:29:05 2016 +0000	Very minor tidy to pcre2grep, plus fix typos in comments.
+664cc44	a3cb2c7	Thu Dec 29 15:57:38 2016 +0000	Fix typos; unset GREP_COLO[U]R.
+a3cb2c7	62659dd	Thu Dec 29 15:54:23 2016 +0000	Fix typo in ChangeLog.
+f676362	fdf7946	Wed Dec 28 12:26:12 2016 +0000	Fix issue with \\Q\\E after a callout before an assertion condition.
+8933d99	a7a25ed	Mon Dec 26 17:11:18 2016 +0000	Fix class bug when UCP but not UTF was set and all wide characters need to be included.
+a7a25ed	6c48775	Sat Dec 24 16:25:11 2016 +0000	Fix bug when a character > 0xffff appears in a lookbehind within a lookbehind.
+6c48775	482b6a1	Fri Dec 23 18:34:10 2016 +0000	Fix mis-parsing of a conditional group with callout but a question mark where the assertion should start.
+3df9674	dfff2fb	Wed Dec 21 17:09:11 2016 +0000	Fix name table sort buffer overflow.
+a984029	f8dcb98	Tue Dec 20 16:47:41 2016 +0000	Fix incorrect internal error for very complicated back reference handling.
+f77339a	a98121a	Sun Dec 11 16:42:29 2016 +0000	Fix \\Q\\E quantification bug.
+a98121a	7914fa8	Sat Dec 10 14:59:24 2016 +0000	Fix caseless minimizing back reference bug when heap in use for recursion.
+7914fa8	bcad1aa	Fri Dec 9 18:19:38 2016 +0000	Fix OOB error in substitute with start offset longer than length.
+bcad1aa	6f3deee	Fri Dec 9 16:57:51 2016 +0000	Fix NULL defer in extended substition for \\p, \\P, or \\X.
+156a5c4	0e04c15	Thu Dec 8 18:56:24 2016 +0000	Fix crash in pcre2test when displaying a wide character with a locale set.
+0e04c15	561dff7	Thu Dec 8 17:55:26 2016 +0000	Fix buffer overflow in partial match test for CRLF in empty buffer.
+561dff7	14f6b9f	Thu Dec 8 16:52:26 2016 +0000	Fix small memory leak in error code path.
+14f6b9f	d3e36ba	Sun Nov 27 16:14:33 2016 +0000	Fix \\Q...\\E bug in (*VERB) name when PCRE2_ALT_VERBNAMES and PCRE2_AUTO_CALLOUT were both specified.
+4c69f50	2aec84e	Wed Nov 23 17:17:57 2016 +0000	Fix bad behaviour for subroutine call in lookbehind when the called subroutine contained an option setting such as (?s) and PCRE2_ANCHORED was set.
+e0cccdd	21c0841	Fri Nov 18 18:59:37 2016 +0000	Fix overrun bug caused by conditional with assertion using too much memory.
+21c0841	02e8b83	Thu Nov 10 17:08:27 2016 +0000	Fix global overflow bug for get/copy names in pcre2test.
+270eaa7	e533e0f	Fri Nov 4 16:35:47 2016 +0000	Fix bad working space size calculation when PCRE2_AUTO_CALLOUT is set.
+e533e0f	10f4e45	Fri Nov 4 11:05:21 2016 +0000	Fix overrun for unterminated number after \\g\'
+6a15c1c	4fd8fea	Tue Nov 1 17:45:54 2016 +0000	Fix callout string read overrun; do better with catching these when using zero-terminated patterns under valgrind.
+4fd8fea	12a6d69	Tue Nov 1 15:58:28 2016 +0000	Fix auto-anchor bug when .* is inside an assertion.
+12a6d69	d3b60a9	Tue Nov 1 12:12:45 2016 +0000	Fix read beyond unterminated quantifier at end of pattern.
+0ea3274	2aa4820	Mon Oct 31 17:46:56 2016 +0000	Fix pattern overrun in utf extended mode for a # comment that hit the end.
+24ab24f	e036cda	Fri Oct 28 16:09:08 2016 +0000	Fix bad memory calculation when the first branch of a lookbehind is of zero length.
+e036cda	8eae402	Fri Oct 28 16:08:44 2016 +0000	Fix error in documentation.
+8eae402	56084cc	Thu Oct 27 17:42:14 2016 +0000	Fix bad lookup in global table for wide characters in extended mode and in *VERB names.
+56084cc	2821076	Wed Oct 26 16:59:22 2016 +0000	Fix *MARK length check in UTF mode (it was checking characters, not code units).
+d0c0111	a22c5e4	Tue Oct 18 15:37:31 2016 +0000	Fix typo.
+a22c5e4	1828179	Tue Oct 18 11:22:40 2016 +0000	Fix optimization bugs when pattern starts with lookahead.
+3938a5b	a8e6116	Sat Oct 15 10:28:27 2016 +0000	Fix typo.
+5d6bf78	bd9a70f	Fri Oct 14 17:06:34 2016 +0000	Fix documentation error.
+bc3e331	bf6f0bb	Thu Oct 13 16:08:08 2016 +0000	Add test for bug already fixed by the refactoring.
+b451e9f	9d99ac5	Fri Oct 7 15:50:39 2016 +0000	Fix new test in testinput5 when LF is not a default newline.
+9d99ac5	710fac1	Thu Oct 6 17:48:24 2016 +0000	Missed typo fixed.
+710fac1	fe96535	Thu Oct 6 17:44:39 2016 +0000	Fix typos in documentation.
+ffd53c9	1d28e04	Wed Oct 5 17:03:52 2016 +0000	Fix typo in CMakeLists.txt.
+1d28e04	7fd341c	Wed Oct 5 16:53:34 2016 +0000	Fix callout display bug in pcre2test.
+dda1e79	69c9d81	Wed Aug 3 17:22:59 2016 +0000	Fix bug that caused chars > 255 not to be matched by classes like [\\W\\pL] when PCRE2_UCP was not set.
+063f45d	22c4999	Fri Jul 15 10:02:19 2016 +0000	Fix unaligned accesses on x86. Patch by Marc Mutz.
+22c4999	6a5aced	Wed Jul 6 17:39:15 2016 +0000	Fix new tests when newline is not LF.
+7aedda0	55f982a	Sun Jul 3 15:21:01 2016 +0000	Fix typo again - hopefully correctly this time.
+55f982a	9bedb66	Sat Jul 2 16:34:01 2016 +0000	Fix typos and add clarification to documentation.
+9bedb66	37e02cf	Sat Jul 2 16:03:06 2016 +0000	Fix incorrect SONAME for pcre2posix wrapper library.
+37e02cf	83c67a8	Sat Jul 2 15:52:30 2016 +0000	Additional test for recent JIT bugfix.
+83c67a8	921636f	Fri Jul 1 08:56:59 2016 +0000	Fix register overwite in JIT when SSE2 acceleration is enabled.
+f16f539	d6bec3e	Sun Jun 26 16:21:23 2016 +0000	Add MSVC snprintf fix to pcre2posix.c, which no longer includes pcre2_internal.h.
+d6bec3e	b7850e4	Fri Jun 24 09:07:15 2016 +0000	Update patch for MSVC static compilation (see Bugzilla #1681).
+5f5e7f6	149456d	Wed Jun 22 10:41:05 2016 +0000	Fix two compiler warnings from clang when only one code unit width is supported.
+b002f44	4f238da	Fri Jun 17 17:37:26 2016 +0000	Fix bad interaction between -o and -M in pcre2grep.
+16acce6	4db9b51	Tue Jun 14 16:14:52 2016 +0000	Fix possible negative index possibility in pcre2test.
+4db9b51	42f9a5e	Tue Jun 14 15:12:07 2016 +0000	Fix comment describing returns from find_fixedlength().
+42f9a5e	d243224	Tue Jun 14 09:19:24 2016 +0000	Fix typo that gave compiler error when JIT not supported.
+afa3c56	784b3d2	Sun Jun 5 16:04:38 2016 +0000	Fix typo in pcre2grep documentation.
+de605ef	c014958	Wed May 25 08:42:31 2016 +0000	Fix typo in test program.
+7650161	8f4e7c8	Thu May 19 18:09:07 2016 +0000	A racing condition is fixed in JIT reported by Mozilla.
+517cd43	c8938f7	Fri Apr 22 14:10:51 2016 +0000	Fix bug for test 22.
+ddcedf0	3e486da	Fri Apr 1 09:15:38 2016 +0000	pcre2grep: fix \\r\\r\
+5b543bf	21ca327	Sun Feb 28 14:56:50 2016 +0000	Fix typo in pcre2_study().
+21ca327	371bf87	Sun Feb 28 13:33:55 2016 +0000	Further small fix to regerror() overflow handling, to ensure identical output whether or not there is a zero at the end of the buffer.
+371bf87	4d807dc	Sat Feb 27 12:49:00 2016 +0000	Fix pcre2test bug when snprintf() in regerror() does not insert a binary zero.
+80d7d82	c28ed7f	Wed Feb 24 10:17:10 2016 +0000	JIT style fixes.
+c28ed7f	88027b4	Tue Feb 16 10:23:06 2016 +0000	Fix some picky compiler warnings
+88027b4	94e07de	Mon Feb 15 09:15:49 2016 +0000	Minor JIT style fixes.
+6bb1322	78aff8c	Wed Feb 10 18:24:02 2016 +0000	Fix workspace overflow for deep nested parentheses with (*ACCEPT).
+78aff8c	112d5b7	Sat Feb 6 16:40:59 2016 +0000	Fix pcre2test loop when a callout is in an initial lookbehind.
+1a01c2a	8febd27	Sat Jan 30 10:08:18 2016 +0000	Fix typo.
+fd00895	bebd2d4	Fri Jan 29 15:01:17 2016 +0000	Patches to fix tests under Windows.
+dcff5bd	68940c7	Tue Jan 5 15:49:53 2016 +0000	Fix erroneous COPYING file.
+57c44ee	255974e	Wed Dec 16 18:44:24 2015 +0000	Fix printing of *MARK names containing binary zeroes in pcre2test.
+6761a59	3ea5c71	Tue Dec 15 18:20:50 2015 +0000	Fix minor glitch.
+38caadf	a7c9027	Fri Dec 4 14:34:35 2015 +0000	Fix typo introduced by ChangeLog 107.
+a7c9027	4a43266	Thu Dec 3 18:36:36 2015 +0000	Fix \\) in (*verb) "name" bug.
+1f9b2a2	d71b70c	Thu Dec 3 16:58:31 2015 +0000	Fix /x bug when pattern starts with whitespace followed by (?-x).
+d71b70c	7b1d954	Wed Dec 2 17:39:26 2015 +0000	Fix issues with NULL characters in patterns.
+7b1d954	12fc152	Tue Dec 1 17:41:24 2015 +0000	Fix extended *verb name ignored terminating whitespace bug.
+12fc152	1b38451	Mon Nov 30 17:31:16 2015 +0000	Fix empty \\Q\\E between an item and a qualifier in auto-callout mode.
+de6603d	65b6fd3	Fri Nov 27 17:34:36 2015 +0000	Fix bad behaviour for isolated \\E before qualifier with auto-callout.
+291ecec	aec5c96	Fri Nov 27 17:03:58 2015 +0000	Fix negated POSIX class bug.
+aec5c96	2eb24e2	Fri Nov 27 15:58:44 2015 +0000	Fix bad offset value in invalid UTF pattern error.
+2eb24e2	5075e74	Wed Nov 25 18:46:35 2015 +0000	Fix auto-callout with (?# comment bug.
+11e0001	3485b14	Fri Nov 20 16:55:36 2015 +0000	Fix wide character problem with negated POSIX ascii and xdigit class items.
+3485b14	c4b8531	Wed Nov 18 08:01:33 2015 +0000	Hotfix for [:punct:] in JIT.
+c4b8531	6650a2f	Tue Nov 17 17:59:35 2015 +0000	Fix [:punct:] bug in UCP mode (matching chars in the range 128-255)
+6650a2f	c0d0f2f	Tue Nov 17 17:13:43 2015 +0000	Fix single-character POSIX class bug in UCP mode.
+c0d0f2f	7cc0597	Mon Nov 16 08:30:48 2015 +0000	Fix two offset_limit bug in JIT.
+89b1ae1	efc135b	Sun Nov 8 14:20:09 2015 +0000	Use caching to improve could_be_empty() and find_fixed_length() compile times, especially when recursion/subroutine calls are present.
+efc135b	2909e24	Fri Nov 6 17:52:41 2015 +0000	Fix out-of-date comment.
+2909e24	b7ee068	Thu Nov 5 18:03:16 2015 +0000	Fix (*NO_AUTO_POSSESS)
+37e9ea2	b02bb99	Tue Nov 3 20:09:33 2015 +0000	Fix buglet in recent name length patch.
+aaa2338	a0d04b9	Sun Nov 1 16:54:17 2015 +0000	Fix dodgy code for UTF-32 checking.
+a0d04b9	f72b753	Sun Nov 1 16:36:20 2015 +0000	Fix off-by-one bug in pcre2_substitute().
+f72b753	a15528e	Sun Nov 1 16:28:13 2015 +0000	Fix VERSION condition bug.
+efccea9	4b242c4	Fri Oct 30 17:30:03 2015 +0000	Fix pcre2_substitute(): set zero-terminated length before UTF validity check.
+4b242c4	30170ad	Fri Oct 30 17:17:40 2015 +0000	Fix regerror() small buffer issues.
+9577d9e	c82273c	Wed Oct 28 09:25:31 2015 +0000	Fix overlong (*MARK) or (*THEN) names bug.
+c82273c	766fbc8	Tue Oct 27 16:15:25 2015 +0000	Fix minor buglet in this script.
+766fbc8	8a8d0ce	Sun Oct 25 17:35:34 2015 +0000	Fix PCRE2_NO_AUTO_CAPTURE bug.
+8a8d0ce	2f542eb	Thu Oct 22 15:49:54 2015 +0000	Fix spurious error in pcre2test when single-letter modifiers at the end of a line have trailing spaces.
+2f542eb	94eda76	Wed Oct 21 15:59:45 2015 +0000	Add attribution for last bug.
+94eda76	0fe342c	Wed Oct 21 11:29:07 2015 +0000	Fix UCP with [[:<]] and [[:>:]] bad compile bug.
+836fbb1	0809e3b	Sat Oct 17 18:29:01 2015 +0000	Fix erroneous "\\ at end of pattern" errors, introduced by PCRE2_SUBSTITUTE_EXTENDED patch.
+0809e3b	3263d44	Sat Oct 17 18:27:38 2015 +0000	Fix bug: test 22 not skipped when Unicode not configured.
+5923caf	0934121	Fri Oct 9 16:54:29 2015 +0000	Fix integer overflow for patterns whose minimum matching length is very, very large.
+0934121	2080c45	Fri Oct 9 16:06:53 2015 +0000	Fix compiler bug for classes such as [\\W\\p{Any}].
+56b8632	357dfb7	Thu Sep 3 15:27:43 2015 +0000	Fix documentation typos.
+357dfb7	cdf07ab	Wed Sep 2 08:35:50 2015 +0000	Fix two issues in JIT.
+fd08e11	ccda7d2	Sun Aug 30 14:11:15 2015 +0000	Fix pcre2test splitting modifier lists at white space.
+e40bc47	69af3b3	Wed Aug 26 13:35:58 2015 +0000	Fixed a corner case of range optimization in JIT.
+3c81648	4facdb9	Mon Aug 24 16:09:39 2015 +0000	Fix bug in RunTest.bat for new test.
+4facdb9	6776437	Mon Aug 24 16:04:32 2015 +0000	Fix CMAKE_C_FLAGS setting
+6776437	9150629	Mon Aug 24 09:25:04 2015 +0000	Fix two assertion fails in JIT found by Karl Skomski.
+4378cd9	ee41aa9	Tue Aug 18 10:39:59 2015 +0000	Fix typo in new test.
+d98800a	b2144d1	Thu Aug 13 11:35:38 2015 +0000	A bug which was introduced by the single character repetition optimization was fixed.
+8e37b0b	e3d62b0	Sun Aug 9 17:46:35 2015 +0000	Fix missing non-existent reference test and bad error offsets for bad \\g and \\k items.
+e3d62b0	c214c54	Sun Aug 9 16:29:35 2015 +0000	Re-write recursion handling to fix another compiler bug and make it all less error-prone.
+4003ae5	b89a448	Wed Aug 5 09:04:01 2015 +0000	Fixed an issue when \\p{Any} inside an xclass did not read the current character.
+3e12e15	8269696	Mon Aug 3 13:18:49 2015 +0000	Fix incorrect minimum matching length when pattern contains (?| groups.
+8269696	d1caa05	Sat Aug 1 09:11:28 2015 +0000	Fix issues with minimum length finding.
+d1caa05	a9c1b4f	Fri Jul 31 09:59:49 2015 +0000	JIT compiler update: Tile-Gx fixes by Walter Lee
+a9c1b4f	3af0a73	Wed Jul 29 08:03:34 2015 +0000	Fix typos.
+1bcfb85	83c7c24	Fri Jul 24 13:30:50 2015 +0000	Fix pedantic infelicities shown up by clang and a UTF-8 checking overflow bug.
+83c7c24	e4d630c	Wed Jul 22 14:34:31 2015 +0000	Fix bugs for patterns with conditional groups starting with assertions.
+e4d630c	0046526	Wed Jul 22 09:29:09 2015 +0000	Fix (?R- not being correctly diagnosed.
+0046526	0b809c7	Wed Jul 22 09:01:50 2015 +0000	Fix incorrect compilation for repeated conditionals with only one branch.
+0b809c7	6881512	Wed Jul 22 06:42:58 2015 +0000	Fix typo in JIT.
+6881512	01c4647	Tue Jul 21 14:03:08 2015 +0000	Fix not diagnosis of missing ) for callout with string argument.
+01c4647	3124191	Tue Jul 21 13:42:14 2015 +0000	Fix "running for ever" bug for deeply nested [: sequences.
+3124191	f957e7b	Mon Jul 20 10:17:23 2015 +0000	Fix another fuzzer bug.
+f957e7b	21b15d9	Mon Jul 20 07:38:06 2015 +0000	Fix infinite recursion in the JIT compiler when certain patterns when certain patterns are analysed.
+21b15d9	d702527	Fri Jul 17 16:25:21 2015 +0000	Fix empty comment (?#) bug
+7b4b853	c1f8a7d	Fri Jul 17 15:18:17 2015 +0000	Correct test for previous bugfix.
+c1f8a7d	c31df29	Fri Jul 17 15:11:45 2015 +0000	Fix bad compilation of a possessively repeated conditional that could match an empty string.
+5cd731f	5700a23	Thu Jul 16 17:47:20 2015 +0000	Fix crash due to incorrect pre-pass handling of callouts with string arguments, and tighten up the callout handling.
+5700a23	3326a72	Thu Jul 16 16:15:52 2015 +0000	Added credit for finding a bug.
+328c792	098562d	Wed Jul 15 09:34:04 2015 +0000	Fix bad processing of (?x)(*MARK) within another group.
+098562d	a972710	Wed Jul 15 09:08:12 2015 +0000	Fix [[:>:]] when followed by parenthesis buffer overflow.
+a972710	d721fd7	Wed Jul 8 08:30:23 2015 +0000	Fix typos in dftables.c for z/OS.
+3fc1676	c5f27e1	Tue Jun 30 10:28:59 2015 +0000	Fix memory leak in pcre2grep.
+b7550b8	f885874	Mon Jun 22 13:40:23 2015 +0000	Fix [\\h] in EBCDIC environments.
+bac822b	78ea22d	Fri Jun 19 16:41:22 2015 +0000	Fix EBCDIC 0x41 omission and give error for \\p and \\P in a class when not supported.
+0638a18	07a8fdc	Fri Jun 19 06:53:36 2015 +0000	Minor single character iterator fixes in JIT.
+149aa29	1d44822	Fri Jun 12 16:25:23 2015 +0000	Fix \\a and \\e in pcre2test, and \\a in pcre2_compile, on EBCDIC platforms.
+1d44822	1e6edd2	Tue Jun 9 17:41:45 2015 +0000	Fix empty string matching bug.
+1e6edd2	ff4553d	Tue Jun 9 16:33:44 2015 +0000	Fix table entry for \\l in EBCDIC environments.
+0766325	c9ac9e2	Wed Jun 3 17:03:37 2015 +0000	Re-instate --enable-debug test.
+bf492e4	f5a63c7	Mon Jun 1 06:55:17 2015 +0000	Warning fixes.
+78b0570	9ce0207	Thu May 28 16:48:42 2015 +0000	Add -fno-sanitize=shift to the sanitize=undefined test, and temporarily disable the debug test.
+78735a5	ba8f1d8	Mon May 18 17:31:29 2015 +0000	Fix buffer overflow for lookbehind with mutually recursive groups.
+150f50b	472d1c4	Sat May 16 16:52:45 2015 +0000	Fix pcre2grep compile with -std=c99.
+472d1c4	6f94ece	Sat May 16 16:02:46 2015 +0000	Fix sanitize=undefined warnings for left shifts of 31.
+6f94ece	56444e9	Sat May 16 11:01:48 2015 +0000	Fix forward reference by name to duplicate group number bug.
+56444e9	92739ef	Fri May 15 17:09:01 2015 +0000	Fix buffer overflow for recursive byname back reference when duplicate names exist.
+92739ef	e653c5f	Fri May 8 16:32:28 2015 +0000	Fix repeated condition check by duplicated name bug.
+e653c5f	c420d11	Wed May 6 16:51:25 2015 +0000	Re-do previous patch and fix new forward-reference-with-quantification bugs.
+c420d11	d519151	Tue May 5 18:46:51 2015 +0000	Fix bug in previous fix.
+d519151	dc8d444	Sun May 3 16:46:56 2015 +0000	Fix recursive forward reference bug.
+2966b06	1d96a5e	Fri Apr 24 11:14:47 2015 +0000	Implement --enable-debug.
+1d96a5e	4d35b44	Thu Apr 23 17:38:02 2015 +0000	Fix static linking using pkg-config issue.
+4d35b44	e75aa00	Thu Apr 23 17:28:39 2015 +0000	Fix compatibility issues for \\8 and \\9.
+e75aa00	d1a13b8	Thu Apr 23 13:53:29 2015 +0000	Fix ARM64 SP alignment issue in JIT.
+fe27332	c8609a7	Tue Apr 21 08:34:10 2015 +0000	Fix replication bug in pcre2test.
+c8609a7	53e2520	Tue Apr 21 07:02:08 2015 +0000	Fix JIT assertion failure.
+3e17483	f123833	Mon Apr 13 09:13:39 2015 +0000	Fix very slow find_minlength when mutual recursion is present.
+f123833	aa8ee3d	Wed Apr 8 16:53:22 2015 +0000	Fix other cases where backtracking after \\C could cause a crash.
+aa8ee3d	7105d24	Wed Apr 8 16:33:58 2015 +0000	Fix backtracking bug for \\C\\X* in UTF mode.
+7105d24	cda8384	Mon Apr 6 12:16:36 2015 +0000	Fix handling of global matching in pcre2test when a lookbehind assertion contains \\K.
+cda8384	ade6732	Fri Apr 3 11:14:19 2015 +0000	Fix pcre2grep loop provoked by \\K in a lookbehind assertion in a non-anchored pattern.
+ade6732	9300cb6	Wed Apr 1 15:37:54 2015 +0000	Fix stack overflow instead of error diagnosis for mutual recursion within lookbehind assertion.
+6a2cb0d	2327a58	Tue Mar 31 15:01:25 2015 +0000	Fix diagnosis of negative relative references to non-existent groups.
+2327a58	63cab0d	Sun Mar 29 17:34:04 2015 +0000	Fix bad compile for possessive quantifier on group containing a subroutine reference.
+63cab0d	99bb61e	Sun Mar 29 15:40:45 2015 +0000	Fix non-diagnosis of syntax error for (?(?< when not followed by ! or =.
+99bb61e	6b6e611	Sun Mar 29 11:15:32 2015 +0000	Fix comment between recursion and quantifier bug.
+6b6e611	cd85fae	Fri Mar 27 17:45:02 2015 +0000	Fix mutual recursion inside other parentheses stack overflow bug.
+cd85fae	a066d12	Wed Mar 25 19:26:27 2015 +0000	Fix bad memory computation for "(*UTF)[\\S\\V\\H]" (a pattern with a negative class (\\S) and explicit wide characters).
+a4ceadb	69cda6b	Tue Mar 24 10:21:34 2015 +0000	Fix bugs when (?!) is used as a condition.
+69cda6b	4e61019	Tue Mar 24 08:43:52 2015 +0000	Fix JIT compilation of conditional blocks whose assertion is converted to (*FAIL).
+b15698b	aa8d734	Fri Mar 20 12:37:28 2015 +0000	Fix data overrun for /(?(?C)/
+b2c6708	baf08a3	Sat Mar 14 10:47:43 2015 +0000	Fix crash in pcre2test for some callouts with string arguments.
+4161891	54396a3	Fri Mar 6 12:49:18 2015 +0000	Fix compiler errors when JIT is not enabled.
+54396a3	24a1028	Fri Mar 6 11:57:06 2015 +0000	Fix bad compile of patterns like /[A-`]/i,utf where the range contains characters with multiple other cases and the ranges adjoin.
+c372df5	ea03932	Sun Mar 1 18:34:05 2015 +0000	Fix compile error for forward reference subroutine call within a group that also contained a recursive back reference.
+ea03932	67800ba	Sat Feb 28 11:31:51 2015 +0000	Fix "internal error" bug caused by patterns like "((?2){0,1999}())?".
+438e519	980a637	Tue Feb 24 14:21:28 2015 +0000	Fix DECL/DEFN typo that affects Windows.
+980a637	928766f	Tue Feb 24 12:35:28 2015 +0000	Fix bugs in CMake control file.
+5878c2c	07e25a1	Sat Feb 21 17:26:24 2015 +0000	Two more 32-bit warnings fixed.
+07e25a1	49a7ead	Sat Feb 21 17:25:12 2015 +0000	Fix compiler warnings for pcre2test on 32-bit systems.
+52ba34a	3d9cc76	Wed Feb 11 18:27:45 2015 +0000	Documentation bug.
+3d9cc76	154bc83	Wed Feb 11 10:06:09 2015 +0000	Fix bug for groups like (a)*+ (possessive, zero minimum) when the ovector was too small to capture.
+154bc83	e8435bc	Tue Feb 10 12:48:45 2015 +0000	Fix replacement bug in pcre2_substitute().
+e8435bc	3e253d0	Sun Feb 8 17:05:12 2015 +0000	Missed test for mutual recursion after crash fixed.
+9059444	2e36497	Sat Feb 7 16:22:48 2015 +0000	Fix alignement problem in deserialization on 64-bit SPARC.
+2e36497	ad452f4	Fri Feb 6 17:51:55 2015 +0000	Fix compile loop for subroutine reference after class such as [^\\ff].
+6c8945b	911b800	Wed Jan 28 11:28:53 2015 +0000	Fix mutual back reference recursion segfault.
+911b800	ca77bdd	Tue Jan 27 17:21:32 2015 +0000	Fix incorrect size calculation when a reference to a duplicate name occurs in a part of the pattern where PCRE2_DUPNAMES is not set.
+5438fc8	d4daaf9	Fri Jan 23 16:51:47 2015 +0000	Add serialization functions and tests with updated pcre2test. Fix PCRE2_INFO_SIZE issues.
+d4daaf9	c702fd6	Tue Jan 13 16:01:24 2015 +0000	Fix conditional group backreference bug.
+a85d15c	45b4ec3	Sat Dec 13 17:43:26 2014 +0000	Improve interfaces to substring functions, and fix bugs.
+45b4ec3	a119d6f	Tue Dec 2 11:06:13 2014 +0000	Fix typo.
+bb3b792	d788c58	Sun Nov 30 10:05:41 2014 +0000	Next attempt to fix the previous bug.
+d788c58	a99e048	Sun Nov 30 10:01:49 2014 +0000	Fix jit_callback check in JIT.
+b7b8ec1	caf7823	Fri Nov 28 13:26:50 2014 +0000	Fix documentation error.
+ba1e2e0	69176e7	Fri Nov 21 12:19:37 2014 +0000	Add additional tests and fix some compiler warnings; update stack information.
+eea35d0	f024446	Wed Nov 19 11:17:20 2014 +0000	Fix zero-repeated assertion-as-condition bug.
+68d95c6	c461546	Tue Nov 18 12:48:28 2014 +0000	Fix missing things in CMake configuration files.
+d4d9ca9	e3e4131	Wed Nov 5 16:05:43 2014 +0000	Buglet fixed.
+e3e4131	44ef2c3	Wed Nov 5 16:05:19 2014 +0000	Fix bug for (*ACCEPT) inside a capturing group.
+8aa511a	959bf27	Fri Oct 31 12:34:34 2014 +0000	Improve test coverage; minor typo in JIT test and other minor buglets fixed.
+7228170	29ae875	Wed Oct 15 15:57:49 2014 +0000	Fix several bugs concerned with different configurations.
+29ae875	14ed10f	Tue Oct 14 17:07:46 2014 +0000	Fix Unicode version and JIT target output.
+14ed10f	26cd0bc	Tue Oct 14 16:41:13 2014 +0000	Minor length bug.
+a630244	3934d4b	Mon Oct 13 06:43:00 2014 +0000	Fix JIT test issues when PCRE2 configured in various modes.
+d961132	623b497	Fri Oct 10 16:42:03 2014 +0000	Fix match_unset_backref bug.
+623b497	62d728b	Fri Oct 10 16:16:44 2014 +0000	Fix "first code unit" bug.
+62746ce	cc463c7	Wed Oct 8 08:57:26 2014 +0000	Several small JIT fixes.
+4ca4ad6	386b47e	Sun Oct 5 16:56:11 2014 +0000	Fix duplicate RM15 label (compile error with --disable-stack-for-recursion).
+386b47e	648695e	Sun Oct 5 06:20:41 2014 +0000	More JIT fixes.
+648695e	0e221c4	Sat Oct 4 17:05:21 2014 +0000	Minor fixes. RunTest 1 now works with JIT.
+9c3deeb	4bb064a	Sat Aug 30 14:20:14 2014 +0000	Fix int/long bug in limit argument decoding.
+4bb064a	babec83	Sat Aug 30 08:52:32 2014 +0000	Fix typos: PCREPOSIX -> PCRE2POSIX.
+cfb78cb	fa3b6bb	Wed Aug 27 16:59:56 2014 +0000	Refactor match_ref() and fix UTF-8 caseless bug.
+059a8eb	7329273	Mon Aug 11 18:43:15 2014 +0000	Re-arrange option bits and fix bad indentation.
+b7c5d02	896e605	Fri Aug 8 15:36:18 2014 +0000	Fix stack overflow bug, copying fix from PCRE1.
+896e605	f40fba5	Thu Aug 7 16:57:28 2014 +0000	Abolish \'D\' abbrevation for \'debug\'.
+f40fba5	fd555f2	Wed Aug 6 17:33:14 2014 +0000	Adjust tests for PCRE/Perl anomalies in character properties & fix one bug.

@@ -1,0 +1,30 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ili/ogrili1datasource.cpp b/gdal/ogr/ogrsf_frmts/ili/ogrili1datasource.cpp
+index 65b2489547..6d54ed0136 100644
+--- a/gdal/ogr/ogrsf_frmts/ili/ogrili1datasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/ili/ogrili1datasource.cpp
+@@ -331,6 +331,12 @@ int OGRILI1DataSource::TestCapability( const char * pszCap )
+ 
+ OGRLayer *OGRILI1DataSource::GetLayer( int iLayer )
+ {
++  if( !poReader )
++  {
++      if( iLayer < 0 || iLayer >= nLayers )
++          return nullptr;
++      return papoLayers[iLayer];
++  }
+   return poReader->GetLayer( iLayer );
+ }
+ 
+@@ -340,6 +346,12 @@ OGRLayer *OGRILI1DataSource::GetLayer( int iLayer )
+ 
+ OGRILI1Layer *OGRILI1DataSource::GetLayerByName( const char* pszLayerName )
+ {
++  if( !poReader )
++  {
++      return reinterpret_cast<OGRILI1Layer *>(
++          OGRDataSource::GetLayerByName(pszLayerName));
++  }
++
+   return reinterpret_cast<OGRILI1Layer *>(
+       poReader->GetLayerByName( pszLayerName ) );
+ }

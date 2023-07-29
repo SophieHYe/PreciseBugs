@@ -1,0 +1,44 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index d7b2e0fdc2..53519ac9ec 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -100,6 +100,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz37457.sksl",
+   "/sksl/errors/Ossfuzz37465.sksl",
+   "/sksl/errors/Ossfuzz37620.sksl",
++  "/sksl/errors/Ossfuzz38106.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz38106.sksl b/resources/sksl/errors/Ossfuzz38106.sksl
+new file mode 100644
+index 0000000000..79dbe5cee8
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz38106.sksl
+@@ -0,0 +1 @@
++half R = 0 .;
+diff --git a/src/sksl/SkSLDSLParser.cpp b/src/sksl/SkSLDSLParser.cpp
+index f632975ca6..657d851abe 100644
+--- a/src/sksl/SkSLDSLParser.cpp
++++ b/src/sksl/SkSLDSLParser.cpp
+@@ -1625,6 +1625,9 @@ skstd::optional<DSLWrapper<DSLExpression>> DSLParser::suffix(DSLExpression base)
+             Token id = this->nextRawToken();
+             if (id.fKind == Token::Kind::TK_IDENTIFIER) {
+                 return this->swizzle(next.fOffset, std::move(base), field + this->text(id));
++            } else if (field.empty()) {
++                this->error(next, "expected field name or swizzle mask after '.'");
++                return {{DSLExpression::Poison()}};
+             }
+             this->pushback(id);
+             return this->swizzle(next.fOffset, std::move(base), field);
+diff --git a/tests/sksl/errors/Ossfuzz38106.glsl b/tests/sksl/errors/Ossfuzz38106.glsl
+new file mode 100644
+index 0000000000..cd947fe24a
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz38106.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: expected identifier, but found ';'
++error: 2: expected ';', but found ''
++2 errors

@@ -1,0 +1,16 @@
+diff --git a/src/trace_processor/gzip_trace_parser.cc b/src/trace_processor/gzip_trace_parser.cc
+index 39f407dd6..209c8cf7f 100644
+--- a/src/trace_processor/gzip_trace_parser.cc
++++ b/src/trace_processor/gzip_trace_parser.cc
+@@ -31,7 +31,10 @@ GzipTraceParser::GzipTraceParser(TraceProcessorContext* context)
+   inflateInit(z_stream_.get());
+ }
+ 
+-GzipTraceParser::~GzipTraceParser() = default;
++GzipTraceParser::~GzipTraceParser() {
++  // Ensure the call to inflateEnd to prevent leaks of internal state.
++  inflateEnd(z_stream_.get());
++}
+ 
+ util::Status GzipTraceParser::Parse(std::unique_ptr<uint8_t[]> data,
+                                     size_t size) {

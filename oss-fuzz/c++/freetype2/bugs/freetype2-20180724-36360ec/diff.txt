@@ -1,0 +1,37 @@
+diff --git a/fuzzing/CMakeLists.txt b/fuzzing/CMakeLists.txt
+index 01fb841..114623e 100644
+--- a/fuzzing/CMakeLists.txt
++++ b/fuzzing/CMakeLists.txt
+@@ -30,12 +30,26 @@ set(LIBARCHIVE_STATIC_LIBRARY "${LIBARCHIVE_BASE_DIR}/.libs/libarchive.a")
+ set(FUZZING_BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+ set(FUZZING_SRC_DIR  "${FUZZING_BASE_DIR}/src")
+ 
++# ${FUZZING_CORPORA_SUITES} is used to automatically detect and register
++# regression tests.
++
+ set(FUZZING_CORPORA_DIR    "${FUZZING_BASE_DIR}/corpora")
+ set(FUZZING_CORPORA_SUITES
++  "legacy"
++
+   "cff"
++  "cff-render"
++
+   "cidtype1"
+-  "legacy"
+-  "truetype")
++  "cidtype1-render"
++
++  "truetype"
++  "truetype-render"
++
++  "type1"
++  "type1-render"
++  "type1-render-tar"
++  "type1-tar")
+ 
+ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+diff --git a/fuzzing/corpora/legacy/oss-fuzz/4928410907312128-out-of-memory b/fuzzing/corpora/legacy/oss-fuzz/4928410907312128-out-of-memory
+new file mode 100644
+index 0000000..4be2526
+Binary files /dev/null and b/fuzzing/corpora/legacy/oss-fuzz/4928410907312128-out-of-memory differ

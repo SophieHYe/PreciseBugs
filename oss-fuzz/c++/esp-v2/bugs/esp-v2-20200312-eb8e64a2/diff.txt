@@ -1,0 +1,47 @@
+diff --git a/api/envoy/http/service_control/config.proto b/api/envoy/http/service_control/config.proto
+index 3dd76e10..e2835df1 100644
+--- a/api/envoy/http/service_control/config.proto
++++ b/api/envoy/http/service_control/config.proto
+@@ -69,10 +69,10 @@ message Service {
+   string backend_protocol = 5;
+ 
+   // The array of request headers demanded to be logged
+-  repeated string log_request_headers = 6;
++  repeated string log_request_headers = 6 [(validate.rules).repeated.items.string.well_known_regex = HTTP_HEADER_NAME];
+ 
+   // The array of response headers demanded to be logged
+-  repeated string log_response_headers = 7;
++  repeated string log_response_headers = 7 [(validate.rules).repeated.items.string.well_known_regex = HTTP_HEADER_NAME];
+ 
+   // Minimum amount of time (milliseconds) between sending intermediate
+   // reports on a stream.
+diff --git a/tests/fuzz/corpus/service_control_filter/crash-log-request-headers.prototxt b/tests/fuzz/corpus/service_control_filter/crash-log-request-headers.prototxt
+new file mode 100644
+index 00000000..d2d6d4de
+--- /dev/null
++++ b/tests/fuzz/corpus/service_control_filter/crash-log-request-headers.prototxt
+@@ -0,0 +1,23 @@
++config {
++  services {
++    service_name: "echo-api.endpoints.cloudesf-testing.cloud.goog"
++    service_config_id: "test-config-id"
++    producer_project_id: "producer-project"
++    backend_protocol: "http1"
++    log_request_headers: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
++    jwt_payload_metadata_name: "jwt_payloads"
++  }
++  requirements {
++    service_name: "echo-api.endpoints.cloudesf-testing.cloud.goog"
++    operation_name: "1.echo_api_endpoints_cloudesf_testing_cloud_goog.Echo"
++  }
++}
++downstream_request {
++}
++upstream_response {
++}
++stream_info {
++  start_time: 1560281088
++}
++sidestream_response {
++}
+\ No newline at end of file

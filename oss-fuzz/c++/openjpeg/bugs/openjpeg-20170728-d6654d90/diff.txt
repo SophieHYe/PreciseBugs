@@ -1,0 +1,13 @@
+diff --git a/src/lib/openjp2/opj_intmath.h b/src/lib/openjp2/opj_intmath.h
+index 03a446f1..64c87ed9 100644
+--- a/src/lib/openjp2/opj_intmath.h
++++ b/src/lib/openjp2/opj_intmath.h
+@@ -129,7 +129,7 @@ Divide an integer and round upwards
+ static INLINE OPJ_INT32 opj_int_ceildiv(OPJ_INT32 a, OPJ_INT32 b)
+ {
+     assert(b);
+-    return (a + b - 1) / b;
++    return (OPJ_INT32)(((OPJ_INT64)a + b - 1) / b);
+ }
+ 
+ /**

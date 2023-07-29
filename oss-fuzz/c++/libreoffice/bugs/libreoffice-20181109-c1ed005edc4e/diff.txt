@@ -1,0 +1,769 @@
+diff --git a/config_host/config_fuzzers.h.in b/config_host/config_fuzzers.h.in
+new file mode 100644
+index 000000000000..a33823260a9e
+--- /dev/null
++++ b/config_host/config_fuzzers.h.in
+@@ -0,0 +1,10 @@
++/*
++Settings for fuzzers mode
++*/
++
++#ifndef CONFIG_FUZZERS_H
++#define CONFIG_FUZZERS_H
++
++#define ENABLE_FUZZERS 0
++
++#endif
+diff --git a/configure.ac b/configure.ac
+index 145505c6e390..92d21b8d0385 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -9245,7 +9245,7 @@ if test "$enable_fuzzers" != yes; then
+ else
+     AC_MSG_RESULT([yes])
+     ENABLE_FUZZERS="TRUE"
+-    AC_DEFINE(ENABLE_FUZZERS)
++    AC_DEFINE([ENABLE_FUZZERS],1)
+     BUILD_TYPE="$BUILD_TYPE FUZZERS"
+ fi
+ AC_SUBST(ENABLE_FUZZERS)
+@@ -12863,6 +12863,7 @@ AC_CONFIG_HEADERS([config_host/config_dbus.h])
+ AC_CONFIG_HEADERS([config_host/config_features.h])
+ AC_CONFIG_HEADERS([config_host/config_firebird.h])
+ AC_CONFIG_HEADERS([config_host/config_folders.h])
++AC_CONFIG_HEADERS([config_host/config_fuzzers.h])
+ AC_CONFIG_HEADERS([config_host/config_gio.h])
+ AC_CONFIG_HEADERS([config_host/config_global.h])
+ AC_CONFIG_HEADERS([config_host/config_gpgme.h])
+diff --git a/solenv/bin/native-code.py b/solenv/bin/native-code.py
+index 8bde580dda5a..e6fa5f3a2431 100755
+--- a/solenv/bin/native-code.py
++++ b/solenv/bin/native-code.py
+@@ -609,6 +609,7 @@ print ("""/*
+  */
+ 
+ #include <config_features.h>
++#include <config_fuzzers.h>
+ #include <config_gpgme.h>
+ #include <osl/detail/component-mapping.h>
+ #include <string.h>
+@@ -639,18 +640,25 @@ print ('')
+ for entry in sorted(custom_widgets):
+     print ('void make' + entry + '();')
+ print ('typedef void (*custom_widget_func)();')
++print ('#if !defined(ENABLE_FUZZERS)')
+ print ('static struct { const char *name; custom_widget_func func; } custom_widgets[] = {')
+ for entry in sorted(custom_widgets):
+     print ('    { "make' + entry + '", make' + entry + ' },')
+ print ('};')
++print ('#endif')
+ print ('')
+ print ("""
+ custom_widget_func lo_get_custom_widget_func(const char* name)
+ {
++#if defined(ENABLE_FUZZERS)
++    (void)name;
++    return nullptr;
++#else
+     for (size_t i = 0; i < sizeof(custom_widgets) / sizeof(custom_widgets[0]); i++)
+         if (strcmp(name, custom_widgets[i].name) == 0)
+             return custom_widgets[i].func;
+     return nullptr;
++#endif
+ }
+ """)
+ 
+diff --git a/vcl/Executable_mtpfuzzer.mk b/vcl/Executable_mtpfuzzer.mk
+index 8d96c618ba37..73e30b257007 100644
+--- a/vcl/Executable_mtpfuzzer.mk
++++ b/vcl/Executable_mtpfuzzer.mk
+@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_use_libraries,mtpfuzzer,\
+ $(eval $(call gb_Executable_use_static_libraries,mtpfuzzer,\
+     findsofficepath \
+     ulingu \
+-    fuzzer_math \
+     fuzzerstubs \
+ ))
+ 
+diff --git a/vcl/workben/602fuzzer.cxx b/vcl/workben/602fuzzer.cxx
+index 7fc085da79ca..6fb96a4c778c 100644
+--- a/vcl/workben/602fuzzer.cxx
++++ b/vcl/workben/602fuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImport602(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/bmpfuzzer.cxx b/vcl/workben/bmpfuzzer.cxx
+index 0029cb1d00d5..8e22aabafc21 100644
+--- a/vcl/workben/bmpfuzzer.cxx
++++ b/vcl/workben/bmpfuzzer.cxx
+@@ -40,6 +40,11 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+     return 0;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+ {
+     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
+diff --git a/vcl/workben/cgmfuzzer.cxx b/vcl/workben/cgmfuzzer.cxx
+index 73b37b934a10..624d156e4c8a 100644
+--- a/vcl/workben/cgmfuzzer.cxx
++++ b/vcl/workben/cgmfuzzer.cxx
+@@ -100,6 +100,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportCGM(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/diffuzzer.cxx b/vcl/workben/diffuzzer.cxx
+index 42735bdb5a3c..c9bc77a16e99 100644
+--- a/vcl/workben/diffuzzer.cxx
++++ b/vcl/workben/diffuzzer.cxx
+@@ -64,6 +64,10 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*) { return nullptr; }
++
++extern "C" void* ScCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportDIF(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/docxfuzzer.cxx b/vcl/workben/docxfuzzer.cxx
+index 9d36b5add2fd..d8751bd0f1bb 100644
+--- a/vcl/workben/docxfuzzer.cxx
++++ b/vcl/workben/docxfuzzer.cxx
+@@ -11,6 +11,11 @@
+ #include <vcl/FilterConfigItem.hxx>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportDOCX(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/dxffuzzer.cxx b/vcl/workben/dxffuzzer.cxx
+index 2b062ebf65c6..6ca526a1d8cf 100644
+--- a/vcl/workben/dxffuzzer.cxx
++++ b/vcl/workben/dxffuzzer.cxx
+@@ -43,6 +43,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool idxGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/epsfuzzer.cxx b/vcl/workben/epsfuzzer.cxx
+index 3105bf76dcc5..effb05193aa1 100644
+--- a/vcl/workben/epsfuzzer.cxx
++++ b/vcl/workben/epsfuzzer.cxx
+@@ -43,6 +43,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool ipsGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/fodsfuzzer.cxx b/vcl/workben/fodsfuzzer.cxx
+index b56a8e84f707..370eed84fb2f 100644
+--- a/vcl/workben/fodsfuzzer.cxx
++++ b/vcl/workben/fodsfuzzer.cxx
+@@ -11,6 +11,11 @@
+ #include <vcl/FilterConfigItem.hxx>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* ScCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportFODS(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/fodtfuzzer.cxx b/vcl/workben/fodtfuzzer.cxx
+index b881c6af2157..c2e837b14dbd 100644
+--- a/vcl/workben/fodtfuzzer.cxx
++++ b/vcl/workben/fodtfuzzer.cxx
+@@ -11,6 +11,11 @@
+ #include <vcl/FilterConfigItem.hxx>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportFODT(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/giffuzzer.cxx b/vcl/workben/giffuzzer.cxx
+index 482099ea807d..7a2b9a9f051a 100644
+--- a/vcl/workben/giffuzzer.cxx
++++ b/vcl/workben/giffuzzer.cxx
+@@ -40,6 +40,11 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+     return 0;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+ {
+     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
+diff --git a/vcl/workben/htmlfuzzer.cxx b/vcl/workben/htmlfuzzer.cxx
+index 7acbf1eb2881..96c9171c1446 100644
+--- a/vcl/workben/htmlfuzzer.cxx
++++ b/vcl/workben/htmlfuzzer.cxx
+@@ -11,6 +11,8 @@
+ #include <vcl/FilterConfigItem.hxx>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* SwCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportHTML(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/hwpfuzzer.cxx b/vcl/workben/hwpfuzzer.cxx
+index acff28cdb178..430b1bdfc82e 100644
+--- a/vcl/workben/hwpfuzzer.cxx
++++ b/vcl/workben/hwpfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportHWP(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/jpgfuzzer.cxx b/vcl/workben/jpgfuzzer.cxx
+index 0fe6fc9076ee..5850deec5882 100644
+--- a/vcl/workben/jpgfuzzer.cxx
++++ b/vcl/workben/jpgfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+diff --git a/vcl/workben/lwpfuzzer.cxx b/vcl/workben/lwpfuzzer.cxx
+index 76819a711b89..fc07045420fa 100644
+--- a/vcl/workben/lwpfuzzer.cxx
++++ b/vcl/workben/lwpfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportLWP(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/metfuzzer.cxx b/vcl/workben/metfuzzer.cxx
+index 285a27b76909..fd506432996e 100644
+--- a/vcl/workben/metfuzzer.cxx
++++ b/vcl/workben/metfuzzer.cxx
+@@ -43,6 +43,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool imeGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/mtpfuzzer.cxx b/vcl/workben/mtpfuzzer.cxx
+index 51313955b2b2..8ed271ced993 100644
+--- a/vcl/workben/mtpfuzzer.cxx
++++ b/vcl/workben/mtpfuzzer.cxx
+@@ -28,6 +28,8 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*) { return nullptr; }
++
+ extern "C" bool TestImportMathType(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+diff --git a/vcl/workben/olefuzzer.cxx b/vcl/workben/olefuzzer.cxx
+index 7193a0292575..4d67ab57e72a 100644
+--- a/vcl/workben/olefuzzer.cxx
++++ b/vcl/workben/olefuzzer.cxx
+@@ -42,6 +42,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportOLE2(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/pcdfuzzer.cxx b/vcl/workben/pcdfuzzer.cxx
+index fe437adf66e2..ccd0367535be 100644
+--- a/vcl/workben/pcdfuzzer.cxx
++++ b/vcl/workben/pcdfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool icdGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/pctfuzzer.cxx b/vcl/workben/pctfuzzer.cxx
+index daa9f3df147c..a916920c4b9f 100644
+--- a/vcl/workben/pctfuzzer.cxx
++++ b/vcl/workben/pctfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool iptGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/pcxfuzzer.cxx b/vcl/workben/pcxfuzzer.cxx
+index 32e2a88f860d..e2b72fb7e765 100644
+--- a/vcl/workben/pcxfuzzer.cxx
++++ b/vcl/workben/pcxfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool ipxGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/pngfuzzer.cxx b/vcl/workben/pngfuzzer.cxx
+index a88784e1af17..2a3357830007 100644
+--- a/vcl/workben/pngfuzzer.cxx
++++ b/vcl/workben/pngfuzzer.cxx
+@@ -40,6 +40,11 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+     return 0;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+ {
+     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
+diff --git a/vcl/workben/ppmfuzzer.cxx b/vcl/workben/ppmfuzzer.cxx
+index 21010c3e025d..854d457c5503 100644
+--- a/vcl/workben/ppmfuzzer.cxx
++++ b/vcl/workben/ppmfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool ipbGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/pptfuzzer.cxx b/vcl/workben/pptfuzzer.cxx
+index 792cd2f9b6c8..a10f8b218c0f 100644
+--- a/vcl/workben/pptfuzzer.cxx
++++ b/vcl/workben/pptfuzzer.cxx
+@@ -98,6 +98,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportPPT(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/psdfuzzer.cxx b/vcl/workben/psdfuzzer.cxx
+index 715588cc5932..a1bb1823d483 100644
+--- a/vcl/workben/psdfuzzer.cxx
++++ b/vcl/workben/psdfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool ipdGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/qpwfuzzer.cxx b/vcl/workben/qpwfuzzer.cxx
+index 14a05ee4ea7a..0b1fe636240e 100644
+--- a/vcl/workben/qpwfuzzer.cxx
++++ b/vcl/workben/qpwfuzzer.cxx
+@@ -61,6 +61,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* ScCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportQPW(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/rasfuzzer.cxx b/vcl/workben/rasfuzzer.cxx
+index bb78df03fea7..734180b5998b 100644
+--- a/vcl/workben/rasfuzzer.cxx
++++ b/vcl/workben/rasfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool iraGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/rtffuzzer.cxx b/vcl/workben/rtffuzzer.cxx
+index 028efda90351..da039085bca5 100644
+--- a/vcl/workben/rtffuzzer.cxx
++++ b/vcl/workben/rtffuzzer.cxx
+@@ -62,6 +62,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportRTF(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/scrtffuzzer.cxx b/vcl/workben/scrtffuzzer.cxx
+index cf9d88c66159..0646d71c295e 100644
+--- a/vcl/workben/scrtffuzzer.cxx
++++ b/vcl/workben/scrtffuzzer.cxx
+@@ -61,6 +61,10 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*) { return nullptr; }
++
++extern "C" void* ScCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportCalcRTF(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/sftfuzzer.cxx b/vcl/workben/sftfuzzer.cxx
+index 31b96e7cff6d..fc951ddc1468 100644
+--- a/vcl/workben/sftfuzzer.cxx
++++ b/vcl/workben/sftfuzzer.cxx
+@@ -27,6 +27,8 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*) { return nullptr; }
++
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+diff --git a/vcl/workben/slkfuzzer.cxx b/vcl/workben/slkfuzzer.cxx
+index a1e1d72ebd3e..9b8463bdc4fa 100644
+--- a/vcl/workben/slkfuzzer.cxx
++++ b/vcl/workben/slkfuzzer.cxx
+@@ -61,6 +61,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* ScCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportSLK(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/svmfuzzer.cxx b/vcl/workben/svmfuzzer.cxx
+index a36d7dc2215d..5ef7366c1889 100644
+--- a/vcl/workben/svmfuzzer.cxx
++++ b/vcl/workben/svmfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+diff --git a/vcl/workben/tgafuzzer.cxx b/vcl/workben/tgafuzzer.cxx
+index d0c9e0a0a202..47ba63b71da7 100644
+--- a/vcl/workben/tgafuzzer.cxx
++++ b/vcl/workben/tgafuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool itgGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/tiffuzzer.cxx b/vcl/workben/tiffuzzer.cxx
+index 6e7dd7b16722..2ca83d7b05d8 100644
+--- a/vcl/workben/tiffuzzer.cxx
++++ b/vcl/workben/tiffuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" bool itiGraphicImport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/wksfuzzer.cxx b/vcl/workben/wksfuzzer.cxx
+index 36e25f82761d..e4eae020159d 100644
+--- a/vcl/workben/wksfuzzer.cxx
++++ b/vcl/workben/wksfuzzer.cxx
+@@ -13,6 +13,8 @@
+ #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* ScCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportWKS(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/wmffuzzer.cxx b/vcl/workben/wmffuzzer.cxx
+index b6ea0b593c86..7cc43d793d60 100644
+--- a/vcl/workben/wmffuzzer.cxx
++++ b/vcl/workben/wmffuzzer.cxx
+@@ -46,6 +46,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+diff --git a/vcl/workben/ww2fuzzer.cxx b/vcl/workben/ww2fuzzer.cxx
+index 6ec5be024623..c6a44111f510 100644
+--- a/vcl/workben/ww2fuzzer.cxx
++++ b/vcl/workben/ww2fuzzer.cxx
+@@ -76,6 +76,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportWW2(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/ww6fuzzer.cxx b/vcl/workben/ww6fuzzer.cxx
+index c929222251aa..d98b7a579448 100644
+--- a/vcl/workben/ww6fuzzer.cxx
++++ b/vcl/workben/ww6fuzzer.cxx
+@@ -78,6 +78,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportWW6(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/ww8fuzzer.cxx b/vcl/workben/ww8fuzzer.cxx
+index 16f49f119e15..a1c6a8544655 100644
+--- a/vcl/workben/ww8fuzzer.cxx
++++ b/vcl/workben/ww8fuzzer.cxx
+@@ -78,6 +78,16 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
++extern "C" void* SwCreateDialogFactory()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportWW8(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/xbmfuzzer.cxx b/vcl/workben/xbmfuzzer.cxx
+index 0dab121ed1fb..bb261f60a93f 100644
+--- a/vcl/workben/xbmfuzzer.cxx
++++ b/vcl/workben/xbmfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);
+diff --git a/vcl/workben/xlsfuzzer.cxx b/vcl/workben/xlsfuzzer.cxx
+index 014e7b917aca..2878bd5cc1a4 100644
+--- a/vcl/workben/xlsfuzzer.cxx
++++ b/vcl/workben/xlsfuzzer.cxx
+@@ -13,6 +13,8 @@
+ #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* ScCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportXLS(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/xlsxfuzzer.cxx b/vcl/workben/xlsxfuzzer.cxx
+index ae4d74fed9cf..279fdceb7e20 100644
+--- a/vcl/workben/xlsxfuzzer.cxx
++++ b/vcl/workben/xlsxfuzzer.cxx
+@@ -11,6 +11,8 @@
+ #include <vcl/FilterConfigItem.hxx>
+ #include "commonfuzzer.hxx"
+ 
++extern "C" void* ScCreateDialogFactory() { return nullptr; }
++
+ extern "C" bool TestImportXLSX(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
+diff --git a/vcl/workben/xpmfuzzer.cxx b/vcl/workben/xpmfuzzer.cxx
+index e5160414ccaf..700761d1725f 100644
+--- a/vcl/workben/xpmfuzzer.cxx
++++ b/vcl/workben/xpmfuzzer.cxx
+@@ -34,6 +34,11 @@ lo_get_constructor_map(void)
+     return map;
+ }
+ 
++extern "C" void* lo_get_custom_widget_func(const char*)
++{
++    return nullptr;
++}
++
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+ {
+     TypicalFuzzerInitialize(argc, argv);

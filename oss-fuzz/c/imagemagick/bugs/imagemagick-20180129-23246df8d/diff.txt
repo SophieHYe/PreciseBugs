@@ -1,0 +1,12 @@
+diff --git a/coders/pnm.c b/coders/pnm.c
+index 8184730f0..d72e14d53 100644
+--- a/coders/pnm.c
++++ b/coders/pnm.c
+@@ -428,6 +428,7 @@ static Image *ReadPNMImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     status=SetImageExtent(image,image->columns,image->rows,exception);
+     if (status == MagickFalse)
+       return(DestroyImageList(image));
++    (void) SetImageBackgroundColor(image,exception);
+     /*
+       Convert PNM pixels to runextent-encoded MIFF packets.
+     */

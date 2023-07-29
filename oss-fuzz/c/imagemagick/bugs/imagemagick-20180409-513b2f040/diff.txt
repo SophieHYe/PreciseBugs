@@ -1,0 +1,14 @@
+diff --git a/coders/tga.c b/coders/tga.c
+index 53cfb94f3..ef71590fa 100644
+--- a/coders/tga.c
++++ b/coders/tga.c
+@@ -301,8 +301,8 @@ static Image *ReadTGAImage(const ImageInfo *image_info,
+         {
+           comment[length]='\0';
+           (void) SetImageProperty(image,"comment",comment,exception);
+-          comment=DestroyString(comment);
+         }
++      comment=DestroyString(comment);
+     }
+   if (tga_info.attributes & (1UL << 4))
+     {

@@ -1,0 +1,1 @@
+commit 476911e1f90742c4bf67e9b3d1815c8211f40bddAuthor: Peter Nelson <peter@peterdn.com>Date:   Mon Dec 28 12:31:09 2020 +0000    LibGfx: fix OOB access in LZW decoder on bad input        This fixes an issue where a corrupted LZW code can result in the first    element of an empty buffer being accessed.        Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=27863

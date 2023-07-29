@@ -1,0 +1,13 @@
+diff --git a/sigstore-java/src/main/java/dev/sigstore/encryption/certificates/Certificates.java b/sigstore-java/src/main/java/dev/sigstore/encryption/certificates/Certificates.java
+index d807550..df31ff3 100644
+--- a/sigstore-java/src/main/java/dev/sigstore/encryption/certificates/Certificates.java
++++ b/sigstore-java/src/main/java/dev/sigstore/encryption/certificates/Certificates.java
+@@ -93,7 +93,7 @@ public class Certificates {
+           byte[] certBytes = section.getBase64DecodedBytes();
+           certList.add(
+               (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(certBytes)));
+-        } catch (IOException ioe) {
++        } catch (IOException | IllegalArgumentException ioe) {
+           throw new CertificateParsingException("Error reading PEM section in cert chain", ioe);
+         }
+       }

@@ -1,0 +1,156 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 1924247868..b0028c542f 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -814,6 +814,7 @@ sksl_rte_tests = [
+   "runtime/Commutative.rts",
+   "runtime/ConstPreservation.rts",
+   "runtime/ConversionConstructors.rts",
++  "runtime/DivideByZero.rts",
+   "runtime/GLSLTypeNames.rts",
+   "runtime/GlobalVariables.rts",
+   "runtime/HSLColorFilter.rtcf",
+diff --git a/resources/sksl/BUILD.bazel b/resources/sksl/BUILD.bazel
+index 670b143ff5..5c97dad939 100644
+--- a/resources/sksl/BUILD.bazel
++++ b/resources/sksl/BUILD.bazel
+@@ -648,6 +648,7 @@ skia_filegroup(
+         "runtime/Commutative.rts",
+         "runtime/ConstPreservation.rts",
+         "runtime/ConversionConstructors.rts",
++        "runtime/DivideByZero.rts",
+         "runtime/GLSLTypeNames.rts",
+         "runtime/GlobalVariables.rts",
+         "runtime/HSLColorFilter.rtcf",
+diff --git a/resources/sksl/runtime/DivideByZero.rts b/resources/sksl/runtime/DivideByZero.rts
+new file mode 100644
+index 0000000000..bdd58ec2a8
+--- /dev/null
++++ b/resources/sksl/runtime/DivideByZero.rts
+@@ -0,0 +1,10 @@
++uniform half4 colorGreen, colorRed;
++
++half4 main(float2 xy) {
++    int one  = int(colorGreen.g);
++    int zero = int(colorGreen.r);
++    int undefined = (one / zero) + (zero / zero);
++
++    // We have to use the result somehow, in order to prevent dead-code elimination.
++    return (undefined != 9876543) ? colorGreen : colorRed;
++}
+diff --git a/src/opts/SkRasterPipeline_opts.h b/src/opts/SkRasterPipeline_opts.h
+index b10028bd3a..680bc39895 100644
+--- a/src/opts/SkRasterPipeline_opts.h
++++ b/src/opts/SkRasterPipeline_opts.h
+@@ -3646,7 +3646,12 @@ SI void mul_fn(T* dst, T* src) {
+ 
+ template <typename T>
+ SI void div_fn(T* dst, T* src) {
+-    *dst /= *src;
++    T divisor = *src;
++    if constexpr (!std::is_same_v<T, F>) {
++        // We will crash if we integer-divide against zero. Convert 0 to ~0 to avoid this.
++        divisor |= cond_to_mask(divisor == 0);
++    }
++    *dst /= divisor;
+ }
+ 
+ SI void bitwise_and_fn(I32* dst, I32* src) {
+diff --git a/tests/SkSLTest.cpp b/tests/SkSLTest.cpp
+index 24bad3acb4..a9c31799b2 100644
+--- a/tests/SkSLTest.cpp
++++ b/tests/SkSLTest.cpp
+@@ -596,6 +596,7 @@ SKSL_TEST(RP + GPU_ES3,  kNever,      IntrinsicUintBitsToFloat,        "intrinsi
+ 
+ SKSL_TEST(GPU_ES3,       kNever,      ArrayNarrowingConversions,       "runtime/ArrayNarrowingConversions.rts")
+ SKSL_TEST(RP + GPU_ES3,  kNever,      Commutative,                     "runtime/Commutative.rts")
++SKSL_TEST(RP,            kNever,      DivideByZero,                    "runtime/DivideByZero.rts")
+ SKSL_TEST(RP + VM + GPU, kApiLevel_T, LoopFloat,                       "runtime/LoopFloat.rts")
+ SKSL_TEST(RP + VM + GPU, kApiLevel_T, LoopInt,                         "runtime/LoopInt.rts")
+ SKSL_TEST(RP + VM + GPU, kApiLevel_T, Ossfuzz52603,                    "runtime/Ossfuzz52603.rts")
+diff --git a/tests/sksl/runtime/DivideByZero.minified.sksl b/tests/sksl/runtime/DivideByZero.minified.sksl
+new file mode 100644
+index 0000000000..8cf587216e
+--- /dev/null
++++ b/tests/sksl/runtime/DivideByZero.minified.sksl
+@@ -0,0 +1 @@
++uniform half4 colorGreen;uniform half4 colorRed;half4 main(float2 a){int b=int(colorGreen.y);int c=int(colorGreen.x);int d=b/c+c/c;return d!=9876543?colorGreen:colorRed;}
+diff --git a/tests/sksl/runtime/DivideByZero.skrp b/tests/sksl/runtime/DivideByZero.skrp
+new file mode 100644
+index 0000000000..d43b29d55b
+--- /dev/null
++++ b/tests/sksl/runtime/DivideByZero.skrp
+@@ -0,0 +1,23 @@
++    1. store_src_rg                   xy = src.rg
++    2. init_lane_masks                CondMask = LoopMask = RetMask = true
++    3. copy_constant                  $0 = colorGreen(1)
++    4. cast_to_int_from_float         $0 = FloatToInt($0)
++    5. copy_slot_unmasked             one = $0
++    6. copy_constant                  $0 = colorGreen(0)
++    7. cast_to_int_from_float         $0 = FloatToInt($0)
++    8. copy_slot_unmasked             zero = $0
++    9. copy_2_slots_unmasked          $0..1 = one, zero
++   10. div_int                        $0 /= $1
++   11. copy_slot_unmasked             $1 = zero
++   12. copy_slot_unmasked             $2 = zero
++   13. div_int                        $1 /= $2
++   14. add_int                        $0 += $1
++   15. copy_slot_unmasked             undefined = $0
++   16. copy_constant                  $1 = 0x0096B43F (1.38399845e-38)
++   17. cmpne_int                      $0 = notEqual($0, $1)
++   18. swizzle_4                      $0..3 = ($0..3).xxxx
++   19. copy_4_constants               $4..7 = colorRed
++   20. copy_4_constants               $8..11 = colorGreen
++   21. mix_4_ints                     $0..3 = mix($4..7, $8..11, $0..3)
++   22. copy_4_slots_unmasked          [main].result = $0..3
++   23. load_src                       src.rgba = [main].result
+diff --git a/tests/sksl/runtime/DivideByZero.skvm b/tests/sksl/runtime/DivideByZero.skvm
+new file mode 100644
+index 0000000000..68b6b191db
+--- /dev/null
++++ b/tests/sksl/runtime/DivideByZero.skvm
+@@ -0,0 +1,29 @@
++10 registers, 27 instructions:
++0	r0 = uniform32 ptr0 4
++1	r1 = uniform32 ptr0 8
++2	r2 = uniform32 ptr0 C
++3	r3 = uniform32 ptr0 10
++4	r4 = uniform32 ptr0 14
++5	r5 = uniform32 ptr0 18
++6	r6 = uniform32 ptr0 1C
++7	r7 = uniform32 ptr0 20
++8	r8 = trunc r1
++9	r9 = trunc r0
++10	r8 = to_f32 r8
++11	r9 = to_f32 r9
++12	r8 = div_f32 r8 r9
++13	r8 = trunc r8
++14	r9 = div_f32 r9 r9
++15	r9 = trunc r9
++16	r9 = add_i32 r8 r9
++17	r8 = splat 96B43F (1.3839985e-38)
++18	r8 = eq_i32 r9 r8
++19	r0 = select r8 r4 r0
++20	r1 = select r8 r5 r1
++21	r2 = select r8 r6 r2
++22	r3 = select r8 r7 r3
++loop:
++23	    store32 ptr1 r0
++24	    store32 ptr2 r1
++25	    store32 ptr3 r2
++26	    store32 ptr4 r3
+diff --git a/tests/sksl/runtime/DivideByZero.stage b/tests/sksl/runtime/DivideByZero.stage
+new file mode 100644
+index 0000000000..5651a94fdd
+--- /dev/null
++++ b/tests/sksl/runtime/DivideByZero.stage
+@@ -0,0 +1,9 @@
++uniform half4 colorGreen;
++uniform half4 colorRed;
++half4 main(float2 xy)
++{
++	int one = int(colorGreen.y);
++	int zero = int(colorGreen.x);
++	int undefined = one / zero + zero / zero;
++	return half4(undefined != 9876543 ? colorGreen : colorRed);
++}

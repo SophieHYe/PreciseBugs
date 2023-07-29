@@ -1,0 +1,68 @@
+diff --git a/starlark/src/errors/mod.rs b/starlark/src/errors/mod.rs
+index 2394f547..ba347ddb 100644
+--- a/starlark/src/errors/mod.rs
++++ b/starlark/src/errors/mod.rs
+@@ -199,14 +199,6 @@ impl Diagnostic {
+ 
+     /// Gets annotated snippets for a [`Diagnostic`].
+     fn get_display_list<'a>(&'a self, annotation_label: &'a str, color: bool) -> DisplayList<'a> {
+-        fn convert_span_to_range_relative_to_first_line(
+-            diagnostic_span: Span,
+-            start_column: usize,
+-        ) -> (usize, usize) {
+-            let span_length = diagnostic_span.len() as usize;
+-            (start_column, start_column + span_length)
+-        }
+-
+         fn convert_span_to_slice<'a>(span: &'a FileSpan) -> Slice<'a> {
+             let region = span.resolve_span();
+ 
+@@ -216,19 +208,25 @@ impl Diagnostic {
+             let first_line_span = span.file.line_span(region.begin_line);
+             let last_line_span = span.file.line_span(region.end_line);
+             let source_span = span.span.merge(first_line_span).merge(last_line_span);
++            let source = span.file.source_span(source_span);
++
++            // We want to highlight the span, which needs to be relative to source, and in
++            // characters (whereas our spans are in terms of bytes)
++            let range_start_bytes = region.begin_column;
++            let range_len_bytes = span.span.len() as usize;
++            let range_start_chars = fast_string::len(&source[0..range_start_bytes]).0;
++            let range_len_chars =
++                fast_string::len(&source[range_start_bytes..range_start_bytes + range_len_bytes]).0;
+ 
+             Slice {
+-                source: span.file.source_span(source_span),
++                source,
+                 line_start: 1 + region.begin_line,
+                 origin: Some(span.file.filename()),
+                 fold: false,
+                 annotations: vec![SourceAnnotation {
+                     label: "",
+                     annotation_type: AnnotationType::Error,
+-                    range: convert_span_to_range_relative_to_first_line(
+-                        span.span,
+-                        region.begin_column,
+-                    ),
++                    range: (range_start_chars, range_start_chars + range_len_chars),
+                 }],
+             }
+         }
+diff --git a/starlark/src/tests/uncategorized.rs b/starlark/src/tests/uncategorized.rs
+index e1799f44..17cb9622 100644
+--- a/starlark/src/tests/uncategorized.rs
++++ b/starlark/src/tests/uncategorized.rs
+@@ -1008,3 +1008,13 @@ animal("Joe")
+     let animal = SmallMap::<String, Value>::unpack_value(res).unwrap();
+     println!("animal = {:?}", animal);
+ }
++
++#[test]
++fn test_fuzzer_59102() {
++    // let src = std::fs::read_to_string("/Users/ndmitchell/fbsource/fbcode/buck2/clusterfuzz-testcase-minimized-starlark-6484634888962048").unwrap();
++    let src = "\"\u{e0070}";
++    let res: Result<AstModule, anyhow::Error> =
++        AstModule::parse("hello_world.star", src.to_owned(), &Dialect::Standard);
++    // The panic actually only happens when we format the result
++    format!("{:?}", res);
++}

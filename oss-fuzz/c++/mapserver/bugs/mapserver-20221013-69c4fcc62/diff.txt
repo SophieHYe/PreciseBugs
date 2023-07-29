@@ -1,0 +1,12 @@
+diff --git a/mapfile.c b/mapfile.c
+index 94aaceb8d..b819ea707 100755
+--- a/mapfile.c
++++ b/mapfile.c
+@@ -466,6 +466,7 @@ int loadColor(colorObj *color, attributeBindingObj *binding)
+     }
+   } else {
+     assert(binding);
++    msFree(binding->item);
+     binding->item = msStrdup(msyystring_buffer);
+     binding->index = -1;
+   }

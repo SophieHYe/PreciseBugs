@@ -1,0 +1,274 @@
+diff --git a/example/reader_util.c b/example/reader_util.c
+index 00dc7f25..3c49563e 100644
+--- a/example/reader_util.c
++++ b/example/reader_util.c
+@@ -116,14 +116,14 @@ u_int16_t max_pattern_len = 8;
+ 
+ /* *********************************************************** */
+ 
+-void ndpi_analyze_payload(struct ndpi_flow_info *flow,
+-			  u_int8_t src_to_dst_direction,
+-			  u_int8_t *payload,
+-			  u_int16_t payload_len,
+-			  u_int32_t packet_id) {
+-  struct payload_stats *ret;
+-  struct flow_id_stats *f;
+-  struct packet_id_stats *p;
++int ndpi_analyze_payload(struct ndpi_flow_info *flow,
++			 u_int8_t src_to_dst_direction,
++			 u_int8_t *payload,
++			 u_int16_t payload_len,
++			 u_int32_t packet_id) {
++  struct payload_stats *ret, *ret_found;
++  struct flow_id_stats *f, *f_found;
++  struct packet_id_stats *p, *p_found;
+ 
+ #ifdef DEBUG_PAYLOAD
+   u_int16_t i;
+@@ -135,11 +135,11 @@ void ndpi_analyze_payload(struct ndpi_flow_info *flow,
+   HASH_FIND(hh, pstats, payload, payload_len, ret);
+   if(ret == NULL) {
+     if((ret = (struct payload_stats*)ndpi_calloc(1, sizeof(struct payload_stats))) == NULL)
+-      return; /* OOM */
++      return -1; /* OOM */
+ 
+     if((ret->pattern = (u_int8_t*)ndpi_malloc(payload_len)) == NULL) {
+       ndpi_free(ret);
+-      return;
++      return -1;
+     }
+ 
+     memcpy(ret->pattern, payload, payload_len);
+@@ -148,6 +148,13 @@ void ndpi_analyze_payload(struct ndpi_flow_info *flow,
+ 
+     HASH_ADD(hh, pstats, pattern[0], payload_len, ret);
+ 
++    HASH_FIND(hh, pstats, payload, payload_len, ret_found);
++    if(ret_found == NULL) { /* The insertion failed (because of a memory allocation error) */
++      ndpi_free(ret->pattern);
++      ndpi_free(ret);
++      return -1;
++    }
++
+ #ifdef DEBUG_PAYLOAD
+     printf("Added element [total: %u]\n", HASH_COUNT(pstats));
+ #endif
+@@ -159,20 +166,32 @@ void ndpi_analyze_payload(struct ndpi_flow_info *flow,
+   HASH_FIND_INT(ret->flows, &flow->flow_id, f);
+   if(f == NULL) {
+     if((f = (struct flow_id_stats*)ndpi_calloc(1, sizeof(struct flow_id_stats))) == NULL)
+-      return; /* OOM */
++      return -1; /* OOM */
+ 
+     f->flow_id = flow->flow_id;
+     HASH_ADD_INT(ret->flows, flow_id, f);
++
++    HASH_FIND_INT(ret->flows, &flow->flow_id, f_found);
++    if(f_found == NULL) { /* The insertion failed (because of a memory allocation error) */
++      ndpi_free(f);
++      return -1;
++    }
+   }
+ 
+   HASH_FIND_INT(ret->packets, &packet_id, p);
+   if(p == NULL) {
+     if((p = (struct packet_id_stats*)ndpi_calloc(1, sizeof(struct packet_id_stats))) == NULL)
+-      return; /* OOM */
++      return -1; /* OOM */
+     p->packet_id = packet_id;
+ 
+     HASH_ADD_INT(ret->packets, packet_id, p);
++
++    HASH_FIND_INT(ret->packets, &packet_id, p_found);
++    if(p_found == NULL) { /* The insertion failed (because of a memory allocation error) */
++      ndpi_free(p);
++    }
+   }
++  return 0;
+ }
+ 
+ /* *********************************************************** */
+@@ -199,7 +218,12 @@ void ndpi_payload_analyzer(struct ndpi_flow_info *flow,
+   for(i=0; i<scan_len; i++) {
+     for(j=min_pattern_len; j <= max_pattern_len; j++) {
+       if((i+j) < payload_len) {
+-	ndpi_analyze_payload(flow, src_to_dst_direction, &payload[i], j, packet_id);
++	if(ndpi_analyze_payload(flow, src_to_dst_direction, &payload[i], j, packet_id) == -1) {
++#ifndef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
++          /* Avoid too much logging while fuzzing */
++          LOG(NDPI_LOG_ERROR, "Error ndpi_analyze_payload (allocation failure)\n");
++#endif
++	}
+       }
+     }
+   }
+@@ -960,6 +984,12 @@ static struct ndpi_flow_info *get_ndpi_flow_info(struct ndpi_workflow * workflow
+       if(enable_flow_stats) {
+         newflow->entropy = ndpi_calloc(1, sizeof(struct ndpi_entropy));
+         newflow->last_entropy = ndpi_calloc(1, sizeof(struct ndpi_entropy));
++        if(!newflow->entropy || !newflow->last_entropy) {
++          ndpi_tdelete(newflow, &workflow->ndpi_flows_root[idx], ndpi_workflow_node_cmp);
++          ndpi_flow_info_free_data(newflow);
++          ndpi_free(newflow);
++          return(NULL);
++        }
+         newflow->entropy->src2dst_pkt_len[newflow->entropy->src2dst_pkt_count] = l4_data_len;
+         newflow->entropy->src2dst_pkt_time[newflow->entropy->src2dst_pkt_count] = when;
+         if(newflow->entropy->src2dst_pkt_count == 0) {
+diff --git a/fuzz/fuzz_ds_ahocorasick.cpp b/fuzz/fuzz_ds_ahocorasick.cpp
+index 5297236e..e02744e5 100644
+--- a/fuzz/fuzz_ds_ahocorasick.cpp
++++ b/fuzz/fuzz_ds_ahocorasick.cpp
+@@ -133,7 +133,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+ 
+   f = fopen("/dev/null", "w");
+   ac_automata_dump(a, f);
+-  fclose(f);
++  if (f)
++    fclose(f);
+ 
+   ac_automata_get_stats(a, &stats);
+ 
+diff --git a/fuzz/fuzz_libinjection.c b/fuzz/fuzz_libinjection.c
+index c878fe82..f614a62e 100644
+--- a/fuzz/fuzz_libinjection.c
++++ b/fuzz/fuzz_libinjection.c
+@@ -12,6 +12,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+   /* Libinjection: it wants null-terminated string */
+ 
+   query = malloc(size + 1);
++  if (!query)
++    return 0;
+   memcpy(query, data, size);
+   query[size] = '\0';
+ 
+diff --git a/fuzz/fuzz_process_packet.c b/fuzz/fuzz_process_packet.c
+index dcd15c99..3f0694cf 100644
+--- a/fuzz/fuzz_process_packet.c
++++ b/fuzz/fuzz_process_packet.c
+@@ -5,6 +5,7 @@
+ #include <stdio.h>
+ 
+ struct ndpi_detection_module_struct *ndpi_info_mod = NULL;
++struct ndpi_flow_struct ndpi_flow;
+ static ndpi_serializer json_serializer = {};
+ static ndpi_serializer csv_serializer = {};
+ 
+@@ -18,24 +19,23 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+     ndpi_init_serializer(&csv_serializer, ndpi_serialization_format_csv);
+   }
+ 
+-  struct ndpi_flow_struct *ndpi_flow = ndpi_flow_malloc(SIZEOF_FLOW_STRUCT);
+-  memset(ndpi_flow, 0, SIZEOF_FLOW_STRUCT);
++  memset(&ndpi_flow, 0, SIZEOF_FLOW_STRUCT);
+   ndpi_protocol detected_protocol =
+-    ndpi_detection_process_packet(ndpi_info_mod, ndpi_flow, Data, Size, 0, NULL);
++    ndpi_detection_process_packet(ndpi_info_mod, &ndpi_flow, Data, Size, 0, NULL);
+   ndpi_protocol guessed_protocol =
+-    ndpi_detection_giveup(ndpi_info_mod, ndpi_flow, 1, &protocol_was_guessed);
++    ndpi_detection_giveup(ndpi_info_mod, &ndpi_flow, 1, &protocol_was_guessed);
+ 
+   ndpi_reset_serializer(&json_serializer);
+   ndpi_reset_serializer(&csv_serializer);
+   if (protocol_was_guessed == 0)
+   {
+-    ndpi_dpi2json(ndpi_info_mod, ndpi_flow, detected_protocol, &json_serializer);
+-    ndpi_dpi2json(ndpi_info_mod, ndpi_flow, detected_protocol, &csv_serializer);
++    ndpi_dpi2json(ndpi_info_mod, &ndpi_flow, detected_protocol, &json_serializer);
++    ndpi_dpi2json(ndpi_info_mod, &ndpi_flow, detected_protocol, &csv_serializer);
+   } else {
+-    ndpi_dpi2json(ndpi_info_mod, ndpi_flow, guessed_protocol, &json_serializer);
+-    ndpi_dpi2json(ndpi_info_mod, ndpi_flow, guessed_protocol, &csv_serializer);
++    ndpi_dpi2json(ndpi_info_mod, &ndpi_flow, guessed_protocol, &json_serializer);
++    ndpi_dpi2json(ndpi_info_mod, &ndpi_flow, guessed_protocol, &csv_serializer);
+   }
+-  ndpi_free_flow(ndpi_flow);
++  ndpi_free_flow_data(&ndpi_flow);
+ 
+   return 0;
+ }
+diff --git a/src/lib/ndpi_main.c b/src/lib/ndpi_main.c
+index 9776b0b0..7a5de852 100644
+--- a/src/lib/ndpi_main.c
++++ b/src/lib/ndpi_main.c
+@@ -2509,6 +2509,9 @@ static int ndpi_add_host_ip_subprotocol(struct ndpi_detection_module_struct *ndp
+   u_int16_t port = 0; /* Format ip:8.248.73.247:443 */
+   char *double_column;
+ 
++  if(!ndpi_str->protocols_ptree)
++    return(-1);
++
+   if(ptr) {
+     ptr[0] = '\0';
+     ptr++;
+@@ -3674,6 +3677,9 @@ int ndpi_add_ip_risk_mask(struct ndpi_detection_module_struct *ndpi_str,
+ 			  char *ip, ndpi_risk mask) {
+   char *saveptr, *addr = strtok_r(ip, "/", &saveptr);
+ 
++  if(!ndpi_str->ip_risk_mask_ptree)
++    return(-3);
++
+   if(addr) {
+     char *cidr = strtok_r(NULL, "\n", &saveptr);
+     struct in_addr pin;
+@@ -6483,6 +6489,9 @@ int ndpi_load_ip_category(struct ndpi_detection_module_struct *ndpi_str,
+   char *ptr;
+   char ipbuf[64];
+ 
++  if(!ndpi_str->custom_categories.ipAddresses_shadow)
++    return(-1);
++
+   strncpy(ipbuf, ip_address_and_mask, sizeof(ipbuf));
+   ipbuf[sizeof(ipbuf) - 1] = '\0';
+ 
+@@ -6618,7 +6627,9 @@ int ndpi_fill_ip_protocol_category(struct ndpi_detection_module_struct *ndpi_str
+ 
+   ret->custom_category_userdata = NULL;
+ 
+-  if(ndpi_str->custom_categories.categories_loaded) {
++  if(ndpi_str->custom_categories.categories_loaded &&
++     ndpi_str->custom_categories.ipAddresses) {
++
+     ndpi_prefix_t prefix;
+     ndpi_patricia_node_t *node;
+ 
+diff --git a/src/lib/ndpi_utils.c b/src/lib/ndpi_utils.c
+index dfdca923..0199d642 100644
+--- a/src/lib/ndpi_utils.c
++++ b/src/lib/ndpi_utils.c
+@@ -2288,6 +2288,7 @@ int ndpi_hash_add_entry(ndpi_str_hash **h, char *key, u_int8_t key_len, void *va
+ {
+   struct ndpi_str_hash_private **h_priv = (struct ndpi_str_hash_private **)h;
+   struct ndpi_str_hash_private *new = ndpi_calloc(1, sizeof(*new));
++  struct ndpi_str_hash_private *found;
+   unsigned int hash_value;
+ 
+   if (new == NULL)
+@@ -2299,6 +2300,14 @@ int ndpi_hash_add_entry(ndpi_str_hash **h, char *key, u_int8_t key_len, void *va
+   new->hash = hash_value;
+   new->value = value;
+   HASH_ADD_INT(*h_priv, hash, new);
++
++  HASH_FIND_INT(*h_priv, &hash_value, found);
++  if (found == NULL) /* The insertion failed (because of a memory allocation error) */
++  {
++    ndpi_free(new);
++    return 1;
++  }
++
+   return 0;
+ }
+ 
+diff --git a/src/lib/third_party/include/uthash.h b/src/lib/third_party/include/uthash.h
+index b7dfe4d3..7cf305d4 100644
+--- a/src/lib/third_party/include/uthash.h
++++ b/src/lib/third_party/include/uthash.h
+@@ -101,7 +101,7 @@ do {
+ #endif
+ 
+ #ifndef HASH_NONFATAL_OOM
+-#define HASH_NONFATAL_OOM 0
++#define HASH_NONFATAL_OOM 1
+ #endif
+ 
+ #if HASH_NONFATAL_OOM

@@ -1,0 +1,25 @@
+diff --git a/src/hb-ot-layout-common.hh b/src/hb-ot-layout-common.hh
+index 019370908..883ccab6a 100644
+--- a/src/hb-ot-layout-common.hh
++++ b/src/hb-ot-layout-common.hh
+@@ -2708,11 +2708,12 @@ struct FeatureVariationRecord
+     TRACE_SUBSET (this);
+     auto *out = c->subset_context->serializer->embed (this);
+     if (unlikely (!out)) return_trace (false);
+-
+-    out->conditions.serialize_subset (c->subset_context, conditions, base);
+-
++    
+     bool ret = out->substitutions.serialize_subset (c->subset_context, substitutions, base, c);
+-    return_trace (ret);
++    if (unlikely (!ret)) return_trace (false);
++    
++    out->conditions.serialize_subset (c->subset_context, conditions, base);
++    return_trace (true);
+   }
+ 
+   bool sanitize (hb_sanitize_context_t *c, const void *base) const
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5759725666041856 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5759725666041856
+new file mode 100644
+index 000000000..b23c11afb
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5759725666041856 differ

@@ -1,0 +1,13 @@
+diff --git a/src/ucl_util.c b/src/ucl_util.c
+index 17cd5e4..a0fdcc9 100644
+--- a/src/ucl_util.c
++++ b/src/ucl_util.c
+@@ -2177,7 +2177,7 @@ ucl_strnstr (const char *s, const char *find, int len)
+ 		mlen = strlen (find);
+ 		do {
+ 			do {
+-				if ((sc = *s++) == 0 || len-- == 0)
++				if ((sc = *s++) == 0 || len-- < mlen)
+ 					return (NULL);
+ 			} while (sc != c);
+ 		} while (strncmp (s, find, mlen) != 0);

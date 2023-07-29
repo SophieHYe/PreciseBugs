@@ -1,0 +1,17 @@
+diff --git a/coders/png.c b/coders/png.c
+index 457db712e..4d783615f 100644
+--- a/coders/png.c
++++ b/coders/png.c
+@@ -5437,7 +5437,11 @@ static Image *ReadOneMNGImage(MngInfo* mng_info, const ImageInfo *image_info,
+ 
+               c=ReadBlobByte(image);
+               if (c == EOF)
+-                break;
++                {
++                  chunk=(unsigned char *) RelinquishMagickMemory(chunk);
++                  ThrowReaderException(CorruptImageError,
++                    "InsufficientImageDataInFile");
++                }
+               chunk[i]=(unsigned char) c;
+             }
+ 

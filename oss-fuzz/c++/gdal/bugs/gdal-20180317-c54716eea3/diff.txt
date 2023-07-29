@@ -1,0 +1,22 @@
+diff --git a/gdal/ogr/ogrsf_frmts/nas/nashandler.cpp b/gdal/ogr/ogrsf_frmts/nas/nashandler.cpp
+index 9dc13d285b..d856cd996c 100644
+--- a/gdal/ogr/ogrsf_frmts/nas/nashandler.cpp
++++ b/gdal/ogr/ogrsf_frmts/nas/nashandler.cpp
+@@ -513,15 +513,15 @@ void NASHandler::endElement( const XMLCh* const /* uri */ ,
+    {
+        if( m_osElementName == "Name" && m_nDepth == m_nNameOrValueDepth )
+        {
+-           CPLAssert( m_osLastPropertyName == "" );
+            m_osLastPropertyName = m_pszCurField ? m_pszCurField : "";
++           CPLFree(m_pszCurField);
+            m_pszCurField = nullptr;
+            m_nNameOrValueDepth = 0;
+        }
+        else if( m_osElementName == "Value" && m_nDepth == m_nNameOrValueDepth )
+        {
+-           CPLAssert( m_osLastPropertyValue == "" );
+            m_osLastPropertyValue = m_pszCurField ? m_pszCurField : "";
++           CPLFree(m_pszCurField);
+            m_pszCurField = nullptr;
+            m_nNameOrValueDepth = 0;
+        }

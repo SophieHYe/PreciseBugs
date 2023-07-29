@@ -1,0 +1,107 @@
+diff --git a/autotest/ogr/ogr_flatgeobuf.py b/autotest/ogr/ogr_flatgeobuf.py
+index 0f0b1e6a0e..ef6f90ff66 100644
+--- a/autotest/ogr/ogr_flatgeobuf.py
++++ b/autotest/ogr/ogr_flatgeobuf.py
+@@ -255,9 +255,9 @@ def test_ogr_flatgeobuf_2_1():
+     else:
+         assert num == 5
+ 
+-def wktRoundtrip(expected):
++def wktRoundtrip(in_wkt, expected_wkt):
+     ds = ogr.GetDriverByName('FlatGeobuf').CreateDataSource('/vsimem/test.fgb')
+-    g = ogr.CreateGeometryFromWkt(expected)
++    g = ogr.CreateGeometryFromWkt(in_wkt)
+     lyr = ds.CreateLayer('test', None, g.GetGeometryType(), [])
+     f = ogr.Feature(lyr.GetLayerDefn())
+     f.SetGeometry(g)
+@@ -274,12 +274,12 @@ def wktRoundtrip(expected):
+     ogr.GetDriverByName('FlatGeobuf').DeleteDataSource('/vsimem/test.fgb')
+     assert not gdal.VSIStatL('/vsimem/test.fgb')
+ 
+-    assert actual == expected
++    assert actual == expected_wkt
+ 
+ def test_ogr_flatgeobuf_3():
+     wkts = ogrtest.get_wkt_data_series(with_z=True, with_m=True, with_gc=True, with_circular=True, with_surface=True)
+     for wkt in wkts:
+-        wktRoundtrip(wkt)
++        wktRoundtrip(wkt, wkt)
+ 
+ # Run test_ogrsf
+ def test_ogr_flatgeobuf_8():
+@@ -755,3 +755,13 @@ def test_ogr_flatgeobuf_editing():
+ 
+     ogr.GetDriverByName('FlatGeobuf').DeleteDataSource('/vsimem/test.fgb')
+     assert not gdal.VSIStatL('/vsimem/test.fgb')
++
++
++@pytest.mark.parametrize('in_wkt,expected_wkt', [
++    ('MULTIPOINT ((0 0), EMPTY)', 'MULTIPOINT ((0 0))'),
++    ('MULTILINESTRING ((0 0,1 1), EMPTY)', 'MULTILINESTRING ((0 0,1 1))'),
++    ('MULTIPOLYGON (((0 0,0 1,1 1,0 0)), EMPTY)', 'MULTIPOLYGON (((0 0,0 1,1 1,0 0)))'),
++    ('GEOMETRYCOLLECTION (POINT (0 0), POINT EMPTY)', 'GEOMETRYCOLLECTION (POINT (0 0))'),
++])
++def test_ogr_flatgeobuf_multi_geometries_with_empty(in_wkt, expected_wkt):
++    wktRoundtrip(in_wkt, expected_wkt)
+diff --git a/gdal/ogr/ogrsf_frmts/flatgeobuf/geometrywriter.cpp b/gdal/ogr/ogrsf_frmts/flatgeobuf/geometrywriter.cpp
+index 59f238ed7b..4b7f10f80c 100644
+--- a/gdal/ogr/ogrsf_frmts/flatgeobuf/geometrywriter.cpp
++++ b/gdal/ogr/ogrsf_frmts/flatgeobuf/geometrywriter.cpp
+@@ -54,7 +54,13 @@ void GeometryWriter::writePoint(const OGRPoint *p)
+ void GeometryWriter::writeMultiPoint(const OGRMultiPoint *mp)
+ {
+     for (int i = 0; i < mp->getNumGeometries(); i++)
+-        writePoint(mp->getGeometryRef(i)->toPoint());
++    {
++        const auto part = mp->getGeometryRef(i);
++        if( !part->IsEmpty() )
++        {
++            writePoint(part->toPoint());
++        }
++    }
+ }
+ 
+ uint32_t GeometryWriter::writeSimpleCurve(const OGRSimpleCurve *sc)
+@@ -86,7 +92,13 @@ void GeometryWriter::writeMultiLineString(const OGRMultiLineString *mls)
+     uint32_t e = 0;
+     const auto numGeometries = mls->getNumGeometries();
+     for (int i = 0; i < numGeometries; i++)
+-        m_ends.push_back(e += writeSimpleCurve(mls->getGeometryRef(i)->toLineString()));
++    {
++        const auto part = mls->getGeometryRef(i);
++        if( !part->IsEmpty() )
++        {
++            m_ends.push_back(e += writeSimpleCurve(part->toLineString()));
++        }
++    }
+ }
+ 
+ void GeometryWriter::writePolygon(const OGRPolygon *p)
+@@ -107,8 +119,11 @@ const Offset<Geometry> GeometryWriter::writeMultiPolygon(const OGRMultiPolygon *
+     std::vector<Offset<Geometry>> parts;
+     for (int i = 0; i < mp->getNumGeometries(); i++) {
+         const auto part = mp->getGeometryRef(i)->toPolygon();
+-        GeometryWriter writer { m_fbb, part, GeometryType::Polygon, m_hasZ, m_hasM };
+-        parts.push_back(writer.write(depth + 1));
++        if( !part->IsEmpty() )
++        {
++            GeometryWriter writer { m_fbb, part, GeometryType::Polygon, m_hasZ, m_hasM };
++            parts.push_back(writer.write(depth + 1));
++        }
+     }
+     return CreateGeometryDirect(m_fbb, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, m_geometryType, &parts);
+ }
+@@ -118,8 +133,11 @@ const Offset<Geometry> GeometryWriter::writeGeometryCollection(const OGRGeometry
+     std::vector<Offset<Geometry>> parts;
+     for (int i = 0; i < gc->getNumGeometries(); i++) {
+         auto part = gc->getGeometryRef(i);
+-        GeometryWriter writer { m_fbb, part, m_hasZ, m_hasM };
+-        parts.push_back(writer.write(depth + 1));
++        if( !part->IsEmpty() )
++        {
++            GeometryWriter writer { m_fbb, part, m_hasZ, m_hasM };
++            parts.push_back(writer.write(depth + 1));
++        }
+     }
+     return CreateGeometryDirect(m_fbb, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, m_geometryType, &parts);
+ }

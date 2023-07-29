@@ -1,0 +1,198 @@
+diff --git a/cpp/src/parquet/column_reader.cc b/cpp/src/parquet/column_reader.cc
+index 11c4d72f2..60aa4ea07 100644
+--- a/cpp/src/parquet/column_reader.cc
++++ b/cpp/src/parquet/column_reader.cc
+@@ -55,29 +55,36 @@ LevelDecoder::LevelDecoder() : num_values_remaining_(0) {}
+ LevelDecoder::~LevelDecoder() {}
+ 
+ int LevelDecoder::SetData(Encoding::type encoding, int16_t max_level,
+-                          int num_buffered_values, const uint8_t* data) {
++                          int num_buffered_values, const uint8_t* data,
++                          int32_t data_size) {
+   int32_t num_bytes = 0;
+   encoding_ = encoding;
+   num_values_remaining_ = num_buffered_values;
+   bit_width_ = BitUtil::Log2(max_level + 1);
+   switch (encoding) {
+     case Encoding::RLE: {
++      if (data_size < 4) {
++        throw ParquetException("Received invalid levels (corrupt data page?)");
++      }
+       num_bytes = ::arrow::util::SafeLoadAs<int32_t>(data);
+-      if (num_bytes < 0) {
+-        throw ParquetException("Received invalid number of bytes");
++      if (num_bytes < 0 || num_bytes > data_size - 4) {
++        throw ParquetException("Received invalid number of bytes (corrupt data page?)");
+       }
+-      const uint8_t* decoder_data = data + sizeof(int32_t);
++      const uint8_t* decoder_data = data + 4;
+       if (!rle_decoder_) {
+         rle_decoder_.reset(
+             new ::arrow::util::RleDecoder(decoder_data, num_bytes, bit_width_));
+       } else {
+         rle_decoder_->Reset(decoder_data, num_bytes, bit_width_);
+       }
+-      return static_cast<int>(sizeof(int32_t)) + num_bytes;
++      return 4 + num_bytes;
+     }
+     case Encoding::BIT_PACKED: {
+       num_bytes =
+           static_cast<int32_t>(BitUtil::BytesForBits(num_buffered_values * bit_width_));
++      if (num_bytes > data_size) {
++        throw ParquetException("Received invalid number of bytes (corrupt data page?)");
++      }
+       if (!bit_packed_decoder_) {
+         bit_packed_decoder_.reset(new ::arrow::BitUtil::BitReader(data, num_bytes));
+       } else {
+@@ -527,27 +534,30 @@ class ColumnReaderImplBase {
+     num_decoded_values_ = 0;
+ 
+     const uint8_t* buffer = page.data();
+-    int64_t levels_byte_size = 0;
++    int32_t levels_byte_size = 0;
++    int32_t max_size = page.size();
+ 
+     // Data page Layout: Repetition Levels - Definition Levels - encoded values.
+     // Levels are encoded as rle or bit-packed.
+     // Init repetition levels
+     if (max_rep_level_ > 0) {
+-      int64_t rep_levels_bytes = repetition_level_decoder_.SetData(
++      int32_t rep_levels_bytes = repetition_level_decoder_.SetData(
+           repetition_level_encoding, max_rep_level_,
+-          static_cast<int>(num_buffered_values_), buffer);
++          static_cast<int>(num_buffered_values_), buffer, max_size);
+       buffer += rep_levels_bytes;
+       levels_byte_size += rep_levels_bytes;
++      max_size -= rep_levels_bytes;
+     }
+     // TODO figure a way to set max_def_level_ to 0
+     // if the initial value is invalid
+ 
+     // Init definition levels
+     if (max_def_level_ > 0) {
+-      int64_t def_levels_bytes = definition_level_decoder_.SetData(
++      int32_t def_levels_bytes = definition_level_decoder_.SetData(
+           definition_level_encoding, max_def_level_,
+-          static_cast<int>(num_buffered_values_), buffer);
++          static_cast<int>(num_buffered_values_), buffer, max_size);
+       levels_byte_size += def_levels_bytes;
++      max_size -= def_levels_bytes;
+     }
+ 
+     return levels_byte_size;
+diff --git a/cpp/src/parquet/column_reader.h b/cpp/src/parquet/column_reader.h
+index 6ff86d5fe..2d7ce9660 100644
+--- a/cpp/src/parquet/column_reader.h
++++ b/cpp/src/parquet/column_reader.h
+@@ -61,7 +61,7 @@ class PARQUET_EXPORT LevelDecoder {
+   // Initialize the LevelDecoder state with new data
+   // and return the number of bytes consumed
+   int SetData(Encoding::type encoding, int16_t max_level, int num_buffered_values,
+-              const uint8_t* data);
++              const uint8_t* data, int32_t data_size);
+ 
+   // Decodes a batch of levels into an array and returns the number of levels decoded
+   int Decode(int batch_size, int16_t* levels);
+diff --git a/cpp/src/parquet/column_writer_test.cc b/cpp/src/parquet/column_writer_test.cc
+index 3d0ae3bb0..68cb78d45 100644
+--- a/cpp/src/parquet/column_writer_test.cc
++++ b/cpp/src/parquet/column_writer_test.cc
+@@ -815,7 +815,8 @@ void VerifyDecodingLevels(Encoding::type encoding, int16_t max_level,
+   ASSERT_EQ(num_levels, static_cast<int>(output_levels.size()));
+ 
+   // Decode levels and test with multiple decode calls
+-  decoder.SetData(encoding, max_level, num_levels, bytes.data());
++  decoder.SetData(encoding, max_level, num_levels, bytes.data(),
++                  static_cast<int32_t>(bytes.size()));
+   int decode_count = 4;
+   int num_inner_levels = num_levels / decode_count;
+   // Try multiple decoding on a single SetData call
+@@ -856,7 +857,8 @@ void VerifyDecodingMultipleSetData(Encoding::type encoding, int16_t max_level,
+   for (int ct = 0; ct < setdata_count; ct++) {
+     int offset = ct * num_levels;
+     ASSERT_EQ(num_levels, static_cast<int>(output_levels.size()));
+-    decoder.SetData(encoding, max_level, num_levels, bytes[ct].data());
++    decoder.SetData(encoding, max_level, num_levels, bytes[ct].data(),
++                    static_cast<int32_t>(bytes[ct].size()));
+     levels_count = decoder.Decode(num_levels, output_levels.data());
+     ASSERT_EQ(num_levels, levels_count);
+     for (int i = 0; i < num_levels; i++) {
+diff --git a/cpp/src/parquet/types.h b/cpp/src/parquet/types.h
+index 5c9dd99b3..3a9270bd6 100644
+--- a/cpp/src/parquet/types.h
++++ b/cpp/src/parquet/types.h
+@@ -24,6 +24,8 @@
+ #include <sstream>
+ #include <string>
+ 
++#include "arrow/util/int_util.h"
++
+ #include "parquet/platform.h"
+ 
+ namespace arrow {
+@@ -571,11 +573,14 @@ static inline void Int96SetNanoSeconds(parquet::Int96& i96, int64_t nanoseconds)
+ }
+ 
+ static inline int64_t Int96GetNanoSeconds(const parquet::Int96& i96) {
+-  int64_t days_since_epoch = i96.value[2] - kJulianToUnixEpochDays;
+-  int64_t nanoseconds = 0;
+-
+-  memcpy(&nanoseconds, &i96.value, sizeof(int64_t));
+-  return days_since_epoch * kNanosecondsPerDay + nanoseconds;
++  // We do the computations in the unsigned domain to avoid unsigned behaviour
++  // on overflow.
++  uint64_t days_since_epoch =
++      i96.value[2] - static_cast<uint64_t>(kJulianToUnixEpochDays);
++  uint64_t nanoseconds = 0;
++
++  memcpy(&nanoseconds, &i96.value, sizeof(uint64_t));
++  return static_cast<int64_t>(days_since_epoch * kNanosecondsPerDay + nanoseconds);
+ }
+ 
+ static inline std::string Int96ToString(const Int96& a) {
+diff --git a/cpp/src/parquet/types_test.cc b/cpp/src/parquet/types_test.cc
+index dfefe9715..6bfb080c5 100644
+--- a/cpp/src/parquet/types_test.cc
++++ b/cpp/src/parquet/types_test.cc
+@@ -142,6 +142,34 @@ TEST(TypePrinter, StatisticsTypes) {
+                FormatStatValue(Type::FIXED_LEN_BYTE_ARRAY, smax.c_str()).c_str());
+ }
+ 
++TEST(TestInt96Timestamp, Decoding) {
++  auto check = [](int32_t julian_day, uint64_t nanoseconds) {
++    Int96 i96{static_cast<uint32_t>(nanoseconds),
++              static_cast<uint32_t>(nanoseconds >> 32),
++              static_cast<uint32_t>(julian_day)};
++    // Official formula according to https://github.com/apache/parquet-format/pull/49
++    int64_t expected =
++        (julian_day - 2440588) * (86400LL * 1000 * 1000 * 1000) + nanoseconds;
++    int64_t actual = Int96GetNanoSeconds(i96);
++    ASSERT_EQ(expected, actual);
++  };
++
++  // [2333837, 2547339] is the range of Julian days that can be converted to
++  // 64-bit Unix timestamps.
++  check(2333837, 0);
++  check(2333855, 0);
++  check(2547330, 0);
++  check(2547338, 0);
++  check(2547339, 0);
++
++  check(2547330, 13);
++  check(2547330, 32769);
++  check(2547330, 87654);
++  check(2547330, 0x123456789abcdefULL);
++  check(2547330, 0xfedcba9876543210ULL);
++  check(2547339, 0xffffffffffffffffULL);
++}
++
+ #if !(defined(_WIN32) || defined(__CYGWIN__))
+ #pragma GCC diagnostic pop
+ #elif _MSC_VER
+diff --git a/testing b/testing
+index 553bc491d..58b29c418 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit 553bc491d4f7ec31c2f7de2f971e818c58799332
++Subproject commit 58b29c418f86ffc1f34ea3f3b20532067795d483

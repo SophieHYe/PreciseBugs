@@ -1,0 +1,91 @@
+diff --git a/glib/gvariant-parser.c b/glib/gvariant-parser.c
+index 2b02ec90f..ea1ca22e4 100644
+--- a/glib/gvariant-parser.c
++++ b/glib/gvariant-parser.c
+@@ -1921,6 +1921,8 @@ number_get_value (AST                 *ast,
+     case 'n':
+       if (abs_val - negative > G_MAXINT16)
+         return number_overflow (ast, type, error);
++      if (negative && abs_val > G_MAXINT16)
++        return g_variant_new_int16 (G_MININT16);
+       return g_variant_new_int16 (negative ? -((gint16) abs_val) : abs_val);
+ 
+     case 'q':
+@@ -1931,6 +1933,8 @@ number_get_value (AST                 *ast,
+     case 'i':
+       if (abs_val - negative > G_MAXINT32)
+         return number_overflow (ast, type, error);
++      if (negative && abs_val > G_MAXINT32)
++        return g_variant_new_int32 (G_MININT32);
+       return g_variant_new_int32 (negative ? -((gint32) abs_val) : abs_val);
+ 
+     case 'u':
+@@ -1941,6 +1945,8 @@ number_get_value (AST                 *ast,
+     case 'x':
+       if (abs_val - negative > G_MAXINT64)
+         return number_overflow (ast, type, error);
++      if (negative && abs_val > G_MAXINT64)
++        return g_variant_new_int64 (G_MININT64);
+       return g_variant_new_int64 (negative ? -((gint64) abs_val) : abs_val);
+ 
+     case 't':
+@@ -1951,6 +1957,8 @@ number_get_value (AST                 *ast,
+     case 'h':
+       if (abs_val - negative > G_MAXINT32)
+         return number_overflow (ast, type, error);
++      if (negative && abs_val > G_MAXINT32)
++        return g_variant_new_handle (G_MININT32);
+       return g_variant_new_handle (negative ? -((gint32) abs_val) : abs_val);
+ 
+     default:
+diff --git a/glib/tests/gvariant.c b/glib/tests/gvariant.c
+index 33caaf04a..4a3aa771f 100644
+--- a/glib/tests/gvariant.c
++++ b/glib/tests/gvariant.c
+@@ -4097,6 +4097,38 @@ test_parse_failures (void)
+     }
+ }
+ 
++/* Test that parsing GVariant text format integers works at the boundaries of
++ * those integer types. We’re especially interested in the handling of the most
++ * negative numbers, since those can’t be represented in sign + absolute value
++ * form. */
++static void
++test_parser_integer_bounds (void)
++{
++  GVariant *value = NULL;
++  GError *local_error = NULL;
++
++#define test_bound(TYPE, type, text, expected_value) \
++  value = g_variant_parse (G_VARIANT_TYPE_##TYPE, text, NULL, NULL, &local_error); \
++  g_assert_no_error (local_error); \
++  g_assert_nonnull (value); \
++  g_assert_true (g_variant_is_of_type (value, G_VARIANT_TYPE_##TYPE)); \
++  g_assert_cmpint (g_variant_get_##type (value), ==, expected_value); \
++  g_variant_unref (value)
++
++  test_bound (BYTE, byte, "0", 0);
++  test_bound (BYTE, byte, "255", G_MAXUINT8);
++  test_bound (INT16, int16, "-32768", G_MININT16);
++  test_bound (INT16, int16, "32767", G_MAXINT16);
++  test_bound (INT32, int32, "-2147483648", G_MININT32);
++  test_bound (INT32, int32, "2147483647", G_MAXINT32);
++  test_bound (INT64, int64, "-9223372036854775808", G_MININT64);
++  test_bound (INT64, int64, "9223372036854775807", G_MAXINT64);
++  test_bound (HANDLE, handle, "-2147483648", G_MININT32);
++  test_bound (HANDLE, handle, "2147483647", G_MAXINT32);
++
++#undef test_bound
++}
++
+ static void
+ test_parse_bad_format_char (void)
+ {
+@@ -5068,6 +5100,7 @@ main (int argc, char **argv)
+   g_test_add_func ("/gvariant/hashing", test_hashing);
+   g_test_add_func ("/gvariant/byteswap", test_gv_byteswap);
+   g_test_add_func ("/gvariant/parser", test_parses);
++  g_test_add_func ("/gvariant/parser/integer-bounds", test_parser_integer_bounds);
+   g_test_add_func ("/gvariant/parse-failures", test_parse_failures);
+   g_test_add_func ("/gvariant/parse-positional", test_parse_positional);
+   g_test_add_func ("/gvariant/parse/subprocess/bad-format-char", test_parse_bad_format_char);

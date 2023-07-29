@@ -1,0 +1,60 @@
+diff --git a/autotest/gcore/data/packbits-not-enough-data.tif b/autotest/gcore/data/packbits-not-enough-data.tif
+new file mode 100644
+index 0000000000..3b02ae3c6e
+Binary files /dev/null and b/autotest/gcore/data/packbits-not-enough-data.tif differ
+diff --git a/autotest/gcore/tiff_read.py b/autotest/gcore/tiff_read.py
+index f4499cf51a..8045e8828a 100755
+--- a/autotest/gcore/tiff_read.py
++++ b/autotest/gcore/tiff_read.py
+@@ -3105,6 +3105,20 @@ def tiff_read_corrupted_deflate_singlestrip():
+ 
+     return 'success'
+ 
++###############################################################################
++# Test fix for https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1563
++
++def tiff_read_packbits_not_enough_data():
++
++    if not check_libtiff_internal_or_greater(4,0,8):
++        return 'skip'
++
++    with gdaltest.error_handler():
++        ds = gdal.Open('data/packbits-not-enough-data.tif')
++        ds.GetRasterBand(1).Checksum()
++
++    return 'success'
++
+ ###############################################################################
+ 
+ for item in init_list:
+@@ -3211,6 +3225,7 @@ gdaltest_list.append( (tiff_read_huge_number_strips) )
+ gdaltest_list.append( (tiff_read_many_blocks) )
+ gdaltest_list.append( (tiff_read_uint33) )
+ gdaltest_list.append( (tiff_read_corrupted_deflate_singlestrip) )
++gdaltest_list.append( (tiff_read_packbits_not_enough_data) )
+ 
+ gdaltest_list.append( (tiff_read_online_1) )
+ gdaltest_list.append( (tiff_read_online_2) )
+diff --git a/gdal/frmts/gtiff/libtiff/tif_packbits.c b/gdal/frmts/gtiff/libtiff/tif_packbits.c
+index 0495e688a6..18904b0137 100644
+--- a/gdal/frmts/gtiff/libtiff/tif_packbits.c
++++ b/gdal/frmts/gtiff/libtiff/tif_packbits.c
+@@ -1,4 +1,4 @@
+-/* $Id: tif_packbits.c,v 1.25 2017-01-11 20:33:35 erouault Exp $ */
++/* $Id: tif_packbits.c,v 1.26 2017-05-14 02:26:07 erouault Exp $ */
+ 
+ /*
+  * Copyright (c) 1988-1997 Sam Leffler
+@@ -244,6 +244,12 @@ PackBitsDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
+ 				    (unsigned long) ((tmsize_t)n - occ));
+ 				n = (long)occ;
+ 			}
++			if( cc == 0 )
++			{
++				TIFFWarningExt(tif->tif_clientdata, module,
++					       "Terminating PackBitsDecode due to lack of data.");
++				break;
++			}
+ 			occ -= n;
+ 			b = *bp++;
+ 			cc--;

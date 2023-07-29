@@ -1,0 +1,1152 @@
+c7fc1768	08f8af08	Wed Jun 21 17:09:24 2023 +0200	Fix library version numbers/sonames
+fd890034	6a9c1664	Thu Jun 1 19:16:03 2023 +0200	Fix compression level 8 in API docs
+0b8a271b	6571cbbf	Wed May 24 14:52:13 2023 +0200	Fix version number display on Windows
+6571cbbf	c8e6f737	Tue May 23 12:05:58 2023 +0200	Fixed compile error under Windows if winapifamily.h is unavailable (regression of fd842b6a3bacac9e47504ca4d4fb611fab014fa2).
+c623f0f4	fd842b6a	Tue May 9 20:29:05 2023 +0200	Fix use-after-free warning in GCC 12
+fd842b6a	22fffdce	Tue May 9 14:37:57 2023 +0200	Fixed compilation of get_utf8_argv() for Windows UWP
+afad04f0	ebc2a696	Mon May 8 19:39:08 2023 +0200	Fix undefined shift
+ebc2a696	183b22ac	Mon May 8 19:39:08 2023 +0200	Fix mistake in eba4b6f and add check to seektable_is_legal
+4caaef6b	1b92b86a	Fri May 5 09:20:19 2023 +0200	Fix compilation of getopt1.c on Intel Compiler with LLVM backend
+af6df3b9	321c4aeb	Thu May 4 20:48:36 2023 +0200	Fix cuesheet parsing code skipping a digit
+072cfdf5	645d651e	Tue May 2 07:34:12 2023 +0200	Try to fix unreproducible memory leak in metaflac
+763e1856	c7861aa8	Fri Apr 28 11:43:38 2023 +0200	Hide unreproducible bug that is probably harmless
+01fb0610	3e3b4407	Tue Apr 25 07:38:58 2023 +0200	Fix mistakes in 29d1460 and simplify
+d2060f48	798fe376	Thu Apr 20 11:52:38 2023 +0200	Fix division by zero when handling sample rate == 0
+851c0b9c	499f85f9	Sat Apr 8 09:21:03 2023 +0200	Fix another leak in metaflac
+775d214c	bacc9d8c	Sat Apr 8 09:21:03 2023 +0200	Fix leak in metaflac
+bacc9d8c	9ee21a0e	Sat Apr 1 10:13:04 2023 +0200	getopt: Fix the build with clang-16
+9ee21a0e	43bc8101	Tue Mar 28 07:07:06 2023 +0200	Fix potential dead store
+68f605bd	6633d2f9	Mon Mar 20 19:21:23 2023 +0100	Fix mistakes in _compute_best_predictor_limit_residual_intrin_* (#572)
+6fa51a7a	436a3577	Sun Mar 19 22:37:40 2023 +0100	Fix error of metaflac --append testing, add troubleshooting
+b5c763d9	eba4b6f6	Sun Mar 19 18:31:16 2023 +0100	Fix double free in iconvert code
+ae1db714	ac39a007	Sun Mar 19 18:31:16 2023 +0100	Fix problems reading vorbis comment data being ignored
+2568bf69	5f39e88a	Sun Mar 19 18:31:16 2023 +0100	Fix metaflac memory leak
+5f39e88a	cad22e0e	Sun Mar 19 18:31:16 2023 +0100	Fix strlen being used on uninitialized data
+f4220895	9593b949	Sat Mar 18 22:55:35 2023 +0100	Fix null dereference
+9c83e6e4	383512d5	Sat Mar 11 15:47:17 2023 +0100	Add missing *local_fixed_compute_best_predictor_wide member
+fe19b113	3857234f	Fri Mar 3 16:35:31 2023 +0100	Fix use of undefined value in flac
+3857234f	4d21da11	Fri Mar 3 16:35:31 2023 +0100	Fix memory leak in flac on foreign metadata object
+4d21da11	d24b4551	Mon Feb 27 17:22:17 2023 +0100	Add FLAC__fixed_compute_best_predictor_limit_residual_intrin_avx2
+d24b4551	f6fb7044	Mon Feb 27 17:22:17 2023 +0100	Add fixed_compute_best_predictor_limit_residual_intrin_sse42
+f6fb7044	3173fc06	Mon Feb 27 17:22:17 2023 +0100	Add fixed_compute_best_predictor_wide_intrin_avx2
+3173fc06	2db6c1d1	Mon Feb 27 17:22:17 2023 +0100	Remove fixed_compute_best_predictor_wide_intrin
+2db6c1d1	9f3894f0	Sun Feb 26 15:10:10 2023 +0100	Fix mistake in use of bitwriter_grow_
+a336ea52	9382c537	Fri Feb 24 21:58:45 2023 +0100	Fix potential resource leak
+14f19cb2	da3254a7	Thu Feb 23 06:59:11 2023 +0100	Fix undefined behaviour in chunk size reading
+da3254a7	67a0a153	Thu Feb 23 06:59:11 2023 +0100	Fix null dereference read
+67a0a153	0408d251	Thu Feb 23 06:59:11 2023 +0100	Fix oss-build problem and add fuzzer_tool_flac to .gitignore
+2d348612	b318f298	Wed Feb 22 03:18:20 2023 +0100	Fix mistake in preparing for fuzzer_tool_flac
+1a8279b7	21ffc935	Wed Feb 22 03:18:20 2023 +0100	Fix some fuzz finds in grabbag picture code
+7ea43e3b	92b5292d	Fri Feb 17 11:06:46 2023 +0100	Fix some bugs from recent foreign metadata improvements
+3f1f82c8	aaffdcaa	Sat Feb 11 09:42:11 2023 +0100	Fix warning in test suite, introduced in a87e6b
+aaffdcaa	748f3938	Sat Feb 11 09:04:45 2023 +0100	Fix running several tests in parallel with CTest
+9b7ca112	78445789	Fri Dec 2 10:05:45 2022 +0100	Fix segfault introduced in commit 3975b3e
+78445789	c42d4467	Mon Nov 28 22:13:26 2022 +0100	libFLAC.m4, libFLAC++.m4: fix -Wstrict-prototypes (#521)
+7270930e	153c82d5	Wed Nov 16 22:04:52 2022 +0100	Fix partial windowing of 33 bps subframes
+29b57b59	eb5bac33	Mon Nov 7 07:16:17 2022 +0100	Fix memleak in test_libFLAC introduced in commit 10e34d4
+3fe6219c	f00e3553	Thu Nov 3 21:45:56 2022 +0100	Fix encoder not deleting output after error on Windows
+c0a6701b	8c43332c	Wed Oct 19 17:09:57 2022 +0200	fix a typo in stream_encoder.h
+3426713e	ad9618c5	Tue Oct 18 22:43:38 2022 +0200	fix --disable-stack-smash-protection mingw issues, add --disable-fortify-source
+92928f28	5a9ffda8	Mon Oct 17 17:54:53 2022 +0200	fix errors: \'for\' loop initial declarations are only allowed in C99 mode
+5a9ffda8	75ef7958	Mon Oct 17 07:28:08 2022 +0200	fix broken bswap.m4
+2440e19a	e9551810	Mon Sep 26 16:47:17 2022 +0200	Fix out-of-tree building with prebuilt docs
+87c3d8a0	89a1620c	Tue Sep 20 19:54:32 2022 +0200	Fix a lot of Doxygen errors and add some documentation
+1c0eea67	526b28a9	Sat Sep 17 09:20:15 2022 +0200	[CMake] Prepend compiler flags, fix Clang compiler warnings
+4145f745	97dbae18	Thu Sep 15 09:49:53 2022 +0200	Fix man pages lvl 1 install path
+97dbae18	229f4f45	Thu Sep 15 07:17:18 2022 +0200	Fix endianness display in endswap test (cosmetic issue)
+13bba446	a1b7fa78	Wed Sep 14 20:17:53 2022 +0200	Fix wrong format string specifier.
+35303458	f1e26d48	Wed Sep 7 09:57:18 2022 +0200	Fix make check on MinGW when building shared library
+c90b3ea3	5bc582b2	Sat Aug 20 16:03:53 2022 +0200	Fix integer overflow in seeking code
+5bc582b2	1f21ae27	Sat Aug 20 16:03:53 2022 +0200	Fix some OOM metadata bugs, disable OOM checking in metadata fuzzing
+b715d7b9	35306a81	Sat Aug 20 16:03:53 2022 +0200	fix potential memleak
+349cc070	3022dad8	Sun Aug 7 21:47:01 2022 +0200	Fix HAVE_GETAUXVAL check for FreeBSD (#410)
+3022dad8	428e6817	Sat Aug 6 20:32:28 2022 +0200	Fix and warning for MSVC with Windows XP toolset (#399)
+4e823662	10e34d44	Sun Jul 31 21:58:07 2022 +0200	Fix decoding of 33 bps constant subframe
+99885d3d	d3b8947b	Sun Jul 17 22:32:02 2022 +0200	Fix rolled up version of lpc_restore_signal_wide
+46f3f367	f3864bf1	Thu Jul 7 22:06:14 2022 +0200	Fix dereferencing of null pointer in metadata_iterators.c
+633ab36e	10c0a5f6	Fri Jul 1 07:36:48 2022 +0200	Small fixes needed for 32-bit capability (#379)
+f0f9deb5	287f7770	Fri Jun 24 22:17:46 2022 +0200	Fix CMake builds with -DBUILD_CXXLIBS=OFF (#360)
+cbb039d2	99cb7046	Wed Jun 15 07:46:48 2022 +0200	Fix assertion failure in seek_to_absolute_sample_
+99cb7046	12cf4b9c	Wed Jun 15 07:46:48 2022 +0200	Fix bitreader bug, leaving bitreader in undefined state
+12cf4b9c	bef0c92d	Wed Jun 15 07:46:48 2022 +0200	Fix two timeouts when decoding ogg
+95064f9f	9e425621	Sun May 29 21:08:29 2022 +0200	Fix fuzzer_decoder timeouts
+1bb80c18	e0e9cc58	Fri May 27 21:59:32 2022 +0200	Small make distcheck fixes
+5705a61c	febff86a	Thu May 26 22:46:09 2022 +0200	fuzzer_encoder_v2, fix 32-bit input and seektable
+f44d5967	bcb7ed12	Sat May 21 20:06:57 2022 +0200	Fix compression of loose mid-side for certain kinds of music
+69cf76c5	43b6b64c	Fri May 20 19:38:56 2022 +0200	Fix use of undefined value
+5f4fa0ad	74b093f6	Thu May 19 20:22:09 2022 +0200	Fix heap overflow when invalid encoder is used anyway
+74b093f6	383b77fa	Thu May 19 20:22:09 2022 +0200	Fix initialization of encoder fuzzer (v1)
+f180900b	9e8d7389	Wed May 18 17:12:28 2022 +0200	Fix memory leak
+9e8d7389	e5e99dcd	Wed May 18 17:12:28 2022 +0200	Fix initialization of decoder fuzzer
+dd15db8f	8b148b25	Mon May 9 22:08:39 2022 +0200	Fix overflows in fixed_compute_best_predictor
+b433bbc5	b64ea117	Sun May 8 20:14:36 2022 +0200	Rewrite of fixed_compute_best_predictor functions
+b64ea117	b6e2f4f0	Sat May 7 21:58:40 2022 +0200	Fix fuzzer_encoder_v2 timeouts
+b6e2f4f0	cda987f7	Fri May 6 12:28:17 2022 +0200	Fix distcheck
+e3a9212b	d9554fb7	Tue May 3 11:10:15 2022 +0200	[CMake] Fix ARM64 intrinsics activation
+ee9c07aa	b5273424	Sat Apr 30 21:20:50 2022 +0200	Fix memory leak in stream_decoder.c
+6cd28e85	63ac1c37	Sat Apr 30 09:46:47 2022 +0200	Fix uclibc build
+5df56dbc	0caf6853	Thu Apr 28 21:19:10 2022 +0200	Speed up intrinsic routines for fixed_compute_best_predictor
+7e785eb9	9c495ae3	Wed Apr 27 10:29:34 2022 +0200	Fix seeking bug
+a21bdc4a	f59cb6f7	Tue Apr 26 22:09:05 2022 +0200	Documentation fixes: preset description and subset blocksizes
+11b72938	b288acb1	Fri Apr 22 16:59:04 2022 +0200	Fix format_mistake printf
+36b5b63b	b171e767	Fri Apr 22 15:27:54 2022 +0200	Fix hwcaps type for FreeBSD/powerpc*
+7385dac3	7406eabe	Tue Apr 19 17:45:22 2022 +0200	Fix overflow of streaminfo total samples (github issue 237)
+4b7e79f9	cde4b8c7	Tue Apr 19 10:55:23 2022 +0200	Fix stack protector detection for C++
+c729747d	14eb65de	Sun Apr 17 16:41:39 2022 +0200	Fix size of first frame when using analyze function
+14eb65de	7dd7f948	Fri Apr 15 09:36:15 2022 +0200	Fix configuration of stack smash protection/fortify source on MinGW
+7dd7f948	ecede0bc	Fri Apr 15 09:36:15 2022 +0200	Fix building both static and shared libs on MinGW with autotools
+f7e77f62	31bcbb86	Wed Apr 13 17:37:50 2022 +0200	Build as Release to speed up testing and mute debug output
+179cdce1	6debf337	Wed Apr 13 07:35:33 2022 +0200	cmake: Fix tests with BUILD_CXXLIBS or BUILD_PROGRAMS off
+6debf337	2bf5f6ec	Tue Apr 12 21:37:51 2022 +0200	cmake: fix c/cxx compile option use with asm code
+d4a72210	aa126b8f	Tue Feb 8 20:49:12 2022 -0800	Mark fixed subframes with bps > 24 as unparsable
+37d1a620	b7a4402a	Sat Jun 26 05:12:56 2021 +0000	github actions: Fix typo.
+bab58c37	1ac2a631	Thu Jun 24 15:59:31 2021 -0700	Fix building/installing docs with CMake
+1ac2a631	a9557c13	Thu Jun 24 15:59:09 2021 -0700	Fix version & requires fields in pkg config files
+a9557c13	eba0ff8d	Wed Jun 23 13:24:22 2021 -0700	examples: Fix error condition processing
+88fb432a	88bb6d49	Tue Jun 22 22:44:18 2021 -0700	Fix nasm.h not found when building in x86
+88bb6d49	27c61570 d73631d1	Tue Jun 22 10:44:29 2021 -0700	Merge pull request #244 from maxz/fix-wrongly-encoded-characters
+d73631d1	27c61570	Tue Jun 22 15:54:09 2021 +0200	Fix encoding of contributor name.
+ae288c06	ced7f682	Mon Mar 15 13:46:20 2021 +1100	Fix compression ratio display for very small files
+5f5035d2	d7b33142	Mon Mar 15 13:46:20 2021 +1100	flac: Work around gcc bug to prevent false unset MD5 signature warning
+d7b33142	159cd6c4	Mon Mar 15 13:46:20 2021 +1100	libFLAC/stream_decoder.c: Fix divide by zero error in FLAC__stream_decoder_seek_absolute
+bfd4f13f	ce6dd6b5	Thu Dec 17 11:05:31 2020 -0800	docs: fix simple typo, opertator -> operator
+4fbb6d4f	e0b62a61	Sun May 3 17:14:33 2020 +1000	fix build under Mac OS X with PowerPC CPU
+e0b62a61	7a35c528	Sun May 3 17:13:50 2020 +1000	Bunch of CMake fixes
+7a35c528	dd975a9e	Tue Apr 7 18:13:01 2020 +1000	cmake: Fix pkg-config install path
+cffe3890	0dfe2350	Fri Dec 27 11:34:06 2019 +1100	Fix nullptr dereference in FLAC++
+a76bdaab	020042cc	Sun Dec 8 20:34:57 2019 +1100	replaygain: Fixed usage of gainfilter variable after free
+53953b67	1f578f1b	Sun Dec 8 20:34:57 2019 +1100	libFLAC++: Fix mistyped identifier name
+b02e1593	d518e13a	Sun Nov 24 19:30:34 2019 +1100	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+d518e13a	f706f283	Fri Nov 22 06:20:49 2019 +1100	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+1f059e84	ed1b67b9	Tue Nov 19 06:10:19 2019 +1100	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+b3f55c40	c7d3bd80	Mon Nov 11 11:42:34 2019 +1100	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+c7d3bd80	b84ff55b	Mon Nov 11 11:42:34 2019 +1100	test_streams: Fix UBSAN error in random generator
+b84ff55b	25305d68	Thu Oct 24 06:57:47 2019 +1100	libFLAC/stream_decoder.c: fix integer overflow on corrupt file
+25305d68	7bc7aebc	Sat Oct 19 14:51:05 2019 +1100	Fix msvc build after commit b917d456
+7bc7aebc	35b369eb	Sat Oct 19 12:51:38 2019 +1100	Replace unsigned with uint32_t in prototypes; Fixes DJGPP builds.
+952d5116	d4a1b345	Thu Oct 10 18:32:21 2019 +1100	cmake: fix nasm sources build when building in a separate directory
+2e7931c2	6d0e222a	Tue Oct 8 06:14:06 2019 +1100	libFLAC/bitreader.c: Fix out-of-bounds read
+5598543a	8147ee7e	Mon Sep 16 06:18:07 2019 +1000	libFLAC/lpc.c: Fix signed integer overflow
+8147ee7e	09f47c00	Mon Sep 16 06:18:07 2019 +1000	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+09f47c00	c34c3459	Mon Sep 16 06:18:07 2019 +1000	libFLAC/bitreader.c: Fix shift invoking undefined behaviour
+c34c3459	04974d27	Mon Sep 16 06:18:07 2019 +1000	libFLAC/bitreader.c: Fix OOB read
+04974d27	2409f5f3	Sun Sep 15 16:14:36 2019 +1000	Fix a number of gcc 9.2 compiler warnings
+01167efa	9ea40e34	Sun Sep 15 11:35:36 2019 +1000	Fix function redefinition on arm-none-eabi compilers
+5db58209	88ddb5b5	Sun Aug 18 10:44:15 2019 +1000	Fix build on FreeBSD PowerPC
+88ddb5b5	4ca0d85c	Fri Aug 16 06:59:42 2019 +1000	Fix metaflac under ctest.
+48e8dbcf	11461172	Mon Jul 15 09:42:38 2019 +1000	Fix CppCheck warnings
+cd03042e	0c3440ae	Sat Jun 1 12:33:53 2019 +1000	Fix CMake configure warning
+0c3440ae	77e234ac	Fri May 31 19:19:20 2019 +1000	Fixed #107: CMake error without enabling BUILD_CXXLIBS
+77e234ac	e4b94e31	Tue May 28 15:55:27 2019 +1000	CMake: fixed windows_unicode_filenames linking errors
+e4b94e31	95a94232	Sun May 12 09:00:07 2019 +1000	Fix Visual Studio solution generation with CMake
+1cb968a7	5d81610e	Sat May 4 11:41:48 2019 +1000	Fixed dependencies on win_utf8_io
+5d81610e	a82a014c	Sat May 4 11:41:48 2019 +1000	Fixed dependency between grabbag and utf8
+f301518c	5e0d4187	Mon Aug 20 18:16:34 2018 +1000	configure.ac: Fix FLAC__CPU_PPC on little endian, and add FLAC__CPU_PPC64
+a8e9857e	6892e7c8	Sat Aug 18 09:44:24 2018 +1000	windows_unicode_filenames.c: Fix a missing return statement
+452a4477	5dff53c0	Mon Jun 11 09:57:21 2018 +1000	Add output-prefix tests
+5dff53c0	01eb1970	Mon Jun 11 09:57:09 2018 +1000	Fix --output-prefix with input-files in sub-directories
+01eb1970	0db0e878	Thu May 24 07:20:19 2018 +1000	Fix miscellaneous typos.
+65c27964	8874ecc0	Mon May 21 10:19:03 2018 +1000	Fix CRC calculation for small blocks.
+f01a3aa7	096a63d3	Sun May 20 10:29:48 2018 +1000	Minor fixes for bitwriter unit test.
+85fca3c9	aaaaa0de	Sun May 6 15:40:07 2018 +1000	Fix more GCC warnings about case fall-through
+aaaaa0de	2817eca6	Sun May 6 15:25:14 2018 +1000	More generic version of MSVC bug workaround
+98deaf1d	45f7d41a	Mon Apr 9 07:42:12 2018 +1000	replaygain_synthesis.c: Fix compile issue in MSVS
+45f7d41a	a0027fad	Sat Feb 10 13:37:55 2018 +1100	Fix for missing WINAPI_FAMILY_PARTITION
+972454ed	20a2100d	Sat Jan 6 17:49:14 2018 +1100	UWP build fix
+20a2100d	f7cd466c	Fri Jul 21 07:10:13 2017 +1000	replaygain_synthesis.c: Fix a cppcheck warning
+1b5c09e4	ed84746d	Mon Jun 26 19:22:31 2017 +1000	Fix GCC 7 case fall through warnings
+b762a20a	64f47c2d	Wed May 3 18:37:12 2017 +1000	Fix missing SIZE_MAX definition on Android
+64f47c2d	59bedcf2	Wed Apr 19 18:14:39 2017 +1000	libFLAC: Fix default flac_max/min
+59bedcf2	952c93b2	Mon Apr 17 07:31:13 2017 +1000	flac: Fix usage message
+952c93b2	4f47b63e	Sun Apr 9 15:17:06 2017 +1000	metaflac: Fix a memory leak
+4f47b63e	25b2d82f	Sat Apr 8 19:15:37 2017 +1000	stream_decoder.c: Fix a memory leak
+25b2d82f	5121d22e	Tue Mar 21 05:39:29 2017 +1100	Fix typos in header files
+5121d22e	d249bce9	Thu Mar 16 20:29:30 2017 +1100	stream_decoder.h: Fix Reference to Non-Existent Functions
+d249bce9	f7f21647	Thu Mar 16 20:28:39 2017 +1100	stream_decoder.h: Fix References to ``stdout\'\'
+f7f21647	61e7dfa8	Thu Mar 2 06:40:28 2017 +1100	cpu.c: Fix LLVM compile
+172146bd	f80652a8	Thu Feb 23 18:58:53 2017 +1100	cpu.c: Fix debug Windows w32 build issue
+25c6cbe2	c4bdd6fd	Sun Feb 19 06:33:35 2017 +1100	cpu.h: Another CPP fixup
+c4bdd6fd	3a7884bf	Wed Feb 15 20:16:01 2017 +1100	cpu.h: Fix compiler detection
+3a7884bf	841ed1ae	Tue Feb 14 21:26:43 2017 +1100	flac/encode.c: Fix an integer overflow
+841ed1ae	67ea8bad	Mon Feb 13 19:42:46 2017 +1100	stream encoder: fix documentation inconsistencies
+c669249e	d2cb0d1e	Thu Feb 9 20:02:18 2017 +1100	Fix compile with cygwin
+09b82248	ada48f59	Thu Jan 19 20:45:13 2017 +1100	Fix cppcheck warnings
+1e9e707c	89a6c520	Thu Jan 19 06:33:33 2017 +1100	stdint.h fixes for MSVS 2005/2008
+89a6c520	78d67ff8	Tue Jan 17 19:41:44 2017 +1100	metadata.h: Fix search/replace typo in comments
+78d67ff8	c80a819b	Tue Jan 17 19:41:31 2017 +1100	getopt.c: Pointer comparison fix
+64b7142a	9bb7a7e0	Mon Jan 16 19:31:25 2017 +1100	Final unsigned fixes
+9bb7a7e0	f60a8ccc	Mon Jan 16 18:28:31 2017 +1100	Yet more unsigned fixes
+f60a8ccc	d1780580	Sun Jan 15 16:28:16 2017 +1100	bitmath.h: MSVS unsigned fix
+8967db0c	71b909b7	Sun Jan 15 12:20:52 2017 +1100	bitmath.h: More unsigned fixes
+588689b1	733afdbe	Sat Jan 14 20:24:13 2017 +1100	include/FLAC: More unsigned fixes
+6ecd1a26	8f25d680	Fri Jan 13 21:31:00 2017 +1100	libFLAC/cpu.c: Fix build issue on OpenBSD/i386
+58a81cf6	230cffe0	Wed Jan 4 06:31:52 2017 +1100	Fix build with MSVC if UNICODE is enabled
+230cffe0	ac39d371	Tue Jan 3 04:46:24 2017 +1100	libFLAC/cpu.c: Fix CPU detecton
+e64ac797	23ca1285	Wed Dec 21 20:49:52 2016 +1100	Makefile.lite: Fix running of tests
+76c25ba8	db3b3045	Wed Dec 21 16:14:50 2016 +1100	More Makefile.lite fixes
+9e5dd484	2f840300	Sun Dec 11 20:17:52 2016 +1100	Makefile.lite fixes
+2f840300	36849105	Sun Dec 11 20:12:04 2016 +1100	Fix PACKAGE_VERSION in MSVC files
+582f111a	7b91f238	Tue Dec 6 20:05:38 2016 +1100	libFLAC/metadata_object.c: Fix typo in number
+f39a0ea6	459fdc5e	Mon Dec 5 05:37:44 2016 +1100	configure.ac: Fix description of --disable-sse
+8a78aad1	1abd8794	Sun Dec 4 17:41:45 2016 +1100	libFLAC/cpu.c: Whitespace fixes
+979ea746	55fba7e3	Fri Dec 2 18:02:57 2016 +1100	src/share/grabbag/seektable.c: Fix typo inside assert
+a2420c14	d1c15b4f	Mon Sep 12 17:27:11 2016 +1000	cpu.c: Really fix compiler warnings
+d1c15b4f	23f6a359	Sun Sep 11 13:54:15 2016 +1000	cpu.c: Fix compiler warning on PowerPC
+23f6a359	a52177b0	Thu Sep 8 20:39:48 2016 +1000	Fix compiler warning from gcc-6.1.1
+f7491f97	c12bfa0e	Thu Jul 14 18:42:05 2016 +1000	stream_decoder: fix memory leak after seek table read error
+c12bfa0e	74e751c4	Wed Jul 13 19:47:11 2016 +1000	libFLAC: Fix cpuid detecton on old Cyrix CPUs
+9949ce15	0a49fe77	Sun Jul 10 08:19:26 2016 +1000	stream_decoder: fix integer underflow due to malformed wasted_bits
+51fc9487	bba26a55	Fri Jul 1 07:04:28 2016 +1000	libFLAC/cpu.c: Fix dfprintf macro for MSVS
+601c051d	85c902fb	Tue Jun 28 18:08:12 2016 +1000	libFLAC/cpu.c: Use a dummy function for debugging
+85c902fb	a08e90c4	Mon Jun 27 05:46:21 2016 +1000	libFLAC/cpu.c: More MSVC fixes
+a08e90c4	162a4492	Sun Jun 26 21:58:54 2016 +1000	libFLAC/cpu.c: Fixes for MSVC
+162a4492	7a8f3591	Sun Jun 26 17:28:27 2016 +1000	libFLAC/cpu.c: Fix build on non-Intel CPUs
+36a0ab10	e120037f	Mon Jun 20 20:42:44 2016 +1000	Fix use of FLAC__HAS_X86INTRIN configure variable
+e120037f	e58b36c8	Mon Jun 20 20:42:44 2016 +1000	Fix use of FLAC__SSE_OS configure variable
+e58b36c8	fdc1ccf2	Tue Jun 14 06:31:25 2016 +1000	Fix nasm compile on OS X / Darwin
+fdc1ccf2	0b9bcebd	Sun May 22 11:06:32 2016 +1000	libFLAC: More metadata_iterators fixes
+bbf1e3ea	94a61241	Sun May 8 17:29:00 2016 +1000	test_libFLAC++: Fix memory leaks
+94a61241	387992bd	Thu May 5 17:23:52 2016 +1000	libFLAC: Add a workaround for a bug in MSVC2105 update2
+cf0a6ec7	3de7413a	Wed Apr 27 10:23:38 2016 +1000	Fix \'make distcheck\' target
+50af1bcf	9548d4b9	Sun Mar 20 20:49:31 2016 +1100	libFLAC/stream_decoder.c: Fix typo
+eae85ee7	61607377	Sun Mar 20 17:49:44 2016 +1100	libFLAC/stream_decoder.c: Fix compiling with integer only
+c4141f61	15310342	Thu Feb 11 18:23:34 2016 +1100	Another Windows build fix
+9cf42fe5	50e7aea8	Wed Feb 10 21:24:41 2016 +1100	Fix autotool warnings
+ab611022	52522f3a	Tue Feb 9 17:56:55 2016 +1100	More Windows fixes
+52522f3a	0bb06dc1	Tue Feb 9 14:05:50 2016 +1100	More `make distcheck` fixes
+0bb06dc1	e5498e87	Tue Feb 9 07:01:29 2016 +1100	test_libFLAC: Fix `make distcheck` target
+a5c8e8e1	b821ac2d	Mon Feb 8 13:43:00 2016 +1100	src/share/utf8/utf8.c: Windows API usage fixes
+b05c0018	89a0fe1e	Tue Feb 2 09:33:16 2016 +1100	win_utf8_io: Fix compile error
+c225c4a6	dd834749	Tue Feb 2 09:16:51 2016 +1100	Fix debug build for VS2005
+7917b60b	9d99f2db	Sun Jan 31 12:35:57 2016 +1100	src/share/Makefile.am: Fix EXTRA_DIST
+9d99f2db	c5476005	Sun Jan 31 09:55:18 2016 +1100	locale_hack.h: Fix comment
+ba18bd19	04f7b241	Sun Jan 31 09:50:12 2016 +1100	Fix dependencies for MSVC
+aceddf31	4288e446	Fri Jan 29 07:39:16 2016 +1100	Windows/MSVC utf8 build fixes
+4288e446	7411724b	Tue Jan 26 16:20:00 2016 +1100	microbench/util.c: Fix -Wshadow warning
+7411724b	3ff49e60	Tue Jan 26 13:35:24 2016 +1100	Fix ioctl/TIOCGWINSZ for OSX
+3ff49e60	906ccc39	Tue Jan 26 13:03:31 2016 +1100	src/flac/utils.c: Fix for OpenBSD
+924cade2	29029748	Sun Jan 24 08:21:26 2016 +1100	Fix linking of microbenchmark program
+29029748	6c03ab20	Sun Jan 24 08:12:59 2016 +1100	libFLAC/lpc.c: Fix comments
+e0b406f6	d908b292	Sat Jan 23 08:29:35 2016 +1100	Fix three more cppcheck warnings
+d908b292	293d6b22	Sat Jan 23 07:45:54 2016 +1100	Fix some cppcheck reports
+cc55e651	b7e12d6c	Tue Jan 19 18:00:58 2016 +1100	grabbag: Fix comment in header
+b7e12d6c	4684608f	Tue Jan 19 17:59:08 2016 +1100	iffscan: Fix printf format strings
+7eda006d	28817ba5	Sun Jan 10 08:33:52 2016 +1100	Fix description of --rice-partition-order in flac -H
+262505bd	d9f73a8c	Sat Jan 9 10:46:44 2016 +1100	libFLAC: Fix total_samples_estimate
+39699934	cf7f1b5a	Thu Dec 31 07:32:39 2015 +1100	bitwriter.c: Cleanups and fixups
+02a9262e	55910e61	Sun Dec 20 19:40:40 2015 +1100	bitwriter.c: Fix undefined behaviour
+55910e61	f0ee453c	Sun Dec 13 11:33:55 2015 +1100	stream_encoder.c: Fix compiler warning
+eb2af522	3fdb87b9	Wed Nov 25 05:42:43 2015 +1100	libFLAC/stream_encoder.c: Fix overflow in total_error_*
+826b64f3	86b36d92	Sat Nov 7 07:06:26 2015 +1100	libFLAC: Fix link error
+20d721e6	165d7b1d	Mon Oct 26 07:41:13 2015 +1100	Fix manpage: synonyms for encoding options -0 .. -8 now match the code
+165d7b1d	8d43282a	Wed Oct 14 06:34:24 2015 +1100	stream_encoder.c: Fix subframe_bps comparison
+8d43282a	d20a79a8	Tue Oct 13 20:20:33 2015 +1100	libFLAC/cpu.c: Fix un-initialized variable
+d91eb4ae	5fab59f8	Mon Sep 28 09:18:27 2015 +1000	libFLAC: Fix an out-of-bounds heap read
+5fab59f8	084bb72f	Mon Sep 7 15:55:32 2015 +1000	src/flac/encode.c: Fix undefined behaviour
+9be32a53	4591b3f2	Fri Sep 4 00:22:48 2015 +1000	flac/decode.c: Fix undefined behaviour
+4591b3f2	451efca2	Thu Sep 3 14:52:55 2015 +1000	test_seeking: Fix undefined behaviour
+98cab352	95fc3bf3	Wed Sep 2 16:33:54 2015 +1000	microbench/Makefile.am: Fix \'make distcheck\'
+e48ca8d4	e5ef5344	Tue Sep 1 00:46:42 2015 +1000	libFLAC++/metadata.cpp: Fix undefined behaviour
+e5ef5344	0bea5fb9	Tue Sep 1 00:31:51 2015 +1000	MSVC: Fix libFLAC_static.vcxproj dependencies
+0bea5fb9	3982865e	Mon Aug 31 00:22:16 2015 +1000	flac/encode.c: Fix undefinoed behaviour
+3982865e	1b8af6bb	Mon Aug 31 00:22:12 2015 +1000	libFLAC/bitwriter.c: Fix undefined behaviour
+1b8af6bb	25d38737	Sat Aug 29 05:22:22 2015 +1000	libFLAC/fixed.c: Fix undefined behaviour
+25d38737	a1458164	Thu Aug 27 09:34:43 2015 +1000	tests: Fix undefined behaviour
+a1458164	fb273e46	Wed Aug 26 17:21:36 2015 +1000	libFLAC/format.c: Fix undefined behaviour
+fb273e46	e3c80953	Mon Aug 24 19:21:51 2015 +1000	libFLAC/stream_decoder.c: Fix undefined behaviour
+e3c80953	b18d8d50	Sun Aug 23 08:51:44 2015 +1000	libFLAC/bitwriter.c: Fix undefined behaviour
+b18d8d50	d9503c84	Sun Aug 23 08:50:33 2015 +1000	libFLAC/bitreader.c: Fix undefined behaviour
+584a1346	d9ae5e91	Sat Aug 22 20:28:47 2015 +1000	libFLAC: Fix memory leak
+684fb3d5	f7c52c8a	Sat Aug 22 19:25:39 2015 +1000	libFLAC/stream_decoder: Fix double free
+15a90626	7083cf2d	Sun Aug 9 14:32:11 2015 +1000	libFLAC: Fix potential meory leaks
+11230878	c3cf5312	Sun Aug 9 08:42:41 2015 +1000	Compat: Fix for MSVC deprecated functions
+6ced857c	cf7442d6	Mon Jul 13 22:20:29 2015 +1000	libFLAC: Fix decoder_flush with uninitialized decoder
+e771e7b6	5ff15bdd	Fri Jul 10 19:22:39 2015 +1000	flac/foreign_metadata: Fix for odd RIFF chunk size
+a45af0ce	ff50779e	Mon Jul 6 21:29:40 2015 +1000	libFLAC/md5.c: Minor formatting fixes
+d939b44a	bc511300	Sun Jul 5 20:57:39 2015 +1000	libFLAC: Improve fix in bc5113007a
+ccb5a4de	d9aa331c	Sat Jul 4 11:51:33 2015 +1000	flac: Fix inlining failure warning
+336f6a54	ab7ab03b	Wed Feb 25 06:48:34 2015 +1100	configure.ac : Fix FLAC__HAS_X86INTRIN / FLaC__SSE_OS.
+29db3fbf	8267168d	Tue Feb 24 06:06:10 2015 +1100	Fix cursheet tests for \'make distcheck\'.
+8267168d	ffcda161	Sun Feb 22 21:44:27 2015 +1100	src/encode.c : Fix potential infinite loop in flac-toflac encoding.
+c431a6c5	b5a10e75	Sat Feb 21 07:05:21 2015 +1100	libFLAC/metadata_object.c : Fix typo in comment.
+fed0dfa1	033af7bf	Wed Feb 18 17:19:19 2015 +1100	src/libFLAC/stream_decoder.c : Rework fix for seeking bug.
+c06a4496	ed22a42b	Wed Feb 18 09:49:08 2015 +1100	flac : Fix for https://sourceforge.net/p/flac/bugs/425/
+ed22a42b	d8036ea9	Sun Feb 15 20:37:40 2015 +1100	test/test_metaflac.sh : Out-of-tree build fixes.
+d8036ea9	7c3cd3d9	Sun Feb 15 20:37:40 2015 +1100	test/test_flac.sh : Out-of-tree build fixes.
+875be0ad	775eb934	Mon Dec 22 09:05:09 2014 +1100	src/libFLAC/stream_decoder.c : Fix NULL de-reference.
+bc97640b	f8255f2b	Sun Dec 14 18:00:05 2014 +1100	Grammatical error in make file comment fixed
+f8255f2b	18a48545	Sun Dec 14 17:59:47 2014 +1100	Spelling and grammar fixes for console output
+18a48545	b4b2910b	Fri Dec 12 06:51:38 2014 +1100	stream_decoder.c : Fix free-ing of unitilialized pointer.
+b4b2910b	3ff1b9d3	Thu Dec 11 11:17:03 2014 +1100	src/libFLAC/stream_decoder.c : Fix seek bug.
+3ff1b9d3	eb753ae5	Tue Dec 9 06:04:49 2014 +1100	flac/vorbiscomment.c : Fix typo.
+d03c9f46	7b757e46	Thu Dec 4 21:01:23 2014 +1100	src/flac/main.c : Fix an output line > 81 characters in length.
+7b757e46	723cfa34	Wed Dec 3 21:43:03 2014 +1100	Fix some minor word duplication
+43ba7ad0	0e11f73e	Sat Nov 29 18:08:33 2014 +1100	src/libFLAC/stream_decoder.c : Fix another input validation bug.
+3bc649de	50262f58	Thu Nov 27 08:16:34 2014 +1100	Some last copyright year updates and change to open bug list
+50262f58	b147b73e	Wed Nov 26 20:42:15 2014 +1100	Fix two un-related typos.
+b147b73e	ff8a74aa	Wed Nov 26 16:29:29 2014 +1100	test/test_compression.sh : Fix for OSX.
+ccdd8fe2	39d9791b	Wed Nov 26 08:03:34 2014 +1100	libFLAC/format.c : Fix the date in FLAC__VENDOR_STRING.
+39d9791b	b83ee753	Tue Nov 25 20:02:22 2014 +1100	More date fixes.
+288edbb3	e09ff328	Mon Nov 24 21:54:34 2014 +1100	doc/html/changelog.html : Add attributions and fix a typo.
+5b3033a2	d8d17170	Thu Nov 20 21:46:39 2014 +1100	src/libFLAC/stream_decoder.c : Fix buffer read overflow.
+d8d17170	9971e705	Sun Nov 16 09:11:02 2014 -0800	libFLAC: fix more problems with new window functions
+b7d13c07	3af2f2b3	Wed Nov 12 07:06:20 2014 -0800	include/share/endswap.h : Fix usage of HAVE_BSWAP16.
+69c2318b	87408b36	Tue Nov 4 21:18:48 2014 -0800	Fix indenting on the bswap32 autoconf macro.
+f0a17e96	11b5d51b	Tue Oct 7 06:34:21 2014 +1100	libFLAC/fixed_intrin_sse2.c : Fix comments.
+cf780068	cf732a8e	Fri Sep 26 06:28:49 2014 +1000	metaflac : Fix typo in error message.
+1c7e3f10	e0ac5d46	Mon Sep 22 18:29:36 2014 +1000	Windows specific vsnprintf fixes.
+ffa55423	ea0d5dda	Sun Sep 21 21:11:46 2014 +1000	flac/utils.c : Fix calculation of a tag length.
+71875b0c	6abc4803	Sun Sep 21 09:34:32 2014 +1000	fixed_intrin_sse[23].c : Add new, simpler SSE code.
+4fa58808	ed530f6a	Thu Sep 18 21:47:36 2014 +1000	fixed_intrin_sse[23].c : Simplify  XMM -> int64 conversion.
+a87019e7	e0f638fa	Sat Aug 9 13:02:58 2014 +1000	win_utf8_io.c : Fix potential memory leak.
+0ae3e468	27846708	Sat Aug 9 12:23:56 2014 +1000	Various documentation fixes, merge with website
+27846708	6a28facd	Mon Jul 28 21:40:00 2014 +1000	Fix bug when using -p switch during compression
+1930ae10	f73c82a7	Sun Jul 27 21:18:13 2014 +1000	configure.ac : Fix --disable-sse option.
+b08c520d	4a63f10f	Sun Jul 13 20:37:00 2014 +1000	include/share/endswap.h : Fix default ENDSWAP_16.
+71246dcc	5e8854fa	Fri Jul 4 09:02:21 2014 +1000	test_libFLAC/test_libFLAC.vcproj : One more CPU_IS_LITTLE_ENDIAN fix.
+22d4893d	7422e084	Thu Jul 3 18:59:49 2014 +1000	Fix bswap16 issue on Debian 6.
+7422e084	c6ff539a	Thu Jul 3 05:38:12 2014 +1000	test_libFLAC : Fix Windows build after addidion of endian tests.
+08cb913c	74d81333	Wed Jul 2 18:33:33 2014 +1000	src/flac/encode.c :  Fix compression failure warning when encoding from stdin.
+74d81333	c69a2094	Tue Jul 1 13:05:24 2014 +1000	test_libFLAC/md5.c : Fix the tests.
+0d1cb195	3eb4094b	Mon Jun 30 09:20:09 2014 +1000	include/share/endswap.h : Fix fallback ENDSWAP_16 macro.
+3eb4094b	7590d99b	Sun Jun 29 22:57:59 2014 +1000	src/flac/encode.c : Fix cast-align warning on ARM systems.
+7590d99b	51c6567f	Sun Jun 29 21:53:01 2014 +1000	libFLAC/md5: Fix for cast-align warnings on ARM.
+99257e17	1d12d98e	Sat Jun 28 22:25:18 2014 +1000	flac: Fix channel order for mono files.
+1d12d98e	a5c3a37c	Sat Jun 28 22:25:18 2014 +1000	flac: Fix encoder and decode progress messages with --ogg.
+a5c3a37c	b4579dc0	Sat Jun 28 22:25:18 2014 +1000	flac : Fix handling of raw input option.
+a3b35e7f	6ccef147	Sat Jun 28 09:33:02 2014 +1000	flac: Fix padding for --replay-gain option.
+6ccef147	08545753	Sat Jun 28 09:27:33 2014 +1000	stream_decoder : Two read_metadata() fixes from 1.2.1 maintenance branch.
+4bc4255f	db1619d4	Sat Jun 28 09:20:03 2014 +1000	test/test_replaygain.sh : Update tests after work aroind for GCC bug.
+db1619d4	46bedb58	Sat Jun 28 09:17:32 2014 +1000	Underscore fixes.
+9f62979d	23f36ed6	Sat Jun 28 09:07:39 2014 +1000	Fix VS project file for iffscan.
+40e817dc	1f7c0859	Fri Jun 27 22:06:39 2014 +1000	src/flac/decode.c : Fix a cast-align warning from GCC.
+097c0e77	f48c79a4	Thu Jun 26 19:18:29 2014 +1000	Fix Makefile.lite build system on Linux.
+19b549f8	b8d58e32	Sun Jun 15 20:32:48 2014 +1000	regainplay_analysis : Work around GCC optimizer bug.
+cdb46578	be0a8942	Sun Jun 1 17:33:34 2014 +1000	src/ : Fix two typos.
+b1b6caf8	7963120a	Sun May 11 03:24:32 2014 -0700	replaygain_synthesis.h : Fix FLAC_SHARE__MAX_SUPPORTED_CHANNELS.
+11b004ca	c2aeedca	Tue Apr 15 18:36:46 2014 +1000	libFLAC/stream_encoder.c : Fix if else wibble.
+c2aeedca	619d821b	Tue Apr 15 18:31:58 2014 +1000	src/flac/utils.c : Fix compile guard for ioctl().
+3f5208c3	2c455377	Wed Apr 9 18:09:03 2014 +1000	Fix clang compiler warnings.
+ac940e41	1e085666	Thu Mar 27 19:30:47 2014 +1100	libFLAC/cpu.c : Bundle of minor fixes.
+006b8356	49d9d742	Mon Mar 24 12:06:49 2014 +1100	Fix all instances of \'#if HAVE_CONFIG_H\'.
+49d9d742	697dbdee	Sun Mar 23 21:41:01 2014 +1100	metadata_object.c : Fix handling of zero length vorbis comment string.
+697dbdee	70b078cf	Sun Mar 23 19:58:44 2014 +1100	Revert "Attempt to fix differences between x86 FPU and SSE calculations."
+70b078cf	bc2b8c6e	Fri Mar 21 19:26:08 2014 +1100	Attempt to fix differences between x86 FPU and SSE calculations.
+d7e6d91f	cf55fc7b	Fri Mar 21 17:45:21 2014 +1100	Fix build issue on OSX with GCC 4.2/Xcode.
+47bd9964	f931d134	Fri Mar 14 15:33:11 2014 +1100	stream_encoder/decoder : Comment fixes.
+f5902a47	7cbecbae	Fri Mar 14 15:33:11 2014 +1100	Fix pragma warning.
+b334fb2a	cf0e42ae	Mon Feb 24 21:47:20 2014 +1100	Fix typos in comments.
+4be8ed8e	71c95553	Mon Feb 3 18:48:27 2014 +1100	src/share/utf8/charset.c : Fix typo in conditional.
+71c95553	96011ffa	Sun Feb 2 10:42:20 2014 +1100	bitmath.h : Fixes for FLAC__bitmath_ilog2_wide().
+c2747bec	7e927893	Sat Jan 18 07:55:19 2014 +1100	lpc_asm.nasm : More \'mov cl\' -> \'mov ecx\' fixes.
+6cd8b424	b84f0724	Tue Jan 7 21:27:00 2014 +1100	Add FLAC__ prefix to precompute_partition_info_sums....
+d65ede3e	a6a4b6f2	Fri Dec 20 05:57:33 2013 +1100	Fix Makefile.am altivec logic
+64f34e6e	55049aad	Thu Oct 10 21:32:07 2013 +1100	libFLAC/stream_encoder.c : Fix MSVS profiler hot spot.
+674fdc2f	31a79d7e	Fri Sep 27 03:07:53 2013 +1000	FLAC.sln : Fix for MSVS 2005.
+733efde2	899599e5	Wed Sep 25 23:33:55 2013 +1000	Fix documentation rice partition order
+99f5a57d	943384d7	Wed Sep 18 06:56:42 2013 +1000	Fix minor Makefile.am issues arising from 943384d7c33.
+ae4d7204	d6fa2907	Tue Sep 17 06:14:50 2013 +1000	Fix/re-enable SSE/SSE2 lpc optimisations.
+d6fa2907	e21237a8	Sun Sep 15 20:10:06 2013 +1000	test/test_seeking.sh : Fix detection of Ogg support.
+95552e11	24a64471	Sun Sep 15 18:10:55 2013 +1000	Fix numerous warnings arising from addition of -Weffc++.
+0752740d	e07bd181	Sun Sep 15 10:29:19 2013 +1000	src/libFLAC/lpc.c : Fix compiler warning.
+58ecf3ae	9e392706	Sat Sep 7 21:58:29 2013 +1000	MSVS : Fix library output directory.
+b250132a	3ece67d7	Thu Sep 5 19:50:40 2013 +1000	src/flac/iffscan.c : Fix typo.
+3cea079a	7050033b	Tue Aug 13 19:30:24 2013 +1000	Fix a couple of NASM warnings.
+7050033b	1ec41a97	Tue Aug 13 19:30:21 2013 +1000	src/libFLAC/ia32/nasm.h : Fix nasm warning on windows.
+187e596e	b01e5686	Fri Aug 2 06:21:02 2013 +1000	stream_encoder.c : Improve fix for arithmetic overflow.
+f34f31da	dd9460e7	Sun Jul 21 21:05:31 2013 +1000	stream_encoder.c : Improve fix for arithmetic overflow.
+552917d9	355f4aae	Sun Jul 21 19:58:22 2013 +1000	src/share/grabbag/replaygain.c : Fix compiler warnings.
+6f7ec60c	cf0277bd	Wed Jul 17 19:42:12 2013 +1000	stream_encoder.c : Fix an arithmetic overflow in the RICE2 partitioner.
+606fdfca	d42c0426	Wed Jun 5 18:50:42 2013 +1000	metaflac : Fix local_strcat() to terminate string correctly.
+21a70169	c7957b2b	Wed Jun 5 18:48:25 2013 +1000	XMMS plugin : Fix symbol visibility.
+c7957b2b	bd4af7e5	Mon May 27 19:23:42 2013 +1000	test/*.sh : Fix MALLOC_PERTURB initialization.
+cd4ddabe	5999d81f	Mon May 27 18:08:57 2013 +1000	Language fix: "difference licenses"
+5a01bf17	2bce0d60	Mon May 27 06:42:16 2013 +1000	src/flac/main.c : Fix copyright notice
+b09ee017	b1982fbc	Mon May 27 06:20:08 2013 +1000	Fix bootstrap on Mac OS X
+d672efaa	411ba53c	Sun May 26 08:26:45 2013 +1000	Fix gcc version check for private macros
+bb79a59a	c9f05ed2	Sun May 26 07:42:19 2013 +1000	Fix mistyped variable name
+d7a56a28	d4b68b2b	Sat May 25 17:12:27 2013 +1000	Fix compiling for Android.
+9aa40323	aa285f3a	Tue Apr 30 09:51:21 2013 +1000	Fix path to HTML documentation
+c1ebd2ca	1b1d05bb	Mon Apr 29 21:33:02 2013 +1000	Two minor compiled fixes for OS/2.
+cc9f3921	f6585b0b	Thu Apr 25 08:58:08 2013 +1000	Metaflac UTF-8 fixes (Windows)
+dec61cec	bf632684	Mon Apr 22 17:42:56 2013 +1000	Fixes setting test level and valgrind testing
+bf632684	fc21768d	Sun Apr 21 21:47:33 2013 +1000	Fix status print staying on the wrong line with certain filename length.
+fc21768d	ef40d9d4	Sun Apr 21 19:51:56 2013 +1000	Fix compile when compiling with FLAC__INTEGER_ONLY_LIBRARY.
+ef40d9d4	f9d33d96	Sun Apr 21 19:31:54 2013 +1000	Fix -Wshadow warnings when compiling with mingw-gcc.
+f9d33d96	e8ffe523	Sun Apr 21 18:05:25 2013 +1000	Metaflac hex dump UTF-8 and locale fix.
+e8ffe523	52fab8ba	Sun Apr 21 17:56:16 2013 +1000	Windows utf8 utime fix.
+0b736a56	d0c219f1	Sun Apr 21 17:24:59 2013 +1000	Fix compiler warnings related to win utf8 stuff.
+e8d7b7f5	d6219e8b	Sun Apr 7 18:12:35 2013 +1000	Fix Windows SIZE_T_MAX definition.
+b9574fe5	6a9a18ff	Sun Apr 7 13:44:45 2013 +1000	Fix a bunch of compiler warnings (mainly MinGW).
+5da86630	805ffdb6	Sun Apr 7 11:03:52 2013 +1000	Fix pkg-config files to avoid overlinking
+1ec6e3a0	9a93680d	Fri Mar 29 16:31:15 2013 +1100	Fix option names in documentation and help messages.
+f25b2602	6497ce19	Thu Mar 14 18:22:37 2013 +1100	Fix a couple of Windows 2Gig file size issues.
+9edb817d	06f3812d	Tue Mar 12 17:12:07 2013 +1100	MS VS inline/extern fix from Ben Alison plus comments.
+96a5ba71	0a2b901e	Mon Mar 11 06:06:34 2013 +1100	Fix -Wshadow warnings.
+0a2b901e	dd1fa808	Mon Mar 11 06:06:34 2013 +1100	src/libFLAC/include/private/macros.h : Fix flac_min.
+dd1fa808	b85cc57d	Mon Mar 11 06:06:33 2013 +1100	Fix -Wstrict-prototypes -Wmissing-prototypes warnings.
+b85cc57d	11efaa37	Sun Mar 10 18:38:07 2013 +1100	include/share/compat.h : feeko and ftello fixes for MinGW.
+b555ec1a	2860f178	Sat Mar 9 20:07:38 2013 +1100	m4/gcc_version.m4 : Fix XIPH_GCC_VERSION macro.
+139ffb09	fd6b192d	Fri Mar 8 21:06:48 2013 +1100	Fix version number in Visual Studio project files.
+a4c321e4	91790ef9	Wed Mar 6 22:17:51 2013 +1100	Large patch from Ben Allison fixing the MSVC build.
+91790ef9	05609d5b	Wed Mar 6 07:42:08 2013 +1100	Fix compiler warnings from new compiler flags.
+9d057c71	9c024f2b	Tue Mar 5 18:25:15 2013 +1100	Fix a bunch of WDG validation warnings in HTML docs.
+5eb63fc8	9b11da76	Tue Mar 5 17:40:57 2013 +1100	documentation_tools_flac.html : Fix WDG HTML validator warnings.
+81c91782	100c82e1	Fri Feb 8 18:58:29 2013 +1100	xmms - Fix inline linking problems with old glib
+5c8bb133	b104c6d8	Fri Feb 8 18:58:21 2013 +1100	xmms - Fix libtool usage.
+4632f945	f1841cab	Sat Jan 19 11:52:33 2013 +1100	Fix the \'distclean\' target.
+f699788f	fb13acc4	Mon Jan 14 21:52:43 2013 +1100	doc: fix out-of-tree build
+f67928de	33fa7dc6	Wed Jan 2 22:49:55 2013 +1100	Fix VC project files to use /objs/ directory instead of /obj/ directory.
+33fa7dc6	85d5c538	Wed Jan 2 22:49:55 2013 +1100	Minor Linux fixes for Makefile.lite build method.
+85d5c538	96d081c1	Wed Jan 2 22:49:37 2013 +1100	Fix all Makefile.lite to use /objs/ directory instead of /obj/ directory.
+96d081c1	0da96d3c	Wed Jan 2 21:35:47 2013 +1100	Fix building with MSYS and MinGW(-w64); Improve Makefile.lite build system
+0da96d3c	55788ea9	Fri Dec 28 11:31:35 2012 +1100	Fix to allow the flac command to parse piped WAV input with WAVEFORMATEXTENSIBLE format.
+0920bc1f	762ae018	Sun Dec 9 13:13:12 2012 +1100	Fix a copy & paste error in a comment.
+70be52b1	86efeb59	Fri Nov 30 15:33:59 2012 +1100	src/libFLAC/stream_encoder.c : Fix typo.
+fc360735	a2923e64	Fri Oct 12 22:02:49 2012 +1100	Fix a regression that severely impacted compression levels.
+12022d90	a9f3bc8e	Thu Jul 26 17:21:41 2012 +1000	Fix assembler code to make it PIC so the dynamic linker does not have to do text relocations on-the-fly. Patch from Gentoo via Jaren Stangret <sirjaren@gmail.com>
+8749dc27	feab11e9	Fri Jun 22 14:23:56 2012 +1000	Fix building when configured with --disable-shared.
+feab11e9	63c874f0	Fri Jun 22 13:39:40 2012 +1000	Fix FLAC__stream_decoder_delete() and FLAC__stream_encoder_delete() so that they will simply return if passed a NULL pointer (ie just like the C free() stdlib function).
+63c874f0	04ca6fd9	Fri Jun 8 20:13:29 2012 +1000	Fix build with automake 1.12
+04ca6fd9	387b7273	Fri Jun 8 19:58:41 2012 +1000	Quick patch to fix FLAC_metadata_object api docs.
+605f9208	7c07a0dd	Tue May 8 20:08:06 2012 +1000	Fix more compiler warnings.
+56c31918	155719b4	Tue May 8 19:51:50 2012 +1000	metadata.cpp : Fix compiler warning on 64 bit.
+155719b4	601e9610	Tue May 8 19:23:08 2012 +1000	src/libFLAC/lpc.c : Include <inttypes.h> so compiling debug version works.
+d9fde556	f491b733	Mon May 7 19:45:23 2012 +1000	Fix all links to libtool version info rules.
+f13ad375	425d39b5	Sat Apr 7 08:36:27 2012 +1000	Fix make distcheck
+5de949f4	dff08f1b	Thu Apr 5 21:24:06 2012 +1000	Fix gcc-4.7 compiler warnings.
+dff08f1b	6c2040dc	Thu Apr 5 21:02:40 2012 +1000	Fix buffer overflow by replacing strcpy with memcpy.
+b4890978	d273fcee	Sun Feb 26 20:00:36 2012 +1100	Fix a couple \'inlining failed\' warning messages.
+d273fcee	41748f04	Sun Feb 26 19:08:41 2012 +1100	Fix a couple of sign-compare warnings.
+587e118b	a4ffcc02	Fri Feb 17 17:52:12 2012 +1100	Fix a bunch of -Wtype-limits warnings.
+a4ffcc02	e38026a5	Mon Feb 13 19:58:08 2012 +1100	Fix -Werror=format-security errors.
+e38026a5	b6e64af3	Mon Feb 13 19:55:46 2012 +1100	Fix for autoreconf failures.
+e2f80c17	c506b2f4	Sun Feb 12 20:37:16 2012 +1100	Fix misuse of \\r (potentially) in flac -d or -t output.
+efffc25c	d7bfc779	Tue Feb 7 18:41:28 2012 +1100	Fix \'make distcheck\'.
+8f95634b	0fe9767e	Sun Feb 5 16:51:32 2012 +1100	Memory and fd leak fixes - ID: 3436668
+7ee90840	19050f74	Sat Feb 4 14:08:12 2012 +1100	Fix cuesheet bug introduced in ce8a75134cace056f6c436d54b57bad1a1d93797.
+1ca54132	886b9602	Fri Feb 3 06:21:57 2012 +1100	Fix \'make distcheck\'.
+8019c8e5	3b414511	Wed Feb 1 19:46:27 2012 -0800	Fix --disable-doxygen-docs install
+3b414511	e7fb2153	Wed Feb 1 22:01:05 2012 +1100	Fix memory leak when reinitializing stream encoder.
+9c2290ad	ce8a7513	Wed Feb 1 21:46:35 2012 +1100	Fix more printf formatting issues and remove un-necessary casts.
+ce8a7513	8bbbf564	Wed Feb 1 20:34:04 2012 +1100	Fix a bunch of printf format warnings.
+8bbbf564	6b3b1370	Wed Feb 1 19:58:09 2012 +1100	Fix compiler warnings.
+6b3b1370	51d77d12	Wed Feb 1 19:49:54 2012 +1100	Fix a couple of -Winline warnings.
+19e3918d	6c8d740c	Thu Aug 25 23:28:11 2011 -0700	Fix md5 structure clearing in previous commit
+6c8d740c	c2593cc1	Thu Aug 25 23:28:06 2011 -0700	Coverity fixes
+0396b5fa	d0025bda	Wed Jan 7 06:58:04 2009 +0000	Fixes for autotools (SF#1859664: https://sourceforge.net/tracker2/?func=detail&aid=1859664&group_id=13478&atid=313478)
+ee51fc0b	0915a551	Tue Jan 6 17:14:31 2009 +0000	Fix bug in bitreader handling of read callback returning a short count (SF#2490454: https://sourceforge.net/tracker2/?func=detail&aid=2490454&group_id=13478&atid=113478)
+0915a551	8e28e43b	Sat Jan 3 02:13:17 2009 +0000	Fixes for Sun Studio/Forte; us AC_C_INLINE to detect inline keyword for compiler; eliminate floating point calcs in RG analysis array size calculations (SF#1701960: https://sourceforge.net/tracker2/?func=detail&aid=1701960&group_id=13478&atid=313478)
+494d9ab0	75e6cabe	Sat Jan 3 01:59:10 2009 +0000	mingw fixes, enable build dll w/ mingw (SF#2000973: https://sourceforge.net/tracker2/?func=detail&aid=2000973&group_id=13478&atid=313478)
+75e6cabe	d75a07c9	Sat Jan 3 01:55:17 2009 +0000	mingw fixes (SF#2209829: https://sourceforge.net/tracker2/?func=detail&aid=2209829&group_id=13478&atid=313478)
+d75a07c9	4b0f2701	Sat Jan 3 01:50:46 2009 +0000	fix bug with fractional seconds on some locales (SF#1815517: https://sourceforge.net/tracker2/?func=detail&aid=1815517&group_id=13478&atid=113478)
+4b0f2701	4a570080	Sat Jan 3 01:49:01 2009 +0000	fix bug with fractional seconds on some locales (SF#1858012: https://sourceforge.net/tracker2/?func=detail&aid=1858012&group_id=13478&atid=113478)
+e5c64390	85c4e9fd	Fri Jan 2 01:28:30 2009 +0000	fixes for windows builds (SF#1756624: https://sourceforge.net/tracker2/?func=detail&aid=1756624&group_id=13478&atid=113478)
+85c4e9fd	63072d70	Fri Jan 2 01:23:59 2009 +0000	Fix bug where flac was disallowing use of --replay-gain when encoding from stdin (SF#1840124: https://sourceforge.net/tracker2/?func=detail&aid=1840124&group_id=13478&atid=113478)
+63072d70	402a2a3f	Fri Jan 2 01:18:56 2009 +0000	fix libFLAC encoder to default to compression level 5 (SF#1816825: https://sourceforge.net/tracker2/?func=detail&aid=1816825&group_id=13478&atid=113478)
+402a2a3f	a832ef32	Fri Jan 2 01:15:36 2009 +0000	fixes for windows builds (SF#1809863: https://sourceforge.net/tracker2/?func=detail&aid=1809863&group_id=13478&atid=113478)
+a832ef32	f3a8e5ca	Fri Jan 2 01:12:59 2009 +0000	fixes for windows builds (SF#1676822: https://sourceforge.net/tracker2/?func=detail&aid=1676822&group_id=13478&atid=113478)
+7ae181f2	b76d4f81	Sat Nov 29 20:56:09 2008 +0000	remove /FLAC++ suffix on include path
+b76d4f81	1f864e66	Sat Nov 29 20:55:52 2008 +0000	remove /FLAC suffix on include path
+1f864e66	e95399c1	Tue Sep 16 01:42:07 2008 +0000	minor warnings fix
+e95399c1	1eaf5303	Mon Sep 15 05:37:27 2008 +0000	fix bug in FLAC__metadata_object_vorbiscomment_replace_comment()
+02da5ace	fed9dc91	Sat Sep 13 19:30:33 2008 +0000	fix handling of aiff ssnd offset; do not try and recreate offset or block align when writing aiff
+bbdb83d6	d7f5344a	Sat Sep 13 19:29:27 2008 +0000	fix incorrect handling of block align
+59c9d343	08bfd426	Tue Sep 9 07:16:51 2008 +0000	plugin_xmms fix for DARWIN_BUILD
+08bfd426	588e1388	Tue Sep 9 07:06:09 2008 +0000	fix labels (missing colons)
+588e1388	2737f6a8	Tue Jun 3 06:52:20 2008 +0000	win64 fixes
+2737f6a8	3b938ac1	Tue Jun 3 06:35:09 2008 +0000	win64 fixes
+d8a6f4aa	1be89c49	Tue May 27 05:20:15 2008 +0000	fix problem with encoder being too strict about subset blocksizes
+0a4ecd8d	79e10b39	Tue Nov 27 04:17:15 2007 +0000	fix #includes (SF#1834168: https://sourceforge.net/tracker/index.php?func=detail&aid=1834168&group_id=13478&atid=313478)
+79e10b39	08ef65e9	Wed Oct 3 15:08:51 2007 +0000	fix bug: move flac decoder teardown into EncoderSession_destroy()
+ad6ede9d	402a9ed7	Sun Sep 16 23:15:27 2007 +0000	fix typos
+402a9ed7	5988dd59	Sun Sep 16 20:58:48 2007 +0000	final automake-related fixes
+26ba103c	24b58c0c	Fri Sep 14 00:11:21 2007 +0000	fix CFLAGS typo
+fe7ea995	703d0d4a	Thu Sep 13 00:39:45 2007 +0000	minor fixes
+1364a1e8	8c4ac1dc	Wed Sep 12 05:34:06 2007 +0000	minor fixes
+8c4ac1dc	0577344c	Wed Sep 12 05:28:48 2007 +0000	msvc fixes
+6d6afdce	9fbcdcd1	Wed Sep 12 03:01:17 2007 +0000	msvc fixes
+9fbcdcd1	44937a76	Wed Sep 12 02:43:45 2007 +0000	msvc fixes
+546ba794	939dba94	Wed Sep 12 02:39:28 2007 +0000	fixes for msvc
+939dba94	d7e09a29	Wed Sep 12 02:08:27 2007 +0000	fix compiler warning
+cc05275e	a2270174	Wed Sep 12 02:07:47 2007 +0000	fix bug skipping ahead in stdin on windows (SF#1776803: https://sourceforge.net/tracker/index.php?func=detail&aid=1776803&group_id=13478&atid=113478)
+a2270174	908e5c8b	Wed Sep 12 02:05:35 2007 +0000	add user hints to use --keep-foreign-metadata when skipping chunks, fix bug skipping ahead in stdin on windows (SF#1776803: http://sourceforge.net/tracker/index.php?func=detail&aid=1776803&group_id=13478&atid=113478)
+749299cb	902e8d6b	Tue Sep 11 07:36:56 2007 +0000	automake fixes (SF#1792179: https://sourceforge.net/tracker/index.php?func=detail&aid=1792179&group_id=13478&atid=113478)
+902e8d6b	8f072323	Tue Sep 11 07:34:45 2007 +0000	fix seek bug with ogg flac and small streams (SF#1792172: http://sourceforge.net/tracker/index.php?func=detail&aid=1792172&group_id=13478&atid=113478)
+4c30f1ff	cb43114b	Mon Sep 10 05:51:52 2007 +0000	automake-1.10 fixes (SF#1791361: https://sourceforge.net/tracker/index.php?func=detail&aid=1791361&group_id=13478&atid=113478)
+cb43114b	9f742f6d	Mon Sep 10 05:30:52 2007 +0000	fixed bug compiling flac without ogg support (SF#1760786: http://sourceforge.net/tracker/index.php?func=detail&aid=1760786&group_id=13478&atid
+58688193	571b95aa	Sun Sep 9 06:44:09 2007 +0000	fix bug, foreign_metadata pointer was not always initialized
+571b95aa	17af3407	Sun Sep 9 06:43:13 2007 +0000	Fixed bug where importing non-CDDA cuesheets would cause an invalid lead-out track number; also add requirement for non-CDDA lead-out track number to be 255 (SF#1764105: https://sourceforge.net/tracker/index.php?func=detail&aid=1764105&group_id=13478&atid=113478).
+17af3407	e32fad5d	Sat Sep 8 22:49:07 2007 +0000	fix #include for off_t (SF#1786225: https://sourceforge.net/tracker/index.php?func=detail&aid=1786225&group_id=13478&atid=313478)
+ab4bef6a	98bd9942	Sat Sep 8 22:28:09 2007 +0000	64-bit fixes (SF#1790872: https://sourceforge.net/tracker/index.php?func=detail&aid=1790872&group_id=13478&atid=113478)
+e2fea299	367c1587	Fri Aug 31 05:55:50 2007 +0000	OS/2 fixes (SF#1229495: https://sourceforge.net/tracker/index.php?func=detail&aid=1229495&group_id=13478&atid=113478)
+56378245	d54eb03d	Wed Aug 29 00:49:37 2007 +0000	OS/2 fixes (SF#1771378: https://sourceforge.net/tracker/index.php?func=detail&aid=1771378&group_id=13478&atid=113478)
+d54eb03d	412a0375	Wed Aug 29 00:45:01 2007 +0000	fixed very rare seek bug (SF#1684049: https://sourceforge.net/tracker/index.php?func=detail&aid=1684049&group_id=13478&atid=113478)
+412a0375	14687a16	Wed Aug 29 00:38:16 2007 +0000	solaris 10 fixes (SF#1783225: https://sourceforge.net/tracker/index.php?func=detail&aid=1783225&group_id=13478&atid=113478)
+14687a16	cec234b0	Tue Aug 28 05:22:11 2007 +0000	fix guid
+69ecf4f0	01579092	Wed Aug 22 02:01:28 2007 +0000	bug fixes
+a956a821	330fc08a	Thu Aug 9 07:17:32 2007 +0000	fix compiler warnings
+330fc08a	12d3a418	Wed Aug 1 03:03:51 2007 +0000	more mingw fixes
+29008f4f	4d806042	Tue Jul 31 00:47:55 2007 +0000	Fixed bug where importing non-CDDA cuesheets would cause an invalid lead-out track number; also add requirement for non-CDDA lead-out track number to be 255 (SF#1764105: https://sourceforge.net/tracker/index.php?func=detail&aid=1764105&group_id=13478&atid=113478).
+4d806042	7992b942	Tue Jul 31 00:39:46 2007 +0000	Some MinGW fixes (SF#1684879: https://sourceforge.net/tracker/index.php?func=detail&aid=1684879&group_id=13478&atid=113478)
+7992b942	8403c2a8	Tue Jul 31 00:35:33 2007 +0000	Fixed bug where using --replay-gain without any padding option caused only a small PADDING block to be created (SF#1760790: https://sourceforge.net/tracker/index.php?func=detail&aid=1760790&group_id=13478&atid=113478)
+8403c2a8	42c22d5f	Tue Jul 31 00:25:52 2007 +0000	fix bug where sometimes an existing installation of flac could interfere with the build process (SF#1763690: https://sourceforge.net/tracker/index.php?func=detail&aid=1763690&group_id=13478&atid=113478)
+42c22d5f	69b87306	Thu Jul 26 08:01:40 2007 +0000	fixed bug compiling flac without ogg support (SF#1760786: http://sourceforge.net/tracker/index.php?func=detail&aid=1760786&group_id=13478&atid=113478)
+f9cf27fc	a66c218e	Wed Jul 25 03:11:00 2007 +0000	prototype-related fixes
+dea98d59	c90a5cad	Tue Jul 10 02:10:44 2007 +0000	work around ogg flac bug where too many seekpoints makes seektable bigger than one page
+224177c3	1296cb8f	Tue Jul 10 02:08:51 2007 +0000	fix bug where invalid seek tables could cause some seeks to fail
+b28c46d2	3f29169b	Sat Jul 7 04:30:48 2007 +0000	fix optimization bug in FLAC__bitwriter_write_rice_signed_block()
+74d56892	89f01a80	Wed Jun 20 01:26:52 2007 +0000	fix windows bugs
+9fae2451	f395ec43	Wed Jun 20 01:23:49 2007 +0000	fix bug with partition sum overflowing
+f395ec43	e70895b9	Wed Jun 20 01:23:02 2007 +0000	fix for FLAC__INTEGER_ONLY_LIBRARY
+d7ebbe53	a4d84026	Tue Jun 19 04:18:55 2007 +0000	fix mem leaks and open files
+96534bb5	b47ab0d2	Sat Jun 16 00:56:07 2007 +0000	fix typo in max sample rate described in STREAMINFO section
+2ea97f8a	5f114062	Thu Jun 14 06:37:08 2007 +0000	fixed for sun forte compiler
+5f114062	62cb525f	Thu Jun 14 06:21:44 2007 +0000	fix bug with negative indexing
+60a43f07	00da5ae8	Thu Jun 14 05:25:35 2007 +0000	fix LD_LIBRARY_PATH-saving logic
+7a139388	beab986f	Fri May 11 00:48:14 2007 +0000	msvc fixes
+beab986f	da8e187f	Fri May 11 00:45:17 2007 +0000	update flac installer link, fix other links
+22d3f2ad	5fa534f5	Fri Mar 30 01:00:30 2007 +0000	add debug info to nasm debug builds
+7e174a4f	b5f35946	Fri Mar 23 05:23:11 2007 +0000	fix extern names for win32
+5dee4350	5981e4f7	Tue Mar 6 06:52:13 2007 +0000	fix known bugs for 1.1.4
+1ca3a445	83f42e35	Sat Mar 3 02:04:15 2007 +0000	fixes for MSVC6; also: default to best flavors of detect code
+576f41fb	9bedd782	Thu Feb 22 01:38:04 2007 +0000	msvc2005 fix
+9bedd782	c8c9c991	Thu Feb 22 01:37:33 2007 +0000	fix compiler warnings
+6775778d	2e777ba8	Sat Feb 17 01:16:20 2007 +0000	fix MSVC check for ntohl()
+f67f2065	e88147e3	Tue Feb 13 02:12:13 2007 +0000	Darwin fix for ntohl()
+283e5305	147dbe2b	Tue Feb 13 02:06:04 2007 +0000	fix minor problem in locale switching
+147dbe2b	c0f51e77	Tue Feb 13 02:05:19 2007 +0000	fix minor leaks
+f19f7eb8	715e63cb	Fri Feb 9 16:13:07 2007 +0000	fix SB review for replaygain
+e6c05bfa	6dca695a	Thu Feb 8 01:22:07 2007 +0000	remove some debugging output
+9747d170	35e2dbab	Wed Feb 7 01:31:29 2007 +0000	fix bug: file info crashes if file DNE (SF#1634941: http://sourceforge.net/tracker/index.php?func=detail&aid=1634941&group_id=13478&atid=313478)
+13fddc98	ca06f74f	Mon Feb 5 07:29:37 2007 +0000	minor fixes
+1c91ee3b	9047139e	Sun Feb 4 19:46:19 2007 +0000	add debugging defines with /D
+8640da31	d1dd66b3	Sun Feb 4 01:42:08 2007 +0000	fix bug where specifying --picture in FLAC-to-FLAC transcoding did not have any effect (SF#1627993: http://sourceforge.net/tracker/index.php?func=detail&aid=1627993&group_id=13478&atid=113478)
+b5a26ce5	a8ff066a	Fri Feb 2 05:58:42 2007 +0000	fix problem in frame size calculation in analysis mode on first frame
+a9502bf4	1c034079	Tue Jan 30 16:58:51 2007 +0000	add item for --not-utf8-convert; fix typos
+cbe28422	08f582e3	Tue Jan 9 04:46:18 2007 +0000	improved fix for misleading warning, now error out for id3v2 tag (SF#1631064: http://sourceforge.net/tracker/index.php?func=detail&aid=1631064&group_id=13478&atid=113478)
+b7cde6ee	8f634a09	Tue Jan 9 02:00:09 2007 +0000	fix some links
+8f634a09	0e4b20ff	Tue Jan 9 01:59:25 2007 +0000	fix link to itunes feedback form
+0e4b20ff	cd80d144	Tue Jan 9 01:59:02 2007 +0000	fix misleading warning (SF#1631064: http://sourceforge.net/tracker/index.php?func=detail&aid=1631064&group_id=13478&atid=113478)
+0bd9a001	d351d044	Thu Dec 14 07:45:31 2006 +0000	add note to #bugs about error with corrupted FLAC input and FLAC-to-FLAC transcoding
+d351d044	c2590504	Thu Dec 14 07:23:48 2006 +0000	fix makefile bug with ogg linkage (SF#1611414: http://sourceforge.net/tracker/index.php?func=detail&aid=1611414&group_id=13478&atid=113478)
+c2590504	4de80524	Thu Dec 14 06:58:49 2006 +0000	Fix bug where using -F with FLAC-to-FLAC transcoding of a corrupted FLAC would have no effect (SF#1615391: https://sourceforge.net/tracker/index.php?func=detail&aid=1615391&group_id=13478&atid=113478)
+4de80524	173814f3	Thu Dec 14 01:08:15 2006 +0000	Fix bug where FLAC-to-FLAC transcoding of a corrupted FLAC file would truncate the transcoded file at the first error (SF#1615019: https://sourceforge.net/tracker/index.php?func=detail&aid=1615019&group_id=13478&atid=113478)
+5ae00846	b35fc933	Wed Dec 13 01:08:14 2006 +0000	C89 fix (SF#1613348: http://sourceforge.net/tracker/index.php?func=detail&aid=1613348&group_id=13478&atid=313478)
+5c7abee2	4e8fe85b	Tue Dec 5 17:07:47 2006 +0000	add link to bugs
+4e8fe85b	699e5480	Tue Dec 5 01:36:46 2006 +0000	fix bug with locale-specific -A defaults for -0..-8 (SF#1608883: https://sourceforge.net/tracker/index.php?func=detail&aid=1608883&group_id=13478&atid=113478)
+699e5480	fa9d6340	Tue Dec 5 01:09:17 2006 +0000	fix link to wmp guide; fix default padding number in faq
+1b8526e5	e4920510	Tue Dec 5 01:07:35 2006 +0000	fix link to wmp guide; add known bug: -A in some locales
+4269ba29	d6af5786	Tue Dec 5 01:06:44 2006 +0000	add link to known bugs
+32b9baed	d9ac0bd6	Mon Nov 27 16:27:41 2006 +0000	quick fix for SF#1601812 where an error of exactly 0 (very rare) in FLAC__lpc_compute_lp_coefficients() could cause an infinite loop later in FLAC__lpc_quantize_coefficients()
+cd3302e3	2c93a742	Tue Nov 21 08:27:59 2006 +0000	fix bug where jpeg marker detection could be broken by non-C locale
+16e015a5	3000d6c4	Tue Nov 21 06:48:58 2006 +0000	fix some links, add porting guide to news item
+a196a663	2beca730	Tue Nov 21 06:39:14 2006 +0000	fix bug where test would fail if libFLAC not built with ogg support
+7275792b	1fd370b4	Tue Nov 21 01:41:17 2006 +0000	fix options, add m4 directory
+5acd8946	0e6187c4	Mon Nov 20 17:12:50 2006 +0000	minor html fixes
+7ae3359b	36b5527b	Mon Nov 20 05:29:52 2006 +0000	fixes based on valgrind run
+a15957a0	c85f3144	Fri Nov 17 16:06:04 2006 +0000	fix revdate
+2b29546b	9e779158	Fri Nov 17 07:26:39 2006 +0000	fix typo
+ab56ef11	fef9348d	Fri Nov 17 06:52:19 2006 +0000	fixes from 64-bit compile
+6f51d072	1b7604d2	Fri Nov 17 06:49:11 2006 +0000	fix bug where decoding to stdout could fail for no good reason in some cases; fixes from MSVC compile
+b0627a4e	5ebd6932	Fri Nov 17 06:05:02 2006 +0000	fixes from MSVC compile
+a7dceb9a	ece2f61c	Thu Nov 16 01:35:13 2006 +0000	multifix: change FLAC__stream_encoder_finish() to also return false if there is an error processing the last frame or updating metadata
+cf1422e2	f8d544f2	Thu Nov 16 01:32:25 2006 +0000	multifix: change FLAC__stream_encoder_finish() to also return false if there is an error processing the last frame or updating metadata; fix problem trying to update metadata when encoding to stdout; fix problem with updating metadata if client seek_callback returns UNSUPPORTED
+036e9fd0	c986d135	Thu Nov 16 01:21:22 2006 +0000	fix bug with -S # where the sample number >= total samples, is not getting converted to a placeholder point
+c986d135	33bba6d3	Wed Nov 15 08:53:32 2006 +0000	fix a bug where missing STREAMINFO fields (min/max framesize, total samples, MD5 sum) and seek point offsets were not getting rewritten back to Ogg FLAC file (SF#1338969 https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1338969&amp;group_id=13478&amp;atid=113478)
+8ad9a12b	116ca67f	Tue Nov 14 06:29:13 2006 +0000	fix a problem with fractional-second parsing for --skip/--until in some locales (SF #1031043)
+116ca67f	e58aabdb	Tue Nov 14 06:16:05 2006 +0000	fix bug, need to open exported picture file in binary mode on win32
+e58aabdb	e7c17100	Tue Nov 14 05:40:34 2006 +0000	fixes from MSVC6
+e7c17100	03c9d224	Tue Nov 14 05:22:12 2006 +0000	add more fixed bugs to list
+144142b3	32e85a74	Tue Nov 14 04:04:42 2006 +0000	fix bug where sync error at end-of-stream was not being caught (SF#1244071 https://sourceforge.net/tracker/index.php?func=detail&aid=1244071&group_id=13478&atid=113478); add warning about not being able to check md5 if md5 sum in STREAMINFO is zero
+32e85a74	6d31c1a1	Mon Nov 13 06:42:51 2006 +0000	compile fixes based on patch (SF#913238 http://sourceforge.net/tracker/index.php?func=detail&aid=913238&group_id=13478&atid=113478
+6d31c1a1	955aed9c	Sat Nov 11 22:52:47 2006 +0000	un-bump -beta2 prefix on version
+955aed9c	51240f4d	Sat Nov 11 22:51:58 2006 +0000	fix bug compiling assembly files on intel mac (SF#1422598 http://sourceforge.net/tracker/index.php?func=detail&aid=1422598&group_id=13478&atid=113478)
+51240f4d	acd4a434	Sat Nov 11 22:43:38 2006 +0000	fix bug SF#1293830: flac accepting WAVE files with "data" subchunks of size 0
+acd4a434	b413ea41	Sat Nov 11 22:43:25 2006 +0000	fix compiler warnings
+b413ea41	cc190e83	Fri Nov 10 17:42:55 2006 +0000	fix problem with filename parsing if file does not have extension but also has a . in the path (SF#1161916 http://sourceforge.net/tracker/index.php?func=detail&aid=1161916&group_id=13478&atid=113478)
+cc190e83	08956671	Fri Nov 10 17:34:49 2006 +0000	fix bug: wave header fixup was being tried even in test mode
+49f2f169	acc4bea3	Thu Nov 9 16:54:52 2006 +0000	add overreading in the stream encoder process calls to be able to reliably detect when we are at the last block; also fixes a problem with EOS packet flag setting in Ogg FLAC
+b7b57ef2	a586226f	Thu Nov 9 07:06:33 2006 +0000	fix bug in verify_write_callback_ where the FIFO dequeueing did not memmove all the data
+38bf3e6c	4c5d485b	Thu Nov 9 06:55:21 2006 +0000	fix FLAC::Decoder::Stream::finish() to return a bool like its C cousin
+85aaed8f	8295fd03	Thu Nov 9 01:19:13 2006 +0000	fix bug where window was not recalculated when blocksize decreased; better wording for fractional blocks
+8295fd03	1d42ba64	Wed Nov 8 17:07:58 2006 +0000	fixes for new seeking algorithm
+89a8205d	e9b6183b	Wed Nov 8 01:21:51 2006 +0000	minor fixes to linked libs
+e9b6183b	e3e9fcfc	Mon Nov 6 17:06:19 2006 +0000	some more unsigned->size_t fixes
+e3e9fcfc	3571f9c5	Mon Nov 6 16:48:44 2006 +0000	fix docs for --serial-number option
+5f0433fd	99abf3e7	Sat Nov 4 04:19:33 2006 +0000	fix bug where encoder wasn\'t defaulting to -5
+7afb1553	69864699	Thu Nov 2 01:39:54 2006 +0000	fix grabbag__file_are_same() on win32 by using GetFileInformationByHandle() to compare
+08b7d0cb	e0efb5b5	Wed Oct 18 16:37:52 2006 +0000	more fixes for ogg support
+32637e0e	352feb54	Mon Oct 16 15:49:17 2006 +0000	fixes for MSVC6
+15b8eb8a	8da98c89	Sun Oct 15 05:15:55 2006 +0000	fix to ogg-less building
+4e484559	1568b1f7	Sat Oct 14 04:54:07 2006 +0000	fix placement of FLAC_API_VERSION_... #defines
+044be30e	6dde751b	Thu Oct 12 01:16:49 2006 +0000	fix "extern"ness of ReplayGainReferenceLoudness
+2d6b8c64	09217309	Wed Oct 11 06:30:38 2006 +0000	fix bug stats sent to progress callback
+9f85cb63	f461a7bd	Tue Oct 10 00:40:17 2006 +0000	fix problem with code that checks if temp file is needed, before it would compare filenames, now it compares inodes
+369a6da0	ecb677e7	Tue Oct 10 00:37:48 2006 +0000	remove window debugging code
+35a07eea	6af7ab8f	Tue Oct 10 00:33:34 2006 +0000	fix project name
+51ab8cfd	484e0742	Mon Oct 9 05:35:59 2006 +0000	fix bug where output file would always be deleted on error; instead, only delete when we know we have opened successfully, to avoid other problems like deleting pre-existing file when overwriting it fails
+572cc589	6d8ce247	Sat Oct 7 01:19:48 2006 +0000	fix final problems with odd bits per sample
+2ddb1b14	34ae241c	Sat Oct 7 01:18:59 2006 +0000	minor bug fix
+afce1aeb	1dfcea13	Fri Oct 6 06:21:41 2006 +0000	fix bug in code that skips id3v2 tags at the front of a file; false positives could cause decoding to fail
+499f19b0	66616f96	Tue Oct 3 01:07:39 2006 +0000	fix path to test_picture.dsp
+e64d5e3e	719bdaa8	Tue Oct 3 01:04:23 2006 +0000	fix label on instantaneous bitrate button
+719bdaa8	8f6bdf2f	Tue Oct 3 01:03:32 2006 +0000	minor bug fix in argc checking
+8f6bdf2f	a65fd931	Tue Oct 3 01:03:12 2006 +0000	minor fix for windows quirk
+982ea3a2	9acc35fe	Sat Sep 16 00:23:01 2006 +0000	fix recovery logic when seek fails
+9acc35fe	180e0cac	Sat Sep 16 00:09:14 2006 +0000	fix problem on windows where rename() fails if destination exists
+180e0cac	da6c00ef	Sat Sep 16 00:08:45 2006 +0000	fix bug in file closing logic in _finish()
+da6c00ef	e1378259	Sat Sep 16 00:08:23 2006 +0000	fixed bug, file was not being closed at _finish() time
+04720581	afd99a8b	Fri Sep 15 04:25:39 2006 +0000	fix bug, --remove-replay-gain was not removing REPLAYGAIN_REFERENCE_LOUDNESS
+08c719a5	14502c62	Mon Aug 28 03:37:25 2006 +0000	fix #include for off_t
+f27a8ac7	7688f8e7	Sun Jul 9 17:54:09 2006 +0000	minor EMX fix
+d237379a	ba26e4e5	Thu Jul 6 07:50:45 2006 +0000	change unparseable frame handling, from a fatal error and FLAC__STREAM_DECODER_UNPARSEABLE_STREAM state, to a soft error FLAC__STREAM_DECODER_ERROR_STATUS_UNPARSEABLE_STREAM; also fixup wave/aiff headers when -F and there is no STREAMINFO
+78579c5c	bd8bb546	Tue Jun 13 05:17:12 2006 +0000	fix largefile bug
+0abc735e	81cbb8ee	Wed May 3 00:13:25 2006 +0000	minor fixes
+df59845d	6e2b5659	Fri Apr 28 00:13:34 2006 +0000	fix calculation bugs in encode_subframe_(): max_qlp_coeff_precision when qlp_coeff_prec_search; account for qlp coeff overhead in guessing the best lpc order; default to hann instead of rectangular window on assertion failure
+6e2b5659	96d8cd23	Fri Apr 28 00:11:31 2006 +0000	fix a calcuation bug in FLAC__lpc_compute_best_order()
+96d8cd23	0395dac1	Tue Apr 25 07:00:39 2006 +0000	fix comment typos
+e64dda0f	7cfac0b1	Mon Apr 10 05:38:17 2006 +0000	fix compiler warnings
+6847a661	e9a638d0	Fri Sep 9 01:58:36 2005 +0000	fix vorbiscomment entry validity tests to match better utf-8 checking in libFLAC
+d9264962	7fdd688f	Sat Sep 3 01:41:11 2005 +0000	fix bug in return value for FLAC__stream_decoder_set_metadata_respond_application() and FLAC__stream_decoder_set_metadata_ignore_application() (sf #1235005: https://sourceforge.net/tracker/index.php?func=detail&aid=1235005&group_id=13478&atid=113478)
+7fdd688f	33f4ce57	Sat Sep 3 01:33:12 2005 +0000	fix bug: -a and -t were not prevented from being used together (sf #1229481: https://sourceforge.net/tracker/index.php?func=detail&aid=1229481&group_id=13478&atid=113478)
+b0a4ee3c	d2918a3c	Fri Sep 2 05:03:53 2005 +0000	fix "redefinition of socklen_t" problem on freebsd
+d2918a3c	bdb9b2cb	Fri Sep 2 05:00:31 2005 +0000	last batch of fixes related to problems caused by new http streaming code
+b0479648	585e45d6	Wed Aug 31 00:21:14 2005 +0000	fix minor problem with error case in handler for --add-seekpoint
+585e45d6	38892870	Wed Aug 31 00:19:37 2005 +0000	fix bad use of g_strconcat()
+e7819525	4731c751	Mon Aug 29 04:30:20 2005 +0000	fix minor bug printing unknown aiff subchunks (SF bug #1267476: https://sourceforge.net/tracker/index.php?func=detail&aid=1267476&group_id=13478&atid=113478)
+dee53395	15acb69e	Sat Aug 27 01:52:11 2005 +0000	fix bug in --sector-align where appended samples did not completely contain silence (SF bug #1237707: https://sourceforge.net/tracker/index.php?func=detail&aid=1237707&group_id=13478&atid=113478).  also, fix bugs with --sector-align on raw files
+15acb69e	c2af4280	Fri Aug 26 05:57:04 2005 +0000	add support for encoding from non-compressed AIFF-C (SF bug #1090933: https://sourceforge.net/tracker/?func=detail&atid=113478&aid=1090933&group_id=13478)
+c2af4280	c6e53da2	Thu Aug 25 00:25:59 2005 +0000	add note about fixed utf-8 decoding (disallow non-shortest-form and surrogate sequences)
+c6e53da2	b4de1692	Thu Aug 25 00:22:06 2005 +0000	fix bug in utf8len()
+b4de1692	d263e6ee	Wed Aug 24 07:39:25 2005 +0000	fixes to remove warnings from gcc-4.0.0
+e7001d6e	0d903aab	Wed Aug 24 00:02:30 2005 +0000	change bug submission verbiage, require monitoring of sourceforge bug
+0d903aab	ce0b3452	Tue Aug 9 00:59:39 2005 +0000	fix bug in cuesheet parsing where it would return an error if the last line of the cuesheet did not end with a newline
+a02b73f5	a708f556	Wed Mar 2 05:21:06 2005 +0000	check in more fixes from Luca to build properly on linux-ppc (asm-related again)
+6fee5aa0	2f7293b0	Wed Mar 2 05:06:58 2005 +0000	fix bug in the save_http_path initialization
+a2f9a5be	950e3ca1	Fri Feb 11 21:20:05 2005 +0000	fix link to debian packages
+725efa64	17bdc006	Fri Feb 4 06:42:00 2005 +0000	fix bug in random sampling
+16eded53	439367cb	Thu Feb 3 04:29:52 2005 +0000	fix on ppc: as/gas checks need to be __TEMPORARILY_DISABLED
+439367cb	26d92537	Thu Feb 3 04:20:16 2005 +0000	fix endian-ness on sine wave tests
+26e101a3	e68328ea	Wed Feb 2 01:55:40 2005 +0000	fix tag typo
+12065d08	7ffd7e4a	Tue Feb 1 04:43:50 2005 +0000	fix bug in FLAC_plugin__tags_get_tag_utf8(), it was returning the whole entry instead of just the value
+7ffd7e4a	ae25181b	Tue Feb 1 01:49:11 2005 +0000	fix: only do ogg-flac seeking tests if flac has ogg support built in
+05a39840	3c8d2973	Sun Jan 30 18:44:46 2005 +0000	fix handling of CFLAGS/CXXFLAGS, now using AM_CFLAGS
+c2a9bbb0	77d8e7fe	Sun Jan 30 18:18:08 2005 +0000	fixes to get winamp2 plugin to build on win32 again
+77d8e7fe	95bf677e	Sun Jan 30 18:17:11 2005 +0000	minor casting fixes
+44623116	63d489ae	Sun Jan 30 18:15:36 2005 +0000	fix constness in some functions
+cc12687a	dc3fd359	Fri Jan 28 16:24:02 2005 +0000	fix script invocation in valgrind mode
+27ae3485	dc16d4c6	Thu Jan 27 03:59:55 2005 +0000	fix recently-broken host- and system-checking logic
+dc16d4c6	b1b4f59c	Thu Jan 27 03:59:15 2005 +0000	add note about xmms bug to http streaming entry
+b1b4f59c	c4cb493c	Thu Jan 27 03:58:00 2005 +0000	minor fixes
+0d3da77d	f4c1a8e8	Thu Jan 27 03:57:14 2005 +0000	fix typo in solaris defines
+f4c1a8e8	7446e186	Thu Jan 27 03:55:35 2005 +0000	fixes for compiling with SunPro
+7446e186	f30426a7	Wed Jan 26 04:04:38 2005 +0000	fix ANSI C violation w.r.t. const arrays
+a47e20f0	65dc12a5	Wed Jan 26 03:17:28 2005 +0000	fix another seeking bug that can happen rarely when seeking past the end of the stream
+3923e10c	59ebafb4	Tue Jan 25 03:35:02 2005 +0000	add items for speedups and bug fixes
+ba056083	663c599b	Mon Jan 24 00:20:49 2005 +0000	again fix logic around deciphering frame/sample number from frame header
+df8e7323	42372b9a	Fri Jan 21 01:25:43 2005 +0000	fix required nasm version
+1518d941	a11870ba	Fri Jan 7 01:03:45 2005 +0000	better verbiage in bug-report lingo
+a11870ba	b54ce2e4	Fri Jan 7 01:03:19 2005 +0000	fix typos
+80171dc3	f8ecddeb	Thu Dec 30 03:57:13 2004 +0000	fix all bare malloc() realloc() etc calls to have a proper cast in front
+f8ecddeb	2a9ae6a8	Thu Dec 30 03:56:08 2004 +0000	fix typos, remove obsolete $(ORDINALS_H)
+2a9ae6a8	2c75bd8b	Thu Dec 30 03:55:29 2004 +0000	fix typos
+b990022c	d4b29558	Thu Dec 30 01:13:03 2004 +0000	fix libFLAC to build PPC asm properly, conditionalized for gas or as
+8ddf7fb2	37954328	Thu Dec 30 00:58:50 2004 +0000	fix typo in comment
+07e00486	47faab80	Fri Nov 12 07:26:00 2004 +0000	minor error message fix
+5f2b46d0	8f64899d	Tue Nov 9 01:34:01 2004 +0000	finished integerized flavor of library; sections with floating point are either #ifdef\'d out or written in fixed-point
+8f64899d	b43d3cbd	Tue Nov 9 01:29:16 2004 +0000	fix comment typos
+b43d3cbd	b42b0ee5	Tue Nov 9 01:28:05 2004 +0000	fix PATH and LD_LIBRARY_PATH settings, pass build type as first arg to test scripts
+1637d932	29a6a9df	Tue Nov 9 01:26:37 2004 +0000	fix path to local libog dirs
+f719813b	375810eb	Tue Nov 9 01:25:14 2004 +0000	add fixed-point functions
+5899bcb7	2a23c635	Wed Oct 20 00:13:34 2004 +0000	fix bug in handling of --input-size
+07be2916	ed1db1f6	Tue Oct 19 04:23:57 2004 +0000	fix leak: chain was not being freed in one error case
+076adb03	5e8e7339	Thu Oct 7 00:22:43 2004 +0000	fix uninitialized variable
+5e8e7339	91b4ce51	Thu Oct 7 00:22:03 2004 +0000	minor fixes to comply with C99\'s new pointer aliasing rules
+91b4ce51	607fc843	Wed Oct 6 01:03:12 2004 +0000	fix #ifdef problems that existed when FLAC__NO_ASM is defined
+607fc843	53677597	Wed Oct 6 00:56:51 2004 +0000	fix debian bug #274301: libflac4 segfaults on corrupt flac files
+53677597	83688e94	Fri Oct 1 16:44:10 2004 +0000	more path fixes
+30d76666	454dc149	Mon Sep 27 04:38:52 2004 +0000	fix spelling of "misk"
+732dbb2b	8370a7b0	Sat Sep 25 23:49:00 2004 +0000	remove the commented-out and erroneous end-of-stream setting in read_callback_(); fix another bug in seeking where landing after the last frame start would cause a seek error; improve the infinite-loop checker
+42d57fa6	9745f25e	Sat Sep 25 23:45:55 2004 +0000	fix minor comment typos
+9745f25e	838408a3	Fri Sep 24 13:57:40 2004 +0000	major plugin revamp based on x-fixer\'s code
+a81bcae5	cfdb07f5	Thu Sep 23 00:36:18 2004 +0000	add changelog entry for fixed AIFF SSND offset bug
+9f3ac317	94b54997	Thu Sep 23 00:23:16 2004 +0000	patch from Brian Willoughby: fix handling of "offset" field in SSND chunk
+0f0617f7	dc6015bc	Tue Sep 21 05:40:23 2004 +0000	fix some bugs with seeking; the libogg ogg_stream_pagein() bug with large packets still remains
+6803734d	70d8563c	Tue Sep 21 05:29:15 2004 +0000	fix path to bin files
+1fba8fba	6476272f	Tue Sep 14 00:24:12 2004 +0000	fix bug in first packet synthesis
+6476272f	aa2f8bdb	Tue Sep 14 00:23:30 2004 +0000	fix memory leak after parsing cuesheet
+d4346721	f865adbb	Sun Sep 12 22:58:13 2004 +0000	fixes for windows
+f865adbb	b7b98bea	Sun Sep 12 22:57:32 2004 +0000	fix compiler warnings
+64fbc8f1	daef48e0	Fri Sep 10 00:57:17 2004 +0000	fix verbiage about nasm prerequisite with MSCV
+30374cd6	eb9ab683	Fri Sep 10 00:26:11 2004 +0000	make entry for 1.1.1 in known bugs section
+8d596b59	d9c278a7	Wed Sep 8 00:56:22 2004 +0000	fix <TITLE>
+c408de02	0ceb4491	Wed Sep 8 00:55:42 2004 +0000	fix bug copying a null vorbis comment entry
+9aac670e	748459cd	Wed Sep 8 00:50:21 2004 +0000	fix bug: source file needs to be explicitly rewound before reading/writing in callback mode
+748459cd	624afd59	Wed Sep 8 00:49:30 2004 +0000	fix bug copying a null vorbis comment entry
+da1457f0	a1093f9e	Thu Sep 2 04:44:04 2004 +0000	add note about bogus trojan warning in win installer; fix link to burrrn
+55ddee58	9ea8a53d	Fri Aug 20 22:09:02 2004 +0000	fix FLAC->Ogg mapping to merge fLaC magic with the STREAMINFO in the first Ogg packet
+23008d7a	26ca46b8	Sat Jul 31 22:10:19 2004 +0000	fix typo in comments
+26ca46b8	1aca6b11	Sat Jul 31 22:10:13 2004 +0000	fix install bug that happens if doxygen is not present
+50452ab0	90e5716b	Fri Jul 30 00:47:04 2004 +0000	fix bug in touch command
+49623ea2	2af08da5	Thu Jul 29 06:28:59 2004 +0000	be more precise in long long int literal specification for ANSI compilers (gcc3 requires an LL suffix on literals that do not fit in an int
+2af08da5	2ca6ca87	Thu Jul 29 06:27:00 2004 +0000	fix #include ordering to stop a warning caused by id3.h
+2ca6ca87	985dd8d1	Thu Jul 29 05:25:48 2004 +0000	fix syntax error
+530514ac	83dd4ce7	Tue Jul 27 00:02:47 2004 +0000	fix bug skipping padding byte in unsupported WAVE subchunks
+41294c92	a7eecd05	Sat Jul 24 17:56:51 2004 +0000	add extra verbiage about hardware problems to verify error message, hopefully this will cut down on the number of bogus bug reports
+a7eecd05	e04f0c42	Sat Jul 24 00:03:45 2004 +0000	fix "unknown metadata block" test to use ID 126 instead of the now-reserved 127
+e04f0c42	98a81f50	Sat Jul 24 00:02:46 2004 +0000	fix erroneous assertion
+2d405658	f6eb2f45	Fri Jul 23 19:49:23 2004 +0000	fix bonk, optimfrog, rkau links
+f6eb2f45	3e7a96e4	Fri Jul 23 19:49:04 2004 +0000	fix shntool link
+990f741f	527bdda7	Fri Jul 23 05:16:11 2004 +0000	work around MSVC bug in set_metadata()
+63945eca	8eb486a5	Fri Jul 23 05:13:43 2004 +0000	fix warnings exposed by MSVC
+e8410269	6a703a45	Thu Jul 22 00:52:13 2004 +0000	fix display of year tag
+9af9519a	a278cd88	Thu Jul 22 00:17:53 2004 +0000	fix option --residual-gnuplot, was previously looking for --residual-gnu-plot
+a278cd88	c77b2605	Thu Jul 22 00:16:31 2004 +0000	add warning about libtool/autoconf "missing sed" bug to comments
+a9414544	a175043b	Tue Jul 20 01:24:48 2004 +0000	fixes for autoconf
+a175043b	12d7fcb8	Mon Jul 19 06:36:26 2004 +0000	fix bug #896057: parsing ISRC number from cuesheet
+12d7fcb8	faed1494	Mon Jul 19 06:30:11 2004 +0000	fix bug #877122: problem parsing cuesheet with CATALOG entry
+3fb21482	c57db22e	Mon Jul 19 05:49:45 2004 +0000	fix bug #679166: flac doesn\'t respect RIFF subchunk padding byte
+00e8513d	e4240db0	Sat Jul 17 22:27:06 2004 +0000	fix bug in ratio calculation in print_stats()
+02d66815	0bb57d0e	Fri Jul 16 00:52:27 2004 +0000	fix time.h #includes
+cc75611f	89f161c5	Fri Jul 16 00:34:42 2004 +0000	fix valgrind uninitialized memory errors
+cd5b1a63	d5c593b0	Fri Jul 16 00:16:08 2004 +0000	minor comment fixes
+b279130e	65831dd1	Wed Jul 14 00:51:57 2004 +0000	fix uninitialized variable error turned up by valgrind
+028d97ee	463a22cc	Wed Jul 14 00:49:56 2004 +0000	fix bug in FLAC__metadata_chain_check_if_tempfile_needed()
+6ebbabfd	be62f3b2	Wed Jul 7 07:30:41 2004 +0000	fix another possible seeking bug
+ab5c1d15	b7fcd591	Wed Jul 7 00:36:45 2004 +0000	fix bug where calling FLAC__seekable_stream_decoder_set_metadata_ignore_*() to ignore STREAMINFO or SEEKTABLE would also prevent the seekable stream decoder from getting the blocks later, which it needs to be able to seek
+af801835	72178551	Sun Jun 20 21:38:08 2004 +0000	fix link to Audio::FLAC
+42a167fe	5b4b9d2e	Wed May 26 20:20:22 2004 +0000	use $libdir instead of $prefix/lib to find library dir
+d666ed70	fec4a779	Tue Mar 23 04:27:47 2004 +0000	fix seeking bug where I/O seek to "unparseable" frame header caused a seek error: SF bug #851155
+fec4a779	f45b2a85	Mon Mar 22 05:47:25 2004 +0000	fix bug: %ll doesn\'t work for MSVC, use %I64 instead
+e8fa86b8	0433c8e6	Wed Mar 17 21:19:09 2004 +0000	fix memory leaks and bug where STREAMINFO was not being written back
+287ba3ac	60903810	Tue Mar 16 18:01:26 2004 +0000	fix doc typos
+60903810	dde41029	Tue Mar 16 00:15:50 2004 +0000	fix rarewares link
+dde41029	67de0be5	Mon Mar 15 23:58:50 2004 +0000	fix --until bug #851756
+38e579d0	93efc40a	Wed Jan 28 22:01:45 2004 +0000	fix link for Audiofile
+4052c875	f3d6429a	Sun Jan 18 00:04:11 2004 +0000	fix possible bug with seeking past 4Gbytes
+f3d6429a	9564390f	Sun Jan 18 00:03:48 2004 +0000	fix bug in asserts
+cc085367	30cd3163	Fri Jan 16 02:07:30 2004 +0000	fix more typos in returned states after conversion, temporarily disable metadata callback until ogg page rewriter is finished and hooked up
+79946084	d46cfb29	Fri Jan 16 00:09:05 2004 +0000	various fixes related to deriving OggFLAC__SeekableStreamEncoder from FLAC__StreamEncoder instead of FLAC__SeekableStreamEncoder
+d46cfb29	b71b56cb	Fri Jan 16 00:08:46 2004 +0000	fix some syntax bugs
+b71b56cb	17310273	Fri Jan 16 00:03:15 2004 +0000	various fixes related to deriving OggFLAC__SeekableStreamEncoder from FLAC__StreamEncoder instead of FLAC__SeekableStreamEncoder
+09b3926f	fd297885	Mon Jan 12 04:10:16 2004 +0000	fix link to winamp3 plugin
+47d9bbd6	43d8f85f	Wed Dec 31 05:35:48 2003 +0000	fix up reporting of the current frame to the write callback; also fixes a problem with progress callbacks in the ogg flac file encoder
+575c1711	06c9c532	Tue Dec 30 03:44:12 2003 +0000	fix bug in dummy tell callback
+06c9c532	9b07b61f	Tue Dec 30 03:33:43 2003 +0000	fix bug in read callback where *bytes was not being set to 0 on end-of-stream condition
+37a4d2a4	c82bf8a5	Thu Dec 18 20:06:52 2003 +0000	workaround MSVC bug re: scoping of nested classes
+c82bf8a5	2ea9693c	Thu Dec 18 05:21:26 2003 +0000	fix plugin to match latest api for replaygain synthesis
+2ea9693c	5dda2bd6	Thu Dec 18 05:20:43 2003 +0000	fix __LIBNAME__ definition
+0f220344	1a698a88	Wed Dec 17 18:40:02 2003 +0000	fix endian bug when applying replaygain
+1a698a88	e83dbbe9	Wed Dec 17 18:38:23 2003 +0000	fix bug where apply gain is used on a file with no vorbis comment
+e83dbbe9	99e8c2fa	Wed Dec 17 05:52:03 2003 +0000	fixes from MSVC build
+3dc6fa44	029a8e9d	Wed Dec 17 05:27:38 2003 +0000	fixes for MSVC
+029a8e9d	77625ed8	Wed Dec 17 05:27:30 2003 +0000	fix typos, some calls to seekable stream decoder instead of stream decoder
+ce3dd36b	e2999b7c	Wed Dec 17 05:26:34 2003 +0000	more re-org fixes
+e2999b7c	9c650a56	Wed Dec 17 04:54:20 2003 +0000	fix AC_OUTPUT screwup from re-org
+ddb8e821	c65460d4	Tue Dec 16 22:36:29 2003 +0000	fix bug in the returned size
+2eed0b9e	355ab777	Thu Nov 27 18:15:17 2003 +0000	fix bug in sample_number calculation from frame header
+dcd57964	ff3f19c1	Thu Nov 20 00:53:57 2003 +0000	fix typos
+9ff54a52	997c6bc1	Mon Nov 17 18:31:16 2003 +0000	fix broken links
+997c6bc1	78909530	Fri Nov 14 00:06:25 2003 +0000	fix bug (debian #213172): http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=213172
+e56a1e41	6a868045	Fri Nov 7 19:12:53 2003 +0000	fix error in encoded residual definition
+4623d26b	3c2bdf87	Thu Oct 9 17:16:41 2003 +0000	add mplayer link, fix MAC link
+78a0715b	06d2d79b	Fri Sep 12 22:35:56 2003 +0000	fix phatnoise links
+06d2d79b	b32b82bc	Wed Sep 3 18:26:25 2003 +0000	move submit-a-bug to project section
+b32b82bc	b06ed736	Wed Sep 3 18:23:11 2003 +0000	add more to submit-a-bug FAQ
+8cc315c6	f26386a8	Wed Sep 3 18:16:48 2003 +0000	add FAQs for bug submission and verify errors
+f26386a8	1ba525b9	Wed Sep 3 17:39:26 2003 +0000	fix link to nightly CVS tarballs
+1ba525b9	bef021a1	Wed Sep 3 00:56:08 2003 +0000	fix rounding bug in buffer size calculation (MAX_SAMPLES_PER_WINDOW)
+bef021a1	9bb1a16f	Wed Sep 3 00:54:37 2003 +0000	fix possibly uninitialized var if a file has no STREAMINFO block
+9bb1a16f	9d260d88	Fri Aug 29 05:16:32 2003 +0000	fix typo
+2ee59b48	eb35435d	Tue Jul 8 22:05:45 2003 +0000	fix overflow bug in stream length calculation, debian bug #200435; see http://sourceforge.net/mailarchive/forum.php?thread_id=2733072&forum_id=6312
+52f32a0f	e6fff931	Tue Jul 1 19:15:52 2003 +0000	fix link to wren installer
+e3499073	50346e2a	Tue May 27 05:07:16 2003 +0000	Explicitly link shared libraries against dependent libraries, in response to Debian bug #179764.  This lets the linker resolve things automagically, and programs linking with FLAC libs don\'t need to add any extra linker flags, among other good things.
+c2e14fa4	27e13541	Tue May 20 00:30:08 2003 +0000	fix total time for all wave files
+27e13541	1e70455a	Tue May 20 00:01:49 2003 +0000	C89 standard fixes, based on feedback from IRIX port
+bfd080f5	af9c773d	Mon May 19 04:27:13 2003 +0000	fix leak of xmms config struct in init
+b2363960	13ad04bb	Sun Apr 27 08:29:16 2003 +0000	fix link to abcde
+94f81b0a	eff98c85	Thu Feb 27 02:22:00 2003 +0000	fix bug #679255 by checking the block alignment against bps and # of channels
+e8e0ae75	67479818	Thu Feb 20 06:11:49 2003 +0000	fix bug where seeking past the end of the stream could cause an infinite loop
+473eaf30	3564ef9e	Sat Jan 25 06:04:14 2003 +0000	add one to known bugs
+a7038a9a	0c231487	Wed Jan 22 20:16:20 2003 +0000	fix return type for Track::get_num_indices()
+3d1da67d	43bb14d1	Thu Jan 16 07:22:33 2003 +0000	update known bugs
+4c27117f	15ca0daa	Wed Jan 15 07:01:49 2003 +0000	fix release date on vendor string
+15ca0daa	94474450	Wed Jan 15 06:51:54 2003 +0000	add X-Fixer cred
+3123b071	8dea208c	Tue Jan 14 09:07:16 2003 +0000	minor fix for MSVC
+8dea208c	4563fa26	Tue Jan 14 09:05:41 2003 +0000	Second patch from X-Fixer: tweaks for better MSVC build
+4563fa26	ecf57b75	Tue Jan 14 09:01:31 2003 +0000	Second patch from X-Fixer: file info dialog, tag editor, tag formatting in plugin config
+5e2f5711	ccce9edb	Mon Jan 13 02:12:23 2003 +0000	fix some ansi violations in identifier names
+ccce9edb	80f7bb4c	Mon Jan 13 02:06:40 2003 +0000	fix bug with some assertions
+29c47977	fb48f24b	Sat Jan 11 06:26:15 2003 +0000	fix bug when reading very small raw files
+292d20fd	ba9ca956	Sat Jan 11 06:25:20 2003 +0000	fix bux in printing of APPLICATION metadata id
+cbaab862	5267ae56	Fri Jan 10 05:43:51 2003 +0000	big fix to allow codec and metadata interface to handle unknown metadata block types correctly
+d060947c	0eea34aa	Fri Jan 10 05:37:13 2003 +0000	big fix to allow codec and metadata interface to handle unknown metadata block types correctly
+0eea34aa	315daa9e	Fri Jan 10 05:29:17 2003 +0000	 big fix to allow codec and metadata interface to handle unknown metadata block types correctly
+315daa9e	3f0f742b	Fri Jan 10 05:27:47 2003 +0000	fix bug where some Ogg-relative stuff was not #ifdef\'ed
+bef3bc37	75d78a35	Fri Jan 10 04:36:36 2003 +0000	fix bug shown by X-Fixer in ...apply_gain()
+cda02d30	a7cf2336	Wed Jan 8 08:03:17 2003 +0000	fix bug where formatting of replaygain tags was affected by current locale
+d2f55cd2	72e47408	Wed Jan 8 07:59:48 2003 +0000	new configuration dialog and replay gain code; thanks to X-Fixer
+c2b6a11d	27784e9f	Sat Jan 4 01:04:41 2003 +0000	patch from Miroslav to fix bitrate display for large blocksize or small sample rate
+8ee19c0d	32386732	Thu Jan 2 23:57:01 2003 +0000	fix syntax error, add 2003 to copyright notice
+0b3617c2	65d253da	Mon Dec 30 23:28:57 2002 +0000	fix bug in checking of filename extensions
+65d253da	d7228217	Mon Dec 30 23:28:22 2002 +0000	fix bug: explicitly close output file in Ogg FLAC case
+d7228217	59d84502	Mon Dec 30 06:08:15 2002 +0000	fix memory leaks
+1a28b690	6bc4e4f2	Sun Dec 29 10:07:07 2002 +0000	fix problem with uninitialized data from valgrind
+6bc4e4f2	dd190236	Sun Dec 29 10:06:19 2002 +0000	remove --workaroung-gcc296-bugs=yes from Valgrind invocation
+580b6e36	15d9eba1	Sat Dec 28 07:07:57 2002 +0000	fix memory leaks
+45062b84	8825c571	Sat Dec 28 07:06:38 2002 +0000	fix uninitialized data
+8825c571	f91251d1	Sat Dec 28 07:06:10 2002 +0000	fix memory leaks and uninitialized data
+8b9a477a	21cd7b82	Sat Dec 28 07:03:26 2002 +0000	fix verbiage about get_block() in Iterator class
+e900edfd	75c863ea	Fri Dec 27 21:05:55 2002 +0000	fix memory leaks
+75c863ea	28311cfd	Fri Dec 27 21:05:18 2002 +0000	fix memory leak in Cuesheet destructor
+28311cfd	bf996e48	Thu Dec 26 19:35:19 2002 +0000	miroslav\'s patch to fix broken --disable-3dnow option
+91d37b24	36f7d0a6	Mon Dec 23 19:51:41 2002 +0000	fix problem with FLAC_plugin__charset_test_conversion() not returning a value
+36f7d0a6	709b7fce	Mon Dec 23 19:50:59 2002 +0000	fix warning about unused vars
+709b7fce	06ecb281	Mon Dec 23 19:50:36 2002 +0000	fix uninitialized var
+2b7cc17a	adcc4a1d	Mon Dec 23 19:49:56 2002 +0000	fix problem with recursive use of TESTS_ENVIRONMENT
+eb0ccd64	e3cd991a	Sat Dec 21 04:38:59 2002 +0000	fix some typos
+9238a140	9906056d	Sat Dec 21 03:29:26 2002 +0000	add WAVE and AIFF fixup tests
+2295f1fa	92cef3df	Thu Dec 19 15:41:43 2002 +0000	fix typo in integer constant
+e167984d	1106d5f6	Tue Dec 17 08:34:22 2002 +0000	fix bug in aiff code for skipping ahead
+5186c8f3	16129499	Sun Dec 15 21:40:24 2002 +0000	fix more bugs with --skip and --until
+b63b3676	3644a56b	Fri Dec 13 05:37:56 2002 +0000	fix bug with uninitialized vars in parser
+3644a56b	5fa6b9ae	Fri Dec 13 05:37:35 2002 +0000	fix memory leaks
+5fa6b9ae	c3cc5b42	Fri Dec 13 05:37:13 2002 +0000	fix bug in cuesheet comparison
+b04ce04d	6218b344	Thu Dec 12 03:59:23 2002 +0000	fix bugs with --skip, implement --until
+4fa90599	44ca9fed	Wed Dec 4 07:01:37 2002 +0000	fix memory leaks found with valgrind
+44ca9fed	34c1ea8c	Wed Dec 4 06:57:38 2002 +0000	fix library list
+4bfb6e54	71fb9ff2	Tue Dec 3 06:29:23 2002 +0000	fix search path
+1a9869ec	d7fa6ab5	Thu Nov 28 22:53:10 2002 +0000	fix for mingw32
+77123f18	3c75a397	Wed Nov 27 05:35:13 2002 +0000	minor fixes
+14cb7191	cfae6cde	Wed Nov 27 04:45:48 2002 +0000	fix test_grabbag dependencies
+af396a54	303123f9	Wed Nov 27 04:44:24 2002 +0000	fix bug in local_strcat()
+bdec71ce	cb908a6d	Sat Nov 23 02:22:27 2002 +0000	minor fixes revealed by new tests
+abfd3568	fcc7a688	Fri Nov 22 08:05:46 2002 +0000	minor fixes
+fcc7a688	dfdc818a	Fri Nov 22 07:50:26 2002 +0000	get Makefile.vc system working again with new debug/release dirs and static/dynamic targets
+ed6e2cef	121a3561	Fri Nov 22 06:23:01 2002 +0000	minor fixes
+19073069	b166b9d7	Fri Nov 22 06:20:03 2002 +0000	add cuesheet writer, fix several bugs exposed in testing
+bfc8e319	48404ff9	Thu Nov 21 09:00:25 2002 +0000	revamp MSVC build system, separate dynamic and static builds, separate debug and release intermediate directories
+48404ff9	3f86cc74	Thu Nov 21 08:58:52 2002 +0000	split obj dir into separate release and debug dirs
+b74fc98b	6c53ffea	Wed Nov 20 06:40:08 2002 +0000	revamp Makefile.lite system, use separate dirs and names for debug and release targets and object files
+e2c12d09	7efa6e7d	Wed Nov 20 06:36:52 2002 +0000	split into release and debug dirs
+e6abfdba	f27bc593	Tue Nov 19 06:15:45 2002 +0000	remove debug printf\'s
+21c57c00	df7240ac	Sat Nov 16 06:34:08 2002 +0000	minor fixes
+d639455a	587f491b	Sat Nov 16 06:29:58 2002 +0000	fix DLL export define name
+a0d5454f	80be2823	Fri Nov 15 19:32:57 2002 +0000	fix MSVC warning with explicit casts
+f70353b3	d91f8fa7	Fri Nov 15 05:48:10 2002 +0000	fix bitrate calcation bug with diskwriter output
+f6fe5c28	ec348fdd	Thu Nov 14 04:57:46 2002 +0000	fix lib list
+af385ab7	18ca5808	Thu Nov 14 04:53:47 2002 +0000	fix path to grabbag lib
+3c18ade7	cd1a4230	Fri Nov 8 22:15:08 2002 +0000	fix bug passing filename around
+d9b6e335	1786393e	Fri Nov 8 06:05:23 2002 +0000	fix bug in seekpoint calculation in the final frame
+b4cf7b29	51f3b0d9	Thu Nov 7 05:11:15 2002 +0000	fix unused function #ifdefs
+7424d2ff	58d6cf8e	Wed Nov 6 07:10:38 2002 +0000	fix bugs returning the wrong meaning from FLAC__stream_encoder_init()
+03a8ff9f	3379a174	Tue Nov 5 08:42:57 2002 +0000	fix clipping setting in conjunction with hard limiter
+6fd8b362	853d79ce	Thu Oct 31 06:18:39 2002 +0000	fix last-updated date
+fcb502f7	f0ba8217	Wed Oct 30 06:19:54 2002 +0000	fix bug in rebuffering loop, add peak analysis, more fine-grained tagging functions
+c955d2ca	3e40402c	Tue Oct 29 05:46:16 2002 +0000	fix library link order
+3e40402c	2de6baf4	Sat Oct 26 04:35:47 2002 +0000	fix misspellings in docs
+2de6baf4	6ffe8dab	Sat Oct 26 04:35:19 2002 +0000	minor const-related fixes
+0a685462	5eb169d9	Fri Oct 25 04:54:30 2002 +0000	minor fixes
+5eb169d9	1f228161	Fri Oct 25 04:54:14 2002 +0000	fix include paths
+fb9d18fb	2c718a26	Mon Oct 21 07:04:07 2002 +0000	fix from Miroslav on the lpc datapath switching logic
+2c718a26	88064945	Mon Oct 21 06:43:48 2002 +0000	fix bug in free()ing of output arrays
+88064945	a11d5deb	Fri Oct 18 06:14:09 2002 +0000	fixes for building static libs (new FLAC__NO_DLL #define)
+1d25bb6a	3a17d3c3	Fri Oct 18 05:50:28 2002 +0000	fixes for building static libs (new FLAC__NO_DLL #define)
+fc7945c1	b2c94096	Thu Oct 17 07:39:37 2002 +0000	fix bug in vorbis comment construction
+18db4f46	f420524f	Wed Oct 16 22:28:38 2002 +0000	change .cc suffix to .cpp
+acf812ab	3960df1f	Tue Oct 15 01:56:21 2002 +0000	Fix a broken search-and-replace which produced effects like @ OGG_CFLAGS@
+3960df1f	72695809	Tue Oct 15 01:41:11 2002 +0000	Fix slightly botched search-and-replace which produced constructs like "@ CFLAGS".
+f12edc64	64df7151	Fri Oct 11 06:24:33 2002 +0000	fix assertion bug
+deb4132f	057b5326	Tue Oct 8 06:01:24 2002 +0000	fix bug where importing vorbis comments to a flac file with no vorbis comment block corrupted the file
+881a36d0	48669d03	Tue Oct 1 05:17:04 2002 +0000	fix bug with non-ogg builds, wrong # of args to fprintf
+48669d03	c1c8d496	Sat Sep 28 06:08:59 2002 +0000	fix bug where --add-padding was counteracted by --use-padding
+82738b30	7dfd40de	Wed Sep 25 06:09:47 2002 +0000	fixes related to the change of FLAC__VERSION_STRING from a #define to an identifier
+4e3cf29b	f3911323	Fri Sep 20 05:56:33 2002 +0000	fix _HEADERS targets to not clobber each others
+66a5907a	24dc7992	Fri Sep 20 05:51:28 2002 +0000	fix bug calling utf8_decode()
+2a42281d	7f1abc84	Tue Sep 17 05:38:08 2002 +0000	use correct setlocale() setting, fix but where --list of vorbis comments was not going through utf8 conversion step
+17ed10b6	e5dd837c	Wed Sep 11 17:08:05 2002 +0000	fix noinst_HEADERS; missing vorbiscomment.h
+afb15d15	ef528eca	Wed Sep 11 06:14:57 2002 +0000	update "known bugs" section
+ef528eca	e2281f34	Wed Sep 11 00:37:22 2002 +0000	fix handling of api/ directory in accord with new automake
+e2281f34	7eb54b98	Wed Sep 11 00:31:47 2002 +0000	fix bug with missing --lax in some cases
+7eb54b98	bb21fca6	Wed Sep 11 00:31:29 2002 +0000	minor comment typo fix
+54f45c43	0aad38b5	Mon Sep 9 18:35:26 2002 +0000	fix bug #606796 where do_shorthand_operations_on_file() was not checking the needs_write flag before writing
+db17248e	9a30d663	Fri Sep 6 00:39:42 2002 +0000	fix bug where seek table functionality was being called even though no seek table was requested
+9a30d663	a70b3b68	Thu Sep 5 06:58:31 2002 +0000	fix bug where output resolution was being determined before it was read from the FLAC file
+3f6c998b	d7bab817	Thu Sep 5 05:40:58 2002 +0000	gettext-related fixes
+ca673713	bd5d6efa	Thu Sep 5 05:39:47 2002 +0000	fix dependencies for flac target
+bbe7d9d0	fcdef332	Thu Sep 5 05:39:06 2002 +0000	fix bug with title composition
+6a84222d	cd62e3a9	Wed Sep 4 07:58:13 2002 +0000	fix problem with strncasecmp on windows
+214d3191	753ed75f	Sat Aug 31 05:47:33 2002 +0000	fix bugs in encode arguments
+696bf50b	6c5958be	Tue Aug 27 06:02:31 2002 +0000	fix link to shorten paper
+6c5958be	d41726b3	Tue Aug 27 06:02:09 2002 +0000	fixes to make consistent with xmms plugin
+d41726b3	567624c4	Tue Aug 27 06:01:35 2002 +0000	fix WACNAME
+1f99eac2	3e94dad4	Fri Aug 23 06:45:23 2002 +0000	fixes based on a pass over everything with autoconf/automake
+e3382bef	974db5d6	Thu Aug 22 07:27:42 2002 +0000	minor fix in the "clean" target
+5f39e9f1	402da70f	Wed Aug 21 05:27:01 2002 +0000	fixes based on Windows testing
+eb209039	87977bad	Tue Aug 20 20:37:26 2002 +0000	fix various little bugs related to format options
+54fd7a85	e1f795b2	Tue Aug 20 04:02:43 2002 +0000	fix LD_LIBRARY_PATH setting
+875b001f	929ccb88	Mon Aug 19 21:33:22 2002 +0000	fix "unused variables" warnings and others
+c748d12b	a0ac09ad	Sat Aug 17 14:54:47 2002 +0000	fix bug where comparing vorbis comment field names were not case insensitive
+a242b3ca	fc2b7379	Fri Aug 16 05:39:58 2002 +0000	fix bug in status string table
+1ce20ee4	992009a8	Wed Aug 14 00:50:48 2002 +0000	parameterize static and shared library suffixes
+b4e186aa	6a8ff479	Mon Aug 12 21:35:43 2002 +0000	fix bug in STREAMINFO reader that trashes the high bit of bps; streamline the level 0 interface by ignoring all metadata except STREAMINFO
+86d4681e	a5c1ed0e	Mon Aug 12 20:25:56 2002 +0000	fix bugs in option processing
+a1ae61d7	72223bb7	Fri Aug 9 20:36:24 2002 +0000	fix case when seektable is requested for stdout or Ogg encoding
+bd08990c	76e87258	Thu Aug 8 22:55:16 2002 +0000	fix bug where metadata callback was seeking to the wrong place to write the seektable
+6a56fe9e	09c35d2e	Thu Aug 8 22:49:33 2002 +0000	prefix more error messages with the filename
+ef0800da	89caa900	Thu Aug 8 22:47:07 2002 +0000	fix bug in stats reporting
+89caa900	589f8c78	Wed Aug 7 23:55:14 2002 +0000	fix typos
+edc9fee9	79600e1f	Wed Aug 7 17:39:24 2002 +0000	several fixes
+dc321f08	c80681f4	Wed Aug 7 17:36:48 2002 +0000	use new file encoder from libFLAC, still needs fixes for Ogg support
+9e2c8003	eab64574	Wed Aug 7 17:09:02 2002 +0000	many fixes
+9b4a014e	aaa1e196	Fri Aug 2 06:30:31 2002 +0000	use new seektable template functions, fix verify logic to work with revamped decoder process calls
+aaa1e196	ebd4a65c	Fri Aug 2 06:27:51 2002 +0000	fix bug in MD5 sum printing
+14ff156e	681c2933	Fri Aug 2 06:00:06 2002 +0000	fix bug where encoder was closing file too soon in finish()
+08a6282b	680e3aae	Thu Aug 1 07:33:36 2002 +0000	fix bug in seektable sorter where it was returning the wrong value
+f57c0219	a4c0d72a	Fri Jul 26 05:26:18 2002 +0000	fix bug where flush() was not setting the state back to OK
+93df7e0b	9203160c	Wed Jul 24 06:08:37 2002 +0000	fix bug #584595: infinite loop if ..._process*() called when decoder is ABORTED
+aacf21fd	44998949	Tue Jul 23 06:02:36 2002 +0000	fix syntax errors
+087a5d21	0eb02324	Thu Jul 18 05:33:06 2002 +0000	fix makedepend invocation
+a5f27afb	0b9ebc39	Wed Jul 17 05:30:20 2002 +0000	fix bug where md5_checking setting was not restored properly after a ..._reset()
+4b974e7c	a7f907b5	Thu Jul 11 05:52:46 2002 +0000	fix link to apollo plugin
+4358cd43	8396175b	Tue Jul 9 06:16:45 2002 +0000	temporary fix for libtool bug
+09030d3c	c1c5fb16	Tue Jul 9 05:24:59 2002 +0000	add "check known bugs" phrase
+c1c5fb16	692883aa	Fri Jul 5 22:58:47 2002 +0000	add wa2 plugin to known bugs
+692883aa	7dbcfaa2	Fri Jul 5 22:48:45 2002 +0000	fix bug where bogs dialog was popping up
+7dbcfaa2	8a203349	Thu Jul 4 09:18:46 2002 +0000	fix link for PhatBox
+8a203349	d2417ef9	Thu Jul 4 07:00:36 2002 +0000	fix ordering of targets
+d2417ef9	629a45db	Wed Jul 3 22:23:15 2002 +0000	fix include paths
+208ebfdd	60b205c2	Wed Jul 3 07:40:38 2002 +0000	fix -I paths
+60b205c2	917df866	Wed Jul 3 07:40:07 2002 +0000	fix bug in errno mis-handling with MSVC
+e53358ba	157b82c1	Tue Jul 2 22:23:21 2002 +0000	fix Phatnoise links
+69101a52	bfeec743	Sat Jun 29 00:31:43 2002 +0000	minor fixes
+90dff44b	b2cc54ac	Fri Jun 28 19:26:36 2002 +0000	fix path to getopt.h
+8ba563d4	9dfca882	Fri Jun 28 05:26:27 2002 +0000	minor fix to cast sizeof for printf
+9dfca882	5e028f93	Fri Jun 28 05:21:57 2002 +0000	minor fix for Darwin version of /bin/sh
+5e028f93	1ac8321d	Fri Jun 21 01:34:18 2002 +0000	fix bug where decoder wasn\'t getting streaminfo or seektable in all cases; improve seek algo slightly
+9e37d05a	afd2e2d0	Tue Jun 18 16:08:36 2002 +0000	fix bug where plugin would crash if decoder hits unexpected end of file
+16a16e26	bc15aee3	Sat Jun 15 05:14:04 2002 +0000	add more tests, fix check for needed binaries
+bc15aee3	273e168f	Sat Jun 15 05:12:31 2002 +0000	fix check for needed binaries
+14827676	3ecb1175	Sat Jun 15 05:10:55 2002 +0000	fix bug with infinite loop on remove-with-padding
+3ecb1175	e43c51df	Sat Jun 15 05:09:47 2002 +0000	fix bug where current chain length was not calculated all the time
+e43c51df	bc869506	Sat Jun 15 05:08:17 2002 +0000	fix bug with return code passing
+878ba454	b549c9bb	Thu Jun 13 07:02:10 2002 +0000	fixes to work with latest wasabi (beta 3)
+5ee2baa5	e4f05721	Wed Jun 12 00:24:41 2002 +0000	fix return type of externs
+e4f05721	d57c8d31	Tue Jun 11 06:45:49 2002 +0000	fix LDADD var
+d57c8d31	a6a773b3	Tue Jun 11 06:15:28 2002 +0000	fixes from compiling code and running all the tests on NT
+3b678d5b	3ba1c37f	Mon Jun 10 18:25:43 2002 +0000	fix some minor syntax errors
+999be3b9	02783cd1	Mon Jun 10 04:42:35 2002 +0000	last batch of changes and fixes based on the libFLAC++ unit tests
+02783cd1	cc68251f	Sat Jun 8 09:25:14 2002 +0000	translation fixes
+cc68251f	eaf1f555	Sat Jun 8 04:53:42 2002 +0000	another big glob of changes/fixes
+57ba6f4e	7b2e3a37	Fri Jun 7 05:27:37 2002 +0000	massive glob of checkins: improved tests, more tests, bugfixes
+d40f73d4	d63eb24a	Wed Jun 5 06:15:50 2002 +0000	ifdef out debug code
+8d37ddba	28e08d8f	Wed Jun 5 06:05:35 2002 +0000	fix bug where decoding flac file with 0 total_samples yielded 0 chunk size in wave file; add -F to continue decoding through errors
+f391e7d4	947065af	Wed Jun 5 05:51:39 2002 +0000	fix link to abcde patch
+947065af	a92f6005	Tue Jun 4 06:02:56 2002 +0000	fix status enum, more rigorous setting of defaults, add inherited get methods from stream decoder
+2835f433	090f8f78	Tue Jun 4 05:54:44 2002 +0000	fix with new status enums
+090f8f78	a0111f35	Tue Jun 4 05:53:04 2002 +0000	fix status enum, fix bug parsing vorbis comments, stop filtering placeholder seekpoints, more rigorous setting of defaults
+a1260ff9	2e3527f8	Tue Jun 4 05:47:51 2002 +0000	fix status enum names
+a2c78140	36a31299	Tue Jun 4 05:44:32 2002 +0000	fix with new status enums
+7ee4d178	ba2c1b89	Sat Jun 1 06:31:27 2002 +0000	fixes based on MSVC compile
+a90f80fc	e869fd33	Sat Jun 1 05:45:50 2002 +0000	fix state enums
+adfaff39	8ae7bdbf	Fri May 31 06:26:03 2002 +0000	fix bug in flac file generator
+bda92f2f	6b8e5300	Fri May 31 06:24:03 2002 +0000	fix malloc(0) "bug" with application block parsing
+6b8e5300	b2b5358a	Fri May 31 06:23:09 2002 +0000	pass vorbis comment entries by value, fix bug in vorbiscomment_set_entry_
+1e647069	b645e31a	Wed May 29 05:56:39 2002 +0000	fix memory leaks in array resizers
+16556048	b04a16e4	Wed May 29 05:51:24 2002 +0000	fix constness on _set_ methods
+a7b673c0	e959a5de	Sat May 25 02:13:38 2002 +0000	add support for id3v2 tags to levels 1 and 2, better bad metadata handling, fix bug with merge_padding
+7294309b	fb74f10d	Wed May 22 05:35:43 2002 +0000	fix null pointer handling in metadata object routines
+a4bbe46e	76eb863f	Tue May 14 06:16:02 2002 +0000	final fixes to level 2 tests
+e2ba10fe	d34f03d4	Tue May 14 06:03:17 2002 +0000	more fixes for level 2 functions exposed by unit tests
+2745fe7f	7f05acd9	Sat May 11 05:31:56 2002 +0000	more bug fixes from unit tests; level 1 looks good
+6b02a75f	fc9e33f4	Fri May 10 06:42:02 2002 +0000	fix bugs exposed by latest tests
+a46b8891	6d4cd930	Thu May 9 05:49:47 2002 +0000	minor fix
+51ee4656	f567b91c	Thu May 9 05:46:23 2002 +0000	remove unused code, fix several bugs (WARNING: there are still more)
+f567b91c	8400e43e	Thu May 9 05:42:19 2002 +0000	fix _new / _init / _finish / _delete sequence to be more correct, ala C++
+8400e43e	294f82ce	Thu May 9 05:41:35 2002 +0000	fix bug where decoder was not reading APPLICATION id in every case
+294f82ce	4074d05d	Thu May 9 05:39:01 2002 +0000	fix up comments, remove faulty assert
+75c49a6a	c11b5dde	Thu May 9 05:26:43 2002 +0000	fix copyright header
+fad2e61c	8c84e192	Tue May 7 05:33:10 2002 +0000	fixes for padding length calculation, vorbis comment memory leak
+19b7b584	77d09a0c	Sat May 4 17:46:37 2002 +0000	fix bug printing application id
+77d09a0c	e6ad5576	Sat May 4 17:45:46 2002 +0000	fix max sample rate checking
+7add44c5	c8eb74d9	Sat May 4 17:33:35 2002 +0000	add vorbis comment block, fix max sample rate
+46d1616e	7e19b549	Fri May 3 04:50:25 2002 +0000	add "known bugs in current release" sections
+32751943	0bfa2b64	Wed Apr 24 04:50:20 2002 +0000	add lines in usage about --output-prefix
+0bfa2b64	26832eef	Wed Apr 10 06:11:51 2002 +0000	partial fix in the goal of getting this to match the new bitbuffer interface
+28b18573	0f47d27c	Tue Mar 12 16:18:11 2002 +0000	fix bug found by gcc3
+1c2d8c49	e4c62aa9	Fri Mar 1 06:52:52 2002 +0000	fix memory leak, tiny speedup, add some asserts
+1d1fccb6	0a458633	Sun Feb 17 22:23:56 2002 +0000	fix bug where play() was dying instead of skipping over bad files
+38c68540	019795b7	Tue Feb 12 22:58:59 2002 +0000	minor fix
+019795b7	d4710553	Tue Feb 12 05:19:45 2002 +0000	fix typo in assertion
+6188feb8	4e685b9b	Wed Feb 6 07:50:19 2002 +0000	fix bug where the metadata packet and first audio packet were getting the same packet number in ogg
+0041e688	906654e6	Tue Feb 5 23:41:42 2002 +0000	minor bug fixes
+906654e6	bf142794	Mon Feb 4 00:06:22 2002 +0000	fix link to FROG
+6cca87bb	ae84212b	Tue Jan 29 17:56:03 2002 +0000	fix bug when seeking a file that is already at END_OF_FILE
+90cf0b22	1152f9fe	Sat Jan 26 23:17:17 2002 +0000	fix bug where flac would crash if not given a value after some options
+f04466ea	5c0376ba	Sat Dec 15 18:42:24 2001 +0000	fix sonice link
+7146e0f5	bb14ae84	Tue Dec 4 06:46:54 2001 +0000	fix the docbook2man sequence
+bb14ae84	e326848b	Tue Dec 4 06:46:35 2001 +0000	fix the sse and 3dnow argument names
+e326848b	651d6de9	Tue Dec 4 06:46:12 2001 +0000	fix some argument names to match new configure.in
+c150d9d8	25da0d9a	Tue Dec 4 01:25:04 2001 +0000	fix bug with filename setting; fix possible bug with stat()ing if using stdin
+45d9a494	843f1bff	Mon Nov 19 18:14:54 2001 +0000	fix link to news
+2e1d1573	395938e3	Thu Nov 15 23:50:12 2001 +0000	fix bug with --use-3dnow
+69e2d9f1	776f5737	Thu Nov 15 19:21:01 2001 +0000	fix the ogg define
+8c9808fa	d9620b8f	Tue Nov 13 21:27:01 2001 +0000	fix link flags for release target
+03b189ff	548175cf	Thu Nov 1 19:47:06 2001 +0000	fix ..._process_metadata() to return correctly from a READ_FRAME state
+548175cf	b312f28a	Thu Nov 1 11:23:32 2001 +0000	Fix libogg check
+5b4c4896	89c899ef	Wed Oct 31 23:55:56 2001 +0000	fix bugs with skipping id3v2 tags and long metadata blocks
+89c899ef	c74cbef7	Wed Oct 31 23:17:43 2001 +0000	several ogg-related fixes
+8c24ab3a	29516967	Wed Oct 31 20:25:00 2001 +0000	fix tiny bug with filename setting
+b1655955	26cb8d55	Tue Oct 16 06:32:50 2001 +0000	fix bug where raw encoder rewinds to beginning of file when it shouldn\'t
+32685de7	fa697a98	Thu Aug 16 22:36:56 2001 +0000	fix bug when skipping data
+7d53dd91	31a11c72	Thu Aug 2 21:10:42 2001 +0000	fix debian package link to search for just 1.0
+d42fd52f	78974577	Tue Jul 31 21:26:17 2001 +0000	-m was given twice; the second instance should have been -M.  Fixed.
+af9d1a5f	10ab5409	Sat Jul 21 00:28:10 2001 +0000	fix the release year on some news bullets
+d3ed49fb	f207c2be	Wed Jul 18 23:47:19 2001 +0000	fix another possible bug in the quantizer
+3120949c	51e36421	Wed Jul 18 23:43:01 2001 +0000	change some debug printouts
+a52270e0	3643db34	Wed Jul 18 00:23:40 2001 +0000	fix bug in SSE routines
+6fd1c20d	522f7d3f	Mon Jul 16 18:10:56 2001 +0000	again, in more places, fix bug when reading a zero-bit-long value
+ab3fcfac	07c2a0c7	Thu Jul 12 21:29:22 2001 +0000	indenting fix
+63d99579	8395d02f	Thu Jul 12 21:26:57 2001 +0000	fix bug with implicit assumption in ia32 mmx routines, add more complete filling of subframe structure when reading
+8395d02f	e0a06683	Thu Jul 12 21:25:22 2001 +0000	many bug fixes, added escape coding option, fixed residual bit estimation, beginnings of support for wide routines
+251ddb32	d37acf41	Thu Jul 12 21:21:16 2001 +0000	fix bug when reading a zero-bit-long value
+4e6b3ac2	6d5be839	Fri Jul 6 00:37:57 2001 +0000	fix the case in the coeff quantizer where the coeffs were not quantized when the shift is zero
+5975e8a8	fd16e77b	Tue Jul 3 04:10:21 2001 +0000	fix rare bug in FLAC__lpc_quantize_coefficients where the quantized coeff could get larger than the max allowed value
+d30f59d8	414a234b	Fri Jun 29 02:51:01 2001 +0000	supposedly fixes bug where playback happens too fast in some situations
+cd22af6c	ba03ad12	Wed Jun 27 06:53:54 2001 +0000	add the --output-prefix option
+118e98b2	91b65f5a	Wed Jun 27 06:46:24 2001 +0000	workaround for #include bug on OS X
+1162f182	04d1aa35	Tue Jun 19 06:48:21 2001 +0000	minor fixes
+287fccd6	cd66fc07	Mon Jun 18 21:30:39 2001 +0000	fix default versioning behavior
+a38a551d	c72137a6	Fri Jun 15 21:24:34 2001 +0000	fix syntax typo
+eaa8d3c4	91e4dc97	Thu Jun 14 18:57:35 2001 +0000	fix size of application id in struct
+24745f9d	e6499bdf	Wed Jun 13 18:21:03 2001 +0000	fix to work with the new decoder interface
+b20eed8f	a64aed6b	Mon Jun 11 20:13:39 2001 +0000	remove debug printouts
+e81b1958	276ad891	Mon Jun 11 18:59:31 2001 +0000	fix an href typo
+276ad891	f939ab15	Sun Jun 10 20:58:08 2001 +0000	fix copyright typo
+495abdde	3fa53d62	Thu Jun 7 20:01:20 2001 +0000	fix WAVE autodetect to be more robust and not require ungetc()
+3654682d	ac1e70aa	Thu Jun 7 08:06:27 2001 +0000	fixes for MSVC
+6fff8e20	f0003358	Wed Jun 6 19:01:13 2001 +0000	make the default suffix .ana for analysis files
+9e03c444	a68345b6	Wed Jun 6 16:38:22 2001 +0000	minor fixes
+525c22ce	7325329d	Tue Jun 5 22:45:50 2001 +0000	remove debug printouts
+91f2fb36	ba98f3f9	Fri Jun 1 18:56:52 2001 +0000	fix names of SSE routines
+ba98f3f9	92d4240a	Fri Jun 1 00:43:44 2001 +0000	minor comment fixes
+d16370d6	f60dd8e8	Thu May 31 05:56:41 2001 +0000	minor comment fixes
+f60dd8e8	d37d1351	Wed May 30 23:26:39 2001 +0000	minor fix to comments
+d37d1351	07df6625	Wed May 30 23:09:31 2001 +0000	speed up FLAC__encoder_process(); fix bug in FLAC__encoder_process_interleaved()
+7fc68ffc	71421612	Wed May 30 19:08:50 2001 +0000	fix bug in SSE version of ...autocorrelation...
+fd986573	7042adb4	Wed May 30 00:49:30 2001 +0000	fix some tabbing
+7042adb4	6097c96a	Wed May 30 00:47:55 2001 +0000	fix jump distances
+1aafa64c	bd25ddd4	Mon May 28 21:27:28 2001 +0000	fix bug where metaflac was getting the wrong offset for seek points
+bd25ddd4	b7f66c46	Mon May 28 21:20:02 2001 +0000	fix bug where encoder_wrapper->stream_offset was not initialized to 0
+b7f66c46	9ef01460	Mon May 28 21:07:36 2001 +0000	fix bug in write_big_endian_uint64()
+9ef01460	cdaf4a86	Mon May 28 20:44:26 2001 +0000	fix minor bug with type printout; minor spelling fix
+cdaf4a86	319871c2	Sun May 27 18:40:57 2001 +0000	make the parallel fix to FLAC__bitbuffer_read_raw_int64()
+319871c2	038d695e	Sun May 27 18:35:38 2001 +0000	minor fix to the usage printout
+697b603e	480ddd8e	Sat May 26 05:19:10 2001 +0000	fix bug in inlined version of FLAC__bitbuffer_read_raw_int32 where sign extension was not done in some cases
+480ddd8e	e4e0bb90	Sat May 26 00:39:09 2001 +0000	patch in the total_error_ fix that somehow didn\'t make it in
+4fa2aa03	07f2d233	Fri May 25 23:15:08 2001 +0000	fix bug in seekpoint uniquification
+07f2d233	6bd17579	Fri May 25 19:39:40 2001 +0000	remove the debug code from SSE routine
+6bd17579	31c8a1fc	Fri May 25 19:02:01 2001 +0000	fix egregious bug in the partition sum precomputation
+c8ef8353	45d7bfc8	Fri May 25 00:06:33 2001 +0000	add memory.c, fix to work with i386 convenience library (thanks mdz)
+5469112e	a3f7c2c7	Fri May 25 00:05:15 2001 +0000	oops, fix bug with error_scale
+2d071a6b	a1b53c4d	Thu May 24 19:27:31 2001 +0000	remove debug printouts
+8d1676c0	7d297060	Tue May 22 23:33:40 2001 +0000	soup up FLAC__fixed_compute_best_predictor_asm
+a16d8ad5	f5490343	Mon May 21 23:43:35 2001 +0000	fix compiler warnings about comparing signed with unsigned
+f5490343	d1299d96	Mon May 21 23:40:16 2001 +0000	soup up, fix bugs, replace PSHUFW with pre-Katmai-friendly PSRLQ mm,32
+81241a9f	2d9d31e8	Mon May 21 21:50:50 2001 +0000	syntax fixes to the SSE version
+2d9d31e8	1fd9b171	Mon May 21 21:28:12 2001 +0000	fix syntax error in FLAC__fixed_compute_best_predictor_slow()
+1fd9b171	eee20a5f	Mon May 21 18:03:14 2001 +0000	incorporate mdz patches to fix log(0) and unsigned-goes-negative bugs
+eee20a5f	d80c18e4	Fri May 18 18:49:19 2001 +0000	streamline FLAC__fixed_compute_best_predictor_slow()
+d80c18e4	675effa9	Fri May 18 18:47:55 2001 +0000	streamline FLAC__fixed_compute_best_predictor()
+5157f7c1	18301947	Wed May 16 19:28:12 2001 +0000	fix bug where gcc gets shifting wrong
+18301947	0c0fed69	Wed May 16 19:25:33 2001 +0000	fix deallocation bugs
+0c0fed69	376807d9	Wed May 16 19:24:59 2001 +0000	revert to original FLAC__fixed_compute_residual()
+376807d9	9de0942d	Wed May 16 19:23:35 2001 +0000	fix LOCAL_FABS bug
+9de0942d	a151f2c1	Wed May 16 19:23:13 2001 +0000	fix section defs
+2d5aae0a	9f507387	Mon May 14 19:34:12 2001 +0000	remove debug printouts
+fc205cc0	56eba71d	Wed May 9 21:39:57 2001 +0000	fix bug where decoder was closing stdout
+b224440a	dd2ef53c	Fri May 4 19:17:07 2001 +0000	more fixes to the -# settings
+dd2ef53c	89aa472d	Fri May 4 00:45:54 2001 +0000	minor table fix of summary table
+cc78fb57	6904e6a8	Thu May 3 00:59:27 2001 +0000	fix script to work with new flac command line
+5c5c0684	9fa1ad50	Tue May 1 21:07:06 2001 +0000	fix some error messages
+034dfab8	f932bc73	Fri Apr 27 19:10:23 2001 +0000	fix bugs in encoder_set_partitioned_rice_()
+f932bc73	72222cae	Fri Apr 27 03:38:31 2001 +0000	fix bug in inlined version of ...read_unary...()
+2d647904	64f4fbca	Tue Apr 24 22:24:22 2001 +0000	add verbiage to bug submit
+677622ac	afcd877c	Wed Apr 18 23:02:08 2001 +0000	fix some compile bugs related to RESERVOIR_TEST
+671fadb2	a8b35a9a	Tue Apr 17 17:32:01 2001 +0000	fix bug with samples_decoded
+a79c4fa6	4de0541e	Mon Apr 16 23:11:11 2001 +0000	fix -b usage
+4de0541e	ababc226	Mon Apr 16 23:09:47 2001 +0000	fix -b usage printout
+ababc226	d50cd496	Mon Apr 16 22:58:42 2001 +0000	fix syntax error
+29896344	dc839287	Mon Apr 16 22:44:27 2001 +0000	remove debug printout
+eae4dde2	5c3d00c4	Mon Apr 16 05:33:22 2001 +0000	document GCC compiler bug that produces false warning
+5c3d00c4	61eb682a	Sat Apr 14 00:28:17 2001 +0000	fix usage
+61eb682a	7531b008	Sat Apr 14 00:24:54 2001 +0000	fix bug with the default -S setting
+7531b008	3585ece4	Sat Apr 14 00:24:32 2001 +0000	fix bug where sample number is incorrectly calculated for the last block
+3585ece4	5a068063	Fri Apr 13 23:39:07 2001 +0000	fix bug to deal with case when user requests to skip more samples that the stream contains
+5a068063	1d937c0d	Fri Apr 13 23:24:45 2001 +0000	fix more bugs with seek table stuff
+1d937c0d	760f7fd4	Fri Apr 13 23:03:02 2001 +0000	fix bug where seek point was hit during metadata write_callback time
+760f7fd4	67db5da6	Fri Apr 13 23:00:59 2001 +0000	minor bug fix
+67db5da6	211736a7	Fri Apr 13 22:59:58 2001 +0000	fix bug with incorrect seek point separator
+bbe8b46a	0a72e18b	Fri Apr 13 21:54:53 2001 +0000	minor fixes
+a5792161	0fbe7ce0	Fri Apr 13 19:16:52 2001 +0000	fix function signature to make .h file
+3372cc02	6ff59c56	Fri Apr 13 18:44:46 2001 +0000	fix compiler warning
+6ff59c56	ce025f57	Fri Apr 13 18:43:53 2001 +0000	fix compile error
+167e8ecf	6845ca0c	Fri Mar 30 09:07:02 2001 +0000	fix coloring in some tables
+0ef14b1a	673976d9	Fri Mar 30 00:46:53 2001 +0000	minor fix
+ef44878c	470785c3	Thu Mar 29 22:54:33 2001 +0000	fix another bug related to wasted bits
+2cf7d007	bd646e12	Thu Mar 29 22:17:52 2001 +0000	fix bug where subframe bps estimate was not taking into account wasted bits
+ac4c1583	1995f0a0	Wed Mar 28 23:10:22 2001 +0000	comment fix
+1995f0a0	82b7324d	Wed Mar 28 22:19:18 2001 +0000	remove buggy bug comment/printout
+dbe60399	665413e1	Tue Mar 27 23:51:40 2001 +0000	fix comments
+9deb72d6	22bc5d92	Tue Mar 27 01:18:48 2001 +0000	fix bug in the blocksize field of the subframe header spec
+1e1509fb	e850ded4	Fri Mar 23 20:20:43 2001 +0000	fix bug where ...allocate_output_() might allocate the wrong number of channels if the decoder hit a bad frame header
+674653ff	10cffdd2	Thu Mar 22 23:56:07 2001 +0000	fix bug where pos could move to before the beginning of the file
+57b65bbf	e8713d27	Thu Mar 22 23:35:22 2001 +0000	trivial changes, fixes
+5b2b25c6	2bfc33d4	Thu Mar 22 19:51:48 2001 +0000	add note about 0.9 winamp2 plugin fix
+d3094684	6376169c	Wed Mar 21 23:14:27 2001 +0000	fix version string
+bd82959b	352e0f6b	Tue Mar 20 22:56:43 2001 +0000	oops, fix syntax error
+73a99351	67a13156	Tue Mar 20 22:04:12 2001 +0000	fix a couple of playback bugs
+67a13156	b9433f9b	Tue Mar 20 22:02:54 2001 +0000	fix so that file decoder catches when stream decoder says EOF
+b006493d	3d783d67	Fri Mar 16 23:24:53 2001 +0000	comment fix
+acac6428	c864b2d2	Mon Mar 5 20:01:51 2001 +0000	remove bps limit on mid-side, remove some debugging output
+30e5396a	eda1ff6a	Mon Mar 5 18:36:16 2001 +0000	fix empty struct problem
+3de7ba1b	6213a31f	Thu Mar 1 21:48:20 2001 +0000	buncha fixes
+b2109495	22c8ad82	Thu Mar 1 19:00:10 2001 +0000	fix decode buffer size
+f40667b2	c625f903	Wed Feb 28 23:57:09 2001 +0000	remove old version of the lpcoeff quantizer, other debug detritus
+994b5179	d2b9453e	Wed Feb 28 23:47:19 2001 +0000	fix 24-bit support
+f4ce50b9	fe9ba6f4	Wed Feb 28 23:45:15 2001 +0000	fix bug where LP was tried even if autoc[0]==0.0
+fe9ba6f4	f6237c8c	Wed Feb 28 23:44:27 2001 +0000	fix bug where overflow of total_error caused it to go negative
+4795fcab	0552fdf9	Mon Feb 26 20:30:31 2001 +0000	remove some debug output
+0552fdf9	81aa7cea	Mon Feb 26 20:29:56 2001 +0000	fix bug where max_qlp_coeff_precision went too high with 8 bits-per-sample and -p
+090bbb8b	ee0aa837	Thu Feb 22 22:56:19 2001 +0000	fix bug #131976
+ee0aa837	277149fd	Thu Feb 22 21:06:06 2001 +0000	remove 0.7 bug warning
+277149fd	67d9ca57	Tue Feb 13 22:29:02 2001 +0000	add bug warning
+58c84a2e	5feaafff	Mon Feb 12 09:04:49 2001 +0000	fix fclose bug
+5feaafff	c5f2f3f9	Mon Feb 12 09:03:07 2001 +0000	set large default size for bug 131976 workaround
+b90e6f64	f5994a73	Thu Feb 8 22:05:29 2001 +0000	fix dhdate
+46f2ae8a	9f77a196	Thu Feb 8 00:27:21 2001 +0000	fix bug where rice parameter was going to 0
+9f77a196	c4b7c846	Thu Feb 8 00:26:45 2001 +0000	add more debug info, clip bps computation to 0.0
+bcd8da93	230e0f52	Tue Feb 6 00:58:08 2001 +0000	change bug section
+4ba983ca	52dfccec	Fri Feb 2 20:00:26 2001 +0000	fix seek bug in raw encoding
+52dfccec	760f535d	Fri Feb 2 00:54:22 2001 +0000	minor fixes
+08f87486	11ce4e04	Mon Jan 29 23:23:24 2001 +0000	fix BGCOLOR attributes
+efc42137	f4b8032b	Sun Jan 28 09:41:45 2001 +0000	fix to work with new write_callback signature
+4c21cc82	34de84ac	Fri Jan 26 22:10:57 2001 +0000	add Known Bugs section
+0f98d578	2353aee8	Fri Jan 26 21:29:35 2001 +0000	fix default version number
+9c072fa4	a18b2ee5	Wed Jan 24 23:35:48 2001 +0000	fix bug with asserts
+b10d83cd	cbbbb5f1	Tue Jan 23 01:19:17 2001 +0000	fix bug: --skip and pipes
+8c8a55ef	e77287e3	Tue Jan 23 00:40:05 2001 +0000	fix some pipe bugs
+e55f3909	67fcd8ed	Fri Jan 19 23:13:44 2001 +0000	fix compiler warning
+2a21a752	9f429bae	Fri Jan 19 22:43:49 2001 +0000	fix for autoconf system
+cab3c0a9	4297cc73	Tue Jan 16 07:08:13 2001 +0000	fix release date, add MD5 link
+49f02571	920401c5	Tue Jan 16 07:07:09 2001 +0000	minor compile error fix
+c00438cc	2d6744d0	Tue Jan 16 00:08:14 2001 +0000	fix a typo bug
+4ef3ded9	8bad5ec3	Sat Jan 13 01:11:17 2001 +0000	minor fix
+51772848	f73469a5	Sat Jan 13 00:42:05 2001 +0000	minor fixes
+942fad96	da68d764	Sat Jan 6 00:48:29 2001 +0000	fix some misstatements
+da68d764	841e27e1	Fri Jan 5 23:26:59 2001 +0000	fix to chop off bytes after end of data chunk
+c0ef10b0	bbbef82a	Fri Dec 22 22:40:24 2000 +0000	fix some typos in error messages
+f9f0e18d	196e75e8	Sun Dec 17 19:10:20 2000 +0000	Fix typos, flac version number.
+196e75e8	cf2c8a64	Sun Dec 17 19:09:44 2000 +0000	Fix link to download page.
+d44feb11	288c9dea	Sun Dec 17 19:07:46 2000 +0000	Fixed bug in constant-detection.

@@ -1,0 +1,13 @@
+diff --git a/Userland/Libraries/LibJS/Lexer.cpp b/Userland/Libraries/LibJS/Lexer.cpp
+index 78c4c09a26..7f159123d5 100644
+--- a/Userland/Libraries/LibJS/Lexer.cpp
++++ b/Userland/Libraries/LibJS/Lexer.cpp
+@@ -201,7 +201,7 @@ void Lexer::consume()
+             char_size = 4;
+         }
+ 
+-        VERIFY(char_size > 1);
++        VERIFY(char_size >= 1);
+         --char_size;
+ 
+         m_position += char_size;

@@ -1,0 +1,1 @@
+commit 4058cf2a7f7e2590c26588c4eb476ac5c029cb5aAuthor: Daniel Stenberg <daniel@haxx.se>Date:   Tue Sep 25 07:49:35 2018 +0200    http: fix memleak in rewind error path        If the rewind would fail, a strdup() would not get freed.        Detected by OSS-Fuzz        Bug: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=10665    Closes #3044

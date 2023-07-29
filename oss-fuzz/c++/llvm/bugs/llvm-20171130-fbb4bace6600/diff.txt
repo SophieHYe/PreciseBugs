@@ -1,0 +1,41 @@
+diff --git a/compiler-rt/lib/msan/msan_interceptors.cc b/compiler-rt/lib/msan/msan_interceptors.cc
+index 5abfb9ad0445..0b58f54b5bd2 100644
+--- a/compiler-rt/lib/msan/msan_interceptors.cc
++++ b/compiler-rt/lib/msan/msan_interceptors.cc
+@@ -526,7 +526,8 @@ INTERCEPTOR(int, mbtowc, wchar_t *dest, const char *src, SIZE_T n) {
+   return res;
+ }
+ 
+-INTERCEPTOR(int, mbrtowc, wchar_t *dest, const char *src, SIZE_T n, void *ps) {
++INTERCEPTOR(SIZE_T, mbrtowc, wchar_t *dest, const char *src, SIZE_T n,
++            void *ps) {
+   ENSURE_MSAN_INITED();
+   SIZE_T res = REAL(mbrtowc)(dest, src, n, ps);
+   if (res != (SIZE_T)-1 && dest) __msan_unpoison(dest, sizeof(wchar_t));
+diff --git a/compiler-rt/lib/msan/tests/msan_test.cc b/compiler-rt/lib/msan/tests/msan_test.cc
+index 212e0ee3e3e7..82d659e57837 100644
+--- a/compiler-rt/lib/msan/tests/msan_test.cc
++++ b/compiler-rt/lib/msan/tests/msan_test.cc
+@@ -2121,13 +2121,15 @@ TEST(MemorySanitizer, mbtowc) {
+ }
+ 
+ TEST(MemorySanitizer, mbrtowc) {
+-  const char *x = "abc";
+-  wchar_t wx;
+-  mbstate_t mbs;
+-  memset(&mbs, 0, sizeof(mbs));
+-  int res = mbrtowc(&wx, x, 3, &mbs);
+-  EXPECT_GT(res, 0);
+-  EXPECT_NOT_POISONED(wx);
++  mbstate_t mbs = {};
++
++  wchar_t wc;
++  size_t res = mbrtowc(&wc, "\377", 1, &mbs);
++  EXPECT_EQ(res, -1ULL);
++
++  res = mbrtowc(&wc, "abc", 3, &mbs);
++  EXPECT_GT(res, 0ULL);
++  EXPECT_NOT_POISONED(wc);
+ }
+ 
+ TEST(MemorySanitizer, wcsftime) {

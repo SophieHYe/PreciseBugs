@@ -1,0 +1,73 @@
+diff --git a/fuzzing/src/visitors/facevisitor-cid.cpp b/fuzzing/src/visitors/facevisitor-cid.cpp
+index b085e3c..7bce9c3 100644
+--- a/fuzzing/src/visitors/facevisitor-cid.cpp
++++ b/fuzzing/src/visitors/facevisitor-cid.cpp
+@@ -14,11 +14,13 @@
+ 
+ #include "visitors/facevisitor-cid.h"
+ 
+-#include "utils/logging.h"
++#include <cassert>
+ 
+ #include <ft2build.h>
+ #include FT_CID_H
+ 
++#include "utils/logging.h"
++
+ 
+   void
+   FaceVisitorCid::
+@@ -26,7 +28,7 @@
+   {
+     FT_Error  error;
+ 
+-    FT_Long  num_glyphs = face->num_glyphs;
++    FT_Long  num_glyphs;
+ 
+     const char*  registry;
+     const char*  ordering;
+@@ -37,6 +39,10 @@
+     FT_UInt  cid;
+ 
+ 
++    assert( face != nullptr );
++
++    num_glyphs = face->num_glyphs;
++
+     error = FT_Get_CID_Registry_Ordering_Supplement( face.get(),
+                                                      &registry,
+                                                      &ordering,
+diff --git a/fuzzing/src/visitors/facevisitor-type1tables.cpp b/fuzzing/src/visitors/facevisitor-type1tables.cpp
+index ba290dd..ada7e00 100644
+--- a/fuzzing/src/visitors/facevisitor-type1tables.cpp
++++ b/fuzzing/src/visitors/facevisitor-type1tables.cpp
+@@ -49,7 +49,7 @@
+     FT_Byte  num_stem_snap_v;
+     
+ 
+-    assert( face.get() != nullptr );
++    assert( face != nullptr );
+ 
+     has_glyph_names = FT_Has_PS_Glyph_Names( face.get() );
+ 
+diff --git a/fuzzing/src/visitors/facevisitor-variants.cpp b/fuzzing/src/visitors/facevisitor-variants.cpp
+index 1242db1..24156e9 100644
+--- a/fuzzing/src/visitors/facevisitor-variants.cpp
++++ b/fuzzing/src/visitors/facevisitor-variants.cpp
+@@ -14,6 +14,7 @@
+ 
+ #include "visitors/facevisitor-variants.h"
+ 
++#include <cassert>
+ #include <set>
+ #include <vector>
+ 
+@@ -37,6 +38,8 @@
+     FT_UInt  glyph_index;
+ 
+ 
++    assert( face != nullptr );
++
+     raw_selectors = FT_Face_GetVariantSelectors( face.get() );
+ 
+     if ( raw_selectors == nullptr )

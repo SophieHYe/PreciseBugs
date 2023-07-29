@@ -1,0 +1,13 @@
+diff --git a/gdal/gcore/gdalrasterband.cpp b/gdal/gcore/gdalrasterband.cpp
+index 25f38ba593..ed08f05e0f 100644
+--- a/gdal/gcore/gdalrasterband.cpp
++++ b/gdal/gcore/gdalrasterband.cpp
+@@ -2949,7 +2949,7 @@ CPLErr GDALRasterBand::GetHistogram( double dfMin, double dfMax,
+     GDALRasterIOExtraArg sExtraArg;
+     INIT_RASTERIO_EXTRA_ARG(sExtraArg);
+ 
+-    const double dfScale = nBuckets / (dfMax - dfMin);
++    const double dfScale = (dfMax > dfMin) ? nBuckets / (dfMax - dfMin) : 0.0;
+     memset( panHistogram, 0, sizeof(GUIntBig) * nBuckets );
+ 
+     int bGotNoDataValue = FALSE;

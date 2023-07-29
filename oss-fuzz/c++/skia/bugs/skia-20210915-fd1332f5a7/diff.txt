@@ -1,0 +1,38 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 5cd644f225..9fe303b964 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -101,6 +101,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz37465.sksl",
+   "/sksl/errors/Ossfuzz37620.sksl",
+   "/sksl/errors/Ossfuzz38106.sksl",
++  "/sksl/errors/Ossfuzz38107.sksl",
+   "/sksl/errors/Ossfuzz38140.sksl",
+   "/sksl/errors/Ossfuzz38560.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+diff --git a/include/sksl/SkSLErrorReporter.h b/include/sksl/SkSLErrorReporter.h
+index 1d17f0713c..2c90ad854a 100644
+--- a/include/sksl/SkSLErrorReporter.h
++++ b/include/sksl/SkSLErrorReporter.h
+@@ -53,7 +53,6 @@ public:
+             }
+             fLine = 1;
+             for (int i = 0; i < fOffset; i++) {
+-                SkASSERT(fText[i]);
+                 if (fText[i] == '\n') {
+                     ++fLine;
+                 }
+diff --git a/resources/sksl/errors/Ossfuzz38107.sksl b/resources/sksl/errors/Ossfuzz38107.sksl
+new file mode 100644
+index 0000000000..f76dd238ad
+Binary files /dev/null and b/resources/sksl/errors/Ossfuzz38107.sksl differ
+diff --git a/tests/sksl/errors/Ossfuzz38107.glsl b/tests/sksl/errors/Ossfuzz38107.glsl
+new file mode 100644
+index 0000000000..bc5afa7f21
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz38107.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: invalid token
++1 error

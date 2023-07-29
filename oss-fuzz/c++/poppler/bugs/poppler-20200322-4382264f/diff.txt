@@ -1,0 +1,15 @@
+diff --git a/poppler/JPEG2000Stream.cc b/poppler/JPEG2000Stream.cc
+index 123da94a..997f1915 100644
+--- a/poppler/JPEG2000Stream.cc
++++ b/poppler/JPEG2000Stream.cc
+@@ -357,6 +357,10 @@ void JPXStreamPrivate::init2(OPJ_CODEC_FORMAT format, unsigned char *buf, int le
+     return;
+ 
+ error:
++  if (image != nullptr) {
++    opj_image_destroy(image);
++    image = nullptr;
++  }
+   opj_stream_destroy(stream);
+   opj_destroy_codec(decoder);
+   if (format == OPJ_CODEC_JP2) {

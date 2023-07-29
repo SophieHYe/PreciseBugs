@@ -1,0 +1,20 @@
+diff --git a/gdal/frmts/sdts/sdtspolygonreader.cpp b/gdal/frmts/sdts/sdtspolygonreader.cpp
+index ff89d4ec3b..db0a08c447 100644
+--- a/gdal/frmts/sdts/sdtspolygonreader.cpp
++++ b/gdal/frmts/sdts/sdtspolygonreader.cpp
+@@ -90,9 +90,13 @@ int SDTSRawPolygon::Read( DDFRecord * poRecord )
+     for( int iField = 0; iField < poRecord->GetFieldCount(); iField++ )
+     {
+         DDFField        *poField = poRecord->GetField( iField );
+-        CPLAssert( poField != NULL );
++        if( poField == NULL )
++            return FALSE;
++        DDFFieldDefn* poFieldDefn = poField->GetFieldDefn();
++        if( poFieldDefn == NULL )
++            return FALSE;
+ 
+-        const char *pszFieldName = poField->GetFieldDefn()->GetName();
++        const char *pszFieldName = poFieldDefn->GetName();
+ 
+         if( EQUAL(pszFieldName,"POLY") )
+         {

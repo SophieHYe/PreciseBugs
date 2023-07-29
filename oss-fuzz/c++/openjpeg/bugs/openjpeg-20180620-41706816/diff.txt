@@ -1,0 +1,61 @@
+diff --git a/tests/nonregression/md5refs.txt b/tests/nonregression/md5refs.txt
+index 903566d6..a33e82a1 100644
+--- a/tests/nonregression/md5refs.txt
++++ b/tests/nonregression/md5refs.txt
+@@ -316,4 +316,5 @@ ac8f6ab3acc9c692ed7c41bd62a0e1e8  file1.jp2-c0-r1.tif
+ fbfcf662b6f7549574b2885490fbcf12  file1.jp2-c0-d10_20_30_40.tif
+ fa7382fd8b2e788b28b807e200dd95b9  file1.jp2-c0-t0.tif
+ ac8f6ab3acc9c692ed7c41bd62a0e1e8  file1.jp2-c0-t0-r1.tif
+-f31bcb01c771f829054cdb013575e86a  issue1043.png
+\ No newline at end of file
++f31bcb01c771f829054cdb013575e86a  issue1043.png
++62bc654c830efddf1b23d6e208447dab  tnsot_zero.png
+diff --git a/tests/nonregression/test_suite.ctest.in b/tests/nonregression/test_suite.ctest.in
+index 9fe4bc0b..4048a410 100644
+--- a/tests/nonregression/test_suite.ctest.in
++++ b/tests/nonregression/test_suite.ctest.in
+@@ -625,3 +625,8 @@ opj_decompress -i @INPUT_CONF_PATH@/file1.jp2 -o @TEMP_PATH@/file1.jp2-c0-t0-r1.
+ !opj_decompress -i @INPUT_CONF_PATH@/file1.jp2 -o @TEMP_PATH@/file1.jp2-c10.tif -c 10
+ 
+ opj_decompress -i @INPUT_NR_PATH@/db11217111510058.jp2 -o @TEMP_PATH@/issue1043.png
++
++opj_decompress -i @INPUT_NR_PATH@/tnsot_zero.jp2 -o @TEMP_PATH@/tnsot_zero.png
++
++# try to decompress file with repeated PPT marker
++!opj_decompress -i @INPUT_NR_PATH@/oss-fuzz2785.jp2 -o @TEMP_PATH@/oss-fuzz2785.png
+diff --git a/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.3-i386-Release-3rdP.txt b/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.3-i386-Release-3rdP.txt
+index 104a2afc..8e53a623 100644
+--- a/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.3-i386-Release-3rdP.txt
++++ b/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.3-i386-Release-3rdP.txt
+@@ -45,3 +45,4 @@ NR-DEC-kodak_2layers_lrcp.j2c-31-decode-md5
+ NR-DEC-kodak_2layers_lrcp.j2c-32-decode-md5
+ NR-DEC-issue135.j2k-68-decode-md5
+ NR-DEC-db11217111510058.jp2-306-decode-md5
++NR-DEC-tnsot_zero.jp2-307-decode-md5
+diff --git a/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.4-i386-Release-3rdP.txt b/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.4-i386-Release-3rdP.txt
+index 104a2afc..8e53a623 100644
+--- a/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.4-i386-Release-3rdP.txt
++++ b/tools/travis-ci/knownfailures-Ubuntu12.04-gcc4.6.4-i386-Release-3rdP.txt
+@@ -45,3 +45,4 @@ NR-DEC-kodak_2layers_lrcp.j2c-31-decode-md5
+ NR-DEC-kodak_2layers_lrcp.j2c-32-decode-md5
+ NR-DEC-issue135.j2k-68-decode-md5
+ NR-DEC-db11217111510058.jp2-306-decode-md5
++NR-DEC-tnsot_zero.jp2-307-decode-md5
+diff --git a/tools/travis-ci/knownfailures-Ubuntu14.04-gcc4.8.4-i386-Release-3rdP.txt b/tools/travis-ci/knownfailures-Ubuntu14.04-gcc4.8.4-i386-Release-3rdP.txt
+index 104a2afc..8e53a623 100644
+--- a/tools/travis-ci/knownfailures-Ubuntu14.04-gcc4.8.4-i386-Release-3rdP.txt
++++ b/tools/travis-ci/knownfailures-Ubuntu14.04-gcc4.8.4-i386-Release-3rdP.txt
+@@ -45,3 +45,4 @@ NR-DEC-kodak_2layers_lrcp.j2c-31-decode-md5
+ NR-DEC-kodak_2layers_lrcp.j2c-32-decode-md5
+ NR-DEC-issue135.j2k-68-decode-md5
+ NR-DEC-db11217111510058.jp2-306-decode-md5
++NR-DEC-tnsot_zero.jp2-307-decode-md5
+diff --git a/tools/travis-ci/knownfailures-windows-vs2010-x86-Release-3rdP.txt b/tools/travis-ci/knownfailures-windows-vs2010-x86-Release-3rdP.txt
+index 27235010..7850163c 100644
+--- a/tools/travis-ci/knownfailures-windows-vs2010-x86-Release-3rdP.txt
++++ b/tools/travis-ci/knownfailures-windows-vs2010-x86-Release-3rdP.txt
+@@ -43,3 +43,4 @@ NR-DEC-kodak_2layers_lrcp.j2c-31-decode-md5
+ NR-DEC-kodak_2layers_lrcp.j2c-32-decode-md5
+ NR-DEC-issue135.j2k-68-decode-md5
+ NR-DEC-db11217111510058.jp2-306-decode-md5
++NR-DEC-tnsot_zero.jp2-307-decode-md5

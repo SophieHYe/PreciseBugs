@@ -1,0 +1,1 @@
+commit 20100a1e0ef1c10d07b2eb8c10e5b52e01a364c7Author: Albert Astals Cid <aacid@kde.org>Date:   Fri Mar 1 23:32:33 2019 +0100    ras: fix crash on broken files        Replace QVector::operator[] with QVector::value() since we can't know for    sure the values will be on range so use value() that gives us a 0 if the    index is not on range        oss-fuzz/13462

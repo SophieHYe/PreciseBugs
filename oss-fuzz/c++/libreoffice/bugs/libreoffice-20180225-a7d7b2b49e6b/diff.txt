@@ -1,0 +1,13 @@
+diff --git a/vcl/workben/commonfuzzer.hxx b/vcl/workben/commonfuzzer.hxx
+index 05d35a4e1532..108bdb49da90 100644
+--- a/vcl/workben/commonfuzzer.hxx
++++ b/vcl/workben/commonfuzzer.hxx
+@@ -67,7 +67,7 @@ namespace
+             osl::FileBase::getSystemPathFromFileURL(execdir, sExecDir);
+ 
+             rtl::OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
+-            aBuffer.append(OUStringToOString(sExecDir + getExecutableName() + ".fonts", osl_getThreadTextEncoding());
++            aBuffer.append(OUStringToOString(sExecDir + getExecutableName() + ".fonts", osl_getThreadTextEncoding()));
+             aBuffer.append("</dir><cachedir>/tmp/cache/fontconfig</cachedir></fontconfig>");
+             rtl::OString aConf = aBuffer.makeStringAndClear();
+             sal_uInt64 aBytesWritten;

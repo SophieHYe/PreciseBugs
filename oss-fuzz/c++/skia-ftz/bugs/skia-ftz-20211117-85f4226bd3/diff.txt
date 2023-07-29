@@ -1,0 +1,113 @@
+diff --git a/resources/sksl/runtime_errors/IllegalShaderSampling.rts b/resources/sksl/runtime_errors/IllegalShaderSampling.rts
+index d36ba619fc..4083ba58fc 100644
+--- a/resources/sksl/runtime_errors/IllegalShaderSampling.rts
++++ b/resources/sksl/runtime_errors/IllegalShaderSampling.rts
+@@ -1,4 +1,4 @@
+-// Expect 12 errors
++// Expect 15 errors
+ 
+ uniform shader      s;
+ uniform colorFilter f;
+@@ -6,21 +6,25 @@ uniform blender     b;
+ 
+ uniform float2 xy;
+ uniform half4  color;
++int i;
+ 
+-half4 eval_shader_xy_color() { return s.eval(xy, color); }
+-half4 eval_shader_color()    { return s.eval(color); }
+-half4 eval_shader_color_xy() { return s.eval(color, xy); }
+-half4 eval_shader_empty()    { return s.eval(); }
+-half4 eval_shader_matrix()   { return s.eval(float3x3(1)); }
++half4 eval_shader_xy_color()   { return s.eval(xy, color); }
++half4 eval_shader_color()      { return s.eval(color); }
++half4 eval_shader_color_xy()   { return s.eval(color, xy); }
++half4 eval_shader_empty()      { return s.eval(); }
++half4 eval_shader_matrix()     { return s.eval(float3x3(1)); }
++half4 eval_shader_comma_expr() { return (i++, s).eval(xy); }
+ 
+-half4 eval_colorFilter_empty()    { return f.eval(); }
+-half4 eval_colorFilter_xy()       { return f.eval(xy); }
+-half4 eval_colorFilter_xy_color() { return f.eval(xy, color); }
++half4 eval_colorFilter_empty()      { return f.eval(); }
++half4 eval_colorFilter_xy()         { return f.eval(xy); }
++half4 eval_colorFilter_xy_color()   { return f.eval(xy, color); }
++half4 eval_colorFilter_comma_expr() { return (s, f).eval(color); }
+ 
+-half4 eval_blender_empty()    { return b.eval(); }
+-half4 eval_blender_color()    { return b.eval(color); }
+-half4 eval_blender_xy()       { return b.eval(xy); }
+-half4 eval_blender_xy_color() { return b.eval(xy, color); }
++half4 eval_blender_empty()      { return b.eval(); }
++half4 eval_blender_color()      { return b.eval(color); }
++half4 eval_blender_xy()         { return b.eval(xy); }
++half4 eval_blender_xy_color()   { return b.eval(xy, color); }
++half4 eval_blender_comma_expr() { return (b, b).eval(color, color); }
+ 
+ // Correct usage (EXPECT NO ERRORS)
+ 
+diff --git a/src/sksl/SkSLOperators.cpp b/src/sksl/SkSLOperators.cpp
+index 9796d08cc4..5daa1e9c89 100644
+--- a/src/sksl/SkSLOperators.cpp
++++ b/src/sksl/SkSLOperators.cpp
+@@ -289,6 +289,9 @@ bool Operator::determineBinaryType(const Context& context,
+                    right.canCoerceTo(*context.fTypes.fBool, allowNarrowing);
+ 
+         case Token::Kind::TK_COMMA:  // left, right
++            if (left.isOpaque() || right.isOpaque()) {
++                return false;
++            }
+             *outLeftType = &left;
+             *outRightType = &right;
+             *outResultType = &right;
+diff --git a/tests/sksl/errors/AssignmentTypeMismatch.glsl b/tests/sksl/errors/AssignmentTypeMismatch.glsl
+index ec59bdc924..fd0a7b1f8b 100644
+--- a/tests/sksl/errors/AssignmentTypeMismatch.glsl
++++ b/tests/sksl/errors/AssignmentTypeMismatch.glsl
+@@ -3,8 +3,8 @@
+ error: 1: expected 'int', but found 'float'
+ error: 2: type mismatch: '=' cannot operate on 'int', 'float'
+ error: 3: type mismatch: '*=' cannot operate on 'int3', 'float'
+-error: 4: expected '(' to begin function call
+-error: 5: expected '(' to begin constructor invocation
++error: 4: type mismatch: ',' cannot operate on '<INVALID>', 'int'
++error: 5: type mismatch: ',' cannot operate on '<INVALID>', 'int'
+ error: 6: expected '(' to begin function call
+ error: 7: expected '(' to begin constructor invocation
+ 7 errors
+diff --git a/tests/sksl/runtime_errors/IllegalShaderSampling.skvm b/tests/sksl/runtime_errors/IllegalShaderSampling.skvm
+index 84e0d7db46..2a6cb1526f 100644
+--- a/tests/sksl/runtime_errors/IllegalShaderSampling.skvm
++++ b/tests/sksl/runtime_errors/IllegalShaderSampling.skvm
+@@ -1,15 +1,18 @@
+ ### Compilation failed:
+ 
+-error: 10: no match for shader::eval(float2, half4)
+-error: 11: no match for shader::eval(half4)
+-error: 12: no match for shader::eval(half4, float2)
+-error: 13: no match for shader::eval()
+-error: 14: no match for shader::eval(float3x3)
+-error: 16: no match for colorFilter::eval()
+-error: 17: no match for colorFilter::eval(float2)
+-error: 18: no match for colorFilter::eval(float2, half4)
+-error: 20: no match for blender::eval()
+-error: 21: no match for blender::eval(half4)
+-error: 22: no match for blender::eval(float2)
+-error: 23: no match for blender::eval(float2, half4)
+-12 errors
++error: 11: no match for shader::eval(float2, half4)
++error: 12: no match for shader::eval(half4)
++error: 13: no match for shader::eval(half4, float2)
++error: 14: no match for shader::eval()
++error: 15: no match for shader::eval(float3x3)
++error: 16: type mismatch: ',' cannot operate on 'int', 'shader'
++error: 18: no match for colorFilter::eval()
++error: 19: no match for colorFilter::eval(float2)
++error: 20: no match for colorFilter::eval(float2, half4)
++error: 21: type mismatch: ',' cannot operate on 'shader', 'colorFilter'
++error: 23: no match for blender::eval()
++error: 24: no match for blender::eval(half4)
++error: 25: no match for blender::eval(float2)
++error: 26: no match for blender::eval(float2, half4)
++error: 27: type mismatch: ',' cannot operate on 'blender', 'blender'
++15 errors

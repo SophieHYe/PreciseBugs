@@ -1,0 +1,12 @@
+diff --git a/src/core/lib/security/security_connector/load_system_roots_linux.cc b/src/core/lib/security/security_connector/load_system_roots_linux.cc
+index 82d5bf6bcd..58831a6574 100644
+--- a/src/core/lib/security/security_connector/load_system_roots_linux.cc
++++ b/src/core/lib/security/security_connector/load_system_roots_linux.cc
+@@ -67,6 +67,7 @@ grpc_slice GetSystemRootCerts() {
+     if (error == GRPC_ERROR_NONE) {
+       return valid_bundle_slice;
+     }
++    GRPC_ERROR_UNREF(error);
+   }
+   return grpc_empty_slice();
+ }

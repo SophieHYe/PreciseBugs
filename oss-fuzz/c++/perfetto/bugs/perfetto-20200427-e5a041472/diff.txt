@@ -1,0 +1,70 @@
+diff --git a/src/trace_processor/importers/common/track_tracker.cc b/src/trace_processor/importers/common/track_tracker.cc
+index 7c1599d3f..6fffbdb4f 100644
+--- a/src/trace_processor/importers/common/track_tracker.cc
++++ b/src/trace_processor/importers/common/track_tracker.cc
+@@ -478,8 +478,20 @@ TrackId TrackTracker::ResolveDescriptorTrack(
+     // The global track with no uuid is the default global track (e.g. for
+     // global instant events). Any other global tracks are considered children
+     // of the default track.
+-    if (!parent_track_id && uuid)
+-      parent_track_id = GetOrCreateDefaultDescriptorTrack();
++    if (!parent_track_id && uuid) {
++      // Detect loops where the default track has a parent that itself is a
++      // global track (and thus should be parent of the default track).
++      if (descendent_uuids &&
++          std::find(descendent_uuids->begin(), descendent_uuids->end(),
++                    kDefaultDescriptorTrackUuid) != descendent_uuids->end()) {
++        PERFETTO_ELOG(
++            "Loop detected in parent_track_uuid hierarchy at track %" PRIu64
++            " with parent %" PRIu64,
++            uuid, kDefaultDescriptorTrackUuid);
++      } else {
++        parent_track_id = GetOrCreateDefaultDescriptorTrack();
++      }
++    }
+   }
+ 
+   auto args = context_->args_tracker->AddArgsTo(*track_id);
+diff --git a/src/trace_processor/trace_database_integrationtest.cc b/src/trace_processor/trace_database_integrationtest.cc
+index 69ee26170..6803fc7f2 100644
+--- a/src/trace_processor/trace_database_integrationtest.cc
++++ b/src/trace_processor/trace_database_integrationtest.cc
+@@ -224,10 +224,12 @@ TEST_F(TraceProcessorIntegrationTest, Clusterfuzz17805) {
+ #define MAYBE_Clusterfuzz20215 DISABLED_Clusterfuzz20215
+ #define MAYBE_Clusterfuzz20292 DISABLED_Clusterfuzz20292
+ #define MAYBE_Clusterfuzz21178 DISABLED_Clusterfuzz21178
++#define MAYBE_Clusterfuzz21890 DISABLED_Clusterfuzz21890
+ #else  // PERFETTO_DCHECK_IS_ON()
+ #define MAYBE_Clusterfuzz20215 Clusterfuzz20215
+ #define MAYBE_Clusterfuzz20292 Clusterfuzz20292
+ #define MAYBE_Clusterfuzz21178 Clusterfuzz21178
++#define MAYBE_Clusterfuzz21890 Clusterfuzz21890
+ #endif  // PERFETTO_DCHECK_IS_ON()
+ 
+ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz20215) {
+@@ -242,6 +244,10 @@ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz21178) {
+   ASSERT_TRUE(LoadTrace("clusterfuzz_21178", 4096).ok());
+ }
+ 
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz21890) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_21890", 4096).ok());
++}
++
+ TEST_F(TraceProcessorIntegrationTest, RestoreInitialTables) {
+   ASSERT_TRUE(LoadTrace("android_sched_and_ps.pb").ok());
+ 
+diff --git a/tools/install-build-deps b/tools/install-build-deps
+index 5881320a0..b189463c4 100755
+--- a/tools/install-build-deps
++++ b/tools/install-build-deps
+@@ -146,8 +146,8 @@ BUILD_DEPS_HOST = [
+     # Example traces for regression tests.
+     (
+         'buildtools/test_data.zip',
+-        'https://storage.googleapis.com/perfetto/test-data-20200423-125929.zip',
+-        'b07767114b1854a00e372c2c910429077def0fa2',
++        'https://storage.googleapis.com/perfetto/test-data-20200427-094919.zip',
++        'e003d49ef3d31a939ac75b0bbb6ca5eed4e759f9',
+         'all',
+     ),
+ 

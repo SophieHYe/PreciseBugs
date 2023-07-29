@@ -1,0 +1,26 @@
+diff --git a/glib/gdatetime.c b/glib/gdatetime.c
+index 6a99dac8e..4557e3c76 100644
+--- a/glib/gdatetime.c
++++ b/glib/gdatetime.c
+@@ -1220,6 +1220,8 @@ g_date_time_new_ordinal (GTimeZone *tz, gint year, gint ordinal_day, gint hour,
+     return NULL;
+ 
+   dt = g_date_time_new (tz, year, 1, 1, hour, minute, seconds);
++  if (dt == NULL)
++    return NULL;
+   dt->days += ordinal_day - 1;
+ 
+   return dt;
+diff --git a/glib/tests/gdatetime.c b/glib/tests/gdatetime.c
+index 23d83b7d0..d148cf528 100644
+--- a/glib/tests/gdatetime.c
++++ b/glib/tests/gdatetime.c
+@@ -866,6 +866,8 @@ test_GDateTime_new_from_iso8601_2 (void)
+     { TRUE, "+1980-02-22T12:36:00+02:00", 1980, 2, 22, 12, 36, 0, 0, 2 * G_TIME_SPAN_HOUR },
+     { TRUE, "1990-11-01T10:21:17     ", 1990, 11, 1, 10, 21, 17, 0, 0 },
+     */
++    { FALSE, "1719W462 407777-07", 0, 0, 0, 0, 0, 0, 0, 0 },
++    { FALSE, "4011090 260528Z", 0, 0, 0, 0, 0, 0, 0, 0 },
+   };
+   GTimeZone *tz = NULL;
+   GDateTime *dt = NULL;

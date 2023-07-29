@@ -1,0 +1,12 @@
+diff --git a/poppler/Function.cc b/poppler/Function.cc
+index 71992d95..cc32414b 100644
+--- a/poppler/Function.cc
++++ b/poppler/Function.cc
+@@ -1303,6 +1303,7 @@ GBool PostScriptFunction::parseCode(Stream *str, int *codePtr) {
+       if (!tok->cmp("{")) {
+ 	elsePtr = *codePtr;
+ 	if (!parseCode(str, codePtr)) {
++	  delete tok;
+ 	  return gFalse;
+ 	}
+ 	delete tok;

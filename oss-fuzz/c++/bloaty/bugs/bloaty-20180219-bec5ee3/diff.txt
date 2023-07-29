@@ -1,0 +1,112 @@
+diff --git a/src/range_map.cc b/src/range_map.cc
+index 11fbdb1..8b13dbc 100644
+--- a/src/range_map.cc
++++ b/src/range_map.cc
+@@ -234,7 +234,7 @@ bool RangeMap::AddRangeWithTranslation(uint64_t addr, uint64_t size,
+                                        RangeMap* other) {
+   AddRange(addr, size, val);
+ 
+-  auto it = translator.FindContainingOrAfter(addr);
++  auto it = translator.FindContaining(addr);
+   uint64_t end;
+   if (size == kUnknownSize) {
+     end = addr + 1;
+@@ -268,6 +268,7 @@ bool RangeMap::AddRangeWithTranslation(uint64_t addr, uint64_t size,
+ bool RangeMap::CoversRange(uint64_t addr, uint64_t size) const {
+   auto it = FindContaining(addr);
+   uint64_t end = addr + size;
++  assert(end >= addr);
+ 
+   while (true) {
+     if (addr >= end) {
+diff --git a/src/range_map.h b/src/range_map.h
+index 1eed8dc..1153545 100644
+--- a/src/range_map.h
++++ b/src/range_map.h
+@@ -66,7 +66,9 @@ class RangeMap {
+   //
+   // Returns true if the entire range [addr, size] was present in the
+   // |translator| map.  (This does not necessarily mean that every part of the
+-  // range was actually translated).
++  // range was actually translated).  If the return value is false, then the
++  // contents of |this| and |other| are undefined (Bloaty will bail in this
++  // case).
+   bool AddRangeWithTranslation(uint64_t addr, uint64_t size,
+                                const std::string& val,
+                                const RangeMap& translator, RangeMap* other);
+@@ -302,7 +304,7 @@ void RangeMap::ComputeRollup(const std::vector<const RangeMap*>& range_maps,
+           throw std::runtime_error("No more ranges.");
+         } else if (iters[i]->first != current) {
+           printf(
+-              "Error, range (%s) doesn't cover the beginning of base range "
++              "Error, range (%s) doesn't match the beginning of base range "
+               "(%s)\n",
+               range_maps[i]->EntryDebugString(iters[i]).c_str(),
+               range_maps[0]->EntryDebugString(iters[0]).c_str());
+diff --git a/tests/range_map_test.cc b/tests/range_map_test.cc
+index c88a6c8..565d14d 100644
+--- a/tests/range_map_test.cc
++++ b/tests/range_map_test.cc
+@@ -284,25 +284,40 @@ TEST_F(RangeMapTest, Translation) {
+     {20, 25, 120, "foo"}
+   });
+ 
+-  map2_.AddRangeWithTranslation(15, 15, "translate me", map_, &map3_);
++  ASSERT_TRUE(
++      map2_.AddRangeWithTranslation(20, 5, "translate me", map_, &map3_));
++
+   CheckConsistency();
+   AssertMapEquals(map2_, {
+-    {15, 30, kNoTranslation, "translate me"}
++    {20, 25, kNoTranslation, "translate me"}
+   });
+   AssertMapEquals(map3_, {
+     {120, 125, kNoTranslation, "translate me"}
+   });
+ 
+   map_.AddDualRange(1000, 30, 1100, "bar");
+-  map2_.AddRangeWithTranslation(1000, 5, "translate me2", map_, &map3_);
++  ASSERT_TRUE(
++      map2_.AddRangeWithTranslation(1000, 5, "translate me2", map_, &map3_));
+   AssertMapEquals(map2_, {
+-    {15, 30, kNoTranslation, "translate me"},
++    {20, 25, kNoTranslation, "translate me"},
+     {1000, 1005, kNoTranslation, "translate me2"}
+   });
+   AssertMapEquals(map3_, {
+     {120, 125, kNoTranslation, "translate me"},
+     {1100, 1105, kNoTranslation, "translate me2"}
+   });
++
++  // Starts before base map.
++  ASSERT_FALSE(
++      map2_.AddRangeWithTranslation(15, 8, "translate me", map_, &map3_));
++
++  // Extends past base map.
++  ASSERT_FALSE(
++      map2_.AddRangeWithTranslation(22, 15, "translate me", map_, &map3_));
++
++  // Starts and ends in base map, but skips range in the middle.
++  ASSERT_FALSE(
++      map2_.AddRangeWithTranslation(20, 1000, "translate me", map_, &map3_));
+ }
+ 
+ TEST_F(RangeMapTest, Translation2) {
+@@ -318,10 +333,11 @@ TEST_F(RangeMapTest, Translation2) {
+     {30, 35, 130, "quux"}
+   });
+ 
+-  map2_.AddRangeWithTranslation(0, 50, "translate me", map_, &map3_);
++  ASSERT_TRUE(
++      map2_.AddRangeWithTranslation(20, 15, "translate me", map_, &map3_));
+   CheckConsistency();
+   AssertMapEquals(map2_, {
+-    {0, 50, kNoTranslation, "translate me"}
++    {20, 35, kNoTranslation, "translate me"}
+   });
+   AssertMapEquals(map3_, {
+     {120, 125, kNoTranslation, "translate me"},
+diff --git a/tests/testdata/fuzz_corpus/a4da3e6bc07539aece56d12b2e15b89edd842fd8 b/tests/testdata/fuzz_corpus/a4da3e6bc07539aece56d12b2e15b89edd842fd8
+new file mode 100644
+index 0000000..03ddc04
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/a4da3e6bc07539aece56d12b2e15b89edd842fd8 differ

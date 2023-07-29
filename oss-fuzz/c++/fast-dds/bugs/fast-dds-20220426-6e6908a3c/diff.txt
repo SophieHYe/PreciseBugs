@@ -1,0 +1,45 @@
+diff --git a/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp b/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
+index 6f8421d67..20570fe71 100644
+--- a/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
++++ b/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
+@@ -341,9 +341,17 @@ XMLP_ret XMLParser::parseXMLAliasDynamicType(
+         if (valueBuilder != nullptr)
+         {
+             const char* name = p_root->Attribute(NAME);
+-            p_dynamictypebuilder_t typeBuilder =
+-                    types::DynamicTypeBuilderFactory::get_instance()->create_alias_builder(valueBuilder, name);
+-            XMLProfileManager::insertDynamicTypeByName(name, typeBuilder);
++            if (name != nullptr)
++            {
++                p_dynamictypebuilder_t typeBuilder =
++                        types::DynamicTypeBuilderFactory::get_instance()->create_alias_builder(valueBuilder, name);
++                XMLProfileManager::insertDynamicTypeByName(name, typeBuilder);
++            }
++            else
++            {
++                logError(XMLPARSER, "Error parsing alias type: No name attribute given.");
++                ret = XMLP_ret::XML_ERROR;
++            }
+         }
+         else
+         {
+diff --git a/test/unittest/xmlparser/XMLParserTests.cpp b/test/unittest/xmlparser/XMLParserTests.cpp
+index 4fe21ca76..90ff91469 100644
+--- a/test/unittest/xmlparser/XMLParserTests.cpp
++++ b/test/unittest/xmlparser/XMLParserTests.cpp
+@@ -57,6 +57,7 @@ TEST_F(XMLParserTests, regressions)
+     EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/12736.xml", root));
+     EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/13418.xml", root));
+     EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/13454.xml", root));
++    EXPECT_EQ(XMLP_ret::XML_ERROR, XMLParser::loadXML("regressions/13513.xml", root));
+ }
+ 
+ TEST_F(XMLParserTests, NoFile)
+diff --git a/test/unittest/xmlparser/regressions/13513.xml b/test/unittest/xmlparser/regressions/13513.xml
+new file mode 100644
+index 000000000..dbedd3df8
+--- /dev/null
++++ b/test/unittest/xmlparser/regressions/13513.xml
+@@ -0,0 +1 @@
++<types><type><typedef type="int8"/></type></types>
+\ No newline at end of file

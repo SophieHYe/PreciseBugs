@@ -1,0 +1,183 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index b716946970..7e68a5104a 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -763,6 +763,7 @@ sksl_rte_tests = [
+   "/sksl/runtime/LoopInt.rts",
+   "/sksl/runtime/MultipleCallsInOneStatement.rts",
+   "/sksl/runtime/PrecisionQualifiers.rts",
++  "/sksl/runtime/Ossfuzz52603.rts",
+   "/sksl/runtime/QualifierOrder.rts",
+   "/sksl/runtime/RecursiveComparison_Arrays.rts",
+   "/sksl/runtime/RecursiveComparison_Structs.rts",
+diff --git a/resources/sksl/runtime/Ossfuzz52603.rts b/resources/sksl/runtime/Ossfuzz52603.rts
+new file mode 100644
+index 0000000000..7c5c51b806
+--- /dev/null
++++ b/resources/sksl/runtime/Ossfuzz52603.rts
+@@ -0,0 +1,3 @@
++uniform half4 colorGreen;
++struct S {int f;} sk_FragColor;
++half4 main(float2) { return colorGreen; }
+diff --git a/src/sksl/ir/SkSLSymbolTable.cpp b/src/sksl/ir/SkSLSymbolTable.cpp
+index 25b45bdcd9..e8771c9560 100644
+--- a/src/sksl/ir/SkSLSymbolTable.cpp
++++ b/src/sksl/ir/SkSLSymbolTable.cpp
+@@ -25,6 +25,13 @@ bool SymbolTable::isBuiltinType(std::string_view name) const {
+     return this->isType(name);
+ }
+ 
++const Symbol* SymbolTable::findBuiltinSymbol(std::string_view name) const {
++    if (!this->isBuiltin()) {
++        return fParent ? fParent->findBuiltinSymbol(name) : nullptr;
++    }
++    return this->find(name);
++}
++
+ Symbol* SymbolTable::lookup(const SymbolKey& key) const {
+     Symbol** symbolPPtr = fSymbols.find(key);
+     if (symbolPPtr) {
+diff --git a/src/sksl/ir/SkSLSymbolTable.h b/src/sksl/ir/SkSLSymbolTable.h
+index dab20ac53a..0bcfbb178c 100644
+--- a/src/sksl/ir/SkSLSymbolTable.h
++++ b/src/sksl/ir/SkSLSymbolTable.h
+@@ -77,6 +77,11 @@ public:
+         return this->lookup(MakeSymbolKey(name));
+     }
+ 
++    /**
++     * Looks up the requested symbol, only searching the built-in symbol tables. Always const.
++     */
++    const Symbol* findBuiltinSymbol(std::string_view name) const;
++
+     /**
+      * Looks up the requested symbol and returns a mutable pointer. Use caution--mutating a symbol
+      * will have program-wide impact, and built-in symbol tables must never be mutated.
+diff --git a/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp b/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp
+index da75205125..3dc0685691 100644
+--- a/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp
++++ b/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp
+@@ -5,6 +5,7 @@
+  * found in the LICENSE file.
+  */
+ 
++#include "include/core/SkSpan.h"
+ #include "include/core/SkTypes.h"
+ #include "include/private/SkSLLayout.h"
+ #include "include/private/SkSLModifiers.h"
+@@ -17,7 +18,6 @@
+ #include "src/sksl/SkSLProgramSettings.h"
+ #include "src/sksl/SkSLUtil.h"
+ #include "src/sksl/analysis/SkSLProgramUsage.h"
+-#include "src/sksl/analysis/SkSLProgramVisitor.h"
+ #include "src/sksl/ir/SkSLFunctionDeclaration.h"
+ #include "src/sksl/ir/SkSLFunctionDefinition.h"
+ #include "src/sksl/ir/SkSLInterfaceBlock.h"
+@@ -37,7 +37,7 @@ namespace SkSL {
+ namespace Transform {
+ namespace {
+ 
+-class BuiltinVariableScanner : public ProgramVisitor {
++class BuiltinVariableScanner {
+ public:
+     BuiltinVariableScanner(const Context& context, const SymbolTable& symbols)
+             : fContext(context)
+@@ -69,21 +69,22 @@ public:
+         }
+     }
+ 
+-    bool visitProgramElement(const ProgramElement& pe) override {
+-        if (pe.is<FunctionDefinition>()) {
+-            const FunctionDefinition& funcDef = pe.as<FunctionDefinition>();
+-            // We synthesize writes to sk_FragColor if main() returns a color, even if it's
+-            // otherwise unreferenced. Check main's return type to see if it's half4.
++    void addImplicitFragColorWrite(SkSpan<const std::unique_ptr<ProgramElement>> elements) {
++        for (const std::unique_ptr<ProgramElement>& pe : elements) {
++            if (!pe->is<FunctionDefinition>()) {
++                continue;
++            }
++            const FunctionDefinition& funcDef = pe->as<FunctionDefinition>();
+             if (funcDef.declaration().isMain()) {
+                 if (funcDef.declaration().returnType().matches(*fContext.fTypes.fHalf4)) {
+-                    // main() returns a half4, so make sure we include sk_FragColor in the output.
+-                    this->addDeclaringElement(fSymbols.find(Compiler::FRAGCOLOR_NAME));
++                    // We synthesize writes to sk_FragColor if main() returns a color, even if it's
++                    // otherwise unreferenced.
++                    this->addDeclaringElement(fSymbols.findBuiltinSymbol(Compiler::FRAGCOLOR_NAME));
+                 }
+-                // Once we find main(), we can stop scanning.
+-                return true;
++                // Now that main() has been found, we can stop scanning.
++                break;
+             }
+         }
+-        return false;
+     }
+ 
+     static std::string_view GlobalVarBuiltinName(const ProgramElement& elem) {
+@@ -128,16 +129,15 @@ void FindAndDeclareBuiltinVariables(Program& program) {
+     const SymbolTable& symbols = *program.fSymbols;
+     BuiltinVariableScanner scanner(context, symbols);
+ 
+-    // Find main() in the program and check its return type.
+-    for (auto& e : program.fOwnedElements) {
+-        scanner.visitProgramElement(*e);
+-    }
+-
+     if (ProgramConfig::IsFragment(program.fConfig->fKind)) {
++        // Find main() in the program and check its return type.
++        // If it's half4, we treat that as an implicit write to sk_FragColor and add a reference.
++        scanner.addImplicitFragColorWrite(program.fOwnedElements);
++
+         // Vulkan requires certain builtin variables be present, even if they're unused. At one
+         // time, validation errors would result if sk_Clockwise was missing. Now, it's just (Adreno)
+         // driver bugs that drop or corrupt draws if they're missing.
+-        scanner.addDeclaringElement(symbols.find("sk_Clockwise"));
++        scanner.addDeclaringElement(symbols.findBuiltinSymbol("sk_Clockwise"));
+     }
+ 
+     // Scan all the variables used by the program and declare any built-ins.
+diff --git a/tests/SkSLTest.cpp b/tests/SkSLTest.cpp
+index 865d1bfb3e..01ce1e4f55 100644
+--- a/tests/SkSLTest.cpp
++++ b/tests/SkSLTest.cpp
+@@ -437,6 +437,7 @@ SKSL_TEST(GPU_ES3,   kNever,      IntrinsicUintBitsToFloat,        "intrinsics/U
+ SKSL_TEST(GPU_ES3,   kNever,      ArrayNarrowingConversions,       "runtime/ArrayNarrowingConversions.rts")
+ SKSL_TEST(CPU + GPU, kApiLevel_T, LoopFloat,                       "runtime/LoopFloat.rts")
+ SKSL_TEST(CPU + GPU, kApiLevel_T, LoopInt,                         "runtime/LoopInt.rts")
++SKSL_TEST(CPU + GPU, kApiLevel_T, Ossfuzz52603,                    "runtime/Ossfuzz52603.rts")
+ SKSL_TEST(CPU + GPU, kApiLevel_T, QualifierOrder,                  "runtime/QualifierOrder.rts")
+ SKSL_TEST(CPU + GPU, kApiLevel_T, PrecisionQualifiers,             "runtime/PrecisionQualifiers.rts")
+ 
+diff --git a/tests/sksl/runtime/Ossfuzz52603.skvm b/tests/sksl/runtime/Ossfuzz52603.skvm
+new file mode 100644
+index 0000000000..8f00020f87
+--- /dev/null
++++ b/tests/sksl/runtime/Ossfuzz52603.skvm
+@@ -0,0 +1,10 @@
++4 registers, 8 instructions:
++0	r0 = uniform32 ptr0 4
++1	r1 = uniform32 ptr0 8
++2	r2 = uniform32 ptr0 C
++3	r3 = uniform32 ptr0 10
++loop:
++4	    store32 ptr1 r0
++5	    store32 ptr2 r1
++6	    store32 ptr3 r2
++7	    store32 ptr4 r3
+diff --git a/tests/sksl/runtime/Ossfuzz52603.stage b/tests/sksl/runtime/Ossfuzz52603.stage
+new file mode 100644
+index 0000000000..216b99edd7
+--- /dev/null
++++ b/tests/sksl/runtime/Ossfuzz52603.stage
+@@ -0,0 +1,10 @@
++uniform half4 colorGreen;
++struct S_0 
++{
++	int f;
++}
++;
++half4 main(float2 )
++{
++	return half4(colorGreen);
++}

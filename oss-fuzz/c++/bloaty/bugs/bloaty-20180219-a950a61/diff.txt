@@ -1,0 +1,19 @@
+diff --git a/src/dwarf.cc b/src/dwarf.cc
+index 3b7a4a3..601ebaa 100644
+--- a/src/dwarf.cc
++++ b/src/dwarf.cc
+@@ -1090,6 +1090,10 @@ void LineInfoReader::SeekToOffset(uint64_t offset, uint8_t address_size) {
+   params_.minimum_instruction_length = ReadMemcpy<uint8_t>(&data);
+   if (version == 4) {
+     params_.maximum_operations_per_instruction = ReadMemcpy<uint8_t>(&data);
++
++    if (params_.maximum_operations_per_instruction == 0) {
++      THROW("DWARF line info had maximum_operations_per_instruction=0");
++    }
+   } else {
+     params_.maximum_operations_per_instruction = 1;
+   }
+diff --git a/tests/testdata/fuzz_corpus/6b45a7d45ef354eb2d549918a804abc1e6d42d05 b/tests/testdata/fuzz_corpus/6b45a7d45ef354eb2d549918a804abc1e6d42d05
+new file mode 100644
+index 0000000..9ded4ca
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/6b45a7d45ef354eb2d549918a804abc1e6d42d05 differ

@@ -1,0 +1,14 @@
+diff --git a/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp b/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
+index 5b9c5d6e7f..5c4e752f00 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
+@@ -104,7 +104,8 @@ void MetadataSegment::Load()
+ /* -------------------------------------------------------------------- */
+     CheckFileBigEnough( data_size );
+ 
+-    seg_data.SetSize( (int) (data_size - 1024) );
++    // data_size < 1024 will throw an exception in SetSize()
++    seg_data.SetSize( data_size < 1024 ? -1 : (int) (data_size - 1024) );
+ 
+     ReadFromFile( seg_data.buffer, 0, data_size - 1024 );
+ 

@@ -1,0 +1,13 @@
+diff --git a/libavcodec/gsmdec_template.c b/libavcodec/gsmdec_template.c
+index 9b3c0e9719..4e40a20106 100644
+--- a/libavcodec/gsmdec_template.c
++++ b/libavcodec/gsmdec_template.c
+@@ -41,7 +41,7 @@ static void apcm_dequant_add(GetBitContext *gb, int16_t *dst, const int *frame_b
+ 
+ static inline int gsm_mult(int a, int b)
+ {
+-    return (a * b + (1 << 14)) >> 15;
++    return (int)(a * (SUINT)b + (1 << 14)) >> 15;
+ }
+ 
+ static void long_term_synth(int16_t *dst, int lag, int gain_idx)

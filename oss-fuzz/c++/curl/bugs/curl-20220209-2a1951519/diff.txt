@@ -1,0 +1,12 @@
+diff --git a/lib/http2.c b/lib/http2.c
+index be7c24b46..26ab2aa81 100644
+--- a/lib/http2.c
++++ b/lib/http2.c
+@@ -1922,6 +1922,7 @@ static ssize_t http2_send(struct Curl_easy *data, int sockindex,
+       nva[i].namelen = hreq->header[i].namelen;
+       nva[i].value = (unsigned char *)hreq->header[i].value;
+       nva[i].valuelen = hreq->header[i].valuelen;
++      nva[i].flags = NGHTTP2_NV_FLAG_NONE;
+     }
+     Curl_pseudo_free(hreq);
+   }

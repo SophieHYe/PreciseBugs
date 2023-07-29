@@ -1,0 +1,18 @@
+diff --git a/src/elf.cc b/src/elf.cc
+index 55172a7..e39ad12 100644
+--- a/src/elf.cc
++++ b/src/elf.cc
+@@ -784,6 +784,9 @@ void ForEachElf(const InputFile& file, RangeSink* sink, Func func) {
+ // - 40 bits for address (up to 1TB section)
+ static uint64_t ToVMAddr(size_t addr, long ndx, bool is_object) {
+   if (is_object) {
++    if (ndx >= 1 << 24) {
++      THROW("ndx overflow: too many sections");
++    }
+     return (ndx << 40) | addr;
+   } else {
+     return addr;
+diff --git a/tests/testdata/fuzz_corpus/clusterfuzz-testcase-minimized-fuzz_target-5711765729443840 b/tests/testdata/fuzz_corpus/clusterfuzz-testcase-minimized-fuzz_target-5711765729443840
+new file mode 100644
+index 0000000..b35085d
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/clusterfuzz-testcase-minimized-fuzz_target-5711765729443840 differ

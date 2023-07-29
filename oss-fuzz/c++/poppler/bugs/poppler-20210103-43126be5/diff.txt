@@ -1,0 +1,12 @@
+diff --git a/poppler/PSOutputDev.cc b/poppler/PSOutputDev.cc
+index 19c1960f..9e88e32c 100644
+--- a/poppler/PSOutputDev.cc
++++ b/poppler/PSOutputDev.cc
+@@ -1541,6 +1541,7 @@ PSOutputDev::~PSOutputDev()
+         delete cc;
+     }
+     gfree(psTitle);
++    delete t3String;
+ }
+ 
+ void PSOutputDev::writeHeader(int nPages, const PDFRectangle *mediaBox, const PDFRectangle *cropBox, int pageRotate, const char *title)

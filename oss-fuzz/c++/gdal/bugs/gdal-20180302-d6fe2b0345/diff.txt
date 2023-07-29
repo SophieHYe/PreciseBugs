@@ -1,0 +1,14 @@
+diff --git a/gdal/ogr/ogrsf_frmts/avc/avc_e00parse.cpp b/gdal/ogr/ogrsf_frmts/avc/avc_e00parse.cpp
+index cb4caee40e..902b16cacf 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/avc_e00parse.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/avc_e00parse.cpp
+@@ -1670,7 +1670,8 @@ AVCTxt   *AVCE00ParseNextTx6Line(AVCE00ParseInfo *psInfo, const char *pszLine)
+ 
+         psInfo->iCurItem++;
+     }
+-    else if (psInfo->iCurItem < psInfo->numItems)
++    else if (psInfo->iCurItem < psInfo->numItems &&
++             (psTxt->numChars-1)/80 + 1 - (psInfo->numItems - psInfo->iCurItem) >= 0 )
+     {
+         /*-------------------------------------------------------------
+          * Last line, contains the text string

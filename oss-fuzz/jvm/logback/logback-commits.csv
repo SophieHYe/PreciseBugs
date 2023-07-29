@@ -1,0 +1,707 @@
+b'9c318804c	5ceb7c525	Sun Jul 23 11:33:41 2023 +0200	Change LoggerContet to use MDCAdapter instead of LogbackMDCAdapter , partial fix for LOGBACK-1756
+5ceb7c525	be5afc288	Sun Jul 23 11:27:03 2023 +0200	[LOGBACK-1754] fixed use of CountDownLatch
+5105d7a4f	457a64c64	Fri Jul 7 23:46:19 2023 +0200	add support for throwable cause and suppressed[] in JsonEncoder, this fixes LOGBACK-1749
+457a64c64	4e069d34d	Fri Jul 7 17:12:49 2023 +0200	fix prudent mode OverlappingFileLockException, LOGBACK-1754
+4e069d34d	3ef4f12e8	Fri Jun 30 20:41:36 2023 +0200	fix java doc for TTLLLayout as requested in github discussions/685
+3ef4f12e8	34e8fcbf2	Fri Jun 30 14:14:38 2023 +0200	Compressor.gzCompress() log msg fix
+ca7fbc7f4	9e833ec85	Sun May 21 23:31:50 2023 +0200	link logbackMDCAdapter in LoggerContext, fixes LOGBACK-1742
+f7ae80255	f93f3bbe6	Tue May 2 10:30:33 2023 +0200	fix LOGBACK-1737
+5f4b9feff	d378e8b6f	Mon Apr 17 19:58:39 2023 +0200	fix LOGBACK-1716 by adding a ThreadPoolExecutor in addition to the ScheduledExecutor in Context interface
+5ac98f440	fccf9e6d5	Thu Mar 23 17:16:26 2023 +0100	Fix LOGBACK-1729: Add OSGi S.L.M. entries to load logback Configurators
+fccf9e6d5	ad88c19f9	Thu Mar 23 14:43:48 2023 +0100	Fix LOGBACK-1728: Incorrect OSGi execution-environment requirements
+4fb013810	bba7a908c	Wed Mar 8 20:19:51 2023 +0100	tentative fix for LOGBACK-1713
+bba7a908c	4d9380032	Sun Dec 11 22:17:42 2022 +0100	fix LOGBACK-1712
+0323cef98	06df6ea78	Sat Dec 3 22:54:32 2022 +0100	attempt at fixing LOGBACK-1711
+db0488f97	0b07a4b35	Thu Dec 1 22:45:50 2022 +0100	fix typo
+dd2b9fe93	555025461	Thu Dec 1 22:30:53 2022 +0100	fix intermittently failing ReconfigureOnChangeTaskTest
+46b1d96df	29f33f81c	Tue Nov 29 18:22:57 2022 +0100	fix LOGBACK-302/1696
+29f33f81c	4e6b40828	Tue Nov 29 18:21:26 2022 +0100	fix LOGBACK-302/1696
+4e6b40828	5fbf5ee5e	Tue Nov 29 17:50:36 2022 +0100	fix failing regex
+0d3ac6311	a64b8d43b	Fri Nov 18 21:46:59 2022 +0100	fix LOGBACK-1698, [Nested appenders are not allowed] warning using SiftingAppender
+1df66621e	ea165fb02	Fri Nov 18 18:19:20 2022 +0100	fix LOGBACK-1706
+ea165fb02	9e07bd075	Sat Oct 29 18:45:37 2022 +0200	fix LOGBACK-1703
+9e07bd075	a871e9f1b	Sat Oct 29 18:02:22 2022 +0200	fix LOGBACK-1703
+9b3b80056	ba5eb23a3	Fri Oct 7 20:11:39 2022 +0200	fix LOGBACK-1695
+0c789139c	4082b4504	Fri Oct 7 13:42:12 2022 +0200	fix LOGBACK-1693
+b2476240c	6f588feb2	Sun Oct 2 23:51:33 2022 +0200	fix LOGBACK-LOGBACK-1690
+fc78b867a	967d736f7	Sun Oct 2 21:00:47 2022 +0200	fix LOGBACK-1689
+7e3e2ae77	fb40ec089	Mon Sep 26 20:21:52 2022 +0200	fix LOGBACK-1684 using code from LOGBACK-620
+1885da5a9	717ce7128	Fri Sep 16 19:21:30 2022 +0200	fix LOGBACK-1673
+717ce7128	708c6b182	Thu Sep 15 16:10:37 2022 +0200	fix LOGBACK-1672 and LOGBACK-1678
+32a3172e3	2c53e09a2	Tue Sep 13 22:34:27 2022 +0200	fix LOGBACK-LOGBACK-1670, use Class.getModule to obtain versio info under JMPS
+2c53e09a2	e83403e15	Tue Sep 13 17:24:15 2022 +0200	start work on 1.4.1-SNAPSHOT, fix  LOGBACK-1675
+255af5a68	d2c40441f	Mon Aug 22 22:06:05 2022 +0200	fix sequenceNumberGeneration
+d2c40441f	70eb96eac	Mon Aug 22 20:34:48 2022 +0200	fix LOGBACK-1667
+ac823dbc7	475281b3d	Mon Aug 22 10:23:53 2022 -0400	Fix LOGBACK-1409 FileFilterUtil performance
+a73ec1277	09899076a	Sun Aug 21 22:17:51 2022 +0200	fix line number
+f29c8da9f	7606a8814	Sun Aug 21 21:40:30 2022 +0200	fix compilation issues
+f1fb809b0	bee4757dd	Thu Aug 18 23:10:33 2022 +0200	revert to javax instead of jakarta for mail and servlet APIs, fixing LOGBACK-1665 LOGBACK-1666
+d0dcec81c	8f1de6162	Thu Aug 18 16:36:15 2022 +0200	fix LOGBACK-1657 LOGBACK-1656 LOGBACK-1661
+8f1de6162	fa3de6930	Thu Aug 18 15:28:17 2022 +0200	fix LOGBACK-1659
+fa3de6930	8de4c2d1b	Thu Aug 11 21:41:15 2022 +0200	fix LOGBACK-1655
+339bcc5c7	baa237f28	Tue Aug 9 19:55:00 2022 +0200	fix LOGBACK-1644
+19999ef04	fb3032e1b	Mon Aug 8 23:33:32 2022 +0200	fix LOGBACK-1652
+fb3032e1b	db3ec30fa	Mon Aug 8 22:59:45 2022 +0200	fix LOGBACK-1651
+db3ec30fa	f55029ab4	Mon Aug 8 00:06:32 2022 +0200	fix LOGBACK-1650
+f55029ab4	1323e8eb0	Sun Aug 7 22:47:29 2022 +0200	fix fuzz-47093 by remove use of backslash escaping
+7c0b3a3f3	5f37b319d e17e3f53d	Thu Jul 21 17:13:20 2022 +0200	Merge pull request #580 from marcwrobel/fix-typos-doc
+e17e3f53d	21267c324	Mon Jul 18 15:31:42 2022 +0200	fix typos in documentations
+5cf72ed4e	fd45f4f3b 7f9da5852	Tue May 17 01:18:55 2022 +0200	Merge pull request #572 from Ahli/bugfix/add_missing_jdk9_export
+7f9da5852	fd45f4f3b	Tue May 17 01:13:41 2022 +0200	fix missing JDK9 export
+3ce9f04d6	85525394c	Fri May 13 22:23:28 2022 +0200	fix failing tests
+adcdc2e7b	b72c2ccb4	Wed May 11 17:54:42 2022 +0200	fix LOGBACK-1639
+f8779d07e	afc4d0a94	Wed May 11 00:10:45 2022 +0100	upgrade maven-bundle-plugin, fixes OSGi reproduce
+eaeddb2c4	4d3145d06	Thu Apr 28 20:28:12 2022 +0200	fix compiler warnings
+5da1decb4	c448fda9a	Wed Apr 27 23:50:55 2022 +0200	fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46995
+d8ce06f62	1e8245746	Mon Apr 25 12:43:24 2022 +0200	fix https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46793
+1e8245746	8cf452795	Sat Apr 23 20:25:21 2022 +0200	fix oss-fuzz 46966
+df4badf85	d0b78576c	Fri Apr 22 23:24:52 2022 +0200	fix LOGBACK-1632
+d8f1d43cd	8ddc1c28e	Wed Apr 20 11:06:51 2022 +0200	fix LOGBACK-1630
+8ddc1c28e	5b9e9a440	Wed Apr 20 10:13:16 2022 +0200	fix LOGBACK-1629
+288588df7	1f20887d3	Fri Apr 15 15:24:59 2022 +0200	fix LOGBACK-1628
+1f20887d3	c34645b32	Fri Apr 15 15:02:17 2022 +0200	fix LOGBACK-1628
+c34645b32	11095a417	Thu Mar 31 14:59:23 2022 +0200	fix LOGBACK-1623
+3fcd04861	1f7194672	Fri Mar 18 21:15:03 2022 +0100	fix LOGBACK-1622
+3e841e917	c40452541	Tue Mar 15 17:42:07 2022 +0100	print hostname fixing test in CI
+c40452541	4ff0d7150	Tue Mar 15 17:32:38 2022 +0100	print system properties for fixing test in CI
+964f98f92	b07fca878	Tue Mar 8 04:41:27 2022 +0100	fix error in method name
+f09b79224	22d862d17	Fri Mar 4 08:04:17 2022 +0100	Fix LOGBACK-1619 documentation issue
+2457ac24c	75257cd83	Fri Feb 11 11:35:51 2022 +0100	fix LOGBACK-1614
+dbc41e597	d40aa0a2c	Mon Jan 31 12:50:49 2022 +0100	simpler depdency management code, fixes tests
+6677171ca	b5c6e5837	Mon Jan 31 00:15:39 2022 +0100	fix tests
+5adbc3324	859ba761c 42b0f88b2	Mon Jan 10 11:06:09 2022 +0100	Merge pull request #553 from tivrfoa/fix-typo-interrupt
+42b0f88b2	859ba761c	Sun Jan 9 19:05:23 2022 -0300	fix: typo "interrupt"
+51863d73e	716c90612	Wed Dec 29 00:02:23 2021 +0100	fix LOGBACK-1594
+716c90612	b0bc6b3bf	Mon Dec 27 21:09:30 2021 +0100	fix LOGBACK-1605
+b0bc6b3bf	add37b6e4	Mon Dec 27 20:27:09 2021 +0100	LOGBACK-1604 fix tests
+add37b6e4	f6c489982	Mon Dec 27 00:23:16 2021 +0100	Fix LOGBACK-1604
+72096f8fe	ea42f7c30	Thu Dec 23 13:04:04 2021 +0100	update slf4j version reference, typo fixes
+351040224	6aad07e50	Wed Dec 22 21:00:50 2021 +0100	Fix LOGBACK-1572
+e64e0dc0d	a612f622d	Wed Dec 22 17:50:50 2021 +0100	fix test
+18edd9168	a1e94fda4	Wed Dec 22 16:40:39 2021 +0100	Fix LOGBACK-1599
+a1e94fda4	e9f34bcc3	Wed Dec 22 10:22:38 2021 +0100	Fix LOGBACK-1601
+1502cba4c	c43bd30e1	Fri Dec 17 10:00:41 2021 +0100	minor doc fixes
+c43bd30e1	8fb44ca67	Thu Dec 16 23:24:29 2021 +0100	fix JNDI call in SMTPAppedner
+ca09c508b	ce43569b0	Wed Dec 15 22:57:33 2021 +0100	typo fix
+d7deb9654	e1fb3fcf6	Mon Sep 13 11:44:01 2021 +0200	fix link for kvp
+f68864f05	9ba3c69a0	Sat Aug 21 16:03:04 2021 +0200	15000 of timeout seems to fix AppenderAttachableImplLockTest on Linux
+58dbfb75d	5fa934533	Wed Aug 18 17:30:35 2021 +0200	fix LOGBACK-1121
+5fa934533	23bfa90c6	Tue Aug 17 21:42:24 2021 +0200	fix LOGBACK-1571 and LOGBACK-1421
+23bfa90c6	eb11f4070	Tue Aug 17 21:41:50 2021 +0200	fix LOGBACK-1571 and LOGBACK-1421
+eb11f4070	d0595dc47	Mon Aug 16 19:17:22 2021 +0200	LOGBACK-1509 fixed in 1.3.0-alpha7
+af8c15bb7	7173af85d	Mon Aug 16 18:39:31 2021 +0200	fix LOGBACK-1570
+ab33a1471	e3671f39b	Sat Aug 14 00:15:02 2021 +0200	fix LOGBACK-1417
+0e5acf2ee	3528c7d79	Fri Aug 13 12:40:18 2021 +0200	fix LOGBACK-1569
+3528c7d79	81fbf53ac	Fri Aug 13 12:37:53 2021 +0200	typo fix
+d50987fbd	5eb9df2b5	Wed Aug 11 13:08:14 2021 +0200	fix LOGBACK-1568
+e30a71e61	ede0435c9	Tue Aug 10 16:22:21 2021 +0200	fix unit tests related to kvp
+0c171fb1b	e151b8767	Mon Aug 9 07:20:51 2021 +0200	fix ConverterTest.java, minor changes
+e151b8767	694a4fdbc	Sun Aug 8 23:38:37 2021 +0200	fix LOGBACK-1501
+c32a36ef0	6b6918bb9	Wed Aug 4 23:59:45 2021 +0200	fix LOGBACK-1566
+6b6918bb9	cf2112e4d	Wed Aug 4 22:25:32 2021 +0200	fix path to org.slf4j.implTest.RecursiveLBAppender in recursiveInit.xml
+82626f910	c3b0b0ddc	Fri Jul 30 00:12:39 2021 +0200	fix LOGBACK-1465
+e84a52d85	2484ab354	Thu Jul 29 23:20:13 2021 +0200	fix LOGBACK-1219
+d98009d07	2e67cd5a0	Mon Jul 26 18:19:23 2021 +0200	1.2.5 is latest stable release. fix typo in news.html
+dc69022b1	49c6b6794	Mon Jul 26 12:25:09 2021 +0200	fix typo in name of variable
+49c6b6794	718c0c49e	Mon Jul 26 12:24:11 2021 +0200	Fix LOGBACK-1326
+145587422	07bdc035b	Sat Jul 24 14:41:16 2021 +0200	fix unused imports
+70d724ecd	e79fe4e76	Sat Jul 17 00:50:53 2021 +0200	delete empty PrefixCompositeConverterTest.java
+e79fe4e76	1a1985d40	Sat Jul 17 00:43:45 2021 +0200	fix LOGBACK-1415
+1a1985d40	61ffd3aba	Tue Jun 15 10:33:25 2021 +0200	Fix typo in MDC section
+cc0d7394f	d85b5f709	Thu Oct 31 22:17:25 2019 +0100	remove superflous session.setDebug call
+ad2761fe5	c2235faf9	Sat Oct 12 17:34:13 2019 +0200	minor fixes
+d33d4ecc8	3f30c0cfc	Sat Aug 31 11:46:19 2019 +0200	fix postal address
+8e558c918	b40f3de5f	Mon Aug 12 18:00:35 2019 +0200	fix postal address
+4c243dec0	175d54dd7	Mon Apr 22 18:40:22 2019 +0200	minor fixes
+9f0550850	08f7ce5d5	Tue Apr 9 23:46:39 2019 +0200	fix compilatrion errors
+08f7ce5d5	e9e4a271c	Tue Apr 9 23:44:10 2019 +0200	fix compilatrion errors
+25f2be461	48792ad62	Tue Mar 5 18:22:51 2019 +0100	fix javadoc issue
+bf7f83594	4dd08e683	Fri Mar 1 14:43:19 2019 +0000	Fix markup in README
+55a0b46bb	ff3d1c488	Fri Mar 23 12:20:29 2018 +0100	fix javadoc issue
+71a42b87b	f6a4d6e47	Sun Feb 11 22:07:58 2018 +0100	fix LOGBACK-1381
+5186d2604	8a391e7fd	Sat Feb 10 08:13:38 2018 +0100	fix LOGBACK-1380
+dcfd52325	2a5e2e1cc	Tue Feb 6 11:44:56 2018 +0100	fix LOGBACK-1101
+b450abdf4	a2be75b99	Tue Jan 30 19:41:39 2018 +0100	fix raw type compiler warning in T_Entry
+a2be75b99	67833af9b	Tue Jan 30 19:34:40 2018 +0100	fix last compiler warnings
+67833af9b	8adb1a38a	Tue Jan 30 19:11:29 2018 +0100	fix compiler warnings
+8adb1a38a	8be3e3e6e	Tue Jan 30 18:45:35 2018 +0100	fix more compiler warnings
+8be3e3e6e	61db8ea99	Tue Jan 30 17:53:46 2018 +0100	fix compiler warnings
+61db8ea99	2b3578fa9	Tue Jan 30 17:00:06 2018 +0100	fix compiler warnings
+2b3578fa9	b70987a9e	Tue Jan 30 16:48:15 2018 +0100	fix deprecation issue
+b70987a9e	c1303f1d0	Tue Jan 30 14:30:32 2018 +0100	still tinkering to fix Travis build
+9b684f41c	ada35f13b	Tue Jan 30 14:04:48 2018 +0100	fix built under travis, prepare release 1.8.0-alpha2
+6178186da	fcf3be0d0	Mon Jan 29 21:33:36 2018 +0100	fix LOGBACK-1288
+0452e4eda	7d088ca0b	Mon Jan 29 19:39:06 2018 +0100	fix LOGBACK-1361
+ebc0c5b06	8b90a5499	Sun Jan 28 19:21:07 2018 +0100	fix LOGBACK-1165
+41b263a94	722c90657 156e42eb7	Sat Jan 27 23:58:28 2018 +0100	Merge pull request #316 from msteiger/fix-mdcfilter
+f264607fb	5df2273ae	Sat Jan 27 23:31:00 2018 +0100	fix LOGBACK-1175
+2b5b0b36b	32bd3f68e	Sat Jan 27 22:13:13 2018 +0100	fix LOGBACK-1094
+7209b1fb3	21467c6d8	Thu Jan 25 20:17:56 2018 +0100	fix LOGBACK-1280
+4d705d904	5a81da139	Thu Jan 25 16:45:06 2018 +0100	fix LOGBACK-1162
+d99254343	3b9d59858	Mon Jan 22 06:29:02 2018 +0100	Fix LOGBACK-1194
+7e0bf4fe9	fc7c9a440	Sat Jan 20 23:44:34 2018 +0100	fix LOGBACK-1308
+a4d44c73f	8333891b7	Mon Jan 15 23:31:12 2018 +0100	fix javadoc errors
+686980e5c	f9f9dfd81	Mon Oct 16 22:54:53 2017 +0200	fix formatting
+df071e7fa	5fcb23271	Mon Oct 16 21:18:11 2017 +0200	Restore copyright text, fixes test name typo
+39d31a0f8	b0ede870f	Fri Mar 31 17:55:42 2017 -0700	LOGBACK-1287 fix II
+febcd6332	b0ede870f	Fri Mar 31 17:34:01 2017 -0700	LOGBACK-1287 fix II
+b0ede870f	6165653f6	Wed Mar 22 22:01:39 2017 +0100	fix LOGBACK-1287
+627a466f4	a57959b14	Fri Mar 17 18:39:45 2017 +0100	Fix two typos in the README.md
+a57959b14	03a5cf711	Fri Mar 17 15:48:42 2017 +0100	require JDK 1.7, fix LOGBACK-1283
+6e0c28714	8607f601e	Mon Mar 13 07:51:21 2017 -0400	Fixed type within constant about incorrect attribute for parameters
+0e0dca96d	49623d942	Sun Mar 12 08:57:28 2017 +0100	fix LOGBACK-1278
+49623d942	cdc7e44fd	Wed Mar 1 20:46:46 2017 +0100	fix LOGBACK-1271
+f74296173	6f67c88cd	Mon Feb 27 02:56:09 2017 +0800	Fixing some coding style, spelling issues
+6f67c88cd	be810f53b	Thu Feb 23 21:47:35 2017 +0100	fix path to image
+b0b9d4b5d	eb3b114e6	Thu Feb 23 11:11:54 2017 +0100	minor fix
+b3def34fe	fa6d3f7f7	Wed Feb 22 13:41:44 2017 +0100	Fix LOGBACK-1265
+fa6d3f7f7	522ffc052 3ec05ec22	Tue Feb 21 19:50:40 2017 +0100	Merge pull request #360 from To-da/documentation-dependency-fix
+086c4fc27	2268f3b55	Tue Feb 21 12:40:06 2017 +0100	when running assembly:single fix: ERROR OS=Windows and the assembly descriptor contains a *nix-specific root-relative reference
+6a08cdeb7	0a60964ce	Mon Feb 20 20:38:05 2017 -0500	[maven] Update findbugs-maven-plugin to 3.0.4
+3ec05ec22	45784a52d	Sun Feb 19 14:38:14 2017 +0100	minor documentation fix
+7d62891ef	be084275b	Tue Feb 14 19:43:29 2017 +0100	fix tests, fix LOGBACK-1247
+bdd3952b3	735fb8884	Thu Feb 9 14:34:35 2017 +0100	minot fix
+fd5729811	d3d704c12	Thu Feb 9 13:36:48 2017 +0100	fix test
+ad2081473	3b4f60545	Wed Feb 8 23:03:21 2017 +0100	fix LOGBACK-1245
+3b4f60545	7fbea6127	Wed Feb 8 22:31:31 2017 +0100	fix test failures
+7e3c7cafa	f46044b80	Wed Feb 8 14:47:48 2017 +0100	fix issue outlined by Rob Eden at https://github.com/qos-ch/logback/commit/32a2047a1adfcee9d357b1ecc421be2b5435ecca#commitcomment-20791176
+2240d4253	b572a5985	Tue Feb 7 20:21:21 2017 +0100	fix LOGBACK-1231
+3f79c0e14	5688c15b1	Fri Jan 27 21:23:11 2017 +0100	fix LOGBACK-1221
+5688c15b1	a3a66290a	Fri Jan 27 16:56:15 2017 +0100	fix LOGBACK-1170
+a3a66290a	e3641a97d	Thu Jan 26 23:40:50 2017 +0100	add prefix parameter to OnPrintStreamStatusListenerBase
+e3641a97d	1384887b1	Thu Jan 26 20:11:49 2017 +0100	fix tests when crossing into Daylight saving time
+a6a8cd83c	ce1fb1905	Wed Jan 25 12:25:19 2017 +0100	minor fixes in relation to PR #342
+9ad7cc614	fd0e1a186	Tue Jan 24 07:34:37 2017 +0100	update Tomcat and Jetty versions, fix LOGBACK-1189
+b94655143	2becca824	Fri Jan 20 19:32:15 2017 +0100	fix LOGBACK-1238
+2becca824	1a37a0d5e	Fri Jan 20 19:19:50 2017 +0100	fix LOGBACK-1167
+f85fad6ff	006e8408f	Sun Dec 11 21:32:59 2016 +0100	typo fix
+006e8408f	39c7ab951	Sun Dec 11 21:31:37 2016 +0100	fix LOGBACLK-1181
+39c7ab951	ee2634805	Sun Dec 11 20:47:35 2016 +0100	fix LOGBACK-1236
+ee2634805	69dd19926	Sun Dec 11 19:27:49 2016 +0100	fix tests for Windows 7
+6af96f45f	ecf38b32b	Fri Dec 9 15:13:29 2016 +0100	Fix LOGBACK-1232
+fdc10307e	0385c4ba1	Mon Dec 5 19:48:19 2016 +0100	fix LOGBACK-1164
+f6641d668	e0e1756fd 81543754e	Tue Nov 15 15:23:47 2016 +0100	Merge pull request #341 from wuwen5/fix-sizeandtimebasedfnatp-npe
+81543754e	e0e1756fd	Tue Nov 8 20:58:26 2016 +0800	Fix NPE
+e0e1756fd	f059f634e 1c03696a7	Tue Nov 8 08:31:13 2016 +0100	Merge pull request #340 from sebkur/fix_author_names
+1c03696a7	f059f634e	Mon Nov 7 15:33:55 2016 +0100	Fix typos in author names
+f059f634e	49dfabd4a	Fri Nov 4 19:59:19 2016 +0100	fix failing tests on Travis
+49dfabd4a	5bf69812e	Fri Nov 4 19:31:28 2016 +0100	fix LOGBACK-1210
+8808ff0e1	d8b428b50	Thu Mar 31 14:57:35 2016 +0200	fix LOGBACK-1157
+2ba396a20	bd78efadb	Wed Mar 30 21:41:40 2016 +0200	fix LOGBACK-1158
+58646866d	fd2f33e20	Wed Mar 30 20:06:47 2016 +0200	LOGBACK-1159: Fix exceptionhandling
+2f288820e	fd2f33e20	Wed Mar 30 17:35:48 2016 +0100	Fix links to SimpleDateFormat and Charset Javadoc
+b16f852d5	70b9de35d	Tue Mar 29 22:04:51 2016 +0200	fix LOGBACK-1149
+70b9de35d	14a70cda2	Tue Mar 29 21:40:37 2016 +0200	fix LOGBACK-397
+54fb9a626	2204f974e	Thu Mar 24 14:00:44 2016 +0100	fix compiler warnings
+2204f974e	a3834d104	Wed Mar 23 21:43:03 2016 +0100	add DefaultInvocationGateTest, bug fixes
+2a8fa0a30	37c4f3015	Wed Mar 16 15:29:19 2016 +0100	fix tzpo
+0b83d6b55	fb862bb15	Thu Mar 3 14:10:14 2016 +0100	fix failing travis test
+0aa47d038	8e3770f1f	Wed Mar 2 12:17:43 2016 +0100	fix typo
+8e3770f1f	a481e4d06	Wed Mar 2 10:15:16 2016 +0100	typo fix
+a7cb9ee03	d99307912	Tue Mar 1 15:56:31 2016 +0100	fix LOGBACK-1143
+0bb0d395c	5fd0080cc	Mon Feb 29 23:34:37 2016 +0100	typo fix
+43353eb1d	cd0441f99	Mon Feb 29 22:14:35 2016 +0100	fixed LOGBACK-1142
+85c7fea84	4ef008efa b64f57bb4	Sat Feb 27 19:31:52 2016 +0100	fix LOGBACK-1054
+5f0828956	60952eb10	Fri Feb 26 00:16:37 2016 +0100	fix LOGBACK-1140
+43877e7aa	e5eecbcae	Thu Feb 25 22:11:38 2016 +0100	fix LOGBACK-1069, refactoring of OnConsoleListener related functions
+31b87ab04	77661fa5f	Tue Feb 23 21:15:20 2016 +0100	attempt to fix TravisCI failure
+a8baccff0	31b87ab04 a3efa5228	Tue Feb 23 21:12:48 2016 +0100	Merge pull request #302 from vpavic/fix-jmx-reload-npe
+a3efa5228	adf2e7112	Tue Feb 23 12:56:00 2016 +0100	Fix NPE on JMX reloadDefaultConfiguration when no configuration file is used
+72d62b63a	7aa9c55b3	Wed Feb 17 21:11:46 2016 +0100	fix build
+dfa27e0c7	e2518e6af	Wed Feb 17 19:58:02 2016 +0100	fix LOGBACK-1137 and refactor RollingCalendar
+01e72a24b	81fa4f2cc	Tue Feb 16 17:26:43 2016 +0100	fix LOGBACK-1132
+aa7d584ec	1af14db4b	Sat Feb 13 23:18:11 2016 +0100	MDC values no longer inherited. This fixes LOGBACK-422 and LOGBACK-624
+1af14db4b	45e557ad1	Sat Feb 13 22:13:43 2016 +0100	fix LOGBACK-992 by detecting missing %i token in FileNamePattern for SizeAndTimeBasedFNATP
+7aea8653b	afbab3286	Thu Feb 11 23:21:18 2016 +0100	next release is 1.1.5, fixed LOGBACK-898
+5b3f7dacf	993b3ccd1	Wed Feb 10 16:01:58 2016 +0100	fix LOGBACK-966
+467ecc721	985257ffc	Mon Apr 13 19:14:28 2015 +0600	Fixed timing issue in JettyBasicTest
+985257ffc	efa0cafa9 667fa0160	Wed Apr 8 21:01:17 2015 -0500	Merge pull request #251 from klausbayrhammer/fixViewAsGroovyLink
+667fa0160	a7890cfce	Wed Apr 8 10:03:05 2015 +0200	fixes viewAsGroovy Link for configurations with styling
+efa0cafa9	a7890cfce	Wed Apr 8 02:54:17 2015 -0500	Fix unit test errors related to missing packaging data
+039f74bf3	250547212	Wed Mar 25 20:39:32 2015 +0100	fix AsyncAppenderBaseTest
+df0e5f936	e5dc2c5fa	Wed Mar 25 18:19:09 2015 +0100	fixed LOGBACK-910
+e5dc2c5fa	56086e668	Wed Mar 25 17:05:20 2015 +0100	fix eclipse warnings
+077e45c8f	ec1a0fe3d	Wed Mar 18 16:24:33 2015 +0100	Fixed a bug in TimeBasedFileNamingAndTriggeringPolicyBase causing the policy to always rollover according to the local system time and ignore the time zone passed in the file name pattern. LOGBACK-611 introduced the possibility to specify time zone in the file name pattern and the file names are now correctly created according to the specified time zone. However, rollover is still based on the old behaviour, e.g., if the pattern is set to /wombat/foo.{%d, UTC}, rollover will happen at midnight of the local system time, instead of midnight in UTC. If for example the log is created at 00:59+01:00 02/01/2015 (local system time), the rollover will happen at 00:00+01:00 03/01/2015 instead of 01:00+01:00 02/01/2015 (i.e., 00:00Z 02/01/2015).
+93de233e8	6d8bf34b5	Thu Mar 5 11:20:10 2015 +0100	fix LOGBACK-1053
+697e894fe	139298a03 2373a38ee	Sun Mar 1 14:24:36 2015 -0600	Merge pull request #241 from nadavwe/fix-LOGBACK-1046
+139298a03	564042c87 4723d4311	Sun Mar 1 14:17:23 2015 -0600	Merge pull request #246 from ericdahl/docs-markup-bug
+4723d4311	0d3e7ac00	Sun Mar 1 08:26:45 2015 -0800	Documentation: Fix <h3> tag issue
+2373a38ee	6059c5b99	Wed Feb 25 13:49:40 2015 +0200	LOGBACK-1046 fix suggestion
+e56b71bfd	47b0a1fc8	Wed Jan 7 22:39:26 2015 +0100	fixed typo in the paragraph relating to ExecutionServiceUtil changes (PR #187)
+eb1f6d79c	6fa899bb5 1f21d2779	Wed Dec 31 14:52:10 2014 -0600	Merge pull request #65 from randomstuff/bugfix-escape-xml
+6fa899bb5	929b984db 1f4bdb379	Mon Dec 29 15:44:49 2014 -0600	Merge pull request #236 from SierraGolf/sierragolf/fix-of-flaky-AbstractSocketAppenderTest
+eb501c548	84876eab9	Mon Dec 29 21:05:59 2014 +0800	Fix for LOGBACK-894 cleanByPeriodOffset add time check
+1f4bdb379	929b984db	Mon Dec 29 10:21:41 2014 +0100	fixed flaky mocking in AbstractSocketAppenderTest due to multi-threading issues
+c2bbf392f	0f506a2b3 3c5f1463f	Sun Dec 28 17:25:08 2014 -0600	Merge pull request #224 from jelmerk/tee_filter_encoding_fix
+0f506a2b3	a69cd5bbf	Sun Dec 28 17:16:36 2014 -0600	Add release note for LOGBACK-1008 fix (PR #235)
+3c5f1463f	0149b9d04	Sat Dec 27 22:23:26 2014 +0100	Fix for LOGBACK-1023
+7d7b9df14	19cde4d58	Mon Dec 22 19:14:29 2014 -0600	Add release note for LOGBACK-116 fix
+19cde4d58	59c1b1534 2f6f2b789	Mon Dec 22 19:13:31 2014 -0600	Merge pull request #215 from hidekiy/fix-RollingCalendarTest
+1da246ba0	fa58574fb	Mon Dec 22 18:13:25 2014 -0600	Add release note for LOGBACK-909 fix
+ea0da34cf	84876eab9	Mon Dec 22 16:50:56 2014 +0600	Fixed typo in append-toMySQL-with-datasource.xml
+84876eab9	b44048c53 a689304c2	Sun Dec 21 15:08:04 2014 -0600	Merge pull request #213 from SierraGolf/sierragolf/better-fix-for-failing-socketappender-test
+b44048c53	c9279a75e 29e965e64	Sat Dec 20 15:20:21 2014 -0600	Merge pull request #220 from wuwen5/fix-warning-CustomDBNameResolver
+e269033b0	4a1db1512 b33afcea0	Fri Dec 12 20:40:14 2014 +0100	Merge pull request #229 from Mahoney/fix-non-threadsafe-appender
+b33afcea0	4a1db1512	Fri Dec 12 17:09:16 2014 +0000	AppenderBase started variable made volatile as it is mutable, access to it is not synchronized and it is shared between threads. Fix for http://jira.qos.ch/browse/LOGBACK-1037
+2f6f2b789	bcb8f5b86	Sat Sep 20 14:05:15 2014 +0900	fix LOGBACK-116
+bcb8f5b86	8936c0ba2	Sat Aug 30 12:08:36 2014 -0500	Add release note for LOGBACK-875 fix
+c63a656be	edc0fe234	Tue Aug 12 13:42:21 2014 +0300	Fix for LOGBACK-875
+a689304c2	168836114	Sun Jul 13 17:14:54 2014 +0800	fixed broken test setup for addsInfoMessageWhenEventIsBeingDroppedBecauseOfConnectionProblemAndDequeCapacityLimitReached
+9b5a58335	168836114	Tue Jul 8 17:58:05 2014 +0300	LOGBACK-909 Fix race condition in SMTPAppenderBase caused by shared MimeMessage instance.
+168836114	c4382b310	Sat Jun 21 13:36:55 2014 -0500	Fix AsyncAppender/SocketAppender unit tests
+0637d22cf	0c26c8141	Mon May 26 20:13:38 2014 -0500	Fix exception when threads write files to same dir
+d480b7a51	f6bf43938	Fri May 16 08:18:11 2014 +0200	Fix for LOGBACK-732, make charset configurable in SyslogAppender
+ac8a06e72	8aa285a65	Tue May 6 23:45:01 2014 -0400	Add git attributes - to fix line endings
+7f1765807	2ff2f45ee	Wed Apr 16 20:47:49 2014 +0200	fix LOGBACK-976 (take2)
+469e07b3e	1561d0092	Wed Apr 9 13:15:45 2014 +0200	fix LOGBACK-971 CharSequenceToRegexMapper#findMinMaxLengthsInSymbols() always returns min=0
+1561d0092	04868fab6	Wed Apr 9 08:10:39 2014 +0200	fix typo
+04868fab6	495929dc9	Tue Apr 8 23:46:32 2014 +0200	Fix build.
+45b0cd961	a3c0db2d8	Tue Apr 8 20:33:12 2014 +0200	fix LOGBACK-954 - FileNotFoundException is thrown when an include confifgraton file is missing
+a3c0db2d8	c9412d495 0e04dc49f	Tue Apr 8 20:31:26 2014 +0200	LOGBACK-969 related fix - still more
+c9412d495	be4334e96	Tue Apr 8 20:28:46 2014 +0200	LOGBACK-969 related fix - still more
+0e04dc49f	be4334e96	Tue Apr 8 20:13:51 2014 +0200	LOGBACK-969 related fix
+dec77397c	e64dc7a5c	Tue Apr 8 13:18:46 2014 +0200	fix day of the week LOGBACK-969
+e64dc7a5c	01f37a10e	Tue Apr 8 12:53:47 2014 +0200	intermediary fix for LOGBACK-952
+34a62b803	29298f935	Sat Mar 29 14:25:58 2014 -0500	Update release notes: swap NPE with NullPointerException for consistency and fix a couple typos
+6c06f3542	55cd4e990	Sun Feb 16 10:35:03 2014 +0100	Link to the building doc fixed.
+55cd4e990	5aef2cc26	Mon Feb 10 20:03:43 2014 -0600	Fix typo in logback-site/src/site/pages/manual/configuration.html
+02e6fe7ea	89381c0b8	Mon Feb 10 12:35:37 2014 +0100	typo fix
+9ac1e28d9	cef354f0b	Thu Feb 6 23:57:00 2014 -0600	Fix NPE when substituting blank variables
+c35161835	5890195be	Wed Feb 5 22:07:01 2014 +0100	minor typo fix
+b8c8c83c9	0632f4fe6	Fri Dec 27 22:10:51 2013 -0600	Documentation: Fix typos in site and manual
+0568f7a9c	98acde48e	Fri Dec 27 22:10:51 2013 -0600	minor fix related to LOGBACK-927
+2e88caadd	24976eeec	Fri Dec 27 22:10:51 2013 -0600	typo fix
+b66dfef8a	0944b3ae3	Fri Dec 27 22:10:50 2013 -0600	LOGBACK-768 Documentation: Fix mistake in the definition of the combined log format (missing brackets)
+e89727629	af224d85e	Fri Dec 27 22:10:50 2013 -0600	Fix LOGBACK-885
+653a33d5b	89b7236dd	Fri Dec 27 22:10:49 2013 -0600	Fix some typos in manual
+09d57c371	d7181f95a	Fri Dec 27 22:10:49 2013 -0600	LOGBACK-904 Fix typo/mistype in javadoc for TurboFilter
+2423f12ae	5246a0fc6	Fri Dec 27 22:10:48 2013 -0600	Fix typo in release notes
+7042a8552	23aae45f9	Fri Dec 27 22:10:48 2013 -0600	Fix typo in Appenders documentation
+aa214503b	6cb6d5b5d	Fri Dec 27 22:10:47 2013 -0600	Fixed issue "Failed to instantiate LoggerContext" because of " java.lang.SecurityException: AccessController.checkPermission is unsupported." (LOGBACK-760) using the solution provided in the comment by ori.
+e4e417f2b	3bc997e9e	Fri Dec 27 22:10:47 2013 -0600	* Fixed tabbing to be 2-spaces instead of 4 * changed direct access of timestamp field to use getTimstamp() instead inside of calculateElapsedTime.
+3bc997e9e	2d8994cb1	Fri Dec 27 22:10:47 2013 -0600	* Added support to the tomcat Server adaptor for correctly getting request start time. (Includes additional dependency on tomcat-coyote) * Update layouts.html to document the addition of elapsedTime/D to the pattern support for IAccessEvent * Modified AccessEvent.java to calculate the elapsedTime at construction of the event, instead of repeatedly in the getter.  This allows the value to be more easily seen in a debugger, and cleans up the code slightly.
+0fa83499a	78c4e2b62	Sun Dec 15 13:39:03 2013 -0600	Documentation: Fix typos in site and manual
+e0f26e69f	066c8f891	Mon Nov 25 21:21:28 2013 +0100	minor fix related to LOGBACK-927
+db5f121f5	5dfccaf97	Mon Nov 25 19:03:10 2013 +0100	typo fix
+44606f7ac	7af2fa5a5	Tue Nov 19 18:09:03 2013 -0600	LOGBACK-768 Documentation: Fix mistake in the definition of the combined log format (missing brackets)
+78b11e099	5733a37e0	Sun Nov 17 12:44:20 2013 -0600	Fix some typos in manual
+bab220108	dabbde7fe	Fri Nov 15 20:57:50 2013 -0600	LOGBACK-904 Fix typo/mistype in javadoc for TurboFilter
+9ac58e448	4c1562ee3	Mon Nov 11 22:57:24 2013 -0600	Fix typo in release notes
+da1c31d24	25ce0c40d	Sun Nov 10 14:05:27 2013 -0600	Fix typo in Appenders documentation
+959291a5b	071a93e9f	Fri Oct 18 22:57:59 2013 -0400	Fixed issue "Failed to instantiate LoggerContext" because of " java.lang.SecurityException: AccessController.checkPermission is unsupported." (LOGBACK-760) using the solution provided in the comment by ori.
+e7d41d683	e6f99bae5	Mon Oct 14 22:32:25 2013 -0400	* Fixed tabbing to be 2-spaces instead of 4 * changed direct access of timestamp field to use getTimstamp() instead inside of calculateElapsedTime.
+546b0e3e2	9b4025adb	Sun Oct 6 15:32:59 2013 -0500	Fix SMTP error for multi-line subject (LOGBACK-865)
+30d2f7716	cf6d7bc6e	Fri Oct 4 00:16:21 2013 -0500	Fix JUL logger level reset (LOGBACK-906)
+e6f99bae5	f97b1b544	Fri Sep 20 06:14:23 2013 -0400	* Added support to the tomcat Server adaptor for correctly getting request start time. (Includes additional dependency on tomcat-coyote) * Update layouts.html to document the addition of elapsedTime/D to the pattern support for IAccessEvent * Modified AccessEvent.java to calculate the elapsedTime at construction of the event, instead of repeatedly in the getter.  This allows the value to be more easily seen in a debugger, and cleans up the code slightly.
+54b0aa8e2	409ba2596 0bea26efe	Wed Sep 18 18:11:09 2013 -0700	Merge pull request #131 from diroussel/janino-fix
+409ba2596	841d22aea	Sat Sep 14 02:18:00 2013 -0500	Fix RecoveryCoordinatorTest
+9ff887679	dcfb0a056	Fri Sep 13 23:21:50 2013 -0500	Merge pull request #148 from leonardossz:fix-LOGBACK-842
+dcfb0a056	5d62ee9d8	Fri Sep 13 00:07:39 2013 -0500	Fix ThrowableProxy unit tests
+5d62ee9d8	0102597e0	Sun Sep 8 12:59:25 2013 -0500	Merge pull request #124 from dstine/logback-debug
+ca028dbbe	5ae5750c2	Fri Sep 6 22:24:20 2013 -0500	Fix exception for logger name with \'.\' and \'$\'
+246c63d30	3305fb866	Fri Sep 6 22:16:56 2013 -0500	Fixed an issue where an extra line of the stack trace was being printed by the ThrowableProxyConverter when specifying a length option.
+0bcf5afbf	cb13c6df0	Fri Sep 6 22:16:56 2013 -0500	fixing table name to lower case and correcting version of mysql
+a17a61526	73cf3e60f a71fad16e	Sat Aug 31 13:41:06 2013 -0700	Merge pull request #25 from jon-ruckwood/throwable-proxy-converter-fix
+9da0eb953	72d76165a	Thu Aug 29 06:36:52 2013 -0400	fix for LOGBACK-743
+21669fdc3	72d76165a	Fri Jul 19 18:37:39 2013 -0400	Fix LOGBACK-885
+72d76165a	0358e34d5	Wed Jul 3 13:24:11 2013 +0200	document LOGBACK-617 fix, minor changes
+c96dde98f	c485a855e	Wed Jul 3 00:27:30 2013 +0200	fix LOGBACK-873
+0bea26efe	685f692a4	Thu Jun 6 11:08:04 2013 +0100	LOGBACK-832 - set parent classloader to avoid janino classes not being found in some environments (axis2, GWT, etc). Fix author was Arno Unkrig, see http://jira.codehaus.org/browse/JANINO-159
+0e1dad63f	685f692a4	Thu May 30 18:47:17 2013 -0300	fixing table name to lower case and correcting version of mysql
+2edc509bf	011701524	Mon May 27 09:29:34 2013 +0200	fix failures in MDC related tests due to interference
+7472f201e	0667b9315	Sat May 11 09:52:42 2013 +0200	typo fix
+9a11ac8f3	71886409e	Fri May 10 13:09:52 2013 +0200	fix LOGBACK-860
+e6319e5fb	1138d2145	Mon May 6 17:40:27 2013 +0200	typo fix
+1138d2145	51c02114c	Mon May 6 17:38:51 2013 +0200	fix LOGBACK-859
+6ec8a1093	e7058e4ee	Tue Apr 30 17:34:16 2013 -0400	fixed references to MockContext in test classes
+f9492ad0a	9058080ce	Sun Apr 28 19:31:24 2013 +0200	corrected typo and other bugs in imgaes
+0a7a0b70b	19e2a5564	Sun Apr 28 07:38:56 2013 -0400	fixed references to MockContext in test classes
+bb6375b7a	ed2d5d00d	Sat Apr 27 10:27:32 2013 -0400	fixed deprecation warning for SocketAppender convenience constructor
+738117c95	8b2546e00	Fri Apr 26 18:14:44 2013 +0200	fix LOGBACK-230
+cdb8657fc	4ba778bcb	Thu Apr 25 15:39:30 2013 +0200	fix LOGBACK-846
+4ba778bcb	79b8097fe	Thu Apr 25 15:09:31 2013 +0200	fix LOGBACK-845, CyclicBufferTracker_TImpl renamed as CyclicBufferTrackerT
+abdafe0ad	402350acc	Thu Apr 25 09:51:04 2013 +0800	fix logback-767
+7c926d856	c6b55c99a	Fri Apr 19 11:10:18 2013 +0100	LOGBACK-266 - increase max window size of FixedWindowRollingPolicy to 20.  12 is too restrictive, and the users have voted for it to be increased
+97922ee9b	ba2185aa0	Thu Apr 18 12:05:25 2013 +0200	fix LOGBACK-805
+b956210cc	0afa15dee	Wed Apr 17 10:28:48 2013 +0200	attempting to fix AsyncAppenderBaseTest and DBAppenderHSQLTest in JDK 1.7
+18d44a8fa	3e41c8baa	Sun Apr 14 08:31:00 2013 -0400	fixed location of server config for SSL example
+2492ad3b2	2bc16668d	Fri Apr 12 08:49:14 2013 +0200	typo fix
+05bd7d4a4	27405148b	Wed Apr 10 17:03:05 2013 +0200	fix LOGBACK-831
+fe36d8ac4	6d6998cdd	Mon Apr 8 16:01:46 2013 +0200	minor fixes
+c7adc2301	ba4e620ad	Thu Apr 4 14:27:39 2013 -0400	fix functional test for ServerSocketAppenderBase
+edf75ee44	76d0bc4cb	Tue Apr 2 13:25:53 2013 -0400	fixed a potential NPE in RemoteAppenderStreamClient.run
+0d8c97cf3	dc7207faf	Mon Apr 1 05:02:08 2013 -0400	fixed duplication of server log messages
+f47b8dda0	ddd606343	Sun Mar 31 14:21:16 2013 -0400	fixed several html validation errors
+027342577	60d0fe9a2	Sun Mar 31 08:37:55 2013 -0400	fixed package name for example SocketServer
+3b6c804ce	2c15bc5b2	Thu Mar 28 16:33:19 2013 -0400	fixed a potential NPE in SSLSocketAppenderBase
+55348f39a	f307b602d	Thu Mar 28 07:27:26 2013 -0400	fixed content of an informational message
+bd4e72c84	b4e996d4b	Wed Mar 27 17:47:36 2013 +0100	rename FileNamePattern.toRegex(Date date) as toRegexForFixedDate(Date date)
+28a154ddf	77454005c	Mon Mar 25 16:09:06 2013 +0100	minor fix prior to release
+940234e77	91a27b0ff	Sun Mar 24 23:17:45 2013 +0100	typo fix
+b772cbc87	2d1ee0fdc	Fri Mar 15 22:45:56 2013 +0100	fix LOGBACK-463
+2dda2a4d8	5d498c608	Fri Mar 15 17:16:59 2013 +0100	fixed LOGBACK-142
+7fdbe5c20	26bc3be97	Thu Mar 14 16:25:13 2013 +0100	fix LOGBACK-811, caller data computation under Groovy
+9722f92f4	d7ca5e366 cceae89ee	Wed Feb 27 23:18:11 2013 -0800	Merge pull request #75 from Batmat/fix-log-typo
+cceae89ee	d7ca5e366	Thu Feb 28 08:11:21 2013 +0100	Fixing the log "Could not parser [l as an integer"
+aa728a71f	e3470d100	Sun Feb 24 15:38:23 2013 +0400	Close connection inside ConnectionSourceBase#discoverConnectionProperties() This will fix LOGBACK-798 (Leaking jdbc pool connection)
+e3470d100	77cf66e8c	Sun Feb 17 21:21:49 2013 +0100	small fixes to imports section
+af6dd6d18	72a63c0c5	Thu Dec 20 23:28:57 2012 +0100	LOGBACK-782 fixed
+5556bb87b	8e9af35cf	Thu Dec 20 19:36:23 2012 -0200	Fix for issue LOGBACK-782 with test. The fix consists of forcing the nopex variable to be defined with no arguments, so the parser wont get confused and try parsing the variable concatenated with the next string
+dae058dca	d3babf0d9	Tue Nov 13 20:14:54 2012 +0100	fix logback-750
+862b9ddda	bc93693ca	Tue Nov 13 16:40:56 2012 +0100	fix LOGBACK-765
+8259a7dba	edee181e8	Wed Nov 7 17:14:30 2012 +0100	fix LOGBACK-292
+1db2fb27b	4b68a6676	Wed Nov 7 16:23:36 2012 +0100	Fixed LOGBACK-767
+161e79953	a445df818	Mon Oct 29 08:20:29 2012 -0500	Fix for http://jira.qos.ch/browse/LOGBACK-463.
+a445df818	4b68a6676	Wed Oct 24 16:08:18 2012 -0500	Fix for http://jira.qos.ch/browse/LOGBACK-463.
+be14553cb	f36631706	Wed Sep 19 11:42:31 2012 +0200	fix typo
+4b5e513ef	2c04fd4e4	Wed Sep 5 22:15:03 2012 +0200	fix LOGBACK-744
+2c04fd4e4	abff3abe6	Fri Aug 31 23:05:25 2012 +0200	added findbugs to the build
+abff3abe6	4126202dc	Fri Aug 31 21:51:12 2012 +0200	adding findbugs to the build
+86a60af62	4126202dc	Fri Aug 31 16:27:34 2012 +0300	truncate instead of discard too long syslog messages (fixes LOGBACK-141)
+c015e189a	a1a76fc69	Fri Aug 17 23:59:09 2012 +0200	fix LOGBACK-734, speed improvements in SMTPAppender tests
+aab2ee301	1d5329429	Tue Jul 17 20:52:53 2012 +0200	fix LOGBACK-723, make DefinePropertyAction and InsertFromJNDI action scope-aware
+1d5329429	b4da91843	Tue Jul 17 16:30:19 2012 +0200	- Fix doc error for SMTPAppender - Updated the setup page regarding building with Eclipse
+d87608cd8	9e8b345dc	Tue Jul 10 23:06:50 2012 +0200	Fix LOGBACK-720: AsyncAppender may come up without Worker resulting in a Deadlock
+01c6d5f2d	65ab1c72e	Fri Jun 22 09:58:58 2012 +0200	typo fix
+39b744200	6610442cc	Wed Jun 13 15:10:42 2012 +0800	fix default color, current one won\'t set default color correctly. The iteral after colored pattern will always use previous setting color, Even the bold style on windows XP platform.
+de54f2af6	98ffa447d	Thu Jun 7 22:31:05 2012 +0200	Added support javax.mail.Session resource retreival from JNDI, fixed statusListener method in GafferConfigurator
+8baebd057	4398f119c	Wed Jun 6 12:01:32 2012 +0300	logback-site: Fix a typo in the news.
+3f7ae4a8a	c26c545bc	Wed Jun 6 00:31:19 2012 +0200	editorial fix
+91169695a	e9e064031	Thu May 31 23:01:22 2012 +0200	fix  LBCLASSIC-327 and  LBCLASSIC-333
+685b0aa26	0987ec3c5	Wed May 30 14:09:25 2012 +0200	typo fix
+0987ec3c5	ddfe8c312	Wed May 30 14:04:11 2012 +0200	fix LBCLASSIC-225
+ddfe8c312	91317ef14 5cba8ef5b	Wed May 30 02:36:16 2012 -0700	Merge pull request #47 from astubbs/debug
+9e0284976	bd226d4f0	Wed May 30 00:04:01 2012 +0200	fix LBCLASSIC-295
+c348fb635	fb4a6e4e9	Tue May 29 16:03:38 2012 +0200	Fix http://jira.qos.ch/browse/LBCORE-259
+5cba8ef5b	93f025b33	Tue May 22 10:51:00 2012 -0400	LBCLASSIC-225 - Take debug setting from environment property
+617c073bf	f7f651957	Tue May 8 22:57:08 2012 +0200	- Fixed LBCLASSIC-159 (see http://jira.qos.ch/browse/LBCLASSIC-159).
+56add24c8	fdd1363fa	Fri May 4 00:11:01 2012 +0200	fixing lbclassic232
+0a2446b85	d903644be	Thu May 3 18:29:18 2012 +0200	Fix http://jira.qos.ch/browse/LBCLASSIC-256
+d903644be	df62eebfa	Thu May 3 18:27:57 2012 +0200	Fix http://jira.qos.ch/browse/LBCLASSIC-256
+df62eebfa	174573f53	Thu May 3 15:34:32 2012 +0200	fix LBCORE-243
+174573f53	09aee6ec5	Wed May 2 21:55:07 2012 +0200	Fixing LBCORE-243 by reintroducing buffered streaming and immediate flush as an option
+608ed4c58	1f6b71923	Wed Apr 25 23:47:18 2012 +0200	fix LBCORE-221
+d886e9b0a	560596f73	Tue Apr 24 19:50:59 2012 +0200	fix LBCORE-169
+e102325d3	4a2525be2	Tue Apr 24 11:56:44 2012 +0200	fixed LBCORE-84 - typo in PropertyAction.java
+b1ac439e2	54da9981c	Thu Apr 12 14:26:14 2012 +0200	adding stacktraceSuffixPattern property to SyslogAppender
+05efa1e4f	b6033b83b	Thu Apr 5 15:49:29 2012 +0200	Fixing debug messages by starting OnConsoleStatusListener when debug flag is set to true
+e85c6226e	1169a18f6	Tue Mar 6 23:02:16 2012 +0100	Setting the debug attribute to true in the <configuration> element now registers a OnConsoleStatusListener with the StatusManager.
+1169a18f6	26a0a37cc	Tue Mar 6 22:17:13 2012 +0100	Fix LBCLASSIC-316
+26a0a37cc	bfe8b7f3b	Tue Mar 6 18:00:31 2012 +0100	Fix LBCLASSIC-221
+0877b9c3e	1b1345017	Fri Jan 27 22:02:43 2012 +0100	typo fix
+d7038b0e2	9c58b9e82	Fri Nov 11 11:44:36 2011 +0100	upgrade to janino 2.5.16, fix LBCORE-210, remove test-time dependency on joda time
+58de50e30	a2f83e8c0	Tue Nov 8 13:41:30 2011 +0100	fix compiler error
+90ae7a93d	f0d6bc500 8cd1a0ef2	Tue Nov 8 02:11:20 2011 -0800	Merge pull request #28 from nurkiewicz/LBCLASSIC-217-fix
+1cc670395	8bf841630	Mon Nov 7 20:56:32 2011 +0100	added getCallerLinePrefix method in response to LBCORE-233
+9982b65e6	c634320ef	Sun Nov 6 20:58:38 2011 -0500	Fix problems in Javadoc references.
+01ae278bd	ccadbcf38	Fri Nov 4 19:01:04 2011 +0100	typo fix
+eeca3cce5	92857cb94	Tue Nov 1 22:02:37 2011 +0100	fixing  LBACCESS-26
+23f5ce557	501e5108e	Tue Nov 1 19:25:18 2011 +0100	typo fix
+30bf0d638	a11c40845	Wed Oct 26 13:09:14 2011 +0200	upgrade to surefire 2.10, fix ContextDetachingSCLTest
+4fadcb4ae	1e59f24cc	Tue Oct 25 16:07:45 2011 +0200	fix LBACCESS-27
+2755e4fc3	f185581de	Tue Oct 25 13:19:48 2011 +0200	fix LBCLASSIC-131
+0ee187332	e643e9086	Mon Oct 17 21:44:15 2011 +0200	properties now have scope. Fixed LBCORE-212
+3356c3ef1	e338de829	Mon Oct 17 20:07:29 2011 +0900	Fix typo.
+5c2b54f9c	dd63419d3 b572ad6f7	Tue Oct 11 22:53:02 2011 +0200	fixing LBCORE-225
+dd63419d3	da07dc15e	Tue Oct 11 22:51:25 2011 +0200	fixing LBCORE-225
+b572ad6f7	21ab32421	Tue Oct 4 15:30:17 2011 +0200	fix LBCLASSIC-283
+21ab32421	46ae12bdf	Tue Oct 4 21:24:55 2011 +0800	Fix the exception occuring because LoggingEvent is not serializable by using LoggingEventVO instances for the benchmark.
+c16086d47	54014e65f	Tue Oct 4 15:02:51 2011 +0200	fix LBCORE-218
+54014e65f	94c75b9fb	Tue Oct 4 20:55:51 2011 +0800	Fix the javadoc for the H2 dialect to distinguish from the HSQLDB one.
+cdca3a245	0365a8712	Wed Sep 21 23:55:34 2011 +0200	fix LBCORE-222 (a typo)
+7a2e02bca	3c983ccd0	Tue Sep 20 21:50:42 2011 +0200	fix http://jira.qos.ch/browse/LBCLASSIC-289
+524e0fc13	6f2735660	Tue Sep 6 22:00:46 2011 +0200	fixing LBCORE-147 and adding relavant test cases
+6bf860358	b336c6972	Fri Aug 26 15:03:04 2011 +0100	Fixed an issue where an extra line of the stack trace was being printed by the ThrowableProxyConverter when specifying a length option.
+b336c6972	c65a76208	Thu Aug 25 11:41:27 2011 +0200	fix typos reported in LBCLASSIC-288
+0ef4726a0	707298f12	Wed Aug 17 14:03:31 2011 +0200	typo fixes
+6058b4beb	65ba3dd00	Thu Jul 21 10:57:23 2011 +0200	typo fixes
+f91238966	6e98d1bb0	Fri Jul 15 11:48:12 2011 -0400	Fix for:
+6e98d1bb0	187647c5d	Fri Jul 1 18:31:23 2011 +0200	fixing LBCLASSIC-273
+38d48fc3a	690ac09e3	Fri Jun 24 14:01:54 2011 +0200	configuration recovery works with included files as well. Fixes LBCLASSIC-265
+690ac09e3	33a24d816	Thu Jun 23 23:40:38 2011 +0200	fixed LBCLASSIC-265
+33a24d816	218b66b5c	Tue Jun 21 00:35:19 2011 +0200	Preparatory work for fixing LBCLASSIC-265. The first step is to detect SAX exceptions during Joran doConfigure invocation.
+218b66b5c	02da05ef7 b05d1c484	Thu Jun 16 11:35:39 2011 +0200	Merge branch \'typo_fixes\' of git://github.com/datafueled/logback
+1d001fc46	2ac4ee863	Mon Jun 13 14:15:30 2011 -0500	fix typo: mdcPropertyMap != null should have been mdcPropertyMap == null
+7117a1fff	138ac6971	Thu Jun 9 23:24:31 2011 +0200	fixing LBCLASSIC-247
+5d64d2d57	2748f40c7	Wed Jun 1 08:41:55 2011 -0400	Fixed grammar.
+2748f40c7	bdc30d5d4	Wed Jun 1 08:41:53 2011 -0400	Fixed typo.
+bdc30d5d4	fa4c0c645	Wed Jun 1 08:41:51 2011 -0400	Fix typo.
+79989e013	e4aa27eb1	Wed May 25 16:23:38 2011 +0200	Fixed LBCORE-199 by adding a timestamp to the entry found in the zip file. This was suggested by Benoit Xhenseval.
+b05d1c484	e4aa27eb1	Mon May 2 13:49:27 2011 +0700	Fix typos.
+0bc69a589	427f9bffc	Mon Mar 28 22:49:31 2011 +0200	typo fix
+427f9bffc	d12e774a9	Mon Mar 28 22:45:47 2011 +0200	update the list of fixed bugs
+d12e774a9	56fe8a84f	Mon Mar 28 22:38:06 2011 +0200	Fix LBCLASSIC-156
+8fa4596a4	d88160e44	Mon Mar 28 21:35:09 2011 +0200	Fixes LBCLASSIC-257. Added additional c\'tor to LoggerContextVO.
+ebb58bb6e	5be4443a2	Fri Mar 18 15:14:14 2011 +0100	fixing LBCLASSIC-255
+f23196e82	a7582c960	Fri Mar 11 19:01:25 2011 +0100	fixing LBCORE-199
+4373dfaaa	6f77381ae	Thu Feb 10 13:07:18 2011 +0100	fix LBCORE-193
+9280a49da	4804883e6	Mon Feb 7 16:57:48 2011 +0100	fix LBCLASSIC-248
+8be92873e	9e47173e7	Wed Jan 26 16:18:50 2011 +0100	fix LBCLASSIC-246
+d41163832	3c12be5cf	Mon Jan 24 22:44:17 2011 +0100	fixing LBCLASSIC-245
+9fa097d64	0ee73e69b	Thu Dec 30 15:51:48 2010 +0100	fix LBCLASSIC-238
+8c9b86fb1	268c89d8f	Tue Nov 16 18:24:54 2010 +0100	- pom.xml clean up - Fix LBACCESS-10 - TeeServletInputStreamm barfs on input over 8K
+8d70a3e19	ea89ebffd	Mon Nov 8 21:31:24 2010 +0100	fix LBCORE-174
+a0242c2da	c256b231b	Fri Nov 5 18:11:50 2010 +0100	Fix LBCLASSIC-231
+3b87986bf	268a8ffc8	Wed Oct 20 23:43:00 2010 +0200	- fix	 LBCORE-170 - release 0.9.26
+268a8ffc8	358ca5f91	Wed Oct 20 22:16:46 2010 +0200	Fix LBCLASSIC-226
+93995946b	c97834304	Mon Oct 18 20:30:15 2010 +0200	patial fix for LBCLASSIC-183. It helps if the ThreadLoacal class is not anonymous.
+829d2fd48	bd0c4d040	Thu Oct 14 22:49:57 2010 +0200	fix LBCORE-114
+bd0c4d040	0e2790488	Thu Oct 14 21:37:02 2010 +0200	typo fixes
+b5c714985	eb27832f1	Wed Oct 13 23:23:16 2010 +0200	fixed LBCORE-16
+f0ffd80fe	7480e3375	Wed Oct 13 20:51:14 2010 +0200	fixed LBCLASSIC-216
+7480e3375	e519c39a3	Wed Oct 13 19:48:54 2010 +0200	fixing LBCLASSIC-224
+f25fb2e78	909a8e44a	Mon Oct 11 17:40:44 2010 +0200	typo fix
+909a8e44a	d52ee5dce	Fri Oct 8 18:37:19 2010 +0200	- fixes
+d52ee5dce	090b95566	Tue Oct 5 20:48:39 2010 +0200	- typo fix
+090b95566	b100fbfa7	Thu Sep 30 22:02:23 2010 +0200	typo fix
+b100fbfa7	74915053d	Thu Sep 30 21:58:31 2010 +0200	- Many editorial fixes submitted by Dan Lantz.
+f6a15779f	487c8871c	Wed Sep 15 22:50:05 2010 +0200	typo fixes
+487c8871c	bf373eb44	Wed Sep 15 22:42:10 2010 +0200	typo fix
+59827899f	e3a7d9cba	Wed Aug 25 22:22:17 2010 +0200	- minor edits and typo fixes
+b2feaf8b4	e3a7d9cba	Tue Aug 24 23:43:45 2010 +0200	- various typo fixes
+15b5239b5	b9057d805	Tue Jul 20 22:35:39 2010 +0200	Minor edit (fix supplied by Mark Vedder)
+f8c4d4ca4	c1ef0faae	Tue Jun 29 15:28:40 2010 +0200	- Fixed LBCLASSIC-213 ( Groovy runtime dependency problem with   ReconfigureOnChangeFilter)
+c1ef0faae	2bcfa355c	Mon Jun 21 19:55:05 2010 +0200	- typo fixes - starting work on 0.9.23
+263b38aad	2d15361df	Thu Jun 17 15:26:51 2010 +0200	- Fixed LBCORE-158 - added parent injection support in gaffer - updated news.html
+a42570489	f18d4917d	Fri Jun 11 22:31:36 2010 +0100	LBCORE-158 - fix for interleaved output to System.out when logback is not the only one writing to System.out (typo fix)
+f18d4917d	521dfe290	Fri Jun 11 13:59:54 2010 -0700	LBCORE-158 - fix for interleaved output to System.out when logback is not the only one writing to System.out
+729c58c5a	cbd336b71	Sat May 8 18:45:21 2010 +0200	- fixed http://jira.qos.ch/browse/LBCORE-151
+c12af8fa6	157bc935c	Tue Apr 20 17:35:47 2010 +0200	- Fixed http://jira.qos.ch/browse/LBCLASSIC-204
+910d67088	d293dc748	Thu Apr 1 20:33:29 2010 +0200	- fixed incorrect links in the docs
+d293dc748	85f6de721	Wed Mar 31 19:07:58 2010 +0200	typo fix
+85f6de721	a3423c5ec	Wed Mar 31 18:19:42 2010 +0200	- DBAppenderIntegrationTest and SiftingAppenderTest collided on MDC key userid   the MDC used in DBAppenderIntegrationTest is suffixed with a random int value   to avoid collisions
+4bca7fd33	18037a0e5	Wed Mar 31 16:03:23 2010 +0200	Fixed LBCLASSIC-182 according to the patch suppllied by Aleksey Didik
+39d30d0f0	ce0e6110c	Fri Mar 26 16:59:57 2010 +0100	- fixed http://jira.qos.ch/browse/LBCLASSIC-200 - minor edits
+72c5de7d8	98cee806e	Thu Mar 25 19:22:34 2010 +0100	- fixed charset support in Joran - doc edits
+1fd3f4ed5	cc1540f6a	Wed Mar 24 19:50:33 2010 +0100	- fixed LBCLASSIC-187 by adding 4 new columns to the logging_event table
+2181956a1	16e8cfbd6	Tue Mar 23 19:58:33 2010 +0100	- event_id is now expected to be of type LONG. This is a first step in fixing http://jira.qos.ch/browse/LBCLASSIC-198 (more tests to follow)
+130277bce	39dbbf9a5	Mon Mar 22 17:46:26 2010 +0100	Fixed LBCLASSIC-170
+0851bedca	80fb8ac10	Sun Mar 21 23:58:37 2010 +0100	[LBCLASSIC-188] SimpleDBNameResolver C&P bugfix
+80fb8ac10	a9d4721db	Fri Mar 19 18:47:30 2010 +0100	[LBCLASSIC-188] SimpleDBNameResolver allowing to customize table and column prefixes/suffixes
+66fb7325a	0805c91cc	Fri Mar 19 15:34:32 2010 +0100	Fixes http://jira.qos.ch/browse/LBCLASSIC-196
+e13257d75	499abbba8	Thu Mar 18 19:11:14 2010 +0100	Fixed http://jira.qos.ch/browse/LBSITE-36
+1acd46c45	91aaf870b	Wed Mar 17 20:11:49 2010 +0100	Fix LBCORE-144
+3faa7d8bc	df1f63a50	Wed Mar 17 10:21:10 2010 +0100	Fixed http://jira.qos.ch/browse/LBCORE-143
+fd195dcaa	36d3641c8	Tue Mar 16 22:55:14 2010 +0100	Fixed LBCLASSIC-194
+36d3641c8	49e948fd4	Tue Mar 16 18:54:26 2010 +0100	- fixing LBCLASSIC-193
+79ac28a4b	e0739bf39	Wed Mar 10 13:10:43 2010 -0700	fixed spelling error (specifying)
+e0739bf39	f24736291	Wed Mar 10 13:07:51 2010 -0700	fixed spelling error (downloading)
+f24736291	e20cdafef	Wed Mar 10 13:02:31 2010 -0700	fixed spelling error (downloading)
+e7d72885a	83516636b	Wed Mar 3 17:17:18 2010 +0100	Fixed LBCLASSIC-191
+8381bae9d	4577cf0a7	Sat Feb 27 10:37:22 2010 +0100	Skip the UnknownHostException on Mac. This fixes LBCORE-129
+4097c6f76	96435c32e	Tue Feb 23 00:38:21 2010 +0100	typo fix
+4316ce3c3	ade00738d	Sun Feb 21 22:44:54 2010 +0100	- Initial attempt at fixing LBCORE-109
+4e5aba2f2	3884318eb	Wed Feb 10 23:22:27 2010 +0100	Fixed LBCORE-134 reported by Michael Franz. While reading configuration files (in XML), the event handler will correctly process body text, in particular spaces, even when delivered in multiple chunks. The previous behavior of trimming leading and trailing white space has been preserved. Moreover, body text consisting of white space surrounding child elements is ignored.
+3884318eb	7cc45624e	Wed Feb 10 19:21:05 2010 +0100	Fixed LBCORE-130. FileNamePattern no longer treats parenthesis as special.
+705c0faec	7172853f2	Thu Jan 28 08:11:56 2010 +0100	- added missing hsqldb.sql files. A live version of these files can be found in DBAppenderTestFixture.java in the ch.qos.logback.access.db and ch.qos.logback.classic.db packages under src/test.
+df2d1961f	784d84686	Fri Dec 4 14:56:22 2009 +0100	- starting work on 0.9.19 - fixed http://jira.qos.ch/browse/LBSITE-35
+5f017a392	5f3d8faef	Thu Dec 3 18:07:14 2009 +0100	final touches on the LBCLASSIC-154 fix
+6104cf6a8	1c840c987	Wed Dec 2 15:26:06 2009 +0100	fixed intermittent failures in TimeBasedRollingTest
+1c840c987	12f248fab	Fri Dec 4 14:47:05 2009 +0100	- All tests pass. LBCORE-26 has been fixed.
+d106f950f	b228e86a5	Tue Dec 1 23:30:17 2009 +0100	Fixed http://jira.qos.ch/browse/LBCORE-122
+b228e86a5	1c9f5ace7	Tue Dec 1 22:35:56 2009 +0100	- fixed http://jira.qos.ch/browse/LBCORE-119
+f73e9afc1	b018525e3	Tue Dec 1 14:12:51 2009 +0100	Fixed http://jira.qos.ch/browse/LBCORE-127
+c1945db44	f7121aba3	Mon Nov 30 23:16:43 2009 +0100	- Fixed http://jira.qos.ch/browse/LBCLASSIC-102 and added relevant test cases
+a60e0ea2b	0908ef4dc	Sat Nov 28 23:58:39 2009 +0100	- fixed race condition by having the test wait for the compresison thread at least once before the next rollover occurs
+0908ef4dc	843489d8a	Sat Nov 28 23:36:03 2009 +0100	- Partial fix to LBGENERAL-35
+843489d8a	a0e45a889	Wed Nov 25 22:00:11 2009 +0100	- fixed LBCLASSIC-121 by applying Hugues\' patch provided in LBCLASSIC-168.
+bfb1e735c	feba37d06	Fri Nov 13 10:59:50 2009 +0100	Fixed http://jira.qos.ch/browse/LBCLASSIC-149
+feba37d06	0334b5b05	Fri Nov 13 10:35:51 2009 +0100	Fixed http://jira.qos.ch/browse/LBCORE-98
+d61588151	40c50961a	Tue Nov 10 17:31:31 2009 +0100	- ongoing editing of filters.html - fixed http://jira.qos.ch/browse/LBCLASSIC-155
+79cf4f778	f0a9057c4	Wed Oct 14 23:10:48 2009 +0200	- pom packaging is more appropriate for the logback-sire module - editing bugreport.html and license.html
+f0a9057c4	0900ca3cd	Sat Sep 19 17:54:39 2009 +0200	- corrected the expected line number in ConverterTest - fixed TimeBasedRollingWithArchiveRemovalTest.java which would fail when the   number of period+currentMonth - maxHistory is placed in the previous year. - minor editing in license.html
+4433f7787	177f699c2	Mon Aug 10 13:33:55 2009 +0000	- typo fix and minor rewording
+d2112e1fd	c791e8ff5	Sun Aug 9 18:44:14 2009 +0000	- Add caller data in LoggingEventVO to fix LBCLASSIC-145
+56801ff10	1e19f7808	Sun Aug 9 17:51:56 2009 +0000	- document and test the <timestamp> action. This fixes LBCORE-91.
+39ad96036	a351566c3	Fri Aug 7 21:02:57 2009 +0000	- minor changes - added blurb about LBCORE-90 being fixed
+a351566c3	1943885aa	Fri Aug 7 20:32:53 2009 +0000	- fixed LBCORE-90
+acea68ca6	97fc485c6	Wed Jul 22 17:53:23 2009 +0000	- Fix LBCLASSIC-125
+97fc485c6	a28474558	Wed Jul 22 16:29:29 2009 +0000	typo fix
+feebd12fa	bd4e2ffbf	Mon Jul 20 18:15:38 2009 +0000	Failing to reconnect to remote server should be reported as a warning and not an error. Fixes LBCLASSIC-143
+a69f58267	1b7250254	Fri Jul 10 09:28:54 2009 +0000	- Filter chains chapters renamed as "Filters" as filters no longer maintain an internal   linked list structure. - Fixed LBSITE-30
+1b7250254	2d579227f	Fri Jul 10 09:20:11 2009 +0000	- fixed link to JMX Configurator chapter in the manual index.html - rewording in filters.html (as described in LBSITE-31
+4a1d2dfdc	d4ef2752d	Thu Jul 9 14:58:27 2009 +0000	Fix LBCORE-107
+4f64c262f	af7c3e983	Wed Jul 8 11:53:10 2009 +0000	- typo fix
+7131e0a01	6617e9c1b	Wed Jul 8 10:14:59 2009 +0000	Fix LBCLASSIC-134
+4b440c919	c018c54af	Wed Jul 8 08:24:27 2009 +0000	Fix LBCORE-94  Within A RollingFileAppender, if the File property is declared after any rolling or triggering policies, then generate an error status message.
+c018c54af	4f231c3d9	Tue Jul 7 18:22:04 2009 +0000	- Renamed Constants as CoreTestConstants - Fixed LBCORE-105 Configuration files placed in jar files will no longer   lock the jar file.
+974f4927e	0702d87ef	Sat Jul 4 10:38:07 2009 +0000	- minor typo fix
+c539cccb7	028fc74ae	Thu Jul 2 13:56:33 2009 +0000	Fixing LBCORE-104
+8bd202dab	297492bcc	Fri Jun 26 20:32:02 2009 +0000	As a first step in fixing LBCLASSIC-139, added LB139_DeadlockTest to our regular test suite.
+8e062fbbe	3a9ef0324	Thu Jun 18 16:10:04 2009 +0000	Fixing LBCORE-100
+7d5cf3738	b7d33d573	Thu Jun 11 14:44:14 2009 +0000	- fixed slides on SiftingAppender
+ec2bd6075	90f2c88e6	Tue Feb 24 09:40:17 2009 +0000	Fixing problem by the fact that the localLevelReset() method in the Logger class inadvertently uses the DEBUG_INT value in the org.slf4j.spi.LocationAwareLogger interface instead of the DEBUG_INT value in ch.qos.logback.classic.Level class.
+1aead01cc	cf344c7c2	Mon Feb 9 21:07:37 2009 +0000	Initial attempting at fixing LBCLASSIC-101 via apache felix\'s maven-bundle-plugin.
+971ec30aa	022fa75dc	Thu Feb 5 21:25:21 2009 +0000	Added documentation and news about XMLLayout. This fixes LBCLASSIC-22
+2e2b4c5d6	160cf3402	Wed Jan 21 22:06:57 2009 +0000	Fixing LBCLASSIC-103
+4bf4b390b	2f70e3db1	Thu Jan 15 19:02:33 2009 +0000	Fixes LBCLASSIC-104.
+54531de9b	4e7c7cd5f	Fri Jan 9 17:46:02 2009 +0000	- Fixed LBSITE-23 - added blurb in the news about ViewStatusServlet
+19d58f563	a2941244d	Fri Jan 9 17:31:17 2009 +0000	Fixing LBCORE-81 and LBCORE-82.
+5b137ceec	28c14b2d2	Tue Dec 30 14:55:44 2008 +0000	- added an FAQ entry relating to the location of config file on the class path. - the section on logback initialization references the FAQ entry (location of config   files on the class path). This fixes LBSITE-20. - minor enhancements in architecture.html relating to the basic selection rule - updates to news.html
+28c14b2d2	979007d98	Tue Dec 30 11:48:16 2008 +0000	- LoggerContext reset, registered turbo filters are first stopped before being   unregistered. This fixes LBCLASSIC-89.
+18add88fc	b6449babb	Mon Dec 29 14:07:56 2008 +0000	- add charset encoding support for SMTPAppenderBase. This fixes LBCORE-69.
+17faeb66d	a2a298350	Sun Dec 28 19:31:49 2008 +0000	- Fix LBCORE-74
+c361d9542	d7dbf7d38	Thu Dec 18 13:22:04 2008 +0000	Fixed LBCLASSIC-98 (NPE thrown when calling setContextMap on a fresh MDC)
+5e9af127b	42164443b	Wed Dec 10 16:29:23 2008 +0000	Fix LBCORE-78.
+a7070d846	74ddffbb3	Fri Dec 5 10:00:48 2008 +0000	Fix LBCLASSIC-91
+766e42a8f	05404a2e3	Thu Dec 4 17:16:01 2008 +0000	Fixes LBCLASSIC-90. Logger reset set logger levels to NULL, except for the root logger which gets set to DEBUG.
+1342b78b1	a7c42ca8e	Tue Dec 2 19:37:44 2008 +0000	Fixed LBCORE-67
+1669117cf	959b55b30	Tue Nov 18 19:40:42 2008 +0000	- adding a very important test checking that initialization of   logback can succeed even in presence of recursive calls   to LoggerFactory.getLogger (invoked during the initialization of   logback). See also http://bugzilla.slf4j.org/show_bug.cgi?id=106   and http://jira.qos.ch/browse/LBCORE-47
+959b55b30	43d8ffe4c	Mon Nov 17 16:42:16 2008 +0000	 - Moved LINE_SEP constant from Layout to CoreConstants.  - Absorb thrown SecurityException/AccessControlException when accessing system properties    This fixes LBCLASSIC-86
+ccd501326	193af67a6	Wed Nov 12 18:40:35 2008 +0000	The logger and class name converters now consider zero as having special meaning, and will return the simple class name, removing the package name prefix. This feature was asked by Silvano Maffeis.
+9e54ff1d3	80a6444e4	Fri Nov 7 16:00:40 2008 +0000	Add support for a suffix attribute so as to distinguish the JMXConfigurator mbean of different web-application. This feature was requested in LBCLASSIC-61.
+3f236936c	4646573c5	Tue Nov 4 18:59:33 2008 +0000	The earlier version of SQL Server JDBC driver does not run under JDK 1.6. We now use sqljdbc4. (note the suffix 4)
+653c1dd20	51d4a71a2	Fri Oct 31 18:58:24 2008 +0000	- fixed SyslogAppenderTest failing on machines with . in their names. Reported by Thorbj\xc3\xb8rn
+9baefacbc	bb36e39e6	Thu Oct 30 19:42:34 2008 +0000	Fixes LBCLASSIC-49
+bb36e39e6	1409f1de9	Thu Oct 30 18:43:22 2008 +0000	- fixed LBCORE-21,
+f96e54644	ebc6de81d	Wed Oct 29 16:26:43 2008 +0000	- removing the "test" prefix from test methods. These are not needed for Junit4. - added copyright notice
+a62d35fd8	bf48890d9	Wed Oct 29 13:56:19 2008 +0000	placing DBAppender fixture in a separate class. DBAppenderTest no longer extends the fixture. This should make the code a somewhat clearer
+b991822b2	3eeb1fc03	Tue Oct 28 18:07:19 2008 +0000	fixes LBCLASSIC-74
+c08b14a95	6ee391eb8	Tue Oct 28 14:46:33 2008 +0000	Fixed LBCORE-43
+d699a4afd	9025d468d	Tue Oct 28 10:18:59 2008 +0000	Fix LBCLASSIC-77
+9025d468d	05934a8cd	Tue Oct 28 09:51:23 2008 +0000	Fixing http://jira.codehaus.org/browse/MNG-2045 as suggested by Joerg Schaible.
+bc125d94a	0f81eb40f	Thu Oct 23 13:13:49 2008 +0000	- bug hunting
+809eacf88	2ddfbbaf4	Thu Oct 23 09:34:21 2008 +0000	- typo fix (Ralph\'s name was misspelled)
+f3ad26be8	5bed66d79	Sat Oct 18 19:43:11 2008 +0000	Fixing date format as suggested in LBCLASSIC-48 by Peter Royal.
+5bed66d79	c8c5a3fea	Sat Oct 18 19:31:14 2008 +0000	The prefixPattern variable is internal to the buildLayout() method.
+1c83f5875	025b4d38f	Fri Oct 17 21:42:28 2008 +0000	Fixing LBCORE-55
+f9d9ce1ec	79c04354a	Tue Oct 7 15:23:52 2008 +0000	Fixing LBCORE-11
+e6a745ba2	9ae5e794d	Tue Oct 7 13:23:33 2008 +0000	Fixing LBCORE-11
+d76d5c6f2	01f87960a	Wed Aug 27 18:06:57 2008 +0000	- minor fixes
+6a60c9368	3a7c47c85	Mon Aug 4 21:27:46 2008 +0000	more debug info
+3a7c47c85	22c932ac0	Mon Aug 4 21:23:37 2008 +0000	BogoPerf outputs data for debugging purposes
+c2c8f991d	8ab52833f	Fri Jul 18 20:24:51 2008 +0000	- renaming "test" as "tezt" as a prefix in Junit 4 tests, so that they pass under Continuum
+8ab52833f	8eaa643ca	Fri Jul 18 20:18:39 2008 +0000	- removing "test" as a prefix from Junit 4 tests, so that they pass under Continuum
+8eaa643ca	4a4f4905b	Fri Jul 18 20:17:42 2008 +0000	- removing "test" as a prefix from Junit 4 tests, so that they pass under Continuum
+4a4f4905b	faa1f2ae7	Fri Jul 18 20:15:22 2008 +0000	- removing "test" as a prefix from Junit 4 tests, so that they pass under Continuum
+84ed39620	9ae672ccb	Fri Jul 18 19:39:57 2008 +0000	- Debugging IncludeActionTest which fails under continuum
+27f43b37d	a6a9828c7	Mon Jul 14 19:31:59 2008 +0000	- fixes LBCLASSIC-56
+1135eba86	755fa2cd1	Tue May 20 15:31:47 2008 +0000	- migrated from bugzilla to JIRA
+aec12f050	eedb050f6	Sun May 4 18:21:47 2008 +0000	- added blurb about bug fix in LoggerContext.shutdownAndReset()
+ce74bc347	abf165b3b	Thu Apr 17 14:52:22 2008 +0000	- renamed Constant4T ad TestConstants - fixed bug 147 which was caused by the user specifying a layout for SyslogAppender.   SyslogAppender now disallows the user to set a layout. It also informs the user   that the action is disallows directing her to an error page. - updated codes.html in relation to bug 147 - simplified and shortened codes.html
+56babafe4	937465dc7	Thu Mar 13 16:55:08 2008 +0000	- documenting and further testing parentheses support (bug 83) - updating news
+8fc147fac	75b23e0e1	Thu Mar 13 02:59:18 2008 +0000	- fixing remaining issues with bug 109, in particular NPE thrown for getRequestContent and   getResponseContent after serialization. The idea is, as expalined in comment 3, to make a   copy of the contents of various httpRequest and httpResponse fields (without serializing   httpRequest and httpResponse). Also note many converters in the c.q.l.acces.Pattern package   *cannot* deal with null values returned by various get methods in AccessEvent. Thus, it is not   enough to avoid NPE as accomplished by attachment 21 (dated 2008-01-28 21:39:11) but also to   return valid values.
+7cbd42e24	5f3b721a7	Tue Mar 11 09:43:47 2008 +0000	- ongoing work for fixing bug 100
+5f3b721a7	9c5a3bc67	Tue Mar 11 08:23:19 2008 +0000	- typo fix
+62a84446e	60f2d4689	Tue Mar 11 19:50:38 2008 +0000	- updating news file to keep up with bug fixes
+60f2d4689	95939407f	Tue Mar 11 19:43:31 2008 +0000	- StatusPrinter can now print time of statii - Applied patch 10 mentioned in bug 105 onto SocketAppenderBase - SocketServer class has been removed and replaced by SimpleSocketServer - SimpleSocketServer is much more careful to track open client connections and to close them. Added relevant test cases.
+db4ab0bcd	15d3967a1	Tue Mar 4 18:04:20 2008 +0000	- fixing bug #129 see also http://bugzilla.qos.ch/show_bug.cgi?id=129\\
+15d3967a1	d655ffdd1	Tue Mar 4 16:38:27 2008 +0000	- fixing bug #129 see also http://bugzilla.qos.ch/show_bug.cgi?id=129\\
+ae8a704d8	9c38d080c	Tue Mar 4 10:51:19 2008 +0000	- fixing bug #127  See http://bugzilla.qos.ch/show_bug.cgi?id=127 for further details
+8d7cafaa1	14a422c3c	Thu Jan 31 10:32:17 2008 +0000	- fix bug 66 reported by Franck Routier on the SLF4J site. See   http://bugzilla.slf4j.org/show_bug.cgi?id=66 for more details.
+a3595490b	920ef0b18	Mon Jan 28 10:06:58 2008 +0000	- applying some of the changes proposed by Joern Huxhorn in his patch dated 2008-01-26 (bug 109)
+26a6e4509	caa23a0c4	Fri Jan 25 11:32:25 2008 +0000	- removing unnecessary "if(isDebugEnabledTest())" test
+caa23a0c4	daf4338c0	Fri Jan 25 11:21:19 2008 +0000	- bug 109 (corrected, with test case showing correct survival of AccessEvent fields values)
+daf4338c0	edd6a3ca0	Wed Jan 23 16:09:08 2008 +0000	- bug 109 (ONGOING WORK)
+edd6a3ca0	1ac12a616	Wed Jan 23 12:48:22 2008 +0000	- updates to bug list in news.html
+1ac12a616	dfbd23e62	Wed Jan 23 12:18:38 2008 +0000	 - fixing silly but nonetheless serious copy-and-paste bugs, as reported by by Joern Huxhorn in  bug #104  http://bugzilla.qos.ch/show_bug.cgi?id=104
+dfbd23e62	5550c94aa	Wed Jan 23 09:52:19 2008 +0000	- request parameters can be multi-valued as observed in bug 110   http://bugzilla.qos.ch/show_bug.cgi?id=110
+1d2f7973d	e4cf7eea1	Thu Oct 4 13:29:47 2007 +0000	fixing bugs found by FindBugs
+c3ce80a4a	489a13886	Thu Oct 4 12:38:26 2007 +0000	corrected bug caught by FindBugz
+489a13886	d2d75fe0c	Thu Oct 4 11:09:40 2007 +0000	test fix
+34ee5e419	26402b9e6	Tue Sep 18 20:43:32 2007 +0000	Allowing the user to specify a custom ContextSelector as requested in bug 96.
+7659966ff	ea02ccaba	Wed Aug 29 21:59:52 2007 +0000	- MDC data in now inheritable by child threads. This fixes bug #64. - updated MDC docs
+61fa8ba1e	b3293cf8c	Wed Aug 22 20:01:45 2007 +0000	typo fixes
+db214f8a4	8a8dd319a	Wed Aug 22 18:49:23 2007 +0000	- renamed IncludeFileAction as IncludeAction.java - other related (but minor) fixes
+ebb08b097	ed188183d	Tue Aug 21 21:14:30 2007 +0000	- moving to 0.9.8 - adding resource reading capability in IncludeFileAction (see bug 89)   cleaning up IncludeFileActionTest.java - other minor changes
+1ee2505f3	f7aa75634	Tue Aug 21 17:53:37 2007 +0000	we now set the argumentArray variable in the LoggingEvent class\' constructor. Problem reported by Robert Christian in bug #85.
+f7aa75634	a90fe878a	Tue Aug 21 17:41:43 2007 +0000	- minor doc changes - fixed bug 78, in relation with failing caller data extraction (reported by Hans van der Meer) - moved LoggingEventTest to test/
+a90fe878a	649976619	Tue Aug 21 15:58:52 2007 +0000	- verified fix for bug 88
+649976619	635118910	Tue Aug 21 15:44:53 2007 +0000	- various documentation improvements - fixed bug 90 by removing the outdated "configuration" section in chapter 2.   It was a duplicate of a homonym in chapter 3.
+2c2061a8a	afa32a242	Thu Jul 19 20:42:02 2007 +0000	correcting bug fix observed when running with Orion. See also http://www.qos.ch/pipermail/logback-user/2007-May/000216.html
+885263816	c291b38db	Mon Jul 9 20:11:00 2007 +0000	minor typo fix
+b264acde2	e36fbb711	Fri Jul 6 10:32:38 2007 +0000	Fixing bugs 80 and 82
+2f140961c	cee4f0961	Tue May 29 18:51:14 2007 +0000	- Fixing bugs 75 and 76. See [1,2] - Preparing release 0.9.7.
+663854d60	cb1248b14	Fri May 4 13:27:20 2007 +0000	Fixing bug 70 involving the %throwable conversion word.
+cb1248b14	26fb735fd	Thu May 3 19:46:20 2007 +0000	added test case for bug 63
+26fb735fd	f5ddcf921	Thu May 3 19:36:27 2007 +0000	Fix for bug report 63.
+b28256fd7	9ca1565c3	Thu May 3 18:33:27 2007 +0000	Fixed JMX related problem observed when running under JDK 1.4.
+b5c3bca8c	ea25c823c	Mon Apr 2 20:01:53 2007 +0000	minor fixes
+4874d8fb2	0a538ff96	Mon Apr 2 19:09:15 2007 +0000	- Fixed bug 54
+4d929e035	cfc9a590e	Mon Apr 2 18:10:36 2007 +0000	- Renamed LoggerTest as TurboFilteringInLoggerTest - Fixed serious bugs in isXYZEnabled methods as reported in http://www.slf4j.org/pipermail/user/2007-April/000319.html
+3c56c2f04	308e2a887	Mon Mar 26 20:14:39 2007 +0000	typo fix
+f8575edaf	6f19c1b1e	Thu Mar 15 14:15:45 2007 +0000	Mentionned the correction of bug 53
+a3b0aed7d	8db290bde	Mon Mar 12 16:38:55 2007 +0000	Added a test case Fixed a bug
+20e36519d	739d9a7d9	Mon Mar 12 14:46:54 2007 +0000	Refactored Logger and LoggerContext classes. We now construct the Object array to place the arguments of the parametrized logging only when the TurboFilters have been called. This makes the cost of not logging less expensive of about 20 nanos per request. The isDebugEnabled methods (and related isXXXEnabled() ) now call the TurboFilters before returning their result.
+27d1ec1ca	ebe21e265	Thu Mar 8 14:35:19 2007 +0000	Added a test case about bug 52
+0d71471fc	78ac45c47	Mon Feb 19 14:32:29 2007 +0000	Minor fixes
+78ac45c47	e4412e08e	Thu Feb 15 16:53:40 2007 +0000	updated the news.html page after two bug fixes
+e4412e08e	6aef69510	Thu Feb 15 16:46:10 2007 +0000	Changes related to bug #46 This test should now run fine under any time zone
+e1ddc2346	644fb28e7	Thu Feb 15 14:44:03 2007 +0000	Changes related to bug #45 A prepareMessage(Object message): String method has been added to the Category class to check whether the message is null or not and to take care of the casting. The InvokeLog4jTest class has been removed and replaced by a LoggerTest class that tests the same things, plus the changes related to bug #45. Compared to the old test class, the new class tests all this silently.
+903a83435	32613f122	Mon Feb 5 13:38:26 2007 +0000	minor fixes
+7d82ab7c6	d92476df2	Tue Jan 23 14:03:51 2007 +0000	fixed bug #34
+5a115790a	3064783a0	Tue Jan 23 11:10:05 2007 +0000	minor fixes
+3e858876a	9ea26aae5	Thu Jan 18 16:06:40 2007 +0000	will fix later
+e14fbf430	0aaf29eb7	Fri Jan 12 15:44:32 2007 +0000	minor fix
+cd64659c1	1def2400f	Wed Jan 10 20:46:58 2007 +0000	added link to bugzilla entry
+dd8b0976b	82aeea23c	Mon Jan 8 10:54:27 2007 +0000	Sentences fixed
+fad910671	8fa284406	Wed Jan 3 14:46:39 2007 +0000	Fixed bug that would prevent correct conversion of patterns with automatic configuration
+c5d031019	061b412f9	Wed Dec 20 14:12:47 2006 +0000	layout chapter fix temporary changes to SampleLogging.java
+32c241404	65ed68bf6	Tue Dec 19 19:17:24 2006 +0000	on going work on chapter 3 minor fix on build.xml
+53bca04e0	7b3946497	Mon Dec 18 20:30:22 2006 +0000	Fixed bug in LogbackValve: filter chain now called Removed  unnecessary mbeans-descriptors file.
+434865ac8	60dce35df	Mon Dec 18 10:48:17 2006 +0000	title fix
+5bd67e793	c9792c643	Mon Dec 18 09:52:38 2006 +0000	Added debug mode and status printing to access module
+c9792c643	cdbdc0868	Mon Dec 18 09:45:22 2006 +0000	Added debug attribute and status printing
+b64736089	f61d58615	Fri Dec 15 17:22:59 2006 +0000	fixes
+97df0a074	06f18c601	Wed Dec 6 18:39:25 2006 +0000	minor fix
+b58d4008a	12ae67c2a	Sat Dec 2 16:53:22 2006 +0000	minor error reporting fix
+d2873019d	9bd8f1bd2	Fri Dec 1 16:17:37 2006 +0000	Modified test dir prefix to allow eclipse and idea to reach the files with different base directories
+9bd8f1bd2	3ee893993	Fri Dec 1 16:13:48 2006 +0000	Modified test dir prefix to allow eclipse and idea to reach the files with different base directories
+bb97c4723	727f507fe	Tue Nov 28 19:05:25 2006 +0000	minor fix
+7ce80c3ab	ab86db9b1	Tue Nov 28 13:35:19 2006 +0000	minor fixes
+c8c4f6527	4ba2589c8	Wed Nov 22 11:03:49 2006 +0000	minor fix
+4ba2589c8	6d9ae0f36	Wed Nov 22 10:59:00 2006 +0000	minor fix
+d66275b48	68b7a642a	Tue Nov 21 11:07:23 2006 +0000	- fixed problem with TimeUtilTest when run European contries where the first day   of the week is Monday instead of Sunday. - Renamed InterpretationContext.addProperty as addSubstitutionProperty - Fixed bug in PropertyAction
+1b0a78fa0	9c5b665a5	Fri Nov 17 14:43:23 2006 +0000	bug fix
+9aa4249aa	94de7adf5	Fri Nov 17 11:34:09 2006 +0000	minor bug fix
+a760779bc	b1d4fc5a8	Tue Nov 14 11:12:10 2006 +0000	minor fixes
+9e312f37d	01f4ac906	Mon Nov 13 13:28:40 2006 +0000	minor fix
+ebfb639d1	ddc750130	Fri Nov 10 18:03:27 2006 +0000	added a test method in PatternLayoutTest to test bug #29
+880184bee	bdb510f3c	Fri Nov 10 16:40:52 2006 +0000	supressed unnecessary elements in DB configuration examples minor fixes
+193f7dbe0	7b0c8a9e7	Fri Nov 10 09:32:01 2006 +0000	minor fix
+dd293b1fe	1defacdb7	Mon Nov 6 19:21:29 2006 +0000	on going work, added SMTPAppender doc + fixes on other examples
+e220856dd	1235b940b	Mon Nov 6 16:42:54 2006 +0000	Added an option to the SocketAppender to call the getCallerData method on logging events before serializing them so that the caller data is available on the remote machine. Minor fix to SimpleSocketServer.java Reformat only on SocketNode.java
+1235b940b	ac6899010	Mon Nov 6 11:28:49 2006 +0000	minor fix
+20d14b5ba	b660971ac	Mon Nov 6 09:24:05 2006 +0000	minor fix
+1e8d56e0c	b069828f4	Thu Nov 2 21:14:02 2006 +0000	minor fix
+cd5686d97	5ad4e375d	Thu Nov 2 19:06:37 2006 +0000	Fixed bug #27.
+445c93509	6fb60bd87	Thu Nov 2 18:11:54 2006 +0000	- added capability of setting collections of simple properties in PropertySetter and Joran - small bug fix in Pattern class (a trailing / in the pattern string would cause the addition of an extra component with an empty string)
+440486a18	234830daf	Thu Nov 2 10:05:20 2006 +0000	minor fix
+b338ee8e2	f5b5103cc	Wed Nov 1 16:51:54 2006 +0000	Added two test cases to check that Joran can configure turbo filters. In BasicJoranTest, the method testTurboFilterWithStringList fails because Joran doesn\'t add correctly users to the userList. Watch bug #27 for more info.
+f5b5103cc	70549e814	Wed Nov 1 16:21:38 2006 +0000	ConfigurationAction now pushes and pops the context to and from the objectStack, so that it is usable by following actions. Added an implementation of TurboFilter that allows debug level for selected users only. Work in progress: the <user> element still makes Joran caugh a bit.
+622bfacdc	1d7323881	Wed Nov 1 13:34:54 2006 +0000	Changed getActiveFileName() method name to getNewActiveFileName() Other minor fixes
+05758a06d	50f89716e	Tue Oct 31 10:50:42 2006 +0000	corrected bug #23
+ad921370b	83b160061	Tue Oct 31 10:28:23 2006 +0000	minor fix
+83e427763	d0027c4b7	Mon Oct 30 10:18:33 2006 +0000	minor fix deleted some comments
+cb44b6cdb	872f117c9	Fri Oct 27 13:39:43 2006 +0000	added a testSetComponentWithCamelCaseName, trying to catch the wrong behaviour mentionned in bug#18
+14911e7f1	42d8fa0f5	Fri Oct 27 13:12:07 2006 +0000	minor fix
+7e755b897	d67fa9ac7	Fri Oct 27 04:22:28 2006 +0000	- JaninoEvaluator stops itself after several errors - corrected a hard to spot bug in AbstractEvaluatorFilter. It has methods like
+e292eeff2	c5cd7306c	Thu Oct 26 14:34:42 2006 +0000	added news about 0.5 other minor fixes
+72de6f815	297e92745	Thu Oct 26 12:29:57 2006 +0000	minor fix
+79dc03912	b5d6c9fb0	Tue Oct 24 17:56:27 2006 +0000	- added links from javadoc to online layouts page - other fixes
+6712514ee	ae7ecaf13	Tue Oct 24 17:53:12 2006 +0000	minor fix
+d522ce782	b17afdd92	Tue Oct 24 13:18:02 2006 +0000	- fixed bug where the pattern "a/b/*" incorrectly matched "a/other". - also fixed bug whereby if there was no object at the top of the stack, NestedComponentIA   and NestedSimplePropertyIA would barf with an EmptryStackException
+b17afdd92	601bbfd46	Tue Oct 24 13:16:58 2006 +0000	- fixed bug where the pattern "a/b/*" incorrectly matched "a/other". - also fixed bug whereby if there was no object at the top of the stack, NestedComponentIA   and NestedSimplePropertyIA would barf with an EmptryStackException
+ddbe9bfa2	9b15b6158	Mon Oct 23 20:06:43 2006 +0000	bug fix
+db1e638ea	a6797a578	Sat Oct 21 16:42:37 2006 +0000	Licensing fix
+a6797a578	3d61affeb	Fri Oct 20 16:42:32 2006 +0000	Work in progress - Removed mentions of DATE and ABSOLUTE keywords - Added truncation examples - Added %ex examples - other fixes...
+e8350c248	d3806b825	Thu Oct 19 14:40:01 2006 +0000	Corrected printing bug in IE (yes! :) Modified table styles to ease read when doc is printed Modified site.vm to create XHTML Strict pages and link css stylesheets correctly
+d3806b825	a0a2b2ae2	Thu Oct 19 13:45:50 2006 +0000	- Added suffix pattern matching to SimpleRuleStore. We can now do pattern matching   for a/*. - Tested Joran\'s newly introduced reconfigure capability.
+7177ff8f3	2e6aa9835	Sun Oct 15 17:44:14 2006 +0000	- joran now registers sax events and perform configration by replaying them - fixed bug related to element text (see bug #12). If the element body contained   entities joran would not return the complete text part only parts of it. - JoranConfigurator.doConfigure throws a JoranException. This changes has pros and   cons. On the plus side, it is a little for robust.
+191ec4239	66cf23ec9	Thu Oct 12 16:31:33 2006 +0000	Work in progress on layouts.xml and corresponding examples. - minor javadoc fix on PatternLayout.java - added a test to EvaluatorJoranTest.java - supressed sysout call in Interpreter.java - added manual directory to contain manual chapters
+0a9d09b81	8aefb3844	Wed Oct 11 13:04:35 2006 +0000	minor fix
+c64dc4381	bc052e0c3	Mon Oct 9 12:38:44 2006 +0000	- minor code fixes - added readMe in the core examples packages - modified joran documentation: WORK IN PROGRESS - added links to the archives of our mailing lists.
+b3fc3c809	bc21717a8	Fri Oct 6 14:06:44 2006 +0000	minor fix
+bc21717a8	af6fb3c99	Fri Oct 6 14:05:02 2006 +0000	- added HTMLLayout for access module - minor fix on SMTPAppender javadoc
+10b942619	96fe9f3dd	Wed Oct 4 16:25:24 2006 +0000	fixes
+8b4cd9808	aa6975c7b	Mon Oct 2 15:19:24 2006 +0000	- minor fixes
+425ee28d7	6548e6fc3	Mon Sep 25 14:11:49 2006 +0000	- updated RollingFileAppender.java and FixedWindowRollingPolicy.java to show a link to the faq when adding errors to the context
+ba3405821	9af077d3b	Thu Sep 14 09:30:28 2006 +0000	minor fix
+57821aa10	70dd9efe8	Fri Sep 8 15:45:13 2006 +0000	added bug fixes
+4f2ea78e6	a5b9405c2	Thu Sep 7 19:07:49 2006 +0000	Added MDC support Minor bug fixes
+6b8eba96a	4cfcfac53	Thu Sep 7 15:40:37 2006 +0000	- moved *RemoteView classes to spi - modified ouput of performance test classes - other minor fixes
+2c3744eb4	6a4bdecbd	Tue Sep 5 16:19:53 2006 +0000	minor fix
+b782486d7	a66202b7a	Fri Aug 11 17:03:04 2006 +0000	- added a test case to be sure that the LoggerContext doesn\'t get flooded with messages when no appenders are configured related bug: id=2
+a66202b7a	90a85099a	Fri Aug 11 09:31:45 2006 +0000	- updated bugreport.xml introduction - spelling fix on documentation.xml
+10a008ae0	aa5ca4624	Thu Aug 10 17:08:35 2006 +0000	- replaced Lroot and Lx level values in example with real levels - updated last source code snippet - other minor fixes
+7ecefb847	317381f5e	Thu Aug 10 09:14:33 2006 +0000	- added bugzilla link on bugreport.xml - modified links in repos.xml - minor other changes

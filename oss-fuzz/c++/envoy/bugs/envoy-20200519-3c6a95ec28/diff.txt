@@ -1,0 +1,210 @@
+diff --git a/source/common/http/BUILD b/source/common/http/BUILD
+index 5e78b0ed8d..c5b14f4a4b 100644
+--- a/source/common/http/BUILD
++++ b/source/common/http/BUILD
+@@ -371,6 +371,7 @@ envoy_cc_library(
+     ],
+     deps = [
+         ":header_map_lib",
++        ":utility_lib",
+         "//include/envoy/common:regex_interface",
+         "//include/envoy/http:header_map_interface",
+         "//include/envoy/json:json_object_interface",
+diff --git a/source/common/http/conn_manager_impl.cc b/source/common/http/conn_manager_impl.cc
+index c8eba98605..ac3bd11578 100644
+--- a/source/common/http/conn_manager_impl.cc
++++ b/source/common/http/conn_manager_impl.cc
+@@ -1714,9 +1714,10 @@ void ConnectionManagerImpl::ActiveStream::encodeHeadersInternal(ResponseHeaderMa
+   if (connection_manager_.drain_state_ != DrainState::NotDraining &&
+       connection_manager_.codec_->protocol() < Protocol::Http2) {
+     // If the connection manager is draining send "Connection: Close" on HTTP/1.1 connections.
+-    // Do not do this for H2 (which drains via GOAWAY) or Upgrade (as the upgrade
++    // Do not do this for H2 (which drains via GOAWAY) or Upgrade or CONNECT (as the
+     // payload is no longer HTTP/1.1)
+-    if (!Utility::isUpgrade(headers)) {
++    if (!Utility::isUpgrade(headers) &&
++        !HeaderUtility::isConnectResponse(request_headers_, *response_headers_)) {
+       headers.setReferenceConnection(Headers::get().ConnectionValues.Close);
+     }
+   }
+diff --git a/source/common/http/header_utility.cc b/source/common/http/header_utility.cc
+index 38e8256e11..00f089cd10 100644
+--- a/source/common/http/header_utility.cc
++++ b/source/common/http/header_utility.cc
+@@ -5,6 +5,7 @@
+ #include "common/common/regex.h"
+ #include "common/common/utility.h"
+ #include "common/http/header_map_impl.h"
++#include "common/http/utility.h"
+ #include "common/protobuf/utility.h"
+ #include "common/runtime/runtime_features.h"
+ 
+@@ -161,6 +162,13 @@ bool HeaderUtility::isConnect(const RequestHeaderMap& headers) {
+   return headers.Method() && headers.Method()->value() == Http::Headers::get().MethodValues.Connect;
+ }
+ 
++bool HeaderUtility::isConnectResponse(const RequestHeaderMapPtr& request_headers,
++                                      const ResponseHeaderMap& response_headers) {
++  return request_headers.get() && isConnect(*request_headers) &&
++         static_cast<Http::Code>(Http::Utility::getResponseStatus(response_headers)) ==
++             Http::Code::OK;
++}
++
+ void HeaderUtility::addHeaders(HeaderMap& headers, const HeaderMap& headers_to_add) {
+   headers_to_add.iterate(
+       [](const HeaderEntry& header, void* context) -> HeaderMap::Iterate {
+diff --git a/source/common/http/header_utility.h b/source/common/http/header_utility.h
+index 71d45f8d37..b357563b4c 100644
+--- a/source/common/http/header_utility.h
++++ b/source/common/http/header_utility.h
+@@ -117,6 +117,12 @@ public:
+    */
+   static bool isConnect(const RequestHeaderMap& headers);
+ 
++  /**
++   * @brief a helper function to determine if the headers represent an accepted CONNECT response.
++   */
++  static bool isConnectResponse(const RequestHeaderMapPtr& request_headers,
++                                const ResponseHeaderMap& response_headers);
++
+   /**
+    * Add headers from one HeaderMap to another
+    * @param headers target where headers will be added
+diff --git a/source/common/http/http1/codec_impl.cc b/source/common/http/http1/codec_impl.cc
+index 0b7dab12d1..2ab8d5be3a 100644
+--- a/source/common/http/http1/codec_impl.cc
++++ b/source/common/http/http1/codec_impl.cc
+@@ -165,8 +165,12 @@ void StreamEncoderImpl::encodeHeadersBase(const RequestOrResponseHeaderMap& head
+     } else if (connection_.protocol() == Protocol::Http10) {
+       chunk_encoding_ = false;
+     } else {
+-      encodeFormattedHeader(Headers::get().TransferEncoding.get(),
+-                            Headers::get().TransferEncodingValues.Chunked);
++      // For responses to connect requests, do not send the chunked encoding header:
++      // https://tools.ietf.org/html/rfc7231#section-4.3.6
++      if (!is_response_to_connect_request_) {
++        encodeFormattedHeader(Headers::get().TransferEncoding.get(),
++                              Headers::get().TransferEncodingValues.Chunked);
++      }
+       // We do not apply chunk encoding for HTTP upgrades, including CONNECT style upgrades.
+       // If there is a body in a response on the upgrade path, the chunks will be
+       // passed through via maybeDirectDispatch so we need to avoid appending
+@@ -1050,6 +1054,15 @@ int ClientConnectionImpl::onHeadersComplete() {
+         pending_response_.value().encoder_.connectRequest()) {
+       ENVOY_CONN_LOG(trace, "codec entering upgrade mode for CONNECT response.", connection_);
+       handling_upgrade_ = true;
++
++      // For responses to connect requests, do not accept the chunked
++      // encoding header: https://tools.ietf.org/html/rfc7231#section-4.3.6
++      if (headers->TransferEncoding() &&
++          absl::EqualsIgnoreCase(headers->TransferEncoding()->value().getStringView(),
++                                 Headers::get().TransferEncodingValues.Chunked)) {
++        sendProtocolError(Http1ResponseCodeDetails::get().InvalidTransferEncoding);
++        throw CodecProtocolException("http/1.1 protocol error: unsupported transfer encoding");
++      }
+     }
+ 
+     if (parser_.status_code == 100) {
+diff --git a/test/common/http/header_utility_test.cc b/test/common/http/header_utility_test.cc
+index 62ec0c0ff7..229b4e172b 100644
+--- a/test/common/http/header_utility_test.cc
++++ b/test/common/http/header_utility_test.cc
+@@ -526,6 +526,18 @@ TEST(HeaderIsValidTest, IsConnect) {
+   EXPECT_FALSE(HeaderUtility::isConnect(Http::TestRequestHeaderMapImpl{}));
+ }
+ 
++TEST(HeaderIsValidTest, IsConnectResponse) {
++  RequestHeaderMapPtr connect_request{new TestRequestHeaderMapImpl{{":method", "CONNECT"}}};
++  RequestHeaderMapPtr get_request{new TestRequestHeaderMapImpl{{":method", "GET"}}};
++  TestResponseHeaderMapImpl success_response{{":status", "200"}};
++  TestResponseHeaderMapImpl failure_response{{":status", "500"}};
++
++  EXPECT_TRUE(HeaderUtility::isConnectResponse(connect_request, success_response));
++  EXPECT_FALSE(HeaderUtility::isConnectResponse(connect_request, failure_response));
++  EXPECT_FALSE(HeaderUtility::isConnectResponse(nullptr, success_response));
++  EXPECT_FALSE(HeaderUtility::isConnectResponse(get_request, success_response));
++}
++
+ TEST(HeaderAddTest, HeaderAdd) {
+   TestHeaderMapImpl headers{{"myheader1", "123value"}};
+   TestHeaderMapImpl headers_to_add{{"myheader2", "456value"}};
+diff --git a/test/integration/integration_test.cc b/test/integration/integration_test.cc
+index 6f0a501ac3..9a238319ff 100644
+--- a/test/integration/integration_test.cc
++++ b/test/integration/integration_test.cc
+@@ -1304,8 +1304,10 @@ TEST_P(IntegrationTest, ConnectWithNoBody) {
+               hcm) -> void { ConfigHelper::setConnectConfig(hcm, false); });
+   initialize();
+ 
++  // Send the payload early so we can regression test that body data does not
++  // get proxied until after the response headers are sent.
+   IntegrationTcpClientPtr tcp_client = makeTcpConnection(lookupPort("http"));
+-  tcp_client->write("CONNECT host.com:80 HTTP/1.1\r\n\r\n", false);
++  tcp_client->write("CONNECT host.com:80 HTTP/1.1\r\n\r\npayload", false);
+ 
+   FakeRawConnectionPtr fake_upstream_connection;
+   ASSERT_TRUE(fake_upstreams_[0]->waitForRawConnection(fake_upstream_connection));
+@@ -1313,20 +1315,22 @@ TEST_P(IntegrationTest, ConnectWithNoBody) {
+   ASSERT_TRUE(fake_upstream_connection->waitForData(
+       FakeRawConnection::waitForInexactMatch("\r\n\r\n"), &data));
+   EXPECT_TRUE(absl::StartsWith(data, "CONNECT host.com:80 HTTP/1.1"));
++  // The payload should not be present as the response headers have not been sent.
++  EXPECT_FALSE(absl::StrContains(data, "payload")) << data;
+   // No transfer-encoding: chunked or connection: close
+   EXPECT_FALSE(absl::StrContains(data, "hunked")) << data;
+   EXPECT_FALSE(absl::StrContains(data, "onnection")) << data;
+ 
+-  ASSERT_TRUE(fake_upstream_connection->write("HTTP/1.1 200 OK\r\nContent-length: 0\r\n\r\n"));
++  ASSERT_TRUE(fake_upstream_connection->write("HTTP/1.1 200 OK\r\n\r\n"));
+   tcp_client->waitForData("\r\n\r\n", false);
+   EXPECT_TRUE(absl::StartsWith(tcp_client->data(), "HTTP/1.1 200 OK\r\n")) << tcp_client->data();
+   // Make sure the following payload is proxied without chunks or any other modifications.
+-  tcp_client->write("payload");
+   ASSERT_TRUE(fake_upstream_connection->waitForData(
+       FakeRawConnection::waitForInexactMatch("\r\n\r\npayload"), &data));
+ 
+   ASSERT_TRUE(fake_upstream_connection->write("return-payload"));
+   tcp_client->waitForData("\r\n\r\nreturn-payload", false);
++  EXPECT_FALSE(absl::StrContains(tcp_client->data(), "hunked"));
+ 
+   tcp_client->close();
+   ASSERT_TRUE(fake_upstream_connection->waitForDisconnect());
+@@ -1338,8 +1342,6 @@ TEST_P(IntegrationTest, ConnectWithChunkedBody) {
+               hcm) -> void { ConfigHelper::setConnectConfig(hcm, false); });
+   initialize();
+ 
+-  // Send the payload early so we can regression test that body data does not
+-  // get proxied until after the response headers are sent.
+   IntegrationTcpClientPtr tcp_client = makeTcpConnection(lookupPort("http"));
+   tcp_client->write("CONNECT host.com:80 HTTP/1.1\r\n\r\npayload", false);
+ 
+@@ -1351,25 +1353,12 @@ TEST_P(IntegrationTest, ConnectWithChunkedBody) {
+   // No transfer-encoding: chunked or connection: close
+   EXPECT_FALSE(absl::StrContains(data, "hunked")) << data;
+   EXPECT_FALSE(absl::StrContains(data, "onnection")) << data;
+-  // The payload should not be present as the response headers have not been sent.
+-  EXPECT_FALSE(absl::StrContains(data, "payload")) << data;
+-
+   ASSERT_TRUE(fake_upstream_connection->write(
+       "HTTP/1.1 200 OK\r\ntransfer-encoding: chunked\r\n\r\nb\r\nHello World\r\n0\r\n\r\n"));
+-  tcp_client->waitForData("0\r\n\r\n", false);
+-  EXPECT_TRUE(absl::StartsWith(tcp_client->data(), "HTTP/1.1 200 OK\r\n"));
+-  EXPECT_TRUE(absl::StrContains(tcp_client->data(), "hunked")) << tcp_client->data();
+-  EXPECT_TRUE(absl::StrContains(tcp_client->data(), "\r\n\r\nb\r\nHello World\r\n0\r\n\r\n"))
+-      << tcp_client->data();
+-
+-  // Make sure the early payload is proxied without chunks or any other modifications.
+-  ASSERT_TRUE(fake_upstream_connection->waitForData(
+-      FakeRawConnection::waitForInexactMatch("\r\n\r\npayload")));
+-
+-  ASSERT_TRUE(fake_upstream_connection->write("return-payload"));
+-  tcp_client->waitForData("\r\n\r\nreturn-payload", false);
+-
+-  tcp_client->close();
++  // The response will be rejected because chunked headers are not allowed with CONNECT upgrades.
++  // Envoy will send a local reply due to the invalid upstream response.
++  tcp_client->waitForDisconnect(false);
++  EXPECT_TRUE(absl::StartsWith(tcp_client->data(), "HTTP/1.1 503 Service Unavailable\r\n"));
+   ASSERT_TRUE(fake_upstream_connection->waitForDisconnect());
+ }
+ 

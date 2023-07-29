@@ -1,0 +1,14 @@
+diff --git a/mobile/library/common/http/client.cc b/mobile/library/common/http/client.cc
+index ba19358a13..0095bd57c9 100644
+--- a/mobile/library/common/http/client.cc
++++ b/mobile/library/common/http/client.cc
+@@ -48,7 +48,8 @@ void Client::DirectStreamCallbacks::encodeHeaders(const ResponseHeaderMap& heade
+ 
+   absl::string_view alpn = "";
+   uint64_t response_status = Utility::getResponseStatus(headers);
+-  if (direct_stream_.request_decoder_->streamInfo().upstreamInfo() &&
++  if (direct_stream_.request_decoder_ &&
++      direct_stream_.request_decoder_->streamInfo().upstreamInfo() &&
+       direct_stream_.request_decoder_->streamInfo().upstreamInfo()->upstreamSslConnection()) {
+     alpn = direct_stream_.request_decoder_->streamInfo()
+                .upstreamInfo()

@@ -1,0 +1,14 @@
+diff --git a/coders/pcd.c b/coders/pcd.c
+index 4c304e29f..5707d3e44 100644
+--- a/coders/pcd.c
++++ b/coders/pcd.c
+@@ -589,6 +589,9 @@ static Image *ReadPCDImage(const ImageInfo *image_info,ExceptionInfo *exception)
+     image->rows<<=1;
+   }
+   status=SetImageExtent(image,image->columns,image->rows,exception);
++  if (status == MagickFalse)
++    return(DestroyImageList(image));
++  status=ResetImagePixels(image,exception);
+   if (status == MagickFalse)
+     return(DestroyImageList(image));
+   /*

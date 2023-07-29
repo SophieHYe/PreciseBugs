@@ -1,0 +1,41 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index f7e28643f4..92ae858b70 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -2570,7 +2570,7 @@ static zend_always_inline int _zend_update_type_info(
+ 				ssa, opline->extended_value, t1, t2,
+ 				opline->opcode == ZEND_ASSIGN_OP ? ssa_op->op1_def : -1, optimization_level);
+ 			if (tmp & (MAY_BE_STRING|MAY_BE_ARRAY)) {
+-				tmp |= MAY_BE_RC1;
++				tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+ 			}
+ 			if (tmp & (MAY_BE_OBJECT|MAY_BE_RESOURCE)) {
+ 				tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+diff --git a/ext/opcache/tests/jit/assign_op_008.phpt b/ext/opcache/tests/jit/assign_op_008.phpt
+new file mode 100644
+index 0000000000..efd9418741
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_op_008.phpt
+@@ -0,0 +1,22 @@
++--TEST--
++JIT ASSIGN_OP: 008 Arrays merging with itself
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function test() {
++	$a = [];
++    for ($i = 0; $i < 2; $i++) {
++        $a + $a += $a;
++        $a['b'] += 1;
++    }
++}
++test();
++?>
++DONE
++--EXPECTF--
++Warning: Undefined array key "b" in %sassign_op_008.php on line 6
++DONE

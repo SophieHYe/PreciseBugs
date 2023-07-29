@@ -1,0 +1,110 @@
+diff --git a/gdal/frmts/pcidsk/sdk/pcidsk_segment.h b/gdal/frmts/pcidsk/sdk/pcidsk_segment.h
+index d964c22112..f295210e06 100644
+--- a/gdal/frmts/pcidsk/sdk/pcidsk_segment.h
++++ b/gdal/frmts/pcidsk/sdk/pcidsk_segment.h
+@@ -48,6 +48,7 @@ namespace PCIDSK
+ 
+         virtual void Initialize() {}
+ 
++        virtual bool GetUpdatable() const = 0;
+         virtual void WriteToFile( const void *buffer, uint64 offset, uint64 size)=0;
+         virtual void ReadFromFile( void *buffer, uint64 offset, uint64 size ) = 0;
+ 
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.cpp b/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.cpp
+index 83e1d7892b..eb4b745129 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.cpp
+@@ -69,10 +69,6 @@ CPCIDSKGCP2Segment::CPCIDSKGCP2Segment(PCIDSKFile *fileIn, int segmentIn, const
+  
+ CPCIDSKGCP2Segment::~CPCIDSKGCP2Segment()
+ {
+-    if( pimpl_ != NULL )
+-    {
+-        RebuildSegmentData();
+-    }
+     delete pimpl_;
+ }
+ 
+@@ -181,8 +177,6 @@ void CPCIDSKGCP2Segment::SetGCPs(std::vector<PCIDSK::GCP> const& gcps)
+     pimpl_->num_gcps = static_cast<unsigned int>(gcps.size());
+     pimpl_->gcps = gcps; // copy them in
+     pimpl_->changed = true;
+-    
+-    RebuildSegmentData();
+ }
+  
+ // Return the count of GCPs in the segment
+@@ -191,11 +185,20 @@ unsigned int  CPCIDSKGCP2Segment::GetGCPCount(void) const
+     return pimpl_->num_gcps;
+ }
+ 
++void CPCIDSKGCP2Segment::Synchronize()
++{
++    if( pimpl_ != NULL )
++    {
++        RebuildSegmentData();
++    }
++}
++
+ void CPCIDSKGCP2Segment::RebuildSegmentData(void)
+ {
+-    if (pimpl_->changed == false) {
++    if (pimpl_->changed == false || !GetUpdatable()) {
+         return;
+     }
++    pimpl_->changed = false;
+     
+     // Rebuild the segment data based on the contents of the struct
+     int num_blocks = (pimpl_->num_gcps + 1) / 2;
+@@ -302,6 +305,4 @@ void  CPCIDSKGCP2Segment::ClearGCPs(void)
+     pimpl_->num_gcps = 0;
+     pimpl_->gcps.clear();
+     pimpl_->changed = true;
+-    
+-    RebuildSegmentData();
+ }
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.h b/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.h
+index 82d782c7f7..47e3eefa3d 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.h
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidskgcp2segment.h
+@@ -51,6 +51,8 @@ namespace PCIDSK {
+         
+         // Clear a GCP Segment
+         void ClearGCPs(void) override;
++        
++        void Synchronize() override;
+     private:
+         void Load();
+         void RebuildSegmentData(void);
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
+index 8f293c9e8e..c985c295b5 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
+@@ -172,6 +172,15 @@ void CPCIDSKSegment::ReadFromFile( void *buffer, uint64 offset, uint64 size )
+     file->ReadFromFile( buffer, offset + data_offset + 1024, size );
+ }
+ 
++/************************************************************************/
++/*                           GetUpdatable()                             */
++/************************************************************************/
++
++bool CPCIDSKSegment::GetUpdatable() const
++{
++    return file->GetUpdatable();
++}
++
+ /************************************************************************/
+ /*                            WriteToFile()                             */
+ /************************************************************************/
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
+index fc6d0f95e8..28f91e3011 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
+@@ -62,6 +62,7 @@ namespace PCIDSK
+         PCIDSKBuffer &GetHeader() { return header; }
+         void        FlushHeader();
+ 
++        bool      GetUpdatable() const override;
+         void      WriteToFile( const void *buffer, uint64 offset, uint64 size ) override;
+         void      ReadFromFile( void *buffer, uint64 offset, uint64 size ) override;
+ 

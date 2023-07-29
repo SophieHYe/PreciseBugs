@@ -1,0 +1,34 @@
+diff --git a/glib/gbookmarkfile.c b/glib/gbookmarkfile.c
+index 3f0275fb9..31706ba12 100644
+--- a/glib/gbookmarkfile.c
++++ b/glib/gbookmarkfile.c
+@@ -863,7 +863,8 @@ parse_application_element (GMarkupParseContext  *context,
+       item->metadata->applications = g_list_prepend (item->metadata->applications, ai);
+       g_hash_table_replace (item->metadata->apps_by_name, ai->name, ai);
+     }
+-      
++
++  g_free (ai->exec);
+   ai->exec = g_strdup (exec);
+   
+   if (count)
+diff --git a/glib/tests/Makefile.am b/glib/tests/Makefile.am
+index 172d16607..2087f8332 100644
+--- a/glib/tests/Makefile.am
++++ b/glib/tests/Makefile.am
+@@ -165,6 +165,7 @@ dist_test_data += \
+ 	bookmarks/fail-37.xbel \
+ 	bookmarks/fail-38.xbel \
+ 	bookmarks/fail-39.xbel \
++	bookmarks/fail-40.xbel \
+ 	bookmarks/valid-01.xbel \
+ 	bookmarks/valid-02.xbel \
+ 	bookmarks/valid-03.xbel \
+diff --git a/glib/tests/bookmarks/fail-40.xbel b/glib/tests/bookmarks/fail-40.xbel
+new file mode 100644
+index 000000000..9ce48a828
+--- /dev/null
++++ b/glib/tests/bookmarks/fail-40.xbel
+@@ -0,0 +1 @@
++<xbel version="1.0"><bookmark href=""><info><metadata owner="http://freedesktop.org"><applications><application name=""exec=""/><application name=""exec=""/
+\ No newline at end of file

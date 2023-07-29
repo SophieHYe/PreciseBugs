@@ -1,0 +1,175 @@
+diff --git a/mobile/.bazelrc b/mobile/.bazelrc
+index 880efa2c4e..bf002239c0 100644
+--- a/mobile/.bazelrc
++++ b/mobile/.bazelrc
+@@ -69,7 +69,7 @@ build:tsan-dev --test_env="TSAN_OPTIONS=report_atomic_races=0"
+ 
+ # Exclude debug info from the release binary since it makes it too large to fit
+ # into a zip file. This shouldn't affect crash reports.
+-build:release-common --define=no_debug_info=1
++build:release-ios --define=no_debug_info=1
+ 
+ # Flags for release builds targeting iOS
+ build:release-ios --apple_bitcode=embedded
+diff --git a/mobile/.gitignore b/mobile/.gitignore
+index d78d5339b5..ca22245642 100644
+--- a/mobile/.gitignore
++++ b/mobile/.gitignore
+@@ -8,6 +8,7 @@
+ /dist/*pom.xml
+ /dist/*.aar
+ /dist/*.jar
++/dist/*.objdump
+ /dist/envoy_aar_sources.zip
+ /dist/Envoy.framework
+ /dist/*.asc
+diff --git a/mobile/BUILD b/mobile/BUILD
+index af5f1bf4dc..fbad222232 100644
+--- a/mobile/BUILD
++++ b/mobile/BUILD
+@@ -52,6 +52,7 @@ genrule(
+     srcs = [
+         "//library/kotlin/io/envoyproxy/envoymobile:envoy_aar",
+         "//library/kotlin/io/envoyproxy/envoymobile:envoy_aar_pom_xml",
++        "//library/kotlin/io/envoyproxy/envoymobile:envoy_aar_objdump_collector",
+     ],
+     outs = ["output_in_dist_directory"],
+     cmd = """
+@@ -60,6 +61,8 @@ genrule(
+     chmod 755 $$2
+     cp $$1 dist/envoy.aar
+     cp $$2 dist/envoy-pom.xml
++    shift 2
++    cp $$@ dist/
+     touch $@
+     """,
+     stamp = True,
+diff --git a/mobile/bazel/android_artifacts.bzl b/mobile/bazel/android_artifacts.bzl
+index 9f3c67e906..65f20779c6 100644
+--- a/mobile/bazel/android_artifacts.bzl
++++ b/mobile/bazel/android_artifacts.bzl
+@@ -53,6 +53,13 @@ def android_artifacts(name, android_library, manifest, archive_name, native_deps
+     _jni_archive = _create_jni_library(name, native_deps)
+     _aar_output = _create_aar(name, archive_name, _classes_jar, _jni_archive, proguard_rules, visibility)
+ 
++    native.filegroup(
++        name = name + "_objdump_collector",
++        srcs = native_deps,
++        output_group = "objdump",
++        visibility = ["//visibility:public"],
++    )
++
+     # Generate other needed files for a maven publish
+     _sources_name, _javadocs_name = _create_sources_javadocs(name, android_library)
+     _pom_name = _create_pom_xml(name, android_library, visibility)
+diff --git a/mobile/bazel/android_debug_info.bzl b/mobile/bazel/android_debug_info.bzl
+new file mode 100644
+index 0000000000..0c0557a5b1
+--- /dev/null
++++ b/mobile/bazel/android_debug_info.bzl
+@@ -0,0 +1,61 @@
++"""
++Rule to create objdump debug info from a native dynamic library built for
++Android.
++
++This is a workaround for generally not being able to produce dwp files for
++Android https://github.com/bazelbuild/bazel/pull/14765
++
++But even if we could create those we'd need to get them out of the build
++somehow, this rule provides a separate --output_group for this
++"""
++
++def _impl(ctx):
++    library_outputs = []
++    objdump_outputs = []
++    for platform, dep in ctx.split_attr.dep.items():
++        # When --fat_apk_cpu isn't set, the platform is None
++        if len(dep.files.to_list()) != 1:
++            fail("Expected exactly one file in the library")
++
++        cc_toolchain = ctx.split_attr._cc_toolchain[platform][cc_common.CcToolchainInfo]
++        lib = dep.files.to_list()[0]
++        platform_name = platform or ctx.fragments.android.android_cpu
++        objdump_output = ctx.actions.declare_file(platform_name + "/" + platform_name + ".objdump")
++
++        ctx.actions.run_shell(
++            inputs = [lib],
++            outputs = [objdump_output],
++            command = cc_toolchain.objdump_executable + " --dwarf=info --dwarf=rawline " + lib.path + ">" + objdump_output.path,
++            tools = [cc_toolchain.all_files],
++        )
++
++        strip_output = ctx.actions.declare_file(platform_name + "/" + lib.basename)
++        ctx.actions.run_shell(
++            inputs = [lib],
++            outputs = [strip_output],
++            command = cc_toolchain.strip_executable + " --strip-debug " + lib.path + " -o " + strip_output.path,
++            tools = [cc_toolchain.all_files],
++        )
++
++        library_outputs.append(strip_output)
++        objdump_outputs.append(objdump_output)
++
++    return [
++        DefaultInfo(files = depset(library_outputs)),
++        OutputGroupInfo(objdump = objdump_outputs),
++    ]
++
++android_debug_info = rule(
++    implementation = _impl,
++    attrs = dict(
++        dep = attr.label(
++            providers = [CcInfo],
++            cfg = android_common.multi_cpu_configuration,
++        ),
++        _cc_toolchain = attr.label(
++            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
++            cfg = android_common.multi_cpu_configuration,
++        ),
++    ),
++    fragments = ["cpp", "android"],
++)
+diff --git a/mobile/library/common/jni/BUILD b/mobile/library/common/jni/BUILD
+index 1954161be8..d806b39866 100644
+--- a/mobile/library/common/jni/BUILD
++++ b/mobile/library/common/jni/BUILD
+@@ -1,4 +1,5 @@
+ load("//bazel:kotlin_lib.bzl", "envoy_mobile_so_to_jni_lib")
++load("//bazel:android_debug_info.bzl", "android_debug_info")
+ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+ load("@envoy//bazel:envoy_build_system.bzl", "envoy_package")
+ load("//bazel:envoy_mobile_test_extensions.bzl", "TEST_EXTENSIONS")
+@@ -59,7 +60,7 @@ cc_binary(
+         "-llog",
+     ] + select({
+         "@envoy//bazel:dbg_build": ["-Wl,--build-id=sha1"],
+-        "//conditions:default": ["-Wl,-s"],
++        "//conditions:default": [],
+     }),
+     linkshared = True,
+     deps = [
+@@ -68,6 +69,11 @@ cc_binary(
+     ],
+ )
+ 
++android_debug_info(
++    name = "libenvoy_jni.so.debug_info",
++    dep = "libenvoy_jni.so",
++)
++
+ ## Targets for local execution
+ # OS X binary (.jnilib) for NDK testing
+ envoy_mobile_so_to_jni_lib(
+diff --git a/mobile/library/kotlin/io/envoyproxy/envoymobile/BUILD b/mobile/library/kotlin/io/envoyproxy/envoymobile/BUILD
+index 66d5c9f271..91658c0905 100644
+--- a/mobile/library/kotlin/io/envoyproxy/envoymobile/BUILD
++++ b/mobile/library/kotlin/io/envoyproxy/envoymobile/BUILD
+@@ -11,7 +11,7 @@ android_artifacts(
+     archive_name = "envoy",
+     manifest = "EnvoyManifest.xml",
+     native_deps = [
+-        "//library/common/jni:libenvoy_jni.so",
++        "//library/common/jni:libenvoy_jni.so.debug_info",
+     ],
+     proguard_rules = "//library:proguard_rules",
+     visibility = ["//visibility:public"],

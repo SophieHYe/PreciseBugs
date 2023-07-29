@@ -1,0 +1,57 @@
+diff --git a/vcl/Executable_fodtfuzzer.mk b/vcl/Executable_fodtfuzzer.mk
+index d4353cf123b7..c9801df6c678 100644
+--- a/vcl/Executable_fodtfuzzer.mk
++++ b/vcl/Executable_fodtfuzzer.mk
+@@ -19,7 +19,6 @@ $(eval $(call gb_Executable_use_api,fodtfuzzer,\
+ 
+ $(eval $(call gb_Executable_use_externals,fodtfuzzer,\
+     $(fuzzer_externals) \
+-    revenge \
+ ))
+ 
+ $(eval $(call gb_Executable_set_include,fodtfuzzer,\
+diff --git a/vcl/workben/docxfuzzer.cxx b/vcl/workben/docxfuzzer.cxx
+index ab9b30696cad..89766618b982 100644
+--- a/vcl/workben/docxfuzzer.cxx
++++ b/vcl/workben/docxfuzzer.cxx
+@@ -16,6 +16,11 @@ extern "C" void* SwCreateDialogFactory()
+     return nullptr;
+ }
+ 
++extern "C" void* com_sun_star_comp_Writer_EPUBExportFilter_get_implementation()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportDOCX(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/fodtfuzzer.cxx b/vcl/workben/fodtfuzzer.cxx
+index e68e37bf06ab..2b110212a57e 100644
+--- a/vcl/workben/fodtfuzzer.cxx
++++ b/vcl/workben/fodtfuzzer.cxx
+@@ -16,6 +16,11 @@ extern "C" void* SwCreateDialogFactory()
+     return nullptr;
+ }
+ 
++extern "C" void* com_sun_star_comp_Writer_EPUBExportFilter_get_implementation()
++{
++    return nullptr;
++}
++
+ extern "C" bool TestImportFODT(SvStream &rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+diff --git a/vcl/workben/htmlfuzzer.cxx b/vcl/workben/htmlfuzzer.cxx
+index 1c466fb1a3e3..fbeec9f3a4f1 100644
+--- a/vcl/workben/htmlfuzzer.cxx
++++ b/vcl/workben/htmlfuzzer.cxx
+@@ -13,6 +13,8 @@
+ 
+ extern "C" void* SwCreateDialogFactory() { return nullptr; }
+ 
++extern "C" void* com_sun_star_comp_Writer_EPUBExportFilter_get_implementation() { return nullptr; }
++
+ extern "C" bool TestImportHTML(SvStream& rStream);
+ 
+ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)

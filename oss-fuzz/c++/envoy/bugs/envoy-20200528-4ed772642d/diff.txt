@@ -1,0 +1,96 @@
+diff --git a/docs/root/faq/configuration/flow_control.rst b/docs/root/faq/configuration/flow_control.rst
+index 6f7b90163d..9bbce146a9 100644
+--- a/docs/root/faq/configuration/flow_control.rst
++++ b/docs/root/faq/configuration/flow_control.rst
+@@ -1,3 +1,5 @@
++.. _faq_flow_control:
++
+ How do I configure flow control?
+ ================================
+ 
+diff --git a/docs/root/faq/debugging/why_is_envoy_sending_413s.rst b/docs/root/faq/debugging/why_is_envoy_sending_413s.rst
+new file mode 100644
+index 0000000000..39769282ea
+--- /dev/null
++++ b/docs/root/faq/debugging/why_is_envoy_sending_413s.rst
+@@ -0,0 +1,6 @@
++.. _faq_why_is_envoy_sending_413:
++
++Why is Envoy sending 413s?
++==========================
++
++Envoy by default imposes limits to how much it will buffer for a given request. Generally, Envoy filters are designed to be streaming, and will pass data from downstream to upstream, or will simply pause processing while waiting for an external event (e.g. doing auth checks). Some filters, for example the buffer filter, require buffering the full request or response. If a request body is too large to buffer, but buffering is required by the filter, Envoy will send a 413. The buffer limits can be increased at the risk of making OOMs more possible. Please see the ref:`flow control docs <faq_flow_control>` for details.
+diff --git a/docs/root/faq/debugging/why_is_envoy_sending_internal_responses.rst b/docs/root/faq/debugging/why_is_envoy_sending_internal_responses.rst
+new file mode 100644
+index 0000000000..eaaeca31c2
+--- /dev/null
++++ b/docs/root/faq/debugging/why_is_envoy_sending_internal_responses.rst
+@@ -0,0 +1,9 @@
++.. _why_is_envoy_sending_internal_responses:
++
++Why is Envoy sending internal responses?
++========================================
++
++One of the easiest ways to get an understanding of why Envoy sends a given local response, is to turn on trace logging. If you can run your instance with “-l trace” you will slow Envoy down significantly, but get detailed information on various events in the lifetime of each stream and connection. Any time Envoy sends an internally generated response it will log to the _debug_ level “Sending local reply with details [unique reason]” which gives you information about why the local response was sent. Each individual response detail is used at one point in the code base, be it a codec validation check or a failed route match.
++
++If turning on debug logging is not plausible, the response details can be added to the access logs using _%RESPONSE_CODE_DETAILS%_, and again it will let you pinpoint the exact reason a given response was generated.
++
+diff --git a/docs/root/faq/debugging/why_is_my_route_not_found.rst b/docs/root/faq/debugging/why_is_my_route_not_found.rst
+new file mode 100644
+index 0000000000..17b6447c2f
+--- /dev/null
++++ b/docs/root/faq/debugging/why_is_my_route_not_found.rst
+@@ -0,0 +1,33 @@
++.. _why_is_my_route_not_found:
++
++Why is my route not found?
++==========================
++
++Once you've drilled down into Envoy responses and discovered Envoy generating local responses with the message
++"Sending local reply with details route_not_found" the next question is _why_?
++
++Often you can look at your route configuration and the headers sent, and see what is missing.
++One often overlooked problem is host:port matching. If your route configuration matches the domain
++www.host.com but the client is sending requests to www.host.com:443, it will not match.
++
++If this is the problem you are encountering you can solve it one of two ways. First by changing your
++configuration to match host:port pairs, going from
++
++.. code-block:: yaml
++
++  domains:
++    - "www.host.com"
++
++to
++
++.. code-block:: yaml
++
++  domains:
++    - "www.host.com"
++    - "www.host.com:80"
++    - "www.host.com:443"
++
++The other is to strip ports entirely using :ref:`stripping port from host header <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.strip_matching_host_port>`. Not that this will only stip port 80 from insecure requests and 443 from secure request. It does
++not just stop ports when routes are matched, but changes
++the host sent downstream to also not include the port.
++
+diff --git a/docs/root/faq/overview.rst b/docs/root/faq/overview.rst
+index 3769b53f47..48267fb006 100644
+--- a/docs/root/faq/overview.rst
++++ b/docs/root/faq/overview.rst
+@@ -27,6 +27,15 @@ API
+   api/why_versioning
+   api/incremental
+ 
++Debugging
++---------
++.. toctree::
++  :maxdepth: 2
++
++  debugging/why_is_envoy_sending_internal_responses
++  debugging/why_is_envoy_sending_413s
++  debugging/why_is_my_route_not_found
++
+ Performance
+ -----------
+ 

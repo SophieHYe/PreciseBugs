@@ -1,0 +1,72 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index ec9afe8e36..7b7db5af5c 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -159,6 +159,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz44561.sksl",
+   "/sksl/errors/Ossfuzz44565.sksl",
+   "/sksl/errors/Ossfuzz47935.sksl",
++  "/sksl/errors/Ossfuzz48592.sksl",
+   "/sksl/errors/OverflowFloatLiteral.rts",
+   "/sksl/errors/OverflowInlinedLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.rts",
+diff --git a/resources/sksl/errors/Ossfuzz48592.sksl b/resources/sksl/errors/Ossfuzz48592.sksl
+new file mode 100644
+index 0000000000..56af1f1343
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz48592.sksl
+@@ -0,0 +1 @@
++half x[int2((3-3`*cosh(421`.L1
+diff --git a/src/sksl/ir/SkSLType.cpp b/src/sksl/ir/SkSLType.cpp
+index 2294cdf9e3..f64802fc6f 100644
+--- a/src/sksl/ir/SkSLType.cpp
++++ b/src/sksl/ir/SkSLType.cpp
+@@ -968,18 +968,17 @@ bool Type::checkForOutOfRangeLiteral(const Context& context, const Expression& e
+ 
+ bool Type::checkForOutOfRangeLiteral(const Context& context, double value, Position pos) const {
+     SkASSERT(this->isScalar());
+-    if (this->isInteger()) {
+-        if (value < this->minimumValue() || value > this->maximumValue()) {
+-            // We found a value that can't fit in the type. Flag it as an error.
+-            context.fErrors->error(
+-                    pos,
+-                    SkSL::String::printf("integer is out of range for type '%s': %.0f",
+-                                         this->displayName().c_str(),
+-                                         std::floor(value)));
+-            return true;
+-        }
++    if (!this->isInteger()) {
++        return false;
+     }
+-    return false;
++    if (value >= this->minimumValue() && value <= this->maximumValue()) {
++        return false;
++    }
++    // We found a value that can't fit in our integral type. Flag it as an error.
++    context.fErrors->error(pos, SkSL::String::printf("integer is out of range for type '%s': %.0f",
++                                                     this->displayName().c_str(),
++                                                     std::floor(value)));
++    return true;
+ }
+ 
+ bool Type::checkIfUsableInArray(const Context& context, Position arrayPos) const {
+diff --git a/tests/sksl/errors/Ossfuzz48592.glsl b/tests/sksl/errors/Ossfuzz48592.glsl
+new file mode 100644
+index 0000000000..4d138e848c
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz48592.glsl
+@@ -0,0 +1,14 @@
++### Compilation failed:
++
++error: 1: expected ')' to complete expression, but found '`'
++half x[int2((3-3`*cosh(421`.L1
++                ^
++error: 1: expected ')' to complete function arguments, but found '`'
++half x[int2((3-3`*cosh(421`.L1
++                          ^
++error: 2: expected ')' to complete function arguments, but found ''
++error: 1: array size must be an integer
++half x[int2((3-3`*cosh(421`.L1
++       ^^^^^^^^^^^^^^^^^^^^^^^^
++error: 2: expected ']', but found ''
++5 errors

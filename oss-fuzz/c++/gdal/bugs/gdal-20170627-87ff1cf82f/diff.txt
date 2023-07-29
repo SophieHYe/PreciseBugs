@@ -1,0 +1,64 @@
+diff --git a/gdal/frmts/mrf/libLERC/BitStuffer.cpp b/gdal/frmts/mrf/libLERC/BitStuffer.cpp
+index 0cccbdeea6..5a5984cfa1 100644
+--- a/gdal/frmts/mrf/libLERC/BitStuffer.cpp
++++ b/gdal/frmts/mrf/libLERC/BitStuffer.cpp
+@@ -129,7 +129,7 @@ bool BitStuffer::write(Byte** ppByte, const vector<unsigned int>& dataVec)
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool BitStuffer::read(Byte** ppByte, size_t& nRemainingBytes, vector<unsigned int>& dataVec)
++bool BitStuffer::read(Byte** ppByte, size_t& nRemainingBytes, vector<unsigned int>& dataVec, size_t nMaxBufferVecElts)
+ {
+   if (!ppByte)
+     return false;
+@@ -154,6 +154,11 @@ bool BitStuffer::read(Byte** ppByte, size_t& nRemainingBytes, vector<unsigned in
+     LERC_BRKPNT();
+     return false;
+   }
++  if( numElements > nMaxBufferVecElts )
++  {
++    LERC_BRKPNT();
++    return false;
++  }
+ 
+   if (numBitsByte >= 32)
+     return false;
+diff --git a/gdal/frmts/mrf/libLERC/BitStuffer.h b/gdal/frmts/mrf/libLERC/BitStuffer.h
+index 7ae56bec32..b413089838 100644
+--- a/gdal/frmts/mrf/libLERC/BitStuffer.h
++++ b/gdal/frmts/mrf/libLERC/BitStuffer.h
+@@ -37,7 +37,7 @@ public:
+ 
+   // these 2 do not allocate memory. Byte ptr is moved like a file pointer.
+   static bool write(Byte** ppByte, const std::vector<unsigned int>& dataVec);
+-  static bool read( Byte** ppByte, size_t& nRemainingBytes, std::vector<unsigned int>& dataVec);
++  static bool read( Byte** ppByte, size_t& nRemainingBytes, std::vector<unsigned int>& dataVec, size_t nMaxBufferVecElts);
+ 
+   static unsigned int computeNumBytesNeeded(unsigned int numElem, unsigned int maxElem);
+   static unsigned int numExtraBytesToAllocate()  { return 3; }
+diff --git a/gdal/frmts/mrf/libLERC/CntZImage.cpp b/gdal/frmts/mrf/libLERC/CntZImage.cpp
+index 3bdcbc8f89..19b0ad9c71 100644
+--- a/gdal/frmts/mrf/libLERC/CntZImage.cpp
++++ b/gdal/frmts/mrf/libLERC/CntZImage.cpp
+@@ -1043,7 +1043,9 @@ bool CntZImage::readCntTile(Byte** ppByte, size_t& nRemainingBytesInOut, int i0,
+ 
+     vector<unsigned int>& dataVec = m_tmpDataVec;
+     BitStuffer bitStuffer;
+-    if (!bitStuffer.read(&ptr, nRemainingBytes, dataVec))
++    size_t nMaxElts =
++            static_cast<size_t>(i1-i0) * static_cast<size_t>(j1-j0);
++    if (!bitStuffer.read(&ptr, nRemainingBytes, dataVec, nMaxElts))
+     {
+       LERC_BRKPNT();
+       return false;
+@@ -1170,7 +1172,9 @@ bool CntZImage::readZTile(Byte** ppByte, size_t& nRemainingBytesInOut,
+     {
+       vector<unsigned int>& dataVec = m_tmpDataVec;
+       BitStuffer bitStuffer;
+-      if (!bitStuffer.read(&ptr, nRemainingBytes, dataVec))
++      size_t nMaxElts =
++            static_cast<size_t>(i1-i0) * static_cast<size_t>(j1-j0);
++      if (!bitStuffer.read(&ptr, nRemainingBytes, dataVec, nMaxElts))
+       {
+         LERC_BRKPNT();
+         return false;

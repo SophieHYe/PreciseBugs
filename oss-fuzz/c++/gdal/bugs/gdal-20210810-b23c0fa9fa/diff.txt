@@ -1,0 +1,34 @@
+diff --cc gdal/frmts/aigrid/gridlib.c
+index bd6384b58f,bd6384b58f..2d276e517a
+--- a/gdal/frmts/aigrid/gridlib.c
++++ b/gdal/frmts/aigrid/gridlib.c
+@@@ -116,10 -116,10 +116,7 @@@ static GInt32 AIGRolloverSignedAdd(GInt
+      // Not really portable as assumes complement to 2 representation
+      // but AIG assumes typical unsigned rollover on signed
+      // integer operations.
+--    GInt32 res;
+--    GUInt32 resUnsigned = (GUInt32)(a) + (GUInt32)(b);
+--    memcpy(&res, &resUnsigned, sizeof(res));
+--    return res;
+++    return (GInt32)((GUInt32)(a) + (GUInt32)(b));
+  }
+  
+  /************************************************************************/
+@@@ -418,7 -418,7 +415,7 @@@ CPLErr AIGProcessBlock( GByte *pabyCur
+                  return CE_Failure;
+              }
+  
+--            nValue = AIGRolloverSignedAdd(pabyCur[0] * 256 + pabyCur[1], nMin);
+++            nValue = (pabyCur[0] * 256 + pabyCur[1]) + nMin;
+              pabyCur += 2;
+              nDataSize -= 2;
+  
+@@@ -447,7 -447,7 +444,7 @@@
+                  return CE_Failure;
+              }
+  
+--            nValue = AIGRolloverSignedAdd(*(pabyCur++), nMin);
+++            nValue = *(pabyCur++) + nMin;
+              nDataSize--;
+  
+              for( i = 0; i < nMarker; i++ )

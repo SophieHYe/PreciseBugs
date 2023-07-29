@@ -1,0 +1,334 @@
+diff --git a/osquery/config/config.cpp b/osquery/config/config.cpp
+index 9ebb80bcd..41536e303 100644
+--- a/osquery/config/config.cpp
++++ b/osquery/config/config.cpp
+@@ -10,6 +10,7 @@
+ #include <chrono>
+ #include <functional>
+ #include <map>
++#include <queue>
+ #include <string>
+ #include <vector>
+ 
+@@ -39,6 +40,11 @@ namespace {
+ /// Prefix to persist config data
+ const std::string kConfigPersistencePrefix{"config_persistence."};
+ 
++/// Max depth that the JSON document representing the configuration can have
++const int kMaxConfigDepth = 32;
++/// Max size that the configuration, stripped from its comments, can have
++const int kMaxConfigSize = 1024 * 1024;
++
+ using ConfigMap = std::map<std::string, std::string>;
+ 
+ std::atomic<bool> is_first_time_refresh(true);
+@@ -609,6 +615,53 @@ void Config::backupConfig(const ConfigMap& config) {
+   }
+ }
+ 
++Status Config::validateConfig(const JSON& document) {
++  const auto& rapidjson_doc = document.doc();
++  if (!rapidjson_doc.IsObject()) {
++    return Status::failure(
++        "The root of the config JSON document has to be an Object");
++  }
++
++  const rapidjson::Value& root_node = rapidjson_doc;
++  std::queue<std::reference_wrapper<const rapidjson::Value>> nodes;
++  nodes.push(root_node);
++
++  std::size_t node_count = nodes.size();
++  int depth = 0;
++
++  while (node_count > 0 && depth < kMaxConfigDepth) {
++    while (node_count > 0) {
++      const auto& node = nodes.front().get();
++      nodes.pop();
++
++      if (node.IsObject()) {
++        for (rapidjson::Value::ConstMemberIterator itr = node.MemberBegin();
++             itr != node.MemberEnd();
++             ++itr) {
++          nodes.push(node[itr->name]);
++        }
++      } else if (node.IsArray()) {
++        for (size_t i = 0; i < node.Size(); ++i) {
++          nodes.push(node[i]);
++        }
++      }
++
++      --node_count;
++    }
++
++    ++depth;
++    node_count = nodes.size();
++  }
++
++  if (depth == kMaxConfigDepth && node_count != 0) {
++    return Status::failure(
++        "Configuration has too many "
++        "nesting levels!");
++  }
++
++  return Status::success();
++}
++
+ Status Config::updateSource(const std::string& source,
+                             const std::string& json) {
+   // Compute a 'synthesized' hash using the content before it is parsed.
+@@ -631,8 +684,24 @@ Status Config::updateSource(const std::string& source,
+   auto clone = json;
+   stripConfigComments(clone);
+ 
+-  if (!doc.fromString(clone) || !doc.doc().IsObject()) {
+-    return Status(1, "Error parsing the config JSON");
++  // Since we use iterative parsing, we limit the size of the JSON
++  // string to a sane value to avoid memory exhaustion.
++  if (clone.size() > kMaxConfigSize) {
++    return Status::failure(
++        "Error parsing the config JSON: the config size exceeds the limit "
++        "of " +
++        std::to_string(kMaxConfigSize) + " bytes");
++  }
++
++  if (!doc.fromString(clone, JSON::ParseMode::Iterative) ||
++      !doc.doc().IsObject()) {
++    return Status::failure("Error parsing the config JSON");
++  }
++
++  auto status = validateConfig(doc);
++  if (!status.ok()) {
++    return Status::failure("Error validating the config JSON: " +
++                           status.getMessage());
+   }
+ 
+   // extract the "schedule" key and store it as the main pack
+@@ -718,7 +787,7 @@ void Config::applyParsers(const std::string& source,
+         }
+ 
+         auto doc = JSON::newFromValue(obj[key]);
+-        parser_config.emplace(std::make_pair(key, std::move(doc)));
++        parser_config.emplace(key, std::move(doc));
+       }
+     }
+     // The config parser plugin will receive a copy of each property tree for
+diff --git a/osquery/config/config.h b/osquery/config/config.h
+index b4c81ca2b..0e364e845 100644
+--- a/osquery/config/config.h
++++ b/osquery/config/config.h
+@@ -243,6 +243,14 @@ class Config : private boost::noncopyable {
+   static const std::shared_ptr<ConfigParserPlugin> getParser(
+       const std::string& parser);
+ 
++  /**
++   * @brief Helper to generically verify that a config is valid
++   *
++   * This function checks that the config JSON document root is an Object
++   * and that the depth of the document doesn't go beyond kMaxConfigDepth.
++   */
++  Status validateConfig(const JSON& document);
++
+  protected:
+   /**
+    * @brief Call the genConfig method of the config retriever plugin.
+diff --git a/osquery/config/tests/config_tests.cpp b/osquery/config/tests/config_tests.cpp
+index b53bac914..2df84dfc8 100644
+--- a/osquery/config/tests/config_tests.cpp
++++ b/osquery/config/tests/config_tests.cpp
+@@ -6,6 +6,14 @@
+  *  the LICENSE file found in the root directory of this source tree.
+  */
+ 
++#include <atomic>
++#include <chrono>
++#include <map>
++#include <memory>
++#include <string>
++#include <thread>
++#include <vector>
++
+ #include <osquery/config/config.h>
+ 
+ #include <osquery/config/tests/test_utils.h>
+@@ -20,6 +28,7 @@
+ #include <osquery/packs.h>
+ #include <osquery/registry.h>
+ #include <osquery/system.h>
++#include <osquery/utils/json/json.h>
+ 
+ #include <osquery/utils/info/platform_type.h>
+ #include <osquery/utils/json/json.h>
+@@ -29,14 +38,6 @@
+ 
+ #include <gtest/gtest.h>
+ 
+-#include <atomic>
+-#include <chrono>
+-#include <map>
+-#include <memory>
+-#include <string>
+-#include <thread>
+-#include <vector>
+-
+ namespace osquery {
+ 
+ DECLARE_uint64(config_refresh);
+@@ -119,7 +120,8 @@ class TestConfigPlugin : public ConfigPlugin {
+     }
+ 
+     std::string content;
+-    auto s = readFile(getTestConfigDirectory() / "test_noninline_packs.conf", content);
++    auto s = readFile(getTestConfigDirectory() / "test_noninline_packs.conf",
++                      content);
+     config["data"] = content;
+     return s;
+   }
+@@ -185,6 +187,77 @@ TEST_F(ConfigTests, test_invalid_content) {
+   ASSERT_NO_THROW(get().update({{"bad_source", bad_json}}));
+ }
+ 
++TEST_F(ConfigTests, test_config_not_an_object) {
++  std::string invalid_config = "[1]";
++  ASSERT_FALSE(get().update({{"invalid_config_source", invalid_config}}));
++}
++
++TEST_F(ConfigTests, test_config_depth) {
++  std::string invalid_config;
++
++  auto add_nested_objects = [](std::string& invalid_config) {
++    for (int i = 0; i < 100; ++i) {
++      invalid_config += "{\"1\": ";
++    }
++
++    invalid_config += "{}";
++    invalid_config += std::string(100, '}');
++  };
++
++  add_nested_objects(invalid_config);
++
++  JSON doc;
++  auto status = doc.fromString(invalid_config, JSON::ParseMode::Iterative);
++
++  ASSERT_TRUE(status.ok()) << status.getMessage();
++  ASSERT_FALSE(get().validateConfig(doc).ok());
++
++  invalid_config = "{ \"a\" : \"something\", \"b\" : ";
++  add_nested_objects(invalid_config);
++  invalid_config += "}";
++
++  status = doc.fromString(invalid_config, JSON::ParseMode::Iterative);
++
++  ASSERT_TRUE(status.ok()) << status.getMessage();
++  ASSERT_FALSE(get().validateConfig(doc).ok());
++
++  auto add_nested_arrays_and_objects = [](std::string& invalid_config) {
++    for (int i = 0; i < 100; ++i) {
++      invalid_config += "{ \"a\" : [";
++    }
++
++    for (int i = 0; i < 100; i++) {
++      invalid_config += "]}";
++    }
++  };
++
++  invalid_config.clear();
++  add_nested_arrays_and_objects(invalid_config);
++
++  status = doc.fromString(invalid_config, JSON::ParseMode::Iterative);
++
++  ASSERT_TRUE(status.ok()) << status.getMessage();
++  ASSERT_FALSE(get().validateConfig(doc).ok());
++}
++
++TEST_F(ConfigTests, test_config_too_big) {
++  std::string big_config = "{ \"data\" : [ 1";
++
++  for (int i = 0; i < 1 * 1024 * 1024; ++i) {
++    big_config += ",1";
++  }
++
++  big_config += "]}";
++
++  // It is a valid JSON document
++  JSON doc;
++  auto status = doc.fromString(big_config);
++  ASSERT_TRUE(status.ok()) << status.getMessage();
++
++  // But it's too big for our config system
++  ASSERT_FALSE(get().update({{"big_config", big_config}}));
++}
++
+ TEST_F(ConfigTests, test_strip_comments) {
+   std::string json_comments =
+       "// Comment\n // Comment //\n  # Comment\n# Comment\n{\"options\":{}}";
+@@ -375,7 +448,8 @@ TEST_F(ConfigTests, test_get_scheduled_queries) {
+ TEST_F(ConfigTests, test_nonblacklist_query) {
+   std::map<std::string, size_t> blacklist;
+ 
+-  const std::string kConfigTestNonBlacklistQuery{"pack_unrestricted_pack_process_heartbeat"};
++  const std::string kConfigTestNonBlacklistQuery{
++      "pack_unrestricted_pack_process_heartbeat"};
+ 
+   blacklist[kConfigTestNonBlacklistQuery] = getUnixTime() * 2;
+   saveScheduleBlacklist(blacklist);
+@@ -666,4 +740,4 @@ TEST_F(ConfigTests, test_config_backup_integrate) {
+ 
+   FLAGS_config_enable_backup = config_enable_backup_saved;
+ }
+-}
++} // namespace osquery
+diff --git a/osquery/utils/json/json.cpp b/osquery/utils/json/json.cpp
+index eaf36b6dc..387650d4d 100644
+--- a/osquery/utils/json/json.cpp
++++ b/osquery/utils/json/json.cpp
+@@ -286,8 +286,19 @@ Status JSON::toString(std::string& str) const {
+   return Status::success();
+ }
+ 
+-Status JSON::fromString(const std::string& str) {
+-  rj::ParseResult pr = doc_.Parse(str.c_str());
++Status JSON::fromString(const std::string& str, ParseMode mode) {
++  rj::ParseResult pr;
++  switch (mode) {
++  case ParseMode::Iterative: {
++    pr = doc_.Parse<rj::kParseIterativeFlag>(str.c_str());
++    break;
++  }
++  case ParseMode::Recursive: {
++    pr = doc_.Parse(str.c_str());
++    break;
++  }
++  }
++
+   if (!pr) {
+     std::string message{"Cannot parse JSON: "};
+     message += GetParseError_En(pr.Code());
+@@ -368,4 +379,4 @@ bool JSON::valueToBool(const rj::Value& value) {
+   return false;
+ }
+ 
+-}
++} // namespace osquery
+diff --git a/osquery/utils/json/json.h b/osquery/utils/json/json.h
+index f77b9daf4..c090671bd 100644
+--- a/osquery/utils/json/json.h
++++ b/osquery/utils/json/json.h
+@@ -49,6 +49,8 @@ class JSON : private only_movable {
+   explicit JSON(rapidjson::Type type);
+ 
+  public:
++  enum class ParseMode { Iterative, Recursive };
++
+   JSON();
+   JSON(JSON&&) = default;
+   JSON& operator=(JSON&&) = default;
+@@ -346,7 +348,8 @@ class JSON : private only_movable {
+   Status toString(std::string& str) const;
+ 
+   /// Helper to convert a string into JSON.
+-  Status fromString(const std::string& str);
++  Status fromString(const std::string& str,
++                    ParseMode parse_mode = ParseMode::Recursive);
+ 
+   /// Merge members of source into target, must both be objects.
+   void mergeObject(rapidjson::Value& target_obj, rapidjson::Value& source_obj);

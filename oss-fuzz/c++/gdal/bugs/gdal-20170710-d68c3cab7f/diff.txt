@@ -1,0 +1,22 @@
+diff --git a/gdal/frmts/raw/genbindataset.cpp b/gdal/frmts/raw/genbindataset.cpp
+index 4b18057445..5ab38ded2a 100644
+--- a/gdal/frmts/raw/genbindataset.cpp
++++ b/gdal/frmts/raw/genbindataset.cpp
+@@ -636,10 +636,14 @@ GDALDataset *GenBinDataset::Open( GDALOpenInfo * poOpenInfo )
+         else
+         {
+             char *pszName = NULL;
+-            CPLString osValue = CPLParseNameValue( pszLine, &pszName );
+-            osValue.Trim();
++            const char* pszKey = CPLParseNameValue( pszLine, &pszName );
++            if( pszKey && pszName )
++            {
++                CPLString osValue = pszKey;
++                osValue.Trim();
+ 
+-            papszHdr = CSLSetNameValue( papszHdr, pszName, osValue );
++                papszHdr = CSLSetNameValue( papszHdr, pszName, osValue );
++            }
+             CPLFree( pszName );
+ 
+             pszLine = CPLReadLineL( fp );

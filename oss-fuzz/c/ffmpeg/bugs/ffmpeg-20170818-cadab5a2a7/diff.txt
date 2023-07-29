@@ -1,0 +1,14 @@
+diff --git a/libavcodec/pixlet.c b/libavcodec/pixlet.c
+index a9661d3ab6..088226bdda 100644
+--- a/libavcodec/pixlet.c
++++ b/libavcodec/pixlet.c
+@@ -331,6 +331,9 @@ static int read_highpass(AVCodecContext *avctx, uint8_t *ptr, int plane, AVFrame
+             return AVERROR_INVALIDDATA;
+         }
+ 
++        if (a == INT32_MIN)
++            return AVERROR_INVALIDDATA;
++
+         ret = read_high_coeffs(avctx, ptr + bytestream2_tell(&ctx->gb), dest, size,
+                                c, (b >= FFABS(a)) ? b : a, d,
+                                ctx->band[plane][i + 1].width, stride);

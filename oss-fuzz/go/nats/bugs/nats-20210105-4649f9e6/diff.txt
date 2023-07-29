@@ -1,0 +1,56 @@
+diff --git a/conf/lex.go b/conf/lex.go
+index 8d36262a..49ca743a 100644
+--- a/conf/lex.go
++++ b/conf/lex.go
+@@ -666,8 +666,9 @@ func lexMapKeyStart(lx *lexer) stateFn {
+ 
+ // lexMapQuotedKey consumes the text of a key between quotes.
+ func lexMapQuotedKey(lx *lexer) stateFn {
+-	r := lx.peek()
+-	if r == sqStringEnd {
++	if r := lx.peek(); r == eof {
++		return lx.errorf("Unexpected EOF processing quoted map key.")
++	} else if r == sqStringEnd {
+ 		lx.emit(itemKey)
+ 		lx.next()
+ 		return lexSkip(lx, lexMapKeyEnd)
+@@ -678,8 +679,9 @@ func lexMapQuotedKey(lx *lexer) stateFn {
+ 
+ // lexMapQuotedKey consumes the text of a key between quotes.
+ func lexMapDubQuotedKey(lx *lexer) stateFn {
+-	r := lx.peek()
+-	if r == dqStringEnd {
++	if r := lx.peek(); r == eof {
++		return lx.errorf("Unexpected EOF processing double quoted map key.")
++	} else if r == dqStringEnd {
+ 		lx.emit(itemKey)
+ 		lx.next()
+ 		return lexSkip(lx, lexMapKeyEnd)
+@@ -691,8 +693,9 @@ func lexMapDubQuotedKey(lx *lexer) stateFn {
+ // lexMapKey consumes the text of a key. Assumes that the first character (which
+ // is not whitespace) has already been consumed.
+ func lexMapKey(lx *lexer) stateFn {
+-	r := lx.peek()
+-	if unicode.IsSpace(r) {
++	if r := lx.peek(); r == eof {
++		return lx.errorf("Unexpected EOF processing map key.")
++	} else if unicode.IsSpace(r) {
+ 		// Spaces signal we could be looking at a keyword, e.g. include.
+ 		// Keywords will eat the keyword and set the appropriate return stateFn.
+ 		return lx.keyCheckKeyword(lexMapKeyEnd, lexMapValueEnd)
+diff --git a/conf/parse_test.go b/conf/parse_test.go
+index 5d8e303d..427aeba1 100644
+--- a/conf/parse_test.go
++++ b/conf/parse_test.go
+@@ -383,3 +383,11 @@ func TestIncludeVariablesWithChecks(t *testing.T) {
+ 	expectKeyVal(t, m, "BOB_PASS", "$2a$11$dZM98SpGeI7dCFFGSpt.JObQcix8YHml4TBUZoge9R1uxnMIln5ly", 3, 1)
+ 	expectKeyVal(t, m, "CAROL_PASS", "foo", 6, 3)
+ }
++
++func TestParserNoInfiniteLoop(t *testing.T) {
++	if _, err := Parse(`A@@Føøøø?˛ø:{øøøø˙˙`); err == nil {
++		t.Fatal("expected an error")
++	} else if !strings.Contains(err.Error(), "Unexpected EOF") {
++		t.Fatal("expected unexpected eof error")
++	}
++}

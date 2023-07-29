@@ -1,0 +1,1 @@
+commit 3661c1932c3c04f29331f4892d0e60c7b7ba612fAuthor: Nikita Popov <nikita.ppv@gmail.com>Date:   Wed Oct 6 10:48:14 2021 +0200    Fix array cast type inference wrt packed arrays        Use KEY_LONG instead of PACKED if it's possible for the array to    be empty. It won't be packed in that case.        Fixes oss-fuzz #39650.

@@ -1,0 +1,12 @@
+diff --git a/coders/psd.c b/coders/psd.c
+index 9e6a1ab8f..36439f657 100644
+--- a/coders/psd.c
++++ b/coders/psd.c
+@@ -1383,6 +1383,7 @@ static MagickBooleanType ReadPSDChannel(Image *image,
+         layer_info->mask.page.height,MagickFalse,exception);
+       if (mask != (Image *) NULL)
+         {
++          (void) ResetImagePixels(mask,exception);
+           (void) SetImageType(mask,GrayscaleType,exception);
+           channel_image=mask;
+         }

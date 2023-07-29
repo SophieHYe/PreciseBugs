@@ -1,0 +1,118 @@
+diff --git a/src/OT/Layout/GPOS/PairPosFormat1.hh b/src/OT/Layout/GPOS/PairPosFormat1.hh
+index 9c9b26888..6ae8c88b9 100644
+--- a/src/OT/Layout/GPOS/PairPosFormat1.hh
++++ b/src/OT/Layout/GPOS/PairPosFormat1.hh
+@@ -43,7 +43,7 @@ struct PairPosFormat1_3
+     {
+       valueFormat,
+       len1,
+-      1 + len1 + len2
++      Types::HBGlyphID::static_size + HBUINT16::static_size * (len1 + len2)
+     };
+ 
+     return_trace (coverage.sanitize (c, this) && pairSet.sanitize (c, this, &closure));
+@@ -179,7 +179,7 @@ struct PairPosFormat1_3
+   {
+     unsigned len1 = valueFormat[0].get_len ();
+     unsigned len2 = valueFormat[1].get_len ();
+-    unsigned record_size = HBUINT16::static_size + Value::static_size * (len1 + len2);
++    unsigned record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     unsigned format1 = 0;
+     unsigned format2 = 0;
+diff --git a/src/OT/Layout/GPOS/PairPosFormat2.hh b/src/OT/Layout/GPOS/PairPosFormat2.hh
+index 4a1bf1337..de15a29e3 100644
+--- a/src/OT/Layout/GPOS/PairPosFormat2.hh
++++ b/src/OT/Layout/GPOS/PairPosFormat2.hh
+@@ -49,7 +49,7 @@ struct PairPosFormat2_4
+ 
+     unsigned int len1 = valueFormat1.get_len ();
+     unsigned int len2 = valueFormat2.get_len ();
+-    unsigned int stride = len1 + len2;
++    unsigned int stride = HBUINT16::static_size * (len1 + len2);
+     unsigned int record_size = valueFormat1.get_size () + valueFormat2.get_size ();
+     unsigned int count = (unsigned int) class1Count * (unsigned int) class2Count;
+     return_trace (c->check_range ((const void *) values,
+diff --git a/src/OT/Layout/GPOS/PairSet.hh b/src/OT/Layout/GPOS/PairSet.hh
+index 3befcc379..2bf36d604 100644
+--- a/src/OT/Layout/GPOS/PairSet.hh
++++ b/src/OT/Layout/GPOS/PairSet.hh
+@@ -28,7 +28,7 @@ struct PairSet
+   {
+     const ValueFormat *valueFormats;
+     unsigned int len1; /* valueFormats[0].get_len() */
+-    unsigned int stride; /* 1 + len1 + len2 */
++    unsigned int stride; /* bytes */
+   };
+ 
+   bool sanitize (hb_sanitize_context_t *c, const sanitize_closure_t *closure) const
+@@ -37,7 +37,6 @@ struct PairSet
+     if (!(c->check_struct (this)
+        && c->check_range (&firstPairValueRecord,
+                           len,
+-                          HBUINT16::static_size,
+                           closure->stride))) return_trace (false);
+ 
+     unsigned int count = len;
+@@ -51,7 +50,7 @@ struct PairSet
+   {
+     unsigned int len1 = valueFormats[0].get_len ();
+     unsigned int len2 = valueFormats[1].get_len ();
+-    unsigned int record_size = HBUINT16::static_size * (1 + len1 + len2);
++    unsigned int record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     const PairValueRecord *record = &firstPairValueRecord;
+     unsigned int count = len;
+@@ -69,7 +68,7 @@ struct PairSet
+   {
+     unsigned int len1 = valueFormats[0].get_len ();
+     unsigned int len2 = valueFormats[1].get_len ();
+-    unsigned int record_size = HBUINT16::static_size * (1 + len1 + len2);
++    unsigned int record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     const PairValueRecord *record = &firstPairValueRecord;
+     c->input->add_array (&record->secondGlyph, len, record_size);
+@@ -80,7 +79,7 @@ struct PairSet
+   {
+     unsigned len1 = valueFormats[0].get_len ();
+     unsigned len2 = valueFormats[1].get_len ();
+-    unsigned record_size = HBUINT16::static_size * (1 + len1 + len2);
++    unsigned int record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     const PairValueRecord *record = &firstPairValueRecord;
+     unsigned count = len;
+@@ -101,7 +100,7 @@ struct PairSet
+     hb_buffer_t *buffer = c->buffer;
+     unsigned int len1 = valueFormats[0].get_len ();
+     unsigned int len2 = valueFormats[1].get_len ();
+-    unsigned int record_size = HBUINT16::static_size * (1 + len1 + len2);
++    unsigned int record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     const PairValueRecord *record = hb_bsearch (buffer->info[pos].codepoint,
+                                                 &firstPairValueRecord,
+@@ -168,7 +167,7 @@ struct PairSet
+ 
+     unsigned len1 = valueFormats[0].get_len ();
+     unsigned len2 = valueFormats[1].get_len ();
+-    unsigned record_size = HBUINT16::static_size + Value::static_size * (len1 + len2);
++    unsigned int record_size = Types::HBGlyphID::static_size + Value::static_size * (len1 + len2);
+ 
+     typename PairValueRecord::context_t context =
+     {
+diff --git a/src/OT/Layout/GPOS/ValueFormat.hh b/src/OT/Layout/GPOS/ValueFormat.hh
+index 26a40f01a..1aa451abc 100644
+--- a/src/OT/Layout/GPOS/ValueFormat.hh
++++ b/src/OT/Layout/GPOS/ValueFormat.hh
+@@ -371,7 +371,7 @@ struct ValueFormat : HBUINT16
+     for (unsigned int i = 0; i < count; i++) {
+       if (!sanitize_value_devices (c, base, values))
+         return_trace (false);
+-      values += stride;
++      values = &StructAtOffset<const Value> (values, stride);
+     }
+ 
+     return_trace (true);
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5965759719538688 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5965759719538688
+new file mode 100644
+index 000000000..a3e1a1025
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5965759719538688 differ

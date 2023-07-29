@@ -1,0 +1,20 @@
+diff --git a/cpp/src/arrow/array/validate.cc b/cpp/src/arrow/array/validate.cc
+index 44889e4f3..52fcad5e7 100644
+--- a/cpp/src/arrow/array/validate.cc
++++ b/cpp/src/arrow/array/validate.cc
+@@ -564,7 +564,7 @@ struct ValidateArrayImpl {
+                              " and offset: ", data.offset);
+     }
+ 
+-    if (full_validation && offsets_byte_size != 0) {
++    if (full_validation && required_offsets > 0) {
+       // Validate all offset values
+       const offset_type* offsets = data.GetValues<offset_type>(1);
+ 
+diff --git a/testing b/testing
+index 1d8525e10..93ef4a7bb 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit 1d8525e109a12a8c67c489eba48715a199609153
++Subproject commit 93ef4a7bbf8cc629fa1f82bf38bb6e89cda91d40

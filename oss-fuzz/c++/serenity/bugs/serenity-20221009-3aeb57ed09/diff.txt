@@ -1,0 +1,147 @@
+diff --git a/AK/StringView.cpp b/AK/StringView.cpp
+index c9b1cbc703..a987696a08 100644
+--- a/AK/StringView.cpp
++++ b/AK/StringView.cpp
+@@ -9,6 +9,7 @@
+ #include <AK/Find.h>
+ #include <AK/Function.h>
+ #include <AK/Memory.h>
++#include <AK/StringBuilder.h>
+ #include <AK/StringView.h>
+ #include <AK/Vector.h>
+ 
+@@ -137,6 +138,20 @@ bool StringView::contains(char needle) const
+     return false;
+ }
+ 
++bool StringView::contains(u32 needle) const
++{
++    // A code point should be at most four UTF-8 bytes, which easily fits into StringBuilder's inline-buffer.
++    // Therefore, this will not allocate.
++    StringBuilder needle_builder;
++    auto result = needle_builder.try_append_code_point(needle);
++    if (result.is_error()) {
++        // The needle is invalid, therefore the string does not contain it.
++        return false;
++    }
++
++    return contains(needle_builder.string_view());
++}
++
+ bool StringView::contains(StringView needle, CaseSensitivity case_sensitivity) const
+ {
+     return StringUtils::contains(*this, needle, case_sensitivity);
+diff --git a/AK/StringView.h b/AK/StringView.h
+index 72c4ef599d..9eb09a10e2 100644
+--- a/AK/StringView.h
++++ b/AK/StringView.h
+@@ -88,6 +88,7 @@ public:
+     [[nodiscard]] bool matches(StringView mask, CaseSensitivity = CaseSensitivity::CaseInsensitive) const;
+     [[nodiscard]] bool matches(StringView mask, Vector<MaskSpan>&, CaseSensitivity = CaseSensitivity::CaseInsensitive) const;
+     [[nodiscard]] bool contains(char) const;
++    [[nodiscard]] bool contains(u32) const;
+     [[nodiscard]] bool contains(StringView, CaseSensitivity = CaseSensitivity::CaseSensitive) const;
+     [[nodiscard]] bool equals_ignoring_case(StringView other) const;
+ 
+diff --git a/AK/URL.cpp b/AK/URL.cpp
+index 3cb00c9ffd..610acdf744 100644
+--- a/AK/URL.cpp
++++ b/AK/URL.cpp
+@@ -406,7 +406,7 @@ bool URL::code_point_is_in_percent_encode_set(u32 code_point, URL::PercentEncode
+     case URL::PercentEncodeSet::EncodeURI:
+         // NOTE: This is the same percent encode set that JS encodeURI() uses.
+         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI
+-        return code_point >= 0x7E || (!is_ascii_alphanumeric(code_point) && !";,/?:@&=+$-_.!~*'()#"sv.contains(code_point));
++        return code_point >= 0x7E || (!is_ascii_alphanumeric(code_point) && !";,/?:@&=+$-_.!~*'()#"sv.contains(static_cast<char>(code_point)));
+     default:
+         VERIFY_NOT_REACHED();
+     }
+diff --git a/AK/URLParser.cpp b/AK/URLParser.cpp
+index e39e0667fc..6ec35b9be7 100644
+--- a/AK/URLParser.cpp
++++ b/AK/URLParser.cpp
+@@ -32,9 +32,9 @@ static void report_validation_error(SourceLocation const& location = SourceLocat
+ 
+ static Optional<String> parse_opaque_host(StringView input)
+ {
+-    auto forbidden_host_code_points_excluding_percent = "\0\t\n\r #/:<>?@[\\]^|"sv;
+-    for (auto code_point : forbidden_host_code_points_excluding_percent) {
+-        if (input.contains(code_point)) {
++    auto forbidden_host_characters_excluding_percent = "\0\t\n\r #/:<>?@[\\]^|"sv;
++    for (auto character : forbidden_host_characters_excluding_percent) {
++        if (input.contains(character)) {
+             report_validation_error();
+             return {};
+         }
+@@ -72,9 +72,9 @@ static Optional<String> parse_host(StringView input, bool is_not_special = false
+     // FIXME: Let asciiDomain be the result of running domain to ASCII on domain.
+     auto& ascii_domain = domain;
+ 
+-    auto forbidden_host_code_points = "\0\t\n\r #%/:<>?@[\\]^|"sv;
+-    for (auto code_point : forbidden_host_code_points) {
+-        if (ascii_domain.view().contains(code_point)) {
++    auto forbidden_host_characters = "\0\t\n\r #%/:<>?@[\\]^|"sv;
++    for (auto character : forbidden_host_characters) {
++        if (ascii_domain.view().contains(character)) {
+             report_validation_error();
+             return {};
+         }
+diff --git a/Userland/Libraries/LibJS/Runtime/GlobalObject.cpp b/Userland/Libraries/LibJS/Runtime/GlobalObject.cpp
+index 1b35206d21..003add64d5 100644
+--- a/Userland/Libraries/LibJS/Runtime/GlobalObject.cpp
++++ b/Userland/Libraries/LibJS/Runtime/GlobalObject.cpp
+@@ -350,7 +350,7 @@ static ThrowCompletionOr<String> encode(VM& vm, String const& string, StringView
+         auto code_unit = utf16_string.code_unit_at(k);
+         // c. If C is in unescapedSet, then
+         // NOTE: We assume the unescaped set only contains ascii characters as unescaped_set is a StringView.
+-        if (code_unit < 0x80 && unescaped_set.contains(code_unit)) {
++        if (code_unit < 0x80 && unescaped_set.contains(static_cast<char>(code_unit))) {
+             // i. Set k to k + 1.
+             k++;
+ 
+@@ -420,8 +420,8 @@ static ThrowCompletionOr<String> decode(VM& vm, String const& string, StringView
+             continue;
+         }
+ 
+-        if ((decoded_code_unit & 0x80) == 0) {
+-            if (reserved_set.contains(decoded_code_unit))
++        if (decoded_code_unit < 0x80) {
++            if (reserved_set.contains(static_cast<char>(decoded_code_unit)))
+                 decoded_builder.append(string.substring_view(k - 2, 3));
+             else
+                 decoded_builder.append(decoded_code_unit);
+@@ -480,7 +480,7 @@ JS_DEFINE_NATIVE_FUNCTION(GlobalObject::escape)
+     StringBuilder escaped;
+     for (auto code_point : utf8_to_utf16(string)) {
+         if (code_point < 256) {
+-            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@*_+-./"sv.contains(code_point))
++            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@*_+-./"sv.contains(static_cast<char>(code_point)))
+                 escaped.append(code_point);
+             else
+                 escaped.appendff("%{:02X}", code_point);
+diff --git a/Userland/Libraries/LibWeb/Fetch/Infrastructure/HTTP/Headers.cpp b/Userland/Libraries/LibWeb/Fetch/Infrastructure/HTTP/Headers.cpp
+index db61a91ad8..f6cac4a5ed 100644
+--- a/Userland/Libraries/LibWeb/Fetch/Infrastructure/HTTP/Headers.cpp
++++ b/Userland/Libraries/LibWeb/Fetch/Infrastructure/HTTP/Headers.cpp
+@@ -402,7 +402,7 @@ bool is_cors_safelisted_request_header(Header const& header)
+     else if (name.is_one_of_ignoring_case("accept-language"sv, "content-language"sv)) {
+         // If value contains a byte that is not in the range 0x30 (0) to 0x39 (9), inclusive, is not in the range 0x41 (A) to 0x5A (Z), inclusive, is not in the range 0x61 (a) to 0x7A (z), inclusive, and is not 0x20 (SP), 0x2A (*), 0x2C (,), 0x2D (-), 0x2E (.), 0x3B (;), or 0x3D (=), then return false.
+         if (any_of(value.span(), [](auto byte) {
+-                return !(is_ascii_digit(byte) || is_ascii_alpha(byte) || " *,-.;="sv.contains(byte));
++                return !(is_ascii_digit(byte) || is_ascii_alpha(byte) || " *,-.;="sv.contains(static_cast<char>(byte)));
+             }))
+             return false;
+     }
+diff --git a/Userland/Utilities/grep.cpp b/Userland/Utilities/grep.cpp
+index 0fb9fe8188..eed4c9a24c 100644
+--- a/Userland/Utilities/grep.cpp
++++ b/Userland/Utilities/grep.cpp
+@@ -258,7 +258,7 @@ ErrorOr<int> serenity_main(Main::Arguments args)
+                 // Human-readable indexes start at 1, so it's fine to increment already.
+                 line_number += 1;
+                 StringView line_view(line, nread);
+-                bool is_binary = line_view.contains(0);
++                bool is_binary = line_view.contains('\0');
+ 
+                 if (is_binary && binary_mode == BinaryFileMode::Skip)
+                     return 1;

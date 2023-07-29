@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index 19c0fbdb4..a78e46c37 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -1249,6 +1249,8 @@ static Image *ReadHEICImage(const ImageInfo *image_info,
+ 
+     if (info->type != ATOM('E','x','i','f'))
+       continue;
++    if (info->size <= 4)
++      continue;
+ 
+     buffer = (unsigned char *) AcquireMagickMemory(info->size);
+     if (buffer == NULL) {

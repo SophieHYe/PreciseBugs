@@ -1,0 +1,23 @@
+diff --git a/gdal/third_party/LercLib/Lerc.cpp b/gdal/third_party/LercLib/Lerc.cpp
+index b967b9a86e..0eeceecae3 100644
+--- a/gdal/third_party/LercLib/Lerc.cpp
++++ b/gdal/third_party/LercLib/Lerc.cpp
+@@ -25,6 +25,8 @@ Contributors:  Thomas Maurer
+ #include "Lerc.h"
+ #include "Lerc2.h"
+ 
++#include <limits>
++
+ #ifdef HAVE_LERC1_DECODE
+ #include "Lerc1Decode/CntZImage.h"
+ #endif
+@@ -122,6 +124,9 @@ ErrCode Lerc::GetLercInfo(const Byte* pLercBlob, unsigned int numBytesBlob, stru
+         return ErrCode::Failed;
+       }
+ 
++      if( lercInfo.blobSize > std::numeric_limits<int>::max() - hdInfo.blobSize )
++        return ErrCode::Failed;
++
+       lercInfo.blobSize += hdInfo.blobSize;
+ 
+       if (lercInfo.blobSize > (int)numBytesBlob)    // truncated blob, we won't be able to read this band

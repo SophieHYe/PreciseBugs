@@ -1,0 +1,54 @@
+diff --git a/gdal/frmts/wms/gdalwmsdataset.cpp b/gdal/frmts/wms/gdalwmsdataset.cpp
+index 6b42703e3f..afd62e5e83 100644
+--- a/gdal/frmts/wms/gdalwmsdataset.cpp
++++ b/gdal/frmts/wms/gdalwmsdataset.cpp
+@@ -525,7 +525,8 @@ CPLErr GDALWMSDataset::Initialize(CPLXMLNode *config, char **l_papszOpenOptions)
+                 double scale = 0.5;
+                 for (int j = 0; j < nOverviews; ++j)
+                 {
+-                    band->AddOverview(scale);
++                    if( !band->AddOverview(scale) )
++                        break;
+                     band->m_color_interp = color_interp;
+                     scale *= 0.5;
+                 }
+diff --git a/gdal/frmts/wms/gdalwmsrasterband.cpp b/gdal/frmts/wms/gdalwmsrasterband.cpp
+index ec8cc27e83..135a23530c 100644
+--- a/gdal/frmts/wms/gdalwmsrasterband.cpp
++++ b/gdal/frmts/wms/gdalwmsrasterband.cpp
+@@ -300,8 +300,13 @@ GDALRasterBand *GDALWMSRasterBand::GetOverview(int n) {
+     else return NULL;
+ }
+ 
+-void GDALWMSRasterBand::AddOverview(double scale) {
++bool GDALWMSRasterBand::AddOverview(double scale) {
+     GDALWMSRasterBand *overview = new GDALWMSRasterBand(m_parent_dataset, nBand, scale);
++    if( overview->GetXSize() == 0 || overview->GetYSize() == 0 )
++    {
++        delete overview;
++        return false;
++    }
+     std::vector<GDALWMSRasterBand *>::iterator it = m_overviews.begin();
+     for (; it != m_overviews.end(); ++it) {
+         GDALWMSRasterBand *p = *it;
+@@ -313,6 +318,7 @@ void GDALWMSRasterBand::AddOverview(double scale) {
+         GDALWMSRasterBand *p = *it;
+         p->m_overview = i;
+     }
++    return true;
+ }
+ 
+ bool GDALWMSRasterBand::IsBlockInCache(int x, int y) {
+diff --git a/gdal/frmts/wms/wmsdriver.h b/gdal/frmts/wms/wmsdriver.h
+index 500a5e70bc..5851d46238 100644
+--- a/gdal/frmts/wms/wmsdriver.h
++++ b/gdal/frmts/wms/wmsdriver.h
+@@ -438,7 +438,7 @@ class GDALWMSRasterBand : public GDALPamRasterBand {
+ public:
+     GDALWMSRasterBand( GDALWMSDataset *parent_dataset, int band, double scale );
+     virtual ~GDALWMSRasterBand();
+-    void AddOverview(double scale);
++    bool AddOverview(double scale);
+     virtual double GetNoDataValue( int * ) override;
+     virtual double GetMinimum( int * ) override;
+     virtual double GetMaximum( int * ) override;

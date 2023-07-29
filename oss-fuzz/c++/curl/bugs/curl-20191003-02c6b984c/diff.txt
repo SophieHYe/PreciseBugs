@@ -1,0 +1,216 @@
+diff --git a/lib/urlapi.c b/lib/urlapi.c
+index a57c5e72e..fa514bce5 100644
+--- a/lib/urlapi.c
++++ b/lib/urlapi.c
+@@ -64,6 +64,7 @@ struct Curl_URL {
+   char *fragment;
+ 
+   char *scratch; /* temporary scratch area */
++  char *temppath; /* temporary path pointer */
+   long portnum; /* the numerical version */
+ };
+ 
+@@ -82,6 +83,7 @@ static void free_urlhandle(struct Curl_URL *u)
+   free(u->query);
+   free(u->fragment);
+   free(u->scratch);
++  free(u->temppath);
+ }
+ 
+ /* move the full contents of one handle onto another and
+@@ -858,43 +860,53 @@ static CURLUcode seturl(const char *url, CURLU *u, unsigned int flags)
+       return CURLUE_OUT_OF_MEMORY;
+     path_alloced = TRUE;
+     strcpy_url(newp, path, TRUE); /* consider it relative */
+-    path = newp;
++    u->temppath = path = newp;
+   }
+ 
+   fragment = strchr(path, '#');
+-  if(fragment)
++  if(fragment) {
+     *fragment++ = 0;
++    if(fragment[0]) {
++      u->fragment = strdup(fragment);
++      if(!u->fragment)
++        return CURLUE_OUT_OF_MEMORY;
++    }
++  }
+ 
+   query = strchr(path, '?');
+-  if(query)
++  if(query) {
+     *query++ = 0;
++    /* done even if the query part is a blank string */
++    u->query = strdup(query);
++    if(!u->query)
++      return CURLUE_OUT_OF_MEMORY;
++  }
+ 
+   if(!path[0])
+-    /* if there's no path set, unset */
++    /* if there's no path left set, unset */
+     path = NULL;
+-  else if(!(flags & CURLU_PATH_AS_IS)) {
+-    /* sanitise paths and remove ../ and ./ sequences according to RFC3986 */
+-    char *newp = Curl_dedotdotify(path);
+-    if(!newp) {
+-      if(path_alloced)
+-        free(path);
+-      return CURLUE_OUT_OF_MEMORY;
+-    }
++  else {
++    if(!(flags & CURLU_PATH_AS_IS)) {
++      /* remove ../ and ./ sequences according to RFC3986 */
++      char *newp = Curl_dedotdotify(path);
++      if(!newp)
++        return CURLUE_OUT_OF_MEMORY;
+ 
+-    if(strcmp(newp, path)) {
+-      /* if we got a new version */
+-      if(path_alloced)
+-        free(path);
+-      path = newp;
+-      path_alloced = TRUE;
++      if(strcmp(newp, path)) {
++        /* if we got a new version */
++        if(path_alloced)
++          Curl_safefree(u->temppath);
++        u->temppath = path = newp;
++        path_alloced = TRUE;
++      }
++      else
++        free(newp);
+     }
+-    else
+-      free(newp);
+-  }
+-  if(path) {
++
+     u->path = path_alloced?path:strdup(path);
+     if(!u->path)
+       return CURLUE_OUT_OF_MEMORY;
++    u->temppath = NULL; /* used now */
+   }
+ 
+   if(hostname) {
+@@ -926,19 +938,8 @@ static CURLUcode seturl(const char *url, CURLU *u, unsigned int flags)
+       return CURLUE_OUT_OF_MEMORY;
+   }
+ 
+-  if(query) {
+-    u->query = strdup(query);
+-    if(!u->query)
+-      return CURLUE_OUT_OF_MEMORY;
+-  }
+-  if(fragment && fragment[0]) {
+-    u->fragment = strdup(fragment);
+-    if(!u->fragment)
+-      return CURLUE_OUT_OF_MEMORY;
+-  }
+-
+-  free(u->scratch);
+-  u->scratch = NULL;
++  Curl_safefree(u->scratch);
++  Curl_safefree(u->temppath);
+ 
+   return CURLUE_OK;
+ }
+diff --git a/tests/data/Makefile.inc b/tests/data/Makefile.inc
+index 7d237325d..5b0af4e30 100644
+--- a/tests/data/Makefile.inc
++++ b/tests/data/Makefile.inc
+@@ -84,7 +84,7 @@ test626 test627 test628 test629 test630 test631 test632 test633 test634 \
+ test635 test636 test637 test638 test639 test640 test641 test642 \
+ test643 test644 test645 test646 test647 test648 test649 test650 test651 \
+ test652 test653 test654 test655 test656 test658 test659 test660 test661 \
+-test662 \
++test662 test663 \
+ \
+ test700 test701 test702 test703 test704 test705 test706 test707 test708 \
+ test709 test710 test711 test712 test713 test714 test715 test716 test717 \
+diff --git a/tests/data/test663 b/tests/data/test663
+new file mode 100644
+index 000000000..b9648fd70
+--- /dev/null
++++ b/tests/data/test663
+@@ -0,0 +1,79 @@
++#
++# This test is crafted to reproduce oss-fuzz bug
++# https://crbug.com/oss-fuzz/17954
++#
++<testcase>
++<info>
++<keywords>
++HTTP
++HTTP GET
++followlocation
++</keywords>
++</info>
++#
++# Server-side
++<reply>
++<data>
++HTTP/1.1 302 OK
++Location: http://example.net/there/it/is/../../tes t case=/6630002? yes no
++Date: Thu, 09 Nov 2010 14:49:00 GMT
++Content-Length: 0
++
++</data>
++<data2>
++HTTP/1.1 200 OK
++Location: this should be ignored
++Date: Thu, 09 Nov 2010 14:49:00 GMT
++Content-Length: 5
++
++body
++</data2>
++<datacheck>
++HTTP/1.1 302 OK
++Location: http://example.net/there/it/is/../../tes t case=/6630002? yes no
++Date: Thu, 09 Nov 2010 14:49:00 GMT
++Content-Length: 0
++
++HTTP/1.1 200 OK
++Location: this should be ignored
++Date: Thu, 09 Nov 2010 14:49:00 GMT
++Content-Length: 5
++
++body
++</datacheck>
++</reply>
++
++#
++# Client-side
++<client>
++<server>
++http
++</server>
++ <name>
++HTTP redirect with dotdots and whitespaces in absolute Location: URL
++ </name>
++ <command>
++http://example.com/please/../gimme/663?foobar#hello -L -x http://%HOSTIP:%HTTPPORT
++</command>
++</client>
++
++#
++# Verify data after the test has been "shot"
++<verify>
++<strip>
++^User-Agent:.*
++</strip>
++<protocol>
++GET http://example.com/gimme/663?foobar HTTP/1.1
++Host: example.com
++Accept: */*
++Proxy-Connection: Keep-Alive
++
++GET http://example.net/there/tes%20t%20case=/6630002?+yes+no HTTP/1.1
++Host: example.net
++Accept: */*
++Proxy-Connection: Keep-Alive
++
++</protocol>
++</verify>
++</testcase>

@@ -1,0 +1,22 @@
+diff --git a/Packet++/src/SipLayer.cpp b/Packet++/src/SipLayer.cpp
+index 506046d7..ff120357 100644
+--- a/Packet++/src/SipLayer.cpp
++++ b/Packet++/src/SipLayer.cpp
+@@ -291,6 +291,13 @@ SipRequestLayer::SipMethod SipRequestFirstLine::parseMethod(char* data, size_t d
+ 
+ void SipRequestFirstLine::parseVersion()
+ {
++	if (m_SipRequest->getDataLen() < m_UriOffset)
++	{
++		m_Version = "";
++		m_VersionOffset = -1;
++		return;
++	}
++
+ 	char* data = (char*)(m_SipRequest->m_Data + m_UriOffset);
+ 	char* verPos = (char*)cross_platform_memmem(data, m_SipRequest->getDataLen() - m_UriOffset, " SIP/", 5);
+ 	if (verPos == NULL)
+diff --git a/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5421416466481152 b/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5421416466481152
+new file mode 100644
+index 00000000..954705c3
+Binary files /dev/null and b/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5421416466481152 differ

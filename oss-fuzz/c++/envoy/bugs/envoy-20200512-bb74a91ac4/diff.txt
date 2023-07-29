@@ -1,0 +1,444 @@
+diff --git a/api/envoy/config/accesslog/v3/accesslog.proto b/api/envoy/config/accesslog/v3/accesslog.proto
+index 218ad5bda4..9a2f276b34 100644
+--- a/api/envoy/config/accesslog/v3/accesslog.proto
++++ b/api/envoy/config/accesslog/v3/accesslog.proto
+@@ -241,6 +241,7 @@ message ResponseFlagFilter {
+         in: "IH"
+         in: "DPE"
+         in: "UMSDR"
++        in: "RFCF"
+       }
+     }
+   }];
+diff --git a/api/envoy/config/accesslog/v4alpha/accesslog.proto b/api/envoy/config/accesslog/v4alpha/accesslog.proto
+index 5900f62f4f..c5eb4d2497 100644
+--- a/api/envoy/config/accesslog/v4alpha/accesslog.proto
++++ b/api/envoy/config/accesslog/v4alpha/accesslog.proto
+@@ -240,6 +240,7 @@ message ResponseFlagFilter {
+         in: "IH"
+         in: "DPE"
+         in: "UMSDR"
++        in: "RFCF"
+       }
+     }
+   }];
+diff --git a/api/envoy/data/accesslog/v3/accesslog.proto b/api/envoy/data/accesslog/v3/accesslog.proto
+index c97e2f4ace..347adc2003 100644
+--- a/api/envoy/data/accesslog/v3/accesslog.proto
++++ b/api/envoy/data/accesslog/v3/accesslog.proto
+@@ -186,7 +186,7 @@ message AccessLogCommon {
+ }
+ 
+ // Flags indicating occurrences during request/response processing.
+-// [#next-free-field: 21]
++// [#next-free-field: 22]
+ message ResponseFlags {
+   option (udpa.annotations.versioning).previous_message_type =
+       "envoy.data.accesslog.v2.ResponseFlags";
+@@ -266,6 +266,9 @@ message ResponseFlags {
+ 
+   // Indicates there was a max stream duration reached on the upstream request.
+   bool upstream_max_stream_duration_reached = 20;
++
++  // Indicates the response was served from a cache filter.
++  bool response_from_cache_filter = 21;
+ }
+ 
+ // Properties of a negotiated TLS connection.
+diff --git a/generated_api_shadow/envoy/config/accesslog/v3/accesslog.proto b/generated_api_shadow/envoy/config/accesslog/v3/accesslog.proto
+index 1edd344076..09d691dd36 100644
+--- a/generated_api_shadow/envoy/config/accesslog/v3/accesslog.proto
++++ b/generated_api_shadow/envoy/config/accesslog/v3/accesslog.proto
+@@ -239,6 +239,7 @@ message ResponseFlagFilter {
+         in: "IH"
+         in: "DPE"
+         in: "UMSDR"
++        in: "RFCF"
+       }
+     }
+   }];
+diff --git a/generated_api_shadow/envoy/config/accesslog/v4alpha/accesslog.proto b/generated_api_shadow/envoy/config/accesslog/v4alpha/accesslog.proto
+index 5900f62f4f..c5eb4d2497 100644
+--- a/generated_api_shadow/envoy/config/accesslog/v4alpha/accesslog.proto
++++ b/generated_api_shadow/envoy/config/accesslog/v4alpha/accesslog.proto
+@@ -240,6 +240,7 @@ message ResponseFlagFilter {
+         in: "IH"
+         in: "DPE"
+         in: "UMSDR"
++        in: "RFCF"
+       }
+     }
+   }];
+diff --git a/generated_api_shadow/envoy/data/accesslog/v3/accesslog.proto b/generated_api_shadow/envoy/data/accesslog/v3/accesslog.proto
+index c97e2f4ace..347adc2003 100644
+--- a/generated_api_shadow/envoy/data/accesslog/v3/accesslog.proto
++++ b/generated_api_shadow/envoy/data/accesslog/v3/accesslog.proto
+@@ -186,7 +186,7 @@ message AccessLogCommon {
+ }
+ 
+ // Flags indicating occurrences during request/response processing.
+-// [#next-free-field: 21]
++// [#next-free-field: 22]
+ message ResponseFlags {
+   option (udpa.annotations.versioning).previous_message_type =
+       "envoy.data.accesslog.v2.ResponseFlags";
+@@ -266,6 +266,9 @@ message ResponseFlags {
+ 
+   // Indicates there was a max stream duration reached on the upstream request.
+   bool upstream_max_stream_duration_reached = 20;
++
++  // Indicates the response was served from a cache filter.
++  bool response_from_cache_filter = 21;
+ }
+ 
+ // Properties of a negotiated TLS connection.
+diff --git a/include/envoy/stream_info/stream_info.h b/include/envoy/stream_info/stream_info.h
+index bb4a2e7338..c6a0318564 100644
+--- a/include/envoy/stream_info/stream_info.h
++++ b/include/envoy/stream_info/stream_info.h
+@@ -74,8 +74,10 @@ enum ResponseFlag {
+   DownstreamProtocolError = 0x40000,
+   // Upstream request reached to user defined max stream duration.
+   UpstreamMaxStreamDurationReached = 0x80000,
++  // True if the response was served from an Envoy cache filter.
++  ResponseFromCacheFilter = 0x100000,
+   // ATTENTION: MAKE SURE THIS REMAINS EQUAL TO THE LAST FLAG.
+-  LastFlag = UpstreamMaxStreamDurationReached
++  LastFlag = ResponseFromCacheFilter
+ };
+ 
+ /**
+diff --git a/source/common/http/conn_manager_impl.cc b/source/common/http/conn_manager_impl.cc
+index 1765fdb60b..fee69c99c9 100644
+--- a/source/common/http/conn_manager_impl.cc
++++ b/source/common/http/conn_manager_impl.cc
+@@ -1640,7 +1640,9 @@ void ConnectionManagerImpl::ActiveStream::encodeHeaders(ActiveStreamEncoderFilte
+ void ConnectionManagerImpl::ActiveStream::encodeHeadersInternal(ResponseHeaderMap& headers,
+                                                                 bool end_stream) {
+   // Base headers.
+-  connection_manager_.config_.dateProvider().setDateHeader(headers);
++  if (!stream_info_.hasResponseFlag(StreamInfo::ResponseFlag::ResponseFromCacheFilter)) {
++    connection_manager_.config_.dateProvider().setDateHeader(headers);
++  }
+   // Following setReference() is safe because serverName() is constant for the life of the listener.
+   const auto transformation = connection_manager_.config_.serverHeaderTransformation();
+   if (transformation == ConnectionManagerConfig::HttpConnectionManagerProto::OVERWRITE ||
+diff --git a/source/common/stream_info/utility.cc b/source/common/stream_info/utility.cc
+index 2a173e9dd5..9a5a690b68 100644
+--- a/source/common/stream_info/utility.cc
++++ b/source/common/stream_info/utility.cc
+@@ -26,6 +26,7 @@ const std::string ResponseFlagUtils::STREAM_IDLE_TIMEOUT = "SI";
+ const std::string ResponseFlagUtils::INVALID_ENVOY_REQUEST_HEADERS = "IH";
+ const std::string ResponseFlagUtils::DOWNSTREAM_PROTOCOL_ERROR = "DPE";
+ const std::string ResponseFlagUtils::UPSTREAM_MAX_STREAM_DURATION_REACHED = "UMSDR";
++const std::string ResponseFlagUtils::RESPONSE_FROM_CACHE_FILTER = "RFCF";
+ 
+ void ResponseFlagUtils::appendString(std::string& result, const std::string& append) {
+   if (result.empty()) {
+@@ -38,7 +39,7 @@ void ResponseFlagUtils::appendString(std::string& result, const std::string& app
+ const std::string ResponseFlagUtils::toShortString(const StreamInfo& stream_info) {
+   std::string result;
+ 
+-  static_assert(ResponseFlag::LastFlag == 0x80000, "A flag has been added. Fix this code.");
++  static_assert(ResponseFlag::LastFlag == 0x100000, "A flag has been added. Fix this code.");
+ 
+   if (stream_info.hasResponseFlag(ResponseFlag::FailedLocalHealthCheck)) {
+     appendString(result, FAILED_LOCAL_HEALTH_CHECK);
+@@ -118,6 +119,11 @@ const std::string ResponseFlagUtils::toShortString(const StreamInfo& stream_info
+   if (stream_info.hasResponseFlag(ResponseFlag::UpstreamMaxStreamDurationReached)) {
+     appendString(result, UPSTREAM_MAX_STREAM_DURATION_REACHED);
+   }
++
++  if (stream_info.hasResponseFlag(ResponseFlag::ResponseFromCacheFilter)) {
++    appendString(result, RESPONSE_FROM_CACHE_FILTER);
++  }
++
+   return result.empty() ? NONE : result;
+ }
+ 
+@@ -146,6 +152,7 @@ absl::optional<ResponseFlag> ResponseFlagUtils::toResponseFlag(const std::string
+       {ResponseFlagUtils::DOWNSTREAM_PROTOCOL_ERROR, ResponseFlag::DownstreamProtocolError},
+       {ResponseFlagUtils::UPSTREAM_MAX_STREAM_DURATION_REACHED,
+        ResponseFlag::UpstreamMaxStreamDurationReached},
++      {ResponseFlagUtils::RESPONSE_FROM_CACHE_FILTER, ResponseFlag::ResponseFromCacheFilter},
+   };
+   const auto& it = map.find(flag);
+   if (it != map.end()) {
+diff --git a/source/common/stream_info/utility.h b/source/common/stream_info/utility.h
+index 85285d1d2f..2c7b73d751 100644
+--- a/source/common/stream_info/utility.h
++++ b/source/common/stream_info/utility.h
+@@ -41,6 +41,7 @@ private:
+   const static std::string INVALID_ENVOY_REQUEST_HEADERS;
+   const static std::string DOWNSTREAM_PROTOCOL_ERROR;
+   const static std::string UPSTREAM_MAX_STREAM_DURATION_REACHED;
++  const static std::string RESPONSE_FROM_CACHE_FILTER;
+ };
+ 
+ /**
+diff --git a/source/extensions/access_loggers/grpc/grpc_access_log_utils.cc b/source/extensions/access_loggers/grpc/grpc_access_log_utils.cc
+index 65ace2eb7e..0977540b41 100644
+--- a/source/extensions/access_loggers/grpc/grpc_access_log_utils.cc
++++ b/source/extensions/access_loggers/grpc/grpc_access_log_utils.cc
+@@ -37,7 +37,7 @@ void Utility::responseFlagsToAccessLogResponseFlags(
+     envoy::data::accesslog::v3::AccessLogCommon& common_access_log,
+     const StreamInfo::StreamInfo& stream_info) {
+ 
+-  static_assert(StreamInfo::ResponseFlag::LastFlag == 0x80000,
++  static_assert(StreamInfo::ResponseFlag::LastFlag == 0x100000,
+                 "A flag has been added. Fix this code.");
+ 
+   if (stream_info.hasResponseFlag(StreamInfo::ResponseFlag::FailedLocalHealthCheck)) {
+@@ -119,6 +119,9 @@ void Utility::responseFlagsToAccessLogResponseFlags(
+   if (stream_info.hasResponseFlag(StreamInfo::ResponseFlag::UpstreamMaxStreamDurationReached)) {
+     common_access_log.mutable_response_flags()->set_upstream_max_stream_duration_reached(true);
+   }
++  if (stream_info.hasResponseFlag(StreamInfo::ResponseFlag::ResponseFromCacheFilter)) {
++    common_access_log.mutable_response_flags()->set_response_from_cache_filter(true);
++  }
+ }
+ 
+ void Utility::extractCommonAccessLogProperties(
+diff --git a/source/extensions/filters/http/cache/cache_filter.cc b/source/extensions/filters/http/cache/cache_filter.cc
+index ad43c57703..55f477c24c 100644
+--- a/source/extensions/filters/http/cache/cache_filter.cc
++++ b/source/extensions/filters/http/cache/cache_filter.cc
+@@ -9,6 +9,12 @@ namespace Extensions {
+ namespace HttpFilters {
+ namespace Cache {
+ 
++struct CacheResponseCodeDetailValues {
++  const absl::string_view ResponseFromCacheFilter = "cache.response_from_cache_filter";
++};
++
++using CacheResponseCodeDetails = ConstSingleton<CacheResponseCodeDetailValues>;
++
+ bool CacheFilter::isCacheableRequest(Http::RequestHeaderMap& headers) {
+   const Http::HeaderEntry* method = headers.Method();
+   const Http::HeaderEntry* forwarded_proto = headers.ForwardedProto();
+@@ -113,6 +119,10 @@ void CacheFilter::onHeaders(LookupResult&& result) {
+     const bool end_stream = (result.content_length_ == 0 && !response_has_trailers_);
+     // TODO(toddmgreer): Calculate age per https://httpwg.org/specs/rfc7234.html#age.calculations
+     result.headers_->addReferenceKey(Http::Headers::get().Age, 0);
++    decoder_callbacks_->streamInfo().setResponseFlag(
++        StreamInfo::ResponseFlag::ResponseFromCacheFilter);
++    decoder_callbacks_->streamInfo().setResponseCodeDetails(
++        CacheResponseCodeDetails::get().ResponseFromCacheFilter);
+     decoder_callbacks_->encodeHeaders(std::move(result.headers_), end_stream);
+     if (end_stream) {
+       return;
+diff --git a/test/common/access_log/access_log_impl_test.cc b/test/common/access_log/access_log_impl_test.cc
+index 74010eaef8..451c44bf52 100644
+--- a/test/common/access_log/access_log_impl_test.cc
++++ b/test/common/access_log/access_log_impl_test.cc
+@@ -946,12 +946,13 @@ filter:
+       - IH
+       - DPE
+       - UMSDR
++      - RFCF
+ typed_config:
+   "@type": type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog
+   path: /dev/null
+   )EOF";
+ 
+-  static_assert(StreamInfo::ResponseFlag::LastFlag == 0x80000,
++  static_assert(StreamInfo::ResponseFlag::LastFlag == 0x100000,
+                 "A flag has been added. Fix this code.");
+ 
+   const std::vector<StreamInfo::ResponseFlag> all_response_flags = {
+@@ -974,7 +975,8 @@ typed_config:
+       StreamInfo::ResponseFlag::StreamIdleTimeout,
+       StreamInfo::ResponseFlag::InvalidEnvoyRequestHeaders,
+       StreamInfo::ResponseFlag::DownstreamProtocolError,
+-      StreamInfo::ResponseFlag::UpstreamMaxStreamDurationReached};
++      StreamInfo::ResponseFlag::UpstreamMaxStreamDurationReached,
++      StreamInfo::ResponseFlag::ResponseFromCacheFilter};
+ 
+   InstanceSharedPtr log = AccessLogFactory::fromProto(parseAccessLogFromV2Yaml(yaml), context_);
+ 
+@@ -1006,7 +1008,8 @@ typed_config:
+       "[\"embedded message failed validation\"] | caused by "
+       "ResponseFlagFilterValidationError.Flags[i]: [\"value must be in list \" [\"LH\" \"UH\" "
+       "\"UT\" \"LR\" \"UR\" \"UF\" \"UC\" \"UO\" \"NR\" \"DI\" \"FI\" \"RL\" \"UAEX\" \"RLSE\" "
+-      "\"DC\" \"URX\" \"SI\" \"IH\" \"DPE\" \"UMSDR\"]]): name: \"accesslog\"\nfilter {\n  "
++      "\"DC\" \"URX\" \"SI\" \"IH\" \"DPE\" \"UMSDR\" \"RFCF\"]]): name: \"accesslog\"\nfilter {\n "
++      " "
+       "response_flag_filter {\n    flags: \"UnsupportedFlag\"\n  }\n}\ntyped_config {\n  "
+       "[type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog] {\n    path: \"/dev/null\"\n  "
+       "}\n}\n");
+@@ -1032,7 +1035,8 @@ typed_config:
+       "[\"embedded message failed validation\"] | caused by "
+       "ResponseFlagFilterValidationError.Flags[i]: [\"value must be in list \" [\"LH\" \"UH\" "
+       "\"UT\" \"LR\" \"UR\" \"UF\" \"UC\" \"UO\" \"NR\" \"DI\" \"FI\" \"RL\" \"UAEX\" \"RLSE\" "
+-      "\"DC\" \"URX\" \"SI\" \"IH\" \"DPE\" \"UMSDR\"]]): name: \"accesslog\"\nfilter {\n  "
++      "\"DC\" \"URX\" \"SI\" \"IH\" \"DPE\" \"UMSDR\" \"RFCF\"]]): name: \"accesslog\"\nfilter {\n "
++      " "
+       "response_flag_filter {\n    flags: \"UnsupportedFlag\"\n  }\n}\ntyped_config {\n  "
+       "[type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog] {\n    path: \"/dev/null\"\n  "
+       "}\n}\n");
+diff --git a/test/common/stream_info/utility_test.cc b/test/common/stream_info/utility_test.cc
+index 5b1b737603..6492488efa 100644
+--- a/test/common/stream_info/utility_test.cc
++++ b/test/common/stream_info/utility_test.cc
+@@ -15,7 +15,7 @@ namespace StreamInfo {
+ namespace {
+ 
+ TEST(ResponseFlagUtilsTest, toShortStringConversion) {
+-  static_assert(ResponseFlag::LastFlag == 0x80000, "A flag has been added. Fix this code.");
++  static_assert(ResponseFlag::LastFlag == 0x100000, "A flag has been added. Fix this code.");
+ 
+   std::vector<std::pair<ResponseFlag, std::string>> expected = {
+       std::make_pair(ResponseFlag::FailedLocalHealthCheck, "LH"),
+@@ -37,7 +37,8 @@ TEST(ResponseFlagUtilsTest, toShortStringConversion) {
+       std::make_pair(ResponseFlag::StreamIdleTimeout, "SI"),
+       std::make_pair(ResponseFlag::InvalidEnvoyRequestHeaders, "IH"),
+       std::make_pair(ResponseFlag::DownstreamProtocolError, "DPE"),
+-      std::make_pair(ResponseFlag::UpstreamMaxStreamDurationReached, "UMSDR")};
++      std::make_pair(ResponseFlag::UpstreamMaxStreamDurationReached, "UMSDR"),
++      std::make_pair(ResponseFlag::ResponseFromCacheFilter, "RFCF")};
+ 
+   for (const auto& test_case : expected) {
+     NiceMock<MockStreamInfo> stream_info;
+@@ -65,7 +66,7 @@ TEST(ResponseFlagUtilsTest, toShortStringConversion) {
+ }
+ 
+ TEST(ResponseFlagsUtilsTest, toResponseFlagConversion) {
+-  static_assert(ResponseFlag::LastFlag == 0x80000, "A flag has been added. Fix this code.");
++  static_assert(ResponseFlag::LastFlag == 0x100000, "A flag has been added. Fix this code.");
+ 
+   std::vector<std::pair<std::string, ResponseFlag>> expected = {
+       std::make_pair("LH", ResponseFlag::FailedLocalHealthCheck),
+@@ -87,7 +88,8 @@ TEST(ResponseFlagsUtilsTest, toResponseFlagConversion) {
+       std::make_pair("SI", ResponseFlag::StreamIdleTimeout),
+       std::make_pair("IH", ResponseFlag::InvalidEnvoyRequestHeaders),
+       std::make_pair("DPE", ResponseFlag::DownstreamProtocolError),
+-      std::make_pair("UMSDR", ResponseFlag::UpstreamMaxStreamDurationReached)};
++      std::make_pair("UMSDR", ResponseFlag::UpstreamMaxStreamDurationReached),
++      std::make_pair("RFCF", ResponseFlag::ResponseFromCacheFilter)};
+ 
+   EXPECT_FALSE(ResponseFlagUtils::toResponseFlag("NonExistentFlag").has_value());
+ 
+diff --git a/test/config/utility.cc b/test/config/utility.cc
+index 076006ce26..359925892a 100644
+--- a/test/config/utility.cc
++++ b/test/config/utility.cc
+@@ -766,7 +766,7 @@ bool ConfigHelper::setAccessLog(const std::string& filename, absl::string_view f
+   loadHttpConnectionManager(hcm_config);
+   envoy::extensions::access_loggers::file::v3::FileAccessLog access_log_config;
+   if (!format.empty()) {
+-    access_log_config.set_format(std::string(format));
++    access_log_config.set_format(absl::StrCat(format, "\n"));
+   }
+   access_log_config.set_path(filename);
+   hcm_config.mutable_access_log(0)->mutable_typed_config()->PackFrom(access_log_config);
+diff --git a/test/extensions/access_loggers/grpc/grpc_access_log_utils_test.cc b/test/extensions/access_loggers/grpc/grpc_access_log_utils_test.cc
+index 1519369ffb..b824aeb2a3 100644
+--- a/test/extensions/access_loggers/grpc/grpc_access_log_utils_test.cc
++++ b/test/extensions/access_loggers/grpc/grpc_access_log_utils_test.cc
+@@ -42,6 +42,7 @@ TEST(UtilityResponseFlagsToAccessLogResponseFlagsTest, All) {
+   common_access_log_expected.mutable_response_flags()->set_downstream_protocol_error(true);
+   common_access_log_expected.mutable_response_flags()->set_upstream_max_stream_duration_reached(
+       true);
++  common_access_log_expected.mutable_response_flags()->set_response_from_cache_filter(true);
+ 
+   EXPECT_EQ(common_access_log_expected.DebugString(), common_access_log.DebugString());
+ }
+diff --git a/test/extensions/filters/http/cache/cache_filter_integration_test.cc b/test/extensions/filters/http/cache/cache_filter_integration_test.cc
+index a645734486..4ddb678680 100644
+--- a/test/extensions/filters/http/cache/cache_filter_integration_test.cc
++++ b/test/extensions/filters/http/cache/cache_filter_integration_test.cc
+@@ -40,6 +40,7 @@ INSTANTIATE_TEST_SUITE_P(Protocols, CacheIntegrationTest,
+                          HttpProtocolIntegrationTest::protocolTestParamsToString);
+ 
+ TEST_P(CacheIntegrationTest, MissInsertHit) {
++  useAccessLog("%RESPONSE_FLAGS% %RESPONSE_CODE_DETAILS%");
+   // Set system time to cause Envoy's cached formatted time to match time on this thread.
+   simTime().setSystemTime(std::chrono::hours(1));
+   initializeFilter(default_config);
+@@ -68,8 +69,12 @@ TEST_P(CacheIntegrationTest, MissInsertHit) {
+     EXPECT_THAT(request->headers(), IsSupersetOfHeaders(response_headers));
+     EXPECT_EQ(request->headers().get(Http::Headers::get().Age), nullptr);
+     EXPECT_EQ(request->body(), std::string(42, 'a'));
++    EXPECT_EQ(waitForAccessLog(access_log_name_), "- via_upstream\n");
+   }
+ 
++  // Advance time, to verify the original date header is preserved.
++  simTime().advanceTimeWait(std::chrono::seconds(10));
++
+   // Send second request, and get response from cache.
+   IntegrationStreamDecoderPtr request = codec_client_->makeHeaderOnlyRequest(request_headers);
+   request->waitForEndStream();
+@@ -77,6 +82,9 @@ TEST_P(CacheIntegrationTest, MissInsertHit) {
+   EXPECT_THAT(request->headers(), IsSupersetOfHeaders(response_headers));
+   EXPECT_EQ(request->body(), std::string(42, 'a'));
+   EXPECT_NE(request->headers().get(Http::Headers::get().Age), nullptr);
++  // Advance time to force a log flush.
++  simTime().advanceTimeWait(std::chrono::seconds(1));
++  EXPECT_EQ(waitForAccessLog(access_log_name_, 1), "RFCF cache.response_from_cache_filter\n");
+ }
+ 
+ // Send the same GET request twice with body and trailers twice, then check that the response
+diff --git a/test/integration/integration.cc b/test/integration/integration.cc
+index 5f2f57a5e8..d56347633e 100644
+--- a/test/integration/integration.cc
++++ b/test/integration/integration.cc
+@@ -545,12 +545,28 @@ void BaseIntegrationTest::useListenerAccessLog(absl::string_view format) {
+   ASSERT_TRUE(config_helper_.setListenerAccessLog(listener_access_log_name_, format));
+ }
+ 
+-std::string BaseIntegrationTest::waitForAccessLog(const std::string& filename) {
++// Assuming logs are newline delineated, return the start index of the nth entry.
++// If there are not n entries, it will return file.length() (end of the string
++// index)
++size_t entryIndex(const std::string& file, uint32_t entry) {
++  size_t index = 0;
++  for (uint32_t i = 0; i < entry; ++i) {
++    index = file.find('\n', index);
++    if (index == std::string::npos || index == file.length()) {
++      return file.length();
++    }
++    ++index;
++  }
++  return index;
++}
++
++std::string BaseIntegrationTest::waitForAccessLog(const std::string& filename, uint32_t entry) {
+   // Wait a max of 1s for logs to flush to disk.
+   for (int i = 0; i < 1000; ++i) {
+     std::string contents = TestEnvironment::readFileToStringForTest(filename, false);
+-    if (contents.length() > 0) {
+-      return contents;
++    size_t index = entryIndex(contents, entry);
++    if (contents.length() > index) {
++      return contents.substr(index);
+     }
+     absl::SleepFor(absl::Milliseconds(1));
+   }
+diff --git a/test/integration/integration.h b/test/integration/integration.h
+index 83fcccedb1..959a550cb5 100644
+--- a/test/integration/integration.h
++++ b/test/integration/integration.h
+@@ -222,8 +222,8 @@ public:
+ 
+   // Enable the listener access log
+   void useListenerAccessLog(absl::string_view format = "");
+-  // Waits for the first access log entry.
+-  std::string waitForAccessLog(const std::string& filename);
++  // Waits for the nth access log entry, defaulting to log entry 0.
++  std::string waitForAccessLog(const std::string& filename, uint32_t entry = 0);
+ 
+   std::string listener_access_log_name_;
+ 
+diff --git a/test/integration/proxy_proto_integration_test.cc b/test/integration/proxy_proto_integration_test.cc
+index ec62a8991a..10b1a96104 100644
+--- a/test/integration/proxy_proto_integration_test.cc
++++ b/test/integration/proxy_proto_integration_test.cc
+@@ -116,7 +116,7 @@ TEST_P(ProxyProtoIntegrationTest, AccessLog) {
+ 
+   ASSERT_EQ(2, tokens.size());
+   EXPECT_EQ(tokens[0], Network::Test::getLoopbackAddressString(GetParam()));
+-  EXPECT_EQ(tokens[1], "1.2.3.4:12345");
++  EXPECT_EQ(tokens[1], "1.2.3.4:12345\n");
+ }
+ 
+ TEST_P(ProxyProtoIntegrationTest, DEPRECATED_FEATURE_TEST(OriginalDst)) {

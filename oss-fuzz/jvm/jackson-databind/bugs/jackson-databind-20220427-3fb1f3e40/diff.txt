@@ -1,0 +1,59 @@
+diff --git a/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java b/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
+index c1d204258..ca833e8d2 100644
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
+@@ -460,12 +460,16 @@ _coercedTypeDesc());
+                             .setExtension(value.charAt(0), value.substring(hyphenIx + 1))
+                             .build();
+                 }
+-                return new Locale.Builder().setLanguage(first)
++                final int len = value.length();
++                Locale.Builder b = new Locale.Builder()
++                        .setLanguage(first)
+                         .setRegion(second).setVariant(third)
+-                        .setScript(value.substring(0, underscoreIx))
+-                        .setExtension(value.charAt(underscoreIx + 1),
+-                                value.substring(Math.min(value.length(), underscoreIx + 3)))
+-                        .build();
++                        .setScript(value.substring(0, underscoreIx));
++                if ((underscoreIx + 1) < len) {
++                    b = b.setExtension(value.charAt(underscoreIx + 1),
++                                value.substring(Math.min(len, underscoreIx + 3)));
++                }
++                return b.build();
+             } catch (IllformedLocaleException ex) {
+                 // should we really just swallow the exception?
+                 return new Locale(first, second, third);
+diff --git a/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java b/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
+index 31e490e1b..ad6b06c80 100644
+--- a/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
++++ b/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
+@@ -240,10 +240,19 @@ public class LocaleDeserTest extends BaseMapTest
+ 
+     // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=47034
+     // @since 2.14
+-    public void testStringBoundsIssue() throws Exception
++    public void testLocaleFuzz47034() throws Exception
+     {
+         Locale loc = MAPPER.readValue(getClass().getResourceAsStream("/fuzz/oss-fuzz-47034.json"),
+                 Locale.class);
+         assertNotNull(loc);
+     }
++
++    // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=47036
++    // @since 2.14
++    public void testLocaleFuzz47036() throws Exception
++    {
++        Locale loc = MAPPER.readValue(getClass().getResourceAsStream("/fuzz/oss-fuzz-47036.json"),
++                Locale.class);
++        assertNotNull(loc);
++    }
+ }
+diff --git a/src/test/resources/fuzz/oss-fuzz-47036.json b/src/test/resources/fuzz/oss-fuzz-47036.json
+new file mode 100644
+index 000000000..748a29bbe
+--- /dev/null
++++ b/src/test/resources/fuzz/oss-fuzz-47036.json
+@@ -0,0 +1 @@
++"__#_"/
+\ No newline at end of file

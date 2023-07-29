@@ -1,0 +1,13 @@
+diff --git a/snmplib/mib.c b/snmplib/mib.c
+index 1e9a1e8576..4220f52e22 100644
+--- a/snmplib/mib.c
++++ b/snmplib/mib.c
+@@ -5683,6 +5683,8 @@ _add_strings_to_oid(void *tp, char *cp,
+         case '"':
+         case '\'':
+             doingquote = *cp++;
++            if (*cp == '\0')
++                goto bad_id;
+             /*
+              * insert length if requested 
+              */

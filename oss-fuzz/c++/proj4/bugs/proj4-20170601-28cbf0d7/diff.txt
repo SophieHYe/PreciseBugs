@@ -1,0 +1,93 @@
+diff --git a/src/nad_init.c b/src/nad_init.c
+index a84b0387..0a28e200 100644
+--- a/src/nad_init.c
++++ b/src/nad_init.c
+@@ -122,6 +122,7 @@ struct CTABLE *nad_ctable_init( projCtx ctx, PAFile fid )
+         || pj_ctx_fread( ctx, ct, sizeof(struct CTABLE), 1, fid ) != 1 )
+     {
+         pj_ctx_set_errno( ctx, -38 );
++        pj_dalloc( ct );
+         return NULL;
+     }
+ 
+@@ -130,6 +131,7 @@ struct CTABLE *nad_ctable_init( projCtx ctx, PAFile fid )
+         || ct->lim.phi < 1 || ct->lim.phi > 100000 )
+     {
+         pj_ctx_set_errno( ctx, -38 );
++        pj_dalloc( ct );
+         return NULL;
+     }
+     
+diff --git a/src/pj_init.c b/src/pj_init.c
+index e3d99a8f..434ad2ef 100644
+--- a/src/pj_init.c
++++ b/src/pj_init.c
+@@ -682,26 +682,57 @@ pj_init_ctx(projCtx ctx, int argc, char **argv) {
+     else
+         PIN->from_greenwich = 0.0;
+ 
++    /* Private object for the geodesic functions */
++    PIN->geod = pj_calloc (1, sizeof (struct geod_geodesic));
++    if (0!=PIN->geod)
++        geod_init(PIN->geod, PIN->a,  (1 - sqrt (1 - PIN->es)));
++
+     /* projection specific initialization */
+-    if (!(PIN = (*proj)(PIN)) || ctx->last_errno) {
+-      bum_call: /* cleanup error return */
++    {
++        /* Backup those variables so that we can clean them in case
++         * (*proj)(PIN) fails */
++        void* gridlist = PIN->gridlist;
++        void* vgridlist_geoid = PIN->vgridlist_geoid;
++        void* catalog_name = PIN->catalog_name;
++        void* geod = PIN->geod;
++        if (!(PIN = (*proj)(PIN)) || ctx->last_errno) {
++            if (PIN)
++                pj_free(PIN);
++            else {
++                for ( ; start; start = curr) {
++                    curr = start->next;
++                    pj_dalloc(start);
++                }
++                if( gridlist )
++                    pj_dalloc( gridlist );
++                if( vgridlist_geoid )
++                    pj_dalloc( vgridlist_geoid );
++                if( catalog_name )
++                    pj_dalloc( catalog_name );
++                if( geod )
++                    pj_dalloc( geod );
++            }
++            PIN = 0;
++        }
++    }
++
++    return PIN;
++
++bum_call: /* cleanup error return */
++    {
+         if (PIN)
++        {
+             pj_free(PIN);
+-        else
++        }
++        else {
+             for ( ; start; start = curr) {
+                 curr = start->next;
+                 pj_dalloc(start);
+             }
+-        PIN = 0;
+-    }
+-    else {
+-        /* Private object for the geodesic functions */
+-        PIN->geod = pj_calloc (1, sizeof (struct geod_geodesic));
+-        if (0!=PIN->geod)
+-            geod_init(PIN->geod, PIN->a,  (1 - sqrt (1 - PIN->es)));
++        }
++        return 0;
+     }
+ 
+-    return PIN;
+ }
+ 
+ /************************************************************************/

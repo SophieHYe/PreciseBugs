@@ -1,0 +1,123 @@
+diff --git a/source/common/runtime/runtime_impl.cc b/source/common/runtime/runtime_impl.cc
+index 6eb490d201..295f9ee23f 100644
+--- a/source/common/runtime/runtime_impl.cc
++++ b/source/common/runtime/runtime_impl.cc
+@@ -513,7 +513,13 @@ LoaderImpl::LoaderImpl(Event::Dispatcher& dispatcher, ThreadLocal::SlotAllocator
+   loadNewSnapshot();
+ }
+ 
+-void LoaderImpl::initialize(Upstream::ClusterManager& cm) { cm_ = &cm; }
++void LoaderImpl::initialize(Upstream::ClusterManager& cm) {
++  cm_ = &cm;
++
++  for (const auto& s : subscriptions_) {
++    s->createSubscription();
++  }
++}
+ 
+ void LoaderImpl::startRtdsSubscriptions(ReadyCallback on_done) {
+   on_rtds_initialized_ = on_done;
+@@ -534,6 +540,12 @@ RtdsSubscription::RtdsSubscription(
+       resource_name_(rtds_layer.name()),
+       init_target_("RTDS " + resource_name_, [this]() { start(); }) {}
+ 
++void RtdsSubscription::createSubscription() {
++  const auto resource_name = getResourceName();
++  subscription_ = parent_.cm_->subscriptionFactory().subscriptionFromConfigSource(
++      config_source_, Grpc::Common::typeUrl(resource_name), store_, *this, resource_decoder_);
++}
++
+ void RtdsSubscription::onConfigUpdate(const std::vector<Config::DecodedResourceRef>& resources,
+                                       const std::string&) {
+   validateUpdateSize(resources.size());
+@@ -564,15 +576,7 @@ void RtdsSubscription::onConfigUpdateFailed(Envoy::Config::ConfigUpdateFailureRe
+   init_target_.ready();
+ }
+ 
+-void RtdsSubscription::start() {
+-  // We have to delay the subscription creation until init-time, since the
+-  // cluster manager resources are not available in the constructor when
+-  // instantiated in the server instance.
+-  const auto resource_name = getResourceName();
+-  subscription_ = parent_.cm_->subscriptionFactory().subscriptionFromConfigSource(
+-      config_source_, Grpc::Common::typeUrl(resource_name), store_, *this, resource_decoder_);
+-  subscription_->start({resource_name_});
+-}
++void RtdsSubscription::start() { subscription_->start({resource_name_}); }
+ 
+ void RtdsSubscription::validateUpdateSize(uint32_t num_resources) {
+   if (num_resources != 1) {
+diff --git a/source/common/runtime/runtime_impl.h b/source/common/runtime/runtime_impl.h
+index 22426335ed..5f8297ec1a 100644
+--- a/source/common/runtime/runtime_impl.h
++++ b/source/common/runtime/runtime_impl.h
+@@ -219,6 +219,7 @@ struct RtdsSubscription : Envoy::Config::SubscriptionBase<envoy::service::runtim
+ 
+   void start();
+   void validateUpdateSize(uint32_t num_resources);
++  void createSubscription();
+ 
+   LoaderImpl& parent_;
+   const envoy::config::core::v3::ConfigSource config_source_;
+@@ -257,7 +258,7 @@ private:
+   friend RtdsSubscription;
+ 
+   // Create a new Snapshot
+-  virtual SnapshotImplPtr createNewSnapshot();
++  SnapshotImplPtr createNewSnapshot();
+   // Load a new Snapshot into TLS
+   void loadNewSnapshot();
+   RuntimeStats generateStats(Stats::Store& store);
+diff --git a/test/common/runtime/BUILD b/test/common/runtime/BUILD
+index d6ffd6dfb1..8d29521e12 100644
+--- a/test/common/runtime/BUILD
++++ b/test/common/runtime/BUILD
+@@ -55,6 +55,7 @@ envoy_cc_test(
+         "//test/mocks/local_info:local_info_mocks",
+         "//test/mocks/protobuf:protobuf_mocks",
+         "//test/mocks/runtime:runtime_mocks",
++        "//test/mocks/server:server_mocks",
+         "//test/mocks/thread_local:thread_local_mocks",
+         "//test/mocks/upstream:upstream_mocks",
+         "//test/test_common:environment_lib",
+diff --git a/test/common/runtime/runtime_impl_test.cc b/test/common/runtime/runtime_impl_test.cc
+index e45588c7aa..168123abcf 100644
+--- a/test/common/runtime/runtime_impl_test.cc
++++ b/test/common/runtime/runtime_impl_test.cc
+@@ -18,6 +18,7 @@
+ #include "test/mocks/local_info/mocks.h"
+ #include "test/mocks/protobuf/mocks.h"
+ #include "test/mocks/runtime/mocks.h"
++#include "test/mocks/server/mocks.h"
+ #include "test/mocks/thread_local/mocks.h"
+ #include "test/mocks/upstream/mocks.h"
+ #include "test/test_common/environment.h"
+@@ -1112,6 +1113,28 @@ TEST_F(RtdsLoaderImplTest, MultipleRtdsLayers) {
+   EXPECT_EQ(3, store_.gauge("runtime.num_layers", Stats::Gauge::ImportMode::NeverImport).value());
+ }
+ 
++TEST_F(RtdsLoaderImplTest, BadConfigSource) {
++  Upstream::MockClusterManager cm_;
++  EXPECT_CALL(cm_.subscription_factory_, subscriptionFromConfigSource(_, _, _, _, _))
++      .WillOnce(InvokeWithoutArgs([]() -> Config::SubscriptionPtr {
++        throw EnvoyException("bad config");
++        return nullptr;
++      }));
++
++  envoy::config::bootstrap::v3::LayeredRuntime config;
++  auto* layer = config.add_layers();
++  layer->set_name("some_other_resource");
++  auto* rtds_layer = layer->mutable_rtds_layer();
++  rtds_layer->set_name("some_resource");
++  rtds_layer->mutable_rtds_config();
++
++  EXPECT_CALL(cm_, subscriptionFactory()).Times(1);
++  LoaderImpl loader(dispatcher_, tls_, config, local_info_, store_, generator_, validation_visitor_,
++                    *api_);
++
++  EXPECT_THROW_WITH_MESSAGE(loader.initialize(cm_), EnvoyException, "bad config");
++}
++
+ } // namespace
+ } // namespace Runtime
+ } // namespace Envoy

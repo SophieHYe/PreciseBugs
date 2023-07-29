@@ -1,0 +1,97 @@
+diff --git a/api/envoy/config/tap/v3/common.proto b/api/envoy/config/tap/v3/common.proto
+index e51aba968d..812c30399e 100644
+--- a/api/envoy/config/tap/v3/common.proto
++++ b/api/envoy/config/tap/v3/common.proto
+@@ -231,6 +231,7 @@ message OutputSink {
+ 
+     // [#not-implemented-hide:]
+     // GrpcService to stream data to. The format argument must be PROTO_BINARY.
++    // [#comment: TODO(samflattery): remove cleanup in uber_per_filter.cc once implemented]
+     StreamingGrpcSink streaming_grpc = 4;
+   }
+ }
+diff --git a/api/envoy/config/tap/v4alpha/common.proto b/api/envoy/config/tap/v4alpha/common.proto
+index 53cb57e5d4..281150715c 100644
+--- a/api/envoy/config/tap/v4alpha/common.proto
++++ b/api/envoy/config/tap/v4alpha/common.proto
+@@ -233,6 +233,7 @@ message OutputSink {
+ 
+     // [#not-implemented-hide:]
+     // GrpcService to stream data to. The format argument must be PROTO_BINARY.
++    // [#comment: TODO(samflattery): remove cleanup in uber_per_filter.cc once implemented]
+     StreamingGrpcSink streaming_grpc = 4;
+   }
+ }
+diff --git a/generated_api_shadow/envoy/config/tap/v3/common.proto b/generated_api_shadow/envoy/config/tap/v3/common.proto
+index e51aba968d..812c30399e 100644
+--- a/generated_api_shadow/envoy/config/tap/v3/common.proto
++++ b/generated_api_shadow/envoy/config/tap/v3/common.proto
+@@ -231,6 +231,7 @@ message OutputSink {
+ 
+     // [#not-implemented-hide:]
+     // GrpcService to stream data to. The format argument must be PROTO_BINARY.
++    // [#comment: TODO(samflattery): remove cleanup in uber_per_filter.cc once implemented]
+     StreamingGrpcSink streaming_grpc = 4;
+   }
+ }
+diff --git a/generated_api_shadow/envoy/config/tap/v4alpha/common.proto b/generated_api_shadow/envoy/config/tap/v4alpha/common.proto
+index 53cb57e5d4..281150715c 100644
+--- a/generated_api_shadow/envoy/config/tap/v4alpha/common.proto
++++ b/generated_api_shadow/envoy/config/tap/v4alpha/common.proto
+@@ -233,6 +233,7 @@ message OutputSink {
+ 
+     // [#not-implemented-hide:]
+     // GrpcService to stream data to. The format argument must be PROTO_BINARY.
++    // [#comment: TODO(samflattery): remove cleanup in uber_per_filter.cc once implemented]
+     StreamingGrpcSink streaming_grpc = 4;
+   }
+ }
+diff --git a/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5635252589690880 b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5635252589690880
+new file mode 100644
+index 0000000000..6d7a709ef7
+--- /dev/null
++++ b/test/extensions/filters/http/common/fuzz/filter_corpus/clusterfuzz-testcase-minimized-filter_fuzz_test-5635252589690880
+@@ -0,0 +1,7 @@
++config {
++  name: "envoy.filters.http.tap"
++  typed_config {
++    type_url: "type.googleapis.com/envoy.extensions.filters.http.tap.v3.Tap"
++    value: "\nZ\022X\n\010\032\006\032\004\032\002 \001\022L\nH\"F\n)envoy.service.health.v3.HealthCheckReques\022\031\022\027\n\010BB\017\000\000\000\000\000\"\001R*\010P\000\000\000\000\000\000\000 \001"
++  }
++}
+diff --git a/test/extensions/filters/http/common/fuzz/uber_per_filter.cc b/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
+index c6db8b6ffe..1abdf75194 100644
+--- a/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
++++ b/test/extensions/filters/http/common/fuzz/uber_per_filter.cc
+@@ -103,6 +103,19 @@ void cleanTapConfig(Protobuf::Message* message) {
+     config.mutable_common_config()->mutable_static_config()->mutable_match_config()->set_any_match(
+         true);
+   }
++  // TODO(samflattery): remove once StreamingGrpcSink is implemented
++  else if (config.common_config().config_type_case() ==
++               envoy::extensions::common::tap::v3::CommonExtensionConfig::ConfigTypeCase::
++                   kStaticConfig &&
++           config.common_config()
++                   .static_config()
++                   .output_config()
++                   .sinks(0)
++                   .output_sink_type_case() ==
++               envoy::config::tap::v3::OutputSink::OutputSinkTypeCase::kStreamingGrpc) {
++    // will be caught in UberFilterFuzzer::fuzz
++    throw EnvoyException("received input with not implemented output_sink_type StreamingGrpcSink");
++  }
+ }
+ 
+ void UberFilterFuzzer::cleanFuzzedConfig(absl::string_view filter_name,
+diff --git a/tools/spelling/spelling_dictionary.txt b/tools/spelling/spelling_dictionary.txt
+index 6170e93bec..e8aa2fcd6b 100644
+--- a/tools/spelling/spelling_dictionary.txt
++++ b/tools/spelling/spelling_dictionary.txt
+@@ -1111,6 +1111,7 @@ tuples
+ typedef
+ typeid
+ typesafe
++uber
+ ucontext
+ udpa
+ uint

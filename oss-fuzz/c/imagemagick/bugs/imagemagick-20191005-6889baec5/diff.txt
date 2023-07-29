@@ -1,0 +1,12 @@
+diff --git a/coders/meta.c b/coders/meta.c
+index 2e77186d8..a33ff7b17 100644
+--- a/coders/meta.c
++++ b/coders/meta.c
+@@ -1146,6 +1146,7 @@ static inline void CopyBlob(Image *source,Image *destination)
+     sizeof(*buffer));
+   if (buffer != (unsigned char *) NULL)
+     {
++      (void) memset(buffer,0,MagickMaxBufferExtent*sizeof(*buffer));
+       i=0;
+       while ((length=ReadBlob(source,MagickMaxBufferExtent,buffer)) != 0)
+       {

@@ -1,0 +1,74 @@
+diff --git a/cpp/src/arrow/array/concatenate.cc b/cpp/src/arrow/array/concatenate.cc
+index 6989d7a1a..dcfb3f530 100644
+--- a/cpp/src/arrow/array/concatenate.cc
++++ b/cpp/src/arrow/array/concatenate.cc
+@@ -70,7 +70,9 @@ static Status ConcatenateBitmaps(const std::vector<Bitmap>& bitmaps, MemoryPool*
+                                  std::shared_ptr<Buffer>* out) {
+   int64_t out_length = 0;
+   for (const auto& bitmap : bitmaps) {
+-    out_length += bitmap.range.length;
++    if (internal::AddWithOverflow(out_length, bitmap.range.length, &out_length)) {
++      return Status::Invalid("Length overflow when concatenating arrays");
++    }
+   }
+   ARROW_ASSIGN_OR_RAISE(*out, AllocateBitmap(out_length, pool));
+   uint8_t* dst = (*out)->mutable_data();
+@@ -86,10 +88,6 @@ static Status ConcatenateBitmaps(const std::vector<Bitmap>& bitmaps, MemoryPool*
+     bitmap_offset += bitmap.range.length;
+   }
+ 
+-  // finally (if applicable) zero out any trailing bits
+-  if (auto preceding_bits = BitUtil::kPrecedingBitmask[out_length % 8]) {
+-    dst[out_length / 8] &= preceding_bits;
+-  }
+   return Status::OK();
+ }
+ 
+diff --git a/cpp/src/arrow/buffer.cc b/cpp/src/arrow/buffer.cc
+index 6aac70eeb..17884db94 100644
+--- a/cpp/src/arrow/buffer.cc
++++ b/cpp/src/arrow/buffer.cc
+@@ -277,13 +277,18 @@ Result<std::unique_ptr<ResizableBuffer>> AllocateResizableBuffer(const int64_t s
+ }
+ 
+ Result<std::shared_ptr<Buffer>> AllocateBitmap(int64_t length, MemoryPool* pool) {
+-  return AllocateBuffer(BitUtil::BytesForBits(length), pool);
++  ARROW_ASSIGN_OR_RAISE(auto buf, AllocateBuffer(BitUtil::BytesForBits(length), pool));
++  // Zero out any trailing bits
++  if (buf->size() > 0) {
++    buf->mutable_data()[buf->size() - 1] = 0;
++  }
++  return std::move(buf);
+ }
+ 
+ Result<std::shared_ptr<Buffer>> AllocateEmptyBitmap(int64_t length, MemoryPool* pool) {
+-  ARROW_ASSIGN_OR_RAISE(auto buf, AllocateBitmap(length, pool));
++  ARROW_ASSIGN_OR_RAISE(auto buf, AllocateBuffer(BitUtil::BytesForBits(length), pool));
+   memset(buf->mutable_data(), 0, static_cast<size_t>(buf->size()));
+-  return buf;
++  return std::move(buf);
+ }
+ 
+ Status AllocateEmptyBitmap(int64_t length, std::shared_ptr<Buffer>* out) {
+diff --git a/cpp/src/arrow/json/chunked_builder.cc b/cpp/src/arrow/json/chunked_builder.cc
+index 7789a5d03..01385d2b8 100644
+--- a/cpp/src/arrow/json/chunked_builder.cc
++++ b/cpp/src/arrow/json/chunked_builder.cc
+@@ -246,9 +246,7 @@ class ChunkedListArrayBuilder : public ChunkedArrayBuilder {
+     value_builder_->Insert(block_index, value_field_, std::make_shared<NullArray>(0));
+ 
+     ARROW_ASSIGN_OR_RAISE(null_bitmap_chunks_[block_index],
+-                          AllocateBitmap(length, pool_));
+-    std::memset(null_bitmap_chunks_[block_index]->mutable_data(), 0,
+-                null_bitmap_chunks_[block_index]->size());
++                          AllocateEmptyBitmap(length, pool_));
+ 
+     int64_t offsets_length = (length + 1) * sizeof(int32_t);
+     ARROW_ASSIGN_OR_RAISE(offset_chunks_[block_index],
+diff --git a/testing b/testing
+index 84298b3e5..d4aa70abc 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit 84298b3e58c2ac29a10cc9843e3bc2637c42291c
++Subproject commit d4aa70abcd18c169194bd2355028625c871d138c

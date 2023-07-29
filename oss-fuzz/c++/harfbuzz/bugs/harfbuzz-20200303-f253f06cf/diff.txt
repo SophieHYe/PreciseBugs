@@ -1,0 +1,16 @@
+diff --git a/src/hb-ot-layout-gsubgpos.hh b/src/hb-ot-layout-gsubgpos.hh
+index 64afe4fd4..db4247fae 100644
+--- a/src/hb-ot-layout-gsubgpos.hh
++++ b/src/hb-ot-layout-gsubgpos.hh
+@@ -3160,6 +3160,7 @@ struct GSUBGPOS
+       if (unlikely (!this->accels))
+ 	this->lookup_count = 0;
+ 
++printf ("%d\n", lookup_count);
+       for (unsigned int i = 0; i < this->lookup_count; i++)
+ 	this->accels[i].init (table->get_lookup (i));
+     }
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5712050577211392 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5712050577211392
+new file mode 100644
+index 000000000..9b31fedb5
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5712050577211392 differ

@@ -1,0 +1,26 @@
+diff --git a/examples/cors/backend/front-envoy.yaml b/examples/cors/backend/front-envoy.yaml
+index 0343ac0984..0dd81339f5 100644
+--- a/examples/cors/backend/front-envoy.yaml
++++ b/examples/cors/backend/front-envoy.yaml
+@@ -15,7 +15,7 @@ static_resources:
+             - name: envoy.access_loggers.file
+               typed_config:
+                 "@type": type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog
+-                path: "/var/log/access.log"
++                path: /dev/stdout
+           route_config:
+             name: local_route
+             virtual_hosts:
+diff --git a/examples/cors/frontend/front-envoy.yaml b/examples/cors/frontend/front-envoy.yaml
+index 07da44803b..e871ebea1e 100644
+--- a/examples/cors/frontend/front-envoy.yaml
++++ b/examples/cors/frontend/front-envoy.yaml
+@@ -15,7 +15,7 @@ static_resources:
+             - name: envoy.access_loggers.file
+               typed_config:
+                 "@type": type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog
+-                path: "/var/log/access.log"
++                path: /dev/stdout
+           route_config:
+             name: local_route
+             virtual_hosts:

@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
+index 355e3c7aa0..6d8eb8ad59 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
+@@ -218,7 +218,7 @@ int comunpack(unsigned char *cpack,g2int cpack_length,g2int lensec,g2int idrsnum
+ 
+       for (j=0;j<ngroups;j++)
+       {
+-           if( glen[j] > INT_MAX / idrstmpl[13] ||
++           if( (idrstmpl[13] != 0 && glen[j] > INT_MAX / idrstmpl[13]) ||
+                glen[j] *  idrstmpl[13] > INT_MAX - idrstmpl[12] )
+            {
+                 free(ifld);

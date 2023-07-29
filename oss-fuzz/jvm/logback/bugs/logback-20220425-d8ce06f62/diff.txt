@@ -1,0 +1,191 @@
+diff --git a/logback-classic/src/test/input/joran/ossfuzz/noConfig.xml b/logback-classic/src/test/input/joran/ossfuzz/noConfig.xml
+new file mode 100644
+index 000000000..754e21013
+--- /dev/null
++++ b/logback-classic/src/test/input/joran/ossfuzz/noConfig.xml
+@@ -0,0 +1,4 @@
++<!-- missing configuration element -->
++<!-- https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46793-->
++
++<param>a</param>
+\ No newline at end of file
+diff --git a/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java b/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
+index 4d52a7f8f..1a1b9723d 100755
+--- a/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
++++ b/logback-classic/src/test/java/ch/qos/logback/classic/joran/JoranConfiguratorTest.java
+@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
+ import java.io.IOException;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
++import java.util.List;
+ 
+ import org.junit.Ignore;
+ import org.junit.Test;
+@@ -41,6 +42,8 @@ import ch.qos.logback.classic.turbo.TurboFilter;
+ import ch.qos.logback.core.ConsoleAppender;
+ import ch.qos.logback.core.CoreConstants;
+ import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
++import ch.qos.logback.core.joran.action.ParamAction;
++import ch.qos.logback.core.joran.spi.ActionException;
+ import ch.qos.logback.core.joran.spi.JoranException;
+ import ch.qos.logback.core.pattern.parser.Parser;
+ import ch.qos.logback.core.read.ListAppender;
+@@ -218,6 +221,19 @@ public class JoranConfiguratorTest {
+         assertTrue(str1.contains(" DEBUG - hello world"));
+     }
+ 
++    
++    @Test
++    public void missingConfigurationElement() throws JoranException {
++        configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "ossfuzz/noConfig.xml");
++        StatusPrinter.print(loggerContext);
++        
++        String msg1 = "Exception in body\\(\\) method for action \\["+ParamAction.class.getName()+"\\]";
++        checker.assertContainsMatch(Status.ERROR, msg1);
++        
++        String msg2 = "current model is null. Is <configuration> element missing?";
++        checker.assertContainsException(ActionException.class, msg2 );
++    }
++    
+     @Test
+     public void turboFilter() throws JoranException {
+         // Although this test uses turbo filters, it only checks
+@@ -461,7 +477,7 @@ public class JoranConfiguratorTest {
+     public void LOGBACK_111() throws JoranException {
+         String configFileAsStr = ClassicTestConstants.ISSUES_PREFIX + "lbcore193.xml";
+         configure(configFileAsStr);
+-        checker.asssertContainsException(ScanException.class);
++        checker.assertContainsException(ScanException.class);
+         checker.assertContainsMatch(Status.ERROR, "Expecting RIGHT_PARENTHESIS token but got null");
+         checker.assertContainsMatch(Status.ERROR, "See also " + Parser.MISSING_RIGHT_PARENTHESIS);
+     }
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/action/BaseModelAction.java b/logback-core/src/main/java/ch/qos/logback/core/joran/action/BaseModelAction.java
+index b8e950441..41bbb3fc0 100755
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/action/BaseModelAction.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/action/BaseModelAction.java
+@@ -1,3 +1,16 @@
++/**
++ * Logback: the reliable, generic, fast and flexible logging framework.
++ * Copyright (C) 1999-2022, QOS.ch. All rights reserved.
++ *
++ * This program and the accompanying materials are dual-licensed under
++ * either the terms of the Eclipse Public License v1.0 as published by
++ * the Eclipse Foundation
++ *
++ *   or (per the licensee's choosing)
++ *
++ * under the terms of the GNU Lesser General Public License version 2.1
++ * as published by the Free Software Foundation.
++ */
+ package ch.qos.logback.core.joran.action;
+ 
+ import org.xml.sax.Attributes;
+@@ -51,7 +64,10 @@ public abstract class BaseModelAction extends Action {
+     }
+ 
+     @Override
+-    public void body(SaxEventInterpretationContext ec, String body) {
++    public void body(SaxEventInterpretationContext ec, String body) throws ActionException {
++        if(currentModel == null) {
++            throw new ActionException("current model is null. Is <configuration> element missing?");
++        }
+         currentModel.addText(body);
+     }
+ 
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/ActionException.java b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/ActionException.java
+index 33477c7ac..9a3996a9a 100644
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/ActionException.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/ActionException.java
+@@ -27,6 +27,10 @@ public class ActionException extends Exception {
+     public ActionException() {
+     }
+ 
++    public ActionException(String msg) {
++        super(msg);
++    }
++    
+     public ActionException(final Throwable rootCause) {
+         super(rootCause);
+     }
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
+index 7b13825fb..8e10e641a 100644
+--- a/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/joran/spi/SaxEventInterpreter.java
+@@ -271,7 +271,7 @@ public class SaxEventInterpreter {
+             try {
+                 action.body(interpretationContext, body);
+             } catch (ActionException ae) {
+-                cai.addError("Exception in end() methd for action [" + action + "]", ae);
++                cai.addError("Exception in body() method for action [" + action + "]", ae);
+             }
+         }
+     }
+diff --git a/logback-core/src/main/java/ch/qos/logback/core/status/StatusUtil.java b/logback-core/src/main/java/ch/qos/logback/core/status/StatusUtil.java
+index f5bdb997c..9aa3a8df6 100755
+--- a/logback-core/src/main/java/ch/qos/logback/core/status/StatusUtil.java
++++ b/logback-core/src/main/java/ch/qos/logback/core/status/StatusUtil.java
+@@ -17,7 +17,6 @@ import ch.qos.logback.core.Context;
+ import ch.qos.logback.core.CoreConstants;
+ 
+ import java.util.ArrayList;
+-import java.util.Iterator;
+ import java.util.List;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+@@ -154,19 +153,32 @@ public class StatusUtil {
+     }
+ 
+     public boolean containsException(Class<?> exceptionType) {
+-        Iterator<Status> stati = sm.getCopyOfStatusList().iterator();
+-        while (stati.hasNext()) {
+-            Status status = stati.next();
++        return containsException(exceptionType, null);
++    }
++
++    public boolean containsException(Class<?> exceptionType, String msgRegex) {
++        for (Status status: sm.getCopyOfStatusList()) {
+             Throwable t = status.getThrowable();
+             while (t != null) {
+                 if (t.getClass().getName().equals(exceptionType.getName())) {
+-                    return true;
++                    if(msgRegex == null) {
++                      return true;
++                    } else if(checkRegexMatch(t.getMessage(), msgRegex)) {
++                        return true;
++                    }
+                 }
+                 t = t.getCause();
+             }
+         }
+         return false;
+     }
++    
++    private boolean checkRegexMatch(String message, String msgRegex) {
++        Pattern p = Pattern.compile(msgRegex);
++        Matcher matcher = p.matcher(message);
++        return matcher.lookingAt();
++    }
++
+ 
+     /**
+      * Return the time of last reset. -1 if last reset time could not be found
+diff --git a/logback-core/src/test/java/ch/qos/logback/core/testUtil/StatusChecker.java b/logback-core/src/test/java/ch/qos/logback/core/testUtil/StatusChecker.java
+index 1c67b57f3..ecd3b0e6a 100644
+--- a/logback-core/src/test/java/ch/qos/logback/core/testUtil/StatusChecker.java
++++ b/logback-core/src/test/java/ch/qos/logback/core/testUtil/StatusChecker.java
+@@ -45,10 +45,14 @@ public class StatusChecker extends StatusUtil {
+         assertTrue(containsMatch(regex));
+     }
+ 
+-    public void asssertContainsException(Class<?> scanExceptionClass) {
++    public void assertContainsException(Class<?> scanExceptionClass) {
+         assertTrue(containsException(scanExceptionClass));
+     }
+ 
++    public void assertContainsException(Class<?> scanExceptionClass, String msg) {
++        assertTrue(containsException(scanExceptionClass, msg));
++    }
++    
+     public void assertIsErrorFree() {
+         assertTrue(isErrorFree(0));
+     }

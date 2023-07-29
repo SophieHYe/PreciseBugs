@@ -1,0 +1,15 @@
+diff --git a/src/ua_types_encoding_json.c b/src/ua_types_encoding_json.c
+index 262652c3a..fa1141d8c 100644
+--- a/src/ua_types_encoding_json.c
++++ b/src/ua_types_encoding_json.c
+@@ -2622,8 +2622,8 @@ DECODE_JSON(Variant) {
+         return UA_STATUSCODE_GOOD;
+     }
+ 
+-    size_t size = (size_t)(parseCtx->tokenArray[searchResultType].end -
+-                           parseCtx->tokenArray[searchResultType].start);
++    size_t size = ((size_t)parseCtx->tokenArray[searchResultType].end -
++                   (size_t)parseCtx->tokenArray[searchResultType].start);
+ 
+     /* check if size is zero or the type is not a number */
+     if(size < 1 || parseCtx->tokenArray[searchResultType].type != JSMN_PRIMITIVE)

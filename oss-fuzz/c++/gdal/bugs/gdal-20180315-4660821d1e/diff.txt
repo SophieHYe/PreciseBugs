@@ -1,0 +1,39 @@
+diff --git a/gdal/fuzzers/gdal_fuzzer.cpp b/gdal/fuzzers/gdal_fuzzer.cpp
+index 5d59ece2b2..069b1b4d0a 100644
+--- a/gdal/fuzzers/gdal_fuzzer.cpp
++++ b/gdal/fuzzers/gdal_fuzzer.cpp
+@@ -76,6 +76,7 @@ int LLVMFuzzerInitialize(int* /*argc*/, char*** argv)
+     CPLSetConfigOption("GDAL_WMS_ABORT_CURL_REQUEST", "YES");
+     CPLSetConfigOption("GDAL_HTTP_TIMEOUT", "1");
+     CPLSetConfigOption("GDAL_HTTP_CONNECTTIMEOUT", "1");
++    CPLSetConfigOption("GDAL_CACHEMAX", "1000"); // Limit to 1 GB
+ #ifdef GTIFF_USE_MMAP
+     CPLSetConfigOption("GTIFF_USE_MMAP", "YES");
+ #endif
+diff --git a/gdal/fuzzers/gdal_translate_fuzzer.cpp b/gdal/fuzzers/gdal_translate_fuzzer.cpp
+index 4128a5ac97..f6eeb3309d 100644
+--- a/gdal/fuzzers/gdal_translate_fuzzer.cpp
++++ b/gdal/fuzzers/gdal_translate_fuzzer.cpp
+@@ -49,6 +49,7 @@ int LLVMFuzzerInitialize(int* /*argc*/, char*** argv)
+     CPLSetConfigOption("GDAL_WMS_ABORT_CURL_REQUEST", "YES");
+     CPLSetConfigOption("GDAL_HTTP_TIMEOUT", "1");
+     CPLSetConfigOption("GDAL_HTTP_CONNECTTIMEOUT", "1");
++    CPLSetConfigOption("GDAL_CACHEMAX", "1000"); // Limit to 1 GB
+     GDALAllRegister();
+     return 0;
+ }
+diff --git a/gdal/gcore/gdalrasterblock.cpp b/gdal/gcore/gdalrasterblock.cpp
+index e75088a20f..8e4c34b738 100644
+--- a/gdal/gcore/gdalrasterblock.cpp
++++ b/gdal/gcore/gdalrasterblock.cpp
+@@ -680,8 +680,9 @@ GDALRasterBlock::~GDALRasterBlock()
+ static size_t GetEffectiveBlockSize(int nBlockSize)
+ {
+     // The real cost of a block allocation is more than just nBlockSize
++    // As we allocate with 64-byte alignment, use 64 as a multiple.
+     // We arbitrarily add 2 * sizeof(GDALRasterBlock) to account for that
+-    return nBlockSize + 2 * sizeof(GDALRasterBlock);
++    return DIV_ROUND_UP(nBlockSize, 64) + 2 * sizeof(GDALRasterBlock);
+ }
+ 
+ /************************************************************************/

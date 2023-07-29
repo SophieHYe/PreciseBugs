@@ -1,0 +1,28 @@
+diff --git a/src/lib/protocols/csgo.c b/src/lib/protocols/csgo.c
+index f48636ef..4bd541bc 100644
+--- a/src/lib/protocols/csgo.c
++++ b/src/lib/protocols/csgo.c
+@@ -77,7 +77,8 @@ void ndpi_search_csgo(struct ndpi_detection_module_struct* ndpi_struct, struct n
+       }
+     }
+ 
+-    if(flow->l4.udp.csgo_s2 < 3 && (w & 0xffff0000ul) == 0x0d1d0000) {
++    if(packet->payload_packet_len > 6 &&
++       flow->l4.udp.csgo_s2 < 3 && (w & 0xffff0000ul) == 0x0d1d0000) {
+       uint32_t w2 = get_u_int32_t(packet->payload, 2);
+       if(packet->payload_packet_len == 13) {
+         if(!flow->l4.udp.csgo_s2) {
+diff --git a/src/lib/protocols/netbios.c b/src/lib/protocols/netbios.c
+index 4614e6c1..710f18a7 100644
+--- a/src/lib/protocols/netbios.c
++++ b/src/lib/protocols/netbios.c
+@@ -367,7 +367,8 @@ void ndpi_search_netbios(struct ndpi_detection_module_struct *ndpi_struct,
+       if(netbios_len == packet->payload_packet_len - 14) {
+ 	NDPI_LOG_DBG2(ndpi_struct, "found netbios port 138 and payload length >= 112 \n");
+ 
+-	if(packet->payload[0] >= 0x10 && packet->payload[0] <= 0x16) {
++	/* TODO: ipv6 */
++	if(packet->iph && packet->payload[0] >= 0x10 && packet->payload[0] <= 0x16) {
+ 	  u_int32_t source_ip = ntohl(get_u_int32_t(packet->payload, 4));
+ 
+ 	  NDPI_LOG_DBG2(ndpi_struct, "found netbios with MSG-type 0x10,0x11,0x12,0x13,0x14,0x15 or 0x16\n");

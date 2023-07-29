@@ -1,0 +1,13 @@
+diff --git a/mapogr.cpp b/mapogr.cpp
+index 1b66219b1..e3162de2a 100644
+--- a/mapogr.cpp
++++ b/mapogr.cpp
+@@ -5537,7 +5537,7 @@ shapeObj *msOGRShapeFromWKT(const char *string)
+                             wkbFlatten(OGR_G_GetGeometryType(hGeom)) )
+       == MS_FAILURE ) {
+     free( shape );
+-    return NULL;
++    shape = NULL;
+   }
+ 
+   OGR_G_DestroyGeometry( hGeom );

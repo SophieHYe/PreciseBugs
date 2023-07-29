@@ -1,0 +1,13 @@
+diff --git a/MagickCore/profile.c b/MagickCore/profile.c
+index b6083270d..fff31dbdc 100644
+--- a/MagickCore/profile.c
++++ b/MagickCore/profile.c
+@@ -1769,6 +1769,8 @@ static MagickBooleanType ValidateXMPProfile(const StringInfo *profile)
+ 
+   xmp=(const char *) GetStringInfoDatum(profile);
+   p=StringLocateSubstring(xmp,"<rdf:RDF ");
++  if (p != (char *) NULL)
++    p=StringLocateSubstring(p,">");
+   if (p != (char *) NULL)
+     p=StringLocateSubstring(p,"</rdf:RDF>");
+   return(p == (char *) NULL ? MagickFalse : MagickTrue);

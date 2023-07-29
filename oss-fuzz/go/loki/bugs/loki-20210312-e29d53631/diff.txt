@@ -1,0 +1,42 @@
+diff --git a/pkg/logql/lex.go b/pkg/logql/lex.go
+index 2917dd834..71591ac9f 100644
+--- a/pkg/logql/lex.go
++++ b/pkg/logql/lex.go
+@@ -5,6 +5,7 @@ import (
+ 	"text/scanner"
+ 	"time"
+ 	"unicode"
++	"unicode/utf8"
+ 
+ 	"github.com/dustin/go-humanize"
+ 	"github.com/prometheus/common/model"
+@@ -133,7 +134,12 @@ func (l *lexer) Lex(lval *exprSymType) int {
+ 
+ 	case scanner.String, scanner.RawString:
+ 		var err error
+-		lval.str, err = strutil.Unquote(l.TokenText())
++		tokenText := l.TokenText()
++		if !utf8.ValidString(tokenText) {
++			l.Error("invalid UTF-8 rune")
++			return 0
++		}
++		lval.str, err = strutil.Unquote(tokenText)
+ 		if err != nil {
+ 			l.Error(err.Error())
+ 			return 0
+diff --git a/pkg/logql/parser_test.go b/pkg/logql/parser_test.go
+index a7774326e..bd878d73a 100644
+--- a/pkg/logql/parser_test.go
++++ b/pkg/logql/parser_test.go
+@@ -1298,6 +1298,11 @@ func TestParse(t *testing.T) {
+ 				nil, nil,
+ 			),
+ 		},
++		{
++			in:  "{app=~\"\xa0\xa1\"}",
++			exp: nil,
++			err: ParseError{msg: "invalid UTF-8 encoding", line: 1, col: 7},
++		},
+ 		{
+ 			in: `sum_over_time({app="foo"} |= "bar" | json | latency >= 250ms or ( status_code < 500 and status_code > 200)
+ 			| line_format "blip{{ .foo }}blop {{.status_code}}" | label_format foo=bar,status_code="buzz{{.bar}}"[5m])`,

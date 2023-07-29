@@ -1,0 +1,13 @@
+diff --git a/coders/wpg.c b/coders/wpg.c
+index b91848154..d453f6f6a 100644
+--- a/coders/wpg.c
++++ b/coders/wpg.c
+@@ -1210,7 +1210,7 @@ static Image *ReadWPGImage(const ImageInfo *image_info,
+                         sizeof(*image->colormap));
+                 }
+ 
+-              if (bpp == 1)
++              if ((bpp == 1) && (image->colors > 1))
+                 {
+                   if(image->colormap[0].red==0 &&
+                      image->colormap[0].green==0 &&

@@ -1,0 +1,53 @@
+diff --git a/regex-syntax/src/hir/mod.rs b/regex-syntax/src/hir/mod.rs
+index beea995..bdf2fb2 100644
+--- a/regex-syntax/src/hir/mod.rs
++++ b/regex-syntax/src/hir/mod.rs
+@@ -2072,8 +2072,8 @@ impl Properties {
+     /// concatenation of only `Literal`s or an alternation of only `Literal`s.
+     ///
+     /// For example, `f`, `foo`, `a|b|c`, and `foo|bar|baz` are alternation
+-    /// literals, but `f+`, `(foo)`, `foo()`, ``
+-    /// are not (even though that contain sub-expressions that are literals).
++    /// literals, but `f+`, `(foo)`, `foo()`, and the empty pattern are not
++    /// (even though that contain sub-expressions that are literals).
+     #[inline]
+     pub fn is_alternation_literal(&self) -> bool {
+         self.0.alternation_literal
+@@ -2211,7 +2211,7 @@ impl Properties {
+                 props.static_explicit_captures_len = None;
+             }
+             props.alternation_literal =
+-                props.alternation_literal && p.is_alternation_literal();
++                props.alternation_literal && p.is_literal();
+             if !min_poisoned {
+                 if let Some(xmin) = p.minimum_len() {
+                     if props.minimum_len.map_or(true, |pmin| xmin < pmin) {
+diff --git a/regex-syntax/src/hir/translate.rs b/regex-syntax/src/hir/translate.rs
+index a0a8d12..8751372 100644
+--- a/regex-syntax/src/hir/translate.rs
++++ b/regex-syntax/src/hir/translate.rs
+@@ -3480,6 +3480,7 @@ mod tests {
+         assert!(!props(r"a|[b]").is_alternation_literal());
+         assert!(!props(r"(?:a)|b").is_alternation_literal());
+         assert!(!props(r"a|(?:b)").is_alternation_literal());
++        assert!(!props(r"(?:z|xx)@|xx").is_alternation_literal());
+     }
+ 
+     // This tests that the smart Hir::concat constructor simplifies the given
+diff --git a/tests/regression_fuzz.rs b/tests/regression_fuzz.rs
+index 4e76704..5f49530 100644
+--- a/tests/regression_fuzz.rs
++++ b/tests/regression_fuzz.rs
+@@ -29,3 +29,12 @@ fn big_regex_fails_to_compile() {
+     let pat = "[\u{0}\u{e}\u{2}\\w~~>[l\t\u{0}]p?<]{971158}";
+     assert!(regex_new!(pat).is_err());
+ }
++
++// This was caught while on master but before a release went out(!).
++//
++// See: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=58173
++#[test]
++fn todo() {
++    let pat = "(?:z|xx)@|xx";
++    assert!(regex_new!(pat).is_ok());
++}

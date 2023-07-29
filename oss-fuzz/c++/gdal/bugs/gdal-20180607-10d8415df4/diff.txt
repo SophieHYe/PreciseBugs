@@ -1,0 +1,56 @@
+diff --git a/autotest/ogr/ogr_geom.py b/autotest/ogr/ogr_geom.py
+index 5b2946c59f..2ece44a6bd 100755
+--- a/autotest/ogr/ogr_geom.py
++++ b/autotest/ogr/ogr_geom.py
+@@ -4527,6 +4527,17 @@ def ogr_geom_cannot_add_triangle_to_multisurface():
+     return 'success'
+ 
+ ###############################################################################
++
++
++def ogr_geom_force_polygonzm_to_linestring():
++    g = ogr.CreateGeometryFromWkt('POLYGON ZM ((0 0 10 20,0 1 30 40,1 1 50 60,0 0 10 70))')
++    wkt = ogr.ForceToLineString(g).ExportToIsoWkt()
++    if wkt != 'LINESTRING ZM (0 0 10 20,0 1 30 40,1 1 50 60,0 0 10 70)':
++        print(wkt)
++        return 'fail'
++    return 'success'
++
++###############################################################################
+ # cleanup
+ 
+ 
+@@ -4602,6 +4613,7 @@ gdaltest_list = [
+     ogr_geom_remove_geometry,
+     ogr_geom_sfcgal,
+     ogr_geom_cannot_add_triangle_to_multisurface,
++    ogr_geom_force_polygonzm_to_linestring,
+     ogr_geom_cleanup]
+ 
+ # gdaltest_list = [ ogr_geom_triangle_ps_tin_conversion ]
+diff --git a/gdal/ogr/ogrlinestring.cpp b/gdal/ogr/ogrlinestring.cpp
+index 5d49b743bd..5562caa2a3 100644
+--- a/gdal/ogr/ogrlinestring.cpp
++++ b/gdal/ogr/ogrlinestring.cpp
+@@ -2814,15 +2814,19 @@ OGRLineString* OGRLineString::TransferMembersAndDestroy(
+     OGRLineString* poSrc,
+     OGRLineString* poDst )
+ {
+-    poDst->set3D(poSrc->Is3D());
+-    poDst->setMeasured(poSrc->IsMeasured());
++    if( poSrc->Is3D())
++        poDst->flags |= OGR_G_3D;
++    if( poSrc->IsMeasured())
++        poDst->flags |= OGR_G_MEASURED;
+     poDst->assignSpatialReference(poSrc->getSpatialReference());
+     poDst->nPointCount = poSrc->nPointCount;
+     poDst->paoPoints = poSrc->paoPoints;
+     poDst->padfZ = poSrc->padfZ;
++    poDst->padfM = poSrc->padfM;
+     poSrc->nPointCount = 0;
+     poSrc->paoPoints = nullptr;
+     poSrc->padfZ = nullptr;
++    poSrc->padfM = nullptr;
+     delete poSrc;
+     return poDst;
+ }

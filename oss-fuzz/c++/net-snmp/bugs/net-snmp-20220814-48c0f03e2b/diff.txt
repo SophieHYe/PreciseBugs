@@ -1,0 +1,13 @@
+diff --git a/testing/fuzzing/snmp_api_fuzzer.c b/testing/fuzzing/snmp_api_fuzzer.c
+index 9020397d2b..75d1932f03 100644
+--- a/testing/fuzzing/snmp_api_fuzzer.c
++++ b/testing/fuzzing/snmp_api_fuzzer.c
+@@ -106,7 +106,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+         }
+         sess.securityLevel = af_get_int(&data2, &size2);
+ 
+-        pdu->securityName = af_gb_get_null_terminated(&data2, &size2);
++        pdu->securityName = af_get_null_terminated(&data2, &size2);
+         if (pdu->securityName) {
+             pdu->securityNameLen = strlen(pdu->securityName);
+         }

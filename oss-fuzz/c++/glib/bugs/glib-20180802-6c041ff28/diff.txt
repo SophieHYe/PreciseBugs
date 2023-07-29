@@ -1,0 +1,45 @@
+diff --git a/glib/gbookmarkfile.c b/glib/gbookmarkfile.c
+index e6f885e6b..3f0275fb9 100644
+--- a/glib/gbookmarkfile.c
++++ b/glib/gbookmarkfile.c
+@@ -915,7 +915,8 @@ parse_mime_type_element (GMarkupParseContext  *context,
+     
+   if (!item->metadata)
+     item->metadata = bookmark_metadata_new ();
+-  
++
++  g_free (item->metadata->mime_type);
+   item->metadata->mime_type = g_strdup (type);
+ }
+ 
+@@ -964,7 +965,9 @@ parse_icon_element (GMarkupParseContext  *context,
+     
+   if (!item->metadata)
+     item->metadata = bookmark_metadata_new ();
+-  
++
++  g_free (item->metadata->icon_href);
++  g_free (item->metadata->icon_mime);
+   item->metadata->icon_href = g_strdup (href);
+   item->metadata->icon_mime = g_strdup (type);
+ }
+diff --git a/glib/tests/Makefile.am b/glib/tests/Makefile.am
+index 2a53ae6fd..172d16607 100644
+--- a/glib/tests/Makefile.am
++++ b/glib/tests/Makefile.am
+@@ -164,6 +164,7 @@ dist_test_data += \
+ 	bookmarks/fail-36.xbel \
+ 	bookmarks/fail-37.xbel \
+ 	bookmarks/fail-38.xbel \
++	bookmarks/fail-39.xbel \
+ 	bookmarks/valid-01.xbel \
+ 	bookmarks/valid-02.xbel \
+ 	bookmarks/valid-03.xbel \
+diff --git a/glib/tests/bookmarks/fail-39.xbel b/glib/tests/bookmarks/fail-39.xbel
+new file mode 100644
+index 000000000..c57c83784
+--- /dev/null
++++ b/glib/tests/bookmarks/fail-39.xbel
+@@ -0,0 +1 @@
++<xbel version="1.0"><bookmark href=""><info><metadata owner="http://freedesktop.org"><mime-type/><mime-type/
+\ No newline at end of file

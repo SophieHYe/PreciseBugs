@@ -1,0 +1,65 @@
+diff --git a/autotest/cpp/test_cpl.cpp b/autotest/cpp/test_cpl.cpp
+index deec847d93..578afc93b2 100644
+--- a/autotest/cpp/test_cpl.cpp
++++ b/autotest/cpp/test_cpl.cpp
+@@ -2010,4 +2010,31 @@ namespace tut
+             ensure( oJsonId.IsValid() );
+         }
+     }
++
++    // Test CPLRecodeIconv() with re-allocation
++    template<>
++    template<>
++    void object::test<32>()
++    {
++#ifdef CPL_RECODE_ICONV
++        int N = 32800;
++        char* pszIn = static_cast<char*>(CPLMalloc(N + 1));
++        for(int i=0;i<N;i++)
++            pszIn[i] = '\xE9';
++        pszIn[N] = 0;
++        char* pszExpected = static_cast<char*>(CPLMalloc(N * 2 + 1));
++        for(int i=0;i<N;i++)
++        {
++            pszExpected[2*i] = '\xC3';
++            pszExpected[2*i+1] = '\xA9';
++        }
++        pszExpected[N * 2] = 0;
++        char* pszRet = CPLRecode(pszIn, "ISO-8859-2", CPL_ENC_UTF8);
++        ensure_equals( memcmp(pszExpected, pszRet, N * 2 + 1), 0 );
++        CPLFree(pszIn);
++        CPLFree(pszRet);
++        CPLFree(pszExpected);
++#endif
++    }
++
+ } // namespace tut
+diff --git a/gdal/port/cpl_recode_iconv.cpp b/gdal/port/cpl_recode_iconv.cpp
+index 1b17b292bd..33946b6589 100644
+--- a/gdal/port/cpl_recode_iconv.cpp
++++ b/gdal/port/cpl_recode_iconv.cpp
+@@ -104,10 +104,10 @@ char *CPLRecodeIconv( const char *pszSource,
+ /* -------------------------------------------------------------------- */
+     ICONV_CPP_CONST char *pszSrcBuf = (ICONV_CPP_CONST char *)pszSource;
+     size_t nSrcLen = strlen( pszSource );
+-    size_t nDstCurLen = std::max(CPL_RECODE_DSTBUF_SIZE, nSrcLen + 1);
++    size_t nDstCurLen = std::max(CPL_RECODE_DSTBUF_SIZE, nSrcLen);
+     size_t nDstLen = nDstCurLen;
+     char *pszDestination =
+-        static_cast<char *>(CPLCalloc(nDstCurLen, sizeof(char)));
++        static_cast<char *>(CPLCalloc(nDstCurLen + 1, sizeof(char)));
+     char *pszDstBuf = pszDestination;
+ 
+     while( nSrcLen > 0 )
+@@ -141,9 +141,9 @@ char *CPLRecodeIconv( const char *pszSource,
+                 size_t nTmp = nDstCurLen;
+                 nDstCurLen *= 2;
+                 pszDestination =
+-                    static_cast<char *>(CPLRealloc(pszDestination, nDstCurLen));
++                    static_cast<char *>(CPLRealloc(pszDestination, nDstCurLen + 1));
+                 pszDstBuf = pszDestination + nTmp - nDstLen;
+-                nDstLen += nDstCurLen - nTmp;
++                nDstLen += nTmp;
+                 continue;
+             }
+ 

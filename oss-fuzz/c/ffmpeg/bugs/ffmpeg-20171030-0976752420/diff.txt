@@ -1,0 +1,16 @@
+diff --git a/libavcodec/aacdec_fixed.c b/libavcodec/aacdec_fixed.c
+index f6a533010f..5e9249ceea 100644
+--- a/libavcodec/aacdec_fixed.c
++++ b/libavcodec/aacdec_fixed.c
+@@ -307,9 +307,9 @@ static av_always_inline void predict(PredictorState *ps, int *coef,
+ 
+         if (shift < 31) {
+             if (shift > 0) {
+-                *coef += (pv.mant + (1 << (shift - 1))) >> shift;
++                *coef += (unsigned)((pv.mant + (1 << (shift - 1))) >> shift);
+             } else
+-                *coef += pv.mant << -shift;
++                *coef += (unsigned)(pv.mant << -shift);
+         }
+     }
+ 

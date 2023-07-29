@@ -1,0 +1,48 @@
+b4d3251	82b3597	Mon Aug 15 10:31:18 2022 -0400	Add missing #include to fix C++20 compile error. (#130)
+82b3597	fd53959	Wed Aug 10 11:06:37 2022 -0400	Fix Wunqualified-std-cast-call warnings (#129)
+2ee7aa2	962471a	Tue Mar 23 12:50:48 2021 +0000	Fix unused variable warnings in COLRv1 (#100)
+afe87e6	a8ceb6c	Mon Feb 22 17:36:38 2021 +0000	Build fix when HAVE_ARCHIVE not available (#95)
+a8ceb6c	4155a63	Mon Feb 22 17:33:02 2021 +0000	Fix unused variable build warnings/errors (#96)
+4155a63	0cb328e	Mon Feb 22 17:32:21 2021 +0000	Fix unitialized value num_subrs sign comparison issues (#97)
+f3e8aba	7ac6e6e	Thu Dec 10 13:08:05 2020 +0100	Fix \'libpng\' build (#91)
+3a20806	1a5069b	Thu Oct 29 15:50:29 2020 +0000	Fix build warnings (#88)
+6f46ee5	09a214b	Sun Jul 28 16:02:03 2019 +0100	Fix Travis CI Build - The automatic update to Xenial ships Clang 7 by default;  downgrade to Clang 5   fails the build.
+8f20e93	9587fcd	Sun Mar 31 11:41:38 2019 +0100	Add recently fixed issue that was uncovered by OSS-Fuzz.
+ab6d717	7e045f0	Thu Feb 21 10:58:40 2019 +0000	Add recently fixed issues that were uncovered by OSS-Fuzz.
+5d93ce6	08b711d	Thu Nov 22 10:51:47 2018 +0000	Add recently fixed issues that were uncovered by OSS-Fuzz.
+08b711d	7e860f4	Thu Nov 15 11:19:27 2018 +0000	Fix a lot of timeout issues with OSS-Fuzz: - Restrict the height of rendered glyphs to 5000 pixels.
+7e860f4	4085682	Thu Nov 8 20:23:18 2018 +0000	Add recently fixed issues that were uncovered by OSS-Fuzz.
+4085682	e9d2381	Tue Oct 30 10:45:50 2018 +0000	Add recently fixed issues that were uncovered by OSS-Fuzz.
+f6fa2af	38bc17a	Sat Oct 6 12:40:59 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+38bc17a	fa25bfd	Fri Sep 14 12:21:00 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+518936d	842ea66	Wed Aug 29 11:20:50 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+453d715	c21120b	Mon Aug 20 00:32:25 2018 +0200	Use git protocol for checking out FreeType: - Due to an attack of Savannah. - Fix a path in `custom-build.sh\' on the fly.
+6ce9451	2ec74e5	Sat Aug 18 18:32:37 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+2ec74e5	451c206	Wed Aug 15 15:53:54 2018 +0100	Fail more gracefully than ... ... https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9914
+b000e48	0c256f6	Tue Aug 14 10:35:25 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+4fa3193	a5ce748	Mon Aug 13 00:49:00 2018 +0100	Fix build issue of OSS-Fuzz: - The target `glyphs-outlines\' was not built (and returned an error);   introduced by 731c059129aeb228ea62d8cad40c71dcaa9530b2. - Call the legacy target\'s options file `legacy.options\' (makes sense,   right?).
+a5ce748	731c059	Mon Aug 13 00:17:56 2018 +0100	Add two verified and fixed OSS-Fuzz findings.
+b91ebf3	ce895f4	Fri Aug 3 23:28:03 2018 +0100	Add recently fixed issues that were uncovered by OSS-Fuzz.
+073754e	c1e6985	Mon Jul 30 19:59:38 2018 +0100	Update the documentation: - Add a note about the general structure of `/fuzzing\' and about how to   use it for debugging.
+3de2523	41786d1	Mon Jul 30 15:50:08 2018 +0100	Fix use of `uninitialised value\': - `FT_Get_PS_Font_Value\' does not touch the value in case of an error.
+f7073bf	239c760	Sun Jul 29 23:19:00 2018 +0100	Fix huge amount of copy+paste issues within the fuzzers: - Have all fuzzers fuzz what they are supposed to fuzz. - Fix comments as well.
+239c760	153f912	Sun Jul 29 22:22:30 2018 +0100	Small fixes: - Fix a logic error in `FaceVisitorMultipleMasters\' -- this code should be   executed if NO error occurred. - Mark `FT_Get_PS_Font_Value\' as `extensively fuzzed\'.
+153f912	af791c1	Sun Jul 29 16:00:17 2018 +0100	Add verified and fixed OSS-Fuzz findings.
+af791c1	4b764cd	Sun Jul 29 14:33:10 2018 +0100	Fix build for `git <= 2.13\': - Remove `--depth 1\' when updating submodules since `git <= 2.14\' does not   understand its purpose correctly (when working with tags or commits that are   not most recent).
+4b764cd	8e7957a	Sat Jul 28 20:40:41 2018 +0100	Add `--repeat\' to `./custom-build.sh\' to improve the debugging experience.
+d0fede2	772ca68	Fri Jul 27 23:29:35 2018 +0100	Update the build system: - Refactor/reorganise the main `CMakeLists.txt\'. - Make sure `-std=c++11\' is added everywhere. - Clear the contents of `fuzzing/build\' except for `bin\'. This should fix   caching issues with CMake. - Remove `run-oss-fuzz-mock.sh\' as it is not needed anymore.
+772ca68	3739cd7	Fri Jul 27 00:26:42 2018 +0100	Extensively fuzz `FT_Get_PS_Font_Value\': - Temporarily remove a regression test since it fails now.  Add it back once   the bug is fixed.
+3739cd7	ead4e3f	Thu Jul 26 20:57:04 2018 +0100	Some fixes: - Only clone the part of `freetype2\' and `libarchive\' that are necessary. - Remove unnecessary double linebreaks in the usage message of `driver\'.
+ead4e3f	eb2b618	Wed Jul 25 18:46:27 2018 +0100	Fuzz `warping\' property of the `autofitter\' module + small fixes: - Add `FaceVisitorAutohinter\' to fuzz `warping\' of `autofitter\'. - Fix a bug in `FaceVisitorCharCodes\': `WARN_ABOUT_IGNORED_VALUES\' failed when   compiled with a logger. - Fix order of includes and CMake lists.
+eb2b618	bf76248	Wed Jul 25 16:10:31 2018 +0100	Cleanup the visitors and iterators: - Make sure every loop as a reasonable upper bound. - Values that are printed in `hex\' should be prefixed with `0x\'.
+c641047	1f74483	Wed Jul 25 11:45:35 2018 +0100	Add two verified and fixed OSS-Fuzz findings.
+36360ec	4b35d9a	Tue Jul 24 16:44:32 2018 +0100	Update regression testing: - Activate regression tests for new corpora. - Add masked (not fixed) testcase of   https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9523.
+4b35d9a	2f2f16a	Tue Jul 24 16:21:14 2018 +0100	Bump `libarchive` due to a signed integer overflow with `3.3.1\': - https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9565 - https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=9566 - Add (now) fixed samples to the corpora.
+2f2f16a	2e9a544	Tue Jul 24 14:43:53 2018 +0200	Add verified and fixed OSS-Fuzz finding.
+8f04279	bb1de3f	Sun Jul 22 21:43:30 2018 +0200	Add verified and fixed OSS-Fuzz finding.
+bb1de3f	3bd8b6f	Sun Jul 22 20:21:18 2018 +0200	Add two verified and fixed OSS-Fuzz findings.
+4ca1c49	f646e9f	Sun Jul 22 10:58:48 2018 +0200	driver.cpp (main): Fix typo in `--help\' output.
+b739df2	74ff39a	Mon Jul 16 09:05:33 2018 +0200	Fix `Conditional jump or move depends on uninitialised value(s)\'.
+d24b19b	1bd429d	Tue Jul 10 21:19:02 2018 +0200	Fixup commit: - Remove whitespace after `move\'. - Bail out early when `language_id <= 0x8000U\'.
+77f11ed	2047547	Tue Jul 3 17:42:03 2018 +0200	Add fonts to the test corpus: - Add fonts of various formats from bungeman   https://savannah.nongnu.org/bugs/index.php?46486
+51507e5	65b2487	Wed Jun 20 10:43:45 2018 +0200	Add test corpus: - findings of OSS-Fuzz that triggered (verified) bugs that have been fixed officially - other findings

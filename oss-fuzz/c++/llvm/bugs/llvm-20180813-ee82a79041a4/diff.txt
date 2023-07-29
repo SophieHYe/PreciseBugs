@@ -1,0 +1,39 @@
+diff --git a/llvm/lib/CodeGen/CodeGenPrepare.cpp b/llvm/lib/CodeGen/CodeGenPrepare.cpp
+index 725b69dbaf5b..2dbf2637dc81 100644
+--- a/llvm/lib/CodeGen/CodeGenPrepare.cpp
++++ b/llvm/lib/CodeGen/CodeGenPrepare.cpp
+@@ -3801,8 +3801,13 @@ bool AddressingModeMatcher::matchOperationAddr(User *AddrInst, unsigned Opcode,
+       } else {
+         uint64_t TypeSize = DL.getTypeAllocSize(GTI.getIndexedType());
+         if (ConstantInt *CI = dyn_cast<ConstantInt>(AddrInst->getOperand(i))) {
+-          ConstantOffset += CI->getSExtValue() * TypeSize;
+-        } else if (TypeSize) {  // Scales of zero don't do anything.
++          const APInt &CVal = CI->getValue();
++          if (CVal.getMinSignedBits() <= 64) {
++            ConstantOffset += CVal.getSExtValue() * TypeSize;
++            continue;
++          }
++        }
++        if (TypeSize) {  // Scales of zero don't do anything.
+           // We only allow one variable index at the moment.
+           if (VariableOperand != -1)
+             return false;
+diff --git a/llvm/test/CodeGen/X86/getelementptr.ll b/llvm/test/CodeGen/X86/getelementptr.ll
+index 68caf7a65f8f..11d534e0560f 100644
+--- a/llvm/test/CodeGen/X86/getelementptr.ll
++++ b/llvm/test/CodeGen/X86/getelementptr.ll
+@@ -78,3 +78,14 @@ define i8* @test_sext16(i8* %ptr) nounwind {
+   %d = getelementptr i8, i8* %ptr, i8 -21
+   ret i8* %d
+ }
++
++
++; Test out of int64_t range indices
++
++; OSS-Fuzz: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=7173
++define void @test_outofrange(i96* %ptr) nounwind {
++; CHECK-LABEL: test_outofrange
++  %d = getelementptr i96, i96* %ptr, i96 39614081257132168796771975167
++  %ld = load i96, i96* %d, align 1
++  unreachable
++}

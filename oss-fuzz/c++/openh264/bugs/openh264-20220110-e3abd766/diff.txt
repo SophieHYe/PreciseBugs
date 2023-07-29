@@ -1,0 +1,14 @@
+diff --cc codec/decoder/core/src/decode_slice.cpp
+index b8e7c755,b8e7c755..d06a7d77
+--- a/codec/decoder/core/src/decode_slice.cpp
++++ b/codec/decoder/core/src/decode_slice.cpp
+@@@ -2556,9 -2556,9 +2556,6 @@@ int32_t WelsDecodeMbCavlcBSlice (PWelsD
+      pSlice->iMbSkipRun = uiCode;
+      if (-1 == pSlice->iMbSkipRun) {
+        return GENERATE_ERROR_NO (ERR_LEVEL_MB_DATA, ERR_INFO_INVALID_MB_SKIP_RUN);
+--    }
+--    if ((uint32_t) (pSlice->iMbSkipRun) > (uint32_t) (pCurDqLayer->iMbWidth * pCurDqLayer->iMbHeight - iMbXy)) {
+--      return GENERATE_ERROR_NO (ERR_LEVEL_MB_DATA, ERR_INFO_INVALID_MB_SKIP_RUN);
+      }
+    }
+    if (pSlice->iMbSkipRun--) {

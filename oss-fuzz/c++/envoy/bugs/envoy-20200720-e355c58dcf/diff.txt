@@ -1,0 +1,76 @@
+diff --git a/api/envoy/config/route/v3/route_components.proto b/api/envoy/config/route/v3/route_components.proto
+index e4ad52e662..c35e210691 100644
+--- a/api/envoy/config/route/v3/route_components.proto
++++ b/api/envoy/config/route/v3/route_components.proto
+@@ -127,7 +127,9 @@ message VirtualHost {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // handled by this virtual host.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Indicates that the virtual host has a CORS policy.
+   CorsPolicy cors = 8;
+diff --git a/api/envoy/config/route/v4alpha/route_components.proto b/api/envoy/config/route/v4alpha/route_components.proto
+index 01b138c7a7..f921ea506d 100644
+--- a/api/envoy/config/route/v4alpha/route_components.proto
++++ b/api/envoy/config/route/v4alpha/route_components.proto
+@@ -126,7 +126,9 @@ message VirtualHost {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // handled by this virtual host.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Indicates that the virtual host has a CORS policy.
+   CorsPolicy cors = 8;
+diff --git a/generated_api_shadow/envoy/config/route/v3/route_components.proto b/generated_api_shadow/envoy/config/route/v3/route_components.proto
+index ee95088a43..f79f399d21 100644
+--- a/generated_api_shadow/envoy/config/route/v3/route_components.proto
++++ b/generated_api_shadow/envoy/config/route/v3/route_components.proto
+@@ -125,7 +125,9 @@ message VirtualHost {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // handled by this virtual host.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Indicates that the virtual host has a CORS policy.
+   CorsPolicy cors = 8;
+diff --git a/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto b/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
+index 7292f6258f..a8b6ae4459 100644
+--- a/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
++++ b/generated_api_shadow/envoy/config/route/v4alpha/route_components.proto
+@@ -126,7 +126,9 @@ message VirtualHost {
+ 
+   // Specifies a list of HTTP headers that should be removed from each response
+   // handled by this virtual host.
+-  repeated string response_headers_to_remove = 11;
++  repeated string response_headers_to_remove = 11 [(validate.rules).repeated = {
++    items {string {min_bytes: 1 well_known_regex: HTTP_HEADER_NAME strict: false}}
++  }];
+ 
+   // Indicates that the virtual host has a CORS policy.
+   CorsPolicy cors = 8;
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4701452596674560.fuzz b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4701452596674560.fuzz
+new file mode 100644
+index 0000000000..a147ab2392
+--- /dev/null
++++ b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-4701452596674560.fuzz
+@@ -0,0 +1,10 @@
++config {
++  virtual_hosts {
++    name: "&\006\000\000\000"
++    domains: "-"
++    require_tls: ALL
++    response_headers_to_remove: "\0Ï3\022\362\211\245\247V\036"
++    request_headers_to_remove: "\003\022\360\234\254\265V\036"
++  }
++}
++random_value: 67070975

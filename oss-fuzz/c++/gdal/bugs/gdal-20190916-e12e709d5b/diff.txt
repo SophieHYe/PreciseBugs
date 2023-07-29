@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/nitf/nitfimage.c b/gdal/frmts/nitf/nitfimage.c
+index 3dcaf2d971..3d71d8c302 100644
+--- a/gdal/frmts/nitf/nitfimage.c
++++ b/gdal/frmts/nitf/nitfimage.c
+@@ -3701,7 +3701,7 @@ static void NITFLoadLocationTable( NITFImage *psImage )
+         }
+     }
+ 
+-    if( nHeaderOffset != 0 )
++    if( nHeaderOffset > 11 )
+     {
+         char achHeaderChunk[1000];
+ 

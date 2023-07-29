@@ -1,0 +1,13 @@
+diff --git a/libavcodec/h264dec.c b/libavcodec/h264dec.c
+index 38f8967265..07ff9110d2 100644
+--- a/libavcodec/h264dec.c
++++ b/libavcodec/h264dec.c
+@@ -914,7 +914,7 @@ static int finalize_frame(H264Context *h, AVFrame *dst, H264Picture *out, int *g
+                                  out->qscale_table,
+                                  out->motion_val,
+                                  NULL,
+-                                 h->mb_width, h->mb_height, h->mb_stride, 1);
++                                 out->mb_width, out->mb_height, out->mb_stride, 1);
+         }
+     }
+ 

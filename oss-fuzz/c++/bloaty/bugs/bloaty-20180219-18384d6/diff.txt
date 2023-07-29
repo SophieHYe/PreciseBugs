@@ -1,0 +1,20 @@
+diff --git a/src/disassemble.cc b/src/disassemble.cc
+index f0a0365..b1bb710 100644
+--- a/src/disassemble.cc
++++ b/src/disassemble.cc
+@@ -46,6 +46,11 @@ static std::string RightPad(const std::string& input, size_t size) {
+ }  // anonymous namespace
+ 
+ void DisassembleFindReferences(const DisassemblyInfo& info, RangeSink* sink) {
++  if (info.arch != CS_ARCH_X86) {
++    // x86 only for now.
++    return;
++  }
++
+   csh handle;
+   if (cs_open(info.arch, info.mode, &handle) != CS_ERR_OK ||
+       cs_option(handle, CS_OPT_DETAIL, CS_OPT_ON) != CS_ERR_OK) {
+diff --git a/tests/testdata/fuzz_corpus/f5d4fb20f43ef7131ed49ff29f5c1bee69070ff2 b/tests/testdata/fuzz_corpus/f5d4fb20f43ef7131ed49ff29f5c1bee69070ff2
+new file mode 100644
+index 0000000..ee17dbf
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/f5d4fb20f43ef7131ed49ff29f5c1bee69070ff2 differ

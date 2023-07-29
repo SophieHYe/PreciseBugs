@@ -1,0 +1,51 @@
+diff --git a/Zend/tests/gc_046.phpt b/Zend/tests/gc_046.phpt
+new file mode 100644
+index 0000000000..74481fb76a
+--- /dev/null
++++ b/Zend/tests/gc_046.phpt
+@@ -0,0 +1,23 @@
++--TEST--
++GC 046: Leak in User Iterator
++--INI--
++zend.enable_gc=1
++--FILE--
++<?php
++class Action {
++    function __construct() {
++        $this->iterator = new ArrayIterator($this);
++    }
++    function filter() {
++        $this->iterator = new CallbackFilterIterator($this->iterator, fn() => true);
++        $this->iterator->rewind();
++    }
++}
++
++$action=new Action;
++$action->filter();
++$action->filter();
++?>
++DONE
++--EXPECT--
++DONE
+diff --git a/Zend/zend_interfaces.c b/Zend/zend_interfaces.c
+index b032d1d4e0..3297b9f82a 100644
+--- a/Zend/zend_interfaces.c
++++ b/Zend/zend_interfaces.c
+@@ -185,8 +185,15 @@ ZEND_API void zend_user_it_rewind(zend_object_iterator *_iter)
+ ZEND_API HashTable *zend_user_it_get_gc(zend_object_iterator *_iter, zval **table, int *n)
+ {
+ 	zend_user_iterator *iter = (zend_user_iterator*)_iter;
+-	*table = &iter->it.data;
+-	*n = 1;
++	if (Z_ISUNDEF(iter->value)) {
++		*table = &iter->it.data;
++		*n = 1;
++	} else {
++		zend_get_gc_buffer *gc_buffer = zend_get_gc_buffer_create();
++		zend_get_gc_buffer_add_zval(gc_buffer, &iter->it.data);
++		zend_get_gc_buffer_add_zval(gc_buffer, &iter->value);
++		zend_get_gc_buffer_use(gc_buffer, table, n);
++	}
+ 	return NULL;
+ }
+ 

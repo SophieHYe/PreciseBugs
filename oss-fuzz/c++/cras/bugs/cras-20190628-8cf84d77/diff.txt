@@ -1,0 +1,21 @@
+diff --git a/cras/src/common/cras_shm.h b/cras/src/common/cras_shm.h
+index dee01b23..83aae8bc 100644
+--- a/cras/src/common/cras_shm.h
++++ b/cras/src/common/cras_shm.h
+@@ -64,14 +64,14 @@ struct __attribute__((__packed__)) cras_audio_shm_header {
+ };
+ 
+ /* Returns the number of bytes needed to hold a cras_audio_shm_header. */
+-inline uint32_t cras_shm_header_size()
++static inline uint32_t cras_shm_header_size()
+ {
+ 	return sizeof(struct cras_audio_shm_header);
+ }
+ 
+ /* Returns the number of bytes needed to hold the samples area for an audio
+  * shm with the given used_size */
+-inline uint32_t cras_shm_calculate_samples_size(uint32_t used_size)
++static inline uint32_t cras_shm_calculate_samples_size(uint32_t used_size)
+ {
+ 	return used_size * CRAS_NUM_SHM_BUFFERS;
+ }

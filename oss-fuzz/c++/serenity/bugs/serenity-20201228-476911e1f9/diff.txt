@@ -1,0 +1,25 @@
+diff --git a/Libraries/LibGfx/GIFLoader.cpp b/Libraries/LibGfx/GIFLoader.cpp
+index d50bd73a60..7a0480379d 100644
+--- a/Libraries/LibGfx/GIFLoader.cpp
++++ b/Libraries/LibGfx/GIFLoader.cpp
+@@ -216,6 +216,12 @@ public:
+ #ifdef GIF_DEBUG
+             dbg() << "Corrupted LZW stream, invalid code: " << m_current_code << " at bit index: "
+                   << m_current_bit_index << ", code table size: " << m_code_table.size();
++#endif
++            return {};
++        } else if (m_current_code == m_code_table.size() && m_output.is_empty()) {
++#ifdef GIF_DEBUG
++            dbg() << "Corrupted LZW stream, valid new code but output buffer is empty: " << m_current_code
++                  << " at bit index: " << m_current_bit_index << ", code table size: " << m_code_table.size();
+ #endif
+             return {};
+         }
+@@ -234,6 +240,7 @@ public:
+             new_entry.append(m_output[0]);
+             extend_code_table(new_entry);
+         } else if (m_current_code == m_code_table.size()) {
++            ASSERT(!m_output.is_empty());
+             m_output.append(m_output[0]);
+             extend_code_table(m_output);
+         }

@@ -1,0 +1,27 @@
+diff --git a/src/projections/eqdc.cpp b/src/projections/eqdc.cpp
+index e050a593..00aacfda 100644
+--- a/src/projections/eqdc.cpp
++++ b/src/projections/eqdc.cpp
+@@ -117,6 +117,8 @@ PJ *PROJECTION(eqdc) {
+     } else {
+         if (secant)
+             Q->n = (cosphi - cos(Q->phi2)) / (Q->phi2 - Q->phi1);
++        if (Q->n == 0)
++            return destructor (P, PJD_ERR_CONIC_LAT_EQUAL);
+         Q->c = Q->phi1 + cos(Q->phi1) / Q->n;
+         Q->rho0 = Q->c - P->phi0;
+     }
+diff --git a/test/gie/builtins.gie b/test/gie/builtins.gie
+index df19efb6..3397090c 100644
+--- a/test/gie/builtins.gie
++++ b/test/gie/builtins.gie
+@@ -1321,6 +1321,9 @@ expect    failure errno lat_larger_than_90
+ operation +proj=eqdc   +R=6400000    +lat_2=91
+ expect    failure errno lat_larger_than_90
+ 
++operation +proj=eqdc   +R=1 +lat_1=1e-9
++expect    failure errno conic_lat_equal
++
+ ===============================================================================
+ Euler
+ 	Conic, Sph

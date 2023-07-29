@@ -1,0 +1,19 @@
+diff --git a/gdal/frmts/iso8211/ddfrecord.cpp b/gdal/frmts/iso8211/ddfrecord.cpp
+index 34be20b484..2844de88e7 100644
+--- a/gdal/frmts/iso8211/ddfrecord.cpp
++++ b/gdal/frmts/iso8211/ddfrecord.cpp
+@@ -362,8 +362,13 @@ int DDFRecord::ReadHeader()
+                 nFieldOffset = -1;
+                 return FALSE;
+             }
+-            CPLDebug( "ISO8211",
++            static bool bFirstTime = true;
++            if( bFirstTime )
++            {
++                bFirstTime = false;
++                CPLDebug( "ISO8211",
+                       "Didn't find field terminator, read one more byte." );
++            }
+         }
+ 
+         if( nFieldOffset >= nDataSize )

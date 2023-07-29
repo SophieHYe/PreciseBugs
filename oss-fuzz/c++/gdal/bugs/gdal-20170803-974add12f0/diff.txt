@@ -1,0 +1,147 @@
+diff --git a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+index cd53b74ece..f7bed4191a 100644
+--- a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
++++ b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.cpp
+@@ -410,6 +410,39 @@ std::vector<PCIDSK::PCIDSKSegment *> CPCIDSKFile::GetSegments()
+     return list;
+ }
+ 
++/************************************************************************/
++/*                        CheckFileBigEnough()                          */
++/************************************************************************/
++
++void CPCIDSKFile::CheckFileBigEnough( uint64 nBytesToRead )
++{
++    if( nBytesToRead > 100 * 1024 * 1024 )
++    {
++        bool bTooBig = false;
++        // Do not trust too big filesize from header
++        if( GetFileSize() * 512 > 100 * 1024 * 1024 )
++        {
++            MutexHolder oHolder( io_mutex );
++
++            interfaces.io->Seek( io_handle, 0, SEEK_END );
++            if( nBytesToRead > interfaces.io->Tell( io_handle ) )
++            {
++                bTooBig = true;
++            }
++        }
++        else if ( nBytesToRead > GetFileSize() * 512 )
++        {
++            bTooBig = true;
++        }
++        if( bTooBig )
++        {
++            ThrowPCIDSKException( 
++                "File too short to read " PCIDSK_FRMT_UINT64 " bytes "
++                "of scanline.", nBytesToRead );
++        }
++    }
++}
++
+ /************************************************************************/
+ /*                        InitializeFromHeader()                        */
+ /************************************************************************/
+@@ -498,31 +531,7 @@ void CPCIDSKFile::InitializeFromHeader()
+                 "Allocating " PCIDSK_FRMT_UINT64 " bytes for scanline "
+                 "buffer failed.", block_size );
+         }
+-        if( block_size > 100 * 1024 * 1024 )
+-        {
+-            bool bTooBig = false;
+-            // Do not trust too big filesize from header
+-            if( GetFileSize() * 512 > 100 * 1024 * 1024 )
+-            {
+-                MutexHolder oHolder( io_mutex );
+-
+-                interfaces.io->Seek( io_handle, 0, SEEK_END );
+-                if( block_size > interfaces.io->Tell( io_handle ) )
+-                {
+-                    bTooBig = true;
+-                }
+-            }
+-            else if ( block_size > GetFileSize() * 512 )
+-            {
+-                bTooBig = true;
+-            }
+-            if( bTooBig )
+-            {
+-                return ThrowPCIDSKException( 
+-                    "File too short to read " PCIDSK_FRMT_UINT64 " bytes "
+-                    "of scanline.", block_size );
+-            }
+-        }
++        CheckFileBigEnough(block_size);
+ 
+         last_block_data = malloc(static_cast<size_t>(block_size));
+         if( last_block_data == NULL )
+diff --git a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.h b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.h
+index e9eaebc433..36fa96e379 100644
+--- a/gdal/frmts/pcidsk/sdk/core/cpcidskfile.h
++++ b/gdal/frmts/pcidsk/sdk/core/cpcidskfile.h
+@@ -86,6 +86,7 @@ namespace PCIDSK
+ 
+         void      WriteToFile( const void *buffer, uint64 offset, uint64 size ) override;
+         void      ReadFromFile( void *buffer, uint64 offset, uint64 size ) override;
++        void      CheckFileBigEnough( uint64 bytes_to_read ) override;
+ 
+         std::string GetFilename() const { return base_filename; }
+ 
+diff --git a/gdal/frmts/pcidsk/sdk/pcidsk_file.h b/gdal/frmts/pcidsk/sdk/pcidsk_file.h
+index 4c1b08a6f6..b937201618 100644
+--- a/gdal/frmts/pcidsk/sdk/pcidsk_file.h
++++ b/gdal/frmts/pcidsk/sdk/pcidsk_file.h
+@@ -78,6 +78,7 @@ namespace PCIDSK
+     // low level io, primarily internal.
+         virtual void WriteToFile( const void *buffer, uint64 offset, uint64 size)=0;
+         virtual void ReadFromFile( void *buffer, uint64 offset, uint64 size ) = 0;
++        virtual void CheckFileBigEnough( uint64 bytes_to_read ) = 0;
+ 
+         virtual void GetIODetails( void ***io_handle_pp, Mutex ***io_mutex_pp,
+                                    std::string filename="", bool writable=false ) = 0;
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
+index c985c295b5..16d8ad44fa 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.cpp
+@@ -172,6 +172,16 @@ void CPCIDSKSegment::ReadFromFile( void *buffer, uint64 offset, uint64 size )
+     file->ReadFromFile( buffer, offset + data_offset + 1024, size );
+ }
+ 
++/************************************************************************/
++/*                        CheckFileBigEnough()                          */
++/************************************************************************/
++
++void CPCIDSKSegment::CheckFileBigEnough( uint64 bytes_to_read )
++
++{
++    file->CheckFileBigEnough( bytes_to_read );
++}
++
+ /************************************************************************/
+ /*                           GetUpdatable()                             */
+ /************************************************************************/
+diff --git a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
+index 28f91e3011..e0a8d883ce 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
++++ b/gdal/frmts/pcidsk/sdk/segment/cpcidsksegment.h
+@@ -65,6 +65,7 @@ namespace PCIDSK
+         bool      GetUpdatable() const override;
+         void      WriteToFile( const void *buffer, uint64 offset, uint64 size ) override;
+         void      ReadFromFile( void *buffer, uint64 offset, uint64 size ) override;
++        void      CheckFileBigEnough( uint64 bytes_to_read );
+ 
+         eSegType    GetSegmentType() override { return segment_type; }
+         std::string GetName() override { return segment_name; }
+diff --git a/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp b/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
+index 2efa617160..5b9c5d6e7f 100644
+--- a/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
++++ b/gdal/frmts/pcidsk/sdk/segment/metadatasegment_p.cpp
+@@ -102,6 +102,8 @@ void MetadataSegment::Load()
+ /* -------------------------------------------------------------------- */
+ /*      Load the segment contents into a buffer.                        */
+ /* -------------------------------------------------------------------- */
++    CheckFileBigEnough( data_size );
++
+     seg_data.SetSize( (int) (data_size - 1024) );
+ 
+     ReadFromFile( seg_data.buffer, 0, data_size - 1024 );

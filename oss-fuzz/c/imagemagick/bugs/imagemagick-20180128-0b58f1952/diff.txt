@@ -1,0 +1,16 @@
+diff --git a/coders/xcf.c b/coders/xcf.c
+index ead1e6ed1..72db89221 100644
+--- a/coders/xcf.c
++++ b/coders/xcf.c
+@@ -683,9 +683,11 @@ static MagickBooleanType load_level(Image *image,XCFDocInfo *inDocInfo,
+             status=MagickTrue;
+           break;
+         case COMPRESS_ZLIB:
++          tile_image=DestroyImage(tile_image);
+           ThrowBinaryException(CoderError,"ZipCompressNotSupported",
+             image->filename)
+         case COMPRESS_FRACTAL:
++          tile_image=DestroyImage(tile_image);
+           ThrowBinaryException(CoderError,"FractalCompressNotSupported",
+             image->filename)
+       }

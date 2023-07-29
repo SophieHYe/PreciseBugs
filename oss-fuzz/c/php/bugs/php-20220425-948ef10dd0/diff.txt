@@ -1,0 +1,38 @@
+diff --git a/Zend/Optimizer/zend_optimizer.c b/Zend/Optimizer/zend_optimizer.c
+index c85d329a58..acde2d3f36 100644
+--- a/Zend/Optimizer/zend_optimizer.c
++++ b/Zend/Optimizer/zend_optimizer.c
+@@ -323,6 +323,8 @@ int zend_optimizer_update_op1_const(zend_op_array *op_array,
+ 		case ZEND_FETCH_IS:
+ 		case ZEND_FETCH_UNSET:
+ 		case ZEND_FETCH_FUNC_ARG:
++		case ZEND_ISSET_ISEMPTY_VAR:
++		case ZEND_UNSET_VAR:
+ 			TO_STRING_NOWARN(val);
+ 			if (opline->opcode == ZEND_CONCAT && opline->op2_type == IS_CONST) {
+ 				opline->opcode = ZEND_FAST_CONCAT;
+diff --git a/ext/opcache/tests/opt/isset_var_001.phpt b/ext/opcache/tests/opt/isset_var_001.phpt
+new file mode 100644
+index 0000000000..4efdbb5978
+--- /dev/null
++++ b/ext/opcache/tests/opt/isset_var_001.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++ISSET_ISEMPTY_VAR 001: CONST operand of ISSET_ISEMPTY_VAR must be converted to STRING
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++class A {
++    function __destruct() {
++        $i=0;
++        if (isset($GLOBALS[$i])) y;
++    }
++}
++new A;
++?>
++DONE
++--EXPECT--
++DONE

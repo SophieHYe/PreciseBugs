@@ -1,0 +1,12 @@
+diff --git a/src/sksl/SkSLMetalCodeGenerator.cpp b/src/sksl/SkSLMetalCodeGenerator.cpp
+index 582136160d..5e7153f4f1 100644
+--- a/src/sksl/SkSLMetalCodeGenerator.cpp
++++ b/src/sksl/SkSLMetalCodeGenerator.cpp
+@@ -1649,6 +1649,7 @@ MetalCodeGenerator::Requirements MetalCodeGenerator::requirements(const Function
+     }
+     auto found = fRequirements.find(&f);
+     if (found == fRequirements.end()) {
++        fRequirements[&f] = kNo_Requirements;
+         for (const auto& e : fProgram) {
+             if (ProgramElement::kFunction_Kind == e.fKind) {
+                 const FunctionDefinition& def = (const FunctionDefinition&) e;

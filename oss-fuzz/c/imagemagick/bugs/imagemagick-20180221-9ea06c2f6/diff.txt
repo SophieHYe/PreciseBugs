@@ -1,0 +1,21 @@
+diff --git a/MagickCore/draw.c b/MagickCore/draw.c
+index bea28ab0c..f0301ad5f 100644
+--- a/MagickCore/draw.c
++++ b/MagickCore/draw.c
+@@ -96,6 +96,7 @@
+   (void) ThrowMagickException(exception,GetMagickModule(),DrawError, \
+     "NonconformingDrawingPrimitiveDefinition","`%s'",token); \
+   status=MagickFalse; \
++  break; \
+ }
+ 
+ /*
+@@ -5876,6 +5877,8 @@ static size_t TracePath(PrimitiveInfo *primitive_info,const char *path,
+             end.y=(double) (attribute == (int) 'T' ? y : point.y+y);
+             points[i]=end;
+           }
++          if (status == MagickFalse)
++            break;
+           if (strchr("QqTt",last_attribute) == (char *) NULL)
+             {
+               points[0]=point;

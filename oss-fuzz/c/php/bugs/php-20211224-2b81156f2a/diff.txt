@@ -1,0 +1,35 @@
+diff --git a/ext/opcache/Optimizer/sccp.c b/ext/opcache/Optimizer/sccp.c
+index bdeb883aa5..0818a20e0b 100644
+--- a/ext/opcache/Optimizer/sccp.c
++++ b/ext/opcache/Optimizer/sccp.c
+@@ -1547,6 +1547,7 @@ static void sccp_visit_instr(scdf_ctx *scdf, zend_op *opline, zend_ssa_op *ssa_o
+ 						if (opline->opcode == ZEND_PRE_INC_OBJ
+ 								|| opline->opcode == ZEND_PRE_DEC_OBJ) {
+ 							SET_RESULT(result, &tmp2);
++							zval_ptr_dtor_nogc(&tmp1);
+ 						} else {
+ 							SET_RESULT(result, &tmp1);
+ 						}
+diff --git a/ext/opcache/tests/opt/sccp_035.phpt b/ext/opcache/tests/opt/sccp_035.phpt
+new file mode 100644
+index 0000000000..86965b13b5
+--- /dev/null
++++ b/ext/opcache/tests/opt/sccp_035.phpt
+@@ -0,0 +1,17 @@
++--TEST--
++SCCP 035: memory leak
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++function test() {
++  $obj = new stdClass;
++  $obj->$b = ~$b = $a='';
++  $obj->$a--;
++}
++?>
++DONE
++--EXPECT--
++DONE

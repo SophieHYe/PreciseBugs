@@ -1,0 +1,154 @@
+diff --git a/api/envoy/api/v2/core/health_check.proto b/api/envoy/api/v2/core/health_check.proto
+index 7b2ba58723..a8120817b1 100644
+--- a/api/envoy/api/v2/core/health_check.proto
++++ b/api/envoy/api/v2/core/health_check.proto
+@@ -64,7 +64,7 @@ message HealthCheck {
+   }
+ 
+   // [#comment:next free field: 10]
+-  // [#next-free-field: 10]
++  // [#next-free-field: 11]
+   message HttpHealthCheck {
+     // The value of the host header in the HTTP health check request. If
+     // left empty (default value), the name of the cluster this health check is associated
+diff --git a/api/envoy/api/v2/route/route.proto b/api/envoy/api/v2/route/route.proto
+index 748145c501..ed21642905 100644
+--- a/api/envoy/api/v2/route/route.proto
++++ b/api/envoy/api/v2/route/route.proto
+@@ -324,7 +324,7 @@ message WeightedCluster {
+   string runtime_key_prefix = 2;
+ }
+ 
+-// [#next-free-field: 11]
++// [#next-free-field: 12]
+ message RouteMatch {
+   message GrpcRouteMatchOptions {
+   }
+diff --git a/api/envoy/api/v3alpha/core/health_check.proto b/api/envoy/api/v3alpha/core/health_check.proto
+index 1c268b734c..96a7b99596 100644
+--- a/api/envoy/api/v3alpha/core/health_check.proto
++++ b/api/envoy/api/v3alpha/core/health_check.proto
+@@ -64,7 +64,7 @@ message HealthCheck {
+   }
+ 
+   // [#comment:next free field: 10]
+-  // [#next-free-field: 10]
++  // [#next-free-field: 11]
+   message HttpHealthCheck {
+     reserved 7;
+ 
+diff --git a/api/envoy/api/v3alpha/route/route.proto b/api/envoy/api/v3alpha/route/route.proto
+index fb5f6b584e..0166aad895 100644
+--- a/api/envoy/api/v3alpha/route/route.proto
++++ b/api/envoy/api/v3alpha/route/route.proto
+@@ -325,7 +325,7 @@ message WeightedCluster {
+   string runtime_key_prefix = 2;
+ }
+ 
+-// [#next-free-field: 11]
++// [#next-free-field: 12]
+ message RouteMatch {
+   message GrpcRouteMatchOptions {
+   }
+diff --git a/source/common/config/api_type_db.generated.pb_text b/source/common/config/api_type_db.generated.pb_text
+index dd963044eb..d22da7ce62 100644
+--- a/source/common/config/api_type_db.generated.pb_text
++++ b/source/common/config/api_type_db.generated.pb_text
+@@ -1921,6 +1921,14 @@ types {
+     next_version_type_name: "envoy.api.v3alpha.route.RouteMatch.GrpcRouteMatchOptions"
+   }
+ }
++types {
++  key: "envoy.api.v2.route.RouteMatch.TlsContextMatchOptions"
++  value {
++    qualified_package: "envoy.api.v2.route"
++    proto_path: "envoy/api/v2/route/route.proto"
++    next_version_type_name: "envoy.api.v3alpha.route.RouteMatch.TlsContextMatchOptions"
++  }
++}
+ types {
+   key: "envoy.api.v2.route.Tracing"
+   value {
+@@ -3198,6 +3206,13 @@ types {
+     proto_path: "envoy/api/v3alpha/route/route.proto"
+   }
+ }
++types {
++  key: "envoy.api.v3alpha.route.RouteMatch.TlsContextMatchOptions"
++  value {
++    qualified_package: "envoy.api.v3alpha.route"
++    proto_path: "envoy/api/v3alpha/route/route.proto"
++  }
++}
+ types {
+   key: "envoy.api.v3alpha.route.Tracing"
+   value {
+@@ -4039,6 +4054,14 @@ types {
+     next_version_type_name: "envoy.config.filter.http.dynamic_forward_proxy.v3alpha.FilterConfig"
+   }
+ }
++types {
++  key: "envoy.config.filter.http.dynamic_forward_proxy.v2alpha.PerRouteConfig"
++  value {
++    qualified_package: "envoy.config.filter.http.dynamic_forward_proxy.v2alpha"
++    proto_path: "envoy/config/filter/http/dynamic_forward_proxy/v2alpha/dynamic_forward_proxy.proto"
++    next_version_type_name: "envoy.config.filter.http.dynamic_forward_proxy.v3alpha.PerRouteConfig"
++  }
++}
+ types {
+   key: "envoy.config.filter.http.dynamic_forward_proxy.v3alpha.FilterConfig"
+   value {
+@@ -4046,6 +4069,13 @@ types {
+     proto_path: "envoy/config/filter/http/dynamic_forward_proxy/v3alpha/dynamic_forward_proxy.proto"
+   }
+ }
++types {
++  key: "envoy.config.filter.http.dynamic_forward_proxy.v3alpha.PerRouteConfig"
++  value {
++    qualified_package: "envoy.config.filter.http.dynamic_forward_proxy.v3alpha"
++    proto_path: "envoy/config/filter/http/dynamic_forward_proxy/v3alpha/dynamic_forward_proxy.proto"
++  }
++}
+ types {
+   key: "envoy.config.filter.http.ext_authz.v2.AuthorizationRequest"
+   value {
+@@ -7517,6 +7547,14 @@ types {
+     proto_path: "envoy/service/trace/v3alpha/trace_service.proto"
+   }
+ }
++types {
++  key: "envoy.type.CodecClientType"
++  value {
++    qualified_package: "envoy.type"
++    proto_path: "envoy/type/http.proto"
++    next_version_type_name: "envoy.type.v3alpha.CodecClientType"
++  }
++}
+ types {
+   key: "envoy.type.DoubleRange"
+   value {
+@@ -7723,6 +7761,13 @@ types {
+     proto_path: "envoy/type/matcher/v3alpha/value.proto"
+   }
+ }
++types {
++  key: "envoy.type.v3alpha.CodecClientType"
++  value {
++    qualified_package: "envoy.type.v3alpha"
++    proto_path: "envoy/type/v3alpha/http.proto"
++  }
++}
+ types {
+   key: "envoy.type.v3alpha.DoubleRange"
+   value {
+@@ -8380,6 +8425,10 @@ next_version_proto_paths {
+   key: "envoy/service/trace/v2/trace_service.proto"
+   value: "envoy/service/trace/v3alpha/trace_service.proto"
+ }
++next_version_proto_paths {
++  key: "envoy/type/http.proto"
++  value: "envoy/type/v3alpha/http.proto"
++}
+ next_version_proto_paths {
+   key: "envoy/type/http_status.proto"
+   value: "envoy/type/v3alpha/http_status.proto"

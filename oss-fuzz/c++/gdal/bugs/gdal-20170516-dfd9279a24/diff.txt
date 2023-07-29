@@ -1,0 +1,30 @@
+diff --git a/gdal/port/cpl_vsil.cpp b/gdal/port/cpl_vsil.cpp
+index 5da794006b..cfd310311c 100644
+--- a/gdal/port/cpl_vsil.cpp
++++ b/gdal/port/cpl_vsil.cpp
+@@ -1388,7 +1388,8 @@ int VSIIngestFile( VSILFILE* fp,
+ 
+         // With "large" VSI I/O API we can read data chunks larger than
+         // VSIMalloc could allocate. Catch it here.
+-        if( nDataLen > static_cast<vsi_l_offset>(static_cast<size_t>(nDataLen))
++        if( nDataLen != static_cast<vsi_l_offset>(static_cast<size_t>(nDataLen))
++            || nDataLen + 1 < nDataLen
+             || (nMaxSize >= 0 &&
+                 nDataLen > static_cast<vsi_l_offset>(nMaxSize)) )
+         {
+diff --git a/gdal/port/cpl_vsil_subfile.cpp b/gdal/port/cpl_vsil_subfile.cpp
+index 60230cdac1..40dde9e438 100644
+--- a/gdal/port/cpl_vsil_subfile.cpp
++++ b/gdal/port/cpl_vsil_subfile.cpp
+@@ -157,7 +157,10 @@ int VSISubFileHandle::Seek( vsi_l_offset nOffset, int nWhence )
+ vsi_l_offset VSISubFileHandle::Tell()
+ 
+ {
+-    return VSIFTellL( fp ) - nSubregionOffset;
++    vsi_l_offset nBasePos = VSIFTellL( fp );
++    if( nBasePos >= nSubregionOffset )
++        return nBasePos - nSubregionOffset;
++    return 0;
+ }
+ 
+ /************************************************************************/

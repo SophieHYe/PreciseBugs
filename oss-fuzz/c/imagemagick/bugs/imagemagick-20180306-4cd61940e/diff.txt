@@ -1,0 +1,13 @@
+diff --git a/coders/pcd.c b/coders/pcd.c
+index 5707d3e44..7cebfc4d7 100644
+--- a/coders/pcd.c
++++ b/coders/pcd.c
+@@ -1120,6 +1120,8 @@ static MagickBooleanType WritePCDImage(const ImageInfo *image_info,Image *image,
+       if (rotate_image == (Image *) NULL)
+         return(MagickFalse);
+       pcd_image=rotate_image;
++      DestroyBlob(rotate_image);
++      pcd_image->blob=ReferenceBlob(image->blob);
+     }
+   /*
+     Open output image file.

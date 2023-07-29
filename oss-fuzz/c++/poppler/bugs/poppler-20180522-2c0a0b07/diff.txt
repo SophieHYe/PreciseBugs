@@ -1,0 +1,12 @@
+diff --git a/poppler/Gfx.cc b/poppler/Gfx.cc
+index bed1dc4b..e0ccb4c2 100644
+--- a/poppler/Gfx.cc
++++ b/poppler/Gfx.cc
+@@ -4455,6 +4455,7 @@ void Gfx::doImage(Object *ref, Stream *str, GBool inlineImg) {
+       }
+       maskColorSpace = GfxColorSpace::parse(nullptr, &obj1, out, state);
+       if (!maskColorSpace || maskColorSpace->getMode() != csDeviceGray) {
++	delete maskColorSpace;
+ 	goto err1;
+       }
+       obj1 = maskDict->lookup("Decode");

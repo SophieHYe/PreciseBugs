@@ -1,0 +1,150 @@
+diff --git a/src/fuzzer/mode_padding.cpp b/src/fuzzer/mode_padding.cpp
+index 0819afb72..c366530dd 100644
+--- a/src/fuzzer/mode_padding.cpp
++++ b/src/fuzzer/mode_padding.cpp
+@@ -130,25 +130,38 @@ uint16_t ref_tls_cbc_unpad(const uint8_t in[], size_t len)
+ 
+ void fuzz(const uint8_t in[], size_t len)
+    {
+-   Botan::PKCS7_Padding pkcs7;
+-   const size_t ct_pkcs7 = pkcs7.unpad(in, len);
+-   const size_t ref_pkcs7 = ref_pkcs7_unpad(in, len);
+-   FUZZER_ASSERT_EQUAL(ct_pkcs7, ref_pkcs7);
+-
+-   Botan::ANSI_X923_Padding x923;
+-   const size_t ct_x923 = x923.unpad(in, len);
+-   const size_t ref_x923 = ref_x923_unpad(in, len);
+-   FUZZER_ASSERT_EQUAL(ct_x923, ref_x923);
+-
+-   Botan::OneAndZeros_Padding oneandzero;
+-   const size_t ct_oneandzero = oneandzero.unpad(in, len);
+-   const size_t ref_oneandzero = ref_oneandzero_unpad(in, len);
+-   FUZZER_ASSERT_EQUAL(ct_oneandzero, ref_oneandzero);
+-
+-   Botan::ESP_Padding esp;
+-   const size_t ct_esp = esp.unpad(in, len);
+-   const size_t ref_esp = ref_esp_unpad(in, len);
+-   FUZZER_ASSERT_EQUAL(ct_esp, ref_esp);
++   static Botan::PKCS7_Padding pkcs7;
++   static Botan::ANSI_X923_Padding x923;
++   static Botan::OneAndZeros_Padding oneandzero;
++   static Botan::ESP_Padding esp;
++
++   if(pkcs7.valid_blocksize(len))
++      {
++      const size_t ct_pkcs7 = pkcs7.unpad(in, len);
++      const size_t ref_pkcs7 = ref_pkcs7_unpad(in, len);
++      FUZZER_ASSERT_EQUAL(ct_pkcs7, ref_pkcs7);
++      }
++
++   if(x923.valid_blocksize(len))
++      {
++      const size_t ct_x923 = x923.unpad(in, len);
++      const size_t ref_x923 = ref_x923_unpad(in, len);
++      FUZZER_ASSERT_EQUAL(ct_x923, ref_x923);
++      }
++
++   if(oneandzero.valid_blocksize(len))
++      {
++      const size_t ct_oneandzero = oneandzero.unpad(in, len);
++      const size_t ref_oneandzero = ref_oneandzero_unpad(in, len);
++      FUZZER_ASSERT_EQUAL(ct_oneandzero, ref_oneandzero);
++      }
++
++   if(esp.valid_blocksize(len))
++      {
++      const size_t ct_esp = esp.unpad(in, len);
++      const size_t ref_esp = ref_esp_unpad(in, len);
++      FUZZER_ASSERT_EQUAL(ct_esp, ref_esp);
++      }
+ 
+    const uint16_t ct_cbc = Botan::TLS::check_tls_cbc_padding(in, len);
+    const uint16_t ref_cbc = ref_tls_cbc_unpad(in, len);
+diff --git a/src/lib/modes/mode_pad/mode_pad.cpp b/src/lib/modes/mode_pad/mode_pad.cpp
+index 5c949e9cf..be3ecf7dc 100644
+--- a/src/lib/modes/mode_pad/mode_pad.cpp
++++ b/src/lib/modes/mode_pad/mode_pad.cpp
+@@ -53,7 +53,7 @@ void PKCS7_Padding::add_padding(secure_vector<uint8_t>& buffer,
+ */
+ size_t PKCS7_Padding::unpad(const uint8_t input[], size_t input_length) const
+    {
+-   if(input_length <= 2)
++   if(!valid_blocksize(input_length))
+       return input_length;
+ 
+    CT::poison(input, input_length);
+@@ -104,7 +104,7 @@ void ANSI_X923_Padding::add_padding(secure_vector<uint8_t>& buffer,
+ */
+ size_t ANSI_X923_Padding::unpad(const uint8_t input[], size_t input_length) const
+    {
+-   if(input_length <= 2)
++   if(!valid_blocksize(input_length))
+       return input_length;
+ 
+    CT::poison(input, input_length);
+@@ -146,7 +146,7 @@ void OneAndZeros_Padding::add_padding(secure_vector<uint8_t>& buffer,
+ */
+ size_t OneAndZeros_Padding::unpad(const uint8_t input[], size_t input_length) const
+    {
+-   if(input_length <= 2)
++   if(!valid_blocksize(input_length))
+       return input_length;
+ 
+    CT::poison(input, input_length);
+@@ -170,7 +170,8 @@ size_t OneAndZeros_Padding::unpad(const uint8_t input[], size_t input_length) co
+    bad_input |= ~seen_0x80;
+ 
+    CT::unpoison(input, input_length);
+-   return bad_input.select_and_unpoison(input_length, pad_pos);
++
++   return CT::Mask<size_t>::expand(bad_input).select_and_unpoison(input_length, pad_pos);
+    }
+ 
+ /*
+@@ -193,7 +194,7 @@ void ESP_Padding::add_padding(secure_vector<uint8_t>& buffer,
+ */
+ size_t ESP_Padding::unpad(const uint8_t input[], size_t input_length) const
+    {
+-   if(input_length <= 2)
++   if(!valid_blocksize(input_length))
+       return input_length;
+ 
+    CT::poison(input, input_length);
+diff --git a/src/lib/utils/ct_utils.h b/src/lib/utils/ct_utils.h
+index eb510baa2..9243d6701 100644
+--- a/src/lib/utils/ct_utils.h
++++ b/src/lib/utils/ct_utils.h
+@@ -124,6 +124,16 @@ class Mask
+          return ~Mask<T>::is_zero(v);
+          }
+ 
++      /**
++      * Return a Mask<T> which is set if m is set
++      */
++      template<typename U>
++      static Mask<T> expand(Mask<U> m)
++         {
++         static_assert(sizeof(U) < sizeof(T), "sizes ok");
++         return ~Mask<T>::is_zero(m.value());
++         }
++
+       /**
+       * Return a Mask<T> which is set if v is == 0 or cleared otherwise
+       */
+diff --git a/src/tests/data/pad.vec b/src/tests/data/pad.vec
+index 712d38709..acd668201 100644
+--- a/src/tests/data/pad.vec
++++ b/src/tests/data/pad.vec
+@@ -105,6 +105,12 @@ Blocksize = 8
+ In  = 0000000000000000
+ Blocksize = 8
+ 
++In = 2020202020202020
++Blocksize = 8
++
++In = 20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020
++Blocksize = 256
++
+ [X9.23]
+ In  = FFFFFF
+ Out = FFFFFF0000000000000000000000000D

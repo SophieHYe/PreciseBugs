@@ -1,0 +1,375 @@
+diff --git a/gdal/frmts/grib/degrib18/degrib/grib2api.c b/gdal/frmts/grib/degrib18/degrib/grib2api.c
+index f1a5b94275..2122f027e9 100644
+--- a/gdal/frmts/grib/degrib18/degrib/grib2api.c
++++ b/gdal/frmts/grib/degrib18/degrib/grib2api.c
+@@ -1384,7 +1384,7 @@ static void clear (float * ain, sInt4 * iain, sInt4 * nd2x3, sInt4 * idat,
+  * NOTES
+  *****************************************************************************
+  */
+-static void BigByteCpy (sInt4 * dst, sInt4 * ipack, CPL_UNUSED sInt4 nd5,
++static void BigByteCpy (sInt4 * dst, sInt4 * ipack, sInt4 nd5,
+                         unsigned int startInt, unsigned int startByte,
+                         int numByte)
+ {
+@@ -1401,6 +1401,11 @@ static void BigByteCpy (sInt4 * dst, sInt4 * ipack, CPL_UNUSED sInt4 nd5,
+    intIndex = startInt;
+    byteIndex = startByte;
+    for (i = 0; i < numByte; i++) {
++       if( intIndex >= (unsigned)nd5 )
++       {
++           /* TODO should error out */
++           return;
++       }
+       curInt = (uInt4) ipack[intIndex];
+       curByte = (curInt << Lshift[byteIndex]) >> 24;
+       *dst = (*dst << 8) + curByte;
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
+index efd946408b..9084a933b4 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/comunpack.c
+@@ -3,7 +3,7 @@
+ #include "grib2.h"
+ 
+ 
+-int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2int ndpts,g2float *fld)
++int comunpack(unsigned char *cpack,g2int cpack_length,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2int ndpts,g2float *fld)
+ ////$$$  SUBPROGRAM DOCUMENTATION BLOCK
+ //                .      .    .                                       .
+ // SUBPROGRAM:    comunpack
+@@ -75,6 +75,18 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+          return(0);
+       }
+ 
++      /* Early test in particular case for more general test belows */
++      /* "Test to see if the group widths and lengths are consistent with number of */
++      /*  values, and length of section 7. */
++      if( idrstmpl[12] < 0 || idrstmpl[14] < 0 || idrstmpl[14] > ndpts )
++          return -1;
++      if( nbitsglen == 0 &&
++          ((ngroups > 1 && idrstmpl[12] != (ndpts - idrstmpl[14]) / (ngroups - 1)) ||
++           idrstmpl[12] * (ngroups-1) + idrstmpl[14] != ndpts) )
++      {
++          return -1;
++      }
++
+       iofst=0;
+       ifld=(g2int *)calloc(ndpts,sizeof(g2int));
+       //printf("ALLOC ifld: %d %x\n",(int)ndpts,ifld);
+@@ -82,6 +94,13 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+       //printf("ALLOC gref: %d %x\n",(int)ngroups,gref);
+       gwidth=(g2int *)calloc(ngroups,sizeof(g2int));
+       //printf("ALLOC gwidth: %d %x\n",(int)ngroups,gwidth);
++      if( ifld == NULL || gref == NULL || gwidth == NULL )
++      {
++          free(ifld);
++          free(gref);
++          free(gwidth);
++          return -1;
++      }
+ //
+ //  Get missing values, if supplied
+ //
+@@ -138,29 +157,27 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+ //
+       //printf("SAG1: %ld %ld %ld \n",nbitsgref,ngroups,iofst);
+       if (nbitsgref != 0) {
+-         gbits(cpack,G2_UNKNOWN_SIZE,gref+0,iofst,nbitsgref,0,ngroups);
++         if( gbits(cpack,cpack_length,gref+0,iofst,nbitsgref,0,ngroups) != 0 )
++         {
++             return -1;
++         }
+          itemp=nbitsgref*ngroups;
+          iofst=iofst+itemp;
+          if (itemp%8 != 0) iofst=iofst+(8-(itemp%8));
+       }
+-      else {
+-         for (j=0;j<ngroups;j++)
+-              gref[j]=0;
+-      }
+ //
+ //  Extract Each Group's bit width
+ //
+       //printf("SAG2: %ld %ld %ld %ld \n",nbitsgwidth,ngroups,iofst,idrstmpl[10]);
+       if (nbitsgwidth != 0) {
+-         gbits(cpack,G2_UNKNOWN_SIZE,gwidth+0,iofst,nbitsgwidth,0,ngroups);
++         if( gbits(cpack,cpack_length,gwidth+0,iofst,nbitsgwidth,0,ngroups) != 0 )
++         {
++             return -1;
++         }
+          itemp=nbitsgwidth*ngroups;
+          iofst=iofst+itemp;
+          if (itemp%8 != 0) iofst=iofst+(8-(itemp%8));
+       }
+-      else {
+-         for (j=0;j<ngroups;j++)
+-                gwidth[j]=0;
+-      }
+ 
+       for (j=0;j<ngroups;j++)
+           gwidth[j]=gwidth[j]+idrstmpl[10];
+@@ -169,18 +186,30 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+ //  Extract Each Group's length (number of values in each group)
+ //
+       glen=(g2int *)calloc(ngroups,sizeof(g2int));
++      if( glen == NULL )
++      {
++        free(ifld);
++        free(gwidth);
++        free(gref);
++        return -1;
++      }
+       //printf("ALLOC glen: %d %x\n",(int)ngroups,glen);
+       //printf("SAG3: %ld %ld %ld %ld %ld \n",nbitsglen,ngroups,iofst,idrstmpl[13],idrstmpl[12]);
+       if (nbitsglen != 0) {
+-         gbits(cpack,G2_UNKNOWN_SIZE,glen,iofst,nbitsglen,0,ngroups);
++         if( gbits(cpack,cpack_length,glen,iofst,nbitsglen,0,ngroups) != 0 )
++         {
++            free(ifld);
++            free(gwidth);
++            free(glen);
++            free(gref);
++             return -1;
++         }
+          itemp=nbitsglen*ngroups;
+          iofst=iofst+itemp;
+          if (itemp%8 != 0) iofst=iofst+(8-(itemp%8));
+       }
+-      else {
+-         for (j=0;j<ngroups;j++)
+-              glen[j]=0;
+-      }
++
++      // TODO potential int overflow
+       for (j=0;j<ngroups;j++)
+            glen[j]=(glen[j]*idrstmpl[13])+idrstmpl[12];
+       glen[ngroups-1]=idrstmpl[14];
+@@ -191,6 +220,7 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+       totBit = 0;
+       totLen = 0;
+       for (j=0;j<ngroups;j++) {
++          // TODO potential int overflow
+         totBit += (gwidth[j]*glen[j]);
+         totLen += glen[j];
+       }
+@@ -208,7 +238,14 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+          n=0;
+          for (j=0;j<ngroups;j++) {
+            if (gwidth[j] != 0) {
+-             gbits(cpack,G2_UNKNOWN_SIZE,ifld+n,iofst,gwidth[j],0,glen[j]);
++             if( gbits(cpack,cpack_length,ifld+n,iofst,gwidth[j],0,glen[j]) != 0 )
++             {
++                 free(ifld);
++                 free(gwidth);
++                 free(glen);
++                 free(gref);
++                 return -1;
++             }
+              for (k=0;k<glen[j];k++) {
+                ifld[n]=ifld[n]+gref[j];
+                n=n+1;
+@@ -233,7 +270,14 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
+            if (gwidth[j] != 0) {
+              msng1=(g2int)int_power(2.0,gwidth[j])-1;
+              msng2=msng1-1;
+-             gbits(cpack,G2_UNKNOWN_SIZE,ifld+n,iofst,gwidth[j],0,glen[j]);
++             if( gbits(cpack,cpack_length,ifld+n,iofst,gwidth[j],0,glen[j]) != 0 )
++             {
++                 free(ifld);
++                 free(gwidth);
++                 free(glen);
++                 free(gref);
++                 return -1;
++             }
+              iofst=iofst+(gwidth[j]*glen[j]);
+              for (k=0;k<glen[j];k++) {
+                if (ifld[n] == msng1) {
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_getfld.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_getfld.c
+index fd6aa51d20..c1d909b6d1 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_getfld.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_getfld.c
+@@ -422,7 +422,7 @@ g2int g2_getfld(unsigned char *cgrib,g2int cgrib_length, g2int ifldnum,g2int unp
+         //
+         if (isecnum == 5 && numfld == ifldnum) {
+           iofst=iofst-40;       // reset offset to beginning of section
+-          jerr=g2_unpack5(cgrib,&iofst,&lgfld->ndpts,&lgfld->idrtnum,
++          jerr=g2_unpack5(cgrib,cgrib_length,&iofst,&lgfld->ndpts,&lgfld->idrtnum,
+                           &lgfld->idrtmpl,&lgfld->idrtlen);
+           if (jerr == 0)
+             have5=1;
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack5.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack5.c
+index ff5be67500..b4d50797b8 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack5.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack5.c
+@@ -3,7 +3,7 @@
+ #include "grib2.h"
+ 
+ 
+-g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
++g2int g2_unpack5(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+                g2int **idrstmpl,g2int *mapdrslen)
+ ////$$$  SUBPROGRAM DOCUMENTATION BLOCK
+ //                .      .    .                                       .
+@@ -58,9 +58,9 @@ g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+       ierr=0;
+       *idrstmpl=0;       //NULL
+ 
+-      gbit(cgrib,&lensec,*iofst,32);        // Get Length of Section
++      gbit2(cgrib,cgrib_length,&lensec,*iofst,32);        // Get Length of Section
+       *iofst=*iofst+32;
+-      gbit(cgrib,&isecnum,*iofst,8);         // Get Section Number
++      gbit2(cgrib,cgrib_length,&isecnum,*iofst,8);         // Get Section Number
+       *iofst=*iofst+8;
+ 
+       if ( isecnum != 5 ) {
+@@ -71,9 +71,9 @@ g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+          return(ierr);
+       }
+ 
+-      gbit(cgrib,ndpts,*iofst,32);    // Get num of data points
++      gbit2(cgrib,cgrib_length,ndpts,*iofst,32);    // Get num of data points
+       *iofst=*iofst+32;
+-      gbit(cgrib,idrsnum,*iofst,16);     // Get Data Rep Template Num.
++      gbit2(cgrib,cgrib_length,idrsnum,*iofst,16);     // Get Data Rep Template Num.
+       *iofst=*iofst+16;
+ 
+       //   Gen Data Representation Template
+@@ -104,11 +104,11 @@ g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+       for (i=0;i<mapdrs->maplen;i++) {
+         nbits=abs(mapdrs->map[i])*8;
+         if ( mapdrs->map[i] >= 0 ) {
+-          gbit(cgrib,lidrstmpl+i,*iofst,nbits);
++          gbit2(cgrib,cgrib_length,lidrstmpl+i,*iofst,nbits);
+         }
+         else {
+-          gbit(cgrib,&isign,*iofst,1);
+-          gbit(cgrib,lidrstmpl+i,*iofst+1,nbits-1);
++          gbit2(cgrib,cgrib_length,&isign,*iofst,1);
++          gbit2(cgrib,cgrib_length,lidrstmpl+i,*iofst+1,nbits-1);
+           if (isign == 1) lidrstmpl[i]=-1*lidrstmpl[i];
+         }
+         *iofst=*iofst+nbits;
+@@ -131,11 +131,11 @@ g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+         for (i=*mapdrslen;i<newlen;i++) {
+           nbits=abs(mapdrs->ext[j])*8;
+           if ( mapdrs->ext[j] >= 0 ) {
+-            gbit(cgrib,lidrstmpl+i,*iofst,nbits);
++            gbit2(cgrib,cgrib_length,lidrstmpl+i,*iofst,nbits);
+           }
+           else {
+-            gbit(cgrib,&isign,*iofst,1);
+-            gbit(cgrib,lidrstmpl+i,*iofst+1,nbits-1);
++            gbit2(cgrib,cgrib_length,&isign,*iofst,1);
++            gbit2(cgrib,cgrib_length,lidrstmpl+i,*iofst+1,nbits-1);
+             if (isign == 1) lidrstmpl[i]=-1*lidrstmpl[i];
+           }
+           *iofst=*iofst+nbits;
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
+index 71a6d1b46a..0cf04c0c57 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/g2_unpack7.c
+@@ -107,7 +107,7 @@ g2int g2_unpack7(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int igds
+       if (idrsnum == 0)
+         simunpack(cgrib+ipos,cgrib_length-ipos,idrstmpl,ndpts,lfld);
+       else if (idrsnum == 2 || idrsnum == 3) {
+-        if (comunpack(cgrib+ipos,lensec,idrsnum,idrstmpl,ndpts,lfld) != 0) {
++        if (comunpack(cgrib+ipos,cgrib_length-ipos,lensec,idrsnum,idrstmpl,ndpts,lfld) != 0) {
+           return 7;
+         }
+       }
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/gbits.c b/gdal/frmts/grib/degrib18/g2clib-1.0.4/gbits.c
+index 23633749d0..5766a7a92b 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/gbits.c
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/gbits.c
+@@ -1,8 +1,13 @@
+ #include "grib2.h"
+ 
+-void gbit(unsigned char *in,g2int *iout,g2int iskip,g2int nbyte)
++int gbit(unsigned char *in,g2int *iout,g2int iskip,g2int nbyte)
+ {
+-      gbits(in,G2_UNKNOWN_SIZE,iout,iskip,nbyte,(g2int)0,(g2int)1);
++      return gbits(in,G2_UNKNOWN_SIZE,iout,iskip,nbyte,(g2int)0,(g2int)1);
++}
++
++int gbit2(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte)
++{
++      return gbits(in,in_length,iout,iskip,nbyte,(g2int)0,(g2int)1);
+ }
+ 
+ void sbit(unsigned char *out,const g2int *in,g2int iskip,g2int nbyte)
+@@ -11,7 +16,7 @@ void sbit(unsigned char *out,const g2int *in,g2int iskip,g2int nbyte)
+ }
+ 
+ 
+-void gbits(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte,g2int nskip,
++int gbits(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte,g2int nskip,
+            g2int n)
+ /*          Get bits - unpack bits:  Extract arbitrary size values from a
+ /          packed bit string, right justifying each value in the unpacked
+@@ -40,7 +45,7 @@ void gbits(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte
+ //        first byte
+          tbit= ( bitcnt < (8-ibit) ) ? bitcnt : 8-ibit;  // find min
+          if( in_length != G2_UNKNOWN_SIZE && l_index >= in_length )
+-             return; /* TODO error ? */
++             return -1;
+          itmp = (int)*(in+l_index) & ones[7-ibit];
+          if (tbit != 8-ibit) itmp >>= (8-ibit-tbit);
+          l_index++;
+@@ -49,7 +54,7 @@ void gbits(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte
+ //        now transfer whole bytes
+          while (bitcnt >= 8) {
+             if( in_length != G2_UNKNOWN_SIZE && l_index >= in_length )
+-                return; /* TODO error ? */
++                return -1;
+              itmp = (int)(((unsigned)itmp)<<8 | (int)*(in+l_index));
+              bitcnt = bitcnt - 8;
+              l_index++;
+@@ -58,12 +63,14 @@ void gbits(unsigned char *in,g2int in_length,g2int *iout,g2int iskip,g2int nbyte
+ //        get data from last byte
+          if (bitcnt > 0) {
+             if( in_length != G2_UNKNOWN_SIZE && l_index >= in_length )
+-                return; /* TODO error ? */
++                return -1;
+              itmp = (int)( (unsigned)itmp << bitcnt ) | ( ((int)*(in+l_index) >> (8-bitcnt)) & ones[bitcnt-1] );
+          }
+ 
+          *(iout+i) = itmp;
+       }
++
++      return 0;
+ }
+ 
+ 
+diff --git a/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h b/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
+index 38837f2206..ade8436800 100644
+--- a/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
++++ b/gdal/frmts/grib/degrib18/g2clib-1.0.4/grib2.h
+@@ -228,9 +228,10 @@ extern xxtemplate *extgridtemplate(g2int,g2int *);
+ extern void simpack(g2float *,g2int,g2int *,unsigned char *,g2int *);
+ extern void compack(g2float *,g2int,g2int,g2int *,unsigned char *,g2int *);
+ void misspack(g2float *,g2int ,g2int ,g2int *, unsigned char *, g2int *);
+-void gbit(unsigned char *,g2int *,g2int ,g2int );
++int gbit(unsigned char *,g2int *,g2int ,g2int );
++int gbit2(unsigned char *,g2int in_length,g2int *,g2int ,g2int );
+ void sbit(unsigned char *,const g2int *,g2int ,g2int );
+-void gbits(unsigned char *,g2int in_length,g2int *,g2int ,g2int ,g2int ,g2int );
++int gbits(unsigned char *,g2int in_length,g2int *,g2int ,g2int ,g2int ,g2int );
+ void sbits(unsigned char *,const g2int *,g2int ,g2int ,g2int ,g2int );
+ 
+ int pack_gp(g2int *, g2int *, g2int *,
+@@ -245,14 +246,14 @@ g2int g2_unpack3(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int **ig
+                          g2int *mapgridlen,g2int **ideflist,g2int *idefnum);
+ g2int g2_unpack4(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int *ipdsnum,g2int **ipdstmpl,
+                g2int *mappdslen,g2float **coordlist,g2int *numcoord);
+-g2int g2_unpack5(unsigned char *cgrib,g2int *iofst,g2int *ndpts,g2int *idrsnum,
++g2int g2_unpack5(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int *ndpts,g2int *idrsnum,
+                g2int **idrstmpl,g2int *mapdrslen);
+ g2int g2_unpack6(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int ngpts,g2int *ibmap,
+                g2int **bmap);
+ g2int g2_unpack7(unsigned char *cgrib,g2int cgrib_length,g2int *iofst,g2int igdsnum,g2int *igdstmpl,
+                g2int idrsnum,g2int *idrstmpl,g2int ndpts,g2float **fld);
+ g2int simunpack(unsigned char *,g2int cpack_length,g2int *, g2int,g2float *);
+-int comunpack(unsigned char *,g2int,g2int,g2int *,g2int,g2float *);
++int comunpack(unsigned char *,g2int cpack_length,g2int,g2int,g2int *,g2int,g2float *);
+ g2int specunpack(unsigned char *,g2int *,g2int,g2int,g2int, g2int, g2float *);
+ g2int jpcunpack(unsigned char *,g2int,g2int *,g2int, g2float *);
+ void specpack(g2float *fld,g2int ndpts,g2int JJ,g2int KK,g2int MM,

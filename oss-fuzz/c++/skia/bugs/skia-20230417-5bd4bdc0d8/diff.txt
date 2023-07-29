@@ -1,0 +1,67 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 0ed4aa6327..768b9db92f 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -201,6 +201,7 @@ sksl_error_tests = [
+   "errors/PrivateTypes.rts",
+   "errors/PrivateVariables.rts",
+   "errors/ProgramTooLarge_Globals.rts",
++  "errors/ProgramTooLarge_InterfaceBlock.sksl",
+   "errors/ProgramTooLarge_Parameters.rts",
+   "errors/ProgramTooLarge_Stack.rts",
+   "errors/ProgramTooLarge_Struct.rts",
+diff --git a/resources/sksl/BUILD.bazel b/resources/sksl/BUILD.bazel
+index 731d5da333..49c0337daf 100644
+--- a/resources/sksl/BUILD.bazel
++++ b/resources/sksl/BUILD.bazel
+@@ -373,6 +373,7 @@ skia_filegroup(
+         "errors/PrivateTypes.rts",
+         "errors/PrivateVariables.rts",
+         "errors/ProgramTooLarge_Globals.rts",
++        "errors/ProgramTooLarge_InterfaceBlock.sksl",
+         "errors/ProgramTooLarge_Parameters.rts",
+         "errors/ProgramTooLarge_Stack.rts",
+         "errors/ProgramTooLarge_Struct.rts",
+diff --git a/resources/sksl/errors/ProgramTooLarge_InterfaceBlock.sksl b/resources/sksl/errors/ProgramTooLarge_InterfaceBlock.sksl
+new file mode 100644
+index 0000000000..0c452c4bdd
+--- /dev/null
++++ b/resources/sksl/errors/ProgramTooLarge_InterfaceBlock.sksl
+@@ -0,0 +1,8 @@
++MyInterfaceBlock {
++    float data[50000];
++} array[10];
++
++/*%%*
++array size is too large
++interface block type is not valid
++*%%*/
+diff --git a/src/sksl/ir/SkSLInterfaceBlock.cpp b/src/sksl/ir/SkSLInterfaceBlock.cpp
+index 80660c0dc8..30953ec54e 100644
+--- a/src/sksl/ir/SkSLInterfaceBlock.cpp
++++ b/src/sksl/ir/SkSLInterfaceBlock.cpp
+@@ -53,7 +53,10 @@ std::unique_ptr<InterfaceBlock> InterfaceBlock::Convert(const Context& context,
+         context.fErrors->error(pos, "interface blocks are not allowed in this kind of program");
+         return nullptr;
+     }
+-
++    if (!variable->type().componentType().isInterfaceBlock()) {
++        context.fErrors->error(pos, "interface block type is not valid");
++        return nullptr;
++    }
+     // Find sk_RTAdjust and error out if it's not of type `float4`.
+     SkSpan<const Type::Field> fields = variable->type().componentType().fields();
+     std::optional<int> rtAdjustIndex = find_rt_adjust_index(fields);
+diff --git a/tests/sksl/errors/ProgramTooLarge_InterfaceBlock.glsl b/tests/sksl/errors/ProgramTooLarge_InterfaceBlock.glsl
+new file mode 100644
+index 0000000000..8c6cb4fd45
+--- /dev/null
++++ b/tests/sksl/errors/ProgramTooLarge_InterfaceBlock.glsl
+@@ -0,0 +1,7 @@
++### Compilation failed:
++
++error: array size is too large
++error: 1: interface block type is not valid
++MyInterfaceBlock {
++^^^^^^^^^^^^^^^^
++2 errors

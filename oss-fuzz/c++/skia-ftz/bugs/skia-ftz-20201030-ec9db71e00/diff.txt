@@ -1,0 +1,13 @@
+diff --git a/src/sksl/SkSLCFGGenerator.cpp b/src/sksl/SkSLCFGGenerator.cpp
+index 0b1e49373b..eb88e49c7a 100644
+--- a/src/sksl/SkSLCFGGenerator.cpp
++++ b/src/sksl/SkSLCFGGenerator.cpp
+@@ -256,7 +256,7 @@ bool BasicBlock::tryRemoveExpression(std::vector<BasicBlock::Node>::iterator* it
+             return true;
+         case Expression::Kind::kPostfix:
+             if (!this->tryRemoveExpressionBefore(iter,
+-                                                 expr->as<PrefixExpression>().operand().get())) {
++                                                 expr->as<PostfixExpression>().operand().get())) {
+                 return false;
+             }
+             *iter = fNodes.erase(*iter);

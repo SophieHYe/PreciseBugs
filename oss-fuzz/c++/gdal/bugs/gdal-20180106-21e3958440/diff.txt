@@ -1,0 +1,53 @@
+diff --git a/gdal/port/cplkeywordparser.cpp b/gdal/port/cplkeywordparser.cpp
+index 47f03b340b..1a8fe8d7c8 100644
+--- a/gdal/port/cplkeywordparser.cpp
++++ b/gdal/port/cplkeywordparser.cpp
+@@ -106,19 +106,23 @@ int CPLKeywordParser::Ingest( VSILFILE *fp )
+ /* -------------------------------------------------------------------- */
+ /*      Process name/value pairs, keeping track of a "path stack".      */
+ /* -------------------------------------------------------------------- */
+-    return ReadGroup( "" );
++    return ReadGroup( "", 0 );
+ }
+ 
+ /************************************************************************/
+ /*                             ReadGroup()                              */
+ /************************************************************************/
+ 
+-bool CPLKeywordParser::ReadGroup( const char *pszPathPrefix )
++bool CPLKeywordParser::ReadGroup( const char *pszPathPrefix, int nRecLevel )
+ 
+ {
+     CPLString osName;
+     CPLString osValue;
+ 
++    // Arbitrary threshold to avoid stack overflow
++    if( nRecLevel == 100 )
++        return false;
++
+     for( ; true; )
+     {
+         if( !ReadPair( osName, osValue ) )
+@@ -126,7 +130,8 @@ bool CPLKeywordParser::ReadGroup( const char *pszPathPrefix )
+ 
+         if( EQUAL(osName, "BEGIN_GROUP") || EQUAL(osName, "GROUP") )
+         {
+-            if( !ReadGroup((CPLString(pszPathPrefix) + osValue + ".").c_str()) )
++            if( !ReadGroup((CPLString(pszPathPrefix) + osValue + ".").c_str(),
++                           nRecLevel + 1) )
+                 return false;
+         }
+         else if( STARTS_WITH_CI(osName, "END") )
+diff --git a/gdal/port/cplkeywordparser.h b/gdal/port/cplkeywordparser.h
+index 2032f1d65c..06f369f74f 100644
+--- a/gdal/port/cplkeywordparser.h
++++ b/gdal/port/cplkeywordparser.h
+@@ -53,7 +53,7 @@ class CPLKeywordParser
+     void    SkipWhite();
+     bool    ReadWord( CPLString &osWord );
+     bool    ReadPair( CPLString &osName, CPLString &osValue );
+-    bool    ReadGroup( const char *pszPathPrefix );
++    bool    ReadGroup( const char *pszPathPrefix, int nRecLevel );
+ 
+ public:
+     CPLKeywordParser();

@@ -1,0 +1,13 @@
+diff --git a/libavcodec/jpeg2000dwt.c b/libavcodec/jpeg2000dwt.c
+index ce1678a3d7..badf0f8cd0 100644
+--- a/libavcodec/jpeg2000dwt.c
++++ b/libavcodec/jpeg2000dwt.c
+@@ -531,7 +531,7 @@ static void dwt_decode97_int(DWTContext *s, int32_t *t)
+     }
+ 
+     for (i = 0; i < w * h; i++)
+-        data[i] = (data[i] + ((1<<I_PRESHIFT)>>1)) >> I_PRESHIFT;
++        data[i] = (data[i] + ((1LL<<I_PRESHIFT)>>1)) >> I_PRESHIFT;
+ }
+ 
+ int ff_jpeg2000_dwt_init(DWTContext *s, int border[2][2],

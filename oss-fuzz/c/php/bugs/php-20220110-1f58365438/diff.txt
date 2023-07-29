@@ -1,0 +1,38 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index a1eff0ceb6..d3a483b889 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -2636,9 +2636,6 @@ static zend_always_inline int _zend_update_type_info(
+ 						tmp |= MAY_BE_NULL|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_STRING;
+ 					}
+ 				}
+-				if (t1 & MAY_BE_OBJECT) {
+-					tmp |= MAY_BE_REF;
+-				}
+ 				tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+ 				UPDATE_SSA_TYPE(tmp, ssa_op->result_def);
+ 			}
+diff --git a/ext/opcache/tests/jit/assign_dim_008.phpt b/ext/opcache/tests/jit/assign_dim_008.phpt
+new file mode 100644
+index 0000000000..c0150809e4
+--- /dev/null
++++ b/ext/opcache/tests/jit/assign_dim_008.phpt
+@@ -0,0 +1,18 @@
++--TEST--
++JIT ASSIGN_DIM: 008
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++--FILE--
++<?php
++function(int $a) {
++  $arr = $a[] = (y);
++  $arr = y;
++  $c = $y = $arr[] = y($c);
++}
++?>
++DONE
++--EXPECT--
++DONE

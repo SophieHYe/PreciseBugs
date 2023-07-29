@@ -1,0 +1,13 @@
+diff --git a/libavcodec/rangecoder.c b/libavcodec/rangecoder.c
+index d7a2774d27..0bb79c880e 100644
+--- a/libavcodec/rangecoder.c
++++ b/libavcodec/rangecoder.c
+@@ -60,7 +60,7 @@ av_cold void ff_init_range_decoder(RangeCoder *c, const uint8_t *buf,
+     c->bytestream += 2;
+     if (c->low >= 0xFF00) {
+         c->low = 0xFF00;
+-        c->bytestream_end = c->bytestream + 2;
++        c->bytestream_end = c->bytestream;
+     }
+ }
+ 

@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/northwood/northwood.cpp b/gdal/frmts/northwood/northwood.cpp
+index 31c32d37f6..75f0e737e7 100644
+--- a/gdal/frmts/northwood/northwood.cpp
++++ b/gdal/frmts/northwood/northwood.cpp
+@@ -296,7 +296,7 @@ int nwt_LoadColors( NWT_RGB * pMap, int mapSize, NWT_GRID * pGrd )
+                      pGrd->stInflection[0].b, pMap, &nWarkerMark );
+     }
+     // find what inflections zmin is between
+-    for( i = 0; i < pGrd->iNumColorInflections; i++ )
++    for( i = 1; i < pGrd->iNumColorInflections; i++ )
+     {
+         if( pGrd->fZMin < pGrd->stInflection[i].zVal )
+         {

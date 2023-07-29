@@ -1,0 +1,24 @@
+diff --git a/Packet++/src/DnsResource.cpp b/Packet++/src/DnsResource.cpp
+index fe3a8fe7..bf821f18 100644
+--- a/Packet++/src/DnsResource.cpp
++++ b/Packet++/src/DnsResource.cpp
+@@ -138,9 +138,12 @@ size_t IDnsResource::decodeName(const char* encodedName, char* result, int itera
+ 		result[resultPtr - result - 1] = 0;
+ 	}
+ 
+-	// add the last '\0' to encodedNameLength
+-	resultPtr[0] = 0;
+-	encodedNameLength++;
++	if (resultPtr - result < 256)
++	{
++		// add the last '\0' to encodedNameLength
++		resultPtr[0] = 0;
++		encodedNameLength++;
++	}
+ 
+ 	return encodedNameLength;
+ }
+diff --git a/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5814090897948672 b/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5814090897948672
+new file mode 100644
+index 00000000..2427f083
+Binary files /dev/null and b/Tests/Fuzzers/RegressionTests/regression_samples/clusterfuzz-testcase-minimized-FuzzTarget-5814090897948672 differ

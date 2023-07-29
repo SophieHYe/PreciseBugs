@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp b/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+index b1ec5160c7..2a26a13fb7 100644
+--- a/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
++++ b/gdal/ogr/ogrsf_frmts/gml/gmlhandler.cpp
+@@ -808,7 +808,7 @@ void GMLHandler::DealWithAttributes(const char *pszName, int nLenName, void* att
+             }
+             else if( (!poClass->IsSchemaLocked() && (m_bReportHref || m_poReader->ReportAllAttributes())) ||
+                         (poClass->IsSchemaLocked() && (nAttrIndex =
+-                        m_poReader->GetAttributeElementIndex( CPLSPrintf("%s_href", pszName ),
++                        m_poReader->GetAttributeElementIndex( (std::string(pszName) + "_href").c_str(),
+                                                     nLenName + 5 )) != -1) )
+             {
+                 poState->PushPath( pszName, nLenName );

@@ -1,0 +1,44 @@
+diff --git a/src/ots.cc b/src/ots.cc
+index 8faa3b3..b384261 100644
+--- a/src/ots.cc
++++ b/src/ots.cc
+@@ -744,7 +744,7 @@ bool ProcessGeneric(ots::FontFile *header,
+     ots::OpenTypeGVAR *gvar = new ots::OpenTypeGVAR(font, OTS_TAG_GVAR);
+     if (gvar->InitEmpty()) {
+       table_map[OTS_TAG_GVAR] = { OTS_TAG_GVAR, 0, 0, 0, 0 };
+-      font->AddTable(gvar);
++      font->AddTable(table_map[OTS_TAG_GVAR], gvar);
+     } else {
+       delete gvar;
+     }
+@@ -1022,11 +1022,12 @@ Table* Font::GetTypedTable(uint32_t tag) const {
+   return NULL;
+ }
+ 
+-void Font::AddTable(Table* table) {
++void Font::AddTable(TableEntry entry, Table* table) {
+   // Attempting to add a duplicate table would be an error; this should only
+   // be used to add a table that does not already exist.
+   assert(m_tables.find(table->Tag()) == m_tables.end());
+   m_tables[table->Tag()] = table;
++  file->tables[entry] = table;
+ }
+ 
+ void Font::DropGraphite() {
+diff --git a/src/ots.h b/src/ots.h
+index 4181f69..434e068 100644
+--- a/src/ots.h
++++ b/src/ots.h
+@@ -319,7 +319,7 @@ struct Font {
+   Table* GetTypedTable(uint32_t tag) const;
+ 
+   // Insert a new table. Asserts if a table with the same tag already exists.
+-  void AddTable(Table* table);
++  void AddTable(TableEntry entry, Table* table);
+ 
+   // Drop all Graphite tables and don't parse new ones.
+   void DropGraphite();
+diff --git a/tests/fonts/fuzzing/b48e5042d1f1f6cec531b73abf15c8ee4f2afc63.ttf b/tests/fonts/fuzzing/b48e5042d1f1f6cec531b73abf15c8ee4f2afc63.ttf
+new file mode 100644
+index 0000000..01cef45
+Binary files /dev/null and b/tests/fonts/fuzzing/b48e5042d1f1f6cec531b73abf15c8ee4f2afc63.ttf differ

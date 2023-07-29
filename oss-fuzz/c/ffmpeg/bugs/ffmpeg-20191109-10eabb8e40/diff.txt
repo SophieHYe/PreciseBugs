@@ -1,0 +1,13 @@
+diff --git a/libavcodec/interplayacm.c b/libavcodec/interplayacm.c
+index cff79eb6b2..3704d1a2f2 100644
+--- a/libavcodec/interplayacm.c
++++ b/libavcodec/interplayacm.c
+@@ -529,7 +529,7 @@ static int decode_block(InterplayACMContext *s)
+ 
+     for (i = 1, x = -val; i <= count; i++) {
+         s->midbuf[-i] = x;
+-        x -= val;
++        x -= (unsigned)val;
+     }
+ 
+     ret = fill_block(s);

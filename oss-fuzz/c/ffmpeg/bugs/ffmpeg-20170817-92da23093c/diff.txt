@@ -1,0 +1,13 @@
+diff --git a/libavcodec/diracdec.c b/libavcodec/diracdec.c
+index 29042bd86b..0aee08f9e1 100644
+--- a/libavcodec/diracdec.c
++++ b/libavcodec/diracdec.c
+@@ -442,7 +442,7 @@ static av_cold int dirac_decode_end(AVCodecContext *avctx)
+ static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qoffset)
+ {
+     int coeff = dirac_get_se_golomb(gb);
+-    const int sign = FFSIGN(coeff);
++    const unsigned sign = FFSIGN(coeff);
+     if (coeff)
+         coeff = sign*((sign * coeff * qfactor + qoffset) >> 2);
+     return coeff;

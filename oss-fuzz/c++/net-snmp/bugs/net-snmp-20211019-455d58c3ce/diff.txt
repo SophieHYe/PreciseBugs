@@ -1,0 +1,18 @@
+diff --git a/snmplib/snmp_api.c b/snmplib/snmp_api.c
+index 181335baff..ca1ad12b37 100644
+--- a/snmplib/snmp_api.c
++++ b/snmplib/snmp_api.c
+@@ -7600,6 +7600,13 @@ snmp_add_var(netsnmp_pdu *pdu,
+                 result = SNMPERR_MALLOC;
+                 break;
+             }
++            if (ix < 0 || ix >= buf_len) {
++               result = SNMPERR_RANGE;
++               snmp_set_detail(cp);
++               SNMP_FREE(buf);
++               SNMP_FREE(vp);
++               goto out;
++            }
+             bit = 0x80 >> ltmp % 8;
+             buf[ix] |= bit;
+ 	    

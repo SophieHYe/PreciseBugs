@@ -1,0 +1,442 @@
+b'53f138f9f	a00a1112d	Mon Jul 24 08:09:13 2023 -0400	strip cache: fix single tile
+bb9940a3a	57a66d96a	Thu Jul 13 15:41:24 2023 -0400	fix build
+57a66d96a	05bf1b168	Thu Jul 13 15:18:23 2023 -0400	fix mac build
+05bf1b168	3e99a5180	Thu Jul 13 13:39:47 2023 -0400	libtiff: fix build
+bd5c681d9	37db3f3ab	Fri Jul 7 20:33:46 2023 -0400	decompress: ensure correct help message - fixes #343
+d0ebfc907	905fbc7c2	Sun Jun 11 20:38:24 2023 -0400	packer: fix potential errors (cppcheck)
+d072d1bec	e9b08de32	Mon Apr 10 12:31:54 2023 -0400	fix build
+e9b08de32	5238f7e6c	Mon Apr 10 12:07:42 2023 -0400	plugin fix
+5238f7e6c	80dc3f492	Mon Apr 10 11:37:47 2023 -0400	plugin debug update
+50cc57486	3898723fd	Sat Mar 4 10:41:38 2023 -0500	fix plugin single decode crash
+5baf9c99e	bab3ddd9f	Sat Feb 25 17:34:22 2023 -0500	fix windows plugin build
+0d6462ae6	4e3a1c431	Tue Feb 21 14:01:18 2023 -0500	examples: fix compress to buf
+c9db4e93f	8d44c50dc	Tue Feb 21 13:56:02 2023 -0500	fuzzer: fix build
+4ecefe637	066f8f4b1	Tue Feb 14 05:35:52 2023 -0500	T2: add debug flag
+d23806ec1	e6807f7c5	Wed Sep 14 18:46:08 2022 -0400	fix cleanup
+c184f295c	8d4941353	Wed Sep 7 08:50:20 2022 -0400	build: try to fix static bundling on windows
+4904da51c	51140d52e	Sun Sep 4 18:33:59 2022 -0400	man pages: fix incorrect cmake variable usage
+57249b4bf	7dc52d9a3	Sun Jul 31 09:23:46 2022 -0400	fix warning formatting
+d5bab86f8	40bbc8ca7	Mon Jul 25 10:40:18 2022 -0400	cmake:fix build
+2d539bf83	adb43d406	Mon Jul 25 08:22:59 2022 -0400	emscripten: fix build
+9e1a8896f	6a26a9700	Fri Jun 17 22:16:15 2022 -0400	build: fix for windows
+6ca437246	0aa5147b1	Sun Jun 5 21:38:16 2022 -0400	fix potential integer truncation when adding tile marker info
+e51e26dc3	7bd7a3cd4	Fri Jun 3 20:42:43 2022 -0400	fixed bug in strip serialization when image has origin different from (0,0)
+b14cc0439	de30fec85	Wed Jun 1 18:20:59 2022 -0400	Fix single-threaded decompress
+087321a8d	a80cf2543	Mon May 30 06:42:49 2022 -0400	packet parser: fix access after delete
+0af2ac2f4	d468952f5	Fri May 27 20:20:14 2022 -0400	remove headerLength as it is not used and buggy
+b2fddebe6	b89dc1b62	Sun May 22 21:14:24 2022 -0400	CI: fix windows build
+158a5d7ad	b94a6e633	Sun May 22 14:38:08 2022 -0400	IO: fix auto-finish for chunked mode
+c828ea447	939b6d675	Sat May 21 19:51:51 2022 -0400	fix uring-enabled compile
+f68269b88	bd8b77277	Wed May 18 09:46:18 2022 -0400	fix uninitialized warnings in highway header
+3e25cf495	262d95e92	Wed May 18 08:29:57 2022 -0400	highway fix
+61e13bb1f	dc8777c81	Mon Apr 25 09:29:00 2022 -0400	CI: fix build
+80288f6b7	cee258f79	Sun Apr 24 15:12:31 2022 -0400	fix windows build
+3dc1d4fa8	1dcafe81a	Thu Apr 21 20:38:24 2022 -0400	serializer: fix open bug
+9e95f7c28	7cb31173e	Thu Apr 14 17:36:30 2022 -0400	decompression: fix resolution=1 case - no wavelet
+7cb31173e	838785d47	Thu Apr 14 17:31:19 2022 -0400	sparse canvas: fix bug in code block selection code
+2471acc94	47507ebc8	Thu Apr 14 09:09:46 2022 -0400	strip cache: fix race conditions in ingestTile method
+7ac815d4c	32a279e1a	Sun Apr 10 14:10:20 2022 -0400	strip cache: fix potential race condition when acquiring buffer for strip
+f06324437	f52b3e3bf	Sat Apr 9 11:56:55 2022 -0400	strip decompression : take resolution reduction into account. fixes #302
+3b0fcb125	8e44e0bc7	Fri Apr 8 18:55:12 2022 -0400	fix bug in logging of scaled window coordinates
+8e44e0bc7	15db9987d	Fri Apr 8 18:28:38 2022 -0400	fix a few warnings
+46b645284	88c991d7a	Thu Mar 31 19:45:53 2022 -0400	fix conversion warning
+4bb2da158	0fe2cdb70	Thu Mar 31 08:44:55 2022 -0400	TIFF: add bounds check on subsampled chroma - fixes #274
+e165ba127	7a8c9a72a	Sat Mar 26 21:24:55 2022 -0400	decompess: validate TLM marker lengths. fixes #297
+746b605d5	c9dbd9cda	Sat Mar 26 13:34:39 2022 -0400	sparse canvas : increase padding to twice block size - fix failure in XL image
+c9dbd9cda	b34574297	Sat Mar 26 12:26:09 2022 -0400	PLT : fix bug in PLT disablement
+f33b49fa4	50531d479	Wed Mar 23 18:01:08 2022 -0400	packet iterator : fix bug in resolution prec info generation : subsampling
+4ee61f2fd	afabd55fc	Tue Mar 22 08:32:18 2022 -0400	packet iterator: static and dynamic state printing for debug
+1821c96c3	0baaae86f	Sat Mar 19 20:50:33 2022 -0400	decompress: fix fast RCPL progression when PLT not available
+0d996c805	69bf1c301	Fri Mar 18 18:00:21 2022 -0400	packet length marker: fix 32 bit overflow in pop method
+e66a189b7	672442c17	Wed Mar 16 16:40:24 2022 -0400	compress: UUIDBox should not own data buffer : fixes #295
+2a9e2638c	7c896f9b9	Tue Mar 15 17:55:11 2022 -0400	PLT marker : fix PLM implementation + cleanup
+76abaaff7	5fb4c2be4	Tue Mar 8 17:56:52 2022 -0500	PLT : add debugging code
+fa7b32fdd	fadaee58f	Sun Mar 6 12:53:10 2022 -0500	README : fix build badge
+1182bfd2f	d2b7774c2	Sat Mar 5 19:10:06 2022 -0500	CI: fix dependencies
+47344fb0c	ed527c4a1	Tue Mar 1 23:18:44 2022 -0500	fix bug in taskflow implementation
+796d9d7b2	25e199982	Tue Mar 1 20:04:48 2022 -0500	fix windows warning
+25e199982	7833bfd40	Tue Mar 1 19:46:57 2022 -0500	fix windows build
+a25318a56	bb6d066c7	Tue Mar 1 09:36:53 2022 -0500	fix clang warnings
+605775b52	087f258fc	Sun Feb 27 09:50:13 2022 -0500	suppress false-positive sanitizer error : fixes oss-fuzz 43676
+3dd8658ba	a753433bf	Wed Feb 23 08:01:53 2022 -0500	decompress: fix handling of missing libtiff etc. libraries
+818294d1e	7e15b4a02	Sun Feb 20 18:01:58 2022 -0500	fix windows build
+005098b17	4f7a356ef	Sun Feb 20 16:38:42 2022 -0500	sycc420_to_rgb: fix a crash and a few other bugs
+02c8340bf	774a52541	Tue Jan 25 20:59:41 2022 -0500	TLM marker: validate. fixes #281
+5f2b7c9dd	348c8a4e3	Fri Jan 14 09:55:58 2022 -0500	io_uring : fix memory crash
+d9f03aa4a	00caadfb6	Sun Jan 9 19:18:21 2022 -0500	fix reclaimable interface
+00caadfb6	83209849e	Sun Jan 9 19:11:32 2022 -0500	io_uring: fix failed tests
+5e3713325	26ed0c33a	Sat Jan 8 08:34:23 2022 -0500	fix build
+5ee01b547	16b6dbb4a	Fri Jan 7 18:09:43 2022 -0500	cie : fix heab-buffer overflow in cieToRGB method
+542e87e20	438535062	Sat Jan 1 17:10:18 2022 -0500	fix some warnings in TIFF file format
+a91b9041a	28162b243	Fri Dec 31 20:16:51 2021 -0500	ICC: plug memory leak : fixes oss-fuzz 43104
+3218a52e5	ae944b522	Thu Dec 30 20:34:29 2021 -0500	fix a few memory issues
+29a6953f4	d7890f0b9	Mon Dec 27 16:14:42 2021 -0500	fix windows build
+aca5525b7	daae04780	Mon Dec 27 12:46:55 2021 -0500	fuzzer: fix build
+c53b7f3ba	8448663dd	Sat Dec 4 13:57:56 2021 -0500	build: fix static build link errors on unix
+f24e9f10a	b9e67bcc7	Sat Oct 16 14:07:50 2021 -0400	fixed SparseCache bug
+b9e67bcc7	25ae0bacf	Tue Oct 5 14:14:57 2021 -0400	fix broken unit tests
+5d00c04d4	896e03815	Sun Sep 26 21:21:49 2021 -0400	build: fix GCC linking when plugin loader is enabled
+ec15b41ca	826be4451	Wed Sep 15 16:46:33 2021 -0400	decompress: fix handling of unknown markers
+bc5d5de93	efdc1c0bb	Sun Sep 12 12:49:11 2021 -0400	iouring: fix some warnings
+5806a91d3	0293deb42	Fri Jul 30 10:03:09 2021 -0400	highway: fix compiler warning
+2187e2e01	739174810	Thu Jul 29 15:42:08 2021 -0400	add debugging code for tile length calculations
+0d384f649	1eefb0b24	Tue Jul 27 16:55:31 2021 -0400	fixed nasty bug where mono dc shift was not converting buffer to float
+c61ce1c40	60d47c444	Sun Jul 25 21:55:54 2021 -0400	pgx: fix bug in sign extension routine
+60d47c444	76cce67b9	Sun Jul 25 19:40:33 2021 -0400	conformance test fix
+0662eafea	123a98f97	Sun Jul 25 10:58:14 2021 -0400	bmp: fix conversion error
+a6f137a4d	d1872d15d	Sat Jul 24 22:25:38 2021 -0400	PGX: fixed bug in handling of signed data
+696e79bd7	2a8adc112	Thu May 20 12:48:48 2021 -0400	fix a few warnings
+92f438e8f	80c68429d	Mon May 3 08:48:26 2021 -0400	highway: fix windows warning
+a2839c61f	edb17cd2d	Sun May 2 09:56:55 2021 -0400	compress: fix error in 4K - number of pocs should be 1, not 2
+164b5da23	f2e3a0ffb	Sat May 1 22:24:18 2021 -0400	compress: fix bug in POC marker management
+31a71e9ba	6a16b9d07	Thu Apr 29 12:11:33 2021 -0400	highway: fix warnings
+6a16b9d07	a1536e4d9	Wed Apr 28 18:51:30 2021 -0400	fix a few warnings
+b0ba11815	88ffdd1fd	Tue Apr 27 22:08:44 2021 -0400	fix warning
+cbde4ec08	ca3737988	Sun Apr 18 10:36:29 2021 -0400	fix a few warnings
+6e9dab898	b00fafb1c	Sat Apr 17 11:05:06 2021 -0400	fix two warnings
+6c650d6fc	aa59f2325	Fri Apr 16 20:24:12 2021 -0400	PNM: fix bug encountered when resetting file pointer to start of next line
+4780b4fc4	3f0f258d2	Sun Apr 11 10:24:31 2021 -0400	fix warning
+be94bfabd	0875e6d66	Sun Apr 11 09:34:45 2021 -0400	fix warning
+47c9f6383	2347b714e	Sat Apr 10 14:13:24 2021 -0400	bit io: fix packet simulation bug
+934186809	53e7a003e	Mon Mar 22 18:48:27 2021 -0400	T2: fix plt refactor bug
+9801c41b9	fca9599cf	Sat Mar 20 10:57:57 2021 -0400	refactor: fix inherited method ambiguity
+fca9599cf	a32b8860e	Sat Mar 20 10:26:20 2021 -0400	build: fix windows build
+1d7221f03	224607564	Sat Mar 13 13:32:46 2021 -0500	fix warning: alloc(bool) hiding alloc(size_t)
+a5f7d9ec5	613cf4767	Sun Mar 7 10:49:54 2021 -0500	color: fix new/realloc mismatch
+94ddf5026	b1f3c4534	Wed Mar 3 09:41:39 2021 -0500	CI: fix github actions cmake workflow
+7f656d0a8	915ab7a2d	Tue Mar 2 17:56:09 2021 -0500	exif: fix crash
+915ab7a2d	419c0e8db	Tue Mar 2 08:49:35 2021 -0500	tile cache: fix race condition
+2bcf47bc7	18b805b31	Mon Mar 1 20:30:52 2021 -0500	fix build
+4a3ecb812	0924dd25e	Thu Feb 25 22:24:41 2021 -0500	wavelet: fix sign errors in new forward 9/7 xform
+0924dd25e	2c7cf2a92	Thu Feb 25 21:42:47 2021 -0500	jpeg: fix type redefinition errors coming from jpeglib.h
+09c2825ce	0249ddaf4	Wed Feb 24 19:46:09 2021 -0500	partial wavelet: partial fix for uninitialized memory issue
+6d76a6173	916ed81eb	Wed Feb 24 18:42:51 2021 -0500	taskflow: update from master - fixes template recursion error
+a48fc2a6d	1e486505c	Thu Feb 18 15:32:50 2021 -0500	wavelet: fixed very nasty bug in partial 5/3 inverse wavelet
+8fba84333	6b7a1e895	Wed Feb 17 14:37:20 2021 -0500	dwt53: fix small region bug
+f10bf7c90	6f838cacb	Tue Feb 16 18:51:13 2021 -0500	fix two error messages
+6905adf3e	a9b734adf	Sun Feb 14 14:22:04 2021 -0500	debug: output final synthesis window in canvas coordinates
+9e51012ad	f34eb9de2	Sat Feb 13 15:51:39 2021 -0500	SIZ marker: fix sanity check on number of tiles
+f34eb9de2	36a0dc2ea	Sat Feb 13 13:16:59 2021 -0500	CI: fix OSX build
+980f2c9b1	202f0dec4	Fri Feb 12 21:50:40 2021 -0500	build: fix OSX build
+752873671	0ca50d287	Fri Feb 12 18:15:36 2021 -0500	decompress: fix bug in PPM marker handling
+3038ad60c	f825f1aaf	Sat Feb 6 18:48:16 2021 -0500	warnings: fix a few remaining
+904ab5e85	fb756f574	Fri Feb 5 17:57:28 2021 -0500	decompress: fix random-access tile decompression when TLM present
+59916687b	7b8e6a73b	Thu Feb 4 09:08:01 2021 -0500	decompress: fix uninitialized value valgrind error in palette application
+3bebf4ad6	f84c4ac23	Mon Feb 1 19:54:04 2021 -0500	compress: monochrome image not being converted to fixed point for lossy
+6bd524f00	4017d916e	Sat Jan 30 22:50:38 2021 -0500	fix warning
+4c7dc7743	4adcd26a0	Fri Jan 22 18:18:43 2021 -0500	dwt: fixed nasty bug in 5/3 partial wavelet
+e9a40e86c	be084cc32	Wed Jan 13 08:44:56 2021 -0500	decompress: fix mistake in 5/3 wavelet for case 1
+2caf21f3f	8f93e7561	Tue Jan 12 18:30:42 2021 -0500	wavelet: refactor and fix MSAN errors with 5/3 partial wavelet
+8f93e7561	97df9b06d	Mon Jan 11 22:15:41 2021 -0500	wavelet: fix overflow crash
+7810af209	0cb25d1ab	Sun Jan 10 19:29:09 2021 -0500	reverse wavelet: fix a few more bugs
+0cb25d1ab	065ebeaef	Sun Jan 10 18:17:09 2021 -0500	debug: fix sparse debug errors
+065ebeaef	cb3fbe833	Sun Jan 10 17:05:14 2021 -0500	debug: valgrind refactor
+cb3fbe833	6b66a2182	Sun Jan 10 16:20:02 2021 -0500	debug: improve logging for dc transform
+6b66a2182	620ffc5da	Sun Jan 10 15:37:11 2021 -0500	debug: sparse update
+0a66f7748	240e5c92d	Sat Jan 9 09:59:38 2021 -0500	reverse wavelet: fix 5/3 vertical pass memLow mis-calculation
+455a20f6d	37fa1ad95	Fri Jan 8 22:19:20 2021 -0500	reverse wavelet: fix bug in line buffer low and high mem calculation
+116164eda	a7dce328f	Fri Jan 8 21:41:18 2021 -0500	debug: no longer need to disable SIMD when debugging sparse wavelet
+4a90c73dc	b4f8124a7	Fri Jan 8 15:48:48 2021 -0500	debug: clean up sparse debugging
+b4f8124a7	1f4ea7455	Fri Jan 8 09:44:05 2021 -0500	partial wavelet: fix bug in vertical pass: memHigh calculation was incorrect
+04255a060	e7038122c	Thu Jan 7 21:43:09 2021 -0500	debug: use correct length in reverse wavelet when initializing memory
+702983fc5	c78010634	Thu Jan 7 15:55:33 2021 -0500	sparse debug:  fill sparse blocks with special value
+30faf708c	776988f33	Thu Jan 7 12:56:17 2021 -0500	debug: extend sparse array testing
+053ccbaae	990904f2c	Thu Jan 7 09:16:10 2021 -0500	fuzzer: fix compile error
+908be490d	f91dea01d	Wed Jan 6 09:39:10 2021 -0500	reverse wavelet: bump the filter padding up by one, fixes oss-fuzz 29249
+17c70b579	e3990366e	Tue Jan 5 20:13:17 2021 -0500	decompress: add debug mode for sparse wavelet
+73e58a710	203b9a903	Sun Jan 3 21:46:14 2021 -0500	fix ASAN ILL in fuzzer init
+e028dc8e6	69316ea7e	Sun Jan 3 14:59:03 2021 -0500	fix a few warnings
+abff87f14	5eb6b4198	Fri Jan 1 11:28:22 2021 -0500	exif: fix Perl compile error
+72ac6c146	1cfd30e24	Thu Dec 31 12:29:45 2020 -0500	decompress: correct bug in sanity check on code block dimensions
+c2c03f5db	ab6ceb3e9	Thu Dec 31 10:17:24 2020 -0500	fix MSVC warning
+ab6ceb3e9	75ad3f738	Thu Dec 31 09:45:59 2020 -0500	fix incorrect cast
+51ce8bbd7	4f41ad6ea	Wed Dec 30 20:39:09 2020 -0500	fix a few more warnings
+04cf0c6b5	76ca1fa53	Wed Dec 30 17:01:05 2020 -0500	fix a C++20 warning
+432e1d6d8	5eb8cc8fb	Wed Dec 30 15:08:32 2020 -0500	fix a few more warnings
+4537d5a76	704bff7b4	Wed Dec 30 14:55:49 2020 -0500	fix warning
+c7e1db1cb	85705c2b9	Wed Dec 30 14:22:19 2020 -0500	try to fix warning from MSVC
+44f8e830d	cb0a68098	Wed Dec 30 13:51:47 2020 -0500	compress: fix warning when parsing progression order
+fa99a17b0	93c62d7c3	Mon Dec 28 14:19:01 2020 -0500	fix final clang warning
+58a984c0e	83e604591	Mon Dec 28 12:28:24 2020 -0500	fix more clang warnings
+83e604591	a277fe62f	Mon Dec 28 10:42:59 2020 -0500	decompress: fix undefined shift in error message
+a277fe62f	e44635a9e	Sun Dec 27 19:05:38 2020 -0500	fix clang warnings
+a2c0e9692	9e96ac224	Sat Dec 19 17:47:27 2020 -0500	decompress: fix bug in reverse wavelet template param calculation
+ba50d6c69	44ca4d655	Sat Dec 19 12:55:51 2020 -0500	decompress: fix a comment
+2a82df8cd	a6542278c	Tue Dec 15 19:32:50 2020 -0500	decompress: correct bug in code block dimension sanity check
+93424f9f8	73eae9802	Mon Dec 14 23:10:48 2020 -0500	HT decode: fix a small bug in ojph block decoder
+ad69276c1	400da8397	Wed Dec 9 20:05:13 2020 -0500	decompress: fix overflow error when assessing component dimensions
+cc86b59c6	1cb27625e	Mon Dec 7 22:35:20 2020 -0500	fuzz: print info and warn to stderr, so they show in bug log
+dc952b51e	753bef696	Sat Dec 5 10:51:36 2020 -0500	window decompress: fix overflow error in line buffer size calculation
+58b807f27	9ef760d48	Fri Dec 4 17:50:22 2020 -0500	fuzzer: fix build
+cae0fb41c	0ffea76ad	Thu Dec 3 22:22:08 2020 -0500	size marker: fix warning
+590b8901d	f58714054	Thu Dec 3 15:10:27 2020 -0500	bmp: avoid a few overflow bugs
+f58714054	b7569d4a0	Thu Dec 3 15:10:01 2020 -0500	grk_buffer_2d alloc: fix overflow bug in data size calculation
+b7569d4a0	3ded446da	Thu Dec 3 12:06:30 2020 -0500	TIFF format: fix a few bugs
+976fa90a1	18233aad7	Mon Nov 30 18:27:30 2020 -0500	png decode: fix bug in image dimension calculation
+fb00f3c18	ab072be11	Mon Nov 30 12:55:00 2020 -0500	HT decompress: fix sanity check on CAP marker
+487f335f1	bba19d656	Sun Nov 15 11:23:14 2020 -0500	fix windows build
+a2cb1b934	c007abeb2	Tue Nov 10 09:19:50 2020 -0500	attempt to fix oss-fuzz #27352
+78f0ab59a	50723b778	Sun Nov 8 21:38:18 2020 -0500	bmp: fix memory leak in rle decode
+45686bb44	08374f3f8	Sat Nov 7 19:39:10 2020 -0500	partial decode: add some debug code for valgrind uninitialized errors
+71c509fd1	ff5b3d530	Sat Nov 7 19:28:04 2020 -0500	partial wavelet: fix off by one error in calculating number of rows + columns
+c51e8d9a4	33c828b4c	Thu Nov 5 08:05:52 2020 -0500	fix fuzzer build failure
+8583296ff	f5a25eca6	Wed Nov 4 10:14:04 2020 -0500	fix overflow when reading code block dimension exponents
+98de4ae52	1dbe47184	Wed Oct 28 14:09:17 2020 -0400	fix new/free mismatch
+1dbe47184	a0064175c	Mon Oct 26 22:15:35 2020 -0400	fix bug in subbandIntersectsAOI : thanks oss-fuzz
+a74ae1bbd	c66bfb1b4	Fri Oct 23 12:43:08 2020 -0400	sparse array: fix new/free mismatch
+f1ce863c2	2754a2590	Wed Oct 21 20:16:16 2020 -0400	fix doxygen STRIP_FROM_PATH setting, courtesy of C Lamb at reproducible builds
+d150f4f8a	56e625774	Sat Oct 17 13:17:24 2020 -0600	fix build
+19cb6cdbd	d6e7f1fe6	Sat Oct 17 12:18:37 2020 -0400	fix for windoze
+eef84179f	179884523	Sat Oct 17 09:24:39 2020 -0400	pan fix
+38cb5da5e	34bdff090	Fri Oct 16 22:49:21 2020 -0400	pan fix
+358ca191a	4ff8291c4	Wed Oct 14 23:02:57 2020 -0600	fix windows build issue with macros
+881551882	b6f43740c	Tue Oct 6 20:30:39 2020 -0400	fix typo
+f987b9d73	fa1dfb0c7	Sun Sep 27 09:44:50 2020 -0400	fixed use of uninitialized value in decompressor thanks to oss fuzz
+fa1dfb0c7	709bfcd00	Sun Sep 27 09:26:59 2020 -0400	fixed heap use after free thanks to oss-fuzz
+149a8c7d7	c422eed26	Sat Sep 26 16:29:43 2020 -0400	jpeg: fix a few compile errors
+18e262142	af00a77ba	Mon Sep 21 21:19:28 2020 -0400	ImageFormat: fixed some warnings for unused rows parameter
+12c712fad	34b85460d	Sun Sep 20 22:35:53 2020 -0400	bmp: fix bug with os2 palette entries calculation
+24adcc9ce	570006791	Sat Sep 12 11:02:35 2020 -0400	bmp: fix bug in image size calculation for encode file header
+570006791	bb490e485	Sat Sep 12 09:41:02 2020 -0400	bmp: fix padding error
+722ea1b60	8bf5042c7	Thu Aug 27 23:11:27 2020 -0400	fix a few pixel read bugs (PNM)
+8bf5042c7	ff7aac2b5	Thu Aug 27 23:01:16 2020 -0400	PBM: fix bug in reading packed 1 bit binary PBMs
+ad3efde60	01b259684	Thu Aug 20 13:11:13 2020 -0400	fix broken build
+ead3dd1ce	d9119df43	Tue Aug 18 16:54:52 2020 -0400	another void* fix
+ec23d0c2c	7fdd4faf0	Tue Aug 18 09:23:04 2020 -0400	fix mismatched calloc/delete[]
+6a546088b	945d9306a	Sun Aug 9 12:15:35 2020 -0400	fix crash when decoding to stdout
+ad608adba	e8275a8b6	Thu Aug 6 13:46:59 2020 -0400	grk_buffer_2d: fix memory leak
+e8275a8b6	057c58248	Thu Aug 6 12:59:35 2020 -0400	dwt bench: fix access violations
+c62e8fceb	22c48bca8	Mon Aug 3 15:11:19 2020 -0400	fix copy-paste error in 5-3 dwt
+2e7306d22	bbc53235d	Fri Jul 24 15:44:28 2020 -0400	decode: fix bug where wrong error code is used on error condition
+de75a9d02	7ead1153d	Fri Jul 17 14:56:33 2020 -0400	jpeg: fix handling of sub-8 bit precision images
+e5449a83d	212e032fd	Sun Jul 12 16:40:13 2020 -0400	CI: fix osx build
+fa1dc06ef	954e78c1a	Sat Jul 11 13:58:05 2020 -0400	Fix a few bugs with single threaded encode/decode
+d47037565	a1fa7a54b	Wed Jul 8 20:08:51 2020 -0400	more cppcheck fixes
+8b63f421a	98221496f	Wed Jul 8 18:13:28 2020 -0400	fix bug in get_tile colour space logic - CMYK is overwritten as UNKNOWN
+98221496f	1af67beb4	Wed Jul 8 17:24:56 2020 -0400	cppcheck fixes
+857bfddbf	4025f2b44	Wed Jul 8 15:02:29 2020 -0400	logging fixes
+32ae61844	3f0a67739	Fri Jun 5 19:43:06 2020 -0400	decode: fix double-free for single thread
+3f0a67739	a9b74ed08	Fri Jun 5 19:35:36 2020 -0400	decode: fix a memory leak triggered by a block failing to decode
+389e660de	659930880	Sat May 30 20:37:02 2020 -0400	dwt benchmark fixes
+14f3aabd0	c71456d02	Sat May 30 15:53:13 2020 -0400	fix broken build
+4b80bce79	6109aa21c	Fri May 29 19:48:01 2020 -0400	fix warning grammar
+9feff7a8e	cc2c4e0e2	Wed May 27 19:07:03 2020 -0400	Revert "fix a few warnings"
+57e0259d7	1772dfd12	Wed May 27 17:08:39 2020 -0400	fix a few warnings
+1772dfd12	dc0869b0b	Tue May 26 23:00:30 2020 -0600	fix bug with count trailing zeros on windows
+dc0869b0b	1029783ef	Tue May 26 22:07:40 2020 -0400	fix a few warnings
+1029783ef	050bf72dd	Tue May 26 21:40:59 2020 -0400	fix handling of bits per component read/write
+d3b7a3acf	a0e17b330	Tue May 26 17:37:49 2020 -0400	tests: fix bug where !grk_compress was added as grk_decompress test
+c82092054	f05984dd9 d692fe028	Sun May 24 18:20:26 2020 -0400	Merge pull request #182 from ao2/fix-man-page-warning
+d692fe028	f05984dd9	Sun May 24 22:07:00 2020 +0200	doc: fix troff warning in libgrokj2k.3 man page
+52c6a1405	9c1e9e89a	Thu May 21 22:02:07 2020 -0400	fix OSX build
+25afcaf27	5a445a97f	Thu May 21 20:00:17 2020 -0400	fix potential overflow
+aa8ce01ed	86b2c35d1	Mon May 18 09:59:42 2020 -0400	test_sparse_array: don\'t put main() in a namespace, fix a linking error
+d800b80fb	e05e57d6d	Sun May 17 14:06:19 2020 -0600	windoze: fix compile error : "std::byte ambiguous"
+15f10a882	cf8a749c4	Tue May 12 21:42:41 2020 -0400	fix some warnings
+d4459b42e	627402169	Tue May 12 13:54:56 2020 -0400	tiff: another YBR fix
+a6494ea4a	7a299f6eb	Thu May 7 19:56:09 2020 -0400	tiff: fix logic that checks whether alpha channels occur as last channels
+6c23d0fd5	b34231624	Sat May 2 22:40:42 2020 -0400	tiff: fixed a few bugs related to max number of components
+9b4725288	725fedd70	Fri May 1 20:25:53 2020 -0400	fix warnings
+40ed331a9	75440d2bd	Sun Apr 26 20:24:31 2020 -0400	compress: fix bug in reading of custom MCT
+e85b2b545	d483c9377	Sat Apr 25 15:54:54 2020 -0400	fix man pages
+ee3b6f569	857773d9c	Sat Apr 25 14:17:12 2020 -0400	fix up some comments and reformat
+3896dceaf	df3adfde5	Thu Apr 23 15:54:17 2020 -0400	decode: fix precinct filtering, courtesy of OpenJPEG !
+241ff6b5e	3a24b850f	Sun Apr 19 18:32:47 2020 -0400	fix warnings
+e8d689fa3	b46a7f662	Sat Apr 18 21:41:06 2020 -0400	fix  a few more warnings
+b46a7f662	77d055123	Sat Apr 18 20:38:47 2020 -0400	fix a few warnings
+643a764f0	b312196e0	Sat Apr 18 16:16:11 2020 -0400	fix a few warnings
+4d41c4a5a	b04568cb8	Sat Apr 18 14:50:32 2020 -0400	fix doc warnings
+191cfe21d	e3da4c1e5	Sat Apr 18 13:45:35 2020 -0400	fix warnings
+52daf018e	9be161316	Sat Apr 18 13:45:35 2020 -0400	fix some warnings
+95ebd6d81	6ceee3a53	Sat Apr 18 13:45:35 2020 -0400	plugin fix
+cea040009	6ee91c917	Sat Apr 18 13:45:35 2020 -0400	fix a few warnings
+ad132dd10	83b5a5752	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+b69568a32	517b88ab1	Sat Apr 18 13:45:35 2020 -0400	fix warnings
+517b88ab1	312752051	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+312752051	a1dc1ffe3	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+a8dd0eb3a	7297bbb1f	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+7297bbb1f	b6a0894d0	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+b6a0894d0	9defcd443	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+9defcd443	3895a6c3f	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+9959a8c74	aa5b109b9	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+aa5b109b9	7e713b486	Sat Apr 18 13:45:35 2020 -0400	fix more warnings
+c68db0baa	5f7c6f3fe	Sat Apr 18 13:45:35 2020 -0400	fix a few warnings
+251821906	bc9488372	Sat Apr 18 13:45:35 2020 -0400	build: fix sign conversion warnings
+4d9a93e66	9764ee641	Sat Apr 18 13:45:35 2020 -0400	fix rounding in inverse quantization step calculation
+1e0da3b3e	3f01f316e	Sat Apr 18 13:45:35 2020 -0400	fix error message
+72eaf06e2	a3f747092	Sat Apr 18 13:45:34 2020 -0400	remove debuggin code from t1 block encoder
+a3f747092	17cdb8463	Sat Apr 18 13:45:34 2020 -0400	fix warning
+d72497ffe	74c26ba55	Sat Apr 18 13:45:34 2020 -0400	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=21382
+c3d920abd	ee26f157d	Sat Apr 18 13:45:34 2020 -0400	ht: fix two warnings in static table gen
+ee26f157d	cd5c80a5e	Sat Apr 18 13:45:34 2020 -0400	ht: fix region decode
+da4e861c9	8634cea24	Sat Apr 18 13:45:34 2020 -0400	fix a few typos
+73fc7e9cc	a4f66f8bf	Sat Apr 18 13:45:34 2020 -0400	sparse array: fix a few minor issues and clean up code
+6cd819434	3a0bb55f3	Sat Apr 18 13:45:34 2020 -0400	standardize global method prefix to "grk"
+28d761eb6	a353f6c0a	Sat Apr 18 13:45:34 2020 -0400	debian: package fixes
+528fe59e4	c85ec6dbd	Sat Apr 18 13:45:34 2020 -0400	add debug flag for fuzz files
+c85ec6dbd	fa13b32d8	Sat Apr 18 13:45:34 2020 -0400	ht: fix leak
+2ed215048	fe834b2e3	Sat Apr 18 13:45:34 2020 -0400	fix warning message format
+6577a0411	031bc38d0	Sat Apr 18 13:45:34 2020 -0400	fix unit test build
+3b3428a31	c979d4119	Sat Apr 18 13:45:34 2020 -0400	fixed point rounding fix
+c979d4119	a260047c8	Sat Apr 18 13:45:34 2020 -0400	HT: fix for lossy encode
+a260047c8	08dae06e9	Sat Apr 18 13:45:34 2020 -0400	HT: fix lossy decode
+4bcbaa80a	ebe176f0d	Sat Apr 18 13:45:34 2020 -0400	HT: fix lossless bug
+c427b8c83	fbd6a9704	Sat Apr 18 13:45:34 2020 -0400	fix a few bugs in resolution region calculations
+89ce7acb3	9fed64a53	Sat Apr 18 13:45:34 2020 -0400	fix decompress from memory-mapped file
+9fed64a53	bf0f95658	Sat Apr 18 13:45:34 2020 -0400	fix type
+c6a209dc6	162e6a1a9	Sat Apr 18 13:45:34 2020 -0400	fix a few warnings
+e235488b2	b2e92b49e	Sat Apr 18 13:45:33 2020 -0400	fix windows build !
+b2e92b49e	c43520806	Sat Apr 18 13:45:33 2020 -0400	fix OSX build
+ced0444c0	d3fbd146c	Sat Apr 18 13:45:33 2020 -0400	fix build
+d3c6be929	59b9ce7de	Sat Apr 18 13:45:33 2020 -0400	GrokConfig.cmake.in : fix include directory root path
+f389fb3f5	4c278b8fc	Sat Apr 18 13:45:33 2020 -0400	fix OSX build - add missing tar `z` flag for zip files
+22fc2e3de	759b363bf	Sat Apr 18 13:45:33 2020 -0400	fix OSX build
+cd176ffec	23ceed481	Sat Apr 18 13:45:33 2020 -0400	fix windows build
+cb02726bf	f72fae810	Sat Apr 18 13:45:33 2020 -0400	disabled some debug logging
+015870c86	f1181ea8d	Sat Apr 18 13:45:33 2020 -0400	p_ should only prefix pointer variables
+0b25272fe	6f8c15c4b	Sat Apr 18 13:45:33 2020 -0400	fix travis build
+029c82914	e63a1171d	Sat Apr 18 13:45:33 2020 -0400	fix codespell-detected typos
+f83c5a5a7	c8b6669a3	Sat Apr 18 13:45:32 2020 -0400	PNM fixes
+05a31ea95	e32ef4143	Sat Apr 18 13:45:32 2020 -0400	Fix ROI shift bug
+393948a7f	dec3015f3	Sat Apr 18 13:45:32 2020 -0400	fix leaks and alloc/re-alloc/free mismatch
+dec3015f3	68ad52bdc	Sat Apr 18 13:45:32 2020 -0400	fix VS 2015 build
+708b683d1	4321b2ff3	Sat Apr 18 13:45:32 2020 -0400	fix another potential overflow
+b3c82afe2	e536f171b	Sat Apr 18 13:45:32 2020 -0400	fix potential overflow
+2d83a089d	3c0bfdc44	Sat Apr 18 13:45:32 2020 -0400	fix compress from stdin
+8f7fb2da6	2655ce2f9	Sat Apr 18 13:45:32 2020 -0400	fix some compiler warnings
+2655ce2f9	3bb4e2c6e	Sat Apr 18 13:45:32 2020 -0400	fixed longjmp clobber warning
+db35a2c85	a376b880b	Sat Apr 18 13:45:32 2020 -0400	fix some warnings
+77590663e	7d5161a1e	Sat Apr 18 13:45:32 2020 -0400	fixed some warnings
+96f3aede6	560e69dce	Sat Apr 18 13:45:32 2020 -0400	fixes #128 . When setting rate for tiled compress, adjust for header size for each tile proportional
+560e69dce	1845f6070	Sat Apr 18 13:45:32 2020 -0400	fixed a streaming issue : seek in buffer was generating invalid offsets
+49861c0e0	8dda2edb1	Sat Apr 18 13:45:32 2020 -0400	fix problem with static build. fixes #127
+baa878c7d	da4f620ad	Sat Apr 18 13:45:32 2020 -0400	fix build when lcms library is missing
+5f979824c	357dbcc22	Sat Apr 18 13:45:32 2020 -0400	decode to stdout: bugs when setting binary mode in windoze
+357dbcc22	a88ef2626	Sat Apr 18 13:45:32 2020 -0400	fixed a warning
+48a6ee783	d3a389651	Sat Apr 18 13:45:32 2020 -0400	fixed a warning
+d3a389651	249ef439f	Sat Apr 18 13:45:32 2020 -0400	fixed a bug in raw encoding
+747b48b08	18e366fbf	Sat Apr 18 13:45:32 2020 -0400	fixed potential memory leak in JPEG reader
+295c6c371	ed8693a29	Sat Apr 18 13:45:32 2020 -0400	decode: fixed bug with XMP retrieval: now working!
+ed8693a29	791403abb	Sat Apr 18 13:45:32 2020 -0400	encode: fixed bug with XMP storage - now working correctly.
+607e39dc8	15484b820	Sat Apr 18 13:45:32 2020 -0400	corrected bug in reading IPTC from TIFF
+ba64e44d9	edca9053e	Sat Apr 18 13:45:32 2020 -0400	fixed a few typos
+edca9053e	af1e2ff9b	Sat Apr 18 13:45:32 2020 -0400	fixed appveyor indentation
+18c36ba5d	954ece33f	Sat Apr 18 13:45:32 2020 -0400	added a bounds check on packet iterator\'s precinct number: fixes #119
+954ece33f	820d0c14e	Sat Apr 18 13:45:32 2020 -0400	Ensure that there are no more than 255 tile parts for each tile fixes #120
+727209321	f03b782c9	Sat Apr 18 13:45:32 2020 -0400	fixed a second serious leak
+f03b782c9	bde315905	Sat Apr 18 13:45:32 2020 -0400	fixed a very serious memory leak
+c954d4c89	09ea82cbf	Sat Apr 18 13:45:32 2020 -0400	moved some debug code around
+91d975a1a	0ba768e0e	Sat Apr 18 13:45:31 2020 -0400	fix sig handler for decompress
+12ed852d5	912aa055e	Sat Apr 18 13:45:31 2020 -0400	corrected a  9/7 wavelet factor (in 13 bit fixed point)
+7b18ded72	f3632d21f	Sat Apr 18 13:45:31 2020 -0400	fix potential buffer overrun in pgxtoimage method
+e915d1fc3	c842b7fbd	Sat Apr 18 13:45:31 2020 -0400	Support IMF and non-tiled broadcast profiles. Fixes #116
+773ac0a46	cddee300e	Sat Apr 18 13:45:31 2020 -0400	yet another callback fix
+cddee300e	a65188516	Sat Apr 18 13:45:31 2020 -0400	another callback fix
+a65188516	29d990cef	Sat Apr 18 13:45:31 2020 -0400	fix plugin decode calllback struct constructor
+e4ee285f1	40edc25f3	Sat Apr 18 13:45:31 2020 -0400	fixed refactor bug
+7d9e6e750	b6ae36b4b	Sat Apr 18 13:45:31 2020 -0400	try to fix buffer-based decode errors on unix
+3ae76f8c3	85db7b3fa	Sat Apr 18 13:45:31 2020 -0400	sanitize m_sot_length: cannot be larger than stream length. fixes #45
+fe36e0553	6f831f838	Sat Apr 18 13:45:31 2020 -0400	fixed a batch decode bug
+7b96129d0	ac6abcc8a	Sat Apr 18 13:45:31 2020 -0400	fix --permissive error
+898fc11f5	00e135e8a	Sat Apr 18 13:45:31 2020 -0400	fixed a bug with plugin post-decode
+00e135e8a	94eed8b6b	Sat Apr 18 13:45:31 2020 -0400	fixed a bug in plugin pre-decode
+0d7d8c0b5	d5ff30041	Sat Apr 18 13:45:31 2020 -0400	fixed compiler errors from gcc
+8681924e8	ac79f0e0f	Sat Apr 18 13:45:31 2020 -0400	store more information when debugging plugin
+6ac6c38aa	251502ab7	Sat Apr 18 13:45:31 2020 -0400	another optimized decoder fix
+2c050b299	ce7d69239	Sat Apr 18 13:45:31 2020 -0400	fix gcc build, remove warnings
+c0fd703ae	a1c9922ee	Sat Apr 18 13:45:31 2020 -0400	fixed bug in optimized decode
+876765f18	b3c2cc82b	Sat Apr 18 13:45:31 2020 -0400	fix build on linux
+b3c2cc82b	e3537ccb3	Sat Apr 18 13:45:31 2020 -0400	fix a bug in PCRD-OPT
+e4b0f940f	490ac446b	Sat Apr 18 13:45:31 2020 -0400	Fixed a bypass bug: only SPP pass in LAZY region (no TERMALL) needs a correction term.
+45ebe779a	3360bfceb	Sat Apr 18 13:45:31 2020 -0400	Slightly expand boundary for region decode. fixes #107
+3360bfceb	cdb79e91d	Sat Apr 18 13:45:31 2020 -0400	fix some warnings
+ecf74effc	d0d0409be	Sat Apr 18 13:45:31 2020 -0400	jpeg: really fix bool vs boolean issue for picky compilers
+b4aaa8943	8d4babeea	Sat Apr 18 13:45:31 2020 -0400	fix failing test (PNG ICC profile name)
+ae1bbe58b	f173eb4c7	Sat Apr 18 13:45:31 2020 -0400	fixed a few conversion warnings
+4a8a42d9c	fba7991b1	Sat Apr 18 13:45:31 2020 -0400	fix more warnings
+5189832c0	93d6390ef	Sat Apr 18 13:45:31 2020 -0400	fix warnings
+93d6390ef	22ef58633	Sat Apr 18 13:45:31 2020 -0400	fixed a windows bug with setting file binary mode
+0150e1884	ee766257a	Sat Apr 18 13:45:30 2020 -0400	fixed easy termination for ERTERM
+900309633	85f351f40	Sat Apr 18 13:45:30 2020 -0400	fix memory leak in xml buffer
+85f351f40	39348324a	Sat Apr 18 13:45:30 2020 -0400	fix predictive termination valgrind bug
+cc0c2c38d	4c1e7267d	Sat Apr 18 13:45:30 2020 -0400	make T2 lossless debugging work again
+cf2c5bde0	cf61ad6c6	Sat Apr 18 13:45:30 2020 -0400	disable Kakadu unit tests - Kakadu has a bug on Ubuntu Trusty, apparently
+2eb115326	16fc3e24f	Sat Apr 18 13:45:30 2020 -0400	fixed compile errors in t1_generate_luts file
+f439d5ce3	624a3720d	Sat Apr 18 13:45:30 2020 -0400	PNG: implement reading of  sRGB chunk, fix bug in reading ICC profiles
+c96b90aca	f7081d194	Sat Apr 18 13:45:30 2020 -0400	fixed a few more warnings
+53d4a5c57	83458a718	Sat Apr 18 13:45:30 2020 -0400	fixed bug when writing resolution box
+83458a718	bfb69b2a0	Sat Apr 18 13:45:30 2020 -0400	fix warnings
+640567172	2142908b2	Sat Apr 18 13:45:30 2020 -0400	getting rid of grk prefix, now that we have grk namespace
+2bfb22e92	391d9df52	Sat Apr 18 13:45:30 2020 -0400	fix bug with default search for grok test data
+30154226e	dc09b2183	Sat Apr 18 13:45:30 2020 -0400	fixed bug in plugin_main
+bbc0b9a86	14bec023e	Sat Apr 18 13:45:30 2020 -0400	revert change to debug info for various utilities
+4b7ac95d1	49b94ceb1	Sat Apr 18 13:45:30 2020 -0400	fixes #70 explicitly limit precision to <= 16 bits
+d89bf6b3c	b7e14c154	Sat Apr 18 13:45:30 2020 -0400	fixed potential buffer overflow in opj_jp2_write_jp2h
+1f323d17a	1a25c22e4	Sat Apr 18 13:45:30 2020 -0400	fixes #76 use static runtime for static build, and dynamic runtime for dynamic build
+048c9084e	f807eb12f	Sat Apr 18 13:45:30 2020 -0400	Encapsulate tile data, set lower bound on size of tile buffer.  fixes #68
+c725e4121	a5aa768ef	Sat Apr 18 13:45:30 2020 -0400	fixed RESTART bug
+bc9ee8572	ce0396543	Sat Apr 18 13:45:30 2020 -0400	fixes #69 allocate full nominal code block size, even for blocks on precinct or tile boundaries
+78ba1a137	42709b827	Sat Apr 18 13:45:29 2020 -0400	don\'t put mutable code inside assert !!!! Only gets run in debug mode.
+2f233cc93	0940d4b65	Sat Apr 18 13:45:29 2020 -0400	try to fix GCC codecvt
+0d4bab98a	05f2a1f14	Sat Apr 18 13:45:29 2020 -0400	a little more debugging code
+05f2a1f14	15c1a6697	Sat Apr 18 13:45:29 2020 -0400	various static-analysis fixes
+15c1a6697	d943c0c54	Sat Apr 18 13:45:29 2020 -0400	add debug code to opj_dump
+9fb79dea6	9d678840f	Sat Apr 18 13:45:29 2020 -0400	added some debug code to compare_images binary
+217d92aed	3a2af8e48	Sat Apr 18 13:45:29 2020 -0400	fixed bug with split_pnm command line flag
+8b8b4c395	bb6ad6f81	Sat Apr 18 13:45:29 2020 -0400	this is hopefully the last 9/7 region decode fix :)
+c04e03cc9	722743e7b	Sat Apr 18 13:45:29 2020 -0400	fixed one last threading issue for 5/3 region decode
+e00c90fa9	2842bb0cb	Sat Apr 18 13:45:29 2020 -0400	fixes #56 fixed buffer overrun in 9/7 region decode
+01a9e1092	d39f5ddb5	Sat Apr 18 13:45:29 2020 -0400	fixes #54 - fixed another threading bug in 5/3 region decode
+d39f5ddb5	ef36538da	Sat Apr 18 13:45:29 2020 -0400	fixed threading bug in 5/3 region decode
+ef36538da	ae8d39aac	Sat Apr 18 13:45:29 2020 -0400	fixes #48 fixed bug in design of streaming skip method
+839d8cb6a	b14631478	Sat Apr 18 13:45:29 2020 -0400	fixed issue with signed data - now we can avoid one buffer copy
+f1bf4abbe	bbdd7d41e	Sat Apr 18 13:45:29 2020 -0400	fixes issue #46 - need to copy tile data if we are not decoding all resolutions
+39478883a	5e5ac1910	Sat Apr 18 13:45:29 2020 -0400	fixes issue #39 - read/write ICC profile for PNG format
+8c1fcc2c4	aede4ee91	Sat Apr 18 13:45:29 2020 -0400	fixes issue #38 : support force-RGB when applying ICC profile, otherwise output grayscale to grayscale.
+f27e84166	483c9f3f8	Sat Apr 18 13:45:29 2020 -0400	compress and decompress: print out full command line when in debug mode;
+1b2b174bf	7fd89cbc4	Sat Apr 18 13:45:29 2020 -0400	small bug that crept in from recent sanity checks on signed consistency
+cb0bc1ed4	5a2c943ff	Sat Apr 18 13:45:29 2020 -0400	fix bug in handling of non-compliant cinema encode
+04abf0410	3bddb490b	Sat Apr 18 13:45:29 2020 -0400	some small lcms fixes
+3bddb490b	21f6ad233	Sat Apr 18 13:45:29 2020 -0400	fixed compress to buffer
+581f87954	0220be79d	Sat Apr 18 13:45:29 2020 -0400	more small fixes
+a0d67a435	a00f0a778	Sat Apr 18 13:45:29 2020 -0400	small fixes
+282f1586c	aba18bfd1	Sat Apr 18 13:45:29 2020 -0400	lots of libpng fixes
+aba18bfd1	9370a666c	Sat Apr 18 13:45:29 2020 -0400	fix some memory leaks, and other issues
+ac4952c1f	2497ae93d	Sat Apr 18 13:45:29 2020 -0400	1. sanity check on rate and fixed quality values
+d705ea903	56dec046d	Sat Apr 18 13:45:29 2020 -0400	fixed plugin bug - raw was getting cleaned up too early
+d0b36070b	477c84148	Sat Apr 18 13:45:29 2020 -0400	fixed handling of custom plugin path
+3baf59af5	db949b2d8	Sat Apr 18 13:45:29 2020 -0400	fixed all-passes rate control
+6433489ea	974eba11f	Sat Apr 18 13:45:29 2020 -0400	damn! rate control bugs messing up lossless encode
+6f2552ff1	ce0033306	Sat Apr 18 13:45:29 2020 -0400	fix static build with libtiff
+d04f6bc97	c466fe1c5	Sat Apr 18 13:45:29 2020 -0400	fixed gcc error
+634a7b4ca	53f02a540	Sat Apr 18 13:45:29 2020 -0400	fixed static test utility builds
+197af7786	1eada0fcb	Sat Apr 18 13:45:28 2020 -0400	fix typos
+38dde1bc9	9cd26320a	Sat Apr 18 13:45:28 2020 -0400	PNM fix
+2e6ce43e0	f2bbdd755	Sat Apr 18 13:45:28 2020 -0400	simplified fixed-quality rate control
+25da8dd69	d0fd29feb	Sat Apr 18 13:45:28 2020 -0400	Fixed typo in minpf library: thanks Seth!
+6548fac55	27f9f7f43	Sat Apr 18 13:45:28 2020 -0400	fixed OPJ_PLUGIN_STATE_DEBUG_ENCODE bug, where number of plugin bit planes differed from grok open source number of
+b5f12e032	48f3bda82	Sat Apr 18 13:45:28 2020 -0400	PVS-Studio fixes
+5f28c5ba1	fa8746dae	Sat Apr 18 13:45:28 2020 -0400	correction to potential overflow fix
+fa8746dae	c99a27d8b	Sat Apr 18 13:45:28 2020 -0400	fix icc profile crash
+8a6b2399d	88cfa989c	Sat Apr 18 13:45:28 2020 -0400	fixed dwt re-entrance bug
+88cfa989c	3f3b75106	Sat Apr 18 13:45:28 2020 -0400	fix for OSX static build
+21f632bfd	0efee48b5	Sat Apr 18 13:45:28 2020 -0400	improved debug info when remaining bytes in stream is less than SOT length
+91ca13b55	2156cfc95	Sat Apr 18 13:45:28 2020 -0400	fixed out of bounds access
+6f6612028	c6b3879d1	Sat Apr 18 13:45:28 2020 -0400	another attempt at fixing BYPASS and RESTART mode
+bfa5bb4fa	b4ad3f5bb	Sat Apr 18 13:45:28 2020 -0400	bug in Unix plugin management
+2e640a4be	20a481503	Sat Apr 18 13:45:28 2020 -0400	Fix Out-Of-Bounds Read in sycc42x_to_rgb function (#745)
+20a481503	7f2a1b6cf	Sat Apr 18 13:45:28 2020 -0400	fix some coverity warnings
+b6c66a173	eb8850b12	Sat Apr 18 13:45:28 2020 -0400	Fix unsigned int overflow reported by UBSan (#761)
+eb8850b12	2b1ebecab	Sat Apr 18 13:45:28 2020 -0400	Fix issue 135
+be2d8aba7	03679ae72	Sat Apr 18 13:45:28 2020 -0400	fix uninitialized variable
+8a39f637a	e1bccc339	Sat Apr 18 13:45:28 2020 -0400	fixed unsigned int overflow, due to incrementing below zero
+e1bccc339	30f57bd40	Sat Apr 18 13:45:28 2020 -0400	fixed another UB bug
+27f2034e7	3b26b7c30	Sat Apr 18 13:45:28 2020 -0400	fixed some implicit float conversions
+b6e413fa5	a71136122	Sat Apr 18 13:45:28 2020 -0400	mem management fix
+0ff0c02b4	9e85ebe29	Sat Apr 18 13:45:28 2020 -0400	fix some GCC warnings
+e4a1e7a37	83b864960	Sat Apr 18 13:45:28 2020 -0400	fixed heap corruption in colour transform methods
+d8279da67	e9110be47	Sat Apr 18 13:45:28 2020 -0400	fix minor memory leak
+b714d137f	1603b2a7a	Sat Apr 18 13:45:28 2020 -0400	another bug fix to support gigapixel images
+02d7ef2fe	3a2442ce7	Sat Apr 18 13:45:28 2020 -0400	fixed valgrind error where MQ coder was accessing uninitialized memory in RESTART mode. Unfortunately, there is still a problem with RESTART: lossless encoding with RESTART produces a lossy image.
+8272f0bbf	a65a18a6b	Sat Apr 18 13:45:27 2020 -0400	Fixed bug: return bool instead of pointer. Thanks Terrence!
+b8c2d51e7	482510eec	Sat Apr 18 13:45:27 2020 -0400	fixed some coverity issues

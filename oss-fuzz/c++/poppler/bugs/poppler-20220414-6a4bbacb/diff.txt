@@ -1,0 +1,97 @@
+diff --git a/poppler/Catalog.cc b/poppler/Catalog.cc
+index add93530..6fbf2dcf 100644
+--- a/poppler/Catalog.cc
++++ b/poppler/Catalog.cc
+@@ -1065,13 +1065,18 @@ Form *Catalog::getCreateForm()
+ {
+     catalogLocker();
+     if (!form) {
++
++        Object catDict = xref->getCatalog();
++        if (!catDict.isDict()) {
++            error(errSyntaxError, -1, "Catalog object is wrong type ({0:s})", catDict.getTypeName());
++            return nullptr;
++        }
++
+         if (!acroForm.isDict()) {
+             acroForm = Object(new Dict(xref));
+             acroForm.dictSet("Fields", Object(new Array(xref)));
+ 
+             const Ref newFormRef = xref->addIndirectObject(acroForm);
+-
+-            Object catDict = xref->getCatalog();
+             catDict.dictSet("AcroForm", Object(newFormRef));
+ 
+             xref->setModifiedObject(&catDict, { xref->getRootNum(), xref->getRootGen() });
+diff --git a/poppler/Catalog.h b/poppler/Catalog.h
+index 03c7314c..03df89ac 100644
+--- a/poppler/Catalog.h
++++ b/poppler/Catalog.h
+@@ -227,6 +227,7 @@ public:
+     };
+ 
+     FormType getFormType();
++    // This can return nullptr if the document is in a very damaged state
+     Form *getCreateForm();
+     Form *getForm();
+ 
+diff --git a/qt5/src/poppler-annotation.cc b/qt5/src/poppler-annotation.cc
+index 851f78a8..a1804cb5 100644
+--- a/qt5/src/poppler-annotation.cc
++++ b/qt5/src/poppler-annotation.cc
+@@ -1988,15 +1988,17 @@ void TextAnnotationPrivate::setDefaultAppearanceToNative()
+         std::string fontName = "Invalid_font";
+         if (textFont) {
+             Form *form = pdfPage->getDoc()->getCatalog()->getCreateForm();
+-            fontName = form->findFontInDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
+-            if (fontName.empty()) {
+-                fontName = form->addFontToDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
+-            }
++            if (form) {
++                fontName = form->findFontInDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
++                if (fontName.empty()) {
++                    fontName = form->addFontToDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
++                }
+ 
+-            if (!fontName.empty()) {
+-                form->ensureFontsForAllCharacters(pdfAnnot->getContents(), fontName);
+-            } else {
+-                fontName = "Invalid_font";
++                if (!fontName.empty()) {
++                    form->ensureFontsForAllCharacters(pdfAnnot->getContents(), fontName);
++                } else {
++                    fontName = "Invalid_font";
++                }
+             }
+         }
+         DefaultAppearance da { { objName, fontName.c_str() }, pointSize, convertQColor(textColor) };
+diff --git a/qt6/src/poppler-annotation.cc b/qt6/src/poppler-annotation.cc
+index 4472f62f..4232fe8a 100644
+--- a/qt6/src/poppler-annotation.cc
++++ b/qt6/src/poppler-annotation.cc
+@@ -1626,15 +1626,17 @@ void TextAnnotationPrivate::setDefaultAppearanceToNative()
+         std::string fontName = "Invalid_font";
+         if (textFont) {
+             Form *form = pdfPage->getDoc()->getCatalog()->getCreateForm();
+-            fontName = form->findFontInDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
+-            if (fontName.empty()) {
+-                fontName = form->addFontToDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
+-            }
++            if (form) {
++                fontName = form->findFontInDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
++                if (fontName.empty()) {
++                    fontName = form->addFontToDefaultResources(textFont->family().toStdString(), textFont->styleName().toStdString());
++                }
+ 
+-            if (!fontName.empty()) {
+-                form->ensureFontsForAllCharacters(pdfAnnot->getContents(), fontName);
+-            } else {
+-                fontName = "Invalid_font";
++                if (!fontName.empty()) {
++                    form->ensureFontsForAllCharacters(pdfAnnot->getContents(), fontName);
++                } else {
++                    fontName = "Invalid_font";
++                }
+             }
+         }
+         DefaultAppearance da { { objName, fontName.c_str() }, pointSize, convertQColor(textColor) };

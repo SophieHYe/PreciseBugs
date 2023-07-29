@@ -1,0 +1,13 @@
+diff --git a/p9/fuzz.go b/p9/fuzz.go
+index 05ebed2..65fb097 100644
+--- a/p9/fuzz.go
++++ b/p9/fuzz.go
+@@ -15,7 +15,7 @@ func Fuzz(data []byte) int {
+ 		if msg != nil {
+ 			panic("msg !=nil on error")
+ 		}
+-		panic(err)
++		return 0
+ 	}
+ 	buf.Reset()
+ 	send(ulog.Null, buf, tag, msg)

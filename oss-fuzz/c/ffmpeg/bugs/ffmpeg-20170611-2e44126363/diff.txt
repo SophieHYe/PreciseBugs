@@ -1,0 +1,13 @@
+diff --git a/libavcodec/snowdec.c b/libavcodec/snowdec.c
+index 6cf15c5ae6..c80901b754 100644
+--- a/libavcodec/snowdec.c
++++ b/libavcodec/snowdec.c
+@@ -584,7 +584,7 @@ static int decode_frame(AVCodecContext *avctx, void *data, int *got_frame,
+                 for(; yq<slice_h && yq<h; yq++){
+                     IDWTELEM * line = slice_buffer_get_line(&s->sb, yq);
+                     for(x=0; x<w; x++){
+-                        line[x] <<= FRAC_BITS;
++                        line[x] *= 1<<FRAC_BITS;
+                     }
+                 }
+             }

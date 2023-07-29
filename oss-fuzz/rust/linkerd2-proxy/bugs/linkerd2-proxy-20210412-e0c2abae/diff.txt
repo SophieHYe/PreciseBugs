@@ -1,0 +1,70 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e8b96a2c..567fe7fd 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2344,9 +2344,8 @@ dependencies = [
+ 
+ [[package]]
+ name = "trust-dns-proto"
+-version = "0.20.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "98a0381b2864c2978db7f8e17c7b23cca5a3a5f99241076e13002261a8ecbabd"
++version = "0.20.1"
++source = "git+https://github.com/bluejekyll/trust-dns?branch=main#6dfc6713fa4448bca3c691aab366a4bae683df65"
+ dependencies = [
+  "async-trait",
+  "cfg-if",
+@@ -2362,15 +2361,15 @@ dependencies = [
+  "rand",
+  "smallvec",
+  "thiserror",
++ "tinyvec",
+  "tokio",
+  "url",
+ ]
+ 
+ [[package]]
+ name = "trust-dns-resolver"
+-version = "0.20.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3072d18c10bd621cb00507d59cfab5517862285c353160366e37fbf4c74856e4"
++version = "0.20.1"
++source = "git+https://github.com/bluejekyll/trust-dns?branch=main#6dfc6713fa4448bca3c691aab366a4bae683df65"
+ dependencies = [
+  "cfg-if",
+  "futures-util",
+diff --git a/Cargo.toml b/Cargo.toml
+index 513920bc..a409994d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -62,4 +62,6 @@ debug = false
+ debug = false
+ 
+ [patch.crates-io]
++trust-dns-proto = { git = "https://github.com/bluejekyll/trust-dns", branch = "main" }
++trust-dns-resolver = { git = "https://github.com/bluejekyll/trust-dns", branch = "main" }
+ webpki = { git = "https://github.com/linkerd/webpki", branch = "cert-dns-names-0.21" }
+diff --git a/deny.toml b/deny.toml
+index 41f34451..d49e5ae4 100644
+--- a/deny.toml
++++ b/deny.toml
+@@ -53,6 +53,7 @@ unknown-registry = "deny"
+ unknown-git = "deny"
+ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+ allow-git = [
++    "https://github.com/bluejekyll/trust-dns",
+     "https://github.com/hawkw/tokio-trace",
+ ]
+ 
+diff --git a/linkerd/dns/fuzz/Cargo.toml b/linkerd/dns/fuzz/Cargo.toml
+index bb714359..851dac2f 100644
+--- a/linkerd/dns/fuzz/Cargo.toml
++++ b/linkerd/dns/fuzz/Cargo.toml
+@@ -29,3 +29,7 @@ path = "fuzz_targets/fuzz_target_1.rs"
+ test = false
+ doc = false
+ required-features = ["fuzzing"]
++
++[patch.crates-io]
++trust-dns-proto = { git = "https://github.com/bluejekyll/trust-dns", branch = "main" }
++trust-dns-resolver = { git = "https://github.com/bluejekyll/trust-dns", branch = "main" }

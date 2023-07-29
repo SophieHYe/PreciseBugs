@@ -1,0 +1,34 @@
+diff --git a/liblwgeom/cunit/cu_in_wkb.c b/liblwgeom/cunit/cu_in_wkb.c
+index 6411b46a7..8e051f7e6 100644
+--- a/liblwgeom/cunit/cu_in_wkb.c
++++ b/liblwgeom/cunit/cu_in_wkb.c
+@@ -213,6 +213,10 @@ static void test_wkb_in_multisurface(void) {}
+ 
+ static void test_wkb_in_malformed(void)
+ {
++
++	/* OSSFUXX */
++	cu_wkb_malformed_in("0000000008200000002020202020202020");
++
+ 	/* See http://trac.osgeo.org/postgis/ticket/1445 */
+ 	cu_wkb_malformed_in("01060000400200000001040000400100000001010000400000000000000000000000000000000000000000000000000101000040000000000000F03F000000000000F03F000000000000F03F");
+ 	cu_wkb_malformed_in("01050000400200000001040000400100000001010000400000000000000000000000000000000000000000000000000101000040000000000000F03F000000000000F03F000000000000F03F");
+diff --git a/liblwgeom/lwin_wkb.c b/liblwgeom/lwin_wkb.c
+index 99308d1c2..7a488b210 100644
+--- a/liblwgeom/lwin_wkb.c
++++ b/liblwgeom/lwin_wkb.c
+@@ -332,9 +332,14 @@ static POINTARRAY* ptarray_from_wkb_state(wkb_parse_state *s)
+ 	size_t pa_size;
+ 	uint32_t ndims = 2;
+ 	uint32_t npoints = 0;
++	static uint32_t maxpoints = 4294967295 / WKB_DOUBLE_SIZE / 4;
+ 
+ 	/* Calculate the size of this point array. */
+ 	npoints = integer_from_wkb_state(s);
++	if (npoints > maxpoints)
++	{
++		lwerror("point array length (%d) is too large");
++	}
+ 
+ 	LWDEBUGF(4,"Pointarray has %d points", npoints);
+ 

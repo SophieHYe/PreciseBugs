@@ -1,0 +1,397 @@
+diff --git a/docs/root/version_history/current.rst b/docs/root/version_history/current.rst
+index 13b638ba9a..9229315345 100644
+--- a/docs/root/version_history/current.rst
++++ b/docs/root/version_history/current.rst
+@@ -22,6 +22,7 @@ Bug Fixes
+ ---------
+ *Changes expected to improve the state of the world and are unlikely to have negative effects*
+ 
++* csrf: fixed issues with regards to origin and host header parsing.
+ * fault: fixed an issue with `active_faults` gauge not being decremented for when abort faults were injected.
+ 
+ Removed Config or Runtime
+diff --git a/source/extensions/filters/http/csrf/csrf_filter.cc b/source/extensions/filters/http/csrf/csrf_filter.cc
+index eb68859368..bb7db21b36 100644
+--- a/source/extensions/filters/http/csrf/csrf_filter.cc
++++ b/source/extensions/filters/http/csrf/csrf_filter.cc
+@@ -37,27 +37,39 @@ bool isModifyMethod(const Http::RequestHeaderMap& headers) {
+           method_type == method_values.Delete || method_type == method_values.Patch);
+ }
+ 
+-absl::string_view hostAndPort(const absl::string_view header) {
+-  Http::Utility::Url absolute_url;
+-  if (!header.empty()) {
+-    if (absolute_url.initialize(header, /*is_connect=*/false)) {
+-      return absolute_url.hostAndPort();
++std::string hostAndPort(const absl::string_view absolute_url) {
++  Http::Utility::Url url;
++  if (!absolute_url.empty()) {
++    if (url.initialize(absolute_url, /*is_connect=*/false)) {
++      return std::string(url.hostAndPort());
+     }
+-    return header;
++    return std::string(absolute_url);
+   }
+   return EMPTY_STRING;
+ }
+ 
+-absl::string_view sourceOriginValue(const Http::RequestHeaderMap& headers) {
+-  const absl::string_view origin = hostAndPort(headers.getInlineValue(origin_handle.handle()));
+-  if (origin != EMPTY_STRING) {
++// Note: per https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin,
++//       the Origin header must include the scheme (and hostAndPort expects
++//       an absolute URL).
++std::string sourceOriginValue(const Http::RequestHeaderMap& headers) {
++  const auto origin = hostAndPort(headers.getInlineValue(origin_handle.handle()));
++  if (!origin.empty()) {
+     return origin;
+   }
+   return hostAndPort(headers.getInlineValue(referer_handle.handle()));
+ }
+ 
+-absl::string_view targetOriginValue(const Http::RequestHeaderMap& headers) {
+-  return hostAndPort(headers.getHostValue());
++std::string targetOriginValue(const Http::RequestHeaderMap& headers) {
++  const auto host_value = headers.getHostValue();
++
++  // Don't even bother if there's not Host header.
++  if (host_value.empty()) {
++    return EMPTY_STRING;
++  }
++
++  const auto absolute_url = fmt::format(
++      "{}://{}", headers.Scheme() != nullptr ? headers.getSchemeValue() : "http", host_value);
++  return hostAndPort(absolute_url);
+ }
+ 
+ static CsrfStats generateStats(const std::string& prefix, Stats::Scope& scope) {
+@@ -91,8 +103,8 @@ Http::FilterHeadersStatus CsrfFilter::decodeHeaders(Http::RequestHeaderMap& head
+   }
+ 
+   bool is_valid = true;
+-  const absl::string_view source_origin = sourceOriginValue(headers);
+-  if (source_origin == EMPTY_STRING) {
++  const auto source_origin = sourceOriginValue(headers);
++  if (source_origin.empty()) {
+     is_valid = false;
+     config_->stats().missing_source_origin_.inc();
+   }
+@@ -128,7 +140,7 @@ void CsrfFilter::determinePolicy() {
+ }
+ 
+ bool CsrfFilter::isValid(const absl::string_view source_origin, Http::RequestHeaderMap& headers) {
+-  const absl::string_view target_origin = targetOriginValue(headers);
++  const auto target_origin = targetOriginValue(headers);
+   if (source_origin == target_origin) {
+     return true;
+   }
+diff --git a/test/extensions/filters/http/csrf/csrf_filter_integration_test.cc b/test/extensions/filters/http/csrf/csrf_filter_integration_test.cc
+index 91b43cad09..6500bf77b6 100644
+--- a/test/extensions/filters/http/csrf/csrf_filter_integration_test.cc
++++ b/test/extensions/filters/http/csrf/csrf_filter_integration_test.cc
+@@ -84,7 +84,7 @@ TEST_P(CsrfFilterIntegrationTest, TestCsrfSuccess) {
+       {":method", "PUT"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "localhost"},
++      {"origin", "http://localhost"},
+       {"host", "localhost"},
+   }};
+   const auto& response = sendRequestAndWaitForResponse(headers);
+@@ -98,7 +98,7 @@ TEST_P(CsrfFilterIntegrationTest, TestCsrfDisabled) {
+       {":method", "PUT"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequestAndWaitForResponse(headers);
+@@ -112,7 +112,7 @@ TEST_P(CsrfFilterIntegrationTest, TestNonMutationMethod) {
+       {":method", "GET"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequestAndWaitForResponse(headers);
+@@ -126,7 +126,7 @@ TEST_P(CsrfFilterIntegrationTest, TestOriginMismatch) {
+       {":method", "PUT"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequest(headers);
+@@ -140,7 +140,7 @@ TEST_P(CsrfFilterIntegrationTest, TestEnforcesPost) {
+       {":method", "POST"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequest(headers);
+@@ -154,7 +154,7 @@ TEST_P(CsrfFilterIntegrationTest, TestEnforcesDelete) {
+       {":method", "DELETE"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequest(headers);
+@@ -168,7 +168,7 @@ TEST_P(CsrfFilterIntegrationTest, TestEnforcesPatch) {
+       {":method", "PATCH"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "test-origin"},
+   }};
+   const auto& response = sendRequest(headers);
+@@ -181,7 +181,7 @@ TEST_P(CsrfFilterIntegrationTest, TestRefererFallback) {
+   Http::TestRequestHeaderMapImpl headers = {{":method", "DELETE"},
+                                             {":path", "/"},
+                                             {":scheme", "http"},
+-                                            {"referer", "test-origin"},
++                                            {"referer", "http://test-origin"},
+                                             {"host", "test-origin"}};
+   const auto& response = sendRequestAndWaitForResponse(headers);
+   EXPECT_TRUE(response->complete());
+@@ -203,7 +203,7 @@ TEST_P(CsrfFilterIntegrationTest, TestShadowOnlyMode) {
+       {":method", "PUT"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "localhost"},
+   }};
+   const auto& response = sendRequestAndWaitForResponse(headers);
+@@ -217,7 +217,7 @@ TEST_P(CsrfFilterIntegrationTest, TestFilterAndShadowEnabled) {
+       {":method", "PUT"},
+       {":path", "/"},
+       {":scheme", "http"},
+-      {"origin", "cross-origin"},
++      {"origin", "http://cross-origin"},
+       {"host", "localhost"},
+   }};
+   const auto& response = sendRequest(headers);
+diff --git a/test/extensions/filters/http/csrf/csrf_filter_test.cc b/test/extensions/filters/http/csrf/csrf_filter_test.cc
+index 634a01401e..dbac2d629e 100644
+--- a/test/extensions/filters/http/csrf/csrf_filter_test.cc
++++ b/test/extensions/filters/http/csrf/csrf_filter_test.cc
+@@ -124,7 +124,8 @@ TEST_F(CsrfFilterTest, RequestWithoutOrigin) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithoutDestination) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"}, {"origin", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost"}};
+ 
+   EXPECT_EQ(Http::FilterHeadersStatus::StopIteration,
+             filter_.decodeHeaders(request_headers, false));
+@@ -138,7 +139,31 @@ TEST_F(CsrfFilterTest, RequestWithoutDestination) {
+ 
+ TEST_F(CsrfFilterTest, RequestWithInvalidOrigin) {
+   Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "cross-origin"}, {":authority", "localhost"}};
++      {":method", "PUT"}, {"origin", "http://cross-origin"}, {":authority", "localhost"}};
++
++  Http::TestResponseHeaderMapImpl response_headers{
++      {":status", "403"},
++      {"content-length", "14"},
++      {"content-type", "text/plain"},
++  };
++  EXPECT_CALL(decoder_callbacks_, encodeHeaders_(HeaderMapEqualRef(&response_headers), false));
++
++  EXPECT_EQ(Http::FilterHeadersStatus::StopIteration,
++            filter_.decodeHeaders(request_headers, false));
++  EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
++  EXPECT_EQ(Http::FilterTrailersStatus::Continue, filter_.decodeTrailers(request_trailers_));
++
++  EXPECT_EQ(0U, config_->stats().missing_source_origin_.value());
++  EXPECT_EQ(1U, config_->stats().request_invalid_.value());
++  EXPECT_EQ(0U, config_->stats().request_valid_.value());
++  EXPECT_EQ("csrf_origin_mismatch", decoder_callbacks_.details_);
++}
++
++TEST_F(CsrfFilterTest, RequestWithInvalidOriginDifferentNonStandardPorts) {
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost:90"},
++                                                 {":authority", "localhost:91"},
++                                                 {":scheme", "http"}};
+ 
+   Http::TestResponseHeaderMapImpl response_headers{
+       {":status", "403"},
+@@ -159,8 +184,42 @@ TEST_F(CsrfFilterTest, RequestWithInvalidOrigin) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithValidOrigin) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "localhost"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
++
++  EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_.decodeHeaders(request_headers, false));
++  EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
++  EXPECT_EQ(Http::FilterTrailersStatus::Continue, filter_.decodeTrailers(request_trailers_));
++
++  EXPECT_EQ(0U, config_->stats().missing_source_origin_.value());
++  EXPECT_EQ(0U, config_->stats().request_invalid_.value());
++  EXPECT_EQ(1U, config_->stats().request_valid_.value());
++}
++
++TEST_F(CsrfFilterTest, RequestWithValidOriginNonStandardPort) {
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost:88"},
++                                                 {"host", "localhost:88"},
++                                                 {":scheme", "http"}};
++
++  EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_.decodeHeaders(request_headers, false));
++  EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
++  EXPECT_EQ(Http::FilterTrailersStatus::Continue, filter_.decodeTrailers(request_trailers_));
++
++  EXPECT_EQ(0U, config_->stats().missing_source_origin_.value());
++  EXPECT_EQ(0U, config_->stats().request_invalid_.value());
++  EXPECT_EQ(1U, config_->stats().request_valid_.value());
++}
++
++// This works because gURL drops the port for hostAndPort() when they are standard
++// ports (e.g.: 80 & 443).
++TEST_F(CsrfFilterTest, RequestWithValidOriginHttpVsHttps) {
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "https://localhost"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_.decodeHeaders(request_headers, false));
+   EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
+@@ -173,7 +232,7 @@ TEST_F(CsrfFilterTest, RequestWithValidOrigin) {
+ 
+ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfDisabledShadowDisabled) {
+   Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "cross-origin"}, {"host", "localhost"}};
++      {":method", "PUT"}, {"origin", "http://cross-origin"}, {"host", "localhost"}};
+ 
+   setFilterEnabled(false);
+ 
+@@ -188,8 +247,10 @@ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfDisabledShadowDisabled) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfDisabledShadowEnabled) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "cross-origin"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://cross-origin"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   setFilterEnabled(false);
+   setShadowEnabled(true);
+@@ -204,8 +265,10 @@ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfDisabledShadowEnabled) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithValidOriginCsrfDisabledShadowEnabled) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "localhost"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   setFilterEnabled(false);
+   setShadowEnabled(true);
+@@ -220,8 +283,10 @@ TEST_F(CsrfFilterTest, RequestWithValidOriginCsrfDisabledShadowEnabled) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfEnabledShadowEnabled) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "cross-origin"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://cross-origin"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   setShadowEnabled(true);
+ 
+@@ -243,8 +308,10 @@ TEST_F(CsrfFilterTest, RequestWithInvalidOriginCsrfEnabledShadowEnabled) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestWithValidOriginCsrfEnabledShadowEnabled) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "localhost"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://localhost"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   setShadowEnabled(true);
+ 
+@@ -295,8 +362,10 @@ TEST_F(CsrfFilterTest, EmptyRouteEntry) {
+ }
+ 
+ TEST_F(CsrfFilterTest, NoCsrfEntry) {
+-  Http::TestRequestHeaderMapImpl request_headers{
+-      {":method", "PUT"}, {"origin", "cross-origin"}, {"host", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://cross-origin"},
++                                                 {"host", "localhost"},
++                                                 {":scheme", "http"}};
+ 
+   setRoutePolicy(nullptr);
+   setVirtualHostPolicy(nullptr);
+@@ -311,7 +380,8 @@ TEST_F(CsrfFilterTest, NoCsrfEntry) {
+ }
+ 
+ TEST_F(CsrfFilterTest, NoRouteCsrfEntry) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "POST"}, {"origin", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "POST"},
++                                                 {"origin", "http://localhost"}};
+ 
+   setRoutePolicy(nullptr);
+ 
+@@ -326,7 +396,8 @@ TEST_F(CsrfFilterTest, NoRouteCsrfEntry) {
+ }
+ 
+ TEST_F(CsrfFilterTest, NoVHostCsrfEntry) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "DELETE"}, {"origin", "localhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "DELETE"},
++                                                 {"origin", "http://localhost"}};
+ 
+   setVirtualHostPolicy(nullptr);
+ 
+@@ -341,7 +412,8 @@ TEST_F(CsrfFilterTest, NoVHostCsrfEntry) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestFromAdditionalExactOrigin) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"}, {"origin", "additionalhost"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://additionalhost"}};
+ 
+   EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_.decodeHeaders(request_headers, false));
+   EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
+@@ -353,7 +425,8 @@ TEST_F(CsrfFilterTest, RequestFromAdditionalExactOrigin) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestFromAdditionalRegexOrigin) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"}, {"origin", "www-1.allow.com"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://www-1.allow.com"}};
+ 
+   EXPECT_EQ(Http::FilterHeadersStatus::Continue, filter_.decodeHeaders(request_headers, false));
+   EXPECT_EQ(Http::FilterDataStatus::Continue, filter_.decodeData(data_, false));
+@@ -365,7 +438,8 @@ TEST_F(CsrfFilterTest, RequestFromAdditionalRegexOrigin) {
+ }
+ 
+ TEST_F(CsrfFilterTest, RequestFromInvalidAdditionalRegexOrigin) {
+-  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"}, {"origin", "www.allow.com"}};
++  Http::TestRequestHeaderMapImpl request_headers{{":method", "PUT"},
++                                                 {"origin", "http://www.allow.com"}};
+ 
+   EXPECT_EQ(Http::FilterHeadersStatus::StopIteration,
+             filter_.decodeHeaders(request_headers, false));

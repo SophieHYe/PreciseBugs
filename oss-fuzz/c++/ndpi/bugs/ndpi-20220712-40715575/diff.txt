@@ -1,0 +1,65 @@
+diff --git a/src/include/ndpi_main.h b/src/include/ndpi_main.h
+index 0069d987..071097d9 100644
+--- a/src/include/ndpi_main.h
++++ b/src/include/ndpi_main.h
+@@ -165,7 +165,7 @@ extern "C" {
+   char *ndpi_hostname_sni_set(struct ndpi_flow_struct *flow, const u_int8_t *value, size_t value_len);
+   char *ndpi_user_agent_set(struct ndpi_flow_struct *flow, const u_int8_t *value, size_t value_len);
+ 
+-  int ndpi_asn1_ber_decode_length(const unsigned char *payload, int payload_len, u_int16_t *value_len);
++  int64_t ndpi_asn1_ber_decode_length(const unsigned char *payload, int payload_len, u_int16_t *value_len);
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/src/lib/ndpi_utils.c b/src/lib/ndpi_utils.c
+index ce191174..f7c5a110 100644
+--- a/src/lib/ndpi_utils.c
++++ b/src/lib/ndpi_utils.c
+@@ -2707,7 +2707,7 @@ u_int8_t ndpi_check_flow_risk_exceptions(struct ndpi_detection_module_struct *nd
+ 
+ /* ******************************************* */
+ 
+-int ndpi_asn1_ber_decode_length(const unsigned char *payload, int payload_len, u_int16_t *value_len)
++int64_t ndpi_asn1_ber_decode_length(const unsigned char *payload, int payload_len, u_int16_t *value_len)
+ {
+   unsigned int value, i;
+ 
+diff --git a/src/lib/protocols/kerberos.c b/src/lib/protocols/kerberos.c
+index ab2a58e1..92ee7def 100644
+--- a/src/lib/protocols/kerberos.c
++++ b/src/lib/protocols/kerberos.c
+@@ -41,7 +41,7 @@ static int krb_decode_asn1_length(struct ndpi_detection_module_struct *ndpi_stru
+                                   size_t * const kasn1_offset)
+ {
+   struct ndpi_packet_struct * const packet = &ndpi_struct->packet;
+-  int length;
++  int64_t length;
+   u_int16_t value_len;
+ 
+   length = ndpi_asn1_ber_decode_length(&packet->payload[*kasn1_offset],
+diff --git a/src/lib/protocols/ldap.c b/src/lib/protocols/ldap.c
+index 70c9c072..35ea2e19 100644
+--- a/src/lib/protocols/ldap.c
++++ b/src/lib/protocols/ldap.c
+@@ -38,7 +38,7 @@ static void ndpi_int_ldap_add_connection(struct ndpi_detection_module_struct *nd
+ void ndpi_search_ldap(struct ndpi_detection_module_struct *ndpi_struct, struct ndpi_flow_struct *flow)
+ {
+   struct ndpi_packet_struct *packet = &ndpi_struct->packet;
+-  int length;
++  int64_t length;
+   u_int16_t length_len = 0, msg_id_len;
+   u_int8_t op;
+ 	
+diff --git a/src/lib/protocols/snmp_proto.c b/src/lib/protocols/snmp_proto.c
+index 5f0e6727..21ae03fb 100644
+--- a/src/lib/protocols/snmp_proto.c
++++ b/src/lib/protocols/snmp_proto.c
+@@ -69,7 +69,7 @@ void ndpi_search_snmp(struct ndpi_detection_module_struct *ndpi_struct,
+ 
+   if(packet->payload_packet_len > 16 && packet->payload[0] == 0x30) {
+     u_int16_t len_length = 0, offset;
+-    int len;
++    int64_t len;
+ 
+     len = ndpi_asn1_ber_decode_length(&packet->payload[1], packet->payload_packet_len - 1, &len_length);
+ 

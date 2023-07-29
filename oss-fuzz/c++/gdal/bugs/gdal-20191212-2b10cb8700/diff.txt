@@ -1,0 +1,105 @@
+diff --git a/gdal/frmts/pdf/gdal_pdf.h b/gdal/frmts/pdf/gdal_pdf.h
+index 9fd1cfb5b1..084963155d 100644
+--- a/gdal/frmts/pdf/gdal_pdf.h
++++ b/gdal/frmts/pdf/gdal_pdf.h
+@@ -189,6 +189,7 @@ class PDFDataset final: public GDALPamDataset
+     friend class PDFRasterBand;
+     friend class PDFImageRasterBand;
+ 
++    VSILFILE    *m_fp = nullptr;
+     PDFDataset*  poParentDS;
+ 
+     CPLString    osFilename;
+diff --git a/gdal/frmts/pdf/pdfdataset.cpp b/gdal/frmts/pdf/pdfdataset.cpp
+index 967dd8fcd2..7cdeddf1cb 100644
+--- a/gdal/frmts/pdf/pdfdataset.cpp
++++ b/gdal/frmts/pdf/pdfdataset.cpp
+@@ -2629,6 +2629,10 @@ PDFDataset::~PDFDataset()
+     for(int i=0;i<nLayers;i++)
+         delete papoLayers[i];
+     CPLFree( papoLayers );
++
++    // Do that only after having destroyed Poppler objects
++    if( m_fp )
++        VSIFCloseL(m_fp);
+ }
+ 
+ /************************************************************************/
+@@ -4255,6 +4259,17 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+ #endif
+     int nPages = 0;
+ 
++    struct FilePointerKeeper
++    {
++        VSILFILE* m_fp;
++
++        FilePointerKeeper(VSILFILE* fp = nullptr): m_fp(fp) {}
++        ~FilePointerKeeper() { if( m_fp ) VSIFCloseL(m_fp); }
++        void reset(VSILFILE* fp) { if( m_fp ) VSIFCloseL(m_fp); m_fp = fp; }
++        VSILFILE* release() { VSILFILE* ret = m_fp; m_fp = nullptr; return ret; }
++    };
++    FilePointerKeeper fpKeeper;
++
+ #ifdef HAVE_POPPLER
+   if(bUseLib.test(PDFLIB_POPPLER))
+   {
+@@ -4279,14 +4294,16 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+             CPLGetConfigOption("GDAL_PDF_PRINT_COMMANDS", "FALSE")));
+     }
+ 
+-    while( true )
+-    {
+-        VSILFILE* fp = VSIFOpenL(pszFilename, "rb");
+-        if (fp == nullptr)
+-            return nullptr;
++    VSILFILE* fp = VSIFOpenL(pszFilename, "rb");
++    if (fp == nullptr)
++        return nullptr;
+ 
+-        fp = (VSILFILE*)VSICreateBufferedReaderHandle((VSIVirtualHandle*)fp);
++    fp = (VSILFILE*)VSICreateBufferedReaderHandle((VSIVirtualHandle*)fp);
++    fpKeeper.reset(fp);
+ 
++    while( true )
++    {
++        VSIFSeekL(fp, 0, SEEK_SET);
+         if (pszUserPwd)
+             poUserPwd = new GooString(pszUserPwd);
+ 
+@@ -4337,7 +4354,6 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+             }
+ 
+             PDFFreeDoc(poDocPoppler);
+-
+             return nullptr;
+         }
+         else if( poDocPoppler->isLinearized() &&
+@@ -4352,7 +4368,6 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+             CPLError(CE_Failure, CPLE_AppDefined, "Invalid PDF");
+ 
+             PDFFreeDoc(poDocPoppler);
+-
+             return nullptr;
+         }
+         else
+@@ -4589,6 +4604,7 @@ PDFDataset *PDFDataset::Open( GDALOpenInfo * poOpenInfo )
+     }
+ 
+     PDFDataset* poDS = new PDFDataset();
++    poDS->m_fp = fpKeeper.release();
+     poDS->papszOpenOptions = CSLDuplicate(poOpenInfo->papszOpenOptions);
+     poDS->bUseLib = bUseLib;
+     poDS->osFilename = pszFilename;
+diff --git a/gdal/frmts/pdf/pdfio.cpp b/gdal/frmts/pdf/pdfio.cpp
+index df6edd5eb2..49068b8830 100644
+--- a/gdal/frmts/pdf/pdfio.cpp
++++ b/gdal/frmts/pdf/pdfio.cpp
+@@ -107,8 +107,6 @@ VSIPDFFileStream::~VSIPDFFileStream()
+     if (poParent == nullptr)
+     {
+         delete poFilename;
+-        if (f)
+-            VSIFCloseL(f);
+     }
+ }
+ 

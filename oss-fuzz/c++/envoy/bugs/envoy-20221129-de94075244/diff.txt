@@ -1,0 +1,64 @@
+diff --git a/mobile/examples/java/hello_world/MainActivity.java b/mobile/examples/java/hello_world/MainActivity.java
+index e1a39f1e5d..0d9877c625 100644
+--- a/mobile/examples/java/hello_world/MainActivity.java
++++ b/mobile/examples/java/hello_world/MainActivity.java
+@@ -11,6 +11,7 @@ import io.envoyproxy.envoymobile.Distribution;
+ import io.envoyproxy.envoymobile.Engine;
+ import io.envoyproxy.envoymobile.Element;
+ import io.envoyproxy.envoymobile.Gauge;
++import io.envoyproxy.envoymobile.LogLevel;
+ import io.envoyproxy.envoymobile.RequestHeaders;
+ import io.envoyproxy.envoymobile.RequestHeadersBuilder;
+ import io.envoyproxy.envoymobile.RequestMethod;
+@@ -58,6 +59,7 @@ public class MainActivity extends Activity {
+     setContentView(R.layout.activity_main);
+ 
+     engine = new AndroidEngineBuilder(getApplication())
++                 .addLogLevel(LogLevel.DEBUG)
+                  .setOnEngineRunning(() -> {
+                    Log.d("MainActivity", "Envoy async internal setup completed");
+                    return null;
+diff --git a/mobile/examples/kotlin/hello_world/MainActivity.kt b/mobile/examples/kotlin/hello_world/MainActivity.kt
+index 858e93dd4c..b8f2d93e6f 100644
+--- a/mobile/examples/kotlin/hello_world/MainActivity.kt
++++ b/mobile/examples/kotlin/hello_world/MainActivity.kt
+@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
+ import io.envoyproxy.envoymobile.AndroidEngineBuilder
+ import io.envoyproxy.envoymobile.Element
+ import io.envoyproxy.envoymobile.Engine
++import io.envoyproxy.envoymobile.LogLevel
+ import io.envoyproxy.envoymobile.RequestHeadersBuilder
+ import io.envoyproxy.envoymobile.RequestMethod
+ import io.envoyproxy.envoymobile.UpstreamHttpProtocol
+@@ -45,6 +46,7 @@ class MainActivity : Activity() {
+     setContentView(R.layout.activity_main)
+ 
+     engine = AndroidEngineBuilder(application)
++      .addLogLevel(LogLevel.DEBUG)
+       .addPlatformFilter { DemoFilter() }
+       .addPlatformFilter { BufferDemoFilter() }
+       .addPlatformFilter { AsyncDemoFilter() }
+diff --git a/mobile/examples/objective-c/hello_world/ViewController.m b/mobile/examples/objective-c/hello_world/ViewController.m
+index d6c41ecfd5..5193f8a942 100644
+--- a/mobile/examples/objective-c/hello_world/ViewController.m
++++ b/mobile/examples/objective-c/hello_world/ViewController.m
+@@ -39,6 +39,7 @@ NSString *_REQUEST_SCHEME = @"https";
+   NSLog(@"starting Envoy...");
+   NSError *error;
+   EngineBuilder *builder = [[EngineBuilder alloc] init];
++  [builder addLogLevel:LogLevelDebug];
+   [builder setOnEngineRunningWithClosure:^{
+     NSLog(@"Envoy async internal setup completed");
+   }];
+diff --git a/mobile/examples/swift/hello_world/ViewController.swift b/mobile/examples/swift/hello_world/ViewController.swift
+index 954edec240..7a6ca13069 100644
+--- a/mobile/examples/swift/hello_world/ViewController.swift
++++ b/mobile/examples/swift/hello_world/ViewController.swift
+@@ -19,6 +19,7 @@ final class ViewController: UITableViewController {
+     do {
+       NSLog("starting Envoy...")
+       let engine = try EngineBuilder()
++        .addLogLevel(.debug)
+         .addPlatformFilter(factory: DemoFilter.init)
+         .addPlatformFilter(factory: BufferDemoFilter.init)
+         .addPlatformFilter(factory: AsyncDemoFilter.init)

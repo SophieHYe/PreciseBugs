@@ -1,0 +1,31 @@
+diff --git a/src/sksl/SkSLAnalysis.cpp b/src/sksl/SkSLAnalysis.cpp
+index 451d7e9fbd..d7ffe7225b 100644
+--- a/src/sksl/SkSLAnalysis.cpp
++++ b/src/sksl/SkSLAnalysis.cpp
+@@ -702,8 +702,8 @@ bool Analysis::CheckProgramUnrolledSize(const Program& program) {
+                         SkDEBUGFAIL("for-loops should always have unroll info in an ES2 program");
+                     }
+ 
+-                    result = INHERITED::visitExpression(*forStmt.next()) ||
+-                             INHERITED::visitStatement(*forStmt.statement()) || result;
++                    result = this->visitExpression(*forStmt.next()) ||
++                             this->visitStatement(*forStmt.statement()) || result;
+ 
+                     fUnrollFactor = originalUnrollFactor;
+                     return result;
+diff --git a/tests/sksl/runtime_errors/ProgramTooLarge_BlocklessLoops.skvm b/tests/sksl/runtime_errors/ProgramTooLarge_BlocklessLoops.skvm
+index 68f2b9dc43..eb45f443b9 100644
+--- a/tests/sksl/runtime_errors/ProgramTooLarge_BlocklessLoops.skvm
++++ b/tests/sksl/runtime_errors/ProgramTooLarge_BlocklessLoops.skvm
+@@ -1,7 +1,4 @@
+-1 registers, 5 instructions:
+-0	r0 = splat 0 (0)
+-loop:
+-1	    store32 ptr1 r0
+-2	    store32 ptr2 r0
+-3	    store32 ptr3 r0
+-4	    store32 ptr4 r0
++### Compilation failed:
++
++error: program is too large
++1 error

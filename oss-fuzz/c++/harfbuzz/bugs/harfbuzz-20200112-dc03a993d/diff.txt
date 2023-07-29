@@ -1,0 +1,29 @@
+diff --git a/src/hb-ot-layout-common.hh b/src/hb-ot-layout-common.hh
+index af394b5b7..fec8f1ec5 100644
+--- a/src/hb-ot-layout-common.hh
++++ b/src/hb-ot-layout-common.hh
+@@ -2299,9 +2299,9 @@ struct FeatureTableSubstitutionRecord
+ {
+   friend struct FeatureTableSubstitution;
+ 
+-  void collect_lookups (hb_set_t *lookup_indexes /* OUT */) const
++  void collect_lookups (const void *base, hb_set_t *lookup_indexes /* OUT */) const
+   {
+-    return (this+feature).add_lookup_indexes_to (lookup_indexes);
++    return (base+feature).add_lookup_indexes_to (lookup_indexes);
+   }
+ 
+   bool sanitize (hb_sanitize_context_t *c, const void *base) const
+@@ -2338,7 +2338,7 @@ struct FeatureTableSubstitution
+     | hb_filter (feature_indexes, &FeatureTableSubstitutionRecord::featureIndex)
+     | hb_apply ([=] (const FeatureTableSubstitutionRecord& r)
+                 {
+-                  r.collect_lookups (lookup_indexes);
++                  r.collect_lookups (this, lookup_indexes);
+                 })
+     ;
+   }
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5715299773186048 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5715299773186048
+new file mode 100644
+index 000000000..b7a37214a
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5715299773186048 differ

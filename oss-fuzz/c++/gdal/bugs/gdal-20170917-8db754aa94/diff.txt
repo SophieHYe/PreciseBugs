@@ -1,0 +1,22 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ods/ogrodsdatasource.cpp b/gdal/ogr/ogrsf_frmts/ods/ogrodsdatasource.cpp
+index b4ea505820..4be423cea3 100644
+--- a/gdal/ogr/ogrsf_frmts/ods/ogrodsdatasource.cpp
++++ b/gdal/ogr/ogrsf_frmts/ods/ogrodsdatasource.cpp
+@@ -816,6 +816,17 @@ void OGRODSDataSource::startElementRow(const char *pszNameIn,
+             nCellsRepeated = 0;
+             return;
+         }
++        const int nFields = nCellsRepeated +
++            (poCurLayer != NULL ?
++                poCurLayer->GetLayerDefn()->GetFieldCount() : 0);
++        if( nFields > 0 && nRowsRepeated > 100000 / nFields )
++        {
++            CPLError(CE_Failure, CPLE_AppDefined,
++                     "Too big gap with previous valid row");
++            bEndTableParsing = true;
++            nCellsRepeated = 0;
++            return;
++        }
+ 
+     }
+     else if (strcmp(pszNameIn, "table:covered-table-cell") == 0)

@@ -1,0 +1,16 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dgn/dgnread.cpp b/gdal/ogr/ogrsf_frmts/dgn/dgnread.cpp
+index 7d32d4a484..82df700135 100644
+--- a/gdal/ogr/ogrsf_frmts/dgn/dgnread.cpp
++++ b/gdal/ogr/ogrsf_frmts/dgn/dgnread.cpp
+@@ -498,8 +498,10 @@ static DGNElemCore *DGNProcessElement( DGNInfo *psDGN, int nType, int nLevel )
+               return nullptr;
+           }
+           DGNElemMultiPoint *psLine = static_cast<DGNElemMultiPoint *>(
+-              CPLCalloc(sizeof(DGNElemMultiPoint)+(count-1)*sizeof(DGNPoint),
++              VSI_CALLOC_VERBOSE(sizeof(DGNElemMultiPoint)+(count-1)*sizeof(DGNPoint),
+                         1));
++          if( psLine == nullptr )
++              return nullptr;
+           psElement = (DGNElemCore *) psLine;
+           psElement->stype = DGNST_MULTIPOINT;
+           DGNParseCore( psDGN, psElement );

@@ -1,0 +1,238 @@
+diff --git a/resources/sksl/shared/MatrixToVectorCast.sksl b/resources/sksl/shared/MatrixToVectorCast.sksl
+index fef9ede019..7f36638086 100644
+--- a/resources/sksl/shared/MatrixToVectorCast.sksl
++++ b/resources/sksl/shared/MatrixToVectorCast.sksl
+@@ -10,18 +10,26 @@ half4 main(float2 coords) {
+     ok = ok && half4(testMatrix2x2)        == half4(1, 2, 3, 4);
+     ok = ok && half4(half2x2(1, 2, 3, 4))  == half4(1, 2, 3, 4);
+     ok = ok && half4(mat1234)              == half4(1, 2, 3, 4);
++    ok = ok && half4(half2x2(2))           == half4(2, 0, 0, 2);
++    ok = ok && half4(half2x2(2, 2, 2, 2))  == half4(2);
+ 
+     ok = ok && float4(testMatrix2x2)       == float4(1, 2, 3, 4);
+     ok = ok && float4(half2x2(1, 2, 3, 4)) == float4(1, 2, 3, 4);
+     ok = ok && float4(mat1234)             == float4(1, 2, 3, 4);
++    ok = ok && float4(float2x2(4))         == float4(4, 0, 0, 4);
++    ok = ok && float4(float2x2(2, 2, 2, 2)) == float4(2);
+ 
+     ok = ok && int4(testMatrix2x2)         == int4(1, 2, 3, 4);
+     ok = ok && int4(half2x2(1, 2, 3, 4))   == int4(1, 2, 3, 4);
+     ok = ok && int4(mat1234)               == int4(1, 2, 3, 4);
++    ok = ok && int4(float2x2(8))           == int4(8, 0, 0, 8);
++    ok = ok && int4(float2x2(8, 8, 8, 8))  == int4(8);
+ 
+     ok = ok && bool4(testMatrix2x2)        == bool4(true, true, true, true);
+     ok = ok && bool4(half2x2(0, 1, 0, 1))  == bool4(false, true, false, true);
+     ok = ok && bool4(bmat1234)             == bool4(true, false, true, false);
++    ok = ok && bool4(half2x2(1))           == bool4(true, false, false, true);
++    ok = ok && bool4(half2x2(1, 1, 1, 1))  == bool4(true);
+ 
+     return ok ? colorGreen : colorRed;
+ }
+diff --git a/resources/sksl/shared/VectorToMatrixCast.sksl b/resources/sksl/shared/VectorToMatrixCast.sksl
+index 57eacab891..5f59a9927d 100644
+--- a/resources/sksl/shared/VectorToMatrixCast.sksl
++++ b/resources/sksl/shared/VectorToMatrixCast.sksl
+@@ -9,20 +9,28 @@ half4 main(float2 coords) {
+     ok = ok && half2x2(testInputs)         == half2x2(-1.25, 0, 0.75, 2.25);
+     ok = ok && half2x2(half4(1, 2, 3, 4))  == half2x2(1, 2, 3, 4);
+     ok = ok && half2x2(vec1234)            == half2x2(1, 2, 3, 4);
++    ok = ok && half2x2(half4(2, 0, 0, 2))  == half2x2(2);
++    ok = ok && half2x2(half4(2))           == half2x2(2, 2, 2, 2);
+ 
+     ok = ok && float2x2(testInputs)        == float2x2(-1.25, 0, 0.75, 2.25);
+     ok = ok && float2x2(half4(1, 2, 3, 4)) == float2x2(1, 2, 3, 4);
+     ok = ok && float2x2(vec1234)           == float2x2(1, 2, 3, 4);
++    ok = ok && float2x2(half4(4, 0, 0, 4)) == float2x2(4);
++    ok = ok && float2x2(half4(4))          == float2x2(4, 4, 4, 4);
+ 
+     ok = ok && half2x2(colorGreen)         == half2x2(0, 1, 0, 1);
+     ok = ok && half2x2(colorGreen)         == half2x2(int4(0, 1, 0, 1));
+     ok = ok && half2x2(int4(colorGreen))   == half2x2(int4(0, 1, 0, 1));
+     ok = ok && half2x2(0, 1, 0, 1)         == half2x2(int4(0, 1, 0, 1));
++    ok = ok && half2x2(8, 8, 8, 8)         == half2x2(int4(8));
++    ok = ok && half2x2(8)                  == half2x2(int4(8, 0, 0, 8));
+ 
+     ok = ok && half2x2(colorGreen)               == half2x2(false, true, false, true);
+     ok = ok && half2x2(colorGreen)               == half2x2(bool4(false, true, false, true));
+     ok = ok && half2x2(bool4(colorGreen))        == half2x2(bool4(false, true, false, true));
+     ok = ok && half2x2(false, true, false, true) == half2x2(bool4(false, true, false, true));
++    ok = ok && half2x2(true, false, false, true) == half2x2(bool4(true, false, false, true));
++    ok = ok && half2x2(true, true, true, true)   == half2x2(bool4(true));
+ 
+     return ok ? colorGreen : colorRed;
+ }
+diff --git a/src/sksl/ir/SkSLConstructorCompoundCast.cpp b/src/sksl/ir/SkSLConstructorCompoundCast.cpp
+index de23b91c26..fd2fdbef47 100644
+--- a/src/sksl/ir/SkSLConstructorCompoundCast.cpp
++++ b/src/sksl/ir/SkSLConstructorCompoundCast.cpp
+@@ -20,8 +20,12 @@ static std::unique_ptr<Expression> cast_constant_composite(const Context& contex
+                                                            const Type& destType,
+                                                            std::unique_ptr<Expression> constCtor) {
+     const Type& scalarType = destType.componentType();
++
++    // We generate nicer code for splats and diagonal matrices by handling them separately instead
++    // of relying on the constant-subexpression code below. This is not truly necessary but it makes
++    // our output look a little better; human beings prefer `half4(0)` to `half4(0, 0, 0, 0)`.
+     if (constCtor->is<ConstructorSplat>()) {
+-        // This is a composite-cast of a splat containing a constant value, e.g. `half4(7)`. We can
++        // This is a typecast of a splat containing a constant value, e.g. `half4(7)`. We can
+         // replace it with a splat of a different type, e.g. `int4(7)`.
+         ConstructorSplat& splat = constCtor->as<ConstructorSplat>();
+         return ConstructorSplat::Make(
+@@ -30,34 +34,26 @@ static std::unique_ptr<Expression> cast_constant_composite(const Context& contex
+                                             std::move(splat.argument())));
+     }
+ 
+-    if (constCtor->is<ConstructorDiagonalMatrix>()) {
+-        // This is a composite-cast of a diagonal matrix, e.g. `float3x3(2)`. We can
+-        // replace it with a splat of a different type, e.g. `half3x3(2)`.
+-        ConstructorDiagonalMatrix& splat = constCtor->as<ConstructorDiagonalMatrix>();
++    if (constCtor->is<ConstructorDiagonalMatrix>() && destType.isMatrix()) {
++        // This is a typecast of a constant diagonal matrix, e.g. `float3x3(2)`. We can replace it
++        // with a diagonal matrix of a different type, e.g. `half3x3(2)`.
++        ConstructorDiagonalMatrix& matrixCtor = constCtor->as<ConstructorDiagonalMatrix>();
+         return ConstructorDiagonalMatrix::Make(
+                 context, constCtor->fOffset, destType,
+                 ConstructorScalarCast::Make(context, constCtor->fOffset, scalarType,
+-                                            std::move(splat.argument())));
++                                            std::move(matrixCtor.argument())));
+     }
+ 
+-    // Create a composite Constructor(literal, ...) which typecasts each argument inside.
+-    auto inputArgs = constCtor->asAnyConstructor().argumentSpan();
++    // Create a compound Constructor(literal, ...) which typecasts each scalar value inside.
++    size_t numSlots = destType.slotCount();
++    SkASSERT(numSlots == constCtor->type().slotCount());
++
+     ExpressionArray typecastArgs;
+-    typecastArgs.reserve_back(inputArgs.size());
+-    for (std::unique_ptr<Expression>& arg : inputArgs) {
+-        const Type& argType = arg->type();
+-        if (argType.isScalar()) {
+-            int offset = arg->fOffset;
+-            typecastArgs.push_back(ConstructorScalarCast::Make(context, offset, scalarType,
+-                                                               std::move(arg)));
+-        } else {
+-            // Convert inner constant-composites recursively.
+-            SkASSERT(argType.isVector() || (argType.isMatrix() && argType.slotCount() == 4));
+-            typecastArgs.push_back(cast_constant_composite(
+-                    context,
+-                    scalarType.toCompound(context, /*columns=*/argType.slotCount(), /*rows=*/1),
+-                    std::move(arg)));
+-        }
++    typecastArgs.reserve_back(numSlots);
++    for (size_t index = 0; index < numSlots; ++index) {
++        const Expression* arg = constCtor->getConstantSubexpression(index);
++        typecastArgs.push_back(ConstructorScalarCast::Make(context, constCtor->fOffset, scalarType,
++                                                           arg->clone()));
+     }
+ 
+     return ConstructorCompound::Make(context, constCtor->fOffset, destType,
+diff --git a/src/sksl/ir/SkSLConstructorDiagonalMatrix.cpp b/src/sksl/ir/SkSLConstructorDiagonalMatrix.cpp
+index 97cf760544..8c55d43993 100644
+--- a/src/sksl/ir/SkSLConstructorDiagonalMatrix.cpp
++++ b/src/sksl/ir/SkSLConstructorDiagonalMatrix.cpp
+@@ -17,6 +17,7 @@ std::unique_ptr<Expression> ConstructorDiagonalMatrix::Make(const Context& conte
+                                                             const Type& type,
+                                                             std::unique_ptr<Expression> arg) {
+     SkASSERT(type.isMatrix());
++    SkASSERT(arg->type().isScalar());
+     SkASSERT(arg->type() == type.componentType());
+     return std::make_unique<ConstructorDiagonalMatrix>(offset, type, std::move(arg));
+ }
+diff --git a/tests/sksl/shared/MatrixToVectorCast.asm.frag b/tests/sksl/shared/MatrixToVectorCast.asm.frag
+index f99d0d21df..3825e7190b 100644
+--- a/tests/sksl/shared/MatrixToVectorCast.asm.frag
++++ b/tests/sksl/shared/MatrixToVectorCast.asm.frag
+@@ -65,9 +65,10 @@ OpDecorate %105 RelaxedPrecision
+ OpDecorate %107 RelaxedPrecision
+ OpDecorate %109 RelaxedPrecision
+ OpDecorate %116 RelaxedPrecision
+-OpDecorate %125 RelaxedPrecision
+-OpDecorate %127 RelaxedPrecision
+-OpDecorate %128 RelaxedPrecision
++OpDecorate %122 RelaxedPrecision
++OpDecorate %131 RelaxedPrecision
++OpDecorate %133 RelaxedPrecision
++OpDecorate %134 RelaxedPrecision
+ %float = OpTypeFloat 32
+ %v4float = OpTypeVector %float 4
+ %_ptr_Output_v4float = OpTypePointer Output %v4float
+@@ -119,7 +120,7 @@ OpFunctionEnd
+ %25 = OpFunctionParameter %_ptr_Function_v2float
+ %26 = OpLabel
+ %ok = OpVariable %_ptr_Function_bool Function
+-%117 = OpVariable %_ptr_Function_v4float Function
++%123 = OpVariable %_ptr_Function_v4float Function
+ OpStore %ok %true
+ %31 = OpLoad %bool %ok
+ OpSelectionMerge %33 None
+@@ -208,19 +209,29 @@ OpBranch %95
+ %115 = OpPhi %bool %false %68 %114 %94
+ OpStore %ok %115
+ %116 = OpLoad %bool %ok
+-OpSelectionMerge %121 None
+-OpBranchConditional %116 %119 %120
+-%119 = OpLabel
+-%122 = OpAccessChain %_ptr_Uniform_v4float %10 %int_0
+-%125 = OpLoad %v4float %122
+-OpStore %117 %125
+-OpBranch %121
+-%120 = OpLabel
+-%126 = OpAccessChain %_ptr_Uniform_v4float %10 %int_1
+-%127 = OpLoad %v4float %126
+-OpStore %117 %127
+-OpBranch %121
+-%121 = OpLabel
+-%128 = OpLoad %v4float %117
+-OpReturnValue %128
++OpSelectionMerge %118 None
++OpBranchConditional %116 %117 %118
++%117 = OpLabel
++%119 = OpLogicalEqual %v4bool %112 %112
++%120 = OpAll %bool %119
++OpBranch %118
++%118 = OpLabel
++%121 = OpPhi %bool %false %95 %120 %117
++OpStore %ok %121
++%122 = OpLoad %bool %ok
++OpSelectionMerge %127 None
++OpBranchConditional %122 %125 %126
++%125 = OpLabel
++%128 = OpAccessChain %_ptr_Uniform_v4float %10 %int_0
++%131 = OpLoad %v4float %128
++OpStore %123 %131
++OpBranch %127
++%126 = OpLabel
++%132 = OpAccessChain %_ptr_Uniform_v4float %10 %int_1
++%133 = OpLoad %v4float %132
++OpStore %123 %133
++OpBranch %127
++%127 = OpLabel
++%134 = OpLoad %v4float %123
++OpReturnValue %134
+ OpFunctionEnd
+diff --git a/tests/sksl/shared/MatrixToVectorCast.glsl b/tests/sksl/shared/MatrixToVectorCast.glsl
+index 0a382d9466..7a4504a953 100644
+--- a/tests/sksl/shared/MatrixToVectorCast.glsl
++++ b/tests/sksl/shared/MatrixToVectorCast.glsl
+@@ -9,5 +9,6 @@ vec4 main() {
+     ok = ok && vec4(testMatrix2x2) == vec4(1.0, 2.0, 3.0, 4.0);
+     ok = ok && ivec4(vec4(testMatrix2x2)) == ivec4(1, 2, 3, 4);
+     ok = ok && bvec4(vec4(testMatrix2x2)) == bvec4(true, true, true, true);
++    ok = ok && bvec4(true, true, true, true) == bvec4(true);
+     return ok ? colorGreen : colorRed;
+ }
+diff --git a/tests/sksl/shared/MatrixToVectorCast.metal b/tests/sksl/shared/MatrixToVectorCast.metal
+index 8a681dd8e5..e2586d2c53 100644
+--- a/tests/sksl/shared/MatrixToVectorCast.metal
++++ b/tests/sksl/shared/MatrixToVectorCast.metal
+@@ -23,6 +23,7 @@ fragment Outputs fragmentMain(Inputs _in [[stage_in]], constant Uniforms& _unifo
+     ok = ok && all(float4_from_float2x2(_uniforms.testMatrix2x2) == float4(1.0, 2.0, 3.0, 4.0));
+     ok = ok && all(int4(float4_from_float2x2(_uniforms.testMatrix2x2)) == int4(1, 2, 3, 4));
+     ok = ok && all(bool4(float4_from_float2x2(_uniforms.testMatrix2x2)) == bool4(true, true, true, true));
++    ok = ok && all(bool4(true, true, true, true) == bool4(true));
+     _out.sk_FragColor = ok ? _uniforms.colorGreen : _uniforms.colorRed;
+     return _out;
+ }

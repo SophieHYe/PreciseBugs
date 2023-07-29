@@ -1,0 +1,12 @@
+diff --git a/fuzz/fuzz_ndpi_reader.c b/fuzz/fuzz_ndpi_reader.c
+index 76f2d726..e0032340 100644
+--- a/fuzz/fuzz_ndpi_reader.c
++++ b/fuzz/fuzz_ndpi_reader.c
+@@ -27,6 +27,7 @@ struct ndpi_bin malloc_bins; /* unused */
+ 
+ static int mem_alloc_state = 0;
+ 
++__attribute__((no_sanitize("integer")))
+ static int fastrand ()
+ {
+   if(!mem_alloc_state) return 1; /* No failures */

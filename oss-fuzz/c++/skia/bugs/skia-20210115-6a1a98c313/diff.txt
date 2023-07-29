@@ -1,0 +1,202 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index e64db8a974..a98ab53e0d 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -340,6 +340,7 @@ sksl_shared_tests = [
+   "$_tests/sksl/shared/Ossfuzz28050.sksl",
+   "$_tests/sksl/shared/Ossfuzz28794.sksl",
+   "$_tests/sksl/shared/Ossfuzz28904.sksl",
++  "$_tests/sksl/shared/Ossfuzz29444.sksl",
+   "$_tests/sksl/shared/OutParams.sksl",
+   "$_tests/sksl/shared/OutParamsTricky.sksl",
+   "$_tests/sksl/shared/RectangleTexture.sksl",
+diff --git a/src/sksl/SkSLInliner.cpp b/src/sksl/SkSLInliner.cpp
+index 76f8e593d3..41dc4b591a 100644
+--- a/src/sksl/SkSLInliner.cpp
++++ b/src/sksl/SkSLInliner.cpp
+@@ -158,12 +158,16 @@ static bool contains_recursive_call(const FunctionDeclaration& funcDecl) {
+     return ContainsRecursiveCall{}.visit(funcDecl);
+ }
+ 
+-static const Type* copy_if_needed(const Type* src, SymbolTable& symbolTable) {
+-    if (src->isArray()) {
+-        return symbolTable.takeOwnershipOfSymbol(
+-                Type::MakeArrayType(src->name(), src->componentType(), src->columns()));
++static const Type* copy_if_needed(const Type* type, SymbolTable* symbolTable) {
++    if (type->isArray()) {
++        const Symbol* copiedType = (*symbolTable)[type->name()];
++        if (!copiedType) {
++            copiedType = symbolTable->add(Type::MakeArrayType(type->name(), type->componentType(),
++                                                              type->columns()));
++        }
++        return &copiedType->as<Type>();
+     }
+-    return src;
++    return type;
+ }
+ 
+ static std::unique_ptr<Statement>* find_parent_statement(
+@@ -343,12 +347,13 @@ std::unique_ptr<Expression> Inliner::inlineExpression(int offset,
+ 
+     switch (expression.kind()) {
+         case Expression::Kind::kBinary: {
+-            const BinaryExpression& b = expression.as<BinaryExpression>();
++            const BinaryExpression& binaryExpr = expression.as<BinaryExpression>();
++            const Type* type = copy_if_needed(&binaryExpr.type(), symbolTableForExpression);
+             return std::make_unique<BinaryExpression>(offset,
+-                                                      expr(b.left()),
+-                                                      b.getOperator(),
+-                                                      expr(b.right()),
+-                                                      &b.type());
++                                                      expr(binaryExpr.left()),
++                                                      binaryExpr.getOperator(),
++                                                      expr(binaryExpr.right()),
++                                                      type);
+         }
+         case Expression::Kind::kBoolLiteral:
+         case Expression::Kind::kIntLiteral:
+@@ -356,7 +361,7 @@ std::unique_ptr<Expression> Inliner::inlineExpression(int offset,
+             return expression.clone();
+         case Expression::Kind::kConstructor: {
+             const Constructor& constructor = expression.as<Constructor>();
+-            const Type* type = copy_if_needed(&constructor.type(), *symbolTableForExpression);
++            const Type* type = copy_if_needed(&constructor.type(), symbolTableForExpression);
+             return std::make_unique<Constructor>(offset, type, argList(constructor.arguments()));
+         }
+         case Expression::Kind::kExternalFunctionCall: {
+@@ -372,7 +377,8 @@ std::unique_ptr<Expression> Inliner::inlineExpression(int offset,
+         }
+         case Expression::Kind::kFunctionCall: {
+             const FunctionCall& funcCall = expression.as<FunctionCall>();
+-            return std::make_unique<FunctionCall>(offset, &funcCall.type(), &funcCall.function(),
++            const Type* type = copy_if_needed(&funcCall.type(), symbolTableForExpression);
++            return std::make_unique<FunctionCall>(offset, type, &funcCall.function(),
+                                                   argList(funcCall.arguments()));
+         }
+         case Expression::Kind::kFunctionReference:
+@@ -520,13 +526,15 @@ std::unique_ptr<Statement> Inliner::inlineStatement(int offset,
+             }
+ 
+             // For more complex functions, assign their result into a variable.
++            const Type* resultType = copy_if_needed(&resultExpr->get()->type(),
++                                                    symbolTableForStatement);
+             auto assignment =
+                     std::make_unique<ExpressionStatement>(std::make_unique<BinaryExpression>(
+                             offset,
+                             clone_with_ref_kind(**resultExpr, VariableReference::RefKind::kWrite),
+                             Token::Kind::TK_EQ,
+                             expr(r.expression()),
+-                            &resultExpr->get()->type()));
++                            resultType));
+ 
+             // Early returns are wrapped in a for loop; we need to synthesize a continue statement
+             // to "leave" the function.
+@@ -566,8 +574,8 @@ std::unique_ptr<Statement> Inliner::inlineStatement(int offset,
+             auto name = std::make_unique<String>(fMangler.uniqueName(String(old.name()),
+                                                                      symbolTableForStatement));
+             const String* namePtr = symbolTableForStatement->takeOwnershipOfString(std::move(name));
+-            const Type* baseTypePtr = copy_if_needed(&decl.baseType(), *symbolTableForStatement);
+-            const Type* typePtr = copy_if_needed(&old.type(), *symbolTableForStatement);
++            const Type* baseTypePtr = copy_if_needed(&decl.baseType(), symbolTableForStatement);
++            const Type* typePtr = copy_if_needed(&old.type(), symbolTableForStatement);
+             const Variable* clone = symbolTableForStatement->takeOwnershipOfSymbol(
+                     std::make_unique<Variable>(offset,
+                                                &old.modifiers(),
+diff --git a/src/sksl/ir/SkSLSymbolTable.h b/src/sksl/ir/SkSLSymbolTable.h
+index abd0154ea0..ebe4bb4978 100644
+--- a/src/sksl/ir/SkSLSymbolTable.h
++++ b/src/sksl/ir/SkSLSymbolTable.h
+@@ -36,6 +36,11 @@ public:
+     , fBuiltin(builtin)
+     , fErrorReporter(parent->fErrorReporter) {}
+ 
++    /**
++     * If the input is a built-in symbol table, returns a new empty symbol table as a child of the
++     * input table. If the input is not a built-in symbol table, returns it as-is. Built-in symbol
++     * tables must not be mutated after creation, so they must be wrapped if mutation is necessary.
++     */
+     static std::shared_ptr<SymbolTable> WrapIfBuiltin(std::shared_ptr<SymbolTable> symbolTable) {
+         if (!symbolTable) {
+             return nullptr;
+@@ -53,7 +58,11 @@ public:
+      */
+     const Symbol* operator[](StringFragment name);
+ 
++    /**
++     * Creates a new name for a symbol which already exists; does not take ownership of Symbol*.
++     */
+     void addAlias(StringFragment name, const Symbol* symbol);
++
+     void addWithoutOwnership(const Symbol* symbol);
+ 
+     template <typename T>
+@@ -124,6 +133,7 @@ private:
+     }
+ 
+     const Symbol* lookup(SymbolTable* writableSymbolTable, const SymbolKey& key);
++
+     static std::vector<const FunctionDeclaration*> GetFunctions(const Symbol& s);
+ 
+     bool fBuiltin = false;
+diff --git a/tests/sksl/shared/Ossfuzz29444.sksl b/tests/sksl/shared/Ossfuzz29444.sksl
+new file mode 100644
+index 0000000000..dc07ec10b0
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz29444.sksl
+@@ -0,0 +1,4 @@
++float an()   { return 2; }
++void  wna()  { an(), float[1](), float[1](); }
++void  na()   { wna(); }
++void  main() { na(), na(); }
+diff --git a/tests/sksl/shared/golden/Ossfuzz29444.asm.frag b/tests/sksl/shared/golden/Ossfuzz29444.asm.frag
+new file mode 100644
+index 0000000000..b4a67d5d0d
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz29444.asm.frag
+@@ -0,0 +1,18 @@
++OpCapability Shader
++%1 = OpExtInstImport "GLSL.std.450"
++OpMemoryModel Logical GLSL450
++OpEntryPoint Fragment %main "main" %sk_Clockwise
++OpExecutionMode %main OriginUpperLeft
++OpName %sk_Clockwise "sk_Clockwise"
++OpName %main "main"
++OpDecorate %sk_Clockwise RelaxedPrecision
++OpDecorate %sk_Clockwise BuiltIn FrontFacing
++%bool = OpTypeBool
++%_ptr_Input_bool = OpTypePointer Input %bool
++%sk_Clockwise = OpVariable %_ptr_Input_bool Input
++%void = OpTypeVoid
++%7 = OpTypeFunction %void
++%main = OpFunction %void None %7
++%8 = OpLabel
++OpReturn
++OpFunctionEnd
+diff --git a/tests/sksl/shared/golden/Ossfuzz29444.glsl b/tests/sksl/shared/golden/Ossfuzz29444.glsl
+new file mode 100644
+index 0000000000..2933520785
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz29444.glsl
+@@ -0,0 +1,3 @@
++
++void main() {
++}
+diff --git a/tests/sksl/shared/golden/Ossfuzz29444.metal b/tests/sksl/shared/golden/Ossfuzz29444.metal
+new file mode 100644
+index 0000000000..c18cef376a
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz29444.metal
+@@ -0,0 +1,13 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    float4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _outputStruct;
++    thread Outputs* _out = &_outputStruct;
++    return *_out;
++}

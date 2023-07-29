@@ -1,0 +1,13 @@
+diff --git a/libavcodec/dpcm.c b/libavcodec/dpcm.c
+index 7d3934ee35..5958081b66 100644
+--- a/libavcodec/dpcm.c
++++ b/libavcodec/dpcm.c
+@@ -367,7 +367,7 @@ static int dpcm_decode_frame(AVCodecContext *avctx, void *data,
+         while (output_samples < samples_end) {
+             uint8_t n = bytestream2_get_byteu(&gb);
+ 
+-            *output_samples++ = s->sample[idx] += s->array[n];
++            *output_samples++ = s->sample[idx] += (unsigned)s->array[n];
+             idx ^= 1;
+         }
+         }

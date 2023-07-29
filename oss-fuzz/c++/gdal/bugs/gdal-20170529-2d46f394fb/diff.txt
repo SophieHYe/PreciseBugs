@@ -1,0 +1,13 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+index 7a4ba4c228..f2fa10928c 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntffilereader.cpp
+@@ -278,7 +278,7 @@ int NTFFileReader::Open( const char * pszFilenameIn )
+ /* -------------------------------------------------------------------- */
+ /*      Handle feature class name records.                              */
+ /* -------------------------------------------------------------------- */
+-        if( poRecord->GetType() == NRT_FCR )
++        if( poRecord->GetType() == NRT_FCR && poRecord->GetLength() >= 37 )
+         {
+             nFCCount++;
+ 

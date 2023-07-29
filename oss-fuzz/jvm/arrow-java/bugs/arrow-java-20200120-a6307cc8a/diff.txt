@@ -1,0 +1,462 @@
+diff --git a/cpp/cmake_modules/san-config.cmake b/cpp/cmake_modules/san-config.cmake
+index 414291ef3..0fbd85542 100644
+--- a/cpp/cmake_modules/san-config.cmake
++++ b/cpp/cmake_modules/san-config.cmake
+@@ -32,7 +32,7 @@ endif()
+ 
+ # Flag to enable clang undefined behavior sanitizer
+ # We explicitly don't enable all of the sanitizer flags:
+-# - disable 'vptr' because it currently crashes somewhere in boost::intrusive::list code
++# - disable 'vptr' because of RTTI issues accross shared libraries (?)
+ # - disable 'alignment' because unaligned access is really OK on Nehalem and we do it
+ #   all over the place.
+ # - disable 'function' because it appears to give a false positive https://github.com/google/sanitizers/issues/911
+diff --git a/cpp/src/arrow/array/validate.cc b/cpp/src/arrow/array/validate.cc
+index 038971891..c70bd4bfe 100644
+--- a/cpp/src/arrow/array/validate.cc
++++ b/cpp/src/arrow/array/validate.cc
+@@ -18,6 +18,7 @@
+ #include "arrow/array/validate.h"
+ 
+ #include "arrow/array.h"
++#include "arrow/util/int_util.h"
+ #include "arrow/util/logging.h"
+ #include "arrow/visitor_inline.h"
+ 
+@@ -208,16 +209,19 @@ struct ValidateArrayVisitor {
+     // First validate offsets, to make sure the accesses below are valid
+     RETURN_NOT_OK(ValidateOffsets(array));
+ 
+-    const auto first_offset = array.value_offset(0);
+-    const auto last_offset = array.value_offset(array.length());
+-    const auto data_extent = last_offset - first_offset;
+-    if (data_extent > 0 && !array.values()) {
+-      return Status::Invalid("values is null");
+-    }
+-    const auto values_length = array.values()->length();
+-    if (values_length < data_extent) {
+-      return Status::Invalid("Length spanned by list offsets (", data_extent,
+-                             ") larger than values array (length ", values_length, ")");
++    // An empty list array can have 0 offsets
++    if (array.length() > 0) {
++      const auto first_offset = array.value_offset(0);
++      const auto last_offset = array.value_offset(array.length());
++      const auto data_extent = last_offset - first_offset;
++      if (data_extent > 0 && !array.values()) {
++        return Status::Invalid("values is null");
++      }
++      const auto values_length = array.values()->length();
++      if (values_length < data_extent) {
++        return Status::Invalid("Length spanned by list offsets (", data_extent,
++                               ") larger than values array (length ", values_length, ")");
++      }
+     }
+ 
+     const Status child_valid = ValidateArray(*array.values());
+@@ -238,6 +242,7 @@ struct ValidateArrayVisitor {
+       }
+       return Status::OK();
+     }
++    // An empty list array can have 0 offsets
+     auto required_offsets =
+         (array.length() > 0) ? array.length() + array.offset() + 1 : 0;
+     if (value_offsets->size() / static_cast<int>(sizeof(offset_type)) <
+@@ -266,16 +271,43 @@ Status ValidateArray(const Array& array) {
+     return Status::Invalid("Array length is negative");
+   }
+ 
+-  if (array.null_count() > array.length()) {
+-    return Status::Invalid("Null count exceeds array length");
+-  }
+-
+   if (data.buffers.size() != layout.bit_widths.size()) {
+     return Status::Invalid("Expected ", layout.bit_widths.size(),
+                            " buffers in array "
+                            "of type ",
+                            type.ToString(), ", got ", data.buffers.size());
+   }
++  for (int i = 0; i < static_cast<int>(data.buffers.size()); ++i) {
++    const auto& buffer = data.buffers[i];
++    const auto bit_width = layout.bit_widths[i];
++    if (buffer == nullptr || bit_width <= 0) {
++      continue;
++    }
++    if (internal::HasAdditionOverflow(array.length(), array.offset()) ||
++        internal::HasMultiplyOverflow(array.length() + array.offset(), bit_width)) {
++      return Status::Invalid("Array of type ", type.ToString(),
++                             " has impossibly large length and offset");
++    }
++    const auto min_buffer_size =
++        BitUtil::BytesForBits(bit_width * (array.length() + array.offset()));
++    if (buffer->size() < min_buffer_size) {
++      return Status::Invalid("Buffer #", i, " too small in array of type ",
++                             type.ToString(), " and length ", array.length(),
++                             ": expected at least ", min_buffer_size, " byte(s), got ",
++                             buffer->size());
++    }
++  }
++  if (type.id() != Type::NA && data.null_count > 0 && data.buffers[0] == nullptr) {
++    return Status::Invalid("Array of type ", type.ToString(), " has ", data.null_count,
++                           " nulls but no null bitmap");
++  }
++
++  // Check null_count() *after* validating the buffer sizes, to avoid
++  // reading out of bounds.
++  if (array.null_count() > array.length()) {
++    return Status::Invalid("Null count exceeds array length");
++  }
++
+   if (type.id() != Type::EXTENSION) {
+     if (data.child_data.size() != static_cast<size_t>(type.num_children())) {
+       return Status::Invalid("Expected ", type.num_children(),
+@@ -424,12 +456,12 @@ struct ValidateArrayDataVisitor {
+ 
+   template <typename ArrayType>
+   Status ValidateOffsets(const ArrayType& array, int64_t offset_limit) {
+-    if (array.value_offsets() == nullptr) {
+-      if (array.length() != 0) {
+-        return Status::Invalid("non-empty array but value_offsets_ is null");
+-      }
++    if (array.length() == 0) {
+       return Status::OK();
+     }
++    if (array.value_offsets() == nullptr) {
++      return Status::Invalid("non-empty array but value_offsets_ is null");
++    }
+ 
+     auto prev_offset = array.value_offset(0);
+     if (prev_offset < 0) {
+diff --git a/cpp/src/arrow/array_list_test.cc b/cpp/src/arrow/array_list_test.cc
+index fb6807df9..a8336ccc3 100644
+--- a/cpp/src/arrow/array_list_test.cc
++++ b/cpp/src/arrow/array_list_test.cc
+@@ -408,6 +408,9 @@ class TestListArray : public TestBuilder {
+     auto empty_values = ArrayFromJSON(int16(), "[]");
+     auto values = ArrayFromJSON(int16(), "[1, 2, 3, 4, 5, 6, 7]");
+ 
++    // An empty list array can have omitted or 0-length offsets
++    ASSERT_OK(ValidateOffsets(0, {}, empty_values));
++
+     ASSERT_OK(ValidateOffsets(0, {0}, empty_values));
+     ASSERT_OK(ValidateOffsets(1, {0, 7}, values));
+     ASSERT_OK(ValidateOffsets(2, {0, 4, 7}, values));
+diff --git a/cpp/src/arrow/array_test.cc b/cpp/src/arrow/array_test.cc
+index e8094e462..01302b6da 100644
+--- a/cpp/src/arrow/array_test.cc
++++ b/cpp/src/arrow/array_test.cc
+@@ -309,6 +309,57 @@ TEST_F(TestArray, TestMakeArrayFromScalar) {
+   }
+ }
+ 
++TEST_F(TestArray, ValidateBuffersPrimitive) {
++  auto empty_buffer = std::make_shared<Buffer>("");
++  auto null_buffer = Buffer::FromString("\xff");
++  auto data_buffer = Buffer::FromString("123456789abcdef0");
++
++  auto data = ArrayData::Make(int64(), 2, {null_buffer, data_buffer});
++  auto array = MakeArray(data);
++  ASSERT_OK(array->ValidateFull());
++  data = ArrayData::Make(boolean(), 8, {null_buffer, data_buffer});
++  array = MakeArray(data);
++  ASSERT_OK(array->ValidateFull());
++
++  // Null buffer too small
++  data = ArrayData::Make(int64(), 2, {empty_buffer, data_buffer});
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++  data = ArrayData::Make(boolean(), 9, {null_buffer, data_buffer});
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++
++  // Data buffer too small
++  data = ArrayData::Make(int64(), 3, {null_buffer, data_buffer});
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++
++  // Null buffer absent but null_count > 0
++  data = ArrayData::Make(int64(), 2, {nullptr, data_buffer}, 1);
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++
++  //
++  // With offset > 0
++  //
++  data = ArrayData::Make(int64(), 1, {null_buffer, data_buffer}, kUnknownNullCount, 1);
++  array = MakeArray(data);
++  ASSERT_OK(array->ValidateFull());
++  data = ArrayData::Make(boolean(), 6, {null_buffer, data_buffer}, kUnknownNullCount, 2);
++  array = MakeArray(data);
++  ASSERT_OK(array->ValidateFull());
++
++  // Null buffer too small
++  data = ArrayData::Make(boolean(), 7, {null_buffer, data_buffer}, kUnknownNullCount, 2);
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++
++  // Data buffer too small
++  data = ArrayData::Make(int64(), 2, {null_buffer, data_buffer}, kUnknownNullCount, 1);
++  array = MakeArray(data);
++  ASSERT_RAISES(Invalid, array->Validate());
++}
++
+ // ----------------------------------------------------------------------
+ // Null type tests
+ 
+diff --git a/cpp/src/arrow/compute/kernels/util_internal.cc b/cpp/src/arrow/compute/kernels/util_internal.cc
+index 3fee4643b..899f71d72 100644
+--- a/cpp/src/arrow/compute/kernels/util_internal.cc
++++ b/cpp/src/arrow/compute/kernels/util_internal.cc
+@@ -217,21 +217,30 @@ Status PropagateNulls(FunctionContext* ctx, const ArrayData& input, ArrayData* o
+ 
+   // Handle validity bitmap
+   output->null_count = input.GetNullCount();
+-  if (input.offset != 0 && output->null_count > 0) {
+-    DCHECK(input.buffers[0]);
+-    const Buffer& validity_bitmap = *input.buffers[0];
+-    std::shared_ptr<Buffer> buffer;
+-    RETURN_NOT_OK(ctx->Allocate(BitUtil::BytesForBits(length), &buffer));
+-    // Per spec all trailing bits should indicate nullness, since
+-    // the last byte might only be partially set, we ensure the
+-    // remaining bit is set.
+-    ZeroLastByte(buffer.get());
+-    buffer->ZeroPadding();
+-    internal::CopyBitmap(validity_bitmap.data(), input.offset, length,
+-                         buffer->mutable_data(), 0 /* destination offset */);
+-    output->buffers[0] = std::move(buffer);
+-  } else if (output->null_count > 0) {
+-    output->buffers[0] = input.buffers[0];
++  if (output->null_count > 0) {
++    if (input.buffers[0] == nullptr) {
++      // Input was null, need to allocate new null bitmap
++      DCHECK_EQ(input.type->id(), Type::NA);
++      std::shared_ptr<Buffer> buffer;
++      RETURN_NOT_OK(ctx->Allocate(BitUtil::BytesForBits(length), &buffer));
++      memset(buffer->mutable_data(), 0, static_cast<size_t>(buffer->size()));
++      output->buffers[0] = std::move(buffer);
++    } else if (input.offset != 0) {
++      // Realign input null bitmap
++      const Buffer& validity_bitmap = *input.buffers[0];
++      std::shared_ptr<Buffer> buffer;
++      RETURN_NOT_OK(ctx->Allocate(BitUtil::BytesForBits(length), &buffer));
++      // Per spec all trailing bits should indicate nullness, since
++      // the last byte might only be partially set, we ensure the
++      // remaining bit is set.
++      ZeroLastByte(buffer.get());
++      internal::CopyBitmap(validity_bitmap.data(), input.offset, length,
++                           buffer->mutable_data(), 0 /* destination offset */);
++      output->buffers[0] = std::move(buffer);
++    } else {
++      // Use input null bitmap as-is
++      output->buffers[0] = input.buffers[0];
++    }
+   }
+   return Status::OK();
+ }
+diff --git a/cpp/src/arrow/ipc/message.cc b/cpp/src/arrow/ipc/message.cc
+index 3de8772a3..9ce2a2225 100644
+--- a/cpp/src/arrow/ipc/message.cc
++++ b/cpp/src/arrow/ipc/message.cc
+@@ -241,8 +241,9 @@ std::string FormatMessageType(Message::Type type) {
+ 
+ Status ReadMessage(int64_t offset, int32_t metadata_length, io::RandomAccessFile* file,
+                    std::unique_ptr<Message>* message) {
+-  ARROW_CHECK_GT(static_cast<size_t>(metadata_length), sizeof(int32_t))
+-      << "metadata_length should be at least 4";
++  if (static_cast<size_t>(metadata_length) < sizeof(int32_t)) {
++    return Status::Invalid("metadata_length should be at least 4");
++  }
+ 
+   ARROW_ASSIGN_OR_RAISE(auto buffer, file->ReadAt(offset, metadata_length));
+ 
+@@ -278,7 +279,7 @@ Status ReadMessage(int64_t offset, int32_t metadata_length, io::RandomAccessFile
+     return Status::Invalid("Unexpected empty message in IPC file format");
+   }
+ 
+-  if (flatbuffer_length + prefix_size != metadata_length) {
++  if (flatbuffer_length != metadata_length - prefix_size) {
+     return Status::Invalid("flatbuffer size ", flatbuffer_length,
+                            " invalid. File offset: ", offset,
+                            ", metadata length: ", metadata_length);
+diff --git a/cpp/src/arrow/ipc/metadata_internal.cc b/cpp/src/arrow/ipc/metadata_internal.cc
+index 0cbae9bb5..8eb197e19 100644
+--- a/cpp/src/arrow/ipc/metadata_internal.cc
++++ b/cpp/src/arrow/ipc/metadata_internal.cc
+@@ -161,19 +161,20 @@ Status UnionFromFlatbuffer(const flatbuf::Union* union_data,
+ 
+   const flatbuffers::Vector<int32_t>* fb_type_ids = union_data->typeIds();
+   if (fb_type_ids == nullptr) {
+-    // TODO validate that children.size() <= 127?
+     for (int8_t i = 0; i < static_cast<int8_t>(children.size()); ++i) {
+       type_codes.push_back(i);
+     }
+   } else {
+     for (int32_t id : (*fb_type_ids)) {
+-      // TODO(wesm): can these values exceed 127?
+-      type_codes.push_back(static_cast<int8_t>(id));
++      const auto type_code = static_cast<int8_t>(id);
++      if (id != type_code) {
++        return Status::Invalid("union type id out of bounds");
++      }
++      type_codes.push_back(type_code);
+     }
+   }
+ 
+-  *out = union_(children, type_codes, mode);
+-  return Status::OK();
++  return UnionType::Make(children, type_codes, mode).Value(out);
+ }
+ 
+ #define INT_TO_FB_CASE(BIT_WIDTH, IS_SIGNED)            \
+diff --git a/cpp/src/arrow/ipc/reader.cc b/cpp/src/arrow/ipc/reader.cc
+index 584ab92a6..1a800b97d 100644
+--- a/cpp/src/arrow/ipc/reader.cc
++++ b/cpp/src/arrow/ipc/reader.cc
+@@ -622,7 +622,7 @@ class RecordBatchFileReader::RecordBatchFileReaderImpl {
+   RecordBatchFileReaderImpl() : file_(NULLPTR), footer_offset_(0), footer_(NULLPTR) {}
+ 
+   Status ReadFooter() {
+-    int magic_size = static_cast<int>(strlen(kArrowMagicBytes));
++    const int32_t magic_size = static_cast<int>(strlen(kArrowMagicBytes));
+ 
+     if (footer_offset_ <= magic_size * 2 + 4) {
+       return Status::Invalid("File is too small: ", footer_offset_);
+@@ -643,7 +643,7 @@ class RecordBatchFileReader::RecordBatchFileReaderImpl {
+ 
+     int32_t footer_length = *reinterpret_cast<const int32_t*>(buffer->data());
+ 
+-    if (footer_length <= 0 || footer_length + magic_size * 2 + 4 > footer_offset_) {
++    if (footer_length <= 0 || footer_length > footer_offset_ - magic_size * 2 - 4) {
+       return Status::Invalid("File is smaller than indicated metadata size");
+     }
+ 
+@@ -679,9 +679,11 @@ class RecordBatchFileReader::RecordBatchFileReaderImpl {
+   }
+ 
+   Status ReadMessageFromBlock(const FileBlock& block, std::unique_ptr<Message>* out) {
+-    DCHECK(BitUtil::IsMultipleOf8(block.offset));
+-    DCHECK(BitUtil::IsMultipleOf8(block.metadata_length));
+-    DCHECK(BitUtil::IsMultipleOf8(block.body_length));
++    if (!BitUtil::IsMultipleOf8(block.offset) ||
++        !BitUtil::IsMultipleOf8(block.metadata_length) ||
++        !BitUtil::IsMultipleOf8(block.body_length)) {
++      return Status::Invalid("Unaligned block in IPC file");
++    }
+ 
+     RETURN_NOT_OK(ReadMessage(block.offset, block.metadata_length, file_, out));
+ 
+diff --git a/cpp/src/arrow/type.cc b/cpp/src/arrow/type.cc
+index 185bb9303..ae93a3a02 100644
+--- a/cpp/src/arrow/type.cc
++++ b/cpp/src/arrow/type.cc
+@@ -351,18 +351,35 @@ UnionType::UnionType(const std::vector<std::shared_ptr<Field>>& fields,
+       mode_(mode),
+       type_codes_(type_codes),
+       child_ids_(kMaxTypeCode + 1, kInvalidChildId) {
+-  DCHECK_LE(fields.size(), type_codes.size()) << "union field with unknown type id";
+-  DCHECK_GE(fields.size(), type_codes.size())
+-      << "type id provided without corresponding union field";
++  DCHECK_OK(ValidateParameters(fields, type_codes, mode));
+   children_ = fields;
+   for (int child_id = 0; child_id < static_cast<int>(type_codes_.size()); ++child_id) {
+     const auto type_code = type_codes_[child_id];
+-    DCHECK_GE(type_code, 0);
+-    DCHECK_LE(type_code, kMaxTypeCode);
+     child_ids_[type_code] = child_id;
+   }
+ }
+ 
++Result<std::shared_ptr<DataType>> UnionType::Make(
++    const std::vector<std::shared_ptr<Field>>& fields,
++    const std::vector<int8_t>& type_codes, UnionMode::type mode) {
++  RETURN_NOT_OK(ValidateParameters(fields, type_codes, mode));
++  return std::make_shared<UnionType>(fields, type_codes, mode);
++}
++
++Status UnionType::ValidateParameters(const std::vector<std::shared_ptr<Field>>& fields,
++                                     const std::vector<int8_t>& type_codes,
++                                     UnionMode::type mode) {
++  if (fields.size() != type_codes.size()) {
++    return Status::Invalid("Union should get the same number of fields as type codes");
++  }
++  for (const auto type_code : type_codes) {
++    if (type_code < 0 || type_code > kMaxTypeCode) {
++      return Status::Invalid("Union type code out of bounds");
++    }
++  }
++  return Status::OK();
++}
++
+ DataTypeLayout UnionType::layout() const {
+   if (mode_ == UnionMode::SPARSE) {
+     return {{1, CHAR_BIT, DataTypeLayout::kAlwaysNullBuffer}, false};
+diff --git a/cpp/src/arrow/type.h b/cpp/src/arrow/type.h
+index b4175bc2f..cca1d924e 100644
+--- a/cpp/src/arrow/type.h
++++ b/cpp/src/arrow/type.h
+@@ -969,6 +969,11 @@ class ARROW_EXPORT UnionType : public NestedType {
+             const std::vector<int8_t>& type_codes,
+             UnionMode::type mode = UnionMode::SPARSE);
+ 
++  // A constructor variant that validates input parameters
++  static Result<std::shared_ptr<DataType>> Make(
++      const std::vector<std::shared_ptr<Field>>& fields,
++      const std::vector<int8_t>& type_codes, UnionMode::type mode = UnionMode::SPARSE);
++
+   DataTypeLayout layout() const override;
+ 
+   std::string ToString() const override;
+@@ -990,6 +995,10 @@ class ARROW_EXPORT UnionType : public NestedType {
+  private:
+   std::string ComputeFingerprint() const override;
+ 
++  static Status ValidateParameters(const std::vector<std::shared_ptr<Field>>& fields,
++                                   const std::vector<int8_t>& type_codes,
++                                   UnionMode::type mode);
++
+   UnionMode::type mode_;
+ 
+   std::vector<int8_t> type_codes_;
+@@ -1305,10 +1314,10 @@ class ARROW_EXPORT DictionaryType : public FixedWidthType {
+ 
+   bool ordered() const { return ordered_; }
+ 
++ protected:
+   static Status ValidateParameters(const DataType& index_type,
+                                    const DataType& value_type);
+ 
+- protected:
+   std::string ComputeFingerprint() const override;
+ 
+   // Must be an integer type (not currently checked)
+diff --git a/cpp/src/arrow/util/int_util.h b/cpp/src/arrow/util/int_util.h
+index da4547379..19ee41c76 100644
+--- a/cpp/src/arrow/util/int_util.h
++++ b/cpp/src/arrow/util/int_util.h
+@@ -19,6 +19,7 @@
+ #define ARROW_UTIL_INT_UTIL_H
+ 
+ #include <cstdint>
++#include <limits>
+ #include <type_traits>
+ 
+ #include "arrow/util/visibility.h"
+@@ -83,6 +84,19 @@ SignedInt SafeLeftShift(SignedInt u, Shift shift) {
+   return static_cast<SignedInt>(static_cast<UnsignedInt>(u) << shift);
+ }
+ 
++/// Detect multiplication overflow between *positive* integers
++template <typename Integer>
++bool HasMultiplyOverflow(Integer value, Integer multiplicand) {
++  return (multiplicand != 0 &&
++          value > std::numeric_limits<Integer>::max() / multiplicand);
++}
++
++/// Detect addition overflow between *positive* integers
++template <typename Integer>
++bool HasAdditionOverflow(Integer value, Integer addend) {
++  return (value > std::numeric_limits<Integer>::max() - addend);
++}
++
+ /// Upcast an integer to the largest possible width (currently 64 bits)
+ 
+ template <typename Integer>

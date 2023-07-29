@@ -1,0 +1,108 @@
+diff --git a/cpp/src/arrow/array/validate.cc b/cpp/src/arrow/array/validate.cc
+index f42296165..0562e8e4c 100644
+--- a/cpp/src/arrow/array/validate.cc
++++ b/cpp/src/arrow/array/validate.cc
+@@ -27,6 +27,7 @@
+ #include "arrow/util/bit_util.h"
+ #include "arrow/util/checked_cast.h"
+ #include "arrow/util/int_util.h"
++#include "arrow/util/logging.h"
+ #include "arrow/visitor_inline.h"
+ 
+ namespace arrow {
+@@ -216,7 +217,31 @@ struct ValidateArrayVisitor {
+     if (array.value_data() == nullptr) {
+       return Status::Invalid("value data buffer is null");
+     }
+-    return ValidateOffsets(array);
++    RETURN_NOT_OK(ValidateOffsets(array));
++
++    if (array.length() > 0) {
++      const auto first_offset = array.value_offset(0);
++      const auto last_offset = array.value_offset(array.length());
++      // This early test avoids undefined behaviour when computing `data_extent`
++      if (first_offset < 0 || last_offset < 0) {
++        return Status::Invalid("Negative offsets in binary array");
++      }
++      const auto data_extent = last_offset - first_offset;
++      const auto values_length = array.value_data()->size();
++      if (values_length < data_extent) {
++        return Status::Invalid("Length spanned by binary offsets (", data_extent,
++                               ") larger than values array (size ", values_length, ")");
++      }
++      // These tests ensure that array concatenation is safe if Validate() succeeds
++      // (for delta dictionaries)
++      if (first_offset > values_length || last_offset > values_length) {
++        return Status::Invalid("First or last binary offset out of bounds");
++      }
++      if (first_offset > last_offset) {
++        return Status::Invalid("First offset larger than last offset in binary array");
++      }
++    }
++    return Status::OK();
+   }
+ 
+   template <typename ListArrayType>
+@@ -241,6 +266,14 @@ struct ValidateArrayVisitor {
+         return Status::Invalid("Length spanned by list offsets (", data_extent,
+                                ") larger than values array (length ", values_length, ")");
+       }
++      // These tests ensure that array concatenation is safe if Validate() succeeds
++      // (for delta dictionaries)
++      if (first_offset > values_length || last_offset > values_length) {
++        return Status::Invalid("First or last list offset out of bounds");
++      }
++      if (first_offset > last_offset) {
++        return Status::Invalid("First offset larger than last offset in list array");
++      }
+     }
+ 
+     const Status child_valid = ValidateArray(*array.values());
+diff --git a/cpp/src/arrow/ipc/reader.cc b/cpp/src/arrow/ipc/reader.cc
+index 52aaef222..faab0920e 100644
+--- a/cpp/src/arrow/ipc/reader.cc
++++ b/cpp/src/arrow/ipc/reader.cc
+@@ -684,6 +684,8 @@ Status ReadDictionary(const Buffer& metadata, DictionaryMemo* dictionary_memo,
+     return Status::Invalid("Dictionary record batch must only contain one field");
+   }
+   auto dictionary = batch->column(0);
++  // Validate the dictionary for safe delta concatenation
++  RETURN_NOT_OK(dictionary->Validate());
+   if (dictionary_batch->isDelta()) {
+     return dictionary_memo->AddDictionaryDelta(id, dictionary, options.memory_pool);
+   }
+@@ -737,20 +739,21 @@ class RecordBatchStreamReaderImpl : public RecordBatchStreamReader {
+       return Status::OK();
+     }
+ 
++    // Continue to read other dictionaries, if any
+     std::unique_ptr<Message> message;
+     ARROW_ASSIGN_OR_RAISE(message, message_reader_->ReadNextMessage());
++
++    while (message != nullptr && message->type() == MessageType::DICTIONARY_BATCH) {
++      RETURN_NOT_OK(UpdateDictionaries(*message, &dictionary_memo_, options_));
++      ARROW_ASSIGN_OR_RAISE(message, message_reader_->ReadNextMessage());
++    }
++
+     if (message == nullptr) {
+       // End of stream
+       *batch = nullptr;
+       return Status::OK();
+     }
+ 
+-    // continue to read other dictionaries, if any
+-    while (message->type() == MessageType::DICTIONARY_BATCH) {
+-      RETURN_NOT_OK(UpdateDictionaries(*message, &dictionary_memo_, options_));
+-      ARROW_ASSIGN_OR_RAISE(message, message_reader_->ReadNextMessage());
+-    }
+-
+     CHECK_HAS_BODY(*message);
+     ARROW_ASSIGN_OR_RAISE(auto reader, Buffer::GetReader(message->body()));
+     return ReadRecordBatchInternal(*message->metadata(), schema_, field_inclusion_mask_,
+diff --git a/testing b/testing
+index bb555cd8d..10ab9dd6d 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit bb555cd8df1e49b40ad9d4cc053c6a61f3146e86
++Subproject commit 10ab9dd6d4bd8276574d9efe55b759c1ad1a27a4

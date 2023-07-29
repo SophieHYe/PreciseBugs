@@ -1,0 +1,62 @@
+diff --git a/autotest/gcore/vrt_read.py b/autotest/gcore/vrt_read.py
+index d8ca1b63be..67f6361bf4 100755
+--- a/autotest/gcore/vrt_read.py
++++ b/autotest/gcore/vrt_read.py
+@@ -1287,3 +1287,24 @@ def test_vrt_shared_no_proxy_pool():
+ 
+     after = gdaltest.get_opened_files()
+     assert len(before) == len(after)
++
++
++def test_vrt_shared_no_proxy_pool_error():
++
++    vrt_text = """<VRTDataset rasterXSize="50" rasterYSize="50">
++  <VRTRasterBand dataType="Byte" band="1">
++    <SimpleSource>
++      <SourceFilename>data/byte.tif</SourceFilename>
++      <SourceBand>10</SourceBand>
++    </SimpleSource>
++  </VRTRasterBand>
++  <VRTRasterBand dataType="Byte" band="2">
++    <SimpleSource>
++      <SourceFilename>data/byte.tif</SourceFilename>
++      <SourceBand>11</SourceBand>
++    </SimpleSource>
++  </VRTRasterBand>
++</VRTDataset>"""
++    with gdaltest.error_handler():
++        ds = gdal.Open(vrt_text)
++    assert not ds
+diff --git a/gdal/frmts/vrt/vrtsources.cpp b/gdal/frmts/vrt/vrtsources.cpp
+index 313aed885d..7f03f51370 100644
+--- a/gdal/frmts/vrt/vrtsources.cpp
++++ b/gdal/frmts/vrt/vrtsources.cpp
+@@ -663,6 +663,7 @@ CPLErr VRTSimpleSource::XMLInit( CPLXMLNode *psSrc, const char *pszVRTPath,
+         papszOpenOptions =
+             CSLSetNameValue(papszOpenOptions, "ROOT_PATH", pszVRTPath);
+ 
++    bool bAddToMapIfOk = false;
+     GDALDataset *poSrcDS = nullptr;
+     if( nRasterXSize == 0 || nRasterYSize == 0 ||
+         eDataType == static_cast<GDALDataType>(-1) ||
+@@ -691,7 +692,7 @@ CPLErr VRTSimpleSource::XMLInit( CPLXMLNode *psSrc, const char *pszVRTPath,
+                         (const char* const* )papszOpenOptions, nullptr ) );
+                 if( poSrcDS )
+                 {
+-                    oMapSharedSources[pszSrcDSName] = poSrcDS;
++                    bAddToMapIfOk = true;
+                 }
+             }
+         }
+@@ -761,6 +762,11 @@ CPLErr VRTSimpleSource::XMLInit( CPLXMLNode *psSrc, const char *pszVRTPath,
+         poSrcDS->ReleaseRef();
+         return CE_Failure;
+     }
++    else if( bAddToMapIfOk )
++    {
++        oMapSharedSources[pszSrcDSName] = poSrcDS;
++    }
++
+     if( bGetMaskBand )
+     {
+         m_poMaskBandMainBand = m_poRasterBand;

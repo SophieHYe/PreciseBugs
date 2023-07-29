@@ -1,0 +1,15 @@
+diff --git a/gdal/frmts/wcs/wcsdataset.cpp b/gdal/frmts/wcs/wcsdataset.cpp
+index f822964d04..6dc1858a07 100644
+--- a/gdal/frmts/wcs/wcsdataset.cpp
++++ b/gdal/frmts/wcs/wcsdataset.cpp
+@@ -554,7 +554,10 @@ static bool ProcessError( CPLHTTPResult *psResult )
+ /*      sufficient.                                                     */
+ /* -------------------------------------------------------------------- */
+     if( CPLGetLastErrorNo() != 0 )
++    {
++        CPLHTTPDestroyResult( psResult );
+         return TRUE;
++    }
+ 
+     return false;
+ }

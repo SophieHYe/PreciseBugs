@@ -1,0 +1,16 @@
+diff --git a/mapfile.c b/mapfile.c
+index b79bfb58c..02ec6145b 100755
+--- a/mapfile.c
++++ b/mapfile.c
+@@ -4149,7 +4149,10 @@ int loadLayer(layerObj *layer, mapObj *map)
+           return(-1);
+         }
+ 
+-        if(loadJoin(&(layer->joins[layer->numjoins])) == -1) return(-1);
++        if(loadJoin(&(layer->joins[layer->numjoins])) == -1) {
++            freeJoin(&(layer->joins[layer->numjoins]));
++            return(-1);
++        }
+         layer->numjoins++;
+         break;
+       case(LABELCACHE):

@@ -1,0 +1,37 @@
+diff --git a/ext/opcache/Optimizer/zend_inference.c b/ext/opcache/Optimizer/zend_inference.c
+index e4bb7ec345..feb469303c 100644
+--- a/ext/opcache/Optimizer/zend_inference.c
++++ b/ext/opcache/Optimizer/zend_inference.c
+@@ -3002,7 +3002,9 @@ static zend_always_inline int _zend_update_type_info(
+ 				if (ssa_op->result_use >= 0) {
+ 					tmp |= ssa_var_info[ssa_op->result_use].type;
+ 				}
+-				if (opline->op1_type != IS_UNUSED) {
++				if (opline->op1_type != IS_UNUSED
++				 && (opline->op2_type == IS_UNUSED
++				  || (t2 & (MAY_BE_UNDEF|MAY_BE_NULL|MAY_BE_FALSE|MAY_BE_TRUE|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_RESOURCE|MAY_BE_STRING)))) {
+ 					tmp |= (t1 & MAY_BE_ANY) << MAY_BE_ARRAY_SHIFT;
+ 					if (t1 & MAY_BE_UNDEF) {
+ 						tmp |= MAY_BE_ARRAY_OF_NULL;
+diff --git a/ext/opcache/tests/opt/inference_002.phpt b/ext/opcache/tests/opt/inference_002.phpt
+new file mode 100644
+index 0000000000..70412426c2
+--- /dev/null
++++ b/ext/opcache/tests/opt/inference_002.phpt
+@@ -0,0 +1,15 @@
++--TEST--
++Type inference 002: Type inference for INIT_ARRAY with invalid index
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.optimization_level=-1
++--FILE--
++<?php
++var_dump([[]=>&$x]);
++?>
++--EXPECTF--
++Fatal error: Uncaught TypeError: Illegal offset type in %sinference_002.php:2
++Stack trace:
++#0 {main}
++  thrown in %sinference_002.php on line 2
+\ No newline at end of file

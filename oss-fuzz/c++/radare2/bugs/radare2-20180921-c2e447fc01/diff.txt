@@ -1,0 +1,12 @@
+diff --git a/libr/cons/cons.c b/libr/cons/cons.c
+index 7121ad309f..91f9a0b05f 100644
+--- a/libr/cons/cons.c
++++ b/libr/cons/cons.c
+@@ -452,6 +452,7 @@ R_API RCons *r_cons_free() {
+ 	cons_context_deinit (I.context);
+ 	R_FREE (I.context->lastOutput);
+ 	I.context->lastLength = 0;
++	R_FREE (I.pager);
+ 	return NULL;
+ }
+ 

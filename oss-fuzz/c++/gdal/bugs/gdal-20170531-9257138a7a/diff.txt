@@ -1,0 +1,12 @@
+diff --git a/gdal/frmts/ceos/ceosopen.c b/gdal/frmts/ceos/ceosopen.c
+index 23c68370ee..413cfd4e42 100644
+--- a/gdal/frmts/ceos/ceosopen.c
++++ b/gdal/frmts/ceos/ceosopen.c
+@@ -148,6 +148,7 @@ CEOSRecord * CEOSReadRecord( CEOSImage *psImage )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+                   "Short read on CEOS record data.\n" );
++        CPLFree( psRecord->pachData );
+         CPLFree( psRecord );
+         return NULL;
+     }

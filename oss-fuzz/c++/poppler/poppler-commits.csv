@@ -1,0 +1,1426 @@
+d8d63630	0e57662f	Fri Jul 21 17:22:11 2023 -0400	Fix float-cast-overflow error in Catalog
+22c68e52	e0148dbc	Thu Jul 13 14:13:22 2023 -0400	Fix use-of-uninitialized-value in XRef
+2c403ec5	6ebe45e8	Tue Jun 27 22:00:31 2023 +0000	Fix crash if CERT_ExtractPublicKey doesn\'t return a public key
+e885124a	cd999897	Fri Jun 16 11:01:41 2023 +0200	utf8ToUtf16(): fix out-of-bounds write
+cd999897	8eea66b8	Thu Jun 15 07:46:59 2023 +0000	Revert "Remove poppler mingw CI until it\'s fixed again"
+9183da4f	7cf6cd7b	Tue Jun 13 22:24:24 2023 +0000	Fix reading of utf8-with-bom files
+19679f28	f67c0187	Fri Jun 9 14:47:27 2023 +0000	Fix build without NSS
+f67c0187	8d4764b4	Fri Jun 9 16:27:37 2023 +0200	Fix 32bit build.
+fa00b3fb	c002bee1	Mon Jun 5 11:09:13 2023 +0200	Fix cornercase crash in weird pdfsig setups
+2dcbf583	981210b9	Mon Jun 5 00:57:15 2023 +0200	Remove poppler mingw CI until it\'s fixed again
+6f7c8d24	33672ca1	Mon May 22 21:55:37 2023 +0000	fix segfault in _free_type3_font_info
+33672ca1	4efd2f9f	Mon May 22 19:53:08 2023 +0000	Fix crash with weird hashing used for signatures
+591235c8	db6d8623	Wed May 17 20:43:18 2023 +0000	OutlineItem::open: Fix crash on malformed files
+beb63c33	aefd09f9	Fri May 12 11:59:07 2023 +0000	Fix crash when signing existing signature
+6a566e41	adf710ee	Thu May 4 14:42:25 2023 +0200	Fix memory leak when looking for fonts in Windows
+39d00097	2cf3cf58	Fri Apr 28 15:09:13 2023 +0200	API fixup: Use optional instead of a \'None\' backend
+1be35ee8	8354c73e	Wed Apr 12 22:47:41 2023 +0200	Fix stack overflow in PostScriptFunction::parseCode
+34168702	4c6da80a	Sun Apr 2 12:19:44 2023 +0200	GfxCIDFont::getCodeToGIDMap: Fix uninitialized memory reads
+770b0e13	098d2d49	Tue Mar 28 12:34:10 2023 +0200	CI: fix mingw
+098d2d49	08c0766e	Mon Mar 27 17:52:28 2023 +0200	Fix crash in bad signature verification
+ac5cc024	d5d23b3b	Sun Mar 26 23:37:42 2023 +0200	Fix leak when calling addAnnot on malformed files
+d07818d6	96a953db	Fri Mar 24 09:19:23 2023 +0000	Page::removeAnnot: Reorder code to fix memory leak
+ea5e64f1	3d38bd6a	Fri Mar 24 09:19:23 2023 +0000	PDFDoc::sign: Fix memory issue when signing fails
+3d38bd6a	f8d8753f	Thu Mar 23 09:38:47 2023 +0000	Fix use of dangling memory
+2b53d5a8	8787103a	Mon Mar 20 11:48:42 2023 +0100	Fixup for 8787103a43
+90da1d7b	b46e395c	Fri Mar 10 23:27:51 2023 +0100	Fix memory leak in GlobalParams::findSystemFontFileForFamilyAndStyle
+329ec39c	7673e1fd	Thu Feb 2 23:58:09 2023 +0100	PngWriter: Fix uninitialized memory use
+53115a05	da39bd93	Sat Jan 14 09:56:57 2023 +1030	Fix cairo rendering of color type 3 fonts
+63bfacc8	924ef426	Mon Jan 9 21:55:50 2023 +0000	Fix "NSS could not shutdown"
+4f8c8297	4259ff0c	Mon Jan 9 21:35:50 2023 +0100	Fix segfault on wrong nssdir
+09fdfece	6a19713c	Mon Dec 12 23:30:25 2022 +0100	PDFDoc::sign: Fix crash if font can\'t be found
+b1fe3a03	46b185c2	Sun Dec 4 02:20:27 2022 +0100	cmake: nss: Fix typo and remove "deprecated" variables
+2944c16a	54c93aad	Fri Dec 2 22:55:51 2022 +0100	Fix crash on broken documents
+a5952ab7	8fcaa7c6	Wed Nov 2 15:04:02 2022 +0100	Revert "CI: Fix Debian brokenness"
+8fcaa7c6	cc665f75	Tue Nov 1 10:12:49 2022 +0100	CI: Fix Debian brokenness
+907d05a6	e53f5aae	Wed Oct 19 21:30:47 2022 +0200	Fix crash in file that wants to do huge transparency group
+e53f5aae	a4ca3a96	Wed Oct 19 21:15:29 2022 +0200	PSOutputDev::setupResources: Fix stack overflow in malformed doc
+48974ec4	be94b9c1	Thu Sep 15 16:02:07 2022 +0200	Fix typos in method names
+9e0d0e65	4602cac9	Thu Sep 1 13:18:39 2022 +0800	Fix `sed` invocation.
+9a3d991e	c4cc5650	Wed Aug 31 16:26:45 2022 +0200	Fix copy\'n\'paste bug in the check for bounding box correctness
+5c3cbea4	8452b0de	Mon Aug 29 21:57:28 2022 +0000	SignatureHandler: Fix getSignerName when signing_cert is available but CMSSignerInfo is not
+2beb4582	977dd217	Mon Aug 29 21:57:28 2022 +0000	Annot: Fix applying signatures to fields that are not part of a form
+977dd217	6b5437a0	Mon Aug 29 21:57:28 2022 +0000	PDFDoc: Fix finding signature fields not associated with a form
+6b5437a0	27354e9d	Mon Aug 29 00:45:19 2022 +0200	Fix memory leak in TextStringToUTF8
+27354e9d	619bfc1f	Thu Aug 25 00:16:48 2022 +0200	JBIG2Stream: Fix crash on broken file
+03c7bbd6	d1b1535a	Fri Aug 19 16:58:09 2022 +0000	JBIG2Stream::readHalftoneRegionSeg: Fix potential memory leak
+d1b1535a	99889f51	Fri Aug 19 18:54:21 2022 +0200	pdfunite: Fix potential memory leak of docs
+99889f51	efb68686	Fri Aug 19 18:38:06 2022 +0200	glib: Fix two potential memory leaks in poppler_document_create_dests_tree
+4564a002	c9c5eb78	Sat Aug 13 16:53:11 2022 +0000	pdfunite: Fix crash on broken files
+41af8960	0c42f748	Wed Aug 3 16:12:00 2022 -0600	Fix convertToUtf16 so it does not add the Unicode marker to the output string
+0c42f748	12853d22	Tue Aug 2 23:18:41 2022 +0200	Fix error() string formatting
+78e93913	a89c3c27	Mon Aug 1 21:33:53 2022 +0200	Fix infinite recursion in broken files
+cb1f2a68	8f874169	Fri Jul 29 20:59:28 2022 +0200	JBIG2Stream: Fix crash on broken files
+2e3c53b7	dcd5bd82	Thu Jul 28 01:10:27 2022 +0200	Fix leak in early return check that was just introduced
+40762b05	188aa1f8	Sun Jul 3 17:36:05 2022 +0000	Form.cc: Fix crash in Form::ensureFontsForAllCharacters()
+188aa1f8	a59bd7fa	Mon Jun 20 18:55:31 2022 +0000	Fixes 2 MSVC compilation bugs
+e7e9721b	da226d34	Tue Jun 14 17:43:55 2022 +0000	Annot: Fix first lines of Annotations sometimes being cut off
+ae13fd1f	f33cdde7	Tue May 31 21:21:16 2022 +0000	Fix type 3 font size initialization in pdftohtml using font bounding box
+7c822d06	ea8c6fe9	Wed May 25 17:59:26 2022 +0200	test: Fix finding cairo headers on compile time
+b700e0b2	4139f79c	Tue May 17 00:52:04 2022 +0200	Forms: Fix crash in forms with their own DR
+4139f79c	4eeb3380	Fri May 13 01:31:59 2022 +0200	TextPage::coalesce: Fix crash on broken files
+b2f48cfc	5b476757	Mon May 9 21:38:11 2022 +0000	Fix uninitialized memory read on broken files
+27672cc0	09db9f0d	Sun May 8 22:46:19 2022 +0000	JBIGStream: Fix unint memory read on broken files
+5d543e80	d2dd9c32	Thu May 5 04:59:42 2022 +0000	Fix c_time usage
+ac9b736c	133d0b06	Tue May 3 00:16:00 2022 +0200	Fix rendering regression introduced in 5f915d46c99ecbc0c026b86de50f9e0243391a01
+8ce9069f	30900493	Tue Apr 26 20:24:38 2022 -0400	fix multiline find_text() bug in two column docs
+30900493	85b487c5	Tue Apr 26 20:24:38 2022 -0400	fix bug in multiline find_text()
+74f11fbc	67190c0a	Fri Apr 22 11:13:45 2022 +0200	Stream: Fix two types to hold what the are stored to
+6a4bbacb	7ff9c784	Thu Apr 14 01:23:55 2022 +0200	Fix crash in very badly damaged documents when adding a freetext annotation
+3ca9992a	b1ad0474	Fri Apr 8 13:44:29 2022 +0200	MSVC: Fix conversion warnings
+b1ad0474	6f9f8383	Fri Apr 8 13:44:29 2022 +0200	MSVC: type conversion warning fix
+6f9f8383	23c70adb	Fri Apr 8 13:44:26 2022 +0200	MSVC: type warning fixes
+0ccae234	bea57d66	Fri Apr 8 10:47:01 2022 +0200	MSVC: More warning fixes
+bcec8308	0b474ffb	Wed Apr 6 15:03:54 2022 +0200	Fix warning when compiling on FreeBSD
+8a06776b	d55f9ee3	Tue Apr 5 16:50:56 2022 +0200	cpp: MSVC warning fixes
+7f2b2964	61f6d6d1	Mon Apr 4 11:34:24 2022 +0000	Fix clang warning
+5e57fc60	f5aca2be	Sat Apr 2 01:27:36 2022 +0200	More MSVC fixes
+da504033	eecd2434	Sat Apr 2 00:28:32 2022 +0200	Fix MSVC warning
+64f9c8d0	17cb4acb	Fri Apr 1 16:57:48 2022 +0200	Fix typo of d35e11a8f84d396a9d9ef43ef852d377adc3830a
+8942ba12	e60280ae	Thu Mar 31 15:23:38 2022 +0200	Fix regression caused by d72c22caf28cbe8cf1e268f8ff741d7e1330df63
+48bbbfef	c513b069	Wed Mar 30 23:20:05 2022 +0200	Fix crash introduced in dbbaa1651dc168f71054e3dd9ef91e33c960bfb7
+c513b069	404edfd1	Wed Mar 30 18:54:26 2022 +0200	GlobalParams::setupBaseFonts(): fix memory leaks related to GooString
+d72c22ca	022b361d	Wed Mar 30 13:00:22 2022 +0000	Fix regression caused by a6b2442e37cc00534bcdca7c83366a0fa0501157
+6299164c	426f149c	Mon Mar 28 11:52:45 2022 +0000	glib: Fix mem leak in poppler_document_new_from_fd
+426f149c	eefc8ef6	Mon Mar 28 12:37:49 2022 +0200	CI: switch to debian testing while they fix the python migration mess
+9fed1604	5269ce10	Sun Mar 27 12:32:43 2022 +0200	Fix memory leak
+6551e167	4f1f202f	Tue Mar 15 16:45:33 2022 +0100	Fix crash caused by efe7d77838896ddcefb838f382628ae31be54d99
+d55227d2	9e2dc642	Tue Mar 8 15:22:39 2022 +0100	Fix easy warning when building on mingw
+a16189a8	6e1fe42a	Tue Mar 8 13:31:11 2022 +0000	glib: Fix returning c_str() of temporal strings
+894b4740	35f06568	Sun Mar 6 16:06:11 2022 +0000	Fix underline sometimes being drawn only partially
+6f2e2fde	64d53889	Mon Feb 21 23:03:21 2022 +0000	Fix poppler_localdir for relocatable Windows builds
+651c533e	07889cdf	Wed Feb 16 10:03:41 2022 +0000	pdfimages: Fix the wrong Stream being passed for drawMaskedImage
+652ff5ea	b8dab63b	Wed Feb 2 20:20:22 2022 +0100	Fix getting the home dir in Windows
+602f39aa	b2f14ccb	Tue Feb 1 23:19:00 2022 +0100	Windows: Fix path where to look for firefox NSS DB
+ceba74e5	e9d5731b	Mon Jan 31 20:35:16 2022 +0000	Fix leak introduced in 953c9c762f346236d856327833f3a550b993138a
+4d2fa980	14baf977	Thu Jan 20 22:57:01 2022 +0000	Fix glib compilation on MSVC
+14baf977	79984852	Thu Jan 20 23:17:00 2022 +0100	pdfsig: Fix compile with MSVC
+79984852	66100be4	Tue Jan 18 14:49:52 2022 +0000	SignatureHandler: Fix crashes on Windows
+cbaee791	b3ca5e58	Mon Jan 17 16:37:24 2022 +0100	Fix including gdir.h in Windows
+9f5e62f4	c2063dce	Mon Jan 3 18:26:25 2022 +0000	pdfsig: Fix signing with -sign if nss password is needed
+e1613d72	405b7ce2	Wed Dec 29 17:40:11 2021 +0100	pdfsig: Fix signing documents with owner/user password
+4aca8d65	21a074b6	Tue Dec 14 01:14:19 2021 +0000	poppler/Form.cc: fix crash when calling Form::reset()
+e73a2b3a	c99378fe	Fri Dec 10 10:42:22 2021 +0100	PSOutputDev::startPage: Fix potential integer overflow
+27462601	d8032e79	Fri Dec 3 22:29:59 2021 +0000	Fix crash in Splash::gouraudTriangleShadedFill
+d1be2ba7	9fa12987	Tue Nov 30 11:15:41 2021 +0100	Fix memory leak when embedders are not available
+1ad64ccf	bcabe82f	Thu Nov 25 13:54:18 2021 +0100	glib: Fix a warning about missing element-type annotation
+4b6a5305	c7025893	Wed Nov 24 16:01:08 2021 +0000	Form.cc: fix -Wstringop-truncation warning
+c7025893	e0c5c126	Wed Nov 24 16:46:40 2021 +0100	FlateEncoder.cc: fix -Wzero-as-null-pointer-constant warnings
+97fe0bc4	5eecc8aa	Fri Nov 19 09:42:27 2021 +0100	Fix compile on MSVC #2
+5eecc8aa	1c3c1b2e	Fri Nov 19 01:05:30 2021 +0100	Fix compile on MSVC
+0e8d7d11	6d72d824	Sat Nov 6 23:35:59 2021 +0000	Fix de-duping of Flate images
+6d72d824	33c9b192	Fri Nov 5 10:50:11 2021 +0100	Fix crash on broken files when using non-default ENABLE_ZLIB_UNCOMPRESS
+b15bf352	9af5896f	Mon Nov 1 00:35:21 2021 +0100	StructElement::parseChild: Fix memory leak
+f18e9f9f	fa27a634	Tue Oct 26 22:28:26 2021 +0200	Fix crash in malformed files
+72902cfa	8fc71482	Fri Oct 15 17:10:24 2021 +0000	Fix Android CI
+3b8a0158	07ce4864	Sat Sep 25 18:53:53 2021 +0200	Fix copy&paste mistake of previous commit
+07ce4864	d90f153e	Sat Sep 25 12:47:37 2021 +0200	Splash: Fix pattern whose values are not 0 but close enough
+62f014c4	431d2e6c	Thu Sep 16 13:43:00 2021 +0200	pdfsig: fix typo in man page
+e2183097	db9aa98f	Fri Aug 27 14:34:25 2021 +0000	Fix up setmode calls
+f51d2519	c92e079e	Thu Aug 26 07:09:13 2021 +0000	SplashOutputDev::drawImage(): Fix abort() in failed gmallocn
+56822eb1	4aaabeca	Sat Aug 7 23:41:46 2021 +0200	Fix the build_clang12_libcpp CI
+f35567dc	ef8c8ca8	Mon Jul 26 18:19:05 2021 +0000	Fix XRef::copy when we have modified objects
+eea6b4f9	5977890b	Sat Jul 10 23:59:35 2021 +0200	AnnotAppearanceBuilder::drawListBox: Fix memory leak on error condition
+f2a6c6fe	fcdff7bb	Mon Jul 5 20:59:06 2021 +0200	JBIG2Stream: Fix regression caused by 2b2808719d2c91283ae358381391bb0b37d9061d
+77eb02c2	557b86db	Tue Jun 15 07:39:23 2021 +0000	PSOutputDev: fix off-by-one error for image masking in L1/L2 output
+b9314b06	07edd3d3	Wed Jun 2 15:25:47 2021 +0100	glib: fix poppler_rectangle_free() regression
+aad32f49	e43a3d9c	Wed Apr 21 23:55:04 2021 +0200	GfxShading::init: Fix assert in broken files
+0e732883	b770a55a	Thu Apr 15 14:36:07 2021 +0000	pdftoppm: Fix regression when using single scaleTo
+be9960e8	8859bffb	Wed Apr 14 00:07:06 2021 +0200	PSOutputDev::setupResources: Fix infinite recursion call on broken files
+2ed4cd66	d7aa275b	Wed Apr 7 00:20:40 2021 +0200	TextOutputDev: Fix crash in malformed file
+40cc13db	c8d66bee	Sun Mar 28 15:12:46 2021 +0000	Forms: fix unclicking standalone form buttons
+42dde686	57836ce2	Sun Mar 21 23:05:13 2021 +0000	qt: Fix memory leak when QImage constructor "fails"
+57836ce2	81bee89c	Tue Mar 16 17:49:08 2021 +0000	Fix rendering of text in some files
+7578e04f	6267bf4d	Fri Mar 12 22:38:13 2021 +0000	TextSelectionDumper: fix word order for RTL text
+59d50364	ce1fcd43	Tue Mar 9 17:53:00 2021 +0100	qt: Fix crash in files with malformed signatures
+1d91d033	6a81075c	Mon Mar 1 00:28:42 2021 -0400	glib/poppler-structure-element: fix memleak
+6a81075c	9514dcec	Sun Feb 28 23:46:11 2021 +0000	pdftoppm: Compile fix for the unsupported UTILS_USE_PTHREADS define
+03b67050	7d7e09cf	Tue Feb 23 22:04:28 2021 +0000	poppler_annot_free_text_get_callout_line: Fix wrong static cast
+5161fa6f	3746704a	Sat Feb 20 22:30:14 2021 +0100	Fix memory leak in broken file in JBIG2Stream::readGenericBitmap
+5d082425	61d052e9	Sat Feb 20 22:19:08 2021 +0100	Fix leak in case of fread failing
+d6cccfb8	e7fa274d	Sun Feb 14 11:02:41 2021 +0000	TextSelectionDumper: Fix getText() for space after word
+e21c8365	5528ab8a	Sat Feb 13 10:54:19 2021 +0000	pdftoppm: Fix rounding bug in computation of output bitmap size
+c72a1c31	2589f325	Mon Feb 8 00:02:11 2021 +0100	PSOutputDev: Fix stack overflow in broken files
+41f5acec	5b8f942f	Sat Feb 6 23:58:07 2021 +0100	Fix parsing text in some broken pdf files
+222f96ed	7c6a8b90	Mon Jan 18 00:35:51 2021 +0100	qt: Fix regression in QIODeviceOutStream + MSVC
+6fed4c9f	051cae3b	Sat Jan 16 12:33:14 2021 +0100	FoFiTrueType::cvtSfnts: Fix uninitialized memory read on broken files
+d776dafb	4becde57	Fri Jan 15 23:50:48 2021 +0100	Splash: fix uninitialized memory read on broken files
+4becde57	c0f34e98	Fri Jan 15 16:08:15 2021 +0100	CCITTFaxStream: Fix uninitialized memory read in broken files
+548fe49f	3252bc32	Fri Jan 15 16:01:01 2021 +0100	Gfx::opSetFillRGBColor: Fix uninitialized memory read in bad files
+fec79bfc	e68410e3	Sun Jan 10 19:45:23 2021 +0100	FoFiTrueType::cvtSfnts: Fix uninitialized memory read on broken files
+2308e6fb	04035f91	Fri Jan 8 13:55:40 2021 +0100	Fix uninitialized memory read on broken files
+562770a7	5c28b47b	Thu Jan 7 00:04:25 2021 +0100	PSOutputDev: Fix memory leak on broken files
+5c28b47b	2b822714	Wed Jan 6 12:08:39 2021 +0100	Fix leak introduced in 0e6c3ff9bb4390d2b426a4cddbb638c19811055d
+2b822714	d0497325	Wed Jan 6 00:06:37 2021 +0100	JBIG2Stream::readTextRegion: Fix yet another potential integer overflow
+6c9f9a49	d5ac5a3a	Tue Jan 5 13:11:31 2021 +0100	FoFiType1C::cvtGlyph: Fix uninitialized memory read on broken files
+d5ac5a3a	0e6c3ff9	Tue Jan 5 13:11:25 2021 +0100	Fix two k that should have been k+1
+43126be5	8f599d8c	Sun Jan 3 22:34:58 2021 +0100	PSOutputDev: Fix memory leak on broken files
+bc6acbff	af267b33	Sun Jan 3 19:20:45 2021 +0100	PSOutputDev: fix a few integer overflows
+6b4f07ad	3928dde5	Sun Jan 3 01:08:29 2021 +0100	HtmlOutputDev: Fix error() parameter type
+7e4ec140	43b5a94a	Sat Jan 2 23:57:29 2021 +0100	FormWidgetSignature::signDocument: Fix resource leak if something goes wrong
+43b5a94a	27258358	Sat Jan 2 22:49:43 2021 +0000	Fix potential memory leak in FormWidgetSignature::updateOffsets
+db171f48	0a1174ff	Sat Jan 2 23:03:29 2021 +0100	Fix memory leak if saving the file fails
+b8de1a19	51151d41	Fri Jan 1 16:57:13 2021 +0000	JBIG2Stream: Fix byte counting
+3cb5d253	72827b0c	Wed Dec 30 20:06:59 2020 +0100	Fix regression in JBIG2Stream.cc
+3fb0f4bd	43944093	Sun Dec 27 19:41:15 2020 +0100	Fix integer overflow with broken files
+4f478daa	3cc28b66	Wed Dec 23 23:52:58 2020 +0100	Fix opening files by some generators that are a bit broken
+3cc28b66	629d8aa1	Wed Dec 23 23:27:02 2020 +0100	FoFiType1C: Fix crashes with broken files
+629d8aa1	1c0c2ce5	Wed Dec 23 00:01:46 2020 +0100	GfxCIDFont::GfxCIDFont: Fix Integer-overflow on broken files
+238dc045	4c81b066	Tue Dec 22 23:02:04 2020 +0100	Fix infinite looping in cvtGlyph with broken files
+11b2bc1b	52808e8d	Mon Dec 21 18:37:01 2020 +0100	CI: Seems debian unstable clazy got fixed
+ae614bf8	e1f56258	Sun Dec 20 23:15:12 2020 +0100	Fix DCTStream::getChars we\'re reading past the buffer check
+6ec2556b	c71de243	Sat Dec 19 09:55:08 2020 +0100	JBIG2Reader: Fix binary constant
+c38694ae	407293bf	Thu Dec 17 18:38:28 2020 +0000	Fix integer overflow on broken files
+407293bf	b162c710	Wed Dec 16 10:21:31 2020 +0100	Fix potential data loss if we try to fetch a non existing Ref after modifying the document
+49ec8c26	013dbfaf	Sun Dec 13 18:48:34 2020 +0000	XRef: Fix wrong memory read on destruction
+013dbfaf	64e46de8	Sun Dec 13 18:48:33 2020 +0000	qt5: more signature leak fixes
+0ee37e92	f1e703c6	Sun Dec 13 18:48:33 2020 +0000	Fix a few memory leaks in the new signing code
+506769dc	ea268e5c	Sun Dec 13 18:48:33 2020 +0000	Fix PKCS signature generation
+fd002965	51d6f90a	Sun Dec 13 18:48:33 2020 +0000	Fixup GooString
+ac9e14b9	acf4c8e1	Sat Dec 12 18:26:39 2020 +0000	SplashOutputDev: Fix crash on broken files
+32857374	5d3e71c8	Tue Dec 8 12:30:27 2020 +0100	Enable bugprone-signed-char-misuse
+5eb2dec2	bb599a78	Sat Dec 5 21:53:58 2020 +0000	PSOutputDev: fixing two oversights in the rasterization code
+d608992b	113a1f4c	Wed Dec 2 22:23:37 2020 +0000	fix comment in parseargs.cc
+113a1f4c	66a65f99	Wed Dec 2 22:23:37 2020 +0000	bugfix: add missing profile copy operation in GfxICCBasedColorSpace::copy()
+11d97ec8	57f9f7f1	Tue Dec 1 23:42:22 2020 +0100	Fix memory leak in 722f37f7ab39e6d3b7fffb69907433d25f30b5ef
+722f37f7	8ef16f82	Tue Dec 1 21:03:33 2020 +0000	Splash: Fix blitImage in uncolored tiling patterns
+751deb8a	306df53b	Sun Nov 29 00:03:26 2020 +0100	XRef::removeIndirectObject: Fix overflow of gen
+306df53b	d8fb21b7	Sat Nov 28 20:59:25 2020 +0100	Fix abort when searching for "bad" label names
+d8fb21b7	2386bf37	Sat Nov 28 20:23:43 2020 +0100	Fix crash when searching things of length 0
+de8abb8d	c48f469c	Sat Nov 28 01:06:37 2020 +0100	cpp: page::search: Fix invalid memory access if searching for the empty string
+c48f469c	bce14c78	Sat Nov 28 00:55:49 2020 +0100	qt5: Fix division by 0 in broken files
+bce14c78	691866a3	Sat Nov 28 00:34:52 2020 +0100	Fix crash in XRef::removeDocInfo() if Info is not a ref
+44af1536	919a71e5	Fri Nov 27 12:23:31 2020 +0000	Fixing null-terminated string parameters
+1e73805f	48026f90	Fri Nov 27 12:23:31 2020 +0000	Fixes from Michael\'s feedback
+48026f90	890de69d	Fri Nov 27 12:23:31 2020 +0000	Fixing clang_format issues
+1fba0c2b	7478ee80	Wed Nov 25 18:05:55 2020 +0000	qt6: fix packages for CI
+fb93776c	aaf2e808	Tue Nov 24 01:29:59 2020 +0100	Fix Annot border when C is present but empty -> transparent
+cd145d56	2c353300	Fri Nov 20 09:14:02 2020 +0100	Fix rendering of some files
+15960417	331f2f09	Wed Nov 18 20:14:53 2020 +0100	JBIG2Stream::readTextRegion: Fix integer overflow on broken files
+331f2f09	5a65db3d	Tue Nov 17 08:37:11 2020 +0100	Fix annotation line width if no appearance stream or style are given
+db5f849a	72e7e1e8	Sun Nov 15 21:56:42 2020 +0000	Splash: Fix wrong x adjustment during clipping
+0a243dd9	eaa1e07b	Mon Nov 2 22:36:31 2020 +0100	GfxFunctionShading::getColor: Fix buffer overrun in broken documents
+3c16e88f	e4e261a0	Sun Nov 1 22:10:25 2020 +0000	pdftops: fix wording in processcolorformat-related error messages
+55a71830	3a6c0f66	Sun Nov 1 18:58:53 2020 +0100	Fix comment as pointed out by Nelson
+af86c98f	1ad3bc82	Fri Oct 30 16:04:53 2020 +0100	CI: Fix qt6 build
+613c9ce5	8d0765e9	Mon Oct 19 17:38:16 2020 +0200	qt6: fix compile with newer qt6 code
+2fd2acd7	8b7dec28	Fri Oct 16 17:22:34 2020 -0400	cmake: Deduplicate _list_prefix macro
+ec878dc5	c67bd3fa	Fri Oct 16 17:22:22 2020 -0400	cmake: Fix linker error when gtk is not in a default location
+c67bd3fa	3d9dab78	Thu Oct 15 14:18:56 2020 +0200	Fix uninitialized memory read on broken files
+d4be9543	4fee2408	Wed Oct 7 00:10:36 2020 +0200	cpp: Fix crashes in embedded file handling on broken files
+cfeb9525	2a3368e9	Thu Sep 24 23:44:08 2020 +0000	Fix undefined behaviour null pointer passed as argument 2, which is declared to never be null
+2a3368e9	613d5f2a	Thu Sep 24 23:44:08 2020 +0000	Fix undefined behaviour applying non-zero offset 1 to null pointer
+636d12b0	8fd2a278	Fri Sep 18 01:27:00 2020 +0200	Fix compilation with new Qt6 snaptshot
+e2ecddf3	91d95545	Sun Sep 13 04:52:45 2020 +0100	Implement EmbedStream::reset() to fix pdftops -level1sep -optimizecolorspace for in-line images.
+c4771352	92ebc641	Sat Sep 5 21:26:37 2020 +0200	addStrokeAdjustHint(): fix crash in out-of-memory situation.
+b82d0e17	ee0bd544	Tue Sep 1 22:45:32 2020 +0200	Fix memory leak introduced in 9e853438c5e9d56c07141220f2b30d7215ee9278
+7064bb38	e10b0a88	Mon Aug 24 21:16:50 2020 +0000	Fix clearing date in Annot setModified/setDate
+e10b0a88	307d6db4	Sat Aug 22 21:55:10 2020 +0000	qt: MSVC test fixes
+307d6db4	cad2f028	Sat Aug 22 22:44:53 2020 +0200	Gfx::opSetExtGState: Fix memory leak on broken files
+dccd9dbc	171bd475	Fri Aug 21 18:50:17 2020 +0000	Fix #elif statement
+3a9bfd6e	95adf3ed	Mon Jul 20 18:35:22 2020 +0200	Fix x86 + windows asm
+ec8a43c8	3a6c77bc	Mon Jul 13 20:20:40 2020 +0000	Fix stack overflow with specially crafted files
+969562d3	8ee6907b	Sat Jul 11 18:27:24 2020 +0200	Fix UTF16LE support in TextStringToUCS4
+b2fadd0f	2ec6bb9d	Thu Jul 9 23:41:22 2020 +0200	Fix conversion to PS in locales where decimal point is ,
+69794176	434d7a86	Tue Jun 30 18:13:26 2020 +0000	fix boundingbox of type3 fonts
+434d7a86	53368f17	Tue Jun 30 17:48:14 2020 +0000	poppler-glib: fix adding annots in rotated pages
+94e00cbe	ebb77e7a	Mon Jun 22 19:35:53 2020 +0200	qt5: demo: Fix crash on broken files
+ebb77e7a	1460bb96	Sun Jun 21 22:05:55 2020 +0000	Fix infinite loop in broken file
+bf15ccd4	9c9c3df8	Fri Jun 12 11:32:26 2020 +0200	glib: Several fixes to the documentation
+e3a48759	b58d77e9	Sun Jun 7 11:18:56 2020 +0200	fix running cmake with cmake < 3.12
+bf33c25b	562b5a33	Tue May 19 17:47:49 2020 +0200	Fix memory leak when failing to load some fonts
+5cdb78fd	0f01638f	Thu May 14 00:22:33 2020 +0200	Fix crash in PDFDoc::getSignatureFields when there\'s no Forms at all
+9c3b18b8	02ec7a70	Tue May 12 23:14:35 2020 +0200	cairo: Fix tiling patterns when pattern cell is too far
+7c890b37	e10d9cbb	Mon May 11 10:12:23 2020 +0200	Fix typo in variable name
+162fdf21	17b01bd1	Fri Apr 10 22:01:00 2020 +0000	[arthur] Fix font hinting
+155f73bd	4098c654	Wed Apr 8 00:14:26 2020 +0200	Fix crash in destruction of standalone forms
+4098c654	4e3c9a89	Tue Apr 7 17:33:31 2020 +0200	Fix test in MSVC
+1ff36d64	ba81433a	Mon Mar 30 23:27:33 2020 +0200	pdftohtml: Fix noRoundedCoordinates->noroundcoord in man page
+4382264f	5c601c40	Sun Mar 22 12:32:02 2020 +0100	Fix leak in broken files
+81a86064	80fa729b	Wed Mar 18 11:39:50 2020 +0100	Fix vague linkage of Link* class vtables
+af556508	f1480aa0	Wed Mar 11 17:06:16 2020 -0600	Fix memory leak in HtmlOutputDev::getLinkDest
+84c52530	b3cfbbf2	Sun Mar 1 18:08:52 2020 +0000	Fix regression in URI link handling
+35b7e926	a11fc679	Wed Feb 26 21:35:54 2020 +0000	Revert "pdfinfo: Fix another leak"
+afa0528e	90a14418	Tue Feb 25 21:06:32 2020 +0000	pdftoppm/pdftocairo: Fix more odd/even mismatch
+bdafd606	dcce8cc1	Thu Feb 20 22:14:29 2020 +0100	CI: Ignore bugprone-sizeof-expression for clang-tidy
+4ca0cde9	d27cf873	Tue Feb 11 08:00:55 2020 +0000	glib: Fix leak if poppler_document_new_from_file fails
+0bdf0d31	2df04a39	Thu Jan 30 22:27:55 2020 +0100	qt5: Fix loading from iodevice
+2816a359	e249d896	Tue Jan 28 23:43:24 2020 +0100	qt5: fix search for "complex" characters
+4b063f84	a047dea6	Mon Jan 13 09:13:45 2020 +0000	pdftoppm/pdftocairo: Fix -e/-o printing the wrong pages
+c80a0012	ca9b9cb2	Fri Jan 10 00:07:12 2020 +0000	PSStack::copy: Fix integer overflow leading to potential crash
+ca9b9cb2	12a657c5	Thu Jan 9 23:41:39 2020 +0000	Fix crash on broken files
+dd0ea681	c4f8555b	Sun Jan 5 23:35:51 2020 +0000	qt5: Fix FormField::name encoding
+a0e6c8ff	bc825050	Sun Jan 5 23:08:45 2020 +0100	Fix crash in unicodeToAscii7
+ed8159b0	78840bb7	Wed Dec 4 09:29:55 2019 -0300	Fixes pdfsig exit code when dumping signatures
+36bc1703	4163bccb	Tue Dec 3 23:38:36 2019 +0100	Fix calling a function on a null pointer
+f401ad7a	2a115270	Sun Dec 1 19:15:49 2019 +0000	JBIG2Stream: fix leak in reset() if called several times
+8d46550c	6e60cd8e	Sat Nov 30 19:23:49 2019 +0000	Improve pdftops -optimizecolorspace by implementing the CMYK to K conversion in more places. This fixes the conversion of the PDF in poppler/poppler#833
+98dbe4be	0e6790f1	Thu Nov 28 18:35:54 2019 +0000	glib: Fix poppler_action_layer_copy function cast warning
+0e6790f1	9b450304	Thu Nov 28 18:35:54 2019 +0000	glib: Fix return in poppler_page_get_text_attributes_for_area
+72a8d1bf	23685aab	Thu Nov 28 11:07:07 2019 +0000	HtmlPage::dumpComplexHeaders: Fix memory leak
+99f99aa9	1417e682	Tue Nov 19 20:21:11 2019 +0000	fix comment
+8b4a2891	409121ea	Fri Nov 8 00:44:20 2019 +0100	Fix uninitialized memory use in JBIG2Stream::readTextRegionSeg
+aa7827ab	bd3a7119	Wed Oct 30 21:21:56 2019 +0000	Use Fedora 30 for clazy while they fix Fedora 31
+80de4789	498883b5	Wed Oct 9 10:08:36 2019 +0200	Fix assert on malformed documents
+442be9e3	095735fa	Thu Oct 3 13:55:04 2019 +0200	Enable a few more clang-tidy bugprone checks
+095735fa	f92b2858	Wed Oct 2 17:50:42 2019 +0200	Enable clang-tidy bugprone-too-small-loop-variable
+0e8ed9a3	39a8b101	Mon Sep 23 10:01:18 2019 +0200	Annot: Fix uninitialized memory read on broken files
+dc77116d	335cb47a	Sun Sep 1 22:17:42 2019 +0200	SplashBitmap: Fix wrong width condition for splashModeDeviceN8
+7e19574b	a89b52e9	Wed Aug 21 09:42:40 2019 +0000	glib: Documentation fixes for viewer preferences
+2930542f	b7d1374c	Sat Aug 10 11:54:27 2019 +0200	GfxPatchMeshShading::parse: Fix abort on broken files
+d706a9ae	f3502635	Thu Aug 1 23:27:27 2019 +0200	GfxRadialShading::parse: Fix memory leak on broken files
+ff01f747	f390d834	Fri Jul 19 00:42:27 2019 +0200	qt5: Fix MSVC build (hopefully)
+15c89ce2	a57e2d47	Wed Jul 17 00:46:05 2019 +0200	qt5: Page::textList: Fix leak when aborting extraction
+a57e2d47	1f244751	Wed Jul 17 00:41:52 2019 +0200	Link: Fix memory leak on invalid files
+b224e2f5	2d191b49	Mon Jul 15 22:11:09 2019 +0200	SplashOutputDev::tilingPatternFill: Fix crash on broken file
+2d191b49	bf7d1b7d	Wed Jul 10 01:10:39 2019 +0200	Fix mistake on 093531cd0d0878b892d92ebc56c26936e5de3712
+e69dc7a5	ee7f6408	Thu Jul 4 09:17:38 2019 +0200	TextOuputDev: Fix crash when grealloc would overflow
+68b74ab1	080a79b4	Mon Jul 1 23:19:48 2019 +0200	Fix bad cast of GooString* to const char* in DefaultAppearance
+a24536c6	a4d3db87	Tue Jun 25 21:32:24 2019 -0400	Handle Ink annots without an InkList but with an AP According to the pdf spec, the AP entry should take precedence over the InkList entry. Thus, it is safe to render Ink annots with an AP entry but missing an InkList entry. This fixes rendering of some Onyx Generated files.
+5c22d88e	56582f51	Fri Jun 21 20:06:18 2019 +0200	qt5: rename variable to fix shadow warning
+56582f51	9de727a9	Fri Jun 21 20:06:18 2019 +0200	Splash: Rename local variable to fix shadow warning
+9e3c9bdf	2690e42e	Fri Jun 21 16:56:52 2019 +0200	TextOutputDev: rename two in variables to fix shadow warning
+2690e42e	c621269e	Thu Jun 20 21:35:36 2019 +0000	Fix line annotation arrows for usage in dimensioning
+7dd5405d	53c4afce	Wed Jun 19 08:57:55 2019 +0000	Fix typos preventing parsing of start&duration
+5d9eebbf	fb8093dd	Fri Jun 7 17:09:04 2019 +0200	FormField::_createWidget: Rename parameter to fix shadow warning
+c1480855	7f87a3a3	Fri Jun 7 17:09:04 2019 +0200	FormWidget::getAdditionalAction: Rename parameter to fix shadow warning
+7f87a3a3	e3a09f02	Fri Jun 7 17:09:04 2019 +0200	Fix last two shadow warnings in PSOutputDev
+f9ab3afb	6b39c1e8	Wed Jun 5 21:15:03 2019 +0200	Fix shadow warning in PSOutputDev::tilingPatternFill
+2e824cd8	6c16dacc	Wed Jun 5 20:49:37 2019 +0200	GlobalParams: Fix shadow warnings
+6c16dacc	42b41754	Wed Jun 5 20:48:05 2019 +0200	StructElement::parseAttributes: Fix shadow warning
+71830663	3d410e44	Wed Jun 5 20:39:51 2019 +0200	ArthurOutputDev: Fix shadow warning
+3d410e44	0593f256	Wed Jun 5 20:39:51 2019 +0200	gtk-test.cc: Rename variable to fix shadow warning
+18a60f39	c12e4e05	Wed Jun 5 20:09:24 2019 +0200	SplashOutputDev::drawSoftMaskedImage: Rename n to fix shadow warning
+ce8f750d	90ddcddc	Mon May 27 13:04:48 2019 +0000	glib: Fix introspection for poppler_document_new_from_data
+65adf225	157c723c	Thu May 16 17:35:01 2019 +0200	qt5: Fix optional content handling with exclusive layers
+03c0bb79	eaeac5c7	Fri May 10 23:45:12 2019 +0200	Fix small memory leak in SignatureHandler::getCertificateInfo
+eaeac5c7	d06b9617	Fri May 10 23:29:19 2019 +0200	Fix crash on signature handling
+d06b9617	2709ff2e	Fri May 10 20:52:50 2019 +0000	pdfsig: Fix small memory leak
+fe744fed	0d0630cd	Tue Apr 30 12:36:37 2019 +0200	Fix some typos in build system output and comments
+0d0630cd	b49d16a4	Sun Apr 28 19:25:08 2019 +0200	qt5: Fix regression in annotation handling
+9186cf25	62f94527	Thu Apr 25 21:27:04 2019 +0200	Fix a typo in an error message
+28d9bcf8	e0eb356d	Mon Apr 22 12:24:24 2019 +0200	Fix compile with SPLASH_CMYK enabled
+8051f678	0a1c6c41	Fri Apr 5 16:34:48 2019 +0200	FontInfoScanner::scanFonts Fix infinite loop in broken files
+8dbe2e6c	eec84fe2	Wed Apr 3 18:02:42 2019 +0200	SplashXPathScanner::clipAALine: Fix crash on broken file
+647344eb	a17bfb24	Tue Apr 2 00:29:42 2019 +0200	Fix MSVC compile
+67d81ed9	ea12ae67	Mon Apr 1 22:00:13 2019 +0000	findText: fix regression on case-insensitive search
+8aa78dbc	b0f11e3c	Sat Mar 30 23:39:25 2019 +0000	Form.cc: fix radiobutton reporting wrong state
+f4e90212	5a5ae212	Thu Mar 21 20:21:09 2019 +0000	Fix mismatched free/delete
+fada09a2	45c6c323	Mon Mar 18 00:50:00 2019 +0100	pdfunite: Fix stack overflow on broken file
+45c6c323	12d4c8a4	Sat Mar 16 00:25:05 2019 +0000	Fix parsing of polygon annotation LE values
+d9d9c9f1	33befc25	Sat Mar 2 00:07:29 2019 +0100	pdfsig: fix use after free
+33befc25	679339e0	Fri Mar 1 17:46:55 2019 +0100	SignatureHandler: Fix crash on broken files
+f4136a63	49ecbd59	Wed Feb 27 19:43:22 2019 +0100	ImageStream::getLine: fix crash on broken files
+69d86f90	b0a3356f	Tue Feb 19 15:20:38 2019 +0000	TextOutputDev: Fix assert in broken file
+7b9b3a92	2d1c8327	Sun Feb 10 16:25:18 2019 -0500	MSVC/Mac build fix: Hide the private methods in InMemoryFile behind a HAVE_IN_MEMORY_FILE_FOPENCOOKIE guard. These use datatypes like off64_t which don\'t seem to port to MSVC/Mac.
+2d1c8327	0e7b76ef	Sun Feb 10 16:24:29 2019 -0500	MSVC build fix: gbasename: basename()/libgen.h don\'t exist in MSVC-land. Instead, use _splitpath_s.
+9802b5fc	e5fee74c	Sun Feb 10 16:32:26 2019 +0000	cpp: docs: Fix doc generating from poppler-version.h.in
+6f532711	f2493d53	Fri Jan 25 21:19:08 2019 +0000	glib: Fix cast from \'GTime *\' (aka \'int *\') to \'time_t *\' (aka \'long *\')
+f2493d53	a6427ea6	Fri Jan 25 19:49:54 2019 +0100	SampledFunction: Fix uninitialized memory read
+a6427ea6	7486e499	Fri Jan 25 07:37:46 2019 +0100	Fix ofz-8438
+8076bc66	900d02b0	Sat Jan 19 22:00:15 2019 +0100	Fix link in FreeBSD
+98f7cf7c	748b4e58	Fri Jan 18 17:18:39 2019 +0100	Fix e[0] gcc warning
+842a75d8	8984a710	Tue Jan 15 20:32:22 2019 +0100	Fix fseeko configure check on Android for API level < 24
+44505cb3	5196cf63	Mon Jan 7 11:23:50 2019 +0000	glib: Fix named destinations
+aed1af47	01e963c4	Sat Jan 5 23:50:24 2019 +0100	gfile: Fix the build on WIN32
+12cf140b	859b4e54	Sat Jan 5 17:33:39 2019 +0100	msys2: fix glib introspection path on mingw-w64
+9fd5ec0e	141405e0	Wed Jan 2 14:00:18 2019 +0000	PDFDoc::setup: Fix return value
+615a12a4	ac407360	Wed Jan 2 00:22:26 2019 +0100	Fix some trivial warnings
+653d7437	7f87dc10	Thu Dec 27 17:53:53 2018 +0100	JBIG2Stream: Fix uninitialized memory read on broken files
+6e7cbc71	61fe5ae9	Sat Dec 22 11:11:59 2018 +0100	Gfx::doTilingPatternFill: Fix undefined behaviour
+230652c1	13ed7018	Fri Dec 21 19:43:28 2018 +0000	Fix memory handling bug
+7477b71e	e676558a	Thu Dec 20 14:15:46 2018 +0200	Fix minor typos
+a4fad73c	2f442c6a	Thu Dec 6 21:21:54 2018 +0000	cpp: Fix page::text_list encoding issue
+a6aee51c	dc00f298	Wed Nov 28 20:36:50 2018 +0100	Fix typos in utils.
+7bb75cc5	d02d1a1e	Sun Nov 18 09:53:40 2018 +0000	regtest: Fix file opened in wrong mode.
+d02d1a1e	1c3cc387	Sun Nov 18 09:53:40 2018 +0000	regtest: Fix Printer.printerr.
+0c02573f	98a84ba8	Sun Nov 18 09:53:40 2018 +0000	regtest: Fix iteration through dictionary on Py3.
+c3a2c11a	d0ab87c1	Tue Nov 13 00:14:57 2018 +0100	Stream::makeFilter: Fix memory leak
+08d4f02c	f1575bb7	Mon Nov 12 20:55:32 2018 +0100	Fix parsing of line annotation LE values
+28e953cb	74ad4e35	Fri Nov 9 01:59:32 2018 +0100	Minor clazy Qt fixes in tests and demo
+ee6166ab	744a3491	Tue Nov 6 22:07:44 2018 +0000	glib-demo: Fix indent for actions code.
+6ced3253	08572e1b	Sat Nov 3 11:22:58 2018 +0000	glib: Fix missing destructor call
+08572e1b	89fccf45	Sat Nov 3 12:21:41 2018 +0100	Parser::makeStream: Fix crash on malformed files
+91fa06ee	b645e64e	Fri Nov 2 14:16:12 2018 +0500	Form.cc: fix checkbox lacking /AP cannot change state
+aeb2c179	2d6ba9b1	Wed Oct 31 18:06:36 2018 +0100	qt5: Fix crash when adding Highlight Annotations
+2d6ba9b1	a186b433	Tue Oct 30 00:11:06 2018 +0100	Fix crash if document is malformed (too wide)
+54a3233a	f235a536	Fri Oct 26 12:25:25 2018 +0000	poppler-toc.cpp: typo fix
+c5cdf0cc	163420b4	Wed Oct 24 18:11:31 2018 +0000	Fix typo in comment
+8dc68b38	f162ecde	Wed Oct 17 23:08:11 2018 +0200	GfxFunctionShading::parse: Fix memory leak on broken files
+f162ecde	114ec1fc	Tue Oct 16 19:06:14 2018 +0000	Fix crash on missing embedded file
+114ec1fc	710534c7	Tue Oct 16 18:16:49 2018 +0000	CI: fedora fixed their mingw packages, remove workaround
+cc95433b	bcfa08d0	Tue Oct 9 21:36:09 2018 +0200	Remove unused debuggging function in CairoOutputDev translation unit.
+bcfa08d0	38b54a6a	Tue Oct 9 09:36:08 2018 +0000	Fix memory leak in Catalog by tracking pages (and page refs) using std::vector and std::unique_ptr instead of manually allocating them. oss-fuzz/10119
+d8ecf4ca	d52c5675	Mon Oct 8 16:06:13 2018 +0200	Fix typo in a comment
+da428865	51adf4f5	Sun Oct 7 22:43:25 2018 +0200	Fix typo in UPSTREAM_TEST_DATA_URL as while it does work anyway, it is quite confusing.
+e0eb2474	257e583f	Sun Oct 7 17:05:20 2018 +0000	Remove HtmlFont::pos and always track a font name to allow handling of unknown font families with known style suffixes.
+f3916132	a6929b40	Fri Oct 5 20:14:09 2018 +0200	Fix Windows build
+c4c55d9e	ad998fc4	Tue Oct 2 20:32:13 2018 +0200	Fix windows build by not build a test that doesnt\' build anymore
+7ec06fee	2ea24b16	Sun Sep 23 22:38:55 2018 +0200	Fix build with -DFONT_CONFIGURATION=generic
+8ca7c4f2	21a17289	Sun Sep 23 19:32:53 2018 +0200	Fix windows build even more
+21a17289	2aa679bf	Sun Sep 23 19:27:12 2018 +0200	Fix Windows build
+8a845c65	e67e88b3	Sun Sep 23 01:45:38 2018 +0200	Fix crash introduced by c792e4cde92e6ece06592955068ffb579e826382
+1c403665	c792e4cd	Sat Sep 22 21:17:28 2018 +0000	Fix overflow by noting that pos + length instead of just length must stay within bounds when trying to recover. oss-fuzz/8670
+c792e4cd	8a675c04	Sat Sep 22 21:13:19 2018 +0000	Fix integer overflow by moving check bits-per-compoennt before mask computation. oss-fuzz/9343
+de999b24	b2c2433b	Sat Sep 22 22:47:59 2018 +0200	Fix copypasta mistake
+d1a4c5a9	5dadcc93	Thu Sep 20 22:57:43 2018 +0200	Fix 2 errors in computation of type3 glyphs transformation matrix
+5048bec5	7e9b6f1d	Tue Sep 18 11:02:58 2018 +0200	Bugfix: Do not disregard Ref::gen when using Ref as a cache key
+7e9b6f1d	94527d5a	Mon Sep 17 22:11:02 2018 +0000	Fix TODO in OCGs by creating a look-up table from Ref to OptionalContentGroup (and make Ref a regular type to do so).
+1acbe6af	574840c5	Sat Sep 8 12:39:25 2018 +0200	Fix compilation with QT_STRICT_ITERATORS
+f2223e12	7c6c1fef	Tue Sep 4 16:10:53 2018 +0200	Assert validity of Object contents where at least constructor or destructor seem to assume it to catch errors as early as possible when using debug builds.
+7c6c1fef	e8e95d2c	Sun Sep 2 13:32:01 2018 +0200	pdftotext: Fix memory leak in printLine
+e8e95d2c	09cc5fd1	Sun Sep 2 13:25:29 2018 +0200	pdftotext: Fix only outputs first page content with -bbox-layout option
+d4b4be23	b67e7ab7	Sun Sep 2 12:33:45 2018 +0200	More review fixes
+db0451ab	64531344	Sun Sep 2 12:31:04 2018 +0200	Fix open review comments from #50
+f506b8bc	7418616d	Sat Sep 1 23:54:26 2018 +0200	Fix handling of Signature Info Location and Reason
+7418616d	45f0f6d2	Sat Sep 1 23:51:48 2018 +0200	Link: Fix memory leak regarding next actions
+f200264d	9bfc10ee	Fri Aug 31 20:10:17 2018 +0200	FoFiType1C::getDeltaIntArray: Fix undefined inf to int conversion
+ed28a561	de20e92a	Fri Aug 31 07:13:17 2018 +0000	Fix delta decoding for Type1C fonts to avoid signed integer overflow. oss-fuzz/8424
+987bbb68	df818b38	Thu Aug 30 22:49:19 2018 +0200	PSOutputDev: Hopefully fix compilation under MSVC
+df818b38	23d570a6	Thu Aug 30 20:46:20 2018 +0200	SplashPath: Fix overflow check
+ad107bbb	e3a3e3fa	Thu Aug 30 18:28:50 2018 +0200	JBIG2Bitmap: Fix overflow check
+de349009	be05f764	Wed Aug 29 22:59:01 2018 +0200	fix macOS compilation due to boolean define in jpeglib
+122b3ca5	f89446f6	Wed Aug 29 13:10:34 2018 +0000	Replace specific DEBUG_MEM in Array implementation by debug assertions.
+f89446f6	38b67245	Wed Aug 29 13:10:34 2018 +0000	Remove generic heap debugging from gmem since external tools and compiler instrumentation achieve the same effect.
+38b67245	d62d65c2	Wed Aug 29 13:10:34 2018 +0000	Remove gmempp implementing C++ memory allocation operators using gmalloc for heap debugging.
+93b21498	dcd8ad25	Fri Aug 24 07:42:52 2018 +0200	Reconstruct iterator via index arithmetic instead of relying on a non-standard constructor to fix builds on MSVC.
+d479e37d	d4230e3b	Thu Aug 23 20:17:24 2018 +0200	Fix linking errors in release builds due to non exported weak symbols.
+5fbce88e	2b5f35e5	Thu Aug 23 00:56:27 2018 +0200	Fix memory issues in GfxImageColorMap copy ctor
+c220ef25	b8082c67	Wed Aug 22 00:57:33 2018 +0200	Fix uninitialized memory read
+06106d93	04db8bd2	Thu Aug 16 17:20:49 2018 +0200	Fix build with MSVC
+0f35c2de	90ace43c	Thu Aug 9 17:04:38 2018 +0200	Fix spacing
+9f8fb7aa	1f8ab328	Thu Aug 9 16:16:10 2018 +0200	HtmlFont: Fix possible uninitialized variable & dangling reference
+1f8ab328	c1e90bb1	Thu Aug 9 00:40:14 2018 +0200	XRef::readXRef: Fix possible integer overflow
+004e3c10	155897f3	Wed Jul 18 20:31:27 2018 +0200	Fix crash when Object has negative number
+155897f3	eb1291f8	Tue Jul 17 01:05:38 2018 +0200	JBIG2Stream::readTextRegion: Fix uninitialized memory read
+eb1291f8	729e212f	Wed Jul 11 00:26:01 2018 +0200	GfxPatchMeshShading::getParameterizedColor: Fix uninitialized memory read
+1b5298eb	d8346166	Mon Jul 2 21:46:10 2018 +0200	GfxUnivariateShading::getColor: Fix uninitialized memory read
+5ef6a845	267228bb	Mon Jun 25 19:21:37 2018 +0200	Splash::arbitraryTransformImage: Fix uninitialized memory read
+e8b82c42	c0e87eda	Sun Jun 24 11:46:36 2018 +0200	ImageStream::getLine: Fix ubsan undefined shift
+c0e87eda	322f8a45	Sun Jun 24 11:15:52 2018 +0200	AnnotBorder::parseDashArray: Fix correct calculation
+322f8a45	af4d5f31	Sat Jun 23 00:41:18 2018 +0200	GfxDeviceNColorSpace::parse: Fix leak on malformed files
+da349184	877dcec7	Fri Jun 22 16:48:11 2018 +0200	FoFiType1C::readPrivateDict: Fix potential uninitialized memory read
+37d2aa88	e4f4cbdd	Tue Jun 19 17:42:16 2018 +0200	PostScriptFunction::parseCode: Fix memory leak on malformed files
+6b37df79	d6a3dc3e	Wed Jun 6 17:57:36 2018 +0200	SampledFunction: Fix divide by zero
+d6a3dc3e	599e2843	Wed Jun 6 17:46:17 2018 +0200	GfxAxialShading::parse: Fix memory leak on broken files
+599e2843	a231de88	Tue Jun 5 20:11:19 2018 +0200	JBIG2Stream::readSymbolDictSeg: Fix potential uninitialized memory read
+10a3dc2a	96e7bc19	Mon May 28 17:44:34 2018 +0200	GfxState.cc: Fix undefined behaviour when compBits is 31
+18f376c0	19d3993f	Sun May 27 09:29:49 2018 +0200	FoFiType1::parse: Fix reading past font length
+9a8d3324	1bc71245	Sun May 27 08:47:19 2018 +0200	Splash::fillGlyph2: fix buffer overflow
+3b9d8025	0e3b18a4	Fri May 25 17:26:37 2018 +0200	Splash: Fix another potential uninitialized memory use
+0e3b18a4	c75500bf	Fri May 25 17:06:13 2018 +0200	SplashUnivariatePattern::getColor: Fix potential uninitialized memory read
+f966b909	b228892a	Fri May 25 00:18:46 2018 +0200	SplashOutputDev::drawSoftMaskedImage: Fix uninitialized memory read
+67be3708	c758fc98	Thu May 24 23:29:55 2018 +0200	SplashFTFont::makeGlyph: Fix use of uninitialized data
+c758fc98	07318f38	Thu May 24 23:19:16 2018 +0200	FoFiType1::parse: Fix invalid memory access
+07318f38	6b91d37a	Thu May 24 20:15:42 2018 +0200	StreamReader::cmp: Fix potential undefined behaviour
+6b91d37a	c9650369	Thu May 24 18:22:00 2018 +0200	SplashOutputDev: Fix memory leak on malformed files
+f279778f	ea72a3f3	Thu May 24 13:06:00 2018 +0200	JBIG2Stream::readSymbolDictSeg: Fix potential uninitialized memory use
+76820f5a	ffb0daef	Thu May 24 01:12:07 2018 +0200	JBIG2Stream::readPageInfoSeg: Fix memory leak on malformed documents
+e0fb1804	86991adb	Wed May 23 19:42:00 2018 +0200	Gfx::opSetExtGState: Fix memory leak on broken files
+86991adb	62c7a6a1	Wed May 23 19:35:27 2018 +0200	Gfx::doRadialShFill: Fix potential divide by zero
+0318e166	3ca2d43b	Wed May 23 19:11:21 2018 +0200	GfxPatchMeshShading::parse: Fix memory leak on malformed documents
+bf03344a	31c3832b	Tue May 22 20:36:05 2018 +0200	StandardSecurityHandler::isUnencrypted: Fix uninitialized memory use
+2c0a0b07	ace7ca3e	Tue May 22 20:15:39 2018 +0200	Gfx::doImage: Fix memory leak on malformed documents
+ace7ca3e	3b8634e7	Tue May 22 20:10:01 2018 +0200	SplashAxialPattern: fix potential divide by zero
+3b8634e7	91079d4f	Tue May 22 20:07:50 2018 +0200	GfxAxialShading::getParameterRange: Fix potential divide by zero
+91079d4f	6169bfb1	Tue May 22 20:01:56 2018 +0200	SampledFunction: Fix potential divide by zero
+6169bfb1	0868c499	Tue May 22 19:56:34 2018 +0200	GfxState.cc: Fix potential division by zero
+0868c499	dbe33067	Tue May 22 19:49:06 2018 +0200	Parser::makeStream: Fix potential integer overflow
+224dda4d	0c0c368f	Tue May 22 19:17:20 2018 +0200	Fix out of bounds write in BaseCryptStream
+e7f59e39	547f19cd	Tue May 22 18:22:52 2018 +0200	Splash::scaleMaskYuXu: Fix crash on malformed files
+547f19cd	d1d8dea6	Tue May 22 18:17:58 2018 +0200	Fix crash in "generic" GlobalParams::findSystemFontFile
+d1d8dea6	127d0fe3	Tue May 22 18:15:31 2018 +0200	Fix memory leak on malformed files
+127d0fe3	c9e2dc7e	Tue May 22 01:09:04 2018 +0200	Fix overflownLongLong check
+784bf432	07b8f838	Tue May 8 01:16:06 2018 +0200	Fix build with -DFONT_CONFIGURATION=generic
+030c6123	62ed50c6	Sun May 6 17:25:39 2018 +0200	Fix windows build
+60b4fe65	8429a675	Tue May 1 02:46:17 2018 +0200	FoFiType1C::cvtGlyph: Fix infinite recursion on malformed documents
+8429a675	9d427697	Tue May 1 02:44:37 2018 +0200	XRef: Fix runtime undefined behaviour
+a613cd32	4d851d16	Thu Apr 19 17:10:23 2018 +0200	Fix compilation with libc++
+8fe1a5b9	3636ccba	Tue Apr 17 11:15:31 2018 +0200	Fix parsing of focus out actions
+3636ccba	17c7e3b0	Tue Apr 17 11:12:43 2018 +0200	pdfsig: Don\'t use fixed buffer size for path
+88c99f1f	df8a4ee5	Mon Apr 16 17:59:35 2018 +0200	Fix crash on malformed documents
+022ccd4e	776257d0	Mon Apr 16 16:22:55 2018 +0200	GfxGouraudTriangleShading::parse: Fix memory leak on malformed files
+776257d0	d80e7aac	Wed Apr 11 00:44:41 2018 +0200	Fix leaks in GfxPatchMeshShading::parse with malformed documents
+39010904	f75c0f5c	Thu Apr 5 13:00:59 2018 +0200	Fix windows build
+e491e935	c19469f2	Mon Apr 2 20:13:35 2018 +0200	Fix PDFDoc::checkHeader() for PDFs smaller than 1 KiB
+c19469f2	c7a31763	Mon Apr 2 12:53:42 2018 +0200	Fix build on some platforms
+46543272	327c342a	Tue Mar 20 23:44:23 2018 +0100	gfile: Fix windows build
+e25d4af6	e015ab97	Wed Feb 21 21:46:07 2018 +0100	Fix warnings due to unhandled link types in XML serialization of annotations code in the Qt5 frontend.
+e015ab97	732903ec	Wed Feb 21 21:44:08 2018 +0100	Fix warnings due to the use of deprecated overloads of Poppler::Page::Search in tests of Qt5 frontend.
+732903ec	791e0246	Wed Feb 21 21:43:33 2018 +0100	Fix buffer size warning due to missing space for null terminator in pdfseparate.
+e3cece1b	8cfe91ae	Fri Feb 2 23:29:04 2018 +0100	Fix some -Wshadow warnings
+248aa0f5	f93fa488	Sun Jan 28 00:25:38 2018 +0100	Fix build without libpng
+f93fa488	f65f60e5	Sun Jan 28 00:24:33 2018 +0100	Fix build without libtiff
+08f2cddf	10831921	Thu Jan 11 19:38:29 2018 +0100	GfxFunctionShading::parse: Fix abort in malformed document
+c2711874	30ccee02	Tue Jan 9 19:47:29 2018 +0100	Fix another clazy rule-of-three warning
+30ccee02	ef4e450c	Tue Jan 9 19:43:42 2018 +0100	Fix more Wmissing-field-initializer
+cbd864b7	1aaf621f	Mon Jan 8 23:48:57 2018 +0100	Fix abort in Gfx::opBeginMarkedContent if args[1] is not a name
+dea6e033	4c9e1b66	Mon Jan 8 23:28:43 2018 +0100	Fix new Object API porting bug
+4c781434	62337100	Thu Jan 4 23:12:54 2018 +0100	Fix assert on malformed documents
+32153825	c4cbb4fd	Thu Jan 4 15:37:42 2018 +1030	Fix some bugs in StructTreeRoot parsing of parent tree
+c4cbb4fd	f8723829	Wed Jan 3 23:15:38 2018 +0100	Fix pdfimages with flate encoded inline images
+f8723829	e70990c5	Wed Jan 3 23:14:58 2018 +0100	Fix EmbedStream replay
+15272137	066e6a3e	Wed Jan 3 00:15:55 2018 +0100	Fix undefined sanitizer warning about qsort
+79a096a4	c138ec62	Thu Dec 21 00:57:48 2017 +0100	Fix index out of bounds undefined behaviour in PSTokenizer
+f1035912	72e0a3a0	Sun Dec 3 22:41:32 2017 +0100	Fix memory leak on error condition
+f007ab6b	cef42ac8	Sat Dec 2 10:32:38 2017 +0100	INSTALL: add debug options
+cef42ac8	fb4c69d2	Sat Dec 2 10:32:36 2017 +0100	Fix UTF test fail
+33b8e622	a6dd3f95	Wed Nov 15 19:58:53 2017 +1030	fix MSC macro
+49107ffc	4f687665	Wed Nov 15 18:15:18 2017 +1030	Fix some mingw warnings
+19909998	e84338a4	Tue Nov 14 06:20:03 2017 +1030	glib demo: fix warning
+e84338a4	fea27db1	Mon Nov 13 00:37:00 2017 +0100	GfxLabColorSpace::parse: Fix crash in broken documents
+fea27db1	faeb4892	Sun Nov 12 19:54:52 2017 +0100	Fix leak if parseDA fails
+155597a0	c45efa2d	Sun Nov 12 00:32:02 2017 +0100	Fix for corrupted image files on Windows
+c45efa2d	7ccedf2b	Thu Nov 9 09:32:25 2017 +0100	Fix incorrect paths in .pc files.
+4d109589	b9ae2fd7	Mon Oct 30 21:47:05 2017 +0100	Fix leak in ArthurOutputDev::updateFont
+b9ae2fd7	d72f0383	Sat Oct 28 19:54:45 2017 +1030	glib demo: correct the previous warnings fix
+9c7b557d	69414f14	Sat Oct 21 21:05:24 2017 +1030	Fix mingw warnings
+69414f14	ecd2b7bf	Sat Oct 21 21:05:24 2017 +1030	mingw build fix - use win32 threads
+465edbbf	b424862b	Sat Oct 21 21:02:25 2017 +1030	Fix remaining -Wundef warnings
+e38ffea6	9bb84057	Sat Oct 21 21:02:25 2017 +1030	Fix some -Wundef warnings
+9bb84057	5d954d1c	Sat Oct 21 21:02:25 2017 +1030	glib demo: fix deprecated warnings
+5d954d1c	8ccc9efb	Sat Oct 21 21:02:25 2017 +1030	Fix warning: implicit declaration of function \xe2\x80\x98localtime_r\xe2\x80\x99
+8ccc9efb	88571e78	Sat Oct 21 21:02:25 2017 +1030	Fix warning: comparison of unsigned expression < 0 is always false
+19ebd405	7ee9dade	Fri Oct 13 00:55:49 2017 +0200	CairoOutputDev: Fix crash in broken files
+7ee9dade	369cd504	Fri Oct 13 00:42:32 2017 +0200	TextOutputDev: Fix crash in fuzzed file
+f871b82e	3ec5e86c	Sat Sep 30 23:12:56 2017 +0200	qt5: ArthurOutputDev: Fix several small bugs related to dash pattern handling
+19eedc6f	5df4a8b0	Sat Sep 30 11:12:31 2017 +0200	Fix crash in broken files
+2c92c7b6	d3f12611	Mon Sep 25 19:36:57 2017 +0200	Fix infinite recursion on broken files
+e51db61a	6665839b	Wed Sep 20 19:37:28 2017 +0200	PSOutputDev: Fix wrong text generation
+939465c4	a8aa61f7	Tue Sep 19 21:19:03 2017 +0200	Fix crash in broken files
+a8aa61f7	6b82904b	Tue Sep 19 21:17:49 2017 +0200	autotools: Fix build
+6b82904b	b26924e3	Sun Sep 17 23:04:20 2017 +0200	Fix printf-like format warnings
+0790dd3a	afd91b14	Sat Sep 16 18:16:39 2017 +0200	Fix missing-declarations warnings
+afd91b14	a0ed20f3	Sat Sep 16 17:47:42 2017 +0200	Fix warning: format \xe2\x80\x98%x\xe2\x80\x99 expects argument of type \xe2\x80\x98unsigned int*\xe2\x80\x99, but argument 3 has type \xe2\x80\x98int*\xe2\x80\x99
+a0ed20f3	d51cc34d	Sat Sep 16 17:45:42 2017 +0200	-Woverflow fixes
+d51cc34d	804a823a	Sat Sep 16 17:35:15 2017 +0200	-pedantic fixes
+da63c355	504b3590	Thu Sep 14 19:14:41 2017 +0200	FoFiType1C::convertToType0: Fix crash in broken files
+500ce88a	80f9819b	Wed Sep 13 23:19:54 2017 +0200	Fix two minor typos
+80f9819b	aaf53276	Wed Sep 13 23:09:45 2017 +0200	isImageInterpolationRequired: Fix divide by 0 on broken documents
+aaf53276	476394e7	Wed Sep 13 23:04:50 2017 +0200	Gfx::doShowText: Fix infinite recursion on broken files
+476394e7	0f891b85	Wed Sep 13 22:59:11 2017 +0200	XRef::parseEntry: Fix crash in broken file
+a5e5649e	325887eb	Mon Sep 11 12:35:16 2017 +0200	Fix crash in FoFiType1C::convertToType0 in broken files
+1316c7a4	2532df60	Fri Sep 8 18:30:08 2017 +0200	Annot: Fix crash on broken files
+2532df60	6472d849	Fri Sep 8 18:28:15 2017 +0200	Annot: Fix crash on broken files
+6472d849	3ab44e2a	Fri Sep 8 18:27:25 2017 +0200	SplashOutputDev: Fix crash on broken files
+101aba9a	1d3f00e8	Tue Sep 5 19:34:55 2017 +0200	cmake: Fix build when using a cairo different than the system one
+dd80c182	a22cd0ba	Mon Sep 4 19:40:28 2017 +0200	Fix building with old clang
+3ea09e73	6ef21aea	Sun Sep 3 08:22:08 2017 +0930	Fix warning when compiling with cygwin
+6ef21aea	048237db	Sun Sep 3 08:22:08 2017 +0930	Fix cygwin 32-bit compile
+048237db	4459d817	Sat Sep 2 22:59:32 2017 +0200	pdfunite: Fix API porting error that caused abort in some cases
+267ff8af	c5487b65	Sat Sep 2 13:27:33 2017 +0200	Fix infinite recursion in NameTree parsing in broken files
+10660b35	ea6174de	Sat Sep 2 11:50:00 2017 +0200	pdfinfo: Fix memory leaks when using -dests
+ea6174de	73e12716	Sat Sep 2 11:31:51 2017 +0200	pdfinfo: Fix crash if getDest* returns nullptr
+40cb9f4b	5be33ba4	Thu Aug 24 11:14:34 2017 +0200	Fix build with mingw
+5be33ba4	1b84a71e	Wed Aug 23 21:00:09 2017 +0930	Fix Outline title
+6d3239a2	b56a697c	Tue Aug 15 20:09:25 2017 +0200	Fix build with autotools
+3af2e18f	a9581e62	Sun Aug 13 12:32:13 2017 +0200	Fix copy\'n\'paste bugs: Qt4 -> Qt5
+a9581e62	f0ecbc6f	Sat Aug 12 01:12:27 2017 +0200	Form.h: fix error: \'vector\' in namespace \'std\' does not name a type
+d7b80093	cd04a813	Wed Aug 9 14:26:41 2017 +0200	cpp: Fix page.text() not taking page orientation into account
+cd04a813	fe97135f	Tue Aug 8 22:42:46 2017 +0200	Fix use of uninitialized value use
+19eda068	dbe7a5da	Tue Aug 1 00:53:52 2017 +0200	Fix memory leak on corner case condition
+0e7f6cb1	f55d6a64	Mon Jul 31 19:53:12 2017 +0200	Fix some warnings in some unusual #ifdef combinations
+543b0ea2	92ad743b	Mon Jul 31 19:44:53 2017 +0200	configure.ac: fix --disable-FEATURE actually enabling the feature
+0f4ea2f1	75fff655	Mon Jul 31 14:47:25 2017 +0200	Fix parsing of Type 1 fonts with newlines in encoding sequences
+5d0c23a9	852fd286	Sat Jul 29 18:23:39 2017 +0200	Fix crash in broken document
+771c8262	02d9b182	Mon Jul 3 22:44:42 2017 +0200	pdfunite: fix crash in broken documents
+d9c88e1c	55db66c6	Wed Jun 21 22:31:20 2017 +0200	Fix crash in malformed documents
+55db66c6	5266fa42	Wed Jun 21 22:31:20 2017 +0200	Fix crash in malformed documents
+5266fa42	112b8ab1	Wed Jun 21 22:31:19 2017 +0200	Fix crash in malformed document
+112b8ab1	4e68bf99	Wed Jun 21 22:31:19 2017 +0200	Fix crash in broken documents
+4e68bf99	558cdb4a	Wed Jun 21 22:31:19 2017 +0200	Fix crash on broken documents
+558cdb4a	f7030a01	Wed Jun 21 22:31:19 2017 +0200	Fix crash in malformed documents
+f7030a01	e465d36b	Wed Jun 21 22:31:19 2017 +0200	Fix crash on broken documents
+e465d36b	e2ab2fa9	Wed Jun 21 22:31:19 2017 +0200	Fix crash on malformed files
+e2ab2fa9	17e4111d	Wed Jun 21 22:31:19 2017 +0200	Fix crash on malformed files
+5b05222c	e1b5053e	Wed Jun 21 22:31:18 2017 +0200	Fix crash in malformed file
+e1b5053e	9e05af3d	Wed Jun 21 22:31:18 2017 +0200	Fix crash on broken file
+d52bba35	db254b4b	Sat Jun 17 12:33:06 2017 +0200	Fix crash in malformed file
+db254b4b	9fc5ed21	Fri Jun 16 00:21:53 2017 +0200	Fix crash on broken file
+5c9b08a8	ff05069f	Sat May 27 00:09:17 2017 +0200	pdfunite: Fix crash with broken documents
+aa03a71c	65c5a526	Sun May 21 22:37:23 2017 +0200	Fix abort in files with broken Decode arrays
+ea6d3200	b286a6b5	Sun May 21 18:08:41 2017 +0200	Fix openjpeg text
+b5ca57db	b21c5f77	Sat May 13 01:05:43 2017 +0200	Fix memory leak in XRef::constructXRef
+0321bca7	d83b1130	Fri May 12 22:25:36 2017 +0200	SplashOutputDev::doUpdateFont - Fix crash on broken file
+d83b1130	270866eb	Tue May 9 16:09:06 2017 +0200	JPXStreamPrivate::init2 - Fix memory leak in broken files
+270866eb	22123c83	Tue May 9 14:38:51 2017 +0200	GfxDeviceNColorSpace::parse - Fix memory leak on broken files
+22123c83	d7a102f4	Tue May 9 14:38:48 2017 +0200	TextPool::addWord - Fix memory leak on broken files
+d7a102f4	9773c153	Tue May 9 10:50:27 2017 +0200	FoFiType1::parse - Fix memory leak on broken files
+9ad9d925	cdab9a2d	Fri May 5 00:57:35 2017 +0200	Fix memory leak in error condition
+b2545e93	09000ce8	Thu May 4 21:24:23 2017 +0200	Fix regression in GfxIndexedColorSpace::mapColorToBase
+b21b041f	27843953	Tue Apr 25 19:48:24 2017 +0200	Fix memory leak when reconstructing broken files
+27843953	478be219	Tue Apr 25 19:42:15 2017 +0200	Fix memory leak (and probably logic bug) parsing broken XRef entries
+e3779c84	cc7809e7	Sat Apr 8 09:56:59 2017 +0200	glib: Fix return value in API doc comment of poppler_movie_get_play_mode
+aa863326	d30e66cf	Mon Mar 6 22:45:52 2017 +0100	pdfinfo: Fix memory leak when printing JS
+d30e66cf	a7632c5d	Mon Mar 6 22:43:27 2017 +0100	pdfinfo: fix leak when printing JS
+a7632c5d	8ebec831	Mon Mar 6 22:34:20 2017 +0100	pdftohtml: fix small memory leak when constructing some filenames
+8ebec831	cfaeeadb	Mon Mar 6 22:25:39 2017 +0100	SplashOutputDev: Fix memory leak when rendering images with colormap and matte color
+8de4b359	0b7c235c	Mon Feb 13 01:15:04 2017 +0100	Fix assert on reading some OCGs
+e7aad35d	dc8edecc	Thu Jan 19 23:43:44 2017 +0100	Qt: fix memory leaks found when running tests
+0eb28e21	4db65073	Fri Jan 13 00:03:27 2017 +0100	qt5: Fix segfault/assert if LinkDestination is constructed with invalid input string.
+b6c4d6d1	3cae7773	Mon Jan 9 00:28:37 2017 +0100	Fix memory leak in PDFDoc::markAnnotations
+15115234	9b016440	Thu Dec 15 22:04:04 2016 +0100	Refine previous fix a bit
+2cf901c8	97b801b5	Thu Dec 8 21:45:18 2016 +0100	Fix PS conversion for some files
+484d9d46	bc11784e	Fri Nov 25 20:05:19 2016 +0100	Spelling fixes spotted by William Bader
+b4e93c37	5a04becc	Fri Nov 25 17:21:09 2016 +0100	Fix pdftoppm -tiff -gray/-mono incorrect output.
+5a04becc	0c9c2089	Fri Nov 25 11:21:03 2016 +0100	Fix PDFDoc::saveIncrementalUpdate()\'s detection of document being modified
+0c9c2089	e59cbaf9	Wed Nov 23 20:27:04 2016 +0100	Fix Outline parsing on broken documents
+be073d39	2a09ec47	Mon Oct 31 10:12:08 2016 +0100	Fix typo in disable nss help string
+2a09ec47	169889b8	Mon Oct 24 20:04:33 2016 +0200	Fix memory leak in parametrized gouraudTriangleShadedFill
+169889b8	269a91e3	Mon Oct 24 20:04:00 2016 +0200	Fix crash on broken files
+2ece00c8	f5c34c63	Tue Sep 6 23:41:42 2016 +0200	Fix warning about new enum
+3a1a4baa	1de363ee	Tue Sep 6 23:14:08 2016 +0200	goo: fix GooString::STR_STATIC_SIZE calculation
+1de363ee	90d0fae2	Tue Sep 6 00:09:40 2016 +0200	Fix another ubsan warning
+7c7c35db	4552af28	Sun Sep 4 15:40:32 2016 +0200	Fix memory leak in error handling
+22c4701d	c46b8b99	Sun Sep 4 15:32:21 2016 +0200	Fix crash in files with broken JBIG2Streams
+c46b8b99	92175cb2	Sun Sep 4 15:32:21 2016 +0200	Fix memory leak when parsing broken Forms
+92175cb2	fea7bfc3	Sun Sep 4 11:07:34 2016 +0200	Fix UTF16 decoding of document outline title
+7d3aea76	5641644f	Sat Jul 30 17:32:59 2016 +0200	Fix abort on documents where the docinfo obj is not a dict
+df690436	d89ea6ae	Sun Jul 24 23:07:22 2016 +0200	qt5: fix memory leaks in Document::modificationDate() and Document::creationDate()
+d89ea6ae	844ede56	Sun Jul 24 23:06:49 2016 +0200	qt4: fix memory leaks in Document::modificationDate() and Document::creationDate()
+844ede56	d34ac7ce	Sun Jul 24 12:47:21 2016 +0200	qt5: Fix memory leak in new implementation of ::date
+72071873	e7cbc364	Sun Jul 24 12:42:54 2016 +0200	qt4: Fix memory leak in new implementation of ::date
+9faa9b05	500fb06a	Sat Jul 2 17:58:44 2016 +0930	Fix tiling patterns with BBox with non-zero x,y
+5165c1a5	dfbb9832	Sun Jun 19 11:30:04 2016 +0930	cairo: fix bug in setAntialias()
+5ee67050	df077903	Tue Jun 14 07:32:35 2016 +0930	Fix windows compile
+4d799cdf	4daee8a8	Thu Jun 2 00:22:05 2016 +0200	pdfinfo: Fix another leak
+4daee8a8	bc6eb287	Wed Jun 1 18:37:57 2016 +0200	Fix memory leak when failing to parse thumbs or actions
+bc6eb287	66617b25	Wed Jun 1 18:36:17 2016 +0200	pdfinto: Fix memory leak
+3db727f9	8ace48fb	Wed Jun 1 18:32:45 2016 +0200	Fix memory leak in RichMedia parsing
+8ace48fb	46039c2e	Sun May 29 11:45:55 2016 +0200	SplashOutputDev: Fix iccTransform + splashModeXBGR8
+4e49b3af	5f51939e	Thu May 26 17:34:56 2016 +0200	Fix memory leak on error on JBIG2Stream::readHalftoneRegionSeg
+5f51939e	c8208263	Tue May 24 23:34:48 2016 +0200	Fix stack overflow
+c8208263	9ce8dd7f	Tue May 24 00:00:57 2016 +0200	Fix (C) year
+9ce8dd7f	37fb37e3	Tue May 24 00:00:10 2016 +0200	Fix stack overflow on broken file
+37fb37e3	1d0251c8	Mon May 23 23:18:40 2016 +0200	pdftohtml: Fix crash on broken file
+1d0251c8	eb20f8cc	Sat May 21 20:02:26 2016 +0200	Fix memory leak in Splash::gouraudTriangleShadedFill
+58f56a7a	853e9499	Sat May 21 18:31:15 2016 +0200	Fix Compile in 32bit linux
+0ecec576	890178f9	Wed May 4 23:23:04 2016 +0200	Fix typo in GfxPatchMeshShading::parse
+890178f9	86572d7d	Wed May 4 01:32:47 2016 +0200	Fix potential crash in SplashOutputDev::doUpdateFont
+86572d7d	3707f9d1	Wed May 4 01:27:54 2016 +0200	Fix memory leak in SignatureHandler::getDefaultFirefoxCertDB_Linux
+3707f9d1	6d26d02c	Wed May 4 00:59:01 2016 +0200	Fix potential crash in TextPage::coalesce
+56c71fca	a0c3fd3f	Wed May 4 00:55:06 2016 +0200	Fix memory leak in PSOutputDev::filterPSLabel
+dbbe1590	1cc93886	Thu Apr 28 23:59:05 2016 +0200	qt: Fix crash on certain PDF form item activation actions
+d9408c18	5ac54db9	Sun Apr 10 10:29:05 2016 +0200	typo fixes
+7d8dfb09	67bc280c	Sat Apr 2 11:53:15 2016 +0200	cairo: fix fillToStrokePathClip crash and rendering
+57b7a52c	04f3448d	Wed Mar 16 10:36:22 2016 +0100	Fix rendering of some broken PDF files
+1f7cb78f	36c276f1	Wed Mar 2 09:51:46 2016 +0100	Fix memory leak in Matte parsing
+9fa58b1e	01d4bb22	Mon Jan 11 19:26:02 2016 +1030	pdftocairo: fix writing to stdout out with image output
+4b0f6e5e	8859cebe	Wed Jan 6 23:36:17 2016 +0100	Fix printf for unsigned int
+d8f418d2	67645087	Sun Jan 3 12:59:30 2016 +0100	Fix finding Arabic Presentation Forms ligatures
+bc4cab27	ea75de61	Sat Jan 2 10:37:23 2016 +0100	regtest: Fix the number of worker threads spawned reported in log of run-tests command
+7c880dae	4a413b9b	Mon Dec 28 19:11:39 2015 +0100	Make use of LINK_PRIVATE flag to fix warning on CMake policy 0022.
+5d57c34c	3eee5274	Sun Dec 20 08:42:25 2015 +0100	typo fix: "occurence" -> "occurrence"
+7ed7fb6d	47ffce08	Thu Dec 10 09:29:46 2015 +0100	Fix typos in error messages
+3686005c	38796894	Fri Dec 4 11:03:27 2015 +0100	pdftocairo: Fix double free when both user and owner passwords are given
+921fe21d	3e22c678	Thu Dec 3 16:23:30 2015 +0100	regtest: Fix testing text backend
+7f1de12d	d4a9da24	Thu Dec 3 10:55:59 2015 +0100	doc: Fix PopplerStructureElement documentation
+7980727d	37840827	Thu Dec 3 08:44:44 2015 +1030	pdftops: fix %%PageBoundingBox
+0e14049b	3167964d	Sat Oct 31 18:32:49 2015 +1030	pdftocairo: fix fit to page transformation
+c20f68ce	64735113	Mon Oct 26 19:51:09 2015 +0100	forms: Fix showing of some non-ASCII characters
+e8cb16bf	a82e338b	Sun Sep 27 23:55:17 2015 +0930	configure: fix openjpeg detection
+a82e338b	8639b20d	Sun Sep 27 15:41:27 2015 +0200	Fix memory leak on font reload
+e3225a05	0a33e3a7	Fri Sep 25 01:14:41 2015 +0200	Fix crash in GfxGouraudTriangleShading for malformed files
+0a33e3a7	b723e4f9	Fri Sep 25 01:00:32 2015 +0200	Fix the fix of the fix for SplashOutputDev::beginTransparencyGroup and malformed files
+b723e4f9	fd49b3d4	Fri Sep 25 00:53:10 2015 +0200	Fix crash in malformed document in SplashOutputDev::drawMaskedImage
+fd49b3d4	a88be71f	Fri Sep 25 00:45:55 2015 +0200	Fix crash on Annot::layoutText for malformed documents
+a88be71f	0fa5c17e	Fri Sep 25 00:42:14 2015 +0200	Fix crash in SplashOutputDev::beginTransparencyGroup in malformed file
+0fa5c17e	942adfc2	Fri Sep 25 00:36:33 2015 +0200	Fix crash on JBIG2Stream::readHalftoneRegionSeg for malformed documents
+942adfc2	9aa19159	Fri Sep 25 00:30:58 2015 +0200	Fix crash on AnnotInk::draw for malformed documents
+4f7903eb	10693fb2	Thu Sep 24 23:57:46 2015 +0200	Fix for Buffer overflow
+5348f8d0	17b3a8dc	Mon Sep 14 19:46:23 2015 +0200	Fix some leaks in SignatureHandler
+b14d4b09	de1ece5c	Thu Sep 10 00:33:15 2015 +0200	Post release fixlets for the NEWS file
+1e1a2d06	3c91ded2	Sun Sep 6 22:33:48 2015 +0200	Fix JBIG2Decode infinite loop and stack overflow
+72c01622	06f94265	Mon Aug 31 17:58:15 2015 +0200	cairo: fix size of transparency group surface
+06f94265	6ccdd381	Sat Aug 29 15:53:30 2015 +0200	Fix for xref table creation
+6ccdd381	9d79f061	Sat Aug 29 12:18:44 2015 +0200	typo fix, "existant" -> "existent"
+e5511b58	d06c2758	Thu Aug 27 22:38:08 2015 +0200	cpp: Fix utf8/utf16 conversion
+545a8f7c	3e61c752	Mon Aug 24 01:12:01 2015 +0200	Fix bounds check in Linearization::getPageFirst
+3e61c752	431cd5af	Wed Aug 19 23:01:41 2015 +0200	Splash: Fix wrong memory access
+e6e7d149	f3a0191a	Mon Jul 27 14:53:04 2015 +0200	pdftocairo: Fix cast to pointer from integer of different size on win64
+705615f7	3b6b3fef	Fri Jul 17 00:38:58 2015 +0200	More typo fix
+3b6b3fef	885b23bf	Fri Jul 17 00:37:46 2015 +0200	[Splash] Fix wrong writes on non rgb outputs
+885b23bf	0ce4da8a	Fri Jul 17 00:30:08 2015 +0200	GlobalParamsWin bug/fixes
+b7143151	ccd780f9	Wed Jul 15 13:10:27 2015 +0200	Typo fix in warning
+e903b236	810c659f	Sun Jul 12 23:20:20 2015 +0200	[qt] fix spacing in header
+2fc1f540	0b8919f1	Tue Jul 7 18:48:51 2015 +0200	[Splash] Fix crash in PDF with nested softmasks
+0b8919f1	2ef22af9	Mon Jul 6 00:28:27 2015 +0200	Fix pedantic memory leak
+ae76b75c	c516b341	Thu May 14 20:06:22 2015 +0200	Fix regression in pdftops parameter passing
+c516b341	040b316f	Sun May 3 15:49:00 2015 +0200	Fix invalid shell comparaison in libtiff test
+040b316f	056ee891	Sun Apr 19 09:03:05 2015 +0200	glib: Fix segfault when creating PopplerAction
+05ef3f9f	8ca43beb	Sat Apr 18 11:38:20 2015 +0200	annots: Fixed adding annotation of Subtype Popup to pdf page
+8ca43beb	edc7bb4f	Mon Apr 13 14:16:21 2015 +0200	cairo: Fix memory leak in CairoFreeTypeFont::create
+0969801c	ede6d006	Thu Mar 26 16:08:20 2015 +0100	Fix previous commit about initializing on failure
+033dbbd7	bc8076d8	Sun Mar 15 14:06:15 2015 +0100	Fix the previous pdfDocEncoding fix
+bc8076d8	d7cc90a8	Sun Mar 15 13:33:37 2015 +0100	Fix PDF Text String -> QString conversion
+3705fcee	b7fde1ec	Fri Mar 6 15:19:58 2015 +0100	Fix  Wrong colour shown when GouraudTriangleShFill uses a DeviceN colorspace
+b7fde1ec	7980fe86	Wed Feb 25 21:51:34 2015 +0100	Fix last commit regression
+7980fe86	57b6b78a	Wed Feb 25 15:03:00 2015 +0100	Fix uninitialized variable in Splash::pipeRun
+8a30d219	ec956ab8	Sat Feb 21 23:55:10 2015 +0100	Fix memcpy introduced in ec956ab8552dbe10fac4e649951042bddc424b7d
+bf4aae25	97dd46ba	Wed Feb 11 17:35:40 2015 +0100	Off by one fix to the previous crash fix
+c114a900	22895623	Sun Feb 8 00:24:11 2015 +0100	Fix crash in fuzzed file from Bug #84988
+22895623	cdb7ad95	Sat Feb 7 22:28:21 2015 +0100	Fix malformed file crash from bug #86854
+cdb7ad95	6641b935	Sat Feb 7 22:21:55 2015 +0100	Fix malformed file crash in bug #85243
+92e41685	9842b3b0	Sat Feb 7 21:54:39 2015 +0100	Fix crash in malformed file from bug #85275
+9e9df4b2	636faafc	Thu Jan 8 17:01:52 2015 +0100	Fix crash on broken document
+c9c90d50	fa8f276a	Sun Dec 14 14:59:03 2014 +0100	cpp: New API to set debug output function
+7debbb05	d5489ef3	Tue Nov 4 19:29:58 2014 +0100	Fix typo
+2fd0cd65	d6ea8acb	Mon Nov 3 19:20:23 2014 +0100	Fix memory leaks when running pdfseparate
+d6ea8acb	bd142810	Mon Nov 3 19:11:25 2014 +0100	fix crash in Xref::getEntry
+76a350b1	c93d6b26	Thu Oct 30 18:28:52 2014 +0100	regtest: Try to fix again the paths of the resources in the generated HTML report
+3d840231	68e58ec5	Sun Oct 26 12:12:47 2014 +0100	regtest: Fix png diff generation with python-pil pillow fork
+53be607e	f966b876	Fri Oct 24 20:21:41 2014 +1030	Fix warning on unused variable in pdftocairo.cc
+f966b876	4963332c	Tue Oct 21 16:44:00 2014 +0200	fofi: Fix a crash when parsing an invalid font due to a integer overflow
+c091aa14	cc3b39d4	Tue Oct 21 22:06:30 2014 +1030	pdftocairo: fix a number of bugs in win32 printing
+ee4a3898	0c3f53e3	Tue Oct 21 20:16:28 2014 +1030	PDFDoc: fix crash when getPage() returns NULL
+88dbd4df	e0179304	Tue Oct 21 20:14:12 2014 +1030	pdfdetach: fix crash when getPage() returns null
+e0179304	745f1241	Mon Oct 20 19:02:26 2014 +1030	cairo: fix crash when no group color space
+745f1241	b8810703	Tue Oct 7 23:54:52 2014 +0200	Fix memory leak in Dict.remove.
+a2477da5	ce95ecda	Wed Oct 1 22:33:11 2014 +0200	Fix 303287ebdad0de9fb2655c4d7eab627c0045ea04
+ce95ecda	01723aa1	Tue Sep 30 19:50:20 2014 +0200	Fix assert in 5068.asan.0.6052.pdf
+529db4a9	c54f6ace	Mon Sep 29 22:59:15 2014 +0200	Fix build with --disable-utils
+303287eb	f94ba85a	Fri Sep 26 00:25:38 2014 +0200	Fix rendering of file with a wrong embedded font
+f94ba85a	f74a5964	Sat Sep 13 15:37:24 2014 +0200	glib: Fix use of uninitialized members in PopplerInputStream
+4589ce17	fe67324d	Sat Sep 13 15:36:34 2014 +0200	glib: Fix use of uninitialized members in PopplerInputStream
+e7825f7c	a1ecff0f	Fri Jul 25 15:47:06 2014 +0200	glib: Fix a memory leak when getting text layout and attributes
+b729bf92	f302864e	Fri Jul 25 15:45:55 2014 +0200	glib: Fix a memory leak when getting text layout and attributes
+ab1113d1	94ea9d8e	Fri Jul 25 11:29:24 2014 +0200	annots: Fix a crash when adding annot without contents
+13a5c5f4	02c127b3	Fri Jul 25 11:24:00 2014 +0200	annots: Fix a crash when adding annot without contents
+4f4ee736	ddd91675	Fri Jul 11 00:30:52 2014 +0200	Fix compilation of Qt5 frontend with MinGW
+47a947f1	aa6205d1	Fri Jul 11 00:22:06 2014 +0200	Fix moc-qt5 detection
+2b455b85	266a61ab	Sun Jul 6 11:13:54 2014 +0200	glib: fix typo in apidox
+6eb0537a	96adcad8	Mon Jun 9 15:07:49 2014 +0200	[glib] doc: Fix typo
+b36d27b4	f5e70206	Fri Jun 6 21:43:01 2014 +0200	Fix typo in configure.ac
+7e9fc61e	0a6c1ff7	Wed May 7 22:25:59 2014 +0200	Fix libopenjpeg 1.5 detection on some systems
+5b2cdef4	bae836cd	Sun May 4 22:20:30 2014 +0200	Fix extraction of text in some files
+a748b3a0	9a68daee	Wed Apr 30 09:27:05 2014 +0200	glib: Fix multiple definition of PopplerTextSpan
+c859d2b8	9a68daee	Wed Apr 30 09:26:09 2014 +0200	glib: Fix multiple definition of PopplerTextSpan
+8073852c	1fbf9866	Mon Apr 14 23:38:52 2014 +0200	qt: Fix missing ! in TextAnnotation::setInplaceIntent
+b8325316	ca971311	Sun Apr 6 16:08:15 2014 +0200	Fix memory leak
+0ef290a7	8810b891	Sun Apr 6 16:08:15 2014 +0200	Fix memory leak
+8810b891	93099076	Sun Apr 6 16:08:15 2014 +0200	Fix Out-of-bounds read
+93099076	a5110055	Sun Apr 6 16:08:14 2014 +0200	Fix memory leak
+a5110055	26b961a6	Sun Apr 6 16:08:14 2014 +0200	Fix Uninitialized pointer read when nFucnsA is 0
+b496b666	1b612f35	Sun Apr 6 16:08:14 2014 +0200	Fix memory leak
+1b612f35	07621ebb	Sun Apr 6 16:08:14 2014 +0200	Fix memory leak
+9fcd46ac	37286ee2	Sat Apr 5 15:48:27 2014 +0200	qt4/qt5: remove extra qDebug
+37286ee2	a2f0e4b1	Sat Apr 5 15:46:44 2014 +0200	qt4/qt5: fix some kinds of OCG models
+38dcaf96	07b0a038	Mon Mar 31 06:34:28 2014 +1030	cairo: fix segv cause by bad image stream
+07b0a038	ac3c8303	Sun Mar 30 16:14:14 2014 +0200	pdftohtml: Fix typo in manpage
+ac3c8303	82d69da7	Sun Mar 30 12:25:26 2014 +0200	glib: Fix the first coord of the qudrilateral in create_poppler_quads_from_annot_quads()
+82d69da7	38ec8cbe	Fri Mar 28 15:53:35 2014 +0100	Fix error reported by ASAN in 3628.asan.0.3910.pdf
+38ec8cbe	49b4eb68	Fri Mar 28 11:18:29 2014 +0100	Fix error reported by ASAN in 5782.asan.0.7113.pdf
+49b4eb68	89a64b50	Fri Mar 28 11:08:31 2014 +0100	Fix error reported by ASAN in 590.asan.0.7288.pdf
+89a64b50	50554796	Fri Mar 28 00:35:34 2014 +0100	Fix error reported by ASAN in 2279.asan.0.1904.pdf
+50554796	3e777993	Thu Mar 27 23:56:03 2014 +0100	Fix error reported by ASAN in 2010.asan.0.1506.pdf
+3e777993	23ad7fa5	Thu Mar 27 16:50:13 2014 +0100	Fix error reported by ASAN in 139.asan.0.581.pdf
+ec2f8bca	322e4164	Wed Mar 26 18:43:48 2014 +0100	Fix overflow malloc
+322e4164	225232f6	Wed Mar 26 18:43:48 2014 +0100	Fix error reported by ASAN in 1195.asan.0.293.pdf
+225232f6	216890f1	Wed Mar 26 18:43:40 2014 +0100	Fix error reported by ASAN in 6609.asan.0.8343.pdf
+216890f1	fb7d9143	Wed Mar 26 12:20:46 2014 +0100	Fix error reported by ASAN in 6760.asan.0.8568.pdf
+fb7d9143	9002b3b7	Wed Mar 26 12:08:52 2014 +0100	Fix ASAN in 750.asan.0.9621.pdf
+9002b3b7	8947c6bc	Wed Mar 26 00:57:22 2014 +0100	Fix ASAN in 784.asan.0.9671.pdf
+1d7095ab	37ad83d6	Tue Mar 25 22:29:07 2014 +0100	Fix Heap-buffer-overflow in TextPage::updateFont
+1e93c3f2	1ea2eb41	Sat Mar 15 17:15:58 2014 +0100	Fix regression when creating level1 PS
+e24cbeae	b984a3b5	Tue Mar 11 21:25:21 2014 +0100	Fix TIFF writting in Windows
+2fc38c18	cfe47a65	Sun Mar 2 19:46:38 2014 +0100	glib: Fixes in the API reference documentation
+b2394eee	c549b5e9	Sun Feb 23 18:17:59 2014 +0100	Tagged-PDF: Fix parsing of attached element attributes
+63e9c0b6	8f2d847f	Tue Feb 18 00:01:13 2014 +0100	Some error() usage fixes
+a865f13d	d6fde0fa	Sun Feb 9 23:22:07 2014 +0100	Fix cmake build
+46b7470a	8a84b456	Sun Feb 9 14:58:49 2014 +0100	glib-demo: Fix performance in text markup annotations
+8a84b456	899799df	Sat Feb 8 09:17:02 2014 +0100	glib: Fix gobject-introspection warnings
+bf2049b1	fe49033c	Wed Feb 5 19:42:50 2014 +1030	pdftps: fix DocumentMedia/Page/Media/PageBBox DSC comments
+57f34f52	3fac919e	Tue Jan 21 14:51:39 2014 +0100	glib-demo: Fix conding style issue in render.c
+3fac919e	92ea1564	Tue Jan 21 14:50:18 2014 +0100	glib-demo: Fix trailing whitespaces in render.c
+587a40f9	69e73da1	Sun Jan 19 16:22:30 2014 +0100	annots: Fix memory leak when setting AnnotTextMarkup quads twice
+1e1b9991	4cd5c349	Mon Jan 6 21:51:25 2014 +0100	Fix rendering of pdf file from KDE bug 329600
+e238c1f8	381ae287	Fri Jan 3 00:29:28 2014 +0100	Fix qt5 moc detection fix
+0abde34d	a7da4c6a	Sat Dec 28 23:02:55 2013 +0100	Fixed some GooString format markers
+a7da4c6a	fe88f20c	Sat Dec 28 23:02:54 2013 +0100	GooString format: fixed bug with printing LLONG_MIN
+b02f8731	58e04a08	Wed Dec 18 21:47:10 2013 +0100	Fixed some GooString format markers
+a766c55f	a43b4bf8	Mon Dec 16 20:47:20 2013 +0100	Fix detection of moc for Qt5
+e7a0f2b9	c784c4c3	Wed Nov 20 00:44:06 2013 +0100	Fix warning on signed/unsigned comparison in GfxState.cc
+ebe49d59	f4a72fd3	Fri Nov 15 19:33:00 2013 +0100	Fix regression in broken endstream detection
+4dbd36f5	02f3c235	Tue Nov 5 09:36:57 2013 +0100	glib-demo: Fix conding style issue in main.c
+02f3c235	5620b82e	Tue Nov 5 09:36:31 2013 +0100	glib-demo: Fix a typo in function name
+5620b82e	43309d92	Tue Nov 5 09:35:38 2013 +0100	glib-demo: Fix trailing whitespaces in main.c
+a6b1fc1a	bd49b3c0	Fri Oct 4 12:28:29 2013 +0200	glib-demo: Fix rectangle calculation for new annotations in demo
+e2fe8513	06dabe1e	Tue Oct 1 19:15:57 2013 +0200	Fix PFB font embedding
+1e612d33	b8682d86	Sat Sep 21 10:11:22 2013 +0200	Windows: Fix CreateFile fails with ERROR_SHARING_VIOLATION
+d2774325	9b595727	Sat Sep 14 14:08:11 2013 +0930	pdfimages.1: fix typo
+2c73f1ea	16da389c	Mon Aug 26 21:50:51 2013 +0200	Fix typo
+16da389c	ed3585ef	Mon Aug 26 07:50:51 2013 +0930	fix typo in pdfimages.1
+56c0d4f3	af4f2b77	Mon Aug 26 07:48:28 2013 +0930	fix typo in pdfimages.1
+0ca0fcc9	f8ee5a93	Mon Aug 26 06:40:34 2013 +0930	pdfimages: fix bug in -list output
+ed3585ef	70298a02	Sun Aug 25 19:33:01 2013 +0200	Fix pdftops -eps -level1sep rendering of a file
+678c7675	fbea2241	Sun Aug 18 16:19:52 2013 +0200	Fix crash in 1026.asan.0.42.pdf
+ef642065	681f52a5	Sat Aug 17 01:12:48 2013 +0200	Fix jpeg image export
+681f52a5	9f4d7796	Sat Aug 17 01:12:48 2013 +0200	Fix exit(1) in 1026.asan.0.42.pdf
+c3f953dc	62d079b4	Mon Aug 12 22:46:47 2013 +0200	Fix a typo
+b27588c4	b8b57733	Mon Aug 12 22:42:13 2013 +0200	Fix indentation
+62d079b4	86dbc5f6	Thu Aug 8 20:45:08 2013 +0200	Fix `pdftotext -bbox in.pdf -`
+69c281fd	759e0266	Sun Jul 7 16:14:47 2013 +0200	cairo: Fix the bounding box of images saved in CairoImageOutputDev
+b5e9941c	19f8a88b	Mon Jul 1 00:32:51 2013 +0200	Fix crash on malformed doc
+1d5fe3f2	ab130c91	Sun Jun 30 21:10:28 2013 +0200	qt5: FixedRotation annotations\' coordinate conversion
+cf950a2b	4b130855	Sun Jun 30 21:10:28 2013 +0200	qt4: FixedRotation annotations\' coordinate conversion
+ae016aa2	e27c1057	Wed Jun 26 11:33:55 2013 +0200	Fix qt5 found/not found logic
+ee8cfbc7	9d0a5b6a	Tue Jun 18 23:20:01 2013 +0200	Fix indent
+06f45c71	cb617c21	Mon Jun 17 20:05:32 2013 +0200	Build fixes
+fe3ffab1	99908cb0	Tue Jun 11 23:08:07 2013 +0200	Windows compile fixes
+25f453ef	ed01688a	Sun Jun 9 12:16:12 2013 +0200	Prefer prefix ++/-- operators for non-primitive types
+ed01688a	a27890ac	Sun Jun 9 12:16:12 2013 +0200	Fix mismatched allocation and deallocation
+a27890ac	17a16a27	Sun Jun 9 12:08:36 2013 +0200	Fix memory leak
+17a16a27	b4b13102	Sun Jun 9 12:04:40 2013 +0200	Fix mismatched free/delete
+1e74ac45	342cc0d8	Thu Jun 6 01:03:48 2013 +0200	[qt4] fix autotools
+342cc0d8	52945a07	Thu Jun 6 01:02:13 2013 +0200	Fix memory leak
+395b3fa0	425d1b48	Mon Jun 3 23:31:52 2013 +0200	Fix #end -> #endif
+9d3eb07a	287afe22	Mon Jun 3 19:39:33 2013 +0200	Fix cmake build to use ansi stdio extensions when using a mingw compiler
+caa19f49	a0b48b1d	Sat Jun 1 17:22:54 2013 +0200	qt4: Fix test binary name in help
+a0b48b1d	860737c2	Sat Jun 1 15:14:11 2013 +0200	Fix printf format warning for size_t
+dd30ce39	01a825f3	Sat Jun 1 14:01:22 2013 +0200	Fix warning on narrowing conversion from int to DWORD
+b4b13102	56044ef4	Sat Jun 1 13:46:17 2013 +0200	Fix crash on malformed file
+56044ef4	6a98b56f	Mon May 27 00:18:22 2013 +0200	Fix infinite loop while feeding wrong data in stdin
+61f66588	f536a4ec	Mon May 27 00:01:24 2013 +0200	Fix big file support in cmake
+c10f2f87	71d32719	Mon May 20 00:09:45 2013 +0200	fix typo in error message
+b3d8f510	8640933a	Thu May 16 20:53:37 2013 +0200	Fix splashModeBGR8 rendering
+8640933a	f8e8805b	Thu May 16 20:49:17 2013 +0200	Fix printf format specifiers (Goffset is a long long, not a int)
+73d09cd5	b3e44fc5	Mon May 13 19:28:40 2013 +0200	Fix compilation with fixed point mode enabled
+aaaea5d0	e6559a0d	Wed Apr 10 20:40:13 2013 +0200	man pages: Fix typos
+e6559a0d	b9fdb0cb	Sun Apr 7 17:42:23 2013 +0200	Fix crash in KDE bug #317710
+e1ffa910	94bee460	Sat Apr 6 23:22:47 2013 +0200	Fix endstream detection
+b312210b	09ddb34f	Sat Apr 6 23:18:18 2013 +0200	Fix for complete rewrites in repaired files
+b21780e6	75849a0d	Sat Mar 16 23:20:35 2013 +0100	Fix typo
+5a51812b	341e863d	Tue Mar 12 20:25:50 2013 +0100	Fix compile when not using libjpeg
+8a0199a0	1389aa41	Tue Feb 19 23:11:46 2013 +0100	Fix indent
+1389aa41	ffd33e7b	Tue Feb 19 22:25:56 2013 +0100	fix indent
+ffd33e7b	14466ecc	Tue Feb 19 11:31:22 2013 +0100	Fix missing ) here too
+401c35b7	94364ada	Mon Feb 18 22:33:07 2013 +0100	Fix closing ) as suggested by William Bader
+5c7057c6	9fc4b9f7	Tue Feb 12 23:54:47 2013 +0100	Fix the build with automake-1.13
+576dc53c	a9768588	Fri Jan 25 21:27:13 2013 +1030	splash: fix uninitialized memory
+8b6dc55e	e14b6e9c	Thu Jan 10 22:31:52 2013 +0100	Fix invalid memory access in 1150.pdf.asan.8.69
+e14b6e9c	0388837f	Thu Jan 10 20:52:02 2013 +0100	Fix invalid memory access in 2030.pdf.asan.69.463
+0388837f	957aa252	Thu Jan 10 20:29:32 2013 +0100	Fix another invalid memory access in 1091.pdf.asan.72.42
+957aa252	bbc2d891	Thu Jan 10 19:16:19 2013 +0100	Fix invalid memory accesses in 1091.pdf.asan.72.42
+bbc2d891	a9b8ab46	Thu Jan 10 19:07:48 2013 +0100	Fix invalid memory accesses in 1036.pdf.asan.23.17
+a9b8ab46	7266a634	Wed Jan 9 22:56:45 2013 +0100	Fix crash in broken file 1031.pdf.asan.48.15
+7d5bf74c	d61c6d49	Sat Dec 29 09:37:59 2012 +0100	pdf-inspector: Fix crash by not freeing filename_g
+703c77eb	7e0be785	Fri Dec 28 00:57:17 2012 +0100	Fix very long loop in JPXStream::getImageParams()
+858df0dc	1dd6280d	Thu Dec 27 23:30:27 2012 +0100	Fix arg typo
+03045469	5d50b276	Thu Dec 13 19:25:52 2012 +0100	Fix crop on EPS conversion
+f1b2e29e	71bad47e	Sun Dec 9 20:59:26 2012 +0100	Fix crash when rendering on mono1
+1bfe4b22	e5008bdb	Sat Dec 8 23:14:33 2012 +0100	Fix linewidths in monochrome mode.
+787a8438	cb3a1041	Sat Dec 8 18:05:50 2012 +0100	Fix compile warning on deprecated conversion from string constant
+cb3a1041	8550576b	Sat Dec 8 18:04:34 2012 +0100	Fixed check_lexer on 32-bit systems
+5daa17c0	f673be85	Sat Dec 1 20:06:17 2012 +0100	Initialize to NULL, fixes crash
+aca12243	c7020669	Sat Dec 1 02:05:32 2012 +0100	Fix compile warning on unused variable filename_g
+14bdeacb	72d4a1ba	Sat Dec 1 02:03:35 2012 +0100	Fix compile warnings on deprecated conversion from string constant to \'char*\'
+72d4a1ba	1262111e	Sat Dec 1 02:02:42 2012 +0100	Fix compile warning on signed/unsigned comparison
+bdb17da3	beff044e	Wed Nov 28 17:57:10 2012 +0100	cairo: Fix uninitaliazed warning in CairoOutputDev
+beff044e	b484749f	Wed Nov 28 17:51:23 2012 +0100	glib-demo: Fix warning on signedness
+b484749f	8438daf7	Wed Nov 28 17:49:57 2012 +0100	glib-demo: Fix set but unused warning
+8e5ae33b	c6f98d62	Wed Nov 28 17:47:11 2012 +0100	glib-demo: Fix warning "operation on \'page\' may be undefined [-Wsequence-point]"
+c5a8f7ed	4ceb3f4f	Wed Nov 28 17:42:07 2012 +0100	glib-demo: Fix warning on unused variable selection
+4ceb3f4f	5c5945d1	Wed Nov 28 17:41:04 2012 +0100	glib-demo: Fix warnings on unused variables
+55940e98	dcbc9686	Tue Nov 27 16:05:15 2012 +0100	fix my previous GooString::insert fix
+7ba15d11	703f85a1	Mon Nov 26 00:29:35 2012 +0100	fix GooString::insert()
+703f85a1	52896031	Sun Nov 25 12:36:33 2012 +0100	glib: Fix returns tag in PopplerAttachmentSaveFunc api doc
+e0d01775	f050717f	Thu Nov 22 08:46:17 2012 +1030	cairo: Fix crash in CairoImageOutputDev with setSoftMaskFromImageMask
+f050717f	87fd5275	Tue Nov 20 23:22:28 2012 +1030	cairo: fix soft mask when image resolution != smask resolution
+d254174e	46fb3653	Sat Nov 3 10:01:44 2012 +0100	FormFieldChoice::updateSelection: Fixed wrong loop condition
+102553e2	d7522ea1	Sat Nov 3 09:25:37 2012 +0100	FormFieldChoice::updateSelection: Fixed wrong loop condition
+46fb3653	5312984b	Tue Oct 23 00:22:55 2012 +0200	Fix the or-ing of flags
+65a25556	ce18c9b3	Sun Oct 14 11:09:03 2012 +0200	FormFieldChoice ctor: Fixed wrong index variable
+710bb338	b1126023	Sun Oct 14 11:08:18 2012 +0200	FormFieldChoice ctor: Fixed wrong index variable
+9451b7a6	42908e6e	Wed Oct 3 01:21:45 2012 +0200	Fix crash when parsing some unknown colorspaces
+2c0f70af	78558d24	Wed Sep 26 14:58:05 2012 +0200	More crash fixes for broken documents
+78558d24	e8822c0f	Wed Sep 26 14:32:05 2012 +0200	Fix more crashes in broken files
+9ae1184e	1d72c14b	Wed Sep 26 12:50:49 2012 +0200	More fixes against broken files
+1d72c14b	671df5da	Wed Sep 26 11:48:14 2012 +0200	Fix crash in 158.pdf.asan.d.451
+37949165	e8b6d2ac	Sun Sep 16 17:54:40 2012 +0200	Fix the siblings field correctly
+c6d7084d	36580883	Sun Sep 16 13:48:51 2012 +0200	Fix parsing of numbers
+36580883	3ce4d213	Sat Sep 15 20:38:10 2012 +0200	Fix build using mingw64 with winpthread
+5f338ea7	5fd691dc	Mon Sep 10 19:47:20 2012 +0200	Fix typo
+558a7d9b	d0df8e54	Sun Sep 9 23:25:47 2012 +0200	Fix invalid memory access in solves 1066.pdf.asan.38.75
+d0df8e54	86b89864	Sun Sep 9 23:21:38 2012 +0200	Fix invalid memory access in 1106.pdf.asan.30.120.patch
+86b89864	96931732	Sun Sep 9 23:08:49 2012 +0200	Fix crash in 1255.pdf.SIGSEGV.56f.285
+96931732	26917d69	Sun Sep 9 22:47:57 2012 +0200	Fix invalid memory access in 61.pdf.asan.13.95
+e6a3c797	48fe18cf	Sun Sep 9 22:22:59 2012 +0200	Fix wrong memory access in 68.pdf.asan.7.1030
+48fe18cf	b87aafc0	Sun Sep 9 22:09:44 2012 +0200	Fix memory leak
+a019eef2	ad7c6ac8	Sun Sep 9 21:41:09 2012 +0200	Fix crash in 1162.pdf.SIGSEGV.28e.182
+ad7c6ac8	b861af71	Sun Sep 9 21:31:58 2012 +0200	Fix crash in 1028.pdf.SIGSEGV.ae6.33
+b861af71	a4f59113	Sun Sep 9 21:15:06 2012 +0200	Fix memory leak
+a4f59113	28240046	Sun Sep 9 12:49:43 2012 +0200	Fix memory leak
+28240046	ccd3db5a	Sun Sep 9 12:48:26 2012 +0200	Fix crash in 589.pdf.SIGSEGV.8b1.929
+3ca2bc0d	768cf587	Fri Aug 3 00:48:51 2012 +0200	Fix segfault when scaleImage returns NULL
+31fe12c6	d3c33901	Fri Aug 3 00:48:12 2012 +0200	Fix segfault when scaleImage returns NULL
+d3c33901	d0e55aa4	Thu Aug 2 00:23:21 2012 +0200	PSOutputDev: Fix Bitmaps in level2sep or level3sep
+768cf587	31544784	Thu Aug 2 00:22:19 2012 +0200	PSOutputDev: Fix Bitmaps in level2sep or level3sep
+ef7c2418	349b21ac	Sat Jul 21 00:06:45 2012 +0200	Fix conversion to ps when having multiple strips
+6b567565	34327b2c	Sat Jul 21 00:01:49 2012 +0200	Fix conversion to ps when having multiple strips
+51f22ca0	950d5f3d	Mon Jul 16 23:33:49 2012 +0200	PSOutputDev: Fix DeviceN images with alternate Lab colorspace in level 3 PostScript
+31ef9670	f9f5238d	Mon Jul 16 23:32:23 2012 +0200	PSOutputDev: Fix DeviceN images with alternate Lab colorspace in level 3 PostScript
+f9f5238d	31837201	Fri Jul 13 00:57:39 2012 +0200	Fix Splash::arbitraryTransformImage causes bogus memory allocation size
+950d5f3d	e09be3bc	Fri Jul 13 00:56:48 2012 +0200	Fix Splash::arbitraryTransformImage causes bogus memory allocation size
+e15fe0e1	02c4e6bf	Thu Jul 5 17:46:07 2012 +0200	Fix handling of DeviceN images in level 3 PostScript
+31837201	262203bd	Thu Jul 5 17:44:02 2012 +0200	Fix handling of DeviceN images in level 3 PostScript
+0cc27387	2e1410ea	Thu Jun 14 20:32:47 2012 +0200	fix typo to compile in Windows
+3575becd	06618065	Thu Jun 14 20:31:26 2012 +0200	fix typo to compile in Windows
+4f2ac544	0df0aa43	Sat Jun 9 01:33:25 2012 +0200	Fix saving to xml
+bde31ce7	9904b8f1	Sat Jun 9 01:32:21 2012 +0200	Fix saving to xml
+9904b8f1	028f5800	Thu May 24 18:29:24 2012 +0930	glib docs: fix typo
+028f5800	1916d000	Thu May 24 18:29:14 2012 +0930	add sustitute font name to GlobalParamsWin32 to fix compilation
+b47d38e2	14a29dbf	Thu May 24 18:24:48 2012 +0930	glib docs: fix typo
+14a29dbf	7436b2c8	Thu May 24 18:21:37 2012 +0930	add sustitute font name to GlobalParamsWin32 to fix compilation
+8e504bf2	9f7d919e	Mon May 21 23:05:11 2012 +0200	pdfseparate.1: Syntax fixes.
+91845637	892e486a	Mon May 21 23:03:24 2012 +0200	pdfseparate.1: Syntax fixes.
+f818b842	a24e3264	Sat May 19 12:32:33 2012 +0200	glib-demo: Fix runtime warning
+9f7d919e	7e7997e1	Thu May 17 19:56:34 2012 +0200	Fix logic on SplashBitmap::writeImgFile
+87093d12	3a249aa8	Thu May 17 19:54:47 2012 +0200	Fix logic on SplashBitmap::writeImgFile
+7714b4e3	13d2aa30	Sun May 13 19:31:31 2012 +0200	glib: Fix memory leak when document fails to load
+4d0786a9	1d1c8175	Sun May 13 19:30:17 2012 +0200	glib: Fix memory leak when document fails to load
+251be178	be41f1c7	Sun Apr 29 18:26:42 2012 +0200	Fix getFullyQualifiedName with unicode field names
+be41f1c7	800cb9ec	Sun Apr 29 16:03:20 2012 +0200	SplashOutputDev: Fix rendering of knockout groups
+cf7a20ad	26fd142a	Wed Apr 25 18:51:23 2012 +0200	Fix slow rendering of pdf with a lot of image masks in pattern colorspace
+19fb9cae	fa4848ea	Mon Apr 16 19:28:21 2012 +0200	Fix crash when the destination file does not exist
+7f0f0802	5ea305c3	Thu Apr 12 19:12:33 2012 +0200	cairo: fix stroke pattern with transparency group
+af1a84eb	46b3a70c	Thu Apr 12 19:10:28 2012 +0200	cairo: fix paintTransparencyGroup when both mask and fill opacity are required
+80f66216	06591d84	Thu Apr 12 00:19:26 2012 +0200	Fix the mask inversion
+06591d84	1f45afde	Wed Apr 11 23:49:29 2012 +0200	Fix Splash CMYK merge error
+4e940b14	74a7d963	Mon Apr 2 20:03:11 2012 +0930	cairo: fix regression caused by mesh gradients
+74a7d963	2749db77	Sun Apr 1 19:35:48 2012 +0200	regtest: remove debug print to show bisect exit status in Bisect.py
+2749db77	1c8e1bb6	Sun Apr 1 19:20:37 2012 +0200	regtest: Fix crash when creating HTML report for a single test
+a5f4936d	aab8c9a0	Thu Mar 29 23:37:57 2012 +0200	Fix: annotDisplayDecideCbk was not propagated
+a0b3e093	631224dc	Thu Mar 29 19:25:17 2012 +0200	Fix help message
+e9a066c3	3d277b23	Wed Mar 28 23:33:37 2012 +0200	Fix another typo in macGlyphNames
+3d277b23	47b910d3	Wed Mar 28 23:33:08 2012 +0200	Fix typo in "mu" glyph name in truetype \'post\' table standard mac ordering
+e88c17d4	ee0eaabe	Wed Mar 28 20:05:45 2012 +0200	Fix compile in windows
+d6a1b7dc	a5257efe	Tue Mar 27 00:00:05 2012 +0200	Some regression fixes/improvements
+a5257efe	55d039ad	Mon Mar 26 22:48:18 2012 +0200	Re-added forceRasterize to PSOutputDev (and qt4 fix too)\xe2\x80\x8f
+2f156b34	06b6db92	Fri Mar 23 20:00:18 2012 +0100	Fix compile in mingw-gcc
+a2e9b7c0	05641304	Fri Mar 23 00:31:37 2012 +0100	Fix in AnnotMarkup\'s popup window handling
+508c7c3e	68625258	Wed Mar 7 18:35:05 2012 +0100	Fix logic error in Rendition parsing code
+8d935569	2484bc0f	Mon Mar 5 21:59:09 2012 +0100	Fix regression in some PSOutputDev array sizing
+2484bc0f	35c960d1	Sun Mar 4 23:47:24 2012 +0100	Fix mismatch in some functions declarations
+61037a6d	aff5b0a4	Sun Mar 4 17:42:18 2012 +1030	glib demo: fix typo
+3ab6b5eb	6c1ee344	Fri Mar 2 19:43:22 2012 +0100	Fix pdftops -passfonts regression
+aec6cb67	e977925a	Wed Feb 29 23:18:16 2012 +0100	Fix stuff lost when merging xpdf303
+e977925a	e13efe04	Wed Feb 29 23:12:24 2012 +0100	Fix double alloc
+e13efe04	adfc03e4	Wed Feb 29 23:10:43 2012 +0100	Fix memory leak
+2a5f1594	6a5deb0a	Sat Feb 25 16:33:29 2012 +0100	Fix PSOutputDev regression with -level1
+6a5deb0a	8f4566c1	Sat Feb 25 19:39:02 2012 +1030	autoconf: PKG_CHECK_EXISTS should not have the variable prefix in the first argument
+c0c8cc15	fde3bed0	Thu Feb 23 21:13:23 2012 +1030	glib docs: fix typo
+c0fec843	aaae8996	Sun Feb 19 14:47:24 2012 +0100	fix typo, GString -> GooString
+1cc3e152	4f4db591	Sun Feb 19 16:06:43 2012 +1030	glib docs: fix typo
+4f4db591	9b72ee4e	Sun Feb 19 16:06:43 2012 +1030	cairo: fix pdftocairo crash when pdf document uses actualText
+53d8fc4d	597fa37c	Sun Feb 12 17:36:55 2012 +0100	man pages: fix minor issues with hypens and %
+a6312817	cd5a6a4d	Thu Feb 9 22:02:52 2012 +0100	[xpdf303] Fix merge issue
+cd5a6a4d	2b7ba166	Thu Feb 9 22:01:42 2012 +0100	[xpdf303] Fix merge bug
+f655efe3	68f02d19	Thu Feb 9 00:00:40 2012 +0100	Fix memory leak when using HtmlOutputDev::mapEncodingToHtml
+68f02d19	92ce79f4	Thu Feb 9 00:00:34 2012 +0100	Fix leak in pdftohtml getInfoString
+2b7ba166	b8c9b179	Wed Feb 8 19:12:52 2012 +0100	[xpdf303] Compile fixes
+3f4164f8	8daeb82f	Sat Feb 4 11:59:28 2012 +0100	gtk-doc: Fix build when builddir != srcdir
+8daeb82f	f8ce9966	Sat Feb 4 11:55:30 2012 +0100	gtk-doc: Fix API documentation for poppler_page_free_annot_mapping()
+e320f335	1fe27b07	Sat Feb 4 11:32:50 2012 +0100	gtk-doc: Fix typo\'s
+e3d80c79	e074e526	Sat Feb 4 11:23:28 2012 +0100	Fix return value of downscale_box_filter()
+e074e526	bc389cff	Sat Feb 4 11:19:53 2012 +0100	Fix return value of poppler_attachment_save
+165ab4ec	e424a13b	Sat Feb 4 11:00:04 2012 +0100	Fix build for builddir != srcdir
+e424a13b	0089357d	Fri Feb 3 00:12:47 2012 +0100	pdfseparate fixes by Thomas after his last commit
+4fcd42cf	9c092e17	Wed Feb 1 22:53:03 2012 +0100	[xpdf303] More merges from Thomas (with minor fixes from me)
+be62a4f2	acbc6334	Mon Jan 30 20:40:19 2012 +0100	Fix build with latest mingw-w64 headers
+ce1b6c7c	4765c328	Fri Jan 20 15:36:10 2012 +0100	cairo: Fix test for rotation
+69df13c4	cdb56567	Sun Jan 15 15:09:12 2012 +0100	Fix stack overflow in PDFDoc::markObject()
+2cb40bab	c2378609	Sun Jan 8 21:35:41 2012 +1030	Fix typo in pdffonts man page
+c2378609	da6bfacb	Sat Jan 7 11:47:19 2012 +0100	regtest: read stderr output before calling wait to fix a possible deadlock
+bdb439ac	74e11d8c	Thu Nov 24 22:32:57 2011 +0100	Fix typo/regression introduced in f6d026bfa18624ccd321e102bb39ba744998de1e
+74e11d8c	65388b1a	Thu Nov 24 18:54:27 2011 +0100	Fix typo
+e7dbd17f	6a4f0c32	Wed Nov 9 12:41:28 2011 +0100	Fix leak in GooString when resizing
+b4896a41	53f1b0c5	Tue Nov 1 09:43:01 2011 +0100	Fix pkg-config files
+4bb34757	50adbed1	Mon Oct 17 18:52:57 2011 +1030	cairo: fix setSoftMask bugs
+acd8ecc9	6e1326b1	Thu Oct 13 22:55:48 2011 +0200	ps: fix uncolored tiling patterns
+ed05fcb8	d845da2c	Thu Oct 13 22:55:39 2011 +0200	ps: fix tiling pattern fill matrix
+d845da2c	bb40c980	Thu Oct 6 14:49:19 2011 +0200	Okular moved to git, fix docs
+776ca137	ab8616dc	Thu Oct 6 14:48:46 2011 +0200	Fix typo in cmake option documentation
+04e271a0	9855529e	Sat Oct 1 14:39:44 2011 +0200	Fix typo in documentation
+3fc46ac1	79e1d77f	Wed Sep 28 23:30:00 2011 +0200	xpdf303: Fix pdfdetach man page references
+d2706a05	0c0591fa	Wed Sep 28 21:20:23 2011 +0930	cairo: fix crash when using poppler_page_get_image()
+110b8be1	12c6239c	Sun Sep 18 16:26:58 2011 +0200	Fix memory leak
+4bb44394	d737e309	Sun Sep 18 12:42:15 2011 +0200	xpdf303: Fix check of OptionalContentGroup::getState()
+12c6239c	93ba92db	Sun Sep 18 11:09:46 2011 +0200	regtest: Fix checksum check for tests containing spaces in filename
+db4c5789	10c3d15f	Mon Sep 12 00:19:49 2011 +0200	xpdf303: fix spacing
+8a9d92fc	22d370c0	Mon Sep 5 22:57:02 2011 +0200	xpdf303: CCITTFaxStream header misc fixes
+22d370c0	36d30575	Mon Sep 5 22:53:45 2011 +0200	xpdf303: DCTStream misc fixes
+9529e776	071f983f	Mon Sep 5 21:19:58 2011 +0200	xpdf303: Other fixes in PostScriptFunction
+071f983f	da0eff1a	Mon Sep 5 21:19:13 2011 +0200	xpdf303: Fixed a bug in the PostScript-type function parser
+da0eff1a	b6553167	Mon Sep 5 21:12:53 2011 +0200	xpdf303: Fixes in StitchingFunction
+b36d1509	065565a6	Mon Sep 5 20:52:05 2011 +0200	xpdf303: Take xpdf way of handling bug 6500
+1d1a9851	5c027457	Mon Sep 5 20:20:03 2011 +0200	xpdf303: symCodeLen calculation fix
+ddf9d6e3	68e8fa9f	Thu Sep 1 23:21:26 2011 +0200	xpdf303: openFile + minor fixes for openTempFile in Windows
+c8c7fcef	655b1a97	Wed Aug 31 17:05:16 2011 +0200	xpdf303: Fix memory leak in FoFiTrueType
+9710ab96	36b733a3	Wed Aug 31 16:49:54 2011 +0200	Fix the build
+bf2cb5c9	0ca5453f	Tue Aug 30 19:00:32 2011 +0200	Fix compile error with libpng >= 1.5.0
+faaba717	73efc96e	Tue Aug 30 16:43:51 2011 +0200	xpdf303: FixedPoint improvements
+33da7e27	91fafce0	Sun Aug 28 22:10:38 2011 +0200	Fix building static-linked pdftocairo
+cfc67afe	7a7c932e	Sun Aug 28 12:52:52 2011 +0200	cairo: fix stroking of very thin lines
+87c48fdc	08a2ba6f	Wed Aug 24 13:28:01 2011 +0200	cairo: fix unique id mime data
+3a574f13	eb740dac	Mon Aug 22 15:08:09 2011 +0200	cairo: fix stroke patterns
+b7813431	ade53277	Sun Aug 21 23:46:09 2011 +0200	Fix copyright
+eb5b228c	1beac589	Sun Aug 21 23:23:12 2011 +0200	pdftocairo: fix writing to stdout for ps/pdf/svg
+a1093aae	7741b24d	Thu Aug 18 12:30:29 2011 +0200	Fix Adrian\'s (C)
+2c1b25ef	300900af	Mon Jul 25 23:43:27 2011 +0200	Fix a bad memory access
+300900af	ec6ea621	Sat Jul 23 19:49:15 2011 +0200	Fix numerical overflow in libopenjpeg JPXStream::doLookChar()
+ec6ea621	ce97cfcd	Thu Jul 21 23:12:36 2011 +0200	Fix calculation of startXRefPos
+42c1b1c4	091b570c	Wed Jul 20 00:23:15 2011 +0200	Fix crash on truncated JPEG/DCT stream
+37cc1344	230ab66f	Sun Jul 10 01:15:44 2011 +0100	Fix header
+c5601bde	d4af1c4e	Mon Jun 20 23:25:43 2011 +0100	Fix encoding of PDF document metadata in output of pdftohtml
+d4af1c4e	589933ef	Sat Jun 18 13:39:54 2011 +0100	Fix vertical spacing issues in pdftohtml output.
+7b123bf2	db2ae1bd	Sat Jun 4 20:23:10 2011 +0100	Fix pdftotext -htmlmeta to correctly output U+2019 in PDF metadata
+49d199fd	807c1df2	Wed Apr 27 08:38:17 2011 +0100	Fix page_transition::operator=
+813f4136	722baf8b	Sun Apr 3 20:40:15 2011 +0200	forms: fix mem leak in case of error
+a6802301	46f87da0	Sun Apr 3 13:14:19 2011 +0200	forms: Add debug methods to print the forms tree
+46f87da0	b64178ea	Thu Mar 31 14:52:19 2011 +0200	Fix a memleak in AnnotScreen::initialize
+d96efb6c	74ec81d6	Tue Mar 29 11:13:03 2011 +0200	fix comment
+d4a5ea45	cf84a05a	Tue Mar 29 09:54:22 2011 +0200	fix variable name for DisplayDocTitle
+f1102fcc	b3971ee6	Thu Mar 24 12:15:30 2011 +0100	glib-demo: Fix a crash when a choice form field has no items selected
+0268cede	5aa369e6	Sat Mar 12 15:25:50 2011 +0100	cairo: Fix typo
+ec2643d3	900974eb	Tue Mar 1 19:50:55 2011 +0000	fix copyright years
+900974eb	c804db4d	Tue Mar 1 19:42:22 2011 +0000	Fix years
+58a3b83a	664865a2	Tue Mar 1 15:35:45 2011 +0100	fix appendAnnot() invocation on annotations reading
+1f6573e9	e9273848	Sun Feb 27 21:53:32 2011 +0100	small fixes to the pdftohtml manpage
+e9273848	5b24ee2c	Sun Feb 27 16:39:59 2011 +0100	[qt4] fix caption of push button fields
+de77e267	4f82a2e0	Sun Feb 27 01:40:21 2011 +0000	Fix crash in some pdf
+22eb01d3	a6599dd1	Sat Feb 26 12:17:49 2011 +0100	cairo: Fix a crash when rendering a document with inline images
+3590a2d3	384753f1	Thu Feb 24 18:47:35 2011 +0000	Fix rendering of some substituted fonts
+fe7b8aa4	5984ad08	Wed Feb 2 22:35:40 2011 +0000	Workaround bug when converting pdf to ps with level1
+4829d36a	e57c75fb	Wed Jan 26 22:59:49 2011 +0000	fix labelToIndex on multiple prefixes
+5081356f	19dc283c	Tue Jan 25 20:26:25 2011 +0000	Fix leak in SplashOutputDev::axialShadedFill
+5056e33e	88812e71	Mon Jan 24 09:45:27 2011 +0100	Poppler: Fix line selection, dont check y for Line selection
+0c5b1bef	6cb8965f	Fri Jan 21 19:01:45 2011 +0000	Fix rendering for some pdf with -level1sep
+6cb8965f	24f9c892	Fri Jan 21 18:43:21 2011 +0000	fix (C) years
+07a8808c	ed367c08	Mon Jan 17 21:38:59 2011 +0100	fix unicodeToQString() to correctly decode the Unicode sequence
+a9e28050	5d62d189	Sat Jan 8 10:39:41 2011 +0100	glib: Fix memory leak when calling poppler_page_get_text_layout() for pages with no text
+93cf184b	ebb580d7	Sun Dec 19 14:16:25 2010 +0000	Fix last commit
+ebb580d7	88a41544	Sun Dec 19 14:08:31 2010 +0000	Windows fixes
+669cbfc9	2984002a	Sat Dec 11 19:04:22 2010 +0000	Fix the preliminary bbox/clip calculation
+3628837f	b0555189	Sat Nov 20 22:15:08 2010 +0000	And now generalize the previous fix
+32e53c54	1cb3d5d9	Sat Nov 20 18:54:59 2010 +0000	fix spacing
+1cb3d5d9	22e8ceba	Sat Nov 20 18:08:45 2010 +0000	fix the memset
+d772364b	ce929cf3	Thu Nov 11 21:52:25 2010 +0100	[Qt4] New function setDebugErrorFunction().
+b29582cd	970f0755	Sun Nov 7 19:44:11 2010 +0100	[arthur] small fixes and memory leaks
+cad66a7d	7e5f31c1	Tue Nov 2 19:14:34 2010 +0000	Fix crash in broken documents
+561c0567	4ef38cc9	Wed Oct 27 22:43:51 2010 +0100	fix comment
+4ef38cc9	fdfffc9c	Wed Oct 27 22:36:07 2010 +0100	Fix memory leaks that can happen with broken documents
+fdfffc9c	90d479d9	Wed Oct 27 20:40:19 2010 +0100	Fix memory leak
+e09ddce7	906e4e15	Sat Oct 23 23:33:00 2010 +0100	Fix crash in malformed documents
+d6f49aa2	e2fad550	Sun Oct 17 14:22:57 2010 +0200	[cairo] Fix a crash when redering documents with invalid type 3 fonts
+a7cf8d32	d690bea9	Thu Oct 7 18:26:34 2010 +0200	[glib] Fix introspection annotations for poppler_document_get_page*()
+b17be2bc	e3d3944c	Sun Oct 3 12:14:11 2010 +0200	[annots] Fix a crash when drawing square/circle annots without a border
+e3d3944c	f380647f	Wed Sep 29 20:03:45 2010 +0100	Fix uninitialized uses on DCTScanInfo
+a3c1f2d5	1aad013e	Wed Sep 22 20:14:27 2010 +0100	fix copyright
+bcdca66f	d2578bd6	Wed Sep 22 12:55:27 2010 +0200	[glib] Fix minimum value of creation and modification date properties
+473de6f8	9706e286	Tue Sep 21 19:11:42 2010 +0100	Fix memory leak if obj2 is not a dict
+9706e286	26a5817f	Tue Sep 21 19:09:37 2010 +0100	Fix crash when idx is out of range
+26a5817f	dfdf3602	Tue Sep 21 19:08:54 2010 +0100	Fix crash when idx is out of range
+3422638b	a2dab023	Tue Sep 21 18:58:43 2010 +0100	Fix crash in broken pdf (parser->getStream() is 0)
+39d140bf	c6a09151	Tue Sep 21 18:54:31 2010 +0100	Fix crash in broken pdf (code < 0)
+c6a09151	9b6ddb68	Tue Sep 21 18:50:25 2010 +0100	Fix memory leak
+9b6ddb68	fa3abc23	Mon Sep 20 19:47:47 2010 +0100	Fix copyright
+53324502	dfc6ea78	Sun Sep 12 11:42:03 2010 +0200	[glib] Fix a crash when building layer actions
+dfc6ea78	7574912b	Sun Sep 12 11:36:58 2010 +0200	[glib] Fix layers array generation when it contains multiple arrays
+7574912b	2fc83068	Thu Sep 9 20:34:03 2010 +0100	Fix checking whether _WIN32 is defined
+7fc3c21a	bedf48d4	Fri Aug 20 20:24:31 2010 +0100	Fix failure to parse PDF with damaged internal structure
+bdd617f2	e9f0646c	Tue Aug 3 13:05:26 2010 +0200	[glib] Fix a crash when a layer doesn\'t have a name
+627edf88	5d86f9b6	Sun Jul 25 13:57:44 2010 +0200	[annots] Fix a crash when adding a new annotation and annots object is an array
+31ac5789	5da5825e	Thu Jul 15 15:06:17 2010 +0200	Rework ChangeLog generation to fix make distcheck
+fe69b474	e265ae2d	Thu Jul 15 10:51:21 2010 +0100	Fix padding of names
+b1fdb87a	9e577110	Mon Jul 12 23:18:39 2010 +0100	Fix compile warnings on auto imports for mingw compiler
+34e727e0	1bc2f450	Mon Jul 12 23:18:39 2010 +0100	Fix cross compiling for Windows with autotools
+91a7605e	09e3e0e9	Fri Jul 9 11:42:56 2010 +0200	[glib] Fix build when GDK is enabled
+09e3e0e9	25427bde	Thu Jul 8 18:56:38 2010 +0200	[glib] Fix poppler_page_find_tex() when called more than once
+25427bde	55068473	Thu Jul 8 17:46:22 2010 +0200	Fix build when compiling without glib frontend
+bedc8822	092aa901	Wed Jul 7 11:55:47 2010 +0200	[cairo] Fix warning on signed/unsigned comparison
+6c4e14fd	ed324a86	Mon Jul 5 10:49:59 2010 +0200	[glib] docs: fix POPPLER_CHECK_VERSION() docs
+65ea3b63	689bfec4	Wed Jun 30 19:02:32 2010 +0200	[glib] docs: fix typo
+9365c05c	d9504c0a	Sat Jun 19 10:36:39 2010 +0200	[glib] Fix links/annots area for rotated documents with page CropBox not starting at 0,0
+acf7729e	4e017ff2	Fri May 28 17:38:35 2010 +0200	[cpp] fix the font_iterator current page status
+30ea3ab8	b5a90210	Tue May 25 23:07:56 2010 +0100	Fix crash when parsing pdf in bug 28170
+e30d24c5	aaa19a67	Tue May 4 15:19:26 2010 +0200	[cpp] ustring::{from,to}_utf8(): fix in/out buffer sizes
+4905e2bd	f9f0e4b7	Tue Apr 27 23:34:54 2010 +0100	fix include
+f9f0e4b7	5b822011	Tue Apr 27 14:26:23 2010 +0200	Fix first color stop offset of linear gradients
+6cc4d571	4ed53e30	Sat Apr 24 13:04:05 2010 +0100	Fix end() to return the correct last valid value
+4f71d64c	9c5612f6	Wed Apr 21 12:42:48 2010 +0200	[cairo] Fix pattern size when bbox is not at 0,0
+345ed51a	12d83931	Mon Apr 19 11:54:32 2010 +0200	Fix bug 3188, text selection across table cells
+ff6d501a	84cd2186	Sun Apr 18 17:51:42 2010 +0200	[cairo] Fix a crash when rendering 0x0 images
+d46581c5	ab14433f	Wed Apr 7 20:25:23 2010 +0100	Fix destructor
+f5dd5be6	3f302fdd	Wed Apr 7 21:10:35 2010 +0200	Fix saving update docs that have a compressed xref table
+425a62b5	198c9d61	Tue Apr 6 22:47:54 2010 +0100	pdfutils: fix deleting fileName
+0e371fb6	a32f6f9e	Sun Apr 4 12:33:33 2010 +0100	Fix my roll optimization
+bf398e53	ab1a3766	Wed Mar 17 23:06:44 2010 +0100	[CMake] fix pkg-config executable variable name
+fae59411	a451f83d	Mon Mar 8 14:31:49 2010 +0100	Fix handling of poster in Movie
+ef3258d6	fd1d9c88	Sun Mar 7 23:14:12 2010 +0100	[autotools] fix location of poppler-config.h.cmake
+bc42ee05	b21461e9	Fri Mar 5 18:54:32 2010 +0000	fix copyright year
+8e354a15	fcbc571a	Wed Feb 24 19:08:18 2010 +0000	Fix remaining part of 26243
+5c300ce0	3f89ccf8	Sun Feb 21 21:20:10 2010 +0100	[Qt4/apidox] fix typo
+5edd175b	0f0fba1b	Tue Feb 16 21:42:21 2010 +0000	Add and fix copyright years
+ba65b3af	d3d2a3ee	Wed Feb 10 23:09:16 2010 +0000	Wrap #include <jpeglib.h> in extern "C" to fix build
+d3d2a3ee	0dae2294	Wed Feb 10 23:16:27 2010 +0100	[CMake] fix typo: "MULTITHREAD" -> "MULTITHREADED"
+0dae2294	aa9c3acb	Tue Feb 9 21:44:07 2010 +0000	Fix regression in painting. Fixes bug 26243
+a945fe64	428cc965	Wed Jan 27 16:52:41 2010 +0100	[cairo] Fix downscaling images when document is rotated
+0397cf4f	9c9f18b6	Sun Jan 24 19:00:09 2010 +0000	Add and fix copyright years
+5ad492df	3160464b	Sun Jan 24 13:34:41 2010 +0100	[cairo] Fix memory leak
+6c61a457	442894d3	Wed Jan 20 21:59:05 2010 +0000	Fix GfxRadialShading::GfxRadialShading
+1f80f874	350ff407	Thu Jan 14 08:43:11 2010 +0000	Fix Uncover and Fade to return correct values
+a0cffb8b	283dd326	Wed Dec 30 18:57:09 2009 +0100	[cpp] fixup unicode GooString <-> ustring conversions
+283dd326	752b1485	Sat Dec 19 12:50:10 2009 +0100	[cpp] fix installation of poppler-version.h with autotools and builddir != srcdir
+904ecd92	82954ea5	Thu Dec 17 12:49:20 2009 +0100	[annots] Fix memory leaks
+ca1d2ec4	16c946e7	Tue Dec 15 00:54:29 2009 +0100	[cpp] fix the reference to the vector data
+16c946e7	9bb90c99	Tue Dec 15 00:35:25 2009 +0100	[cpp] fix the reference to the vector data
+6798d3e5	92fab93b	Sun Dec 6 15:41:51 2009 +0100	Use fixed size array in AnnotColor
+1c311336	2d30dc60	Sun Nov 15 19:44:40 2009 +0100	Write out fixed-content portion of Type 1 fonts in PSOutputDev
+c839b706	44462e0c	Tue Oct 20 10:09:13 2009 +0200	[glib] Fix CVE-2009-3607
+44462e0c	d701aaa9	Mon Oct 19 23:35:07 2009 +0200	fix memory leak
+85d10154	270764ad	Sat Oct 17 00:48:27 2009 +0200	fix file name comment
+1082e167	c2458275	Fri Oct 16 23:17:22 2009 +0200	Some "security" fixes based on newly released Xpdf 3.02pl4
+c2458275	fd91b79c	Fri Oct 16 20:56:16 2009 +0200	fix constructor of DCTStream
+fd91b79c	c3031b43	Sat Oct 10 14:53:42 2009 +0200	fix compiling with automake
+8194c156	091f68cc	Mon Oct 5 00:55:55 2009 +0200	Fix includes for those using internal headers
+f73f59f2	91135c7e	Fri Oct 2 22:07:16 2009 +0200	If the Length entry of the stream is wrong, fix it
+9dcb3e8b	ed4a6f1c	Sun Sep 27 17:17:32 2009 +0200	Fix the linking not to use the .so directly but the lib
+e9501070	1cb25a4a	Wed Sep 9 01:21:49 2009 +0200	Fix infinite loop in JBIG2Decoder
+4f6016d0	4616b233	Tue Aug 25 21:10:07 2009 +0200	Fix format security warnings
+4616b233	6c5c8d00	Tue Aug 25 21:09:40 2009 +0200	Fix format security warnings
+e7dd1c47	493d2c5a	Tue Aug 25 21:01:13 2009 +0200	Fix automake check, and add automake 1.11 support
+ce70ef7d	5b7b1cdc	Sat Aug 15 17:45:57 2009 +0200	Fix backwards search
+03970d8b	15752b7c	Tue Aug 11 12:01:07 2009 +0200	[build] Fix build with autotools
+2a3025f3	a38001f7	Mon Aug 10 19:55:40 2009 +0200	fix overflow calculation not to depend on the variable overflowing
+bf896472	fdbd0c54	Thu Jul 30 22:08:43 2009 +0200	Fix some double to int warnings by explicit casting
+7e14516a	3d53a0eb	Mon Jul 27 23:25:29 2009 +0200	Fix displayPages call
+f91eb7d0	f93f5e17	Sat Jul 25 16:35:07 2009 +0200	Fix generation of ps for some files
+454f7468	f8d93eae	Thu Jul 9 10:48:10 2009 +0100	[cairo] Fix drawImage() for non-1x1 images
+cafd4653	a3c9c6d0	Wed Jul 8 11:20:17 2009 +0200	[glib-demo] Fix a typo
+92ad0ef8	97094d13	Sat Jul 4 00:19:23 2009 +0200	[Qt4 demo] hopefully fix the page size on zoom change
+5deb6db5	e1e9ae28	Mon Jun 29 21:56:13 2009 +0200	Fix interpolate parameter position
+47de8eef	d30b1013	Fri Jun 19 00:34:39 2009 +0200	Fix some bugs in JBIG2Stream handling
+fc4bc43d	3da7a265	Tue Jun 16 16:34:16 2009 +0200	Fix a crash in pdf-inspector
+572779f8	b9759167	Wed Jun 10 22:57:42 2009 +0200	Fix dashed line in page 1 of bug 20011
+b9759167	a92b3883	Wed Jun 10 22:57:41 2009 +0200	Fix "Conditional jump or move depends on uninitialised value"
+2cecdf92	831288c1	Tue Jun 9 11:04:39 2009 +0200	[glib] Fix a crash when a destination points to an invalid page
+24580fcd	50cf7cff	Sun Jun 7 01:34:53 2009 +0200	Add a debug saying how much rendering took
+7e01e37a	50a7b4bc	Thu Jun 4 20:29:19 2009 +0200	Add part of fix for bug 20420, the other part was checked in with Thomas patches
+f5ae1490	5d4b1995	Tue Jun 2 23:52:59 2009 +0200	Really fix the typo
+5d4b1995	104f9286	Tue Jun 2 23:10:53 2009 +0200	Fix three typos in README
+d3e45631	78a58931	Tue Jun 2 23:02:22 2009 +0200	Set memory to 0 after allocation, fixes problems on Sun machines, should not hurt for others
+47c26747	41775d8c	Tue Jun 2 23:02:22 2009 +0200	Fix splashColorModeNComps to correctly include all values for each SplashColorMode
+0c3517bf	548c7260	Wed May 20 23:08:41 2009 +0200	Fix pdftops crash on file from KDE bug 174899
+0974b7b4	d1c0e8a6	Thu May 14 16:25:59 2009 +0200	[Win32] Build fix for MSVC.
+829ed964	68d96444	Sun May 10 23:43:05 2009 +0200	Fix axial shading fix to ensure the painting passes by the four edges of the bbox
+5b0fb6f9	c21b08a2	Wed May 6 22:59:55 2009 +0200	Fix format printing
+c21b08a2	63cc40ec	Wed May 6 15:56:21 2009 +0200	[glib] Several fixes in poppler_annot_get_color()
+fc7e52fe	df0032cf	Fri Apr 24 09:53:41 2009 +0200	Fix typos in Annot::setContents() documentation
+0750c650	fe73bf97	Tue Apr 21 20:04:27 2009 +0200	[glib-demo] Fix dates handling in annots demo
+e5f5ea01	876ad1bc	Tue Apr 21 19:57:11 2009 +0200	[glib] Fix poppler_annot_markup_get_date()
+8c54a15e	39d09fa2	Tue Apr 21 19:35:14 2009 +0200	[glib] Fix a typo in poppler_date_parse documentation
+2221b8a9	e20efbf6	Sun Apr 19 23:30:37 2009 +0200	Fix decryption using owner password on some pdf
+e20efbf6	b760debe	Fri Apr 17 22:14:26 2009 +0200	Fix typo in GfxFont.cc
+b760debe	9f1312f3	Fri Apr 17 21:04:26 2009 +0200	Fix rendering of axial shadings
+9f1312f3	284a9289	Thu Apr 16 22:13:26 2009 +0200	Fix problems that happen when parsing broken JBIG2 files
+b0b9798c	5c08f57a	Mon Mar 30 23:26:39 2009 +0200	Fix clip test for fonts
+c6d3e788	e4b3f7cb	Sun Mar 29 23:46:09 2009 +0200	Fix extraction of some ActualText content
+e4b3f7cb	4acde05a	Wed Mar 25 22:16:07 2009 +0100	Fix getGlyphAdvance to behave correctly on font size changes
+121c44db	3f55aff5	Fri Mar 20 14:09:46 2009 +0100	Fix cairo luminosity smask when cairo ctm != identity
+3f55aff5	4cc3cb89	Fri Mar 20 14:09:23 2009 +0100	Fix bug in cairo backend with nested masks
+da94fe71	8df0323f	Mon Mar 16 22:54:27 2009 +0100	Fix parsing of border arrays
+8df0323f	12aac677	Thu Mar 12 00:23:28 2009 +0100	Really fix jpeg lib init order?
+cc4b61f1	a4a73cd9	Sun Mar 8 12:55:45 2009 +0100	Fix the previous fix
+f7c88148	305af8cd	Wed Feb 25 23:38:35 2009 +0100	Fix cache shifting
+3a21dafa	0ed3fd52	Tue Feb 3 21:35:53 2009 +0100	Fix cache shifting
+0ed3fd52	2df6d530	Sun Feb 1 10:37:25 2009 +0100	[glib-demo] Fix a typo in format string
+1fc342ea	b1d4efb0	Wed Jan 28 22:53:43 2009 +0100	Fix crash on unexepcted Form Opt value
+3990c9e5	6e51ae7f	Mon Jan 19 09:53:00 2009 +0100	Fix a problem in cairo backend when using a CMYK Profile
+d3d2910f	869584a8	Sun Jan 11 00:40:46 2009 +0100	fix a (relatively small) memory leak when asking for a document-level JS
+cf112dce	6dd77338	Sat Jan 10 18:15:55 2009 +0100	Fix some problems with color management in CMYK Color Profile.
+ae588500	940d060a	Tue Jan 6 01:35:38 2009 +0100	Fix the cmake buildsystem
+0963c276	46128cf8	Sun Jan 4 16:54:32 2009 +0100	Fix some checked checkboxes not rendering correctly
+0f10561f	217b4648	Sun Dec 28 01:45:18 2008 +0100	Fix my last commit, copy&paste is really evil
+b8ae7d91	ba47bd2b	Fri Dec 26 22:28:09 2008 +0100	Fix compile warnings on auto imports for mingw32
+08cef528	0606b4bb	Wed Dec 24 17:48:46 2008 +0100	Fix compile warning on string literal format
+0606b4bb	eba2232c	Wed Dec 24 17:48:10 2008 +0100	Fix compile warnings on parentheses and/or
+eba2232c	c80431eb	Wed Dec 24 17:46:32 2008 +0100	Fix some more warnings
+c80431eb	fda181c3	Mon Dec 22 09:28:47 2008 +0100	Fix compile warning on format type
+ea3546f8	ca672ae5	Sun Dec 21 23:33:49 2008 +0100	Fix compile warnings on signed/unsigned comparison
+ca672ae5	86cfe8ab	Sun Dec 21 23:33:00 2008 +0100	Fix compile warnings on ignored pragma with mingw compiler
+86cfe8ab	e34af7ff	Sun Dec 21 23:08:56 2008 +0100	Fix compile warnings on signed/unsigned comparison
+f6d84dcf	15205403	Sun Dec 21 22:09:56 2008 +0100	Fix compile warning to suggest parentheses and/or
+15205403	cc24f37e	Sun Dec 21 22:09:56 2008 +0100	Fix warning to suggest parentheses inside shift
+cc24f37e	a8cc4ad8	Sun Dec 21 22:09:56 2008 +0100	Fix compile warning on ambiguous else
+a8cc4ad8	3cbbf822	Sun Dec 21 22:09:56 2008 +0100	Fix compile warning on format not a string literal
+3cbbf822	f6759162	Sun Dec 21 22:09:56 2008 +0100	Fix compile warning about uninitialized variable
+f86514c3	fc395eb9	Wed Dec 17 00:37:45 2008 +0100	Fix wrong PS generation when a large image is in Patterns
+ab539f46	c9a755f9	Thu Dec 11 23:15:45 2008 +0100	Fix crash when reading outline
+c9a755f9	4cd364c1	Sun Dec 7 18:00:37 2008 +0100	Fix memory leak
+12f6d6ba	817e123a	Sun Nov 23 18:20:14 2008 +0100	Fix a crash when the second argument of opMarkPoint is not a dictionary
+4a4fa7ed	a6f5032a	Tue Nov 18 20:11:07 2008 +0100	Fix a crash when selecting text in word mode
+03061fda	17b18be4	Thu Nov 13 22:32:22 2008 +0100	Fix build on Solaris 10 + Sun Studio 12.
+04025c4f	471255c5	Sun Nov 9 17:03:20 2008 +0100	Fix a crash when initializing an Annot with a null catalog
+c674566f	06ca313b	Sat Nov 8 20:54:04 2008 +0100	Fix memory leaks in OptionalContent
+8df7d834	d3c424e0	Wed Nov 5 20:49:01 2008 +0100	[Qt4Demo] Fix leak
+9d12de9b	fc61dad9	Wed Nov 5 20:00:01 2008 +0100	Fix crash in case indices is NULL
+fc61dad9	981fb857	Wed Nov 5 19:52:00 2008 +0100	[Qt] Fix leak
+981fb857	e925e92d	Wed Nov 5 19:49:18 2008 +0100	[Qt] Fix memory leak
+a5865dae	e07bfb54	Tue Oct 28 10:30:59 2008 +0100	[glib] Add DISABLE_SINGLE_INCLUDES flags and fix glib-demo
+e07bfb54	a84d272f	Tue Oct 28 10:29:51 2008 +0100	[glib] Fix build when compiling with GTK_DISABLE_SINGLE_INCLUDES
+a84d272f	43f2b84a	Tue Oct 28 10:01:00 2008 +0100	[glib] Add disable deprecated compile flags and fix compile warnings
+c7b87f3b	e9225529	Mon Oct 6 19:35:46 2008 +0200	Fix link on Mingw+Msys
+7604e025	450b21e4	Sat Oct 4 00:35:46 2008 +0200	Fix Poppler::Link::linkArea for rotated pages
+98310ca2	d12f5f43	Tue Sep 30 23:59:43 2008 +0200	Fix StitchingFunction(StitchingFunction *func) and GfxAxialShading(GfxAxialShading *shading)
+68658721	3cb5b7fc	Sun Sep 28 19:29:06 2008 +0200	If tables is null, don\'t try to write to file as it\'ll crash, fixes crash on 17811 when using cairooutputdev
+957d7acb	b3828203	Sat Sep 27 17:23:20 2008 +0200	Misc mingw fixes
+41d1eddd	fe260753	Sun Sep 21 16:33:33 2008 +0200	[glib-demo] Fix a crash in forms demo
+77bf8ec9	b22be54d	Sat Sep 20 14:17:06 2008 +0200	Fix memory leak
+b22be54d	ac16174d	Sat Sep 20 14:16:26 2008 +0200	Fix mismatched free/delete
+ac16174d	ffa4ffdf	Sat Sep 20 00:52:19 2008 +0200	make sure the image is setup before using it, otherwise some things don\'t print correctly like PDF from bug 17645
+dd0f4c15	16c0842c	Tue Sep 9 20:48:04 2008 +0200	Fix includepath
+db7ee3b3	3366059a	Sat Sep 6 23:17:07 2008 +0200	[Qt4] Fix docu
+8670bfed	1c98f197	Sat Aug 30 12:47:13 2008 +0200	Fix extraction of images
+35a72590	33727cf6	Thu Aug 28 00:58:11 2008 +0200	Be more protective against huge font sizes in bogus documents like the one in http://bugs.freedesktop.org/show_bug.cgi?id=17326
+33727cf6	abe29b4f	Sun Aug 24 20:36:13 2008 +0200	fix location of the comment
+6d6913a7	47f54ad4	Sun Aug 24 18:45:45 2008 +0200	fix Jeff\'s entry
+47f54ad4	0dfbb899	Sun Aug 24 18:19:57 2008 +0200	Add more correct copyright statements on fofi, goo, poppler and util directories to be more compliant with GPL that requires such modification statements to be present. Meanwhile i did that, i did qt and qt4 dirs too, glib is missing if someone wants to fix it, but it\'s not crucial as it\'s not a fork of some other GPL software
+0dfbb899	6cfa0e59	Sun Aug 24 18:19:56 2008 +0200	Fixes escaping of hyphens in man pages
+6cfa0e59	63bcaf11	Sun Aug 24 18:19:56 2008 +0200	Fix synopsis of pdftops in man page to clarify that a PDF file is required in all cases
+820f1500	c3a006ae	Sat Aug 23 01:45:07 2008 +0200	fix Movie::copy()
+b5a7987a	a2b0aefe	Thu Aug 21 20:40:18 2008 +0200	[glib-demo] Fix attachments demo with documents that don\'t contain attachments
+a2b0aefe	9e563d6d	Thu Aug 21 20:14:50 2008 +0200	[glib-demo] Fix typo
+d3110e39	303249e5	Tue Aug 19 19:24:51 2008 +0200	Fix include so it can be used in the unsupported way of installing internal poppler/ headers
+a6ecc864	123a87af	Tue Aug 12 01:23:21 2008 +0200	initialize widget, fixes crash on EC2006.pdf
+f5b0ca79	21bbdc9d	Thu Jul 31 20:21:59 2008 +0200	Fix ActualText string length check in TextOutputDev.cc
+e7b3e3ae	006b974d	Fri Jul 25 23:53:07 2008 +0200	Fix leak
+006b974d	3a549d75	Fri Jul 25 23:15:56 2008 +0200	Fix memory leak
+11ebceee	03d445f4	Fri Jul 25 21:33:55 2008 +0200	Fix my last fix about saving, i think this is the correct one
+03d445f4	136fa975	Fri Jul 25 20:16:54 2008 +0200	Fix XRef::writeToFile after my change
+136fa975	55572b77	Fri Jul 25 20:12:51 2008 +0200	Fix XRef::add and XRef::addIndirectObject, also remove num from XRefEntry
+9fb17c95	36960259	Sun Jul 20 13:49:09 2008 +0200	Fix condition, we want thumb to be a Stream, not to be non null
+0189ff8b	5bd77dcd	Tue Jul 1 20:18:14 2008 +0200	Fix condition, we want fetched_thumb to be a Stream, not to be non null
+c75632d6	9810fdfc	Tue Jun 24 02:33:45 2008 +0200	Open in WriteOnly mode, fixes the fact that when writing to an existing file, the contents beyond what we wrote were still there
+9810fdfc	2da15db4	Tue Jun 24 02:14:03 2008 +0200	the entry is not updated here either, fix uninitialized variable use
+d6fb5dcb	c3a00c83	Thu Jun 19 10:46:33 2008 +0200	Fix a crash in the cairo backend with Type 3 glyphs
+86aa8fc0	979ef1ca	Thu Jun 5 19:21:08 2008 +0200	Fix leak on ABWOutputDev.cc
+bf95c697	d21d7271	Sun Jun 1 00:07:11 2008 +0200	[Qt] Fix leak when calling Poppler::Document::scanForFonts
+492209ec	79ab8cce	Mon May 26 20:51:06 2008 +0200	Move variables only used inside the loop inside the loop, fix delete of uninitialized data due to my previous patch
+58d5b7b9	e3e4113c	Wed May 21 22:21:11 2008 +0200	[Qt4] Fix text() method
+19ec5a53	1cf5f0fd	Thu May 8 23:15:58 2008 +0200	Fix build with --enable-fixedpoint
+1cf5f0fd	b5041924	Wed May 7 18:50:16 2008 +0200	[Qt] Fix Document::unlock
+546a7b70	914f1b1d	Sun May 4 15:27:35 2008 +0200	Fix leaks on error conditions
+1ed3cc40	7c8feb4e	Wed Apr 16 15:45:45 2008 +0200	fix border style conversion
+bc2b2ffd	cd5afe6d bacc1dd9	Sat Apr 12 17:40:49 2008 +0200	Fixed merging conflict.
+28c5ee2e	ed027696	Sat Apr 5 23:19:33 2008 +0200	typo fix
+5caac407	0b714a61	Fri Apr 4 23:36:46 2008 +0200	Fixed icon name in AnnotText.
+be765f27	e991e9ac	Mon Mar 31 12:37:33 2008 +0200	[glib] Fix a crash in outline demo due to page_num == dest_page_num - 1
+0222c6ce	3e4164f2	Mon Mar 24 17:14:07 2008 +0100	fix build when using cmake, not sure it\'s completely ok, but at least i can compile
+3e4164f2	22f615ae	Mon Mar 24 15:10:31 2008 +0100	fix some cmake HAVE_foo
+22f615ae	cccfe42e	Sun Mar 23 13:22:07 2008 +0100	Fixed wrong functions.
+cccfe42e	e60d39ba	Sat Mar 22 19:12:05 2008 +0100	Fix rm line not to error when no *moc file is present
+e60d39ba	d9d52e62	Sat Mar 22 19:11:17 2008 +0100	Fix rm line not to error if no *moc file is present
+d9d52e62	9b880929	Sat Mar 22 19:10:40 2008 +0100	Fix configure to not require gdk when we are on try mode
+b33bb282	371932f4	Fri Mar 21 13:53:21 2008 +0100	Fixed poppler glib public api.
+bd2272f3	5bf8d864	Fri Mar 14 19:52:04 2008 +0100	Fix "Make sure we don\'t draw outside the bitmap on Splash::fillGlyph2" when painting with no aa
+5bf8d864	d0be5c86	Wed Mar 12 22:48:07 2008 +0100	fix build
+550c1fc7	6a671686	Wed Mar 12 20:34:48 2008 +0100	Init to false updated field of XRefEntries plus indenting fixes
+6a671686	0b2c3bb2	Wed Mar 12 09:45:24 2008 -0400	Fix regression in cairo output when transforming ctm
+4fdd2543	19f0e3b4	Tue Mar 11 22:31:00 2008 +0100	Fix build
+35f34bd4	32637db1	Sun Mar 9 17:38:54 2008 +0100	Fix build when compiling without cairo support
+4882d7a1	31ce4049	Thu Feb 28 15:12:23 2008 +0100	printf -> qDebug
+277382b8	5b2f8f21	Wed Feb 27 22:56:33 2008 +0100	fix typo
+ed6c0c26	344d5553	Wed Feb 27 20:43:45 2008 +0100	fix build and distcheck with autools
+b73e2afe	803787f7	Wed Feb 27 15:52:06 2008 +0100	fix indexFromItem once again, and make parent() call it with the right node
+b8e83373	f89ba474	Wed Feb 27 14:05:19 2008 +0100	fix build with the autotools
+11b70bcd	d4d6c14c	Tue Feb 26 23:01:27 2008 +0100	fixup the default export macro name (added by cmake); _WIN32 is defined only on win32 (remove a plethora of warnings)
+7f60fa80	053ecae5	Thu Feb 21 19:43:43 2008 +0100	Fix typo
+23164558	d985d3b0	Thu Feb 14 21:02:20 2008 +0100	Pipe the poppler error messages through the Qt debug system.
+ce17383e	15a61cac	Wed Feb 13 20:58:15 2008 +0100	Yet another fix for buggy documents, do not use the cache if the cache could not be created because it ought to be too big
+88c780ae	7574cb71	Wed Feb 13 18:42:49 2008 +0100	Fix what look to be a few bugs in functions for mapping to/from Unicode.
+e798802f	4e2ba70a	Tue Feb 12 20:57:56 2008 +0100	Apidox fix: state which checksum is returned (if available).
+85bfa4f4	ada05055	Mon Feb 11 02:40:37 2008 +0100	Small apidox fix.
+5ba92876	2a39932a	Sat Feb 9 12:48:04 2008 +0100	Fix placeholders in printf-like functions.
+834b8654	11a61eac	Fri Feb 8 12:15:16 2008 +0100	Small apidox fix.
+8a946b76	c31990df	Thu Feb 7 01:07:28 2008 +0100	Micro-touches to the debug messages.
+4e0bb030	6f11ef66	Sat Feb 2 12:57:25 2008 +0100	Fix include guard.
+6f11ef66	1da20918	Fri Feb 1 23:55:37 2008 +0100	Fix for end condition, init ucode to 0
+3085a949	7ad6c4ba	Sun Jan 27 19:15:34 2008 +0100	Fix slice rendering in poppler glib demo
+7c99ec46	2335fb60	Thu Jan 24 19:18:15 2008 +0100	Revert unwanted change on Dict, fix leak on writeTrailer
+96c532ea	6bca6440	Wed Jan 23 13:30:12 2008 +0100	Fix memory leak
+547db8be	0d558841	Tue Jan 22 13:22:20 2008 +0100	Fix a crash when createAnnot returns NULL due to invalid annot dict.
+0d558841	cb6a87e3	Mon Jan 21 21:43:39 2008 +0100	Fix another reversed comparison due to cmp
+cb6a87e3	7cf85dc8	Mon Jan 21 21:39:46 2008 +0100	Fixed a few compare issues with Annots.
+1d160935	0e91a397	Sat Jan 19 13:59:46 2008 +0100	AnnotWidget support and few fixes
+696eaa47	9ec1b28d	Thu Jan 17 15:56:59 2008 +0100	Fix a crash when editing text form fields
+9ec1b28d	f7ed40c4	Thu Jan 17 14:54:34 2008 +0100	Fix a crash when a form field contains reference to non existant children
+f7ed40c4	1c0aa21e	Wed Jan 16 21:01:50 2008 +0100	Add a cast to fix build
+1c0aa21e	88f8bf85	Fri Jan 11 20:28:49 2008 +0100	rename info.c to info.cc to fix bug 14024
+88f8bf85	348f4f9d	Thu Jan 10 23:51:54 2008 +0100	Fix two use after free bugs in HtmlOutputDev.cc
+30e9bae9	40551e61	Sat Dec 22 22:54:51 2007 +0100	Fixlets for Adobe Glyph Naming convention implementation
+5f9f06a1	bb49e1e3	Thu Dec 20 19:59:26 2007 +0100	Fix for latest CJK code
+796d9cb9	99f049f0	Sat Dec 15 15:21:49 2007 +0100	Fix a crash when trying to create a temp annot with catalog = NULL
+cb2a997a	f704e86d	Fri Dec 14 14:12:14 2007 +0100	Fix another crash due to uninitialized variables
+f704e86d	0820a93b	Fri Dec 14 12:58:12 2007 +0100	Fix several crashes due to uninitialized variables in Annots.
+7cbabbf3	e807f9c7	Mon Dec 10 22:00:30 2007 +0100	Fix a crash when marked content properties operator is not a dict.
+02c7ea6e	74af7c12	Wed Nov 28 19:41:54 2007 +1100	Fix off-by-one in printCommands path.
+74af7c12	21a58562	Sat Nov 24 18:12:00 2007 +0100	Convert passwords from utf-8 to latin-1 when needed. Fixes bug #4557
+f6429b13	5797f50a	Sat Nov 10 14:08:09 2007 -0500	Fix accidental mode change.
+551212e5	934a5ae4	Sat Nov 10 11:56:15 2007 +0100	Fix uninitialized variable access
+1b3f045a	944d327f	Thu Nov 8 23:34:07 2007 +0100	Move another gmallocn to gmallocn_checkoverflow. Fixes crashes on incorrect pdf sent by Red Hat
+570fe464	1c7b7a0c 78750679	Mon Nov 5 15:55:39 2007 +1100	Merge branch \'minor-fixes\'
+1c7b7a0c	b86fc565	Mon Nov 5 15:49:45 2007 +1100	Minor Qt4 API documentation fix
+b86fc565	37776afc	Mon Nov 5 00:14:55 2007 +0100	Fix FSF address
+ba5b31c6	cb80112a	Sun Nov 4 13:25:12 2007 +0100	Require fontconfig >= 2.0 Fixes bug 9020
+cb80112a	ad6b888e	Thu Nov 1 20:53:05 2007 +0100	Do not try to parse directories when processing nameToUnicode dir. Fixes ugly warnings on mingw32
+ab0a6c37	6bd637dc	Thu Oct 25 20:56:58 2007 +0200	Fix compilation on mingw. Bug 12493
+c01ab714	57331767	Tue Oct 23 23:26:21 2007 +0200	Provide setters for some methods that only had getters. Fixes bug 12894
+57331767	2a333e5a	Mon Oct 22 23:33:59 2007 +0200	builddir != srcdir fixes by Christian Persch <chpe gnome org>
+2a333e5a	cf785cd1	Mon Oct 22 22:14:43 2007 +0200	Splash rework, check if font is inside clip area before rendering it to a temporary bitmap. Fixes KDE bug 150693
+dbe975c1	8bfe30a4	Mon Oct 22 11:25:37 2007 +0200	Fix a crash with invalid TrueType fonts
+1a531dcf	e1740278	Fri Oct 19 13:12:24 2007 +0200	Fix a crash with invalid embedded fonts
+3156d560	f0b5e628	Fri Oct 5 11:34:01 2007 +0200	Fix a crash when Form Fields array contains references to non existent objects. Fixes bug #11865
+3d0df469	aba29e12	Wed Oct 3 19:43:55 2007 +0200	Fix compile warning
+59d55f73	c36d8afc	Tue Sep 25 01:21:19 2007 -0700	Fix misleading comment.
+c36d8afc	ff25e83a	Tue Sep 25 00:32:29 2007 -0700	Revert "replace extremely confusing \'a*(int)sizeof(foo)/sizeof(foo) != a\' which, due to type promotions, if a is int, is equivalent to a < 0; fix problems revealed by the change"
+2f664b65	05d41cd5	Mon Sep 24 19:41:45 2007 -0700	Fix msvc debug build. Fix bitmap leak in perf-test.
+08bf7c11	5a1f670a	Sun Sep 23 22:28:16 2007 -0700	replace extremely confusing \'a*(int)sizeof(foo)/sizeof(foo) != a\' which, due to type promotions, if a is int, is equivalent to a < 0; fix problems revealed by the change
+fb5bf808	60829b08	Fri Sep 21 03:03:26 2007 -0700	more msvc build fixes
+60829b08	853c22a1	Fri Sep 21 03:02:34 2007 -0700	msvc build fixes
+3330763d	6eb159ef	Fri Sep 14 06:17:35 2007 +0000	windows/msvc compilation fixes
+b3d63d03	64368582	Wed Sep 5 20:22:32 2007 +0000	        * qt4/src/poppler-ps-converter.cc: Fix Right<->Left interchange
+64368582	eaf9d06c	Wed Sep 5 18:22:52 2007 +0000	        * poppler/PSOutputDev.cc: Fix printing of second parameter
+eaf9d06c	c0f488c2	Wed Sep 5 10:57:09 2007 +0000	2007-09-05  Carlos Garcia Campos  <carlosgc@gnome.org> 	* glib/poppler-page.cc: 	* glib/demo/render.c: Fix build with --disable-cairo-output.
+3462851b	cdf3b906	Tue Sep 4 22:02:06 2007 +0000	        * utils/pdftoppm.cc: Fix build on Sun Studio compiler.         Patch by Brian Cameron <brian.cameron@sun.com>
+cdf3b906	c82208a4	Mon Sep 3 19:23:11 2007 +0000	write news fix qt4 build
+2a12409e	0b483e71	Mon Sep 3 17:09:01 2007 +0000	        * poppler/JBIG2Stream.cc:         * poppler/Stream.cc: Patch by Derek B. Noonburg <derekn@foolabs.com>         to fix some errors in CCITTFaxStream and JBIG2Stream.cc
+289e3893	6f6c2180	Sun Sep 2 17:02:55 2007 +0000	        * poppler/GfxState.cc: Pad zeroes instead of aborting when rendering         1-bit images and the stream is "too short" to mimic Acroread and         ghostscript behaviour. Patch by <darren.kenny@sun.com>. Fixes #12208
+bf489d5c	a81cc06c	Thu Aug 30 18:39:51 2007 +0000	        * poppler/Form.h: Remove unused methods. Fixes 12013
+59ddb5cc	a6e46ce6	Mon Aug 27 18:37:55 2007 +0000	        * poppler/UnicodeTypeTable.cc: Fix error on the NFKC text matching         routine. Fixes bug #11775. Patch by Ed Catmur <ed@catmur.co.uk>
+a6e46ce6	a7f8d92f	Mon Aug 27 17:56:29 2007 +0000	        * qt4/src/Doxyfile:         * qt4/src/Mainpage.dox:         * qt4/src/poppler-annotation.h:         * qt4/src/poppler-form.h:         * qt4/src/poppler-link.h:         * qt4/src/poppler-qt4.h:         A few API documentation fixes and improvements.
+2b1ef8f0	20bcac5e	Sun Aug 26 21:39:22 2007 +0000	Fix bug 12121
+099eb568	3b7e3645	Wed Aug 15 18:52:20 2007 +0000	       * poppler/JBIG2Stream.cc: Quick fix for bug #12014
+c240daef	1ba884b6	Tue Aug 14 23:10:37 2007 +0000	* poppler/Stream.cc: Fix CVE-2007-3387 by merging xpdf-3.02pl1.patch
+1ba884b6	3c31f923	Tue Aug 14 22:47:30 2007 +0000	        * configure.ac:         * p\xc3\xb2ppler/Makefile.am: Patch by Vincent Torri <vtorri@univ-evry.fr> to         fix linking under MinGW
+f04a6700	ee9d556a	Tue Jul 31 11:41:53 2007 +0000	2007-07-31  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/Form.cc: 	* poppler/Form.h: Fix memory leak.
+ee9d556a	e0877985	Tue Jul 31 11:40:22 2007 +0000	2007-07-31  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/CairoOutputDev.h: Empty implementation of transparency 	groups and soft masks in CairoImageOutputDev. Fixes a crash in 	poppler_page_get_image_mapping.
+81b669dc	f2c4e530	Sat Jul 28 08:05:11 2007 +0000	2007-07-28  Carlos Garcia Campos  <carlosgc@gnome.org> 	* glib/poppler-page.h: Remove unneeded declarations. Fixes bug 	#11744. Patch by Kouhei	Sutou <kou@cozmixng.org>.
+525a7f49	633a1cde	Tue Jul 24 16:45:25 2007 +0000	2007-07-24  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/Annot.cc: 	* poppler/Form.cc: Several fixes in forms. Generate appearance for 	field buttons that don\'t have an AP dict. Do not remove the first 	character of the second and following lines in multiline text 	fields. Fix a crash with pdf documents created by ooo which have 	radio buttons. Look for some inheritable attributes in the 	parent when needed.
+633a1cde	ccb2d420	Sun Jul 15 21:03:50 2007 +0000	        * utils/HtmlOutputDev.cc:         * utils/HtmlOutputDev.h: Create the html files in the correct place,         not in the invocation dir. Fixes bug #11610
+ccb2d420	f9d82dfd	Sun Jul 15 17:09:29 2007 +0000	        * poppler/DCTStream.cc         * poppler/DCTStream.h: Implement less evil error handling. On a         error_exit level error we don\'t want to actually exit the program. See         http://bugs.kde.org/show_bug.cgi?id=147878 for a pdf with this         problem. libjpeg was printing "Bogus Huffman table definition" and         exiting the program.         * poppler/Stream.cc: Remove bogus #warning
+14a83610	8389099d	Fri Jul 13 22:18:05 2007 +0000	        * fofi/FoFiTrueType.cc         * fofi/FoFiTrueType.h         * poppler/CairoFontEngine.cc         * poppler/CharCodeToUnicode.cc         * poppler/CharCodeToUnicode.h         * poppler/GfxFont.cc         * poppler/GfxFont.h         * poppler/SplashOutputDev.cc: Patch by         Koji Otani <sho@bbr.jp> to fix several problems with Japanese fonts.         Fixes bug 11413
+8389099d	9ced4442	Fri Jul 13 18:21:02 2007 +0000	        * poppler/FontInfo.cc: Fix the FontInfoScanner::scan method to         actually scan the number of requested pages
+fb89fdb8	0c9fa59b	Wed Jul 11 18:52:12 2007 +0000	        * poppler/PSOutputDev.cc         * poppler/PSOutputDev.h         * utils/pdftohtml.cc: Fix bug 9746. pdftohtml complex mode had text         twice
+0c9fa59b	4ae7d43b	Wed Jul 11 18:30:19 2007 +0000	2007-07-11  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/Form.cc: 	* poppler/XRef.cc: 	* poppler/XRef.h: Fix memory leak.
+de0a4018	a33518a3	Sat Jul 7 15:28:29 2007 +0000	2007-07-07  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/Form.cc: Fix a crash when setting state on buttons that 	don\'t have state.
+a33518a3	43f0d5b9	Fri Jul 6 09:08:44 2007 +0000	        * poppler/Form.cc: Fix a bug with FormField\'s destructor which was not         checking if the FormField is terminal to determine wether it needs to         delete children or widgets. Patch by         Julien Rebetez <julien@fhtagn.net>
+d3784387	d933f47d	Wed Jul 4 08:26:52 2007 +0000	2007-07-04  Carlos Garcia Campos  <carlosgc@gnome.org> 	* glib/poppler-attachment.cc: 	* glib/poppler-attachment.h: Add size, creation and modification 	date and checksum properties to attachments. Fix memory leaks. 	* glib/test-poppler-glib.c: 	* glib/poppler.h: 	* glib/poppler-private.h: 	* glib/poppler-document.cc: Add a function to convert a pdf date 	into a GTime that is used by attachments and document 	properties. Fix memory leak in attachments.
+d90b166c	7fa87eb2	Tue Jul 3 16:46:51 2007 +0000	        * poppler/Catalog.cc: Fix crash, embeddedFileNameTree.getName(i)         returns a reference to its own data so does not have to be deleted         * qt4/tests/poppler-attachments.cpp: Delete the doc, just for sake of         correctness
+8b67e040	33a5765e	Tue Jul 3 13:49:18 2007 +0000	2007-07-03  Carlos Garcia Campos  <carlosgc@gnome.org> 	* glib/poppler-form-field.cc: 	* glib/poppler-form-field.h: 	* glib/test-poppler-glib.c: Fix a typo.
+c7d21f93	5e301064	Mon Jul 2 13:39:32 2007 +0000	2007-07-02  Carlos Garcia Campos  <carlosgc@gnome.org> 	* glib/poppler-form-field.cc: 	* glib/poppler-form-field.h: 	* glib/test-poppler-glib.c: 	Use FILE_SELECT instead of FILESELECT and fix a typo. Patch by 	Kouhei Sutou
+e48ee9c4	d874a275	Sat Jun 23 18:06:07 2007 +0000	2007-06-23  Carlos Garcia Campos  <carlosgc@gnome.org> 	* poppler/Annot.cc: 	* poppler/Form.cc: Fix memory leaks.
+cdd2a49d	7f233831	Fri Jun 15 18:15:53 2007 +0000	        * poppler/ABWOutputDev.cc: Replaces the getBiggestSeperator function         at the ABWoutputdev with one that is easier to read/debug         and less likely to contain bugs. Some cosmetic fixes at the         functions recursiveXYC and splitnodes. Patch by         Jauco Noordzij <jauco.noordzij@gmail.com>. More info at bug #11273
+7f233831	948520cd	Wed Jun 13 20:39:21 2007 +0000	        * poppler/ABWOutputDev.cc         * poppler/ABWOutputDev.h: Remove dependency on debugxml. Patch by         Jauco Noordzij <jauco.noordzij@gmail.com>. Fixes bug #11187
+948520cd	825461e4	Wed Jun 13 18:50:40 2007 +0000	        * goo/FixedPoint.h         * goo/gmem.h         * poppler/SecurityHandler.h         * poppler/poppler-config.h.in         * utils/ImageOutputDev.h:         Patch by Axel Howind <Axel.Howind@htp-tel.de>         - include USE_EXCEPTIONS and USE_FIXEDPOINT in poppler-config.h.in         - fix typo (MULTITHREADED/MULTITHREADING) in poppler.config.h.in         - change installed headers to include poppler-config.h instead of         config.h         - use <poppler/poppler-config.h> instead of <poppler-config.h> so that         installed headers can be used without including .../include/poppler         in the include path
+825461e4	a67a93fc	Wed Jun 13 18:24:56 2007 +0000	configure.ac: Fix detection of glib
+a67a93fc	051b31af	Mon Jun 11 21:14:22 2007 +0000	        * poppler/CMap.h:         * poppler/CharCodeToUnicode.h:         * poppler/GlobalParams.h:         * poppler/PageLabelInfo.h:         * poppler/UnicodeMap.h: Further include cleanup. Patch by Axel Howind         on bug #11228
+3e1597b8	49535c20	Fri Jun 8 22:39:23 2007 +0000	poppler/Annot.cc: Fix leak
+cdf70857	90b1a404	Fri Jun 1 18:34:48 2007 +0000	        * poppler/ArthurOutputDev.cc         * splash/SplashFTFont.cc         * splash/SplashMath.h: Make it compile with --enable-fixedpoint. Fixes         bug 11110
+90b1a404	03d766ea	Wed May 30 18:33:24 2007 +0000	        * configure.ac: Fix to check for glib-2.0 not glib that is 1.0. Patch         came though Pardus developers and they don\'t remember where they got         it from.
+97e60275	3d31c2b1	Sun May 27 11:24:40 2007 +0000	2007-05-27  Carlos Garcia Campos <carlosgc@gnome.org> 	* glib/test-poppler-glib.c: Add forms test 	* glib/poppler-page.cc: 	* glib/poppler-page.h: 	Fix indentation, some code cleanups and memory leaks.
+fefefe49	ecaeaa95	Fri May 25 23:17:58 2007 +0000	        * qt4/src/poppler-link-extractor-private.cc:         * qt4/src/poppler-link-extractor-private.h:         * qt4/src/poppler-link.cc:         * qt4/src/poppler-link.h: Return link coordinates in 0..1 range         instead of 0..size, much more easier to do user<->dev transformations         * qt4/src/poppler-private.h: Fix indentation
+bf195b48	36d1fe29	Wed May 23 21:20:58 2007 +0000	        * qt4/src/poppler-document.cc:         * qt4/src/poppler-private.h:         Better handle the setting of the vector antialiasing for Splash.         * qt4/src/Mainpage.dox:         * qt4/src/poppler-link.h:         * qt4/src/poppler-qt4.h:         A few of API documentation fixes and improvements.
+36d1fe29	5b411246	Mon May 21 21:42:38 2007 +0000	Fix assert in bug 11023
+5b411246	409f2a9c	Mon May 21 21:39:08 2007 +0000	        * glib/poppler-page.cc:         * glib/poppler-page.h:         poppler_page_render_section() for cairo. Bug 7023
+afd11ec6	f019c8a8	Mon May 21 21:29:09 2007 +0000	        * poppler/Annot.cc: avoid crashing if the font for the drawing methods         can not be found         * poppler/Form.cc: fix memory leak         * qt4/src/poppler-private.h: fix the UnicodeParsedString function to         really work and not crash         * splash/SplashTypes.h: RGB8X mode makes max number of components in         any SplashColor always be 4
+96f8731e	d46553d6	Mon May 7 18:41:09 2007 +0000	        * Catalog.cc: Fix leak         * Form.cc: Fix leak, provide empty FormPageWidgets::~FormPageWidgets         implementation         * Page.cc: Fix leak
+c5613ab5	6479ce22	Sat Apr 28 23:25:59 2007 +0000	        * poppler/SplashOutputDev.cc:         * qt/poppler-private.h:         * qt4/src/poppler-private.h:         * splash/Splash.cc:         * splash/SplashBitmap.cc:         * splash/SplashTypes.h: Rename splashModeRGBX8 to splashModeXBGR8 and         hopefully fix qt frontends image generation
+6479ce22	e2ac4ada	Sat Apr 28 22:12:22 2007 +0000	fix merging problems
+26d5fefc	218364bc	Sat Apr 28 11:35:34 2007 +0000	* qt4/src/poppler-page.cc:        Hopefully fix the calculation of the image size when rendering using        ArthurOutputDev.
+6c7969f3	add8515d	Sat Apr 14 23:19:46 2007 +0000	       * utils/HtmlFonts.cc: Fix rendering of text colors on complex mode.        * utils/pdftohtml.cc: Fix rendering of links.
+c9b467da	ff8f8d44	Thu Mar 22 20:56:24 2007 +0000	        * poppler/Gfx.cc: Accept reals for width and height of images. Fixes         KDE bug 143322
+08dcc712	e8d3b21d	Tue Mar 6 22:27:18 2007 +0000	        * poppler/Annot.cc:         * poppler/Form.cc:         Fix uninitialized variables.         Properly escape parenthesis and slash in text field
+5c4ea446	dd140dd6	Sun Feb 18 21:44:24 2007 +0000	* configure.ac: Change {datadir}/poppler to {datarootdir}/poppler so                 that i get /usr/local/share/poppler in config.h instead of                 ${prefix}/poppler Better fixes are welcome.
+dd140dd6	3c1ed68b	Sun Feb 4 00:19:25 2007 +0000	fix date
+3c1ed68b	67240883	Sun Feb 4 00:16:43 2007 +0000	        * poppler/Lexer.cc:         * poppler/Lexer.h: Patch to fix regression introduced by optimizations         in bugzilla issue 7808
+9c64b8c7	1b81192f	Wed Jan 31 18:48:16 2007 +0000	* m4/qt.m4: Fix Qt4 detection on Mac. Patch by Benjamin Reed <ranger@befunk.com>
+1b81192f	75dcf94f	Sun Jan 28 15:55:11 2007 +0000	        * glib/poppler-page.cc: Make link mapping coordinates follow page         rotation. Patch by Carlos Garcia Campos <carlosgc@gnome.org>         * glib/poppler-action.cc: Fix link destination coordinates. Patch by         Carlos Garcia Campos <carlosgc@gnome.org>
+bce14b27	3f0679a3	Thu Jan 11 22:12:11 2007 +0000	       * poppler/Catalog.h:        * poppler/Catalog.cc: Limit max depth of recursive calls on        readPageTree to fix MOAB-06-01-2007
+3f0679a3	d41cd2f5	Sat Jan 6 21:53:08 2007 +0000	Patch by Pino Toscano <pino@kde.org> to fix some memory leaks when dealing with sounds.
+f8edfb68	250a9f4b	Thu Jan 4 18:56:13 2007 +0000	qt/poppler-page-transition.cc: Fix memory leak. Patch by Tobias Koenig <tokoe@kde.org>
+6fedd991	7da5885e	Thu Dec 28 17:22:36 2006 +0000	* qt4/src/poppler-embeddedfile.cc: * qt4/src/poppler-document.cc: * qt/poppler-document.cc: Fix memory leaks
+7da5885e	fbc05a67	Thu Dec 28 15:51:44 2006 +0000	* goo/GooString.cc * goo/GooString.h * goo/gmem.c * goo/gmem.h * poppler/Lexer.cc * poppler/Lexer.h * poppler/PageLabelInfo.cc * poppler/Parser.cc * poppler/UGooString.cc * poppler/UGooString.h: Patch by Krzysztof Kowalczyk <kkowalczyk@gmail.com> to improve performance. See bug 7808 for details.
+1a5fa1d2	dd1c134d	Fri Dec 22 23:39:41 2006 +0000	poppler/Page.cc: Fix memory leak when reading a wrong color map in a thumbnail. Patch by Scott Turner <scotty1024@mac.com>
+dd1c134d	87e474a0	Fri Dec 22 23:27:53 2006 +0000	qt/poppler-page.cc: Fix memory leak in Page::textList. Patch by Jerry Epplin <jepplin@globalvelocity.com>
+5c4bca18	fba99578	Tue Dec 19 20:27:55 2006 +0000	poppler/SplashOutputDev.cc: Fix gray calculation. Patch by Scott Turner <scotty1024@mac.com>
+c3ab7add	9e9b82da	Sun Nov 19 18:51:23 2006 +0000	Another leak fix on qt4/src/poppler-page.cc the previous changelog is enough for this one ;-)
+9e9b82da	b9faacc6	Sun Nov 19 12:59:48 2006 +0000	        * qt4/src/poppler-link.cc:         * qt4/src/poppler-page.cc:         * qt4/src/poppler-qt4.h:         * qt4/src/poppler-textbox.cc: Fix memory leaks         * splash/Splash.cc: Initialize the values of nClipRes
+37088dd3	302e2cab	Mon Nov 13 19:16:44 2006 +0000	        * poppler/ArthurOutputDev.cc: Small fix to get colors right
+302e2cab	e3550fb2	Sat Nov 11 15:41:27 2006 +0000	Fix typo when outputing PS scale
+577330ee	42c016c6	Wed Oct 11 23:09:24 2006 +0000	       * splash/Splash.cc:        * splash/SplashErrorCodes.h: Do not crash on documents that report a          0x0 mask for an image, like          http://bugs.kde.org/attachment.cgi?id=18083&action=view
+29366d8e	957c1e59	Mon Sep 25 20:43:18 2006 +0000	        * glib/Makefile.am         * qt/Makefile.am         * qt4/src/Makefile.am         * qt4/tests/Makefile.am         * test/Makefile.am         * utils/Makefile.am: Add FONTCONFIG_CFLAGS FONTCONFIG_LIBS for people         that need them. Patch by morfoh@opensde.org. Fixes bug #8415
+7905adaa	4da7c90a	Sun Sep 3 09:27:21 2006 +0000	        * poppler/Dict.cc:         * poppler/Dict.h:         * poppler/Object.h:         * poppler/Parser.cc: Patch by Krzysztof Kowalczyk to increase speed by         means of doing less copies between objects. See bug 8112 for more         information.
+e4561568	4a275021	Sun Jul 30 09:38:28 2006 +0000	        * splash/SplashFontEngine.cc:         * poppler/SplashOutputDev.cc: Fix memory leak when using embedded         fonts in the pdf file. Patch by Krzysztof Kowalczyk
+0bc1b0f3	2f27c3a0	Thu Jul 27 18:21:28 2006 +0000	fix date, i don\'t live in the past
+2f27c3a0	f39ab43c	Thu Jul 27 18:17:50 2006 +0000	        * poppler/Stream.cc: If you are going to test a variable, better         initialize it first ;-) Fixes bug 7646
+c6926d1d	96ac8dec	Wed Jun 28 19:23:52 2006 +0000		* poppler/DCTStream.cc:         * poppler/DCTStream.h: Reset jpeg structures on reset.         Fixes crash while printing pdf at         http://bugs.kde.org/attachment.cgi?id=16818&action=view
+1223fd4b	b85a39dd	Sat Jun 10 22:23:19 2006 +0000	        * poppler/UGooString.cc: When any of the chars that we         are passing to the UGooString is not pdfencodable, do not         encode the string, because we loose information if we do,         this fixes rendering of         http://publikationen.ub.uni-frankfurt.de/volltexte/2005/890/pdf/TR_abs_g.pdf         and other docs with type3 fonts and ligatures
+c2a81ea8	643b310c	Wed May 31 20:14:04 2006 +0000		* poppler/SplashOutputDev.cc:         * splash/Splash.cc: Fix no splashModeRGB8Qt mode, that is, make it         show images
+6f5a89a0	495d592c	Tue May 23 20:49:16 2006 +0000	        * poppler/SplashOutputDev.cc:         * qt4/src/poppler-private.h:         * splash/Splash.cc:         * splash/SplashBitmap.cc:         * splash/SplashTypes.h: bring splashModeRGB8 back to the old code         (before Frank\'s patch), create splashModeRGB8Qt that has Frank\'s         codepath and is used by Qt frontends. Fixes corruption on         other programs expecting the old behaviour.
+7d4bb053	655af1e0	Sun May 21 18:14:15 2006 +0000	fix all is blue issue on ppc machines
+655af1e0	cc783a1e	Sun May 21 17:19:53 2006 +0000	hope to fix really Kouhei\'s name now
+cc783a1e	e4b6ad3b	Sun May 21 11:54:30 2006 +0000	Fix Kouhei name
+e4b6ad3b	46f5f070	Fri May 19 22:55:49 2006 +0000	Add bug number to ChangeLog entry.
+3c9a5f37	436f578f	Sun May 14 16:11:54 2006 +0000	        * poppler/FontInfo.cc: Fix possible crash, half patch         by Kouhei Sutou <kou@cozmixng.org>
+436f578f	90651576	Sat May 13 16:01:57 2006 +0000	        * poppler/GfxState.cc:         * poppler/GfxState.h: Fix memleak, patch by                 Carlos Garcia Campos <carlosgc@gnome.org>
+35500375	181f0982	Fri May 12 21:02:01 2006 +0000	fixing compile problems for some people
+1fce6266	be913b90	Sat May 6 10:57:07 2006 +0000	fix code, i suck
+be913b90	2b085293	Fri May 5 20:51:01 2006 +0000	        * poppler/Function.cc: quick fix for KDE bug #126760
+4147400e	960d6046	Sat Apr 29 15:23:41 2006 +0000	Fix memory leak. Bug 6765
+18f8e1f1	cbbb28a5	Tue Apr 18 19:11:56 2006 +0000	* goo/GooVector.h: Fix typo that was preventing build with MSVC8         Discovered by Reece Dunn <msclrhd@hotmail.com>
+bf7afe16	315f8e48	Wed Apr 5 18:20:56 2006 +0000	poppler/JBIG2Stream.cc: Fix for some buggy JBIG2 documents, patch by Raj Kumar and Paul Walmsley. Fixes bug 6500
+888bd41b	56c98450	Tue Apr 4 20:42:08 2006 +0000	Fix crash when using fixedpoint math. Patch by Frank Meerkoetter
+c80ebf23	fe8142fb	Sat Apr 1 11:25:57 2006 +0000	Fix bug 6454
+ff4febab	75ac6de8	Mon Mar 20 20:07:36 2006 +0000	Use UGooString for dates, fixes KDE bug 123938
+84743677	401bae69	Sun Mar 19 19:19:42 2006 +0000	fix date
+401bae69	d56330e6	Sun Mar 19 17:01:05 2006 +0000	fix htmloutputdev
+d56330e6	7ed6737b	Thu Mar 16 22:04:56 2006 +0000	        * poppler/Page.cc: Remove a #ifdef that was never defined (nice to         have so sucky W args), probably came from gpdf (it\'s not on xpdf         sources) and was causing bugs 6079 and 6167
+a34688ee	1a90b3aa	Tue Mar 14 19:34:10 2006 +0000	* qt4/src/poppler-qt4.h: Fix compilation with gcc4.1, patch by Michael Olbrich
+1bf83cdc	eb5642f3	Sat Feb 25 12:30:30 2006 +0000	fix warning
+cf9867fb	f04e2c4f	Mon Feb 6 20:49:21 2006 +0000	Various fixes from Frank Meerk\xc3\xb6tter to enable fixedpoint arithmetic
+33e98f81	6d9e6489	Sun Feb 5 15:46:10 2006 +0000	Some small fixes from kpdf
+fd85a0af	67ca9d01	Sat Feb 4 20:34:13 2006 +0000	Remove bug from "do not use an external file to pass fonts to Freetype" patch, patch by Stefan Schweizer
+7d2be955	c191e7d0	Thu Feb 2 23:06:20 2006 +0000	CVE-2006-0301 fix by Derek though KDE security team
+d66f3647	d78b6703	Wed Jan 18 18:54:12 2006 +0000	poppler/CharCodeToUnicode.cc: Fix check for length that was not         having into account that there could be \
+ or \\r in tokens an that         those do not have to be took into account. Fixes         http://bugs.kde.org/show_bug.cgi?id=120310
+d78b6703	f5db636a	Tue Jan 17 21:35:31 2006 +0000	When doing the parsing check with XREF we did not grow too much. Fixes serialata10a.pdf
+ec7fb417	d9bc53a7	Tue Jan 10 21:57:28 2006 +0000	        * configure.ac:         * m4/qt.m4: Fix bugs created when splitting the code from         configure.ac, take QTDIR into account when looking for QtTestLib and         do not die if it is not found as it is not mandatory         * qt/poppler-page-transition.cc:         * qt/poppler-page.cc:         * qt/poppler-private.h:         * qt4/tests/Makefile.am:         * qt4/src/poppler-qt4.h:         * qt4/src/poppler-page.cc:         * qt4/src/Makefile.am: Fix mess created my the moving and renaming of         PageTransition.cc
+93921e77	0dc16af0	Thu Jan 5 23:53:33 2006 +0000	* poppler/DCTStream.cc: Fix handling of malformed jpeg streams like   the one at http://bugs.kde.org/show_bug.cgi?id=119569
+56035ab1	8b64dafc	Fri Dec 30 21:59:58 2005 +0000	 * utils/HtmlOutputDev.cc:  * utils/ImageOutputDev.cc: Fix build when using --disable-libjpeg
+5dca860b	03e3d916	Sun Dec 18 21:08:48 2005 +0000	Fix utils building on Slackware
+830b61bf	0a1c33ed	Thu Dec 8 18:17:42 2005 +0000		* configure.ac: Detect if gettimeofday is available, fixes for correct         linking to Qt4 on windows         * goo/GooTimer.[cc|h]: Only build if gettimeofday is available         * poppler/Gfx.cc: Only use the timer for profiling if gettimeofday is         available         * poppler/GlobalParams.cc: Remove extra unlockGlobalParams that was         making windows hang         * splash/SplashFTFontEngine.cc: i need unistd.h on windows also         * splash/SplashFontFile.cc: i need unistd.h on windows also
+a92b1001	66096477	Mon Dec 5 20:46:22 2005 +0000	* poppler/CairoFontEngine.cc: Correct fix for #5149, i broke it when merging xpdf 3.01 patches
+62345b0a	ba4b3f88	Sun Dec 4 18:53:40 2005 +0000	Fix error in merging CAN-2005-3193 fix. Thanks Daniel Gryniewicz for notifying
+7b2c6e92	a90f076a	Thu Dec 1 22:45:10 2005 +0000	Fix CAN-2005-3193 related bugs Thanks Leonard for reporting
+a90f076a	b7e4f0e7	Mon Nov 28 22:50:19 2005 +0000	Fix QPixmap contents generation messed when doing the xpdf 3.01 transition in qt4 frontend Use Splash backend by default in the qt4 test, added -arthur option to use the Arthur backend
+3c9f09d7	e64f6341	Tue Nov 22 21:50:44 2005 +0000	Fix page range in the inspector
+8bd8cb41	fc59b79d	Mon Nov 21 19:44:09 2005 +0000	Fix a possible build problem
+4b4fc5c0	a68e8e63	Wed Sep 14 21:20:36 2005 +0000	Merge all the fofi/ changes from xpdf 3.01, there is only one api change that affects PSOutputDev (also has been updated the part that uses this api not the whole file). All our fixes in that dir are included in the upgrade.
+b3474fd5	ace2eb6b	Sun Aug 28 03:26:53 2005 +0000	add note about related bug
+5dc9b14b	155d019d	Sun Aug 7 23:58:12 2005 +0000	Fix EOF checking
+43e97129	a75d8033	Thu Aug 4 10:15:23 2005 +0000	Fix problem with drawing filled objects that was introduced in Rev 1.4.
+f3e0a163	5f7bd81b	Mon Aug 1 19:15:40 2005 +0000	Fix problem in the patch to fix #3299
+22f509e6	7bf5d10c	Mon Aug 1 08:09:00 2005 +0000	Fix up the fill problem with drawing text, where the "middle" of glyphs with a "hole" (like d, o, p, b, g) got filled. Also remove some debugging code. The glyphs are still ugly though.
+59d660cf	88c57c73	Fri Jul 29 11:41:14 2005 +0000	Compile fix associated with last change.
+ad312dbd	b45ad9f3	Thu Jul 28 22:56:17 2005 +0000	Fix memory leaks in PageLabelInfo.cc
+f93dfc5c	80223150	Thu Jul 28 18:51:17 2005 +0000	Remove the debugging
+7be920ec	2bc26dff	Tue Jul 26 21:52:09 2005 +0000	Fix mem leak in qt test app
+07911274	a1869eca	Mon Jul 25 20:40:37 2005 +0000	Work on bad jpeg data that have garbage before the start marker. Fixes bug #3299
+a1869eca	95529b41	Fri Jul 22 11:01:25 2005 +0000	Fix bug #3586
+43bed4aa	c7bcef87	Fri Jul 22 10:33:54 2005 +0000	Fix bugs #3728 and #3750
+b1015f6b	8bf78703	Thu Jul 7 11:13:24 2005 +0000	At least try to fix glib issues. If you care about glib, then you should review this.
+8bf78703	695e27fb	Thu Jul 7 11:04:08 2005 +0000	Update for page mode - new mode from PDF-1.6, API docs fixes and some tests.
+2a707908	529a5480	Mon Jul 4 11:36:13 2005 +0000	Fix typo causing failure to pick up upside down pages.
+1303020b	96fc0ea3	Mon Jul 4 07:42:32 2005 +0000	Fix up the unit test, now that I have a real sample file.
+6fe29cf0	42de1348	Thu May 19 05:18:04 2005 +0000	Add bugzilla number.
+6fd62953	6d7f624c	Mon May 16 23:16:15 2005 +0000	Add bug number and attribution to ChangeLog entry.

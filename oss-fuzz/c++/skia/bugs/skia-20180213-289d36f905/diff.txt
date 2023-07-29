@@ -1,0 +1,12 @@
+diff --git a/src/android/SkAnimatedImage.cpp b/src/android/SkAnimatedImage.cpp
+index 2b63f035b2..c9fa48387f 100644
+--- a/src/android/SkAnimatedImage.cpp
++++ b/src/android/SkAnimatedImage.cpp
+@@ -176,6 +176,7 @@ int SkAnimatedImage::decodeNextFrame() {
+             // Static image. This is okay.
+             frameInfo.fRequiredFrame = SkCodec::kNone;
+             frameInfo.fAlphaType = fCodec->getInfo().alphaType();
++            frameInfo.fDisposalMethod = SkCodecAnimation::DisposalMethod::kKeep;
+             // These fields won't be read.
+             frameInfo.fDuration = INT_MAX;
+             frameInfo.fFullyReceived = true;

@@ -1,0 +1,24 @@
+diff --git a/src/hb-subset.cc b/src/hb-subset.cc
+index 6235a5bf5..c0752acc1 100644
+--- a/src/hb-subset.cc
++++ b/src/hb-subset.cc
+@@ -82,6 +82,7 @@ _subset2 (hb_subset_plan_t *plan)
+     if (unlikely (!buf.alloc (buf_size)))
+     {
+       DEBUG_MSG(SUBSET, nullptr, "OT::%c%c%c%c failed to allocate %u bytes.", HB_UNTAG (tag), buf_size);
++      hb_blob_destroy (source_blob);
+       return false;
+     }
+   retry:
+@@ -96,6 +97,7 @@ _subset2 (hb_subset_plan_t *plan)
+       if (unlikely (!buf.alloc (buf_size)))
+       {
+ 	DEBUG_MSG(SUBSET, nullptr, "OT::%c%c%c%c failed to reallocate %u bytes.", HB_UNTAG (tag), buf_size);
++	hb_blob_destroy (source_blob);
+ 	return false;
+       }
+       goto retry;
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5754526379802624 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5754526379802624
+new file mode 100644
+index 000000000..3a7cc9d99
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5754526379802624 differ

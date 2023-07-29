@@ -1,0 +1,47 @@
+diff --git a/apps/gdal_translate_lib.cpp b/apps/gdal_translate_lib.cpp
+index c2830820fb..660e9776ca 100644
+--- a/apps/gdal_translate_lib.cpp
++++ b/apps/gdal_translate_lib.cpp
+@@ -1385,14 +1385,14 @@ GDALDatasetH GDALTranslate( const char *pszDest, GDALDatasetH hSrcDataset,
+     // Build overview dataset if -ovr is specified
+     GDALDataset* poSrcOvrDS = nullptr;
+     GDALDataset* poSrcDSOri = poSrcDS;
+-    const int nOvCount = poSrcDS->GetRasterBand(1)->GetOverviewCount();
+-    if( psOptions->nOvLevel < OVR_LEVEL_AUTO && nOvCount > 0 )
++    const auto poFirstBand = poSrcDS->GetRasterBand(1);
++    const int nOvCount = poFirstBand ? poFirstBand->GetOverviewCount() : 0;
++    if( psOptions->nOvLevel < OVR_LEVEL_AUTO && poFirstBand && nOvCount > 0 )
+     {
+         int iOvr = 0;
+         for( ; iOvr < nOvCount - 1; iOvr++ )
+         {
+-            if( poSrcDS->GetRasterBand(1)->GetOverview(iOvr)->
+-                        GetXSize() <= nOXSize )
++            if( poFirstBand->GetOverview(iOvr)->GetXSize() <= nOXSize )
+             {
+                 break;
+             }
+diff --git a/autotest/utilities/test_gdal_translate_lib.py b/autotest/utilities/test_gdal_translate_lib.py
+index 2a4a48e806..06c53f76b7 100755
+--- a/autotest/utilities/test_gdal_translate_lib.py
++++ b/autotest/utilities/test_gdal_translate_lib.py
+@@ -995,6 +995,19 @@ def test_gdal_translate_lib_overview_level():
+         gdal.Unlink(src_filename)
+ 
+ 
++###############################################################################
++# Test copying a raster with no input band
++
++
++def test_gdal_translate_lib_no_input_band():
++
++    src_ds = gdal.GetDriverByName("MEM").Create("", 1, 1, 0)
++    with gdaltest.error_handler():
++        gdal.Translate("", src_ds, format="MEM")
++    with gdaltest.error_handler():
++        gdal.Translate("", src_ds, format="MEM", outputType=gdal.GDT_Int16)
++
++
+ ###############################################################################
+ # Cleanup
+ 

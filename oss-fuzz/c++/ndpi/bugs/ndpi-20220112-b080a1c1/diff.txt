@@ -1,0 +1,92 @@
+diff --git a/fuzz/fuzz_ndpi_reader.c b/fuzz/fuzz_ndpi_reader.c
+index 84d194ed..09d1f913 100644
+--- a/fuzz/fuzz_ndpi_reader.c
++++ b/fuzz/fuzz_ndpi_reader.c
+@@ -13,7 +13,7 @@ int nDPI_LogLevel = 0;
+ char *_debug_protocols = NULL;
+ u_int32_t current_ndpi_memory = 0, max_ndpi_memory = 0;
+ u_int8_t enable_protocol_guess = 1, enable_payload_analyzer = 0;
+-u_int8_t enable_joy_stats = 0;
++u_int8_t enable_flow_stats = 0;
+ u_int8_t human_readeable_string_len = 5;
+ u_int8_t max_num_udp_dissected_pkts = 16 /* 8 is enough for most protocols, Signal requires more */, max_num_tcp_dissected_pkts = 80 /* due to telnet */;
+ 
+diff --git a/src/lib/ndpi_main.c b/src/lib/ndpi_main.c
+index 8aaee5b8..b6e346d1 100644
+--- a/src/lib/ndpi_main.c
++++ b/src/lib/ndpi_main.c
+@@ -5038,8 +5038,6 @@ ndpi_protocol ndpi_detection_giveup(struct ndpi_detection_module_struct *ndpi_st
+       if(flow->host_server_name[0] != '\0') {
+         ndpi_protocol_match_result ret_match;
+ 
+-        memset(&ret_match, 0, sizeof(ret_match));
+-
+         ndpi_match_host_subprotocol(ndpi_str, flow, (char *) flow->host_server_name,
+ 				    strlen((const char *) flow->host_server_name), &ret_match,
+ 				    NDPI_PROTOCOL_DNS);
+@@ -7110,6 +7108,8 @@ u_int16_t ndpi_match_host_subprotocol(struct ndpi_detection_module_struct *ndpi_
+   u_int16_t rc;
+   ndpi_protocol_category_t id;
+ 
++  memset(ret_match, 0, sizeof(*ret_match));
++
+   rc = ndpi_automa_match_string_subprotocol(ndpi_str, flow, string_to_match, string_to_match_len,
+ 					    master_protocol_id, ret_match);
+   id = ret_match->protocol_category;
+@@ -7147,7 +7147,6 @@ int ndpi_match_hostname_protocol(struct ndpi_detection_module_struct *ndpi_struc
+   else
+     what = name, what_len = name_len;
+ 
+-  memset(&ret_match, 0, sizeof(ret_match));
+   subproto = ndpi_match_host_subprotocol(ndpi_struct, flow, what, what_len,
+ 					 &ret_match, master_protocol);
+ 
+diff --git a/src/lib/protocols/tls.c b/src/lib/protocols/tls.c
+index 622fa678..4815275d 100644
+--- a/src/lib/protocols/tls.c
++++ b/src/lib/protocols/tls.c
+@@ -1718,6 +1718,14 @@ int processClientServerHello(struct ndpi_detection_module_struct *ndpi_struct,
+ 	      checkExtensions(ndpi_struct, flow, is_dtls,
+ 			      extension_id, extension_len, offset + extension_offset);
+ 
++	      if(offset + 4 + extension_len > total_len) {
++#ifdef DEBUG_TLS
++	        printf("[TLS] extension length %u too long (%u, offset %u)\n",
++	               extension_len, total_len, offset);
++#endif
++	        break;
++	      }
++
+ 	      if((extension_id == 0) || (packet->payload[extn_off] != packet->payload[extn_off+1])) {
+ 		/* Skip GREASE */
+ 
+@@ -1957,7 +1965,7 @@ int processClientServerHello(struct ndpi_detection_module_struct *ndpi_struct,
+ 		printf("[SIGNATURE] [is_firefox_tls: %u][is_chrome_tls: %u][is_safari_tls: %u][duplicate_found: %u]\n",
+ 		       flow->protos.tls_quic.browser_heuristics.is_firefox_tls,
+ 		       flow->protos.tls_quic.browser_heuristics.is_chrome_tls,
+-		       flow->protos..tls_quic.browser_heuristics.is_safari_tls,
++		       flow->protos.tls_quic.browser_heuristics.is_safari_tls,
+ 		       duplicate_found);
+ #endif
+ 
+diff --git a/tests/result/fuzz-2021-10-13.pcap.out b/tests/result/fuzz-2021-10-13.pcap.out
+index 0fe11898..119193b3 100644
+--- a/tests/result/fuzz-2021-10-13.pcap.out
++++ b/tests/result/fuzz-2021-10-13.pcap.out
+@@ -10,4 +10,4 @@ JA3 Host Stats:
+ 	1	 3400:3a30:3035:2f75:706c:6f32:643f:6c3d 	 1      
+ 
+ 
+-	1	TCP [3400:3a30:3035:2f75:706c:6f32:643f:6c3d]:44288 -> [302e::3d00::8001]:0 [proto: 91/TLS][Encrypted][Confidence: DPI][cat: Web/5][1 pkts/197 bytes -> 0 pkts/0 bytes][Goodput ratio: 75/0][< 1 sec][Risk: ** Known protocol on non standard port **** Obsolete TLS version (older than 1.2) **** TLS suspicious extension **][Risk Score: 250][TLS (0030)][JA3C: c152bb6bf29399e8c17519f036cc048e][PLAIN TEXT (005/uplo2)][Plen Bins: 0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
++	1	TCP [3400:3a30:3035:2f75:706c:6f32:643f:6c3d]:44288 -> [302e::3d00::8001]:0 [proto: 91/TLS][Encrypted][Confidence: DPI][cat: Web/5][1 pkts/197 bytes -> 0 pkts/0 bytes][Goodput ratio: 75/0][< 1 sec][Risk: ** Known protocol on non standard port **** Obsolete TLS version (older than 1.2) **** TLS suspicious extension **][Risk Score: 250][TLS (0030)][JA3C: a5e5938747ae3199abb5d3fcd94f9e8d][PLAIN TEXT (005/uplo2)][Plen Bins: 0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+diff --git a/tests/result/tls_invalid_reads.pcap.out b/tests/result/tls_invalid_reads.pcap.out
+index 2f5086a0..aa1f02ab 100644
+--- a/tests/result/tls_invalid_reads.pcap.out
++++ b/tests/result/tls_invalid_reads.pcap.out
+@@ -12,5 +12,5 @@ JA3 Host Stats:
+ 
+ 
+ 	1	TCP 192.168.10.101:3967 <-> 206.33.61.113:443 [proto: 91/TLS][Encrypted][Confidence: DPI][cat: Web/5][4 pkts/330 bytes <-> 3 pkts/1497 bytes][Goodput ratio: 31/89][0.08 sec][bytes ratio: -0.639 (Download)][IAT c2s/s2c min/avg/max/stddev: 0/38 25/19 58/38 24/19][Pkt Len c2s/s2c min/avg/max/stddev: 54/60 82/499 156/905 43/346][Risk: ** Obsolete TLS version (older than 1.2) **][Risk Score: 100][TLSv1][JA3S: 53611273a714cb4789c8222932efd5a7 (INSECURE)][Cipher: TLS_RSA_WITH_RC4_128_MD5][Plen Bins: 0,0,0,33,0,0,0,0,0,0,0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+-	2	TCP 10.191.139.17:58552 <-> 54.221.224.45:443 [VLAN: 2][proto: GTP:91.275/TLS.Crashlytics][Encrypted][Confidence: DPI][cat: DataTransfer/4][2 pkts/442 bytes <-> 1 pkts/118 bytes][Goodput ratio: 41/0][0.23 sec][Hostname/SNI: e.crashlytics.com][ALPN: ][Risk: ** TLS suspicious extension **][Risk Score: 100][TLSv1.2][JA3C: 5f704e1e0a47641621b22177875f4e85][Firefox][PLAIN TEXT (e.crashlytics.com)][Plen Bins: 0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
++	2	TCP 10.191.139.17:58552 <-> 54.221.224.45:443 [VLAN: 2][proto: GTP:91.275/TLS.Crashlytics][Encrypted][Confidence: DPI][cat: DataTransfer/4][2 pkts/442 bytes <-> 1 pkts/118 bytes][Goodput ratio: 41/0][0.23 sec][Hostname/SNI: e.crashlytics.com][ALPN: ][Risk: ** TLS suspicious extension **][Risk Score: 100][TLSv1.2][JA3C: 9d5430e6dfce44459702b74d790df353][Firefox][PLAIN TEXT (e.crashlytics.com)][Plen Bins: 0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+ 	3	TCP 74.80.160.99:3258 -> 67.217.77.28:443 [proto: 91/TLS][Encrypted][Confidence: DPI][cat: Web/5][1 pkts/64 bytes -> 0 pkts/0 bytes][Goodput ratio: 15/0][< 1 sec][Plen Bins: 100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]

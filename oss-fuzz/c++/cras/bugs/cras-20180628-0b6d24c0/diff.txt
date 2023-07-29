@@ -1,0 +1,13 @@
+diff --git a/cras/src/fuzz/build.sh b/cras/src/fuzz/build.sh
+index 6ead6631..ac4ad2fb 100755
+--- a/cras/src/fuzz/build.sh
++++ b/cras/src/fuzz/build.sh
+@@ -9,7 +9,7 @@
+ mkdir $WORK/cras
+ cd $SRC/cras
+ ./git_prepare.sh
+-./configure --disable-DBUS
++./configure --disable-dbus --disable-webrtc-apm
+ make -j$(nproc)
+ 
+ $CXX $CXXFLAGS $FUZZER_LDFLAGS \

@@ -1,0 +1,57 @@
+diff --git a/properties/src/main/java/com/fasterxml/jackson/dataformat/javaprop/JavaPropsFactory.java b/properties/src/main/java/com/fasterxml/jackson/dataformat/javaprop/JavaPropsFactory.java
+index 600cbb13..aebb4c03 100644
+--- a/properties/src/main/java/com/fasterxml/jackson/dataformat/javaprop/JavaPropsFactory.java
++++ b/properties/src/main/java/com/fasterxml/jackson/dataformat/javaprop/JavaPropsFactory.java
+@@ -352,6 +352,8 @@ public class JavaPropsFactory extends JsonFactory
+         if (ctxt.isResourceManaged() || isEnabled(StreamReadFeature.AUTO_CLOSE_SOURCE)) {
+             try (Reader r = r0) {
+                 props.load(r);
++            } catch (IllegalArgumentException e) {
++                _reportReadException("Invalid content, problem: "+e.getMessage(), e);
+             }
+         } else {
+             props.load(r0);
+@@ -379,4 +381,11 @@ public class JavaPropsFactory extends JsonFactory
+             System.out.printf("#%d: %s -> %s\n", i++, entry.getKey(), entry.getValue());
+         }
+     }*/
++
++    // @since 2.14
++    protected <T> T _reportReadException(String msg, Exception rootCause)
++        throws IOException
++    {
++        throw new JsonParseException((JsonParser) null, msg, rootCause);
++    }
+ }
+diff --git a/properties/src/test/java/com/fasterxml/jackson/dataformat/javaprop/deser/FuzzPropsReadTest.java b/properties/src/test/java/com/fasterxml/jackson/dataformat/javaprop/deser/FuzzPropsReadTest.java
+new file mode 100644
+index 00000000..844d4e8d
+--- /dev/null
++++ b/properties/src/test/java/com/fasterxml/jackson/dataformat/javaprop/deser/FuzzPropsReadTest.java
+@@ -0,0 +1,26 @@
++package com.fasterxml.jackson.dataformat.javaprop.deser;
++
++import java.io.IOException;
++
++import com.fasterxml.jackson.databind.ObjectMapper;
++
++import com.fasterxml.jackson.dataformat.javaprop.ModuleTestBase;
++
++// Tests for things found via https://oss-fuzz.com/
++public class FuzzPropsReadTest extends ModuleTestBase
++{
++    private final ObjectMapper MAPPER = newPropertiesMapper();
++
++    // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=50053
++    public void testInvalidUnicodeEscape50053() throws Exception
++    {
++        String INPUT = "\\u";
++        try {
++            MAPPER.readTree(INPUT);
++            fail("Should not pass");
++        } catch (IOException e) {
++            verifyException(e, "Invalid content, problem:");
++            verifyException(e, "Malformed \\uxxxx encoding");
++        }
++    }
++}

@@ -1,0 +1,1 @@
+commit 848b301d6f04a44fa49b08987085eb040bbe1fc3Author: Rob Davies <rmd+git@sanger.ac.uk>Date:   Wed Mar 3 23:35:01 2021 +0000    Fix leak of uncompressed_block on bgzf_read_init() error        Detected by making an RAZF file, but it could also leak    on failure to create the cache.        Credit to OSS-Fuzz    Fixes oss-fuzz 31665

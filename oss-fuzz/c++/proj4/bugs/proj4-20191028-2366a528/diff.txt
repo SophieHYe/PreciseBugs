@@ -1,0 +1,59 @@
+diff --git a/src/iso19111/coordinateoperation.cpp b/src/iso19111/coordinateoperation.cpp
+index 881a16fd..0f0e216c 100644
+--- a/src/iso19111/coordinateoperation.cpp
++++ b/src/iso19111/coordinateoperation.cpp
+@@ -12820,11 +12820,13 @@ CoordinateOperationFactory::Private::createOperations(
+             dynamic_cast<const crs::GeographicCRS *>(hubSrc.get());
+         auto geogCRSOfBaseOfBoundSrc =
+             boundSrc->baseCRS()->extractGeographicCRS();
++        bool triedBoundCrsToGeogCRSSameAsHubCRS = false;
+         // Is it: boundCRS to a geogCRS that is the same as the hubCRS ?
+         if (hubSrcGeog && geogCRSOfBaseOfBoundSrc &&
+             (hubSrcGeog->_isEquivalentTo(
+                  geogDst, util::IComparable::Criterion::EQUIVALENT) ||
+              hubSrcGeog->is2DPartOf3D(NN_NO_CHECK(geogDst)))) {
++            triedBoundCrsToGeogCRSSameAsHubCRS = true;
+             if (boundSrc->baseCRS() == geogCRSOfBaseOfBoundSrc) {
+                 // Optimization to avoid creating a useless concatenated
+                 // operation
+@@ -12938,7 +12940,8 @@ CoordinateOperationFactory::Private::createOperations(
+             return res;
+         }
+ 
+-        if (hubSrcGeog && geogCRSOfBaseOfBoundSrc) {
++        if (!triedBoundCrsToGeogCRSSameAsHubCRS && hubSrcGeog &&
++            geogCRSOfBaseOfBoundSrc) {
+             // This one should go to the above 'Is it: boundCRS to a geogCRS
+             // that is the same as the hubCRS ?' case
+             auto opsFirst = createOperations(sourceCRS, hubSrc, context);
+diff --git a/test/unit/test_operation.cpp b/test/unit/test_operation.cpp
+index 8805e6a1..739d8ec3 100644
+--- a/test/unit/test_operation.cpp
++++ b/test/unit/test_operation.cpp
+@@ -7652,6 +7652,26 @@ TEST(operation, createOperation_on_crs_with_bound_crs_and_wktext) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++TEST(operation, createOperation_ossfuzz_18587) {
++    auto objSrc =
++        createFromUserInput("EPSG:4326", DatabaseContext::create(), false);
++    auto src = nn_dynamic_pointer_cast<CRS>(objSrc);
++    ASSERT_TRUE(src != nullptr);
++
++    // Extremly weird string ! We should likely reject it
++    auto objDst = PROJStringParser().createFromPROJString(
++        "type=crs proj=pipeline step proj=merc vunits=m nadgrids=@x "
++        "proj=\"\nproj=pipeline step\n\"");
++    auto dst = nn_dynamic_pointer_cast<CRS>(objDst);
++    ASSERT_TRUE(dst != nullptr);
++
++    // Just check that we don't go into an infinite recursion
++    CoordinateOperationFactory::create()->createOperation(NN_CHECK_ASSERT(src),
++                                                          NN_CHECK_ASSERT(dst));
++}
++
++// ---------------------------------------------------------------------------
++
+ TEST(operation, mercator_variant_A_to_variant_B) {
+     auto projCRS = ProjectedCRS::create(
+         PropertyMap(), GeographicCRS::EPSG_4326,

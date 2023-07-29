@@ -1,0 +1,24 @@
+diff --git a/poppler/GfxState.cc b/poppler/GfxState.cc
+index b8423f23..3137851d 100644
+--- a/poppler/GfxState.cc
++++ b/poppler/GfxState.cc
+@@ -5708,6 +5708,9 @@ GfxImageColorMap::GfxImageColorMap(int bitsA, Object *decode,
+   useMatte = gFalse;
+ 
+   // bits per component and color space
++  if (unlikely(bitsA <= 0 || bitsA > 30))
++    goto err1;
++
+   bits = bitsA;
+   maxPixel = (1 << bits) - 1;
+   colorSpace = colorSpaceA;
+@@ -5725,9 +5728,6 @@ GfxImageColorMap::GfxImageColorMap(int bitsA, Object *decode,
+   }
+   byte_lookup = nullptr;
+ 
+-  if (unlikely(bits <= 0))
+-    goto err1;
+-
+   // get decode map
+   if (decode->isNull()) {
+     nComps = colorSpace->getNComps();

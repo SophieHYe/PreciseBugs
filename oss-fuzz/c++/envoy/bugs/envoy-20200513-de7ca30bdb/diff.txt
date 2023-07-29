@@ -1,0 +1,12 @@
+diff --git a/ci/mac_ci_setup.sh b/ci/mac_ci_setup.sh
+index 378b367875..f3991ac407 100755
+--- a/ci/mac_ci_setup.sh
++++ b/ci/mac_ci_setup.sh
+@@ -41,6 +41,7 @@ fi
+ # to unlink/overwrite them to install bazelisk
+ echo "Installing bazelbuild/tap/bazelisk"
+ brew install --force bazelbuild/tap/bazelisk
++brew unlink bazelbuild/tap/bazelisk || true
+ if ! brew link --overwrite bazelbuild/tap/bazelisk; then
+     echo "Failed to install and link bazelbuild/tap/bazelisk"
+     exit 1

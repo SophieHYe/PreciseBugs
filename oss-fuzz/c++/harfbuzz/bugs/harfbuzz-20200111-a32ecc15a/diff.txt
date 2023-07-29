@@ -1,0 +1,35 @@
+diff --git a/src/hb-ot-layout-common.hh b/src/hb-ot-layout-common.hh
+index c85c5a3a4..af394b5b7 100644
+--- a/src/hb-ot-layout-common.hh
++++ b/src/hb-ot-layout-common.hh
+@@ -2363,10 +2363,11 @@ struct FeatureVariationRecord
+ {
+   friend struct FeatureVariations;
+ 
+-  void collect_lookups (const hb_set_t *feature_indexes,
++  void collect_lookups (const void     *base,
++			const hb_set_t *feature_indexes,
+ 			hb_set_t       *lookup_indexes /* OUT */) const
+   {
+-    return (this+substitutions).collect_lookups (feature_indexes, lookup_indexes);
++    return (base+substitutions).collect_lookups (feature_indexes, lookup_indexes);
+   }
+ 
+   bool sanitize (hb_sanitize_context_t *c, const void *base) const
+@@ -2423,7 +2424,7 @@ struct FeatureVariations
+ 			hb_set_t       *lookup_indexes /* OUT */) const
+   {
+     for (const FeatureVariationRecord& r : varRecords)
+-      r.collect_lookups (feature_indexes, lookup_indexes);
++      r.collect_lookups (this, feature_indexes, lookup_indexes);
+   }
+ 
+   bool sanitize (hb_sanitize_context_t *c) const
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5167653459329024 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5167653459329024
+new file mode 100644
+index 000000000..fe83d24a9
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5167653459329024 differ
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5642531954229248 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5642531954229248
+new file mode 100644
+index 000000000..8631cd645
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5642531954229248 differ

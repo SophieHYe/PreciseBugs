@@ -1,0 +1,15 @@
+diff --git a/gdal/ogr/ogrsf_frmts/xplane/ogr_xplane_geo_utils.cpp b/gdal/ogr/ogrsf_frmts/xplane/ogr_xplane_geo_utils.cpp
+index 9763eeefc5..ba758a8d3e 100644
+--- a/gdal/ogr/ogrsf_frmts/xplane/ogr_xplane_geo_utils.cpp
++++ b/gdal/ogr/ogrsf_frmts/xplane/ogr_xplane_geo_utils.cpp
+@@ -85,6 +85,10 @@ double OGRXPlane_Track( double LatA_deg, double LonA_deg,
+     {
+         return 0; // Arbitrary number
+     }
++    else if( fabs(LatA_deg) < 1e-10 && fabs(LatB_deg) < 1e-10 )
++    {
++        return (LonB_deg > LonA_deg) ? 90.0 : 270.0;
++    }
+     else
+     {
+         const double LatA_rad = LatA_deg * DEG2RAD;

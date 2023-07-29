@@ -1,0 +1,22 @@
+diff --git a/cpp/src/parquet/file_reader.cc b/cpp/src/parquet/file_reader.cc
+index 45f325334..3f4c2cb76 100644
+--- a/cpp/src/parquet/file_reader.cc
++++ b/cpp/src/parquet/file_reader.cc
+@@ -146,6 +146,10 @@ const RowGroupMetaData* RowGroupReader::metadata() const { return contents_->met
+ 
+   int64_t col_length = column_metadata->total_compressed_size();
+   int64_t col_end;
++  if (col_start < 0 || col_length < 0) {
++    throw ParquetException("Invalid column metadata (corrupt file?)");
++  }
++
+   if (AddWithOverflow(col_start, col_length, &col_end) || col_end > source_size) {
+     throw ParquetException("Invalid column metadata (corrupt file?)");
+   }
+diff --git a/testing b/testing
+index 634739c66..d2e832754 160000
+--- a/testing
++++ b/testing
+@@ -1 +1 @@
+-Subproject commit 634739c664433cec366b4b9a81d1e1044a8c5eda
++Subproject commit d2e832754b0ae1fb0b9a5f637b44d68fa4bf6989

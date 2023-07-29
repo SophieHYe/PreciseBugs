@@ -1,0 +1,22 @@
+diff --git a/src/hb-aat-layout-ankr-table.hh b/src/hb-aat-layout-ankr-table.hh
+index 497b2ea2f..69e27066e 100644
+--- a/src/hb-aat-layout-ankr-table.hh
++++ b/src/hb-aat-layout-ankr-table.hh
+@@ -69,7 +69,8 @@ struct ankr
+     if (!offset)
+       return Null(Anchor);
+     const GlyphAnchors &anchors = StructAtOffset<GlyphAnchors> (&(this+anchorData), *offset);
+-    if (unlikely (end - (const char *) &anchors < anchors.len.static_size ||
++    if (unlikely (end < (const char *) &anchors ||
++		  end - (const char *) &anchors < anchors.len.static_size ||
+ 		  end - (const char *) &anchors < anchors.get_size ()))
+       return Null(Anchor);
+     return anchors[i];
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-harfbuzz_fuzzer-5166320261529600 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-harfbuzz_fuzzer-5166320261529600
+new file mode 100644
+index 000000000..b79765a71
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-harfbuzz_fuzzer-5166320261529600 differ
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5667182741028864 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5667182741028864
+new file mode 100644
+index 000000000..0c40dd8f1
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-shape-fuzzer-5667182741028864 differ

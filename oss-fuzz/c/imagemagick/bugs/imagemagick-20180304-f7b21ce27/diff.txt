@@ -1,0 +1,13 @@
+diff --git a/MagickCore/montage.c b/MagickCore/montage.c
+index 2e0b92e9b..5e8d647f7 100644
+--- a/MagickCore/montage.c
++++ b/MagickCore/montage.c
+@@ -438,6 +438,8 @@ MagickExport Image *MontageImageList(const ImageInfo *image_info,
+   }
+   if (i < (ssize_t) number_images)
+     {
++      if (image != (Image *) NULL)
++        image=DestroyImage(image);
+       if (thumbnail == (Image *) NULL)
+         i--;
+       for (tile=0; (ssize_t) tile <= i; tile++)

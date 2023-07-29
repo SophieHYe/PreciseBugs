@@ -1,0 +1,28 @@
+diff --git a/src/ell_set.cpp b/src/ell_set.cpp
+index f4228be8..4c9fc892 100644
+--- a/src/ell_set.cpp
++++ b/src/ell_set.cpp
+@@ -88,7 +88,8 @@ int pj_ellipsoid (PJ *P) {
+ 
+     /* Specifying R overrules everything */
+     if (pj_get_param (P->params, "R")) {
+-        ellps_size (P);
++        if (0 != ellps_size (P))
++            return 1;
+         pj_calc_ellipsoid_params (P, P->a, 0);
+         if (proj_errno (P))
+             return 1;
+diff --git a/test/gie/ellipsoid.gie b/test/gie/ellipsoid.gie
+index 929eb799..ea7f3888 100644
+--- a/test/gie/ellipsoid.gie
++++ b/test/gie/ellipsoid.gie
+@@ -64,6 +64,9 @@ expect    0 0
+ operation proj=merc +es=-1
+ expect    failure errno major_axis_not_given
+ 
++operation proj=merc +R=0
++expect    failure errno major_axis_not_given
++
+ operation
+ expect    failure
+ operation cobra

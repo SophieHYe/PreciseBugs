@@ -1,0 +1,304 @@
+f085582	5fd0de9	Sun Jan 8 09:57:13 2023 +0000	Fix old issue with parsing numbers
+5fd0de9	250938e	Sun Jan 8 09:57:13 2023 +0000	Fix load macro with try=true
+c4fc60e	97e58db	Sat Jan 7 20:00:07 2023 +0000	Backport fixes from Rspamd
+97e58db	45997ad 3d69e83	Thu Jan 20 22:14:27 2022 +0000	Merge pull request #258 from kuriboshi/fix/cmake-install
+45997ad	64557c0	Thu Jan 6 14:48:52 2022 +0000	Fix variables expansion
+f9e5446	852f752	Mon Jan 3 22:24:37 2022 -0500	ucl_expand_variable: fix out-of-bounds read
+852f752	54a5b59	Mon Jan 3 22:21:42 2022 -0500	ucl_strnstr: fix out-of-bounds read
+54a5b59	3a94514	Mon Jan 3 22:21:03 2022 -0500	ucl_inherit_handler: fix format string for non-null-terminated strings
+3a94514	08de358	Mon Jan 3 21:45:43 2022 -0500	ucl_check_variable: fix out_len on unterminated variable
+08de358	ac8d760	Mon Jan 3 21:01:41 2022 -0500	ucl_parse_value: fix out-of-bounds read
+ac8d760	71f16a8	Mon Jan 3 20:49:47 2022 -0500	ucl_lex_json_string: fix out-of-bounds read
+71f16a8	95df30c 482b861	Mon Dec 6 11:44:40 2021 +0000	Merge pull request #259 from allanjude/maybe_number_fix
+3d69e83	95df30c	Sun Nov 21 14:35:58 2021 +0900	Fix cmake public include install
+66923a8	64a1ad4	Sat Mar 13 07:19:21 2021 +0100	Mark + as unsafe which fixes export a key with + in config mode
+64a1ad4	476729f ca8f3fb	Tue Jan 26 15:52:25 2021 +0000	Merge pull request #249 from vanIvan/fix-python-pip-install
+ca8f3fb	e4a357c	Tue Jan 26 14:46:01 2021 +0000	Adding another fix
+e4a357c	476729f	Mon Jan 25 15:25:28 2021 +0000	Fixing error with installing using pip from git with following command: \'pip install -e git+https://github.com/vstakhov/libucl.git/#egg=ucl
+ace0fd1	a7ec6b1	Mon Nov 2 22:42:44 2020 +1100	Python build fixes
+a7ec6b1	e23f232 43e6185	Mon Nov 2 11:35:53 2020 +0000	Merge pull request #246 from jethron/jethron-fixCI
+5cdd409	37ae716	Mon Nov 2 20:41:36 2020 +1100	CI: fix lcov relative paths
+e23f232	10c4dad 207689e	Tue Oct 6 20:06:38 2020 +0100	Merge pull request #245 from timgates42/bugfix_typo_textual
+207689e	10c4dad	Wed Oct 7 05:50:28 2020 +1100	docs: fix simple typo, tectual -> textual
+10c4dad	21ef6eb 258df12	Thu Sep 24 14:26:23 2020 +0100	Merge pull request #241 from PunishedSnakePr/fixed-expanding-runtime-variables
+b14e498	7d69d0a 5ea995e	Wed Sep 23 13:15:24 2020 +0100	Merge pull request #243 from PunishedSnakePr/fixed-memleak
+826faf7	7d69d0a	Tue Sep 22 08:17:31 2020 +0200	Fixed expanding variables at runtime
+5241e9d	b2c33a5 c714132	Fri Sep 18 19:46:22 2020 +0100	Merge pull request #234 from vimishor/fix_openssl
+b2c33a5	a931a15 26795ce	Fri Sep 18 19:45:42 2020 +0100	Merge pull request #238 from PunishedSnakePr/ucl_tool-fixes
+26795ce	a931a15	Fri Sep 18 07:40:27 2020 +0200	Fixed ucl_tool\'s command line argument parsing
+5b149d7	fb12e8b	Thu Sep 17 12:43:28 2020 +0200	Fixed linker error
+0bc5497	bcde407 af0cdeb	Wed Sep 16 13:03:17 2020 +0100	Merge pull request #236 from PunishedSnakePr/PunishedSnakePr/error-fixes
+af0cdeb	00307a5	Wed Sep 16 14:00:28 2020 +0200	Fixed Visual Studio compilation error
+c714132	ac5b370	Fri Sep 11 11:41:54 2020 +0300	fix: Changed OpenSSL check inside configure.am
+2e0b0b1	8b0748c	Sun Jul 19 14:47:58 2020 +0100	Fix remain lenght calculation that led to assertion failure
+590e0ad	7d96a39	Fri Apr 17 16:26:00 2020 +0100	Fix processing of the incomplete msgpack objects
+e7c50d4	cba680e	Sun Apr 12 15:37:49 2020 -0700	fix: Incorrect pointer arithmetics in ucl_expand_single_variable
+725802b	bd70889	Sat Apr 11 18:13:33 2020 -0700	fix: ucl_expand_single_variable doesn\'t call free
+bd70889	1171d79 9a85554	Sat Apr 11 22:13:59 2020 +0100	Merge pull request #219 from bdrewery/fixes
+2f75223	16c1c09	Sat Apr 11 10:23:14 2020 -0700	Fix ucl_util.c not having the prototype for ucl_hash_sort()
+42c4d05	23d99f3	Thu Apr 25 12:29:21 2019 +0100	Fix remain calculations
+d9207c4	a93cfe1	Tue Apr 2 11:57:09 2019 -0700	Fix mismerge.
+b0c0040	aadd923	Tue Apr 2 11:53:43 2019 -0700	Fix mismerge.
+aadd923	0b1a407	Tue Apr 2 11:42:14 2019 -0700	Fix spelling and markup errors.
+0a058a3	a81ac2a	Tue Apr 2 08:51:45 2019 -0700	Revert "Fix 68d87c362b0d7fbb45f395bfae616a28439e0bbc by setting error to 0"
+a0dee5f	68d87c3	Mon Apr 1 15:43:40 2019 -0700	Fix 68d87c362b0d7fbb45f395bfae616a28439e0bbc by setting error to 0 always. Which makes it even uglier.
+41066de	d67ea82 eb2b39c	Sun Dec 9 10:08:00 2018 +0000	Merge pull request #197 from dpacbach/fix-iterators
+eb2b39c	d67ea82	Sat Dec 8 15:21:01 2018 -0500	Fix ucl++ bug where iterators stop on a null field.
+d67ea82	97de762 7263351	Sat Dec 8 09:12:24 2018 +0000	Merge pull request #196 from dpacbach/warning-fix
+97de762	5edd549 9e4a151	Thu Dec 6 20:25:29 2018 +0000	Merge pull request #193 from dpacbach/no-move-fix
+5edd549	2883b71 734fe5f	Thu Dec 6 20:25:14 2018 +0000	Merge pull request #192 from dpacbach/fix-includes
+2883b71	0161fcf f591d12	Sun Dec 2 13:33:55 2018 +0000	Merge pull request #191 from dpacbach/const-fix
+0161fcf	7410d05	Mon Nov 12 16:41:42 2018 +0000	Merge fixes from Rspamd
+e8f6d8e	c4be9d4	Fri Oct 5 18:10:29 2018 +0100	Fix levels and objects closing
+c4be9d4	4cfdfb7	Fri Oct 5 17:40:10 2018 +0100	Split level and flags, add obrace flag, fix msgpack flags
+4cfdfb7	4d803f1	Sun Sep 30 17:46:56 2018 +0100	Fix format strings, add printf attribute to schema functions
+4d803f1	c078d8b	Sun Sep 30 17:13:09 2018 +0100	Backport some fixes
+9b9a379	2cf637b	Mon May 14 14:48:46 2018 +0000	Fix vertical tab handling
+2cf637b	30d7102	Sat May 5 14:58:19 2018 +0100	Minor whitespaces fix
+5b310db	cb26ce8	Sat May 5 12:10:05 2018 +0100	Backport fix from Rspamd
+3a66662	705e461	Mon Apr 23 17:41:43 2018 +0100	Fix emitting of the bad unicode escapes
+eb34acb	705e461	Wed Apr 11 17:24:27 2018 +0200	Fix typos: replace missmatch with mismatch
+705e461	5464d88	Thu Mar 29 13:57:03 2018 +0100	Fix \'\\v\' encoding
+a79a8ef	a720e33	Wed Mar 21 14:52:55 2018 +0000	Fix single quotes emitting
+a96b76e	de67457	Sun Mar 18 13:45:47 2018 +0000	Fix windows build
+de67457	a14c782	Sat Mar 17 14:23:12 2018 +0000	Rework and fix targeted include
+a14c782	cc499a2	Sat Mar 17 14:22:59 2018 +0000	Fix caseless comparison
+da5ca23	9879e7b	Sat Mar 17 12:40:37 2018 +0000	Fix caseless hash
+9879e7b	fa94daa	Sat Mar 17 12:30:39 2018 +0000	Fix hash deletion, add hash reservation
+76722a0	4d9bba8	Fri Dec 1 02:37:03 2017 +0530	Minor documentation fix
+4d9bba8	8171869	Tue Nov 7 22:34:30 2017 +0000	Backport fixes
+4be1bae	26ba933	Fri Jun 23 08:40:14 2017 +0100	Backport fixes
+4c30484	bf722d3	Sun Feb 19 16:17:19 2017 +0000	Fix memory leak on iteration
+e3ba19e	1f86175	Sun Feb 19 16:16:07 2017 +0000	Fix emitting of unsafe characters
+fdffd1a	4fed4ea 68d1f85	Tue Nov 1 19:20:15 2016 +0000	Merge pull request #162 from denisvm/fix-typo
+68d1f85	4fed4ea	Mon Oct 31 10:49:42 2016 -0200	Fix small typo
+4fed4ea	860d517 8a3a8d7	Sun Oct 16 14:15:31 2016 +0100	Merge pull request #158 from raviqqe/fix_file_mode
+8a3a8d7	843dd2e	Sun Oct 16 14:23:46 2016 +0900	Fix file mode of some files
+6b85fb3	829e79e	Fri Aug 12 12:30:35 2016 +0300	fix incorrect executable bits
+c79513f	829e79e	Fri Aug 12 12:23:09 2016 +0300	README.md: fix typos
+444a0a0	faaa901	Fri Aug 12 12:00:46 2016 +0800	C++ API: fix iteration over objects in which the first value is `false`
+faaa901	829e79e	Fri Aug 12 12:00:46 2016 +0800	C++ API: fix compilation error and warnings
+141bbf5	3354f7f	Wed Jun 29 23:20:46 2016 -0300	Fix schema validation for patternProperties with object data
+9c63c09	22d2c7b	Sun Jun 26 19:20:49 2016 -0300	python: Fix tests/schema/refRemote.json to make it valid
+342df39	6acb7ae	Fri Jun 24 11:23:44 2016 +0100	Fix build with plain makefile
+6acb7ae	b4651ea 468363e	Sat Jun 18 12:24:40 2016 +0100	Merge pull request #140 from wtfbbqhax/fix-build
+b4651ea	ce47e0c	Sun Jun 5 11:39:31 2016 +0200	Fix build with old gcc
+ce47e0c	1d6d87e	Sat Jun 4 16:41:11 2016 +0200	Fix msgpack on non x86
+f2c439b	9221a89	Sat May 7 00:41:57 2016 +0900	bug fix: ucl_variable_handle to work properly
+0c24799	8570870	Mon Apr 18 18:30:14 2016 +0100	[Fix] Fix bug with including of empty files
+8c65b49	1ef9267	Fri Feb 26 16:06:48 2016 +0000	Fix return value for ucl_comments_move
+6d9cc22	48c4bbb	Fri Feb 26 14:25:42 2016 +0000	Fix move
+c127d47	ef78dc3	Mon Feb 22 16:32:51 2016 +0000	Fix couple of issues found by coverity
+f27a5b9	4e52a84	Mon Feb 22 22:30:25 2016 +0900	Fix constructor of ucl::Ucl::const_iterator
+0b34198	fb35b5c 709c486	Sat Feb 20 22:19:48 2016 +0000	Merge pull request #120 from allanjude/fix_year_multiplier
+69a37c9	3987cc7	Sat Feb 20 19:56:08 2016 +0900	Fix compile error in ucl++.h
+3987cc7	94573ce	Thu Feb 18 11:42:11 2016 +0000	Fix issue with binary keys
+94573ce	40659fe	Tue Feb 16 13:21:57 2016 +0000	Fix some potential NULL pointer dereferences
+8480c67	a47deaf	Fri Feb 12 11:37:58 2016 +0000	Fix utf8 escapes
+bb80e06	45a0204	Fri Feb 12 09:47:01 2016 +0000	Fix memory corruption
+91d5ad7	baeded4	Thu Feb 11 14:21:37 2016 +0000	Fix issues with negative numbers in msgpack
+3b982db	730b98e	Mon Feb 8 15:39:34 2016 +0000	Another try to fix coverall
+f336ff5	6299d53	Thu Feb 4 00:51:43 2016 +0000	Fix some issues found by coverity scan
+65d453b	9124b47	Mon Feb 1 14:34:42 2016 +0000	Init comments to fix tests
+6ffff25	13beb60	Mon Feb 1 12:54:19 2016 +0000	Fix issue with comments emitting
+13beb60	367c5b5	Mon Feb 1 12:54:10 2016 +0000	Fix issues with multiline comments
+b0294e3	40d3846	Sun Jan 31 23:41:30 2016 +0100	Fix couple of issues with the comments
+332a555	e4a034c	Sun Jan 31 20:33:08 2016 +0100	Fix some warnings.
+666542e	e9aa320	Thu Nov 26 13:23:58 2015 +0000	Fix tests
+e9aa320	b6123ac	Thu Nov 26 13:18:16 2015 +0000	Fix remote refs.
+b6123ac	8ed6fda	Thu Nov 26 11:42:02 2015 +0000	Fix tests.
+77d9d33	57514e4	Thu Oct 22 16:18:44 2015 +0100	Try to fix lua libraries detection.
+57514e4	fc4df9b	Thu Oct 22 16:15:36 2015 +0100	Fix Makefile whitespaces.
+efd5e7e	ce13be8	Mon Oct 19 18:53:21 2015 +0100	Fix actual type of sort callback.
+ce13be8	c9f9c46	Thu Oct 15 09:31:38 2015 +0100	Fix fuzzing for msgpack.
+c9f9c46	0baad3e	Thu Oct 15 09:23:44 2015 +0100	Fix IO in schema test.
+983f9d4	f612dfe	Thu Oct 15 09:02:05 2015 +0100	Fix chartable size.
+a991d53	60cce00	Tue Oct 13 16:35:15 2015 +0100	Fix parsing of arrays at the beginning of file.
+23338e2	2b8cc17	Thu Sep 3 11:46:52 2015 +0100	Fix minor issues.
+60afae1	ff1e8d6	Thu Aug 27 00:36:27 2015 +0100	Add some extra debug to msgpack parser.
+ff1e8d6	6236bbe	Thu Aug 27 00:36:05 2015 +0100	Fix shifts and bit operations.
+8fe7f74	43b5146	Wed Aug 26 23:41:17 2015 +0100	Some more fixes to msgpack parser.
+43b5146	c686591	Wed Aug 26 19:13:19 2015 +0100	Fix shebang in tests.
+afaca6a	dd7acb8	Wed Aug 26 18:50:29 2015 +0100	Fix errors in msgpack parser.
+224789d	6879d46	Tue Aug 25 19:07:15 2015 +0100	Fix some errors in the parser.
+d204eed	4ffefe0	Mon Aug 24 17:21:55 2015 +0100	Implement keys and fix some containers logic.
+b13243f	c0e7add	Mon Aug 24 16:28:16 2015 +0100	Some fixes to parser\'s state machine.
+3cae13b	3497a96 bc52bd9	Wed Aug 19 14:58:08 2015 +0100	Merge pull request #103 from allanjude/bug/merge_strategy_dup
+bc52bd9	314f309	Wed Aug 19 09:50:24 2015 -0400	Update the test cases to match the fixed behaviour
+accff74	14adfa5	Tue Aug 18 15:28:34 2015 +0100	Fix tree.h not to pollute global namespace.
+20b1288	5cba074 fa17eca	Fri Jul 3 23:30:35 2015 +0100	Merge pull request #96 from jaimeMF/fix-lua-example
+fa17eca	5cba074	Fri Jul 3 21:32:36 2015 +0200	Fix lua api examples
+91d5933	9363ca5	Mon Jun 22 14:05:37 2015 +0100	Minor portability fixes.
+9363ca5	d21cfca	Thu Jun 11 21:34:59 2015 -0400	Fix some minor issues detected by fbinfer.
+2db1d47	ec77959	Thu Jun 4 16:52:03 2015 +0100	Fix 0 number encoding.
+aeb5f1a	b6afc14	Thu Jun 4 09:51:46 2015 +0100	Fix printing of arrays and objects in msgpack.
+47c9985	8718d0e	Mon Jun 1 12:31:21 2015 -0400	fix typo in readme
+2e2fd34	4bd4626	Sun May 31 22:08:48 2015 +0100	Fix parsing of macro arguments with quotes.
+e56837c	ce0d34a	Sat May 30 20:34:46 2015 -0400	Fix support for stripping .ucl
+fdda6dd	2a23f72	Sat May 30 15:42:58 2015 -0400	fix include globbing
+3771b2b	2a23f72	Fri May 29 20:04:42 2015 -0400	fix ucl_parser_get_linenum
+fc71a49	7d49857	Sun May 24 16:34:10 2015 +0100	Fix re-setting priority of UCL objects.
+7d49857	d5b95ad 41ca0ce	Sun May 24 16:06:03 2015 +0100	Merge pull request #81 from allanjude/bug/multiline
+d5b95ad	a87ad14 6037ef4	Mon May 18 10:00:33 2015 +0100	Merge pull request #78 from allanjude/bug/array_merge_sigbus
+a87ad14	0f61bc2 f2ce5e6	Mon May 18 09:59:37 2015 +0100	Merge pull request #77 from allanjude/bug/kv_concat_memcpy
+f2ce5e6	0f61bc2	Mon May 18 00:37:04 2015 -0400	Fix kv_concat
+8598107	d26c6f2	Sat May 16 19:38:42 2015 +0100	Fix unescaping of strings ending with \\
+f12ccd2	fd59217	Fri May 15 16:16:06 2015 +0100	Fix implicit arrays overriding.
+fd59217	0a7d87e	Fri May 15 16:16:06 2015 +0100	Restore fix by @allanjude
+e8577b5	6c7e194	Tue Apr 28 13:47:53 2015 +0100	Apply another approach to fix bug with priority include.
+6c7e194	a75afdd	Tue Apr 28 13:25:17 2015 +0100	Fix tests and objdump when reading large inputs.
+a75afdd	29910c7	Mon Apr 27 17:08:58 2015 +0100	Add test case for include bug.
+29910c7	5f48b0b	Mon Apr 27 17:01:31 2015 +0100	Fix include with priority.
+5f48b0b	4c3aad1	Thu Apr 23 18:29:19 2015 +0100	Fix unref for implicit arrays.
+4c3aad1	cc49b29 4f845f8	Sun Apr 19 19:59:42 2015 +0100	Merge pull request #73 from allanjude/bugfix/ucl_object_type-null
+cc49b29	d4dfed8	Sat Apr 18 15:10:54 2015 +0100	Fix deleting from ucl object.
+d4dfed8	510fe7b	Sat Apr 18 13:51:36 2015 +0100	Fix parsing of numeric arrays.
+df400d1	215b85d	Thu Apr 16 16:35:15 2015 +0100	Fix iteration.
+3367b89	a7f898b	Tue Apr 7 18:44:57 2015 +0100	Fix lua arrays.
+6d034d2	ab4a15d 3dabd59	Tue Mar 17 20:54:36 2015 +0000	Merge pull request #66 from allanjude/noimplicit_fix
+3dabd59	7a57511 ab4a15d	Tue Mar 17 15:13:16 2015 -0400	Merge remote-tracking branch \'upstream/master\' into noimplicit_fix
+e13f61f	8d3b186	Wed Mar 11 11:53:03 2015 +0000	Fix bug with freeing of incorrect variable.
+8d3b186	114a8e4	Mon Mar 2 11:05:49 2015 +0000	Fix arrays iteration in objdump.
+114a8e4	0916514	Sat Feb 28 10:50:46 2015 +0000	Fix parsing macroses after objects.
+2c8b139	010d691	Wed Feb 4 14:24:45 2015 +0000	Fix yet another one issue in arrays compare.
+010d691	cfd03f7	Wed Feb 4 14:04:38 2015 +0000	Fix arrays validation.
+cfd03f7	c65c7ee	Wed Feb 4 14:04:23 2015 +0000	Fix objects comparision.
+8d25e89	cda0489	Wed Feb 4 13:33:21 2015 +0000	Fix potential bugs found by coverity.
+c43baae	15fd9b5 2a12db4	Sun Jan 4 18:15:03 2015 +0000	Merge pull request #58 from jbnicolai/fix-indentation-in-readme-examples
+2a12db4	15fd9b5	Sun Jan 4 15:15:46 2015 +0100	Fixes indentation in README.md code examples.
+0823055	5f8c3b9	Wed Dec 17 11:57:41 2014 +0000	Fix cmake build.
+6b484ef	61e6d20	Mon Dec 1 23:24:21 2014 +0000	Fix elements append.
+4f1e681	00be8b6	Mon Dec 1 17:29:50 2014 +0000	Fix arrays.
+ffc0f86	fb59e55	Mon Dec 1 13:00:37 2014 +0000	Fix indicies in order array.
+fb59e55	48481f5	Mon Dec 1 12:53:19 2014 +0000	Fix the rest of libucl.
+4ae94d6	1f963e0	Sat Nov 29 19:45:13 2014 -0500	Fix array length when creating explicit arrays
+1f963e0	a7ccdcc	Sat Nov 29 00:49:47 2014 +0100	Fix permission on source files
+ffceb2d	151df97	Fri Nov 28 15:25:42 2014 -0500	Fix bug in automatic explicit array creation code
+6fa4d68	6142eaa	Sun Nov 9 16:49:49 2014 -0500	Grammar fix
+27a732a	49472a3	Sat Nov 8 20:39:46 2014 -0500	Fix recursive iteration bug
+4457298	c43ca5e	Sat Nov 8 15:01:49 2014 -0500	Fix build errors, extraneous }
+71209e6	8b0d3d4	Sat Nov 8 12:51:41 2014 -0500	Fix documentation of ucl_array_find_index()
+65abe8f	6835cd2	Sat Nov 8 12:38:54 2014 -0500	Fix errors and style
+134e310	c876164	Fri Nov 7 01:40:59 2014 -0500	Fix type declaration
+8b0d3d4	332add5	Thu Oct 16 14:10:17 2014 +0100	Fix stupid use after free.
+89ccd1c	8b995b2	Mon Oct 13 17:35:18 2014 +0100	Fix numbers at the end of chunk.
+8b995b2	2015e6e	Mon Oct 13 17:28:27 2014 +0100	Fix filevars.
+2015e6e	4bae435	Mon Oct 13 17:12:22 2014 +0100	Fix some more stupid errors.
+473e994	1de1183	Mon Oct 13 16:52:54 2014 +0100	Fix, fix, fix.
+55ddb49	66f79df	Mon Oct 13 14:50:42 2014 +0100	Fix internal utilities.
+fd07683	4b8b45c	Sat Oct 11 22:50:01 2014 +0100	Fix shared library version.
+8a6163e	f31892a	Sat Oct 11 22:14:21 2014 +0100	Fix parsing of multiline strings.
+ccbcb2a	8dbe349	Tue Sep 30 01:55:33 2014 +0100	Fix another warning.
+8dbe349	7f2604b	Tue Sep 30 01:42:34 2014 +0100	Fix some more warnings.
+7f2604b	84c742d	Tue Sep 30 01:27:40 2014 +0100	Fix some warnings.
+4466a5c	87b3a92	Fri Aug 22 11:47:45 2014 +0100	Fix memory leak in keys replacing.
+87b3a92	ba249c4	Fri Aug 22 11:42:21 2014 +0100	Fix memory leak in expanding variables.
+d7754c6	006dd46	Fri Aug 22 10:45:44 2014 +0100	Fix keys replacing.
+006dd46	e6310ea	Wed Aug 20 15:51:05 2014 +0100	Fix issue with quoted lines in comments
+2336de1	c740cd9 d3f923e	Thu Jul 31 15:30:13 2014 +0100	Merge pull request #33 from hashicorp/fix-win32-compile
+c740cd9	f1b2292	Sun Jul 27 09:26:18 2014 -0700	Fix copy for implicit arrays.
+c561604	afa5a86	Fri Jul 25 21:33:24 2014 +0200	Fix typo
+70ce7e9	56fd473	Fri Jul 25 12:23:21 2014 +0100	Fix objects copying.
+d3f923e	bf78fc2	Tue Jul 22 19:52:32 2014 -0700	Fix windows compile by compiling ucl_emitter_utils.c
+bf78fc2	4d9f818	Mon Jul 21 11:54:24 2014 -0700	Fix negative indicies.
+8ff1ea6	ef93bde	Mon Jul 21 17:58:47 2014 +0100	Fix distribution.
+caffd96	011ac11	Mon Jul 21 17:45:09 2014 +0100	Fix UCL_NULL handling.
+011ac11	a24b762	Mon Jul 21 17:33:35 2014 +0100	Fix issues with lua.
+a24b762	f80cb01	Mon Jul 21 16:20:29 2014 +0100	Fix build.
+f80cb01	75765f0	Mon Jul 21 16:20:01 2014 +0100	Fix lua issues.
+75765f0	e230945	Mon Jul 21 15:55:00 2014 +0100	Fix build paths.
+e2eb6b5	fcc4fb9	Mon Jul 21 14:50:29 2014 +0100	Fix compilation.
+5338f31	2dccd45	Mon Jul 21 14:27:04 2014 +0100	Fix configure definitions.
+2dccd45	b41e843	Mon Jul 21 14:26:43 2014 +0100	Fix lua detection.
+fa583ef	62eeafd	Fri Jul 18 17:17:58 2014 -0700	Fix parsing spaces at the beginning of document.
+62eeafd	2c02273	Wed Jul 16 14:28:59 2014 +0100	Fix streamline output.
+2c02273	715c67c	Wed Jul 16 13:48:38 2014 +0100	Fix bug with variables parsing.
+148ccb4	91e4ffb	Tue Jul 15 19:39:16 2014 +0100	Fix streamline output.
+3ca4eab	cfba953	Mon Jul 14 17:20:07 2014 +0100	Fix yaml output.
+cfba953	0a3abdf	Mon Jul 14 17:12:18 2014 +0100	Fix json output.
+0a3abdf	80f9c5f	Mon Jul 14 17:02:09 2014 +0100	Fix UCL_EMIT_CONFIG output.
+8139b3f	d84b73b	Thu Jun 26 13:49:17 2014 +0100	Fix documentation mistakes.
+d06b168	8eb6d56	Tue Apr 15 15:11:56 2014 +0200	Fix ucl_object_pop/delete_key
+2438647	256b8f2	Thu Apr 10 17:24:54 2014 +0100	Fix multiple values removing.
+256b8f2	790276e	Thu Apr 10 17:12:53 2014 +0100	Fix refcount logic.
+aa37ab3	41bfcb9	Fri Mar 21 09:10:19 2014 +1100	Fix libtool warning about missing AM_PROG_AR
+7f02f33	ee65f6b	Thu Mar 20 12:26:06 2014 +0000	Fix indent.
+212eb0e	3e1aeed	Wed Mar 19 14:54:28 2014 +0000	Fix oneOf.
+eafb798	7be5412	Tue Mar 18 21:46:08 2014 +0000	Fix build on Darwin.
+7be5412	dcbf226	Tue Mar 18 16:45:44 2014 +0000	Fix tests for distcheck.
+fb35548	d78f21b	Tue Mar 18 14:57:05 2014 +0000	Fix distribution.
+d78f21b	3284ea9	Tue Mar 18 14:56:53 2014 +0000	Fix pkg-config file.
+e108cc4	7038f11	Tue Mar 18 12:37:53 2014 +0100	Fix libfetch detection
+7038f11	ecfeb0c	Tue Mar 18 03:58:38 2014 -0700	Fix CURL detection.
+f0de5fd	9c8562d	Mon Mar 17 13:02:14 2014 -0700	Fix required properties validation.
+9c8562d	1dbffd2	Mon Mar 17 12:51:00 2014 -0700	Fix numbers validation.
+1dbffd2	282f70b	Mon Mar 17 12:47:30 2014 -0700	Fix null type parsing.
+282f70b	8cf1bc2	Mon Mar 17 12:37:44 2014 -0700	Fix numbers parsing.
+8cf1bc2	d6d0f00	Mon Mar 17 17:44:12 2014 +0000	Fix unique test.
+d6d0f00	27bdd5d	Mon Mar 17 17:40:30 2014 +0000	Some fixes to items validation.
+d38a52e	8dda644	Mon Mar 17 17:07:47 2014 +0000	Fix test suite for schema.
+ce811e4	1240b0a	Fri Mar 14 17:10:29 2014 +0000	Fix tests, as empty string is *NOT* a valid UCL.
+39c925f	16b0782	Sun Mar 2 15:58:54 2014 -0800	Fix issue with empty arrays.
+45f67a2	7e8fae4	Thu Feb 20 20:26:02 2014 -0600	Fix memory leaks in ucl_parse_key()
+9cb719a	9052e19	Mon Feb 17 16:04:39 2014 +0000	Some formatting fix.
+0da354c	f2a7f01	Sun Feb 2 16:13:32 2014 +0000	Fix coredump.
+f2a7f01	46123c3	Fri Jan 31 13:25:58 2014 +0000	Fix signatures fetching.
+cafd3c5	541d2de	Wed Jan 29 15:36:48 2014 +0000	Fix issue with arrays appending.
+58235bc	d9ba011	Thu Jan 16 19:24:09 2014 +0000	Fix some issues with braces.
+d9ba011	3e4e5d9	Thu Jan 16 18:56:01 2014 +0000	Fix nested objects.
+f0e0e82	b185e1b	Thu Jan 16 17:50:35 2014 +0000	Fix objdump reading.
+2bfae77	cc9b43a	Wed Jan 15 17:21:01 2014 +0000	Fix ucl to string forced conversion.
+59116ae	209cb64	Mon Jan 13 13:35:08 2014 +0100	Fix style
+07b6b95	d394d56	Thu Dec 19 13:40:24 2013 +0000	Fix include handler.
+a7af36c	41f69e7	Thu Dec 19 12:18:10 2013 +0000	Fix test.
+c8476e6	ec7ce9c	Sat Dec 14 14:53:56 2013 +0400	Fix macros state machine handling.
+ec7ce9c	2f487ad	Sat Dec 14 14:42:30 2013 +0400	Fix build system on Darwin.
+7ddb9b9	d0b73af	Thu Dec 5 13:51:51 2013 +0000	Fix issue with macro body parsing.
+bcfa400	ab07d2a	Wed Dec 4 13:07:05 2013 +0000	Fix xxhash alignment issue.
+ab07d2a	137e060	Wed Dec 4 13:06:47 2013 +0000	Fix build with old openssl.
+035939e	1b7162b	Fri Nov 29 15:33:32 2013 +0000	Fix parsing of empty files.
+52e31f7	11c5e55	Thu Nov 28 21:42:01 2013 +0100	Fix usage on ia64
+11c5e55	99ad37d	Thu Nov 28 00:22:14 2013 +0100	Fix yaml emitter
+33c11dc	1163590	Sat Nov 23 16:37:04 2013 +0000	More fixes to variables parsing.
+1163590	5db0cfc	Sat Nov 23 15:50:59 2013 +0000	Fix variables logic.
+7fd8f9b	1f65c0a	Fri Nov 15 14:02:45 2013 +0000	Allow to force bytes prefixes parsing.
+3d92cfb	c32005c	Wed Nov 13 16:04:09 2013 +0000	Fix parsing boolean values.
+78d3ab9	c32005c	Thu Nov 7 13:11:28 2013 +0100	Fix emitting yaml arrays
+c9e50c9	35ce063	Sat Nov 2 21:51:07 2013 +0000	Fix some warnings.
+35ce063	2c3d325	Thu Oct 31 18:18:39 2013 +0000	Fix ucl_hash_iter_has_next.
+8f98094	2d5af59	Tue Oct 29 14:43:50 2013 +0000	Fix hash destroying.
+31e394a	331c4f9	Tue Oct 29 13:26:16 2013 +0000	Fix objdump utility.
+adf87b6	43bda45	Mon Oct 28 18:43:35 2013 +0000	Fix hashes eventually.
+43bda45	3a02e9f	Mon Oct 28 17:27:43 2013 +0000	Fix endless loop.
+d6b0fd0	92290b6	Mon Oct 28 14:59:40 2013 +0000	Fix naming in hash functions.
+ebb6731	b88b187	Wed Oct 23 18:07:28 2013 +0200	Fix objdump
+b88b187	88a8754	Wed Oct 23 16:51:08 2013 +0100	Fix build with openssl enabled.
+9d88396	d927ae0	Tue Oct 22 17:17:30 2013 +0100	Fix clean target.
+d927ae0	a9b814f	Tue Oct 22 18:22:21 2013 +0200	Fix only consider number units if numbers have actually be found before
+56ecea9	9f44770	Tue Oct 22 14:47:35 2013 +0100	Fix bytes and seconds parsing.
+7e29aef	653ce00	Mon Oct 21 17:44:48 2013 +0100	Fix comment.
+ce81a1b	21619f9	Mon Oct 21 17:29:04 2013 +0100	Fix objects generation.
+21619f9	1dfd64d	Mon Oct 21 17:17:29 2013 +0100	Fix dependency on ucl.h
+1c0a9ad	f6dfe03	Fri Oct 18 16:52:17 2013 +0100	Fixing parser.
+f6dfe03	e3ef3cf	Fri Oct 18 16:09:07 2013 +0100	Fix strlcpy return value.
+4403600	ea72e3c	Thu Oct 17 23:07:04 2013 +0100	Fix misprints.
+368f115	6f6e25a	Thu Oct 17 13:25:04 2013 +0100	Fix DL related issues.
+66ea8a0	ad596ed	Thu Oct 17 12:34:28 2013 +0100	Fix test building.
+ad596ed	1a7fc67	Thu Oct 17 12:33:21 2013 +0100	Fix top object emitting.
+1a7fc67	7975cbd	Thu Oct 17 12:30:06 2013 +0100	Fix emitter for rcl and yaml.
+7975cbd	0e698d0	Thu Oct 17 12:21:41 2013 +0100	Fix arrays emitting.
+0e698d0	9bf2938	Thu Oct 17 12:12:38 2013 +0100	Fix parsing of numbers.
+f939687	9fe9a57	Thu Oct 17 00:14:42 2013 +0100	Fix floating numbers parsing.
+9fe9a57	68335b0	Wed Oct 16 16:46:45 2013 +0100	Fix definition.
+68335b0	934545a	Wed Oct 16 16:45:57 2013 +0100	Fix markup.
+2855344	d93feb0	Tue Oct 15 15:01:04 2013 +0100	Fix clean target.
+82bf547	e4726d5	Tue Oct 15 14:33:30 2013 +0100	Fix append_c code in utstring.
+d2e9865	6b9aca3	Mon Oct 14 16:27:38 2013 +0100	Fix json unescape.
+aa592d4	b5f1a69	Mon Oct 14 12:25:52 2013 +0100	Fix tests.
+b5f1a69	d672ea0	Mon Oct 14 12:25:43 2013 +0100	Fix hashes corruption.
+d672ea0	8ffaa59	Mon Oct 14 11:39:49 2013 +0100	Fix leak.
+3651694	7d9fafc	Mon Oct 14 10:49:37 2013 +0100	Fix memory leak on macros registering.
+434e331	4a93bad	Mon Oct 14 10:12:58 2013 +0100	Fix makefile to enable tests.
+30bc4f1	5655795	Sat Oct 12 10:53:52 2013 +0100	Fix table.
+2c4c802	106ecda	Fri Oct 11 15:16:44 2013 +0100	Fix parser.
+35c8c0c	7a65bf8	Fri Oct 11 09:29:02 2013 +0100	Fix nested list.

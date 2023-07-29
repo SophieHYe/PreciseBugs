@@ -1,0 +1,17 @@
+diff --git a/src/webassembly.cc b/src/webassembly.cc
+index c358a34..342df34 100644
+--- a/src/webassembly.cc
++++ b/src/webassembly.cc
+@@ -102,7 +102,7 @@ bool ReadMagic(string_view* data) {
+ 
+ class Section {
+  public:
+-  int id;
++  uint32_t id;
+   std::string name;
+   string_view data;
+   string_view contents;
+diff --git a/tests/testdata/fuzz_corpus/5b69d5a1654e6f7a84538fa8af16414ea44a00f5 b/tests/testdata/fuzz_corpus/5b69d5a1654e6f7a84538fa8af16414ea44a00f5
+new file mode 100644
+index 0000000..791827c
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/5b69d5a1654e6f7a84538fa8af16414ea44a00f5 differ

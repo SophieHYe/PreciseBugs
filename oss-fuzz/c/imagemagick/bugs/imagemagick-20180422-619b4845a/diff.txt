@@ -1,0 +1,76 @@
+diff --git a/MagickCore/colormap-private.h b/MagickCore/colormap-private.h
+index e49dfecda..6fff7c45d 100644
+--- a/MagickCore/colormap-private.h
++++ b/MagickCore/colormap-private.h
+@@ -31,8 +31,9 @@ static inline ssize_t ConstrainColormapIndex(Image *image,const ssize_t index,
+ {
+   if ((index < 0) || (index >= (ssize_t) image->colors))
+     {
+-      (void) ThrowMagickException(exception,GetMagickModule(),CorruptImageError,
+-        "InvalidColormapIndex","`%s'",image->filename);
++      if (exception->severity != CorruptImageError)
++        (void) ThrowMagickException(exception,GetMagickModule(),
++          CorruptImageError,"InvalidColormapIndex","`%s'",image->filename);
+       return(0);
+     }
+   return((ssize_t) index);
+@@ -43,8 +44,9 @@ static inline void ValidateColormapValue(Image *image,
+ { 
+   if ((index < 0) || (index >= (ssize_t) image->colors))
+     {
+-      (void) ThrowMagickException(exception,GetMagickModule(),CorruptImageError,
+-        "InvalidColormapIndex","`%s'",image->filename);
++      if (exception->severity != CorruptImageError)
++        (void) ThrowMagickException(exception,GetMagickModule(),
++          CorruptImageError,"InvalidColormapIndex","`%s'",image->filename);
+       *target=(Quantum) 0;
+     }
+   else
+diff --git a/MagickCore/exception.c b/MagickCore/exception.c
+index 5c4e2a147..46ec2d101 100644
+--- a/MagickCore/exception.c
++++ b/MagickCore/exception.c
+@@ -54,6 +54,11 @@
+ #include "MagickCore/utility.h"
+ #include "MagickCore/utility-private.h"
+ 
++/*
++  Define declarations.
++*/
++#define MaxExceptionList  64
++
+ /*
+   Forward declarations.
+ */
+@@ -421,9 +426,10 @@ MagickExport ExceptionInfo *DestroyExceptionInfo(ExceptionInfo *exception)
+         exception->exceptions=(void *) DestroyLinkedList((LinkedListInfo *)
+           exception->exceptions,DestroyExceptionElement);
+     }
+-  else if (exception->exceptions != (void *) NULL)
+-    ClearLinkedList((LinkedListInfo *) exception->exceptions,
+-      DestroyExceptionElement);
++  else
++    if (exception->exceptions != (void *) NULL)
++      ClearLinkedList((LinkedListInfo *) exception->exceptions,
++        DestroyExceptionElement);
+   relinquish=exception->relinquish;
+   UnlockSemaphoreInfo(exception->semaphore);
+   if (relinquish != MagickFalse)
+@@ -925,7 +931,7 @@ MagickExport MagickBooleanType ThrowException(ExceptionInfo *exception,
+   assert(exception->signature == MagickCoreSignature);
+   LockSemaphoreInfo(exception->semaphore);
+   exceptions=(LinkedListInfo *) exception->exceptions;
+-  if (GetNumberOfElementsInLinkedList(exceptions) > MagickMaxRecursionDepth)
++  if (GetNumberOfElementsInLinkedList(exceptions) > MaxExceptionList)
+     {
+       UnlockSemaphoreInfo(exception->semaphore);
+       return(MagickTrue);
+@@ -959,7 +965,7 @@ MagickExport MagickBooleanType ThrowException(ExceptionInfo *exception,
+       exception->description=p->description;
+     }
+   UnlockSemaphoreInfo(exception->semaphore);
+-  if (GetNumberOfElementsInLinkedList(exceptions) == MagickMaxRecursionDepth)
++  if (GetNumberOfElementsInLinkedList(exceptions) == MaxExceptionList)
+     (void) ThrowMagickException(exception,GetMagickModule(),ResourceLimitError,
+       "TooManyExceptions","(exception processing is suspended)");
+   return(MagickTrue);

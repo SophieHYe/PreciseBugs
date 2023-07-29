@@ -1,0 +1,14 @@
+diff --git a/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp b/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
+index 9ca4901f8f..0597a8d5dd 100644
+--- a/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
++++ b/gdal/ogr/ogrsf_frmts/ntf/ntf_raster.cpp
+@@ -127,6 +127,9 @@ void NTFFileReader::EstablishRasterAccess()
+ /* -------------------------------------------------------------------- */
+     delete poRecord;
+ 
++    if( !GDALCheckDatasetDimensions(nRasterXSize, nRasterYSize) )
++        return;
++
+     panColumnOffset = static_cast<vsi_l_offset *>(
+         CPLCalloc(sizeof(vsi_l_offset), nRasterXSize));
+ 

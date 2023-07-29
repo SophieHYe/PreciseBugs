@@ -1,0 +1,1035 @@
+diff --git a/gdal/frmts/mrf/LERC_band.cpp b/gdal/frmts/mrf/LERC_band.cpp
+index 8824fbf92e..ed3469db25 100644
+--- a/gdal/frmts/mrf/LERC_band.cpp
++++ b/gdal/frmts/mrf/LERC_band.cpp
+@@ -355,7 +355,7 @@ CPLErr LERC_Band::Decompress(buf_mgr &dst, buf_mgr &src)
+     }
+ 
+     // If not Lerc2 switch to Lerc
+-    if (!lerc2.GetHeaderInfo(ptr, hdInfo))
++    if (!lerc2.GetHeaderInfo(ptr, src.size, hdInfo))
+         return DecompressLERC(dst, src, img);
+ 
+     // It is Lerc2 test that it looks reasonable
+@@ -373,9 +373,10 @@ CPLErr LERC_Band::Decompress(buf_mgr &dst, buf_mgr &src)
+     }
+ 
+     bool success = false;
++    size_t nRemaingBytes = src.size;
+     BitMask2 bitMask(img.pagesize.x, img.pagesize.y);
+     switch (img.dt) {
+-#define DECODE(T) success = lerc2.Decode(&ptr, reinterpret_cast<T *>(dst.buffer), bitMask.Bits())
++#define DECODE(T) success = lerc2.Decode(&ptr, nRemaingBytes, reinterpret_cast<T *>(dst.buffer), bitMask.Bits())
+     case GDT_Byte:      DECODE(GByte);      break;
+     case GDT_UInt16:    DECODE(GUInt16);    break;
+     case GDT_Int16:     DECODE(GInt16);     break;
+@@ -454,7 +455,7 @@ CPLXMLNode *LERC_Band::GetMRFConfig(GDALOpenInfo *poOpenInfo)
+         Lerc2 l2;
+         Lerc2::HeaderInfo hinfo;
+         hinfo.RawInit();
+-        if (l2.GetHeaderInfo(reinterpret_cast<Byte *>(psz), hinfo)) {
++        if (l2.GetHeaderInfo(reinterpret_cast<Byte *>(psz), poOpenInfo->nHeaderBytes, hinfo)) {
+             size.x = hinfo.nCols;
+             size.y = hinfo.nRows;
+             // Set the datatype, which marks it as valid
+diff --git a/gdal/frmts/mrf/libLERC/BitStuffer2.cpp b/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
+index e146866e73..48a3cdce92 100644
+--- a/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
++++ b/gdal/frmts/mrf/libLERC/BitStuffer2.cpp
+@@ -146,13 +146,16 @@ bool BitStuffer2::EncodeLut(Byte** ppByte,
+ 
+ // if you change Encode(...) / Decode(...), don't forget to update ComputeNumBytesNeeded(...)
+ 
+-bool BitStuffer2::Decode(const Byte** ppByte, vector<unsigned int>& dataVec) const
++bool BitStuffer2::Decode(const Byte** ppByte, size_t& nRemainingBytes, vector<unsigned int>& dataVec) const
+ {
+   if (!ppByte)
+     return false;
+ 
++  if( nRemainingBytes < 1 )
++     return false;
+   Byte numBitsByte = **ppByte;
+   (*ppByte)++;
++  nRemainingBytes -= 1;
+ 
+   int bits67 = numBitsByte >> 6;
+   int n = (bits67 == 0) ? 4 : 3 - bits67;
+@@ -161,7 +164,7 @@ bool BitStuffer2::Decode(const Byte** ppByte, vector<unsigned int>& dataVec) con
+   numBitsByte &= 31;    // bits 0-4;
+ 
+   unsigned int numElements = 0;
+-  if (!DecodeUInt(ppByte, numElements, n))
++  if (!DecodeUInt(ppByte, nRemainingBytes, numElements, n))
+     return false;
+ 
+   int numBits = numBitsByte;
+@@ -170,21 +173,29 @@ bool BitStuffer2::Decode(const Byte** ppByte, vector<unsigned int>& dataVec) con
+   if (!doLut)
+   {
+     if (numBits > 0)    // numBits can be 0
+-      BitUnStuff(ppByte, dataVec, numElements, numBits);
++      if( !BitUnStuff(ppByte, nRemainingBytes, dataVec, numElements, numBits) )
++        return false;
+   }
+   else
+   {
++    if( nRemainingBytes < 1 )
++      return false;
+     Byte nLutByte = **ppByte;
+     (*ppByte)++;
++    nRemainingBytes -= 1;
+ 
+     int nLut = nLutByte - 1;
+-    BitUnStuff(ppByte, m_tmpLutVec, nLut, numBits);    // unstuff lut w/o the 0
++    // unstuff lut w/o the 0
++    if( !BitUnStuff(ppByte, nRemainingBytes, m_tmpLutVec, nLut, numBits) )
++        return false;
+ 
+     int nBitsLut = 0;
+     while (nLut >> nBitsLut)
+       nBitsLut++;
+ 
+-    BitUnStuff(ppByte, dataVec, numElements, nBitsLut);    // unstuff indexes
++    // unstuff indexes
++    if( !BitUnStuff(ppByte, nRemainingBytes, dataVec, numElements, nBitsLut) )
++      return false;
+ 
+     // replace indexes by values
+     m_tmpLutVec.insert(m_tmpLutVec.begin(), 0);    // put back in the 0
+@@ -288,7 +299,9 @@ void BitStuffer2::BitStuff(Byte** ppByte, const vector<unsigned int>& dataVec, i
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-void BitStuffer2::BitUnStuff(const Byte** ppByte, vector<unsigned int>& dataVec,
++bool BitStuffer2::BitUnStuff(const Byte** ppByte, 
++                             size_t& nRemainingBytes,
++                             vector<unsigned int>& dataVec,
+                              unsigned int numElements, int numBits) const
+ {
+   dataVec.resize(numElements, 0);    // init with 0
+@@ -297,6 +310,8 @@ void BitStuffer2::BitUnStuff(const Byte** ppByte, vector<unsigned int>& dataVec,
+   unsigned int numBytes = numUInts * sizeof(unsigned int);
+   unsigned int* arr = (unsigned int*)(*ppByte);
+ 
++  if( nRemainingBytes < numBytes )
++    return false;
+   unsigned int* srcPtr = arr;
+   srcPtr += numUInts;
+ 
+@@ -354,6 +369,8 @@ void BitStuffer2::BitUnStuff(const Byte** ppByte, vector<unsigned int>& dataVec,
+   }
+ 
+   *ppByte += numBytes - numBytesNotNeeded;
++  nRemainingBytes -= (numBytes - numBytesNotNeeded);
++  return true;
+ }
+ 
+ // -------------------------------------------------------------------------- ;
+diff --git a/gdal/frmts/mrf/libLERC/BitStuffer2.h b/gdal/frmts/mrf/libLERC/BitStuffer2.h
+index 761eadbd4c..dd06099cac 100644
+--- a/gdal/frmts/mrf/libLERC/BitStuffer2.h
++++ b/gdal/frmts/mrf/libLERC/BitStuffer2.h
+@@ -45,7 +45,7 @@ public:
+   static bool EncodeSimple(Byte** ppByte, const std::vector<unsigned int>& dataVec);
+   // cppcheck-suppress functionStatic
+   bool EncodeLut(Byte** ppByte, const std::vector<Quant>& sortedDataVec) const;
+-  bool Decode(const Byte** ppByte, std::vector<unsigned int>& dataVec) const;
++  bool Decode(const Byte** ppByte, size_t& nRemainingBytes, std::vector<unsigned int>& dataVec) const;
+ 
+   static unsigned int ComputeNumBytesNeededSimple(unsigned int numElem, unsigned int maxElem);
+   static unsigned int ComputeNumBytesNeededLut(const std::vector<Quant>& sortedDataVec,
+@@ -58,9 +58,9 @@ private:
+ 
+   static void BitStuff(Byte** ppByte, const std::vector<unsigned int>& dataVec, int numBits);
+   // cppcheck-suppress functionStatic
+-  void BitUnStuff(const Byte** ppByte, std::vector<unsigned int>& dataVec, unsigned int numElements, int numBits) const;
++  bool BitUnStuff(const Byte** ppByte, size_t& nReminingBytes, std::vector<unsigned int>& dataVec, unsigned int numElements, int numBits) const;
+   static bool EncodeUInt(Byte** ppByte, unsigned int k, int numBytes);     // numBytes = 1, 2, or 4
+-  static bool DecodeUInt(const Byte** ppByte, unsigned int& k, int numBytes);
++  static bool DecodeUInt(const Byte** ppByte, size_t& nReminingBytes, unsigned int& k, int numBytes);
+   static int NumBytesUInt(unsigned int k) { return (k < 256) ? 1 : (k < (1 << 16)) ? 2 : 4; }
+   static unsigned int NumTailBytesNotNeeded(unsigned int numElem, int numBits);
+ };
+@@ -106,9 +106,11 @@ bool BitStuffer2::EncodeUInt(Byte** ppByte, unsigned int k, int numBytes)
+ // -------------------------------------------------------------------------- ;
+ 
+ inline
+-bool BitStuffer2::DecodeUInt(const Byte** ppByte, unsigned int& k, int numBytes)
++bool BitStuffer2::DecodeUInt(const Byte** ppByte, size_t& nRemainingBytes, unsigned int& k, int numBytes)
+ {
+   const Byte* ptr = *ppByte;
++  if( nRemainingBytes < static_cast<size_t>(numBytes) )
++    return false;
+ 
+   if (numBytes == 1)
+     k = *ptr;
+@@ -126,6 +128,7 @@ bool BitStuffer2::DecodeUInt(const Byte** ppByte, unsigned int& k, int numBytes)
+     return false;
+ 
+   *ppByte += numBytes;
++  nRemainingBytes -= numBytes;
+   return true;
+ }
+ 
+diff --git a/gdal/frmts/mrf/libLERC/Huffman.cpp b/gdal/frmts/mrf/libLERC/Huffman.cpp
+index c0ddb51b2f..dd76dcb0e1 100644
+--- a/gdal/frmts/mrf/libLERC/Huffman.cpp
++++ b/gdal/frmts/mrf/libLERC/Huffman.cpp
+@@ -170,25 +170,33 @@ bool Huffman::WriteCodeTable(Byte** ppByte) const
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool Huffman::ReadCodeTable(const Byte** ppByte)
++bool Huffman::ReadCodeTable(const Byte** ppByte, size_t& nRemainingBytesInOut)
+ {
+   if (!ppByte || !(*ppByte))
+     return false;
+ 
+   const Byte* ptr = *ppByte;
++  size_t nRemainingBytes = nRemainingBytesInOut;
+ 
+-  int version = *((int*)ptr);    // version
++  if( nRemainingBytes < sizeof(int) )
++      return false;
++  int version;
++  // FIXME endianness handling
++  memcpy(&version, ptr, sizeof(int));    // version
+   ptr += sizeof(int);
++  nRemainingBytes -= sizeof(int);
+ 
+   if (version < 2) // allow forward compatibility
+     return false;
+ 
+   vector<int> intVec(4, 0);
++  if( nRemainingBytes < sizeof(int) * ( intVec.size() - 1 ) )
++      return false;
+   for (size_t i = 1; i < intVec.size(); i++)
+   {
+-    intVec[i] = *((int*)ptr);
+-    ptr += sizeof(int);
++    memcpy(&intVec[i], ptr, sizeof(int)); // FIXME endianness handling
+   }
++  nRemainingBytes -= sizeof(int) * ( intVec.size() - 1 );
+ 
+   int size = intVec[1];
+   int i0 = intVec[2];
+@@ -199,7 +207,7 @@ bool Huffman::ReadCodeTable(const Byte** ppByte)
+ 
+   vector<unsigned int> dataVec(i1 - i0, 0);
+   BitStuffer2 bitStuffer2;
+-  if (!bitStuffer2.Decode(&ptr, dataVec))    // unstuff the code lengths
++  if (!bitStuffer2.Decode(&ptr, nRemainingBytes, dataVec))    // unstuff the code lengths
+     return false;
+ 
+   m_codeTable.resize(size);
+@@ -212,10 +220,11 @@ bool Huffman::ReadCodeTable(const Byte** ppByte)
+     m_codeTable[k].first = (short)dataVec[i - i0];
+   }
+ 
+-  if (!BitUnStuffCodes(&ptr, i0, i1))    // unstuff the codes
++  if (!BitUnStuffCodes(&ptr, nRemainingBytes, i0, i1))    // unstuff the codes
+     return false;
+ 
+   *ppByte = ptr;
++  nRemainingBytesInOut = nRemainingBytes;
+   return true;
+ }
+ 
+@@ -467,11 +476,12 @@ bool Huffman::BitStuffCodes(Byte** ppByte, int i0, int i1) const
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool Huffman::BitUnStuffCodes(const Byte** ppByte, int i0, int i1)
++bool Huffman::BitUnStuffCodes(const Byte** ppByte, size_t& nRemainingBytesInOut, int i0, int i1)
+ {
+   if (!ppByte || !(*ppByte))
+     return false;
+ 
++  size_t nRemainingBytes = nRemainingBytesInOut;
+   const unsigned int* arr = (const unsigned int*)(*ppByte);
+   const unsigned int* srcPtr = arr;
+   int size = (int)m_codeTable.size();
+@@ -483,7 +493,10 @@ bool Huffman::BitUnStuffCodes(const Byte** ppByte, int i0, int i1)
+     int len = m_codeTable[k].first;
+     if (len > 0)
+     {
++      if( nRemainingBytes < sizeof(unsigned) )
++        return false;
+       m_codeTable[k].second = ((*srcPtr) << bitPos) >> (32 - len);
++      nRemainingBytes -= sizeof(unsigned);
+ 
+       if (32 - bitPos >= len)
+       {
+@@ -492,20 +505,29 @@ bool Huffman::BitUnStuffCodes(const Byte** ppByte, int i0, int i1)
+         if (bitPos == 32)
+         {
+           bitPos = 0;
++          if( nRemainingBytes < sizeof(unsigned) )
++            return false;
+           srcPtr++;
++          nRemainingBytes -= sizeof(unsigned);
+         }
+       }
+       else
+       {
+         bitPos += len - 32;
++        if( nRemainingBytes < sizeof(unsigned) )
++           return false;
+         srcPtr++;
++        nRemainingBytes -= sizeof(unsigned);
+         m_codeTable[k].second |= (*srcPtr) >> (32 - bitPos);
+       }
+     }
+   }
+ 
+   size_t numUInts = srcPtr - arr + (bitPos > 0 ? 1 : 0);
++  if( nRemainingBytes < sizeof(unsigned) * numUInts )
++    return false;
+   *ppByte += numUInts * sizeof(unsigned int);
++  nRemainingBytesInOut = numUInts * sizeof(unsigned int);
+   return true;
+ }
+ 
+diff --git a/gdal/frmts/mrf/libLERC/Huffman.h b/gdal/frmts/mrf/libLERC/Huffman.h
+index f692d45487..d00c8e6075 100644
+--- a/gdal/frmts/mrf/libLERC/Huffman.h
++++ b/gdal/frmts/mrf/libLERC/Huffman.h
+@@ -55,10 +55,10 @@ public:
+   bool SetCodes(const std::vector<std::pair<short, unsigned int> >& codeTable);
+ 
+   bool WriteCodeTable(Byte** ppByte) const;
+-  bool ReadCodeTable(const Byte** ppByte);
++  bool ReadCodeTable(const Byte** ppByte, size_t& nRemainingBytes);
+ 
+   bool BuildTreeFromCodes(int& numBitsLUT);
+-  bool DecodeOneValue(const unsigned int** srcPtr, int& bitPos, int numBitsLUT, int& value) const;
++  bool DecodeOneValue(const unsigned int** srcPtr, size_t& nRemainingBytes, int& bitPos, int numBitsLUT, int& value) const;
+   void Clear();
+ 
+ private:
+@@ -135,22 +135,28 @@ private:
+   bool ComputeNumBytesCodeTable(int& numBytes) const;
+   bool GetRange(int& i0, int& i1, int& maxCodeLength) const;
+   bool BitStuffCodes(Byte** ppByte, int i0, int i1) const;
+-  bool BitUnStuffCodes(const Byte** ppByte, int i0, int i1);
++  bool BitUnStuffCodes(const Byte** ppByte, size_t& nRemainingBytes, int i0, int i1);
+   bool ConvertCodesToCanonical();
+ };
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-inline bool Huffman::DecodeOneValue(const unsigned int** ppSrc, int& bitPos, int numBitsLUT, int& value) const
++inline bool Huffman::DecodeOneValue(const unsigned int** ppSrc, size_t& nRemainingBytes, int& bitPos, int numBitsLUT, int& value) const
+ {
+   if (!ppSrc || !(*ppSrc) || bitPos < 0 || bitPos > 32)
+     return false;
+ 
+   // first get the next (up to) 12 bits as a copy
+   /* coverity[large_shift] */
++  if( nRemainingBytes < sizeof(unsigned) )
++    return false;
+   int valTmp = ((**ppSrc) << bitPos) >> (32 - numBitsLUT);
+   if (32 - bitPos < numBitsLUT)
++  {
++    if( nRemainingBytes < 2 * sizeof(unsigned) )
++      return false;
+     valTmp |= (*(*ppSrc + 1)) >> (64 - bitPos - numBitsLUT);
++  }
+ 
+   if (m_decodeLUT[valTmp].first >= 0)    // if there, move the correct number of bits and done
+   {
+@@ -160,6 +166,7 @@ inline bool Huffman::DecodeOneValue(const unsigned int** ppSrc, int& bitPos, int
+     {
+       bitPos -= 32;
+       (*ppSrc)++;
++      nRemainingBytes -= sizeof(unsigned);
+     }
+     return true;
+   }
+@@ -175,6 +182,7 @@ inline bool Huffman::DecodeOneValue(const unsigned int** ppSrc, int& bitPos, int
+   {
+     bitPos -= 32;
+     (*ppSrc)++;
++    nRemainingBytes -= sizeof(unsigned);
+   }
+ 
+   const Node* node = m_root;
+@@ -182,12 +190,15 @@ inline bool Huffman::DecodeOneValue(const unsigned int** ppSrc, int& bitPos, int
+   while (value < 0)
+   {
+     /* coverity[large_shift] */
++    if( nRemainingBytes < sizeof(unsigned) )
++      return false;
+     int bit = ((**ppSrc) << bitPos) >> 31;
+     bitPos++;
+     if (bitPos == 32)
+     {
+       bitPos = 0;
+       (*ppSrc)++;
++      nRemainingBytes -= sizeof(unsigned);
+     }
+ 
+     node = bit ? node->child1 : node->child0;
+diff --git a/gdal/frmts/mrf/libLERC/Lerc2.cpp b/gdal/frmts/mrf/libLERC/Lerc2.cpp
+index a5cfc59b3e..8d8f5d1d73 100644
+--- a/gdal/frmts/mrf/libLERC/Lerc2.cpp
++++ b/gdal/frmts/mrf/libLERC/Lerc2.cpp
+@@ -114,12 +114,12 @@ unsigned int Lerc2::ComputeNumBytesHeader()
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool Lerc2::GetHeaderInfo(const Byte* pByte, struct HeaderInfo& headerInfo) const
++bool Lerc2::GetHeaderInfo(const Byte* pByte, size_t srcSize, struct HeaderInfo& headerInfo) const
+ {
+   if (!pByte)
+     return false;
+ 
+-  return ReadHeader(&pByte, headerInfo);
++  return ReadHeader(&pByte, srcSize, headerInfo);
+ }
+ 
+ // -------------------------------------------------------------------------- ;
+@@ -164,24 +164,31 @@ bool Lerc2::WriteHeader(Byte** ppByte) const
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool Lerc2::ReadHeader(const Byte** ppByte, struct HeaderInfo& headerInfo) const
++bool Lerc2::ReadHeader(const Byte** ppByte, size_t &nRemainingSizeInOut, struct HeaderInfo& headerInfo) const
+ {
+   if (!ppByte || !*ppByte)
+     return false;
+ 
+   const Byte* ptr = *ppByte;
++  size_t nRemainingSize = nRemainingSizeInOut;
+ 
+   string fileKey = FileKey();
+   HeaderInfo& hd = headerInfo;
+   hd.RawInit();
+ 
++  if (nRemainingSize < fileKey.length())
++    return false;
+   if (0 != memcmp(ptr, fileKey.c_str(), fileKey.length()))
+     return false;
+ 
+   ptr += fileKey.length();
++  nRemainingSize -= fileKey.length();
+ 
++  if( nRemainingSize < sizeof(int) )
++     return false;
+   memcpy(&(hd.version), ptr, sizeof(int));
+   ptr += sizeof(int);
++  nRemainingSize -= sizeof(int);
+ 
+   if (hd.version > m_currentVersion)    // this reader is outdated
+     return false;
+@@ -189,11 +196,17 @@ bool Lerc2::ReadHeader(const Byte** ppByte, struct HeaderInfo& headerInfo) const
+   std::vector<int>  intVec(7, 0);
+   std::vector<double> dblVec(3, 0);
+ 
++  if( nRemainingSize < sizeof(int) * (intVec.size() - 1) )
++     return false;
+   memcpy(&intVec[1], ptr, sizeof(int) * (intVec.size() - 1));
+   ptr += sizeof(int) * (intVec.size() - 1);
++  nRemainingSize -= sizeof(int) * (intVec.size() - 1);
+ 
++  if( nRemainingSize < sizeof(double) * dblVec.size() )
++     return false;
+   memcpy(&dblVec[0], ptr, sizeof(double) * dblVec.size());
+   ptr += sizeof(double) * dblVec.size();
++  nRemainingSize -= sizeof(double) * dblVec.size();
+ 
+   hd.nRows          = intVec[1];
+   hd.nCols          = intVec[2];
+@@ -207,6 +220,7 @@ bool Lerc2::ReadHeader(const Byte** ppByte, struct HeaderInfo& headerInfo) const
+   hd.zMax           = dblVec[2];
+ 
+   *ppByte = ptr;
++  nRemainingSizeInOut = nRemainingSize;
+   return true;
+ }
+ 
+@@ -252,7 +266,7 @@ bool Lerc2::WriteMask(Byte** ppByte) const
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool Lerc2::ReadMask(const Byte** ppByte)
++bool Lerc2::ReadMask(const Byte** ppByte, size_t& nRemainingSizeInOut)
+ {
+   if (!ppByte)
+     return false;
+@@ -262,10 +276,14 @@ bool Lerc2::ReadMask(const Byte** ppByte)
+   int h = m_headerInfo.nRows;
+ 
+   const Byte* ptr = *ppByte;
++  size_t nRemainingSize = nRemainingSizeInOut;
+ 
+   int numBytesMask;
++  if( nRemainingSize < sizeof(int) )
++    return false;
+   memcpy(&numBytesMask, ptr, sizeof(int));
+   ptr += sizeof(int);
++  nRemainingSize -= sizeof(int);
+ 
+   if ((numValid == 0 || numValid == w * h) && (numBytesMask != 0))
+     return false;
+@@ -280,14 +298,19 @@ bool Lerc2::ReadMask(const Byte** ppByte)
+   else if (numBytesMask > 0)    // read it in
+   {
+     RLE rle;
+-    if (!rle.decompress(ptr, m_bitMask.Bits()))
++    if( nRemainingSize < static_cast<size_t>(numBytesMask) )
++      return false;
++    if (!rle.decompress(ptr, nRemainingSize, m_bitMask.Bits()))
+       return false;
+ 
+     ptr += numBytesMask;
++    nRemainingSize -= numBytesMask;
+   }
+   // else use previous mask
+ 
+   *ppByte = ptr;
++  nRemainingSizeInOut = nRemainingSize;
++
+   return true;
+ }
+ 
+diff --git a/gdal/frmts/mrf/libLERC/Lerc2.h b/gdal/frmts/mrf/libLERC/Lerc2.h
+index 7c773ebe41..4b5975b1e7 100644
+--- a/gdal/frmts/mrf/libLERC/Lerc2.h
++++ b/gdal/frmts/mrf/libLERC/Lerc2.h
+@@ -35,6 +35,7 @@ Contributors:  Thomas Maurer
+ #include <typeinfo>
+ #include <cfloat>
+ #include <cmath>
++#include <limits>
+ 
+ NAMESPACE_LERC_START
+ 
+@@ -93,11 +94,11 @@ public:
+     void RawInit()  { memset(this, 0, sizeof(struct HeaderInfo)); }
+   };
+ 
+-  bool GetHeaderInfo(const Byte* pByte, struct HeaderInfo& headerInfo) const;
++  bool GetHeaderInfo(const Byte* pByte, size_t srcSize, struct HeaderInfo& headerInfo) const;
+ 
+   /// does not allocate memory;  byte ptr is moved like a file pointer
+   template<class T>
+-  bool Decode(const Byte** ppByte, T* arr, Byte* pMaskBits = 0);    // if mask ptr is not 0, mask bits are returned (even if all valid or same as previous)
++  bool Decode(const Byte** ppByte, size_t& nRemainingBytes, T* arr, Byte* pMaskBits = 0);    // if mask ptr is not 0, mask bits are returned (even if all valid or same as previous)
+ 
+ private:
+   int         m_currentVersion,
+@@ -115,21 +116,21 @@ private:
+   static std::string FileKey() { return "Lerc2 "; }
+   void Init();
+   bool WriteHeader(Byte** ppByte) const;
+-  bool ReadHeader(const Byte** ppByte, struct HeaderInfo& headerInfo) const;
++  bool ReadHeader(const Byte** ppByte, size_t& nRemainingBytes, struct HeaderInfo& headerInfo) const;
+   bool WriteMask(Byte** ppByte) const;
+-  bool ReadMask(const Byte** ppByte);
++  bool ReadMask(const Byte** ppByte, size_t& nRemainingBytes);
+ 
+   template<class T>
+   bool WriteDataOneSweep(const T* data, Byte** ppByte) const;
+ 
+   template<class T>
+-  bool ReadDataOneSweep(const Byte** ppByte, T* data) const;
++  bool ReadDataOneSweep(const Byte** ppByte, size_t& nRemainingBytes, T* data) const;
+ 
+   template<class T>
+   bool WriteTiles(const T* data, Byte** ppByte, int& numBytes, double& zMinA, double& zMaxA) const;
+ 
+   template<class T>
+-  bool ReadTiles(const Byte** ppByte, T* data) const;
++  bool ReadTiles(const Byte** ppByte, size_t& nRemainingBytes, T* data) const;
+ 
+   template<class T>
+   bool ComputeStats(const T* data, int i0, int i1, int j0, int j1,
+@@ -155,7 +156,8 @@ private:
+                  const std::vector<Quant >& sortedQuantVec) const;
+ 
+   template<class T>
+-  bool ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j1,
++  bool ReadTile(const Byte** ppByte, size_t& nRemainingBytes,
++                T* data, int i0, int i1, int j0, int j1,
+                 std::vector<unsigned int>& bufferVec) const;
+ 
+   template<class T>
+@@ -165,7 +167,7 @@ private:
+ 
+   static bool WriteVariableDataType(Byte** ppByte, double z, DataType dtUsed);
+ 
+-  static double ReadVariableDataType(const Byte** ppByte, DataType dtUsed);
++  static bool ReadVariableDataType(const Byte** ppByte, size_t& nRemainingBytes, DataType dtUsed, double* pdfOutVal);
+ 
+   // cppcheck-suppress functionStatic
+   template<class T> DataType GetDataType(T z) const;
+@@ -182,7 +184,7 @@ private:
+   bool EncodeHuffman(const T* data, Byte** ppByte, T& zMinA, T& zMaxA) const;
+ 
+   template<class T>
+-  bool DecodeHuffman(const Byte** ppByte, T* data) const;
++  bool DecodeHuffman(const Byte** ppByte, size_t& nRemainingBytes, T* data) const;
+ };
+ 
+ // -------------------------------------------------------------------------- ;
+@@ -327,15 +329,15 @@ bool Lerc2::Encode(const T* arr, Byte** ppByte) const
+ // -------------------------------------------------------------------------- ;
+ 
+ template<class T>
+-bool Lerc2::Decode(const Byte** ppByte, T* arr, Byte* pMaskBits)
++bool Lerc2::Decode(const Byte** ppByte, size_t& nRemainingBytes, T* arr, Byte* pMaskBits)
+ {
+   if (!arr || !ppByte)
+     return false;
+ 
+-  if (!ReadHeader(ppByte, m_headerInfo))
++  if (!ReadHeader(ppByte, nRemainingBytes, m_headerInfo))
+     return false;
+ 
+-  if (!ReadMask(ppByte))
++  if (!ReadMask(ppByte, nRemainingBytes))
+     return false;
+ 
+   if (pMaskBits)    // return proper mask bits even if they were not stored
+@@ -359,17 +361,20 @@ bool Lerc2::Decode(const Byte** ppByte, T* arr, Byte* pMaskBits)
+     return true;
+   }
+ 
++  if( nRemainingBytes < 1 )
++    return false;
+   Byte readDataOneSweep = **ppByte;    // read flag
+   (*ppByte)++;
++  nRemainingBytes -= 1;
+ 
+   if (!readDataOneSweep)
+   {
+-    if (!ReadTiles(ppByte, arr))
++    if (!ReadTiles(ppByte, nRemainingBytes, arr))
+       return false;
+   }
+   else
+   {
+-    if (!ReadDataOneSweep(ppByte, arr))
++    if (!ReadDataOneSweep(ppByte, nRemainingBytes, arr))
+       return false;
+   }
+ 
+@@ -403,9 +408,10 @@ bool Lerc2::WriteDataOneSweep(const T* data, Byte** ppByte) const
+ // -------------------------------------------------------------------------- ;
+ 
+ template<class T>
+-bool Lerc2::ReadDataOneSweep(const Byte** ppByte, T* data) const
++bool Lerc2::ReadDataOneSweep(const Byte** ppByte, size_t& nRemainingBytesInOut, T* data) const
+ {
+   const T* srcPtr = (const T*)(*ppByte);
++  size_t nRemainingBytes = nRemainingBytesInOut;
+   int cntPixel = 0;
+ 
+   for (int i = 0; i < m_headerInfo.nRows; i++)
+@@ -414,12 +420,16 @@ bool Lerc2::ReadDataOneSweep(const Byte** ppByte, T* data) const
+     for (int j = 0; j < m_headerInfo.nCols; j++, k++)
+       if (m_bitMask.IsValid(k))
+       {
++        if( nRemainingBytes < sizeof(T) )
++          return false;
+         data[k] = *srcPtr++;
++        nRemainingBytes -= sizeof(T);
+         cntPixel++;
+       }
+   }
+ 
+   (*ppByte) += cntPixel * sizeof(T);
++  nRemainingBytesInOut -= cntPixel * sizeof(T);
+   return true;
+ }
+ 
+@@ -578,7 +588,7 @@ bool Lerc2::WriteTiles(const T* data, Byte** ppByte, int& numBytes, double& zMin
+ // -------------------------------------------------------------------------- ;
+ 
+ template<class T>
+-bool Lerc2::ReadTiles(const Byte** ppByte, T* data) const
++bool Lerc2::ReadTiles(const Byte** ppByte, size_t& nRemainingBytes, T* data) const
+ {
+   if (!data || !ppByte || !(*ppByte))
+     return false;
+@@ -588,18 +598,21 @@ bool Lerc2::ReadTiles(const Byte** ppByte, T* data) const
+     && (m_headerInfo.dt == DT_Byte || m_headerInfo.dt == DT_Char)    // try Huffman coding
+     && m_headerInfo.maxZError == 0.5)    // for lossless only, maybe later extend to lossy, but Byte and lossy is rare
+   {
++    if (nRemainingBytes < 1 )
++      return false;
+     Byte flag = **ppByte;    // read flag Huffman / Lerc2
+     (*ppByte)++;
++    nRemainingBytes --;
+ 
+     if (flag == 1)    // decode Huffman
+     {
+       Huffman huffman;
+-      if (!huffman.ReadCodeTable(ppByte))    // header and code table
++      if (!huffman.ReadCodeTable(ppByte, nRemainingBytes))    // header and code table
+         return false;
+ 
+       m_huffmanCodes = huffman.GetCodes();
+ 
+-      if (!DecodeHuffman(ppByte, data))    // data
++      if (!DecodeHuffman(ppByte, nRemainingBytes, data))    // data
+         return false;
+ 
+       return true;    // done.
+@@ -614,6 +627,10 @@ bool Lerc2::ReadTiles(const Byte** ppByte, T* data) const
+   int height = m_headerInfo.nRows;
+   int width = m_headerInfo.nCols;
+ 
++  if( mbSize <= 0 || height < 0 || width < 0 ||
++      height > std::numeric_limits<int>::max() - (mbSize - 1) ||
++      width > std::numeric_limits<int>::max() - (mbSize - 1) )
++    return false;
+   int numTilesVert = (height + mbSize - 1) / mbSize;
+   int numTilesHori = (width + mbSize - 1) / mbSize;
+ 
+@@ -631,7 +648,7 @@ bool Lerc2::ReadTiles(const Byte** ppByte, T* data) const
+       if (jTile == numTilesHori - 1)
+         tileW = width - j0;
+ 
+-      if (!ReadTile(ppByte, data, i0, i0 + tileH, j0, j0 + tileW, bufferVec))
++      if (!ReadTile(ppByte, nRemainingBytes, data, i0, i0 + tileH, j0, j0 + tileW, bufferVec))
+         return false;
+     }
+   }
+@@ -909,13 +926,18 @@ bool Lerc2::WriteTile(const T* data, Byte** ppByte, int& numBytesWritten,
+ // -------------------------------------------------------------------------- ;
+ 
+ template<class T>
+-bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j1,
++bool Lerc2::ReadTile(const Byte** ppByte, size_t& nRemainingBytesInOut,
++                     T* data, int i0, int i1, int j0, int j1,
+                      std::vector<unsigned int>& bufferVec) const
+ {
++  size_t nRemainingBytes = nRemainingBytesInOut;
+   const Byte* ptr = *ppByte;
+   int numPixel = 0;
+ 
++  if( nRemainingBytes < 1 )
++    return false;
+   Byte comprFlag = *ptr++;
++  nRemainingBytes -= 1;
+   int bits67 = comprFlag >> 6;
+   //comprFlag &= 63;
+ 
+@@ -936,6 +958,7 @@ bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j
+     }
+ 
+     *ppByte = ptr;
++    nRemainingBytesInOut = nRemainingBytes;
+     return true;
+   }
+ 
+@@ -949,7 +972,10 @@ bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j
+       for (int j = j0; j < j1; j++, k++)
+         if (m_bitMask.IsValid(k))
+         {
++          if( nRemainingBytes < sizeof(T) )
++            return false;
+           data[k] = *srcPtr++;
++          nRemainingBytes -= sizeof(T);
+           numPixel++;
+         }
+     }
+@@ -960,7 +986,9 @@ bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j
+   {
+     // read z's as int arr bit stuffed
+     DataType dtUsed = GetDataTypeUsed(bits67);
+-    double offset = ReadVariableDataType(&ptr, dtUsed);
++    double offset;
++    if( !ReadVariableDataType(&ptr, nRemainingBytes, dtUsed, &offset) )
++      return false;
+ 
+     if (comprFlag == 3)
+     {
+@@ -974,7 +1002,7 @@ bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j
+     }
+     else
+     {
+-      if (!m_bitStuffer2.Decode(&ptr, bufferVec))
++      if (!m_bitStuffer2.Decode(&ptr, nRemainingBytes, bufferVec))
+         return false;
+ 
+       double invScale = 2 * m_headerInfo.maxZError;    // for int types this is int
+@@ -1009,6 +1037,7 @@ bool Lerc2::ReadTile(const Byte** ppByte, T* data, int i0, int i1, int j0, int j
+   }
+ 
+   *ppByte = ptr;
++  nRemainingBytesInOut = nRemainingBytes;
+   return true;
+ }
+ 
+@@ -1135,7 +1164,7 @@ bool Lerc2::WriteVariableDataType(Byte** ppByte, double z, DataType dtUsed)
+ // -------------------------------------------------------------------------- ;
+ 
+ inline
+-double Lerc2::ReadVariableDataType(const Byte** ppByte, DataType dtUsed)
++bool Lerc2::ReadVariableDataType(const Byte** ppByte, size_t& nRemainingBytes, DataType dtUsed, double* pdfOutVal)
+ {
+   const Byte* ptr = *ppByte;
+ 
+@@ -1143,60 +1172,93 @@ double Lerc2::ReadVariableDataType(const Byte** ppByte, DataType dtUsed)
+   {
+     case DT_Char:
+     {
++      if( nRemainingBytes < 1 )
++        return false;
+       char c = *((char*)ptr);
+       *ppByte = ptr + 1;
+-      return c;
++      *pdfOutVal = c;
++      nRemainingBytes -= 1;
++      return true;
+     }
+     case DT_Byte:
+     {
++      if( nRemainingBytes < 1 )
++        return false;
+       Byte b = *((Byte*)ptr);
+       *ppByte = ptr + 1;
+-      return b;
++      *pdfOutVal = b;
++      nRemainingBytes -= 1;
++      return true;
+     }
+     case DT_Short:
+     {
++      if( nRemainingBytes < 2 )
++        return false;
+       short s;
+       memcpy(&s, ptr, sizeof(short));
+       *ppByte = ptr + 2;
+-      return s;
++      *pdfOutVal = s;
++      nRemainingBytes -= 2;
++      return true;
+     }
+     case DT_UShort:
+     {
++      if( nRemainingBytes < 2 )
++        return false;
+       unsigned short us;
+       memcpy(&us, ptr, sizeof(unsigned short));
+       *ppByte = ptr + 2;
+-      return us;
++      *pdfOutVal = us;
++      nRemainingBytes -= 2;
++      return true;
+     }
+     case DT_Int:
+     {
++      if( nRemainingBytes < 4 )
++        return false;
+       int i;
+       memcpy(&i, ptr, sizeof(int));
+       *ppByte = ptr + 4;
+-      return i;
++      *pdfOutVal = i;
++      nRemainingBytes -= 4;
++      return true;
+     }
+     case DT_UInt:
+     {
++      if( nRemainingBytes < 4 )
++        return false;
+       unsigned int n;
+       memcpy(&n, ptr, sizeof(unsigned int));
+       *ppByte = ptr + 4;
+-      return n;
++      *pdfOutVal = n;
++      nRemainingBytes -= 4;
++      return true;
+     }
+     case DT_Float:
+     {
++      if( nRemainingBytes < 4 )
++        return false;
+       float f;
+       memcpy(&f, ptr, sizeof(float));
+       *ppByte = ptr + 4;
+-      return f;
++      *pdfOutVal = f;
++      nRemainingBytes -= 4;
++      return true;
+     }
+     case DT_Double:
+     {
++      if( nRemainingBytes < 8 )
++        return false;
+       double d;
+       memcpy(&d, ptr, sizeof(double));
+       *ppByte = ptr + 8;
+-      return d;
++      *pdfOutVal = d;
++      nRemainingBytes -= 8;
++      return true;
+     }
+     default:
+-      return 0;
++      *pdfOutVal = 0;
++      return true;
+   }
+ }
+ 
+@@ -1392,7 +1454,7 @@ bool Lerc2::EncodeHuffman(const T* data, Byte** ppByte, T& zMinA, T& zMaxA) cons
+ // -------------------------------------------------------------------------- ;
+ 
+ template<class T>
+-bool Lerc2::DecodeHuffman(const Byte** ppByte, T* data) const
++bool Lerc2::DecodeHuffman(const Byte** ppByte, size_t& nRemainingBytesInOut, T* data) const
+ {
+   if (!data || !ppByte || !(*ppByte))
+     return false;
+@@ -1402,6 +1464,7 @@ bool Lerc2::DecodeHuffman(const Byte** ppByte, T* data) const
+   int width = m_headerInfo.nCols;
+   T prevVal = 0;
+ 
++  size_t nRemainingBytes = nRemainingBytesInOut;
+   const unsigned int* arr = (const unsigned int*)(*ppByte);
+   const unsigned int* srcPtr = arr;
+   int bitPos = 0;
+@@ -1417,7 +1480,7 @@ bool Lerc2::DecodeHuffman(const Byte** ppByte, T* data) const
+       for (int j = 0; j < width; j++, k++)
+       {
+         int val = 0;
+-        if (!huffman.DecodeOneValue(&srcPtr, bitPos, numBitsLUT, val))
++        if (!huffman.DecodeOneValue(&srcPtr, nRemainingBytes, bitPos, numBitsLUT, val))
+           return false;
+ 
+         T delta = (T)(val - offset);
+@@ -1440,7 +1503,7 @@ bool Lerc2::DecodeHuffman(const Byte** ppByte, T* data) const
+         if (m_bitMask.IsValid(k))
+         {
+           int val = 0;
+-          if (!huffman.DecodeOneValue(&srcPtr, bitPos, numBitsLUT, val))
++          if (!huffman.DecodeOneValue(&srcPtr, nRemainingBytes, bitPos, numBitsLUT, val))
+             return false;
+ 
+           T delta = (T)(val - offset);
+@@ -1462,7 +1525,10 @@ bool Lerc2::DecodeHuffman(const Byte** ppByte, T* data) const
+   }
+ 
+   size_t numUInts = srcPtr - arr + (bitPos > 0 ? 1 : 0) + 1;    // add one more as the decode LUT can read ahead
++  if( nRemainingBytes < numUInts * sizeof(unsigned int))
++    return false;
+   *ppByte += numUInts * sizeof(unsigned int);
++  nRemainingBytesInOut -= numUInts * sizeof(unsigned int);
+   return true;
+ }
+ 
+diff --git a/gdal/frmts/mrf/libLERC/RLE.cpp b/gdal/frmts/mrf/libLERC/RLE.cpp
+index 0e06b10c60..3fb8c6d2c2 100644
+--- a/gdal/frmts/mrf/libLERC/RLE.cpp
++++ b/gdal/frmts/mrf/libLERC/RLE.cpp
+@@ -228,7 +228,7 @@ bool RLE::compress(const Byte* arr, size_t numBytes,
+   {
+     Byte* arr2 = NULL;
+     size_t numBytes2 = 0;
+-    if (!decompress(*arrRLE, &arr2, numBytes2) || numBytes2 != numBytes)
++    if (!decompress(*arrRLE, numBytesRLE, &arr2, numBytes2) || numBytes2 != numBytes)
+     {
+       delete[] arr2;
+       return false;
+@@ -244,7 +244,7 @@ bool RLE::compress(const Byte* arr, size_t numBytes,
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool RLE::decompress(const Byte* arrRLE, Byte** arr, size_t& numBytes) const
++bool RLE::decompress(const Byte* arrRLE, size_t nRemainingSizeIn, Byte** arr, size_t& numBytes) const
+ {
+   if (!arrRLE)
+     return false;
+@@ -252,12 +252,23 @@ bool RLE::decompress(const Byte* arrRLE, Byte** arr, size_t& numBytes) const
+   // first count the encoded bytes
+   const Byte* srcPtr = arrRLE;
+   size_t sum = 0;
++  size_t nRemainingSize = nRemainingSizeIn;
++  if( nRemainingSize < 2 )
++    return false;
+   short cnt = readCount(&srcPtr);
++  nRemainingSize -= 2;
+   while (cnt != -32768)
+   {
+     sum += (cnt < 0) ? -cnt : cnt;
+-    srcPtr += (cnt > 0) ? cnt : 1;
++    size_t nInc = (cnt > 0) ? cnt : 1;
++    if( nRemainingSize < nInc )
++        return false;
++    srcPtr += nInc;
++    nRemainingSize -= nInc;
++    if( nRemainingSize < 2 )
++      return false;
+     cnt = readCount(&srcPtr);
++    nRemainingSize -= 2;
+   }
+ 
+   numBytes = sum;
+@@ -270,30 +281,44 @@ bool RLE::decompress(const Byte* arrRLE, Byte** arr, size_t& numBytes) const
+   if (!*arr)
+     return false;
+ 
+-  return decompress(arrRLE, *arr);
++  return decompress(arrRLE, nRemainingSizeIn, *arr);
+ }
+ 
+ // -------------------------------------------------------------------------- ;
+ 
+-bool RLE::decompress(const Byte* arrRLE, Byte* arr)
++bool RLE::decompress(const Byte* arrRLE, size_t nRemainingSize, Byte* arr)
+ {
+   if (!arrRLE || !arr)
+     return false;
+ 
+   const Byte* srcPtr = arrRLE;
+   Byte* dstPtr = arr;
++  if( nRemainingSize < 2 )
++    return false;
+   short cnt = readCount(&srcPtr);
++  nRemainingSize -= 2;
+   while (cnt != -32768)
+   {
+     int i = (cnt < 0) ? -cnt: cnt ;
+     if (cnt > 0)
++    {
++      if( nRemainingSize < static_cast<size_t>(i) )
++        return false;
++      nRemainingSize -= i;
+       while (i--) *dstPtr++ = *srcPtr++;
++    }
+     else
+     {
++      if( nRemainingSize < 1 )
++        return false;
++      nRemainingSize -= 1;
+       Byte b = *srcPtr++;
+       while (i--) *dstPtr++ = b;
+     }
++    if( nRemainingSize < 2 )
++        return false;
+     cnt = readCount(&srcPtr);
++    nRemainingSize -= 2;
+   }
+ 
+   return true;
+diff --git a/gdal/frmts/mrf/libLERC/RLE.h b/gdal/frmts/mrf/libLERC/RLE.h
+index 8f389fc39d..f5d9f7ebb1 100644
+--- a/gdal/frmts/mrf/libLERC/RLE.h
++++ b/gdal/frmts/mrf/libLERC/RLE.h
+@@ -54,10 +54,10 @@ public:
+   // when done, call
+   // delete[] *arr;
+   // cppcheck-suppress functionStatic
+-  bool decompress(const Byte* arrRLE, Byte** arr, size_t& numBytes) const;
++  bool decompress(const Byte* arrRLE, size_t nRemainingSize, Byte** arr, size_t& numBytes) const;
+ 
+   // arr already allocated, just fill
+-  static bool decompress(const Byte* arrRLE, Byte* arr);
++  static bool decompress(const Byte* arrRLE, size_t nRemainingSize, Byte* arr);
+ 
+ protected:
+   int m_minNumEven;

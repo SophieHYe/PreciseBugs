@@ -1,0 +1,1 @@
+commit 780c64e1f09bf7400b94aab594e1993ac97e0557Author: Andreas Kling <kling@serenityos.org>Date:   Mon Dec 21 18:37:53 2020 +0100    LibELF: Fix ELF::Image::symbol_count() asserting on section-less ELF        If we have no sections, we also have no symbols, so just return 0.        Found by oss-fuzz: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=28683

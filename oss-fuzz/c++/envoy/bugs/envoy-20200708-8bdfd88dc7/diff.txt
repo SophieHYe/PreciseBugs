@@ -1,0 +1,115 @@
+diff --git a/docs/root/faq/debugging/why_is_envoy_sending_http2_resets.rst b/docs/root/faq/debugging/why_is_envoy_sending_http2_resets.rst
+new file mode 100644
+index 0000000000..ab0c41cb8a
+--- /dev/null
++++ b/docs/root/faq/debugging/why_is_envoy_sending_http2_resets.rst
+@@ -0,0 +1,20 @@
++.. _why_is_envoy_sending_http2_resets:
++
++Why is Envoy sending HTTP/2 resets?
++===================================
++
++The HTTP/2 reset path is mostly governed by the codec Envoy uses to frame HTTP/2, nghttp2. nghttp2 has
++extremely good adherence to the HTTP/2 spec, but as many clients are not exactly as compliant, this
++mismatch can cause unexpected resets. Unfortunately, unlike the debugging the 
++:ref:`internal response path <why_is_envoy_sending_internal_responses>`, Envoy has limited visibility into
++the specific reason nghttp2 reset a given stream.
++
++If you have a reproducible failure case, you can run it against a debug Envoy with "-l trace" to get
++detailed nghttp2 error logs, which often indicate which header failed compliance checks. Alternately,
++if you can afford to run with "-l trace" on a machine encountering the errors, you can look for logs
++from the file "source/common/http/http2/codec_impl.cc" of the form
++`invalid http2: [nghttp2 error detail]`
++for example:
++`invalid http2: Invalid HTTP header field was received: frame type: 1, stream: 1, name: [content-length], value: [3]`
++
++
+diff --git a/docs/root/faq/overview.rst b/docs/root/faq/overview.rst
+index a0a160cb21..d8225f9593 100644
+--- a/docs/root/faq/overview.rst
++++ b/docs/root/faq/overview.rst
+@@ -35,6 +35,7 @@ Debugging
+   :maxdepth: 2
+ 
+   debugging/why_is_envoy_sending_internal_responses
++  debugging/why_is_envoy_sending_http2_resets
+   debugging/why_is_envoy_404ing_connect_requests
+   debugging/why_is_envoy_sending_413s
+   debugging/why_is_my_route_not_found
+diff --git a/source/common/http/http2/codec_impl.cc b/source/common/http/http2/codec_impl.cc
+index 5328311987..4a94bb3aaf 100644
+--- a/source/common/http/http2/codec_impl.cc
++++ b/source/common/http/http2/codec_impl.cc
+@@ -759,6 +759,11 @@ int ConnectionImpl::onFrameSend(const nghttp2_frame* frame) {
+   return 0;
+ }
+ 
++int ConnectionImpl::onError(absl::string_view error) {
++  ENVOY_CONN_LOG(debug, "invalid http2: {}", connection_, error);
++  return 0;
++}
++
+ int ConnectionImpl::onInvalidFrame(int32_t stream_id, int error_code) {
+   ENVOY_CONN_LOG(debug, "invalid frame: {} on stream {}", connection_, nghttp2_strerror(error_code),
+                  stream_id);
+@@ -1171,6 +1176,11 @@ ConnectionImpl::Http2Callbacks::Http2Callbacks() {
+         ASSERT(frame->hd.length <= len);
+         return static_cast<ConnectionImpl*>(user_data)->packMetadata(frame->hd.stream_id, buf, len);
+       });
++
++  nghttp2_session_callbacks_set_error_callback2(
++      callbacks_, [](nghttp2_session*, int, const char* msg, size_t len, void* user_data) -> int {
++        return static_cast<ConnectionImpl*>(user_data)->onError(absl::string_view(msg, len));
++      });
+ }
+ 
+ ConnectionImpl::Http2Callbacks::~Http2Callbacks() { nghttp2_session_callbacks_del(callbacks_); }
+diff --git a/source/common/http/http2/codec_impl.h b/source/common/http/http2/codec_impl.h
+index 895e8d21c0..cf848599c8 100644
+--- a/source/common/http/http2/codec_impl.h
++++ b/source/common/http/http2/codec_impl.h
+@@ -491,6 +491,7 @@ private:
+   int onFrameReceived(const nghttp2_frame* frame);
+   int onBeforeFrameSend(const nghttp2_frame* frame);
+   int onFrameSend(const nghttp2_frame* frame);
++  int onError(absl::string_view error);
+   virtual int onHeader(const nghttp2_frame* frame, HeaderString&& name, HeaderString&& value) PURE;
+   int onInvalidFrame(int32_t stream_id, int error_code);
+   int onStreamClose(int32_t stream_id, uint32_t error_code);
+diff --git a/test/common/http/http2/BUILD b/test/common/http/http2/BUILD
+index 6876a13477..82627e0820 100644
+--- a/test/common/http/http2/BUILD
++++ b/test/common/http/http2/BUILD
+@@ -34,6 +34,7 @@ envoy_cc_test(
+         "//test/mocks/thread_local:thread_local_mocks",
+         "//test/mocks/upstream:transport_socket_match_mocks",
+         "//test/mocks/upstream:upstream_mocks",
++        "//test/test_common:logging_lib",
+         "//test/test_common:registry_lib",
+         "//test/test_common:test_runtime_lib",
+         "//test/test_common:utility_lib",
+diff --git a/test/common/http/http2/codec_impl_test.cc b/test/common/http/http2/codec_impl_test.cc
+index f6005c0808..55bc371822 100644
+--- a/test/common/http/http2/codec_impl_test.cc
++++ b/test/common/http/http2/codec_impl_test.cc
+@@ -17,6 +17,7 @@
+ #include "test/mocks/network/mocks.h"
+ #include "test/mocks/protobuf/mocks.h"
+ #include "test/mocks/thread_local/mocks.h"
++#include "test/test_common/logging.h"
+ #include "test/test_common/printers.h"
+ #include "test/test_common/registry.h"
+ #include "test/test_common/test_runtime.h"
+@@ -494,7 +495,11 @@ TEST_P(Http2CodecImplTest, Invalid204WithContentLength) {
+     response_headers.addCopy(std::to_string(i), std::to_string(i));
+   }
+ 
+-  EXPECT_THROW(response_encoder_->encodeHeaders(response_headers, false), ClientCodecError);
++  EXPECT_LOG_CONTAINS(
++      "debug",
++      "Invalid HTTP header field was received: frame type: 1, stream: 1, name: [content-length], "
++      "value: [3]",
++      EXPECT_THROW(response_encoder_->encodeHeaders(response_headers, false), ClientCodecError));
+   EXPECT_EQ(1, client_stats_store_.counter("http2.rx_messaging_error").value());
+ };
+ 

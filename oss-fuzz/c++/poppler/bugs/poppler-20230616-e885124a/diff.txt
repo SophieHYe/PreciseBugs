@@ -1,0 +1,52 @@
+diff --git a/poppler/UTF.cc b/poppler/UTF.cc
+index 8cf8056c..5d971f9d 100644
+--- a/poppler/UTF.cc
++++ b/poppler/UTF.cc
+@@ -365,7 +365,7 @@ uint16_t *utf8ToUtf16(const char *utf8, int *len)
+         *len = n;
+     }
+     uint16_t *utf16 = (uint16_t *)gmallocn(n + 1, sizeof(uint16_t));
+-    utf8ToUtf16(utf8, utf16);
++    utf8ToUtf16(utf8, utf16, n + 1, INT_MAX);
+     return utf16;
+ }
+ 
+diff --git a/poppler/UTF.h b/poppler/UTF.h
+index cdcfb57a..8fec5a93 100644
+--- a/poppler/UTF.h
++++ b/poppler/UTF.h
+@@ -69,7 +69,7 @@ int POPPLER_PRIVATE_EXPORT utf8CountUtf16CodeUnits(const char *utf8);
+ //  maxUtf8 - maximum number of UTF-8 bytes to convert. Conversion stops when
+ //            either this count is reached or a null is encountered.
+ // Returns number of UTF-16 code units written (excluding NULL).
+-int POPPLER_PRIVATE_EXPORT utf8ToUtf16(const char *utf8, uint16_t *utf16, int maxUtf16 = INT_MAX, int maxUtf8 = INT_MAX);
++int POPPLER_PRIVATE_EXPORT utf8ToUtf16(const char *utf8, uint16_t *utf16, int maxUtf16, int maxUtf8);
+ 
+ // Allocate utf16 string and convert utf8 into it.
+ uint16_t POPPLER_PRIVATE_EXPORT *utf8ToUtf16(const char *utf8, int *len = nullptr);
+diff --git a/qt5/tests/check_utf_conversion.cpp b/qt5/tests/check_utf_conversion.cpp
+index 73c684ee..506a2a13 100644
+--- a/qt5/tests/check_utf_conversion.cpp
++++ b/qt5/tests/check_utf_conversion.cpp
+@@ -94,7 +94,7 @@ void TestUTFConversion::testUTF()
+     QCOMPARE(len, s.size()); // QString size() returns number of code units, not code points
+     Q_ASSERT(len < (int)sizeof(utf16Buf)); // if this fails, make utf16Buf larger
+ 
+-    len = utf8ToUtf16(str, utf16Buf);
++    len = utf8ToUtf16(str, utf16Buf, sizeof(utf16Buf), INT_MAX);
+     QVERIFY(compare(utf16Buf, s.utf16()));
+     QCOMPARE(len, s.size());
+ 
+diff --git a/qt6/tests/check_utf_conversion.cpp b/qt6/tests/check_utf_conversion.cpp
+index 2cac7582..06366724 100644
+--- a/qt6/tests/check_utf_conversion.cpp
++++ b/qt6/tests/check_utf_conversion.cpp
+@@ -92,7 +92,7 @@ void TestUTFConversion::testUTF()
+     QCOMPARE(len, s.size()); // QString size() returns number of code units, not code points
+     Q_ASSERT(len < (int)sizeof(utf16Buf)); // if this fails, make utf16Buf larger
+ 
+-    len = utf8ToUtf16(str, utf16Buf);
++    len = utf8ToUtf16(str, utf16Buf, sizeof(utf16Buf), INT_MAX);
+     QVERIFY(compare(utf16Buf, s.utf16()));
+     QCOMPARE(len, s.size());
+ 

@@ -1,0 +1,428 @@
+diff --git a/resources/sksl/errors/Ossfuzz47935.sksl b/resources/sksl/errors/Ossfuzz47935.sksl
+index dc2ddc3e78..833e7ace27 100644
+--- a/resources/sksl/errors/Ossfuzz47935.sksl
++++ b/resources/sksl/errors/Ossfuzz47935.sksl
+@@ -2,5 +2,4 @@ void j = half[4](float[4](5,2,3,1));
+ 
+ /*%%*
+ variables of type 'void' are not allowed
+-expected 'void', but found 'half[4]'
+ *%%*/
+diff --git a/resources/sksl/errors/VoidVariable.rts b/resources/sksl/errors/VoidVariable.rts
+index a48b15e2d2..fcd4290c57 100644
+--- a/resources/sksl/errors/VoidVariable.rts
++++ b/resources/sksl/errors/VoidVariable.rts
+@@ -3,9 +3,18 @@ void func();
+ 
+ void a;
+ void b = func();
++int c;
++
++void m() {
++    // Attempts to assign into a void variable via the switch-hoisting rewrite.
++    switch (c) {
++        case 1: void c = a;
++    }
++}
+ 
+ /*%%*
+ variables of type 'void' are not allowed
+ variables of type 'void' are not allowed
+-global variable initializer must be a constant expression
++unknown identifier 'a'
++variables of type 'void' are not allowed
+ *%%*/
+diff --git a/src/sksl/ir/SkSLInterfaceBlock.cpp b/src/sksl/ir/SkSLInterfaceBlock.cpp
+index af72f30cbc..bfeb8b28bb 100644
+--- a/src/sksl/ir/SkSLInterfaceBlock.cpp
++++ b/src/sksl/ir/SkSLInterfaceBlock.cpp
+@@ -70,12 +70,13 @@ std::unique_ptr<InterfaceBlock> InterfaceBlock::Convert(const Context& context,
+         }
+     }
+     // Build a struct type corresponding to the passed-in fields.
+-    const Type* type = context.fSymbolTable->add(Type::MakeStructType(context,
+-                                                                      pos,
+-                                                                      typeName,
+-                                                                      std::move(fields),
+-                                                                      /*interfaceBlock=*/true));
++    const Type* baseType = context.fSymbolTable->add(Type::MakeStructType(context,
++                                                                          pos,
++                                                                          typeName,
++                                                                          std::move(fields),
++                                                                          /*interfaceBlock=*/true));
+     // Array-ify the type if necessary.
++    const Type* type = baseType;
+     if (arraySize > 0) {
+         arraySize = type->convertArraySize(context, pos, pos, arraySize);
+         if (!arraySize) {
+@@ -83,13 +84,16 @@ std::unique_ptr<InterfaceBlock> InterfaceBlock::Convert(const Context& context,
+         }
+         type = context.fSymbolTable->addArrayDimension(type, arraySize);
+     }
++
+     // Error-check the interface block as if it were being declared as a global variable.
+     VarDeclaration::ErrorCheck(context,
+                                pos,
+                                modifiersPos,
+                                modifiers,
+                                type,
++                               baseType,
+                                VariableStorage::kGlobal);
++
+     // Create a global variable for the Interface Block.
+     std::unique_ptr<SkSL::Variable> var = SkSL::Variable::Convert(context,
+                                                                   pos,
+diff --git a/src/sksl/ir/SkSLVarDeclarations.cpp b/src/sksl/ir/SkSLVarDeclarations.cpp
+index ea0224c732..f8cedd6b05 100644
+--- a/src/sksl/ir/SkSLVarDeclarations.cpp
++++ b/src/sksl/ir/SkSLVarDeclarations.cpp
+@@ -137,26 +137,15 @@ void VarDeclaration::ErrorCheck(const Context& context,
+                                 Position modifiersPosition,
+                                 const Modifiers& modifiers,
+                                 const Type* type,
++                                const Type* baseType,
+                                 Variable::Storage storage) {
+-    const Type* baseType = type;
+-    if (baseType->isArray()) {
+-        baseType = &baseType->componentType();
+-    }
+-    SkASSERT(!baseType->isArray());
+-
+-    if (baseType->matches(*context.fTypes.fInvalid)) {
+-        context.fErrors->error(pos, "invalid type");
+-        return;
+-    }
+-    if (baseType->isVoid()) {
+-        context.fErrors->error(pos, "variables of type 'void' are not allowed");
+-        return;
+-    }
++    SkASSERT(type->isArray() ? baseType->matches(type->componentType())
++                             : baseType->matches(*type));
+ 
+     if (baseType->componentType().isOpaque() && !baseType->componentType().isAtomic() &&
+         storage != Variable::Storage::kGlobal) {
+-        context.fErrors->error(pos,
+-                "variables of type '" + baseType->displayName() + "' must be global");
++        context.fErrors->error(pos, "variables of type '" + baseType->displayName() +
++                                    "' must be global");
+     }
+     if ((modifiers.fFlags & Modifiers::kIn_Flag) && baseType->isMatrix()) {
+         context.fErrors->error(pos, "'in' variables may not have matrix type");
+@@ -211,9 +200,8 @@ void VarDeclaration::ErrorCheck(const Context& context,
+ 
+         if (!isWorkgroup &&
+             !(baseType->isInterfaceBlock() ? isWritableStorageBuffer : isBlockMember)) {
+-            context.fErrors->error(pos,
+-                                   "atomics are only permitted in workgroup variables and writable "
+-                                   "storage blocks");
++            context.fErrors->error(pos, "atomics are only permitted in workgroup variables and "
++                                        "writable storage blocks");
+         }
+     }
+     if (modifiers.fLayout.fFlags & Layout::kColor_Flag) {
+@@ -221,17 +209,15 @@ void VarDeclaration::ErrorCheck(const Context& context,
+             context.fErrors->error(pos, "'layout(color)' is only permitted in runtime effects");
+         }
+         if (!(modifiers.fFlags & Modifiers::kUniform_Flag)) {
+-            context.fErrors->error(pos,
+-                                   "'layout(color)' is only permitted on 'uniform' variables");
++            context.fErrors->error(pos, "'layout(color)' is only permitted on 'uniform' variables");
+         }
+         auto validColorXformType = [](const Type& t) {
+             return t.isVector() && t.componentType().isFloat() &&
+                    (t.columns() == 3 || t.columns() == 4);
+         };
+         if (!validColorXformType(*baseType)) {
+-            context.fErrors->error(pos,
+-                                   "'layout(color)' is not permitted on variables of type '" +
+-                                           baseType->displayName() + "'");
++            context.fErrors->error(pos, "'layout(color)' is not permitted on variables of type '" +
++                                        baseType->displayName() + "'");
+         }
+     }
+ 
+@@ -335,9 +321,19 @@ void VarDeclaration::ErrorCheck(const Context& context,
+ 
+ bool VarDeclaration::ErrorCheckAndCoerce(const Context& context,
+                                          const Variable& var,
++                                         const Type* baseType,
+                                          std::unique_ptr<Expression>& value) {
++    if (baseType->matches(*context.fTypes.fInvalid)) {
++        context.fErrors->error(var.fPosition, "invalid type");
++        return false;
++    }
++    if (baseType->isVoid()) {
++        context.fErrors->error(var.fPosition, "variables of type 'void' are not allowed");
++        return false;
++    }
++
+     ErrorCheck(context, var.fPosition, var.modifiersPosition(), var.modifiers(), &var.type(),
+-               var.storage());
++               baseType, var.storage());
+     if (value) {
+         if (var.type().isOpaque()) {
+             context.fErrors->error(value->fPosition, "opaque type '" + var.type().displayName() +
+@@ -426,15 +422,15 @@ std::unique_ptr<VarDeclaration> VarDeclaration::Convert(const Context& context,
+ std::unique_ptr<VarDeclaration> VarDeclaration::Convert(const Context& context,
+                                                         std::unique_ptr<Variable> var,
+                                                         std::unique_ptr<Expression> value) {
+-    if (!ErrorCheckAndCoerce(context, *var, value)) {
+-        return nullptr;
+-    }
+     const Type* baseType = &var->type();
+     int arraySize = 0;
+     if (baseType->isArray()) {
+         arraySize = baseType->columns();
+         baseType = &baseType->componentType();
+     }
++    if (!ErrorCheckAndCoerce(context, *var, baseType, value)) {
++        return nullptr;
++    }
+     std::unique_ptr<VarDeclaration> varDecl = VarDeclaration::Make(context, var.get(), baseType,
+                                                                    arraySize, std::move(value));
+     if (!varDecl) {
+diff --git a/src/sksl/ir/SkSLVarDeclarations.h b/src/sksl/ir/SkSLVarDeclarations.h
+index 7da7323dbf..9ffa908f05 100644
+--- a/src/sksl/ir/SkSLVarDeclarations.h
++++ b/src/sksl/ir/SkSLVarDeclarations.h
+@@ -60,7 +60,8 @@ public:
+     // errors if needed. This method is implicitly called during Convert(), but is also explicitly
+     // called while processing interface block fields.
+     static void ErrorCheck(const Context& context, Position pos, Position modifiersPosition,
+-                           const Modifiers& modifiers, const Type* type, Variable::Storage storage);
++                           const Modifiers& modifiers, const Type* type, const Type* baseType,
++                           Variable::Storage storage);
+ 
+     // For use when no Variable yet exists. The newly-created variable will be added to the active
+     // symbol table. Performs proper error checking and type coercion; reports errors via
+@@ -119,6 +120,7 @@ public:
+ private:
+     static bool ErrorCheckAndCoerce(const Context& context,
+                                     const Variable& var,
++                                    const Type* baseType,
+                                     std::unique_ptr<Expression>& value);
+ 
+     Variable* fVar;
+diff --git a/tests/sksl/errors/Ossfuzz47935.glsl b/tests/sksl/errors/Ossfuzz47935.glsl
+index 7be8dd0ba5..93146d7f2c 100644
+--- a/tests/sksl/errors/Ossfuzz47935.glsl
++++ b/tests/sksl/errors/Ossfuzz47935.glsl
+@@ -3,7 +3,4 @@
+ error: 1: variables of type 'void' are not allowed
+ void j = half[4](float[4](5,2,3,1));
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-error: 1: expected 'void', but found 'half[4]'
+-void j = half[4](float[4](5,2,3,1));
+-         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+-2 errors
++1 error
+diff --git a/tests/sksl/errors/VoidVariable.glsl b/tests/sksl/errors/VoidVariable.glsl
+index 04bdb7846d..1af3fb3ad9 100644
+--- a/tests/sksl/errors/VoidVariable.glsl
++++ b/tests/sksl/errors/VoidVariable.glsl
+@@ -6,7 +6,10 @@ void a;
+ error: 5: variables of type 'void' are not allowed
+ void b = func();
+ ^^^^^^^^^^^^^^^
+-error: 5: global variable initializer must be a constant expression
+-void b = func();
+-         ^^^^^^
+-3 errors
++error: 11: unknown identifier 'a'
++        case 1: void c = a;
++                         ^
++error: 11: variables of type 'void' are not allowed
++        case 1: void c = a;
++                ^^^^^^^^^^
++4 errors
+diff --git a/tests/sksl/intrinsics/Sample.skrp b/tests/sksl/intrinsics/Sample.skrp
+index b47b907daf..bcbe4a91a0 100644
+--- a/tests/sksl/intrinsics/Sample.skrp
++++ b/tests/sksl/intrinsics/Sample.skrp
+@@ -9,6 +9,9 @@ void main()
+ error: 4: unknown identifier 'sample'
+     half4 c = sample(t, half2(0));
+               ^^^^^^
++error: 4: unknown identifier 't'
++    half4 c = sample(t, half2(0));
++                     ^
+ error: 5: unknown identifier 'sk_FragColor'
+     sk_FragColor = c * sample(t, half3(1));
+     ^^^^^^^^^^^^
+@@ -18,4 +21,7 @@ error: 5: unknown identifier 'c'
+ error: 5: unknown identifier 'sample'
+     sk_FragColor = c * sample(t, half3(1));
+                        ^^^^^^
+-6 errors
++error: 5: unknown identifier 't'
++    sk_FragColor = c * sample(t, half3(1));
++                              ^
++8 errors
+diff --git a/tests/sksl/intrinsics/SampleGrad.skrp b/tests/sksl/intrinsics/SampleGrad.skrp
+index aca94c6948..a2592f6b2a 100644
+--- a/tests/sksl/intrinsics/SampleGrad.skrp
++++ b/tests/sksl/intrinsics/SampleGrad.skrp
+@@ -6,4 +6,7 @@ layout(binding=0) uniform sampler2D t;
+ error: 4: unknown identifier 'sampleGrad'
+     return sampleGrad(t, coords, dFdx(coords), dFdy(coords));
+            ^^^^^^^^^^
+-2 errors
++error: 4: unknown identifier 't'
++    return sampleGrad(t, coords, dFdx(coords), dFdy(coords));
++                      ^
++3 errors
+diff --git a/tests/sksl/intrinsics/SampleLod.skrp b/tests/sksl/intrinsics/SampleLod.skrp
+index 3601de3119..690dc57401 100644
+--- a/tests/sksl/intrinsics/SampleLod.skrp
++++ b/tests/sksl/intrinsics/SampleLod.skrp
+@@ -9,6 +9,9 @@ void main()
+ error: 4: unknown identifier 'sampleLod'
+     half4 c = sampleLod(t, half2(0), 0);
+               ^^^^^^^^^
++error: 4: unknown identifier 't'
++    half4 c = sampleLod(t, half2(0), 0);
++                        ^
+ error: 5: unknown identifier 'sk_FragColor'
+     sk_FragColor = c * sampleLod(t, half3(1), 0);
+     ^^^^^^^^^^^^
+@@ -18,4 +21,7 @@ error: 5: unknown identifier 'c'
+ error: 5: unknown identifier 'sampleLod'
+     sk_FragColor = c * sampleLod(t, half3(1), 0);
+                        ^^^^^^^^^
+-6 errors
++error: 5: unknown identifier 't'
++    sk_FragColor = c * sampleLod(t, half3(1), 0);
++                                 ^
++8 errors
+diff --git a/tests/sksl/realistic/GaussianBlur.skrp b/tests/sksl/realistic/GaussianBlur.skrp
+index 939a1396a0..a79f921b0e 100644
+--- a/tests/sksl/realistic/GaussianBlur.skrp
++++ b/tests/sksl/realistic/GaussianBlur.skrp
+@@ -18,6 +18,9 @@ error: 17: unknown identifier 'unorm_Stage1_c0_c0_c0'
+ error: 23: unknown identifier 'sample'
+     half4 textureColor = sample(uTextureSampler_0_Stage1, (clampedCoord) * unorm_Stage1_c0_c0_c0.zw);
+                          ^^^^^^
++error: 23: unknown identifier 'uTextureSampler_0_Stage1'
++    half4 textureColor = sample(uTextureSampler_0_Stage1, (clampedCoord) * unorm_Stage1_c0_c0_c0.zw);
++                                ^^^^^^^^^^^^^^^^^^^^^^^^
+ error: 23: unknown identifier 'unorm_Stage1_c0_c0_c0'
+     half4 textureColor = sample(uTextureSampler_0_Stage1, (clampedCoord) * unorm_Stage1_c0_c0_c0.zw);
+                                                                            ^^^^^^^^^^^^^^^^^^^^^
+@@ -348,4 +351,4 @@ void main()
+ error: 133: unknown identifier 'sk_FragColor'
+         sk_FragColor = output_Stage1 * outputCoverage_Stage0;
+         ^^^^^^^^^^^^
+-116 errors
++117 errors
+diff --git a/tests/sksl/shared/ComplexDelete.skrp b/tests/sksl/shared/ComplexDelete.skrp
+index c42145ed18..6398c31287 100644
+--- a/tests/sksl/shared/ComplexDelete.skrp
++++ b/tests/sksl/shared/ComplexDelete.skrp
+@@ -12,4 +12,7 @@ error: 6: unknown identifier 'sk_FragColor'
+ error: 8: unknown identifier 'sample'
+             (tmpColor = sample(s, float2(1)),
+                         ^^^^^^
+-4 errors
++error: 8: unknown identifier 's'
++            (tmpColor = sample(s, float2(1)),
++                               ^
++5 errors
+diff --git a/tests/sksl/shared/FunctionParametersOfTextureAndSamplerType.skrp b/tests/sksl/shared/FunctionParametersOfTextureAndSamplerType.skrp
+index 9c47124f3d..d14729f979 100644
+--- a/tests/sksl/shared/FunctionParametersOfTextureAndSamplerType.skrp
++++ b/tests/sksl/shared/FunctionParametersOfTextureAndSamplerType.skrp
+@@ -21,4 +21,10 @@ void main() {
+ error: 15: unknown identifier 'sk_FragColor'
+     sk_FragColor = helper(aTexture, aSampledTexture);
+     ^^^^^^^^^^^^
+-7 errors
++error: 15: unknown identifier 'aTexture'
++    sk_FragColor = helper(aTexture, aSampledTexture);
++                          ^^^^^^^^
++error: 15: unknown identifier 'aSampledTexture'
++    sk_FragColor = helper(aTexture, aSampledTexture);
++                                    ^^^^^^^^^^^^^^^
++9 errors
+diff --git a/tests/sksl/shared/RectangleTexture.skrp b/tests/sksl/shared/RectangleTexture.skrp
+index 7bb5196f58..20e14e28e8 100644
+--- a/tests/sksl/shared/RectangleTexture.skrp
++++ b/tests/sksl/shared/RectangleTexture.skrp
+@@ -15,16 +15,25 @@ error: 5: unknown identifier 'sk_FragColor'
+ error: 5: unknown identifier 'sample'
+     sk_FragColor = sample(test2D, float2(0.5));
+                    ^^^^^^
++error: 5: unknown identifier 'test2D'
++    sk_FragColor = sample(test2D, float2(0.5));
++                          ^^^^^^
+ error: 6: unknown identifier 'sk_FragColor'
+     sk_FragColor = sample(test2DRect, float2(0.5));
+     ^^^^^^^^^^^^
+ error: 6: unknown identifier 'sample'
+     sk_FragColor = sample(test2DRect, float2(0.5));
+                    ^^^^^^
++error: 6: unknown identifier 'test2DRect'
++    sk_FragColor = sample(test2DRect, float2(0.5));
++                          ^^^^^^^^^^
+ error: 7: unknown identifier 'sk_FragColor'
+     sk_FragColor = sample(test2DRect, float3(0.5));
+     ^^^^^^^^^^^^
+ error: 7: unknown identifier 'sample'
+     sk_FragColor = sample(test2DRect, float3(0.5));
+                    ^^^^^^
+-9 errors
++error: 7: unknown identifier 'test2DRect'
++    sk_FragColor = sample(test2DRect, float3(0.5));
++                          ^^^^^^^^^^
++12 errors
+diff --git a/tests/sksl/shared/Texture2D.skrp b/tests/sksl/shared/Texture2D.skrp
+index 72f17f3699..bf11a36f42 100644
+--- a/tests/sksl/shared/Texture2D.skrp
++++ b/tests/sksl/shared/Texture2D.skrp
+@@ -9,9 +9,15 @@ void main() {
+ error: 4: unknown identifier 'sample'
+     float4 a = sample(tex, float2(0));
+                ^^^^^^
++error: 4: unknown identifier 'tex'
++    float4 a = sample(tex, float2(0));
++                      ^^^
+ error: 5: unknown identifier 'sample'
+     float4 b = sample(tex, float3(0));
+                ^^^^^^
++error: 5: unknown identifier 'tex'
++    float4 b = sample(tex, float3(0));
++                      ^^^
+ error: 6: unknown identifier 'sk_FragColor'
+     sk_FragColor = half4(float2(a.xy), float2(b.zw));
+     ^^^^^^^^^^^^
+@@ -21,4 +27,4 @@ error: 6: unknown identifier 'a'
+ error: 6: unknown identifier 'b'
+     sk_FragColor = half4(float2(a.xy), float2(b.zw));
+                                               ^
+-7 errors
++9 errors
+diff --git a/tests/sksl/shared/TextureSharpen.skrp b/tests/sksl/shared/TextureSharpen.skrp
+index 79eaa4158f..ce7fe0e36c 100644
+--- a/tests/sksl/shared/TextureSharpen.skrp
++++ b/tests/sksl/shared/TextureSharpen.skrp
+@@ -9,9 +9,15 @@ void main() {
+ error: 6: unknown identifier 'sample'
+     float4 a = sample(s, float2(0));
+                ^^^^^^
++error: 6: unknown identifier 's'
++    float4 a = sample(s, float2(0));
++                      ^
+ error: 7: unknown identifier 'sample'
+     float4 b = sample(s, float3(0));
+                ^^^^^^
++error: 7: unknown identifier 's'
++    float4 b = sample(s, float3(0));
++                      ^
+ error: 8: unknown identifier 'sk_FragColor'
+     sk_FragColor = half4(half2(a.xy), half2(b.xy));
+     ^^^^^^^^^^^^
+@@ -21,4 +27,4 @@ error: 8: unknown identifier 'a'
+ error: 8: unknown identifier 'b'
+     sk_FragColor = half4(half2(a.xy), half2(b.xy));
+                                             ^
+-7 errors
++9 errors

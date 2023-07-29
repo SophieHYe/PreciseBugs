@@ -1,0 +1,13 @@
+diff --git a/bin/oss-fuzz-setup.sh b/bin/oss-fuzz-setup.sh
+index cc9d65f25b7c..18c3fcfb68d9 100755
+--- a/bin/oss-fuzz-setup.sh
++++ b/bin/oss-fuzz-setup.sh
+@@ -4,8 +4,6 @@ set -e
+ 
+ echo start downloading dependencies at `date -u`
+ 
+-apt-get install -y lockfile-progs
+-
+ # convert FOO := BAR$(MICRO) to FOO=BAR$MICRO
+ source <(sed -e's# := #=#g' download.lst | sed -e 's#[)(]##g')
+ 

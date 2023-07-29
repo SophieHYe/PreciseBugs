@@ -1,0 +1,85 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 650e297d62..1e99cf77ab 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -228,6 +228,7 @@ sksl_shared_tests = [
+   "$_tests/sksl/shared/Offset.sksl",
+   "$_tests/sksl/shared/Operators.sksl",
+   "$_tests/sksl/shared/Ossfuzz26167.sksl",
++  "$_tests/sksl/shared/Ossfuzz27614.sksl",
+   "$_tests/sksl/shared/OutParams.sksl",
+   "$_tests/sksl/shared/OutParamsTricky.sksl",
+   "$_tests/sksl/shared/RectangleTexture.sksl",
+diff --git a/src/sksl/ir/SkSLConstructor.cpp b/src/sksl/ir/SkSLConstructor.cpp
+index 8cbdff5827..0291e9a60f 100644
+--- a/src/sksl/ir/SkSLConstructor.cpp
++++ b/src/sksl/ir/SkSLConstructor.cpp
+@@ -193,4 +193,18 @@ SKSL_FLOAT Constructor::getMatComponent(int col, int row) const {
+     ABORT("can't happen, matrix component out of bounds");
+ }
+ 
++int64_t Constructor::getConstantInt() const {
++    SkASSERT(this->arguments().size() == 1);
++    SkASSERT(this->arguments().front()->type().typeKind() == Type::TypeKind::kScalar);
++    SkASSERT(this->arguments().front()->type().isInteger());
++    return this->arguments().front()->getConstantInt();
++}
++
++SKSL_FLOAT Constructor::getConstantFloat() const {
++    SkASSERT(this->arguments().size() == 1);
++    SkASSERT(this->arguments().front()->type().typeKind() == Type::TypeKind::kScalar);
++    SkASSERT(this->arguments().front()->type().isFloat());
++    return this->arguments().front()->getConstantFloat();
++}
++
+ }  // namespace SkSL
+diff --git a/src/sksl/ir/SkSLConstructor.h b/src/sksl/ir/SkSLConstructor.h
+index 25240b770b..2212ef0615 100644
+--- a/src/sksl/ir/SkSLConstructor.h
++++ b/src/sksl/ir/SkSLConstructor.h
+@@ -112,6 +112,10 @@ public:
+ 
+     SKSL_FLOAT getMatComponent(int col, int row) const override;
+ 
++    int64_t getConstantInt() const override;
++
++    SKSL_FLOAT getConstantFloat() const override;
++
+ private:
+     ExpressionArray fArguments;
+ 
+diff --git a/tests/sksl/shared/Ossfuzz27614.sksl b/tests/sksl/shared/Ossfuzz27614.sksl
+new file mode 100644
+index 0000000000..bb9b8e20e9
+--- /dev/null
++++ b/tests/sksl/shared/Ossfuzz27614.sksl
+@@ -0,0 +1 @@
++void main() { 0.5 - 0 * ~0 - half2(0) + 1; }
+diff --git a/tests/sksl/shared/golden/Ossfuzz27614.glsl b/tests/sksl/shared/golden/Ossfuzz27614.glsl
+new file mode 100644
+index 0000000000..2933520785
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz27614.glsl
+@@ -0,0 +1,3 @@
++
++void main() {
++}
+diff --git a/tests/sksl/shared/golden/Ossfuzz27614.metal b/tests/sksl/shared/golden/Ossfuzz27614.metal
+new file mode 100644
+index 0000000000..c18cef376a
+--- /dev/null
++++ b/tests/sksl/shared/golden/Ossfuzz27614.metal
+@@ -0,0 +1,13 @@
++#include <metal_stdlib>
++#include <simd/simd.h>
++using namespace metal;
++struct Inputs {
++};
++struct Outputs {
++    float4 sk_FragColor [[color(0)]];
++};
++fragment Outputs fragmentMain(Inputs _in [[stage_in]], bool _frontFacing [[front_facing]], float4 _fragCoord [[position]]) {
++    Outputs _outputStruct;
++    thread Outputs* _out = &_outputStruct;
++    return *_out;
++}

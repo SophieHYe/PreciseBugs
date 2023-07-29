@@ -1,0 +1,122 @@
+diff --git a/autotest/gdrivers/zarr_driver.py b/autotest/gdrivers/zarr_driver.py
+index e5b430e499..b1e164c76f 100644
+--- a/autotest/gdrivers/zarr_driver.py
++++ b/autotest/gdrivers/zarr_driver.py
+@@ -2414,6 +2414,10 @@ def test_zarr_read_nczarr_v2(filename,path):
+         assert dims[1].GetName() == 'lon'
+         assert dims[1].GetFullName() == '/MyGroup/Group_A/lon'
+ 
++    if filename == 'data/zarr/nczarr_v2.zarr':
++        mygroup = rg.OpenGroup('MyGroup')
++        assert mygroup.GetMDArrayNames() == ['lon', 'lat', 'dset1']
++
+ 
+ @pytest.mark.parametrize("format", ['ZARR_V2', 'ZARR_V3'])
+ def test_zarr_cache_tile_presence(format):
+@@ -2643,6 +2647,52 @@ def test_zarr_read_invalid_nczarr_dim():
+         gdal.RmdirRecursive('/vsimem/test.zarr')
+ 
+ 
++def test_zarr_read_nczar_repeated_array_names():
++
++    try:
++        gdal.Mkdir('/vsimem/test.zarr', 0)
++
++        j = { "_NCZARR_GROUP":{ "dims":{ "lon": 1 }, "vars": ["a", "a", "lon", "lon"], "groups": ["g", "g"] } }
++
++        gdal.FileFromMemBuffer('/vsimem/test.zarr/.zgroup', json.dumps(j))
++
++        j = { "chunks": [1,1],
++              "compressor": None,
++              "dtype": '!b1',
++              "fill_value": None,
++              "filters": None,
++              "order": "C",
++              "shape": [ 1,1 ],
++              "zarr_format": 2
++        }
++
++        gdal.FileFromMemBuffer('/vsimem/test.zarr/a/.zarray', json.dumps(j))
++
++        j = { "chunks": [1],
++              "compressor": None,
++              "dtype": '!b1',
++              "fill_value": None,
++              "filters": None,
++              "order": "C",
++              "shape": [ 1 ],
++              "zarr_format": 2
++        }
++
++        gdal.FileFromMemBuffer('/vsimem/test.zarr/lon/.zarray', json.dumps(j))
++
++        with gdaltest.error_handler():
++            ds = gdal.OpenEx('/vsimem/test.zarr', gdal.OF_MULTIDIM_RASTER)
++            assert ds
++            rg = ds.GetRootGroup()
++            assert rg.GetMDArrayNames() == ['lon', 'a']
++            ar = rg.OpenMDArray('a')
++            assert ar
++            assert rg.GetGroupNames() == ["g"]
++
++    finally:
++        gdal.RmdirRecursive('/vsimem/test.zarr')
++
++
+ def test_zarr_read_test_overflow_in_AllocateWorkingBuffers_due_to_fortran():
+ 
+     if sys.maxsize < (1 << 32):
+diff --git a/frmts/zarr/zarr_group.cpp b/frmts/zarr/zarr_group.cpp
+index 14298c8052..07f2330bc2 100644
+--- a/frmts/zarr/zarr_group.cpp
++++ b/frmts/zarr/zarr_group.cpp
+@@ -677,35 +677,45 @@ bool ZarrGroupV2::InitFromZGroup(const CPLJSONObject& obj)
+ 
+         const auto vars = nczarrGroup["vars"].ToArray();
+         // open first indexing variables
++        std::set<std::string> oSetIndexingArrayNames;
+         for( const auto& var: vars )
+         {
+             const auto osVarName = var.ToString();
+             if( IsValidName(osVarName) &&
+-                m_oMapDimensions.find(osVarName) != m_oMapDimensions.end() )
++                m_oMapDimensions.find(osVarName) != m_oMapDimensions.end() &&
++                m_oMapMDArrays.find(osVarName) == m_oMapMDArrays.end() &&
++                oSetIndexingArrayNames.find(osVarName) == oSetIndexingArrayNames.end() )
+             {
+-                m_aosArrays.emplace_back(osVarName);
++                oSetIndexingArrayNames.insert(osVarName);
+                 OpenMDArray(osVarName);
+             }
+         }
+ 
+         // add regular arrays
++        std::set<std::string> oSetRegularArrayNames;
+         for( const auto& var: vars )
+         {
+             const auto osVarName = var.ToString();
+             if( IsValidName(osVarName) &&
+-                m_oMapDimensions.find(osVarName) == m_oMapDimensions.end() )
++                m_oMapDimensions.find(osVarName) == m_oMapDimensions.end() &&
++                m_oMapMDArrays.find(osVarName) == m_oMapMDArrays.end() &&
++                oSetRegularArrayNames.find(osVarName) == oSetRegularArrayNames.end() )
+             {
++                oSetRegularArrayNames.insert(osVarName);
+                 m_aosArrays.emplace_back(osVarName);
+             }
+         }
+ 
+         // Finally list groups
++        std::set<std::string> oSetGroups;
+         const auto groups = nczarrGroup["groups"].ToArray();
+         for( const auto& group: groups )
+         {
+             const auto osGroupName = group.ToString();
+-            if( IsValidName(osGroupName) )
++            if( IsValidName(osGroupName) &&
++                oSetGroups.find(osGroupName) == oSetGroups.end() )
+             {
++                oSetGroups.insert(osGroupName);
+                 m_aosGroups.emplace_back(osGroupName);
+             }
+         }

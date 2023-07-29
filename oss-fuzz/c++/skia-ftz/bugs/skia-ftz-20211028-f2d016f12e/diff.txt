@@ -1,0 +1,62 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 2f17a093f5..8b0c49a24c 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -111,6 +111,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz38865.sksl",
+   "/sksl/errors/Ossfuzz38944.sksl",
+   "/sksl/errors/Ossfuzz39000.sksl",
++  "/sksl/errors/Ossfuzz40427.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz40427.sksl b/resources/sksl/errors/Ossfuzz40427.sksl
+new file mode 100644
+index 0000000000..39350e6cd4
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz40427.sksl
+@@ -0,0 +1 @@
++uint s, z = s.0s.0s - 1;
+diff --git a/src/sksl/ir/SkSLPrefixExpression.cpp b/src/sksl/ir/SkSLPrefixExpression.cpp
+index a64172a989..01c53ae3bf 100644
+--- a/src/sksl/ir/SkSLPrefixExpression.cpp
++++ b/src/sksl/ir/SkSLPrefixExpression.cpp
+@@ -66,8 +66,11 @@ static std::unique_ptr<Expression> simplify_negation(const Context& context,
+             // Convert `-matrix(literal)` into `matrix(-literal)`.
+             if (context.fConfig->fSettings.fOptimize && value->isCompileTimeConstant()) {
+                 const ConstructorDiagonalMatrix& ctor = value->as<ConstructorDiagonalMatrix>();
+-                return ConstructorDiagonalMatrix::Make(context, originalExpr.fLine, ctor.type(),
+-                                                      simplify_negation(context, *ctor.argument()));
++                if (std::unique_ptr<Expression> simplified = simplify_negation(context,
++                                                                               *ctor.argument())) {
++                    return ConstructorDiagonalMatrix::Make(context, originalExpr.fLine, ctor.type(),
++                                                           std::move(simplified));
++                }
+             }
+             break;
+ 
+@@ -75,8 +78,11 @@ static std::unique_ptr<Expression> simplify_negation(const Context& context,
+             // Convert `-vector(literal)` into `vector(-literal)`.
+             if (context.fConfig->fSettings.fOptimize && value->isCompileTimeConstant()) {
+                 const ConstructorSplat& ctor = value->as<ConstructorSplat>();
+-                return ConstructorSplat::Make(context, originalExpr.fLine, ctor.type(),
+-                                              simplify_negation(context, *ctor.argument()));
++                if (std::unique_ptr<Expression> simplified = simplify_negation(context,
++                                                                               *ctor.argument())) {
++                    return ConstructorSplat::Make(context, originalExpr.fLine, ctor.type(),
++                                                  std::move(simplified));
++                }
+             }
+             break;
+ 
+diff --git a/tests/sksl/errors/Ossfuzz40427.glsl b/tests/sksl/errors/Ossfuzz40427.glsl
+new file mode 100644
+index 0000000000..20125413f3
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz40427.glsl
+@@ -0,0 +1,5 @@
++### Compilation failed:
++
++error: 1: integer is out of range for type 'uint': -1
++error: 1: expected 'uint', but found 'uint2'
++2 errors

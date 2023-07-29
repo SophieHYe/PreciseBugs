@@ -1,0 +1,14 @@
+diff --git a/libavcodec/truemotion2.c b/libavcodec/truemotion2.c
+index 4f0e52dbf7..e6ae05f1d5 100644
+--- a/libavcodec/truemotion2.c
++++ b/libavcodec/truemotion2.c
+@@ -915,7 +915,8 @@ static int decode_frame(AVCodecContext *avctx,
+                             buf_size - offset);
+         if (t < 0) {
+             int j = tm2_stream_order[i];
+-            memset(l->tokens[j], 0, sizeof(**l->tokens) * l->tok_lens[j]);
++            if (l->tok_lens[j])
++                memset(l->tokens[j], 0, sizeof(**l->tokens) * l->tok_lens[j]);
+             return t;
+         }
+         offset += t;

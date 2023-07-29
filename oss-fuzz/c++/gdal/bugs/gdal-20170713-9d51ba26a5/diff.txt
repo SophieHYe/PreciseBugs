@@ -1,0 +1,19 @@
+diff --git a/gdal/apps/gdal_translate_lib.cpp b/gdal/apps/gdal_translate_lib.cpp
+index dd813df4d7..13c35ac3fc 100644
+--- a/gdal/apps/gdal_translate_lib.cpp
++++ b/gdal/apps/gdal_translate_lib.cpp
+@@ -700,6 +700,14 @@ GDALDatasetH GDALTranslate( const char *pszDest, GDALDatasetH hSrcDataset,
+ 
+         GDALGetGeoTransform( hSrcDataset, adfGeoTransform );
+ 
++        if( adfGeoTransform[1] == 0.0 || adfGeoTransform[5] == 0.0 )
++        {
++            CPLError( CE_Failure, CPLE_AppDefined,
++                     "The -projwin option was used, but the geotransform is "
++                     "invalid." );
++            GDALTranslateOptionsFree(psOptions);
++            return NULL;
++        }
+         if( adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0 )
+         {
+             CPLError( CE_Failure, CPLE_AppDefined,

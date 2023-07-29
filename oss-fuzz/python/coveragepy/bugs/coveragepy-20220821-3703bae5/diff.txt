@@ -1,0 +1,53 @@
+diff --git a/CHANGES.rst b/CHANGES.rst
+index 9ce7f610..ab3a5d6a 100644
+--- a/CHANGES.rst
++++ b/CHANGES.rst
+@@ -20,7 +20,10 @@ development at the same time, such as 4.5.x and 5.0.
+ Unreleased
+ ----------
+ 
+-Nothing yet.
++- Fix an internal problem with caching of invalid Python parsing. Found by
++  OSS-Fuzz, fixing `bug 50381`_
++
++.. _bug 50381: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=50381
+ 
+ 
+ .. _changes_6-4-4:
+diff --git a/coverage/phystokens.py b/coverage/phystokens.py
+index 7184f160..c6dc1e0a 100644
+--- a/coverage/phystokens.py
++++ b/coverage/phystokens.py
+@@ -173,7 +173,11 @@ class CachedTokenizer:
+         if text != self.last_text:
+             self.last_text = text
+             readline = iter(text.splitlines(True)).__next__
+-            self.last_tokens = list(tokenize.generate_tokens(readline))
++            try:
++                self.last_tokens = list(tokenize.generate_tokens(readline))
++            except:
++                self.last_text = None
++                raise
+         return self.last_tokens
+ 
+ # Create our generate_tokens cache as a callable replacement function.
+diff --git a/tests/test_parser.py b/tests/test_parser.py
+index a20741ad..48f5ade3 100644
+--- a/tests/test_parser.py
++++ b/tests/test_parser.py
+@@ -247,6 +247,15 @@ class PythonParserTest(CoverageTest):
+         assert expected_arcs == parser.arcs()
+         assert expected_exits == parser.exit_counts()
+ 
++    def test_fuzzed_double_parse(self):
++        # https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=50381
++        # The second parse used to raise `TypeError: 'NoneType' object is not iterable`
++        msg = "EOF in multi-line statement"
++        with pytest.raises(NotPython, match=msg):
++            self.parse_source("]")
++        with pytest.raises(NotPython, match=msg):
++            self.parse_source("]")
++
+ 
+ class ParserMissingArcDescriptionTest(CoverageTest):
+     """Tests for PythonParser.missing_arc_description."""

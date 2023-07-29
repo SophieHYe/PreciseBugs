@@ -1,0 +1,653 @@
+5dc826f	a809db7	Tue Jul 18 13:43:16 2023 +0100	Fix to 2e672f33 decompress_peek_gz change.
+2e672f3	10f1516	Thu Jul 13 11:23:27 2023 +0100	Fix decompress_peek_gz to cope with files starting on empty gzip blocks.
+6e3e8da	7822d8d	Thu Jul 13 10:19:51 2023 +0100	Fix possible double frees in bcf_hdr_add_hrec() error handling
+f4a3b99	e86126b	Thu Jul 6 09:38:17 2023 +0100	Fix a containment bug in cram_index_last.
+79b3a42	7f69840	Wed Jun 21 09:06:38 2023 +0100	htslib-s3-plugin.7: fix whatis entry
+7f69840	5e0ccef	Sun Jun 11 18:50:59 2023 +0200	cram/cram_external.c: fix external htscodecs include
+f613a93	90af5ee	Fri Jun 9 11:29:26 2023 +0100	Ensure NUL termination of Z/H data in sam_format_aux1; fix base mod state reuse
+ccf7c99	abb4c73	Tue Jun 6 12:22:54 2023 +0100	Fix trailing space in config.h made by configure
+e13611a	c04f61e	Tue May 16 13:48:50 2023 +0100	Fix fd_seek on pipes on modern MinGW releases.
+415d2ce	279cc9e	Tue May 9 00:07:46 2023 +0900	Fix example in docs for sam_hdr_add_line
+ca51cc5	07638e1	Tue Apr 18 12:05:06 2023 +0100	Fix typo in kh_int_hash_func2 macro.
+93434e0	3e0fd29	Wed Apr 5 12:15:22 2023 +0100	Fix bug where bin number could overflow when looking for max_off
+7ed911e	ffd74ec	Thu Mar 30 17:50:33 2023 +0100	Trivial fix to expr, removing "^".
+839a2e9	dcd20d9	Mon Mar 13 12:05:21 2023 +0000	Fix a couple small VCF auto-indexing bugs.
+be6633a	f24ad2c	Tue Mar 7 16:01:27 2023 +0000	Fix crypt4gh redirection
+fda1e03	05ef3b7	Mon Mar 6 16:42:10 2023 +0000	Fix cram_index_query_last function
+f2e845c	f68c84f	Tue Feb 14 11:50:26 2023 +0000	Fix Cram compression container substitution matrix generation.
+19dc7e8	3fe2a59	Wed Feb 8 13:46:45 2023 +0000	Fix a bug with multi-threading and embed_ref=2 on name sorted data
+d40bcf9	463830b	Mon Feb 6 10:05:46 2023 +0000	FIx a bug in the codec learning algorithm for TOKA
+dd63fb0	3fd25cd	Thu Dec 15 16:25:34 2022 +0000	fix memory leak
+3fd25cd	4328912	Thu Dec 15 16:25:34 2022 +0000	draft fix
+58abf07	8e43fb0	Mon Nov 28 10:20:15 2022 +0000	Fix build on ancient versions of gcc
+3f67e7e	d7f6579	Thu Nov 3 16:48:28 2022 +0000	Fix ref fix from c91804c
+d7f6579	c91804c	Thu Nov 3 12:46:42 2022 +0000	Fix buffer read-overrun in bam_plp_insertion_mod.
+32de287	853b801	Fri Oct 14 09:47:17 2022 +0100	Fix a typo in sam.h documentation
+3a37408	191ddc0	Fri Sep 2 10:14:19 2022 +0100	Fix error code 0 returned by bcftools after error
+5036186	203f5bb	Wed Aug 24 09:53:47 2022 +0100	Fix n-squared complexity in sample line with many adjacent tabs
+a1013a6	b47469a	Wed Aug 17 12:01:45 2022 +0100	Fix newer clang warning of unused variable.
+136e4a9	ce7e298	Tue Aug 16 16:11:38 2022 +0100	Fix "make check" on MinGW / MacOS. (PR #1496)
+b5cc0b7	8f140ee	Mon Aug 15 16:17:17 2022 +0100	Fix clang builds on Windows/mingw.
+a6ffbf5	759f696	Wed Aug 10 16:53:15 2022 +0100	Fix SEGV when handling errors from sam_read1_sam without headers
+72dfa6d	542dfb8	Wed Jul 27 17:37:30 2022 +0100	Fix leak of MD5 context when entering embed_ref=2 mode
+542dfb8	c5508d5	Wed Jul 27 17:37:30 2022 +0100	Fix (un)locking bug introduced in commit 9562aeba
+494eca8	4f9a8ba	Thu Jul 14 16:16:27 2022 +0100	Fix unary-not on null strings in expressions
+ff49203	506f479	Thu Jul 14 16:16:27 2022 +0100	Fix and_expr expression bug
+226c1a8	58d9f60	Tue Jun 21 18:06:57 2022 +0100	Fix breakend detection and test bcf_set_variant_type (PR #1456)
+88ccb03	008eabd	Tue May 31 09:29:47 2022 +0100	Fix curl type warning on Windows with gcc 12.1
+008eabd	e16c422	Wed May 25 10:16:55 2022 +0100	Fix clang builds under mingw.
+e16c422	958e6fa	Mon May 23 17:43:49 2022 +0100	Fix NEWS entry for function affected by realn_check_tag() fix
+958e6fa	aada314	Mon May 23 16:02:06 2022 +0100	Pull in extra htscodecs pointer aliasing fixes
+46c56fc	3c44c0b	Wed May 18 15:15:07 2022 +0100	Fix buffer overrun in bam_plp_insertion_mod.
+e51f72f	2eddc21	Wed Apr 13 13:43:55 2022 +0100	Permit MM tags containing "." and "?" suffixes.
+d66cb32	f893208	Fri Apr 1 16:54:03 2022 +0100	Detect and fix invalid Type=Flag && Number!=0 header definitions.
+edd3dab	328c3f5	Fri Apr 1 16:54:03 2022 +0100	Fix excessive memory used by multi-threaded SAM output on long reads.
+a1cd8b8	a2db7ed	Fri Apr 1 10:19:48 2022 +0100	Detect and fix invalid Type=Flag && Number!=0 header definitions.
+328c3f5	762d1b1	Tue Mar 22 16:26:53 2022 +0000	Fix missing parameter in hts_log() calls
+5ccdc35	d5a00db	Fri Feb 25 10:01:36 2022 +0000	Fix excessive memory used by multi-threaded SAM output on long reads.
+7981bc9	f307dfb	Tue Feb 22 18:02:10 2022 +0000	Fix missing parameter in hts_log() calls
+6c1265c	89574a8	Tue Feb 15 17:51:19 2022 +0000	Fix hts_parse_decimal and make synced BCF targets parsing more robust
+5dc29e9	e2d1f25	Fri Feb 4 09:11:46 2022 +0000	Fix CRAM reading of "alignment span" for unmapped data.
+965a90c	7d3eeec	Mon Jan 10 11:31:33 2022 +0000	Fix CRAM region queries when CIGAR isn\'t being decoded.
+7288638	dc8a631	Fri Jan 7 10:22:16 2022 +0000	Fix missing autotools on Appveyor
+1d79f44	0495748	Fri Nov 12 18:08:38 2021 +0000	Fix indexing bug with "placed" unmapped reads.
+ee017a5	8b38a1b	Wed Oct 6 16:20:58 2021 +0100	Fix a filter expression bug for flag.read2
+790842c	a641bb4	Wed Oct 6 15:37:30 2021 +0100	Fix lzma_mem_inflate() error handling memory leak
+2dbbcf6	f05aff6	Tue Sep 28 12:49:31 2021 +0100	Fix hts_idx_get_n_no_coor() out-of-bounds memory access
+f05aff6	ab22e84	Tue Sep 28 12:48:04 2021 +0100	Fix incorrect offset into fastq header in name2 mode
+d3788ba	dfb1947	Mon Sep 27 14:58:49 2021 +0100	Fix clang-13 unused variable messages.
+7ba9ecd	cd9d953	Tue Aug 10 18:09:16 2021 +0100	Small fix to MM-chebi.sam methylation test data.
+0b771f4	b71f048	Tue Aug 10 18:09:16 2021 +0100	Fix copyright notice
+c5aa158	43c127e	Thu Aug 5 11:49:48 2021 +0100	Fix cram_dependent_data_series when FN is used.
+06520ce	d16bed5	Wed Jul 28 11:43:00 2021 +0100	Update NEWS to add CVE number for 1.11\'s VCF parser fix
+82560b1	0313654	Wed Jun 16 12:14:47 2021 +0100	Fix typos in INSTALL [minor]
+0313654	723e261	Fri Jun 11 14:22:45 2021 +0100	Fix the filter expression "cigar" on unmapped reads.
+3a8781a	f3b29c5	Tue Jun 1 10:27:26 2021 +0100	Fix memory leak [minor]
+f3b29c5	57842bb	Tue Jun 1 10:27:26 2021 +0100	Fix knet_open() and knet_dopen() error handling
+3ae5342	818008a	Mon May 24 16:49:17 2021 +0200	Fix a potential invalid memory access. Use the original allele count.
+ae54a47	e36da53	Wed May 5 11:12:56 2021 +0100	Fix the update of `min_off`, when unmapped reads are detected. Previously, `min_off` was set to the start offset of the first chunk of the first matching bin, but this relied on the loose assumption that that first chunk would contain the region of interest. The present solution just resets the `min_off` value to the bin index `loff`, in case no better offset is found in the linear index.
+9aa2d03	f4cfd6f	Tue May 4 18:21:32 2021 +0100	Fix undefined behaviour in cram_xdelta_encode_char.
+c74a63e	bfbe07d e1b1adc	Tue Apr 27 12:33:47 2021 +0100	Merge fix for double freeing of memory (PR #1274)
+bfbe07d	9cc2044	Mon Apr 26 16:33:36 2021 +0100	Fix to make samtools cat work on CRAMs again.
+9be3c82	c3ba302	Thu Apr 22 13:50:08 2021 +0000	fix for double freeing of memory.
+c3ba302	83fd837	Wed Apr 14 17:29:57 2021 +0100	Update htscodecs to fix uninitialised access in name tokeniser
+061ef36	6038f97	Fri Mar 12 11:26:36 2021 +0100	Fix a bug where target regions could miss the first record
+6038f97	f518a26	Fri Mar 5 17:46:17 2021 +0000	Fix NEWS typo
+848b301	0380c7b	Wed Mar 3 23:35:01 2021 +0000	Fix leak of uncompressed_block on bgzf_read_init() error
+c671329	a117153	Mon Feb 22 17:47:39 2021 +0000	Pull in htscodecs name tokeniser uninitialised memory access fix
+8127bfc	10a6a8b	Wed Feb 17 10:30:31 2021 +0000	Fix reading UTF-8 encoded sample names when char is signed
+7152cb4	9f8ac03	Tue Feb 9 16:19:45 2021 +0000	Fix undefined behaviour in bcf_update_alleles()
+9f8ac03	2773f77	Tue Feb 9 16:19:45 2021 +0000	Fix truncation bug in filtering bitwise expressions
+2773f77	1b66f6e	Tue Feb 9 16:19:45 2021 +0000	Fix undefined behaviour warning in bcf_record_check()
+1b66f6e	d40cad3	Tue Feb 9 16:19:45 2021 +0000	Fix undefined behaviour warning in test-vcf-sweep
+d40cad3	222387d	Tue Feb 9 16:19:45 2021 +0000	Fix CRAM undefined behaviour warnings
+222387d	dbac2d1	Tue Feb 9 16:19:45 2021 +0000	Fix undefined behaviour warning in kstring
+dbac2d1	8aa9bcd	Tue Feb 9 14:16:00 2021 +0000	Fix htscodecs dependency typos
+8aa9bcd	d9890a9	Fri Feb 5 12:13:22 2021 +0000	Fix a minor memory leak in XRLE encoding.
+a6e89c5	8510a0d	Fri Jan 29 11:13:54 2021 +0000	Pull in htscodecs fuzzing bug fixes
+8510a0d	64808c2	Fri Jan 29 11:13:54 2021 +0000	Fix more OSS fuzz reported issues.
+9d9e60c	42b365f	Wed Jan 27 11:32:04 2021 +0000	Update htscodecs to pull in more bug fixes
+90fef73	a01a139	Mon Jan 25 14:04:53 2021 +0000	More OSS-Fuzz detected fixes
+a01a139	40afaaa	Mon Jan 25 09:59:48 2021 +0000	Pull in htscodecs bug fixes
+40afaaa	23a6749	Mon Jan 25 09:59:49 2021 +0000	Fixed some more malformed data bugs, this time XPACK.
+23a6749	f423578	Mon Jan 25 09:59:48 2021 +0000	Fix missing rANS_word.h dependency.
+f423578	79d8c94	Mon Jan 25 09:59:48 2021 +0000	Fix memory leak with malformed huffman data.
+79d8c94	1c93061	Mon Jan 25 09:59:48 2021 +0000	Fix some fuzz issues in CRAM 3.1.
+f39dae7	13fe974	Mon Jan 18 10:37:02 2021 +0000	Fix incorrect setting of end position in overlap_push()
+481bd22	410f2b2	Fri Jan 15 19:15:42 2021 +0000	Fix iteration over CIGARs with indels in tweak_overlap_quality (PR #1202)
+a7f7abc	cecf738	Mon Jan 11 15:33:51 2021 +0000	Bug fix CRAM 2.1 output.
+246c146	7ca2b49	Thu Dec 17 21:48:04 2020 +1100	docs: fix simple typo, seperated -> separated
+238600d	2056490	Tue Dec 1 10:24:33 2020 +0000	Fix the bgzf_idx_flush assertion. (PR #1168)
+b710781	0ad12d7	Fri Nov 6 08:58:22 2020 +0000	Fix memory leak on bad input in vcf_parse_info()
+0ad12d7	21b677e	Thu Nov 5 16:54:04 2020 +0000	Fix assumption of pthread_t being a non-structure.
+b211b4c	ca25304	Tue Nov 3 17:35:24 2020 +0000	Fix a long-standing typo in hts_lrand48.
+ff495a9	14a8359	Wed Oct 7 19:18:21 2020 +0100	Bug fix: handling of CRLF line terminators in sam_parse_worker().
+cd0a84b	8016127	Tue Sep 22 13:14:15 2020 +0100	More minor NEWS fixes
+9067dee	8bab82b	Fri Sep 11 14:16:28 2020 +0100	Fixed a crash in bcf_record_check.
+f4f7f24	e9447f8	Tue Sep 1 12:39:46 2020 +0100	Improvement (personal preference) to previous C99 fix.
+78648e2	0456cec	Tue Aug 25 16:52:59 2020 +0100	Bug fix to the pileup constructor.
+adeeb88	71b9e4f	Mon Aug 24 10:08:13 2020 +0100	Add bcf_ prefix to variant_t struct
+773b6ed	0e8a6e2	Mon Aug 17 16:38:22 2020 +0100	Fixed deadlocks and crashes in threaded SAM parsing.
+0e8a6e2	a79009b	Mon Aug 17 16:37:11 2020 +0100	Fix bug in the line reallocation for threaded SAM decoding.
+da59588	dcd4b73	Tue Jul 21 10:19:56 2020 +0100	Fixed a (harmless) CRAM uninitialised data access.
+dcd4b73	df31e59	Wed Jul 15 09:26:33 2020 +0100	Fix check for VCF record size
+c7c7fb5	9c35744	Wed Jul 15 09:03:25 2020 +0100	Fix hfile_libcurl breakage when using libcurl 7.69.1 or later (#1105)
+832e4ba	818b271	Tue Jul 7 18:46:05 2020 +0100	Fix paths for Windows tests.
+913fccf	9a15df9	Tue Jul 7 14:24:26 2020 +0100	Add --enable-plugins to travis (and fix -ldl configure test breakage)
+33bfcfa	3d55140	Tue Jun 30 17:01:27 2020 +0100	Fix mpileup regression between 1.9 and 1.10.
+3d55140	146e6a2	Fri Jun 26 17:50:35 2020 +0100	Fix support for decoding CRAM \'q\' feature.
+808affd	1e11869	Fri Jun 26 17:17:23 2020 +0100	Fix dirty default build by including latest pkg.m4 instead of using aclocal.m4 (PR #1091)
+1e11869	313a9fc	Thu Jun 25 15:01:19 2020 +0100	Fix a bug, which caused cram_codec_decoder2encoder to return an error code.
+313a9fc	16f62c5	Fri Jun 19 15:27:08 2020 +0100	CRAM fix for MD tag generation with "b" FC.
+d314715	9de45b7	Tue Jun 2 15:50:36 2020 +0100	Fix the multi-threaded CRAM multi-region iterator regression.
+e05d8dc	c0e65a1	Mon May 18 16:36:05 2020 +0100	Fix test data to have "=" for RNEXT when matching RNAME.
+382867a	fc431eb	Fri May 15 17:19:35 2020 +0100	Fix reference length check. (PR #1068)
+cdf5d18	e49b666	Tue May 12 13:02:23 2020 +0100	Fix a test case.
+cb8a051	8859b09	Tue May 12 09:33:46 2020 +0100	Print position of offending VCF/BCF records to help with debugging
+2e36fa6	f58a6f3	Tue Apr 7 16:07:13 2020 +0100	Fix memory leak on failure in cram_decode_slice()
+0bff7c1	b34a1ae	Thu Mar 19 10:52:53 2020 +0000	Fix missing newline in error messages [minor]
+ba8d1a1	9a10355	Wed Mar 18 09:11:17 2020 +0000	Unify kroundup macros and fix gcc warnings
+29c294e	8ff8bb3	Wed Mar 11 12:21:29 2020 +0000	Fixed a raft of integer overflows in VCF land.
+b506687	059abb9	Mon Mar 2 10:03:46 2020 +0000	Bug fix to multi-region iterator on CRAMs
+e9863a0	8fc5c63	Thu Feb 20 14:58:10 2020 +0000	Fixes threaded bgzf --write-index.
+8fc5c63	5fef1d3	Wed Feb 19 10:29:14 2020 +0000	Fix integer overflow in cram_read_slice
+9583bf8	d6f1536	Tue Feb 18 15:26:27 2020 +0000	Add / fix byte swapping code for big-endian platforms
+698864f	39acb95	Wed Feb 5 14:47:07 2020 +0000	Fix masking of `fai` variable in fai_path()
+39acb95	ecf0216	Mon Feb 3 12:00:52 2020 +0000	Fixed nuances between gzip vs bgzf compressed files.
+fdd23fb	ba95c89	Thu Jan 23 14:06:55 2020 +0000	Fix missing return parameter value
+ba95c89	d807564	Thu Jan 23 10:28:16 2020 +0000	Fixes to pass cppcheck-1.90 warnings (#997)
+5bd978e	04a20ae	Thu Jan 9 21:05:56 2020 +0000	Fix build on OpenIndiana with Sun Studio 12 [minor]
+223a124	736050d	Wed Jan 8 11:27:08 2020 +0000	Fix possible undefined shift in cram_byte_array_stop_decode_init() (#1009)
+ed4c281	5e7b76b	Mon Dec 9 14:17:51 2019 +0000	Fixes BCF in-memory decoding with 64-bit integers.
+ca04309	43535fe	Tue Nov 26 16:01:13 2019 +0000	Fixed erroneous / introduced in 43535fe.
+9279d76	ab6655f	Wed Nov 20 14:11:07 2019 +0000	Fix sam_hdr_dup to cope with long refs.
+ab6655f	8990a60	Tue Nov 19 14:24:19 2019 +0000	Fixes a bug in hts_detect_format on unmapped long read SAM. (PR #981)
+8990a60	c673947	Tue Nov 19 14:00:00 2019 +0000	Fix header pointer passed to `cram_name2id`. (PR #980)
+016c09c	10e8e6e	Tue Nov 19 12:29:30 2019 +0000	Fix char-subscripts warnings on MinGW build
+10e8e6e	6a73744	Tue Nov 19 12:29:30 2019 +0000	Fix crash when Windows external plug-ins register handlers
+6a73744	626249d	Tue Nov 19 12:29:30 2019 +0000	Fix plug-in dll dependencies on Windows
+d58f21e	71d8683	Fri Nov 15 09:12:14 2019 +0000	Fix possible integer overflows in sam_parse1()
+71d8683	2ab3520	Wed Nov 13 10:23:36 2019 +0000	Fix htslib.mk parallel build (PR #969)
+4a913ba	ca891e4	Mon Nov 11 16:50:35 2019 +0000	Fix waiting mechanism on Windows. (PR #968)
+db90fb5	565560e	Thu Nov 7 15:39:20 2019 +0000	Long awaited fix in VCF region handling
+565560e	7a21586 4ee4b75	Fri Nov 1 18:49:46 2019 +0000	Merge Update regidx - bug fixes and new features (PR #761)
+b6201de	4702faa	Thu Oct 31 12:52:04 2019 +0000	Add memory checks, fix void pointer arithmetic.
+b7a366e	d123a44	Thu Oct 31 12:52:03 2019 +0000	Update regidx - bug fixes and new features. Breaks API
+7110dec	8ac3b5c	Mon Oct 28 09:54:47 2019 +0000	Fix call of memcpy with NULL source in sam_dispatcher_read
+8ac3b5c	e43b472	Mon Oct 28 09:30:24 2019 +0000	Fix type of accumulator in bam_cigar2qlen
+e43b472	f4680d0	Fri Oct 25 20:39:07 2019 +0100	Fix a bug introduced by 64-bit goodies (eb2334e)
+92ea05a	dd6f0b7	Tue Oct 15 12:34:30 2019 +0100	Bug fix a read-beyond-buffer bug in VCF code.
+634aad4	cfa32f7	Fri Oct 4 17:09:13 2019 +0100	Fix build on ancient versions of gcc
+2e9bfe3	c804f81	Thu Sep 26 12:51:40 2019 +0100	Fix n_lvls calculation in vcf_idx_init.
+a19593a	00b72b6	Wed Sep 25 16:38:42 2019 +0100	More CRAM LARGE_POS fixes for testing 64-bit positions.
+13f28be	886a665	Wed Sep 25 11:17:29 2019 +0100	Fixed CRAM_OPT_REFERENCE handling for files with reordered headers. (PR #935)
+efa7aa6	0ef9425	Wed Sep 11 12:09:54 2019 +0100	Fix a bug in the header API, which prevented the removal of all lines when the line ID_key was NULL. (PR #924)
+695b1ea	a27cd9f	Thu Sep 5 10:27:14 2019 +0100	Fix dependencies and stray blank line
+a27cd9f	bf88e19	Thu Sep 5 09:28:25 2019 +0100	Fix memory leak in clean-up code.
+ed27109	3f22b3d	Wed Aug 28 10:07:03 2019 +0100	Fix various cases of undefined behaviour on shifts
+3f22b3d	e6c09d8	Wed Aug 28 10:07:03 2019 +0100	Fix UB in ltf8_decode_crc() and make it spot read errors
+acc6977	751ddc3	Wed Aug 28 10:07:03 2019 +0100	Fix possible vcf header record leakages
+751ddc3	e6005e6	Wed Aug 28 10:07:03 2019 +0100	Fix possible overflow and invalid write in rans_uncompress_O1()
+e6005e6	8c6cddc	Wed Aug 28 10:07:03 2019 +0100	Fix possible memory leak when decoding cram compression header
+8c6cddc	caba2de	Wed Aug 28 10:07:03 2019 +0100	Fix possible memory leak in cram_decode_compression_header
+caba2de	b4e5b2e	Wed Aug 28 10:07:03 2019 +0100	Fix more possible memory leaks.
+b4e5b2e	5bea1cf	Wed Aug 28 10:07:03 2019 +0100	Fix possible memory leak in cram_beta_decode_init()
+16dcfc5	6c8fde3	Tue Aug 27 15:02:12 2019 +0100	Fix SAM threading error handling and other misc changes.
+a7bd226	c95c4bd	Tue Aug 27 14:36:59 2019 +0100	Fix race condition in bgzf_set_cache_size in threaded environment.
+80cb4d9	8271fd9	Tue Aug 20 11:35:53 2019 +0100	Bug fix to cram index query. (PR #911)
+b70f393	d2b4c2c	Sun Jul 7 14:46:41 2019 +0100	Fix test/test_realn.o dependency; ignore test/test-parse-reg [minor]
+d2b4c2c	a428aa2 4694497	Fri Jul 5 16:54:35 2019 +0100	Merge Use sam_hdr_ prefix for new header API functions (PR #887)
+4b58612	cf53767	Fri Jul 5 13:10:45 2019 +0100	Fix sam_hdr_add() straggler commentary; fix ERROR/BM_ERROR
+7c34eec	017195a	Fri Jul 5 12:56:43 2019 +0100	Fix names of bam_hdr_foo stragglers
+1217dde	a428aa2	Fri Jul 5 12:56:43 2019 +0100	Rename new public header API functions to have a sam_hdr_* prefix
+a428aa2	70b8001	Tue Jul 2 18:00:19 2019 +0100	Fix incorrect test for item not in khash table
+1f54567	e36ca90	Tue Jun 18 16:34:05 2019 +0100	Fix bam_hdr_remove_line_pos() counting
+e36ca90	987f8d5	Tue Jun 18 16:34:05 2019 +0100	Fix index values in hash tables when removing header lines
+81233aa	d8e92c2	Tue Jun 18 16:34:04 2019 +0100	Add method `bam_hdr_nref` for returning the number of references inside the header. Minor fixes.
+7f876cf	42deeb5	Tue Jun 18 16:34:03 2019 +0100	Change header API methods prefix to bam_
+f0c6dfa	aa0b31f	Mon Jun 17 12:22:46 2019 +0100	Fix possible stale pointers in mpileup overlap hash
+f872450	05a7b3e	Fri Jun 14 08:22:48 2019 +0100	Fixed auto-indexing of SAM/BAM when writing as multi-thread.
+05a7b3e	e788d8e	Fri Jun 14 08:19:04 2019 +0100	Fixed hts_open_format to honour compression field.
+164d507	c761d16	Thu Jun 6 09:43:15 2019 +0100	Fix kputsn overflow check
+3f13412	10e6de3	Fri May 24 17:08:35 2019 +0100	Fix trailing spaces and tabs, and the travis test to find them
+1aacec3	adc3010	Wed May 8 11:48:04 2019 +0100	Fix undefined behavior in left-shift
+adc3010	c76b3b2	Wed May 8 11:48:04 2019 +0100	Fix unaligned access
+c76b3b2	f5b75ff	Tue May 7 17:01:47 2019 +0100	Fix compilation on Illumos / Sun C compiler
+1a73bf3	cda2298	Wed Apr 24 09:25:50 2019 +0100	Fix configure --disable-werror
+1d4f8ca	8ab9acf	Wed Apr 17 12:46:34 2019 +0100	Fix builds on gcc older than 4.6
+da7d4d6	0a2cf81	Wed Mar 6 13:53:08 2019 +0000	Fixed deadlock in thread pool / bgzf error handling.
+0a2cf81	5e8b5fd	Thu Feb 28 10:14:39 2019 +0000	Fix data race accessing fd->unsorted
+7c04ea5	01bfbd6	Thu Feb 14 15:20:13 2019 -0500	fix leak of iter
+c818977	9845bc9	Fri Jan 25 11:22:22 2019 +0000	Fix bgzip index creation when using multiple threads.
+a80f5fd	43260db	Fri Jan 18 15:26:22 2019 +0000	Fix stale pointers in cram_next_slice()
+9a0ee67	1d97f31	Fri Jan 18 15:26:22 2019 +0000	Fix various potential CRAM memory leaks
+1d97f31	9a9da18	Fri Jan 18 15:26:22 2019 +0000	Fix memory leaks and add malloc checks
+fe9c2f8	22ffbd3	Fri Jan 18 15:26:22 2019 +0000	Fix some places where vcf/bcf might exit; add malloc checks
+5c3bc6f	6833213	Fri Jan 18 15:26:22 2019 +0000	Fix unwanted sign extension when getting header length.
+6833213	6f9b7d3	Fri Jan 18 15:26:22 2019 +0000	Fix crashes in bcf_record_check()
+6f9b7d3	1bd540b	Fri Jan 18 15:26:22 2019 +0000	Fix small memory leak in test/hfile.c
+b26c036	7492268	Thu Dec 27 18:30:56 2018 +0000	Fix libdeflate build using gcc-8 on travis
+adcc20c	5d9d630	Tue Oct 30 17:14:10 2018 +0000	Fix BAQ crash for alignments starting CIGAR 0M.
+b2552fd	6e86e38	Mon Oct 29 16:34:17 2018 +0000	Bug fix for CRAM multi-slice + embedded reference combination.
+18486da	23fa058	Wed Oct 17 12:08:38 2018 +0100	Fix unmapped reads listing when using the multi-region iterator.
+23fa058	b034a41	Wed Oct 17 12:08:38 2018 +0100	Bug fix to cram index query for unmapped reads.
+190aaab	6ba2cb3	Fri Oct 12 12:08:05 2018 +0100	Fix the build on MSYS environments, which don\'t include automatically the header file `strings.h`, which defines the function `strncasecmp`.
+6ba2cb3	80f3557	Thu Oct 11 12:46:42 2018 +0100	Fix memory leak in cram_read_SAM_hdr.
+0a8cdc6	864c5b7	Mon Sep 24 12:00:25 2018 +0100	Fix incorrect l_extranul calculation.
+b7e5a51	e1650a9	Tue Sep 4 12:26:42 2018 +0100	Fix possible string truncation warnings
+6d3be93	bafea32	Tue Aug 14 14:33:48 2018 +0100	Fix the end coordinate passed to the regidx_overlap function, in order to match its expected 0-based inclusive format.
+bafea32	ee0f7f3	Mon Aug 13 13:44:40 2018 -0700	Fix memory leak in knetfile.c
+319b5ae	c77e5ee	Thu Aug 2 14:30:18 2018 +0100	Fix tbx_readrec error checking.
+2be9e0b	64c4927	Fri Jul 27 10:20:15 2018 +0100	Fix possible thread pool lock-up
+64c4927	3d0bd47	Fri Jul 27 10:06:00 2018 +0100	Fixes bug in error handling during gzip read.
+db67856	5cb0da4	Mon Jul 16 11:36:03 2018 +0100	Corrected rans normalisation bug introduced in 4ef6c76f.
+5cb0da4	2050db4	Mon Jul 16 11:16:35 2018 +0100	Fixes a multi-threading cram decode bug.
+99acb64	0c0623f	Wed Jul 11 12:33:15 2018 +0100	Fix memory leak in `test_realn`. Fix buffer overflow in `sam_parse1`. Fixes #731.
+6565adf	98efde4	Mon Jul 9 14:45:14 2018 +0100	Fix memory leak in test_bgzf
+dd49c38	52758ba	Mon Jul 2 11:25:48 2018 +0100	Minor man page formatting fixes
+2b6bac8	a285d85	Thu Jun 28 14:57:02 2018 +0100	Fix mingw printf format warnings
+d7e19b9	749f5b4	Mon Jun 18 18:15:44 2018 +0100	Fix the test run on Windows and AppVeyor.
+5a062a4	c167fee	Fri Jun 8 15:28:51 2018 +0100	Fix off by one bug introduced in a13ac99.
+699ed53	96defa1	Thu May 24 14:08:27 2018 +0100	Fix incorrect bracket placement
+55d7bef	bceff25	Fri May 18 10:14:12 2018 +0100	Fix gcc 8.1 warnings
+eeda089	71b00a8	Fri Apr 27 14:10:12 2018 +0100	Fixes a bug in the creation of the multi-region iterator, that caused some reads to be wrongly skipped when reading a BAM file.
+71b00a8	ac9c273	Thu Apr 26 16:10:39 2018 +0100	Bugfix in VCF record REF length update
+c4a7c72	f31f2c0	Wed Apr 18 12:09:26 2018 +0100	Fixes `cram_pseek` function by clearing the `ctr_mt` pointer. Fixes `cram_ptell` function by using the correct indicator of maximum records in a container. Minor code improvements.
+830e022	ef89556	Wed Apr 4 19:21:38 2018 +0100	allow integrity check on files without .gz suffix
+738c16d	5fef1be	Thu Mar 15 14:03:09 2018 +0000	Fix use of (possibly) signed char with ctype functions
+2796b43	1c4acb4	Thu Mar 15 14:03:08 2018 +0000	Fix SunStudio compiler warnings
+1c4acb4	1893133	Thu Mar 15 12:44:02 2018 +0000	More general CRAM multi-threading fixes (not related to multi-slice).
+1893133	6b6c8a3	Thu Mar 15 12:44:02 2018 +0000	Fixed trivial memory leak in test harness
+6b6c8a3	831747f	Thu Mar 15 12:44:01 2018 +0000	Bug fixes to multi-slice containers (mostly threading related).
+831747f	20f69bf	Wed Mar 14 10:03:55 2018 +0000	Fix uninitialised data in test harness.
+aa1a775	9f9631d	Tue Mar 6 10:04:34 2018 +0000	Fix a couple of minor rANS issues with handling invalid data (#665)
+efe502d	caf3564	Fri Feb 16 16:16:41 2018 +0000	Fixes crashes caused when decoding some cramtools produced CRAM files.
+89f2666	6d2bfb7	Mon Feb 5 12:42:36 2018 +0000	Fix undefined behaviour and check malloc returns in probaln_glocal
+530c7e0	88e8fdc	Fri Feb 2 16:52:09 2018 +0000	Fixed multi-threading bugs with CRAM range querying.
+88e8fdc	2a3bdd9	Mon Jan 29 15:09:59 2018 +0000	Fix cram_close multi-threaded reading.
+682ca0a	af40c73	Mon Jan 29 14:53:23 2018 +0000	Bug fix to free and subsequent reuse of references with -T ref.fa.
+1b2c3b4	61bc0ad	Fri Jan 26 11:33:31 2018 +0000	Fix tabs and stray spaces [minor]
+bc326af	1c5c508	Thu Jan 25 14:22:13 2018 +0000	Fix end-of-range check and setting fd->eof in cram_next_slice()
+7db23df	e539b32	Wed Jan 17 12:30:22 2018 +0000	32-bit fixes.
+139d274	5c9cf3a 87c8693	Fri Jan 12 15:02:00 2018 +0000	Merge bug fix to random bgzf cache removal (PR#629)
+da27bfd	62116e1	Thu Jan 11 10:06:54 2018 +0000	Fix undefined behaviour and sign extension issues in kstrtok
+62116e1	ff823af	Wed Jan 10 16:55:42 2018 +0000	Fixes the finished flag.
+8838b60	5bd5b95	Mon Jan 8 12:22:25 2018 +0000	Fixed return value of cram_get_bam_seq and fixed a bug in required_fields option.
+189f77b	8003166	Sun Dec 24 22:01:21 2017 +0000	Add tcc warnings/werror and fix misplaced bracket
+07c46a0	3540313	Thu Dec 14 09:49:10 2017 +0000	Fixes to PR#590.
+1a859a7	57fa9be	Mon Nov 20 14:53:28 2017 +0000	Bug fix to recent CG/long cigar patch.
+59eae27	aea349a	Tue Nov 14 12:27:51 2017 +0000	Bug fix to random bgzf cache removal.
+829ddae	6e0f098	Fri Nov 10 13:38:03 2017 +0200	Calculate sum in logarithmic form using the expansion: log(a + c) = log(a) + log(1 + c/a) fixes calculation of PLs on ARM and POWER see: https://github.com/samtools/bcftools/issues/702 Switch sum and sum1 to double Use double versions of log1p and exp
+5df3ecf	01ac4f5	Thu Nov 2 15:26:50 2017 +0000	Fixes compiler warnings. (#615)
+199ab97	7c5083b	Mon Oct 23 16:37:25 2017 +0100	Fixed thread_pool comments and examples (#612).
+6978784	75decb8	Thu Oct 12 11:12:10 2017 +0800	Fix annotations: hash [map] => hash [set]
+d10422f	4c49090	Wed Oct 11 15:03:06 2017 +0100	Fix access token caching bugs
+75decb8	8bbc018	Tue Oct 10 10:28:06 2017 +0100	Fix memory leak in bcf_copy
+663bb1e	8bbc018	Wed Oct 4 11:59:26 2017 +0100	Fix double free when libcurl_open fails
+bb67d92	bd9a871	Wed Sep 27 16:08:01 2017 +0100	Fix compiler warnings
+367f603	b8941e4	Tue Sep 26 15:28:10 2017 +0100	Fix cram integer overflows (#598)
+f118a43	887952e	Fri Sep 22 16:21:22 2017 +0100	Fixes potential seg faults.
+887952e	3899ac6 123acca	Wed Sep 20 14:21:45 2017 +0100	Merge PR#592 [libcurl_seek improvements] Fixes issue#588
+3899ac6	1cc6afd	Fri Sep 15 22:18:24 2017 +0100	Prefix *rand48() exports with hts_
+6ff5482	2322f43	Tue Sep 5 14:10:12 2017 +0100	Update NEWS to add CVE fixed to htslib 1.4.1
+44c6a36	e1380c8	Mon Aug 14 17:55:33 2017 +0100	Added BGZF CRC32 checking.  Fixes #402.
+fc05969	ab66ccd	Wed Jul 12 11:20:15 2017 +0200	Replaced commented-out debugging code with #ifdef equivalent.
+da5c0c7	75d9f0d	Tue Jul 4 14:06:14 2017 +0100	Fixes #531 from PR suggestions.
+2739558	9156a41	Wed Jun 21 15:13:43 2017 +0100	Trivial fix for reading empty cram indices.
+54bfd95	d8e5ec4	Thu May 25 14:06:09 2017 +0100	Fix length calculation in bam_read1 and possible memory leak
+d8e5ec4	31650a4	Wed May 24 16:09:23 2017 +0100	Fix clang warning
+a7df765	499245e	Mon May 22 10:08:47 2017 +0100	Fix buffer overrun in vcf_format.
+403353f	dc45f18	Sat May 20 16:43:56 2017 +0200	Fixed format string errors.
+389c4f3	499245e	Sat May 20 16:25:44 2017 +0200	Replaced fprintf(stderr, ...) calls with hts_log_<level> calls. Fixed a few cases of irregular indentation in the process. Made the logging test script ignore multi-line messages.
+a58cd85	3e85cce	Thu May 11 10:21:21 2017 +0100	Bug fix to CRAM index creation (reported by Brent Pedersen).
+8e96d8a	079c7b8	Fri May 5 15:24:26 2017 +0100	Bug fix in VCF/BCF header parsing
+08c16ef	c6d03a1	Thu Apr 13 22:11:20 2017 +0200	Moved the declaration of hts_log & co to the public API. Appended the hts_ prefix to the log_<level> macros. Switched to standard C99 __VA_ARGS__ instead of ##__VA_ARGS__. Added HTS_FORMAT checking to the hts_log function. Changed the initialization of hts_verbose to use the literal HTS_LOG_INFO instead of magic number 3. Centralized newline handling to the hts_log function. Re-purposed the test-logging.pl script to test for message consistency.
+1acad45	9317ca6	Mon Apr 10 09:43:19 2017 +0100	Fix buffer overrun on corrupted data.
+ddcc3ab	e1848ae	Tue Apr 4 22:36:22 2017 +0200	Switched to new logging functions in bgzf.c. NOTE suspicious buggy bracket placements on lines 1716 and 1752 (before edit) changed.
+487f367	052a16e 9db2e71	Tue Apr 4 14:57:35 2017 +0100	Merge Merge NaN issue fix (PR#485)
+9986f5d	10081c4	Tue Apr 4 14:32:27 2017 +0100	Fixed kputd printing of NaN.
+a17fc73	10bc1a7	Thu Mar 23 15:31:21 2017 +0000	Fixes to support a stricter C99 plus POSIX.1-2001 environment.
+e880f57	f790455	Wed Mar 22 12:25:41 2017 +0000	Use -lpthread instead of -pthread when only linking; Fixes clang warning
+ca1423d	5c695a1	Mon Mar 13 14:46:24 2017 +0000	Fix over-specified location of htslib.pc.tmp
+e7203ae	1b5652c	Sun Mar 12 17:36:49 2017 +0100	Fixed a bug in bcf_fmt_array with garbage allele frequencies. The special value 0x7f800001 (NaN), used to indicate a missing value, was changed to 0x7fc00001 (also NaN) when the function le_to_float returned.
+442ae75	ae0bec6	Tue Mar 7 15:20:06 2017 +0000	Fixed a few non-portable constructs.
+7317e4f	dc54b0d	Tue Feb 21 17:09:40 2017 +0000	Fix endianness, integer type and memory safety issues in index metadata
+dc54b0d	8dd26ff	Mon Feb 20 16:46:42 2017 +0000	Fix to iterators when the query overlaps zero bins.
+ff71a31	fd178d3	Wed Feb 8 16:31:02 2017 +0000	Fixed data corruption when switching to threads part way through a stream.
+fd178d3	190a722	Wed Feb 8 10:03:47 2017 +0000	Fixed bgzf_gzip_compress when given uncompressable data.
+190a722	79f38a3 0452e7e	Tue Feb 7 15:25:56 2017 +0000	Merge "Further thread pool fixes" branch (PR #465)
+12d6e02	d8d0323 70622cf	Mon Feb 6 17:32:08 2017 +0000	Merge commit PR #459 (Fix undefined behaviour and improve endian-related behaviour)
+0452e7e	d8d0323	Mon Feb 6 16:42:54 2017 +0000	Further thread pool fixes.
+d8d0323	99660e0	Thu Feb 2 15:30:27 2017 +0000	Fixes for dealing with raw gzip streams.
+f476b53	255863e	Wed Feb 1 15:34:42 2017 +0000	Fixed bgzf threading dead-lock when trying to reading beyond EOF.
+0e63e29	ec1d68e	Fri Jan 27 12:22:12 2017 +0000	Fixed dead-lock case in seek + multi-threaded decode.
+70622cf	86e32e9	Wed Jan 25 14:12:51 2017 +0000	Fix undefined behaviour and improve endian-related behaviour
+a6842b5	4021753	Tue Jan 24 21:04:47 2017 +1300	Fixed lzma memory limit.
+038a61b	3046bbf	Fri Jan 13 14:31:42 2017 +0000	Fix whitespace, shorten help string [minor]
+59972b7	5d114eb	Fri Jan 6 14:58:25 2017 +0000	Fix test/compare_sam.pl -Baux on 32-bit platforms
+4ef6c76	47a29fd	Mon Dec 12 15:22:58 2016 +0000	Fixed a rare renormalisation bug in the rANS codec.
+36c5c47	1dd5c15	Tue Dec 6 14:20:43 2016 +0000	Prevents wrap-around bugs in allocations.
+1dd5c15	9ea1bf9	Tue Dec 6 14:00:56 2016 +0000	Fixes test for enough data when reading the preservation map.
+ee47258	82d0f5b	Mon Dec 5 13:23:11 2016 +0000	allele trimming bugfix
+cc42613	5490930	Mon Dec 5 11:15:37 2016 +0000	Fix hFILE write-after-read bug
+5490930	941c043	Fri Dec 2 16:23:43 2016 +0000	Fix hseek() already-read buffer reuse bug
+6b9abba	609120d	Mon Nov 21 11:34:27 2016 +0000	Add fixed/immobile hFILE buffers
+d58eab8	daae2ea	Thu Oct 6 14:55:25 2016 +0100	Fix error handling in cram_index_load.
+4295de4	19c1894	Tue Sep 27 20:37:34 2016 +0100	Bug fix: 0 is a valid return value of bcf_hrec_find_key
+19c1894	0ca17a0	Mon Sep 26 14:01:05 2016 +0100	Fix bugs in bam_aux_update_str()
+6bed35a	0f298ce 5586168	Tue Sep 13 07:15:37 2016 +0100	Release 1.3.2: bin field bug fix, RTLD_GLOBAL plugins
+9c230e7	9919fca	Mon Sep 12 15:47:21 2016 +0100	Fixed out by one error in bin calculation (CRAM -> BAM).
+5b31094	3d3cc32	Fri Sep 9 17:03:39 2016 +0100	Fixed a double free in multi-threaded CRAM and regions.
+3d3cc32	5c59172	Fri Sep 9 09:29:10 2016 +0100	Fixed a race condition in the multi-threaded cram encoder.
+54dc232	eaef296	Mon Sep 5 10:10:39 2016 +0100	Rebased PR#387 and minor code formatting fixes (trailing white space, indentation, tabs) for consistency with existing code.
+cc4fe23	1659e8f	Tue Jun 28 14:32:53 2016 +0100	Removal of debugging output.
+3ade6b6	eceeb01	Fri Jun 24 14:48:30 2016 +0100	Bug fix to bgzf_read, which was breaking samtools index (and more).
+1c6cf22	4502742	Thu Jun 23 14:17:12 2016 +0100	Fixed file-descriptor leak in refs_load_fai().
+93be96b	173a5d0	Thu Jun 23 09:37:04 2016 +0100	Bug fix to hts_get_bgzfp.
+e65f67d	8ca0175	Tue Jun 21 15:28:18 2016 +0100	Fixed CRAM_OPT_THREAD_POOL for cram.
+d0614e5	511a235	Mon Jun 20 17:45:37 2016 +0100	Fixed bgzf_getc and bgzf_getline to work in multi-threaded mode.
+1eec11b	3f41083	Tue Jun 14 10:34:19 2016 +0100	Fixes bug in bam_aux_update_str()
+2c2330b	8a8fac2	Thu Jun 9 11:01:41 2016 +0100	Various memory leaks fixed in bgzf multi-threading.
+2af39f8	0ba5636	Wed Jun 8 18:04:25 2016 +0100	Removed some debugging and changed the default queue sizes to be smaller.
+4c0b93b	4b1610f	Mon Jun 6 15:47:24 2016 +0100	Made the CRAM_OPT_PREFIX option external via the "name_prefix" option.
+4eef9a7	f58922d	Wed May 25 15:17:22 2016 +0100	Fixed CRAM MD/NM generation to follow the same logic as calmd.
+e5ab997	375ba53	Tue May 17 15:19:42 2016 +0100	Fixed out by one error in bin calculation (CRAM -> BAM).
+375ba53	fc062fb ab793a8	Mon May 16 13:40:37 2016 +0100	Merge hts_itr_query(HTS_IDX_NOCOOR) fixes (PR #376)
+f581de8	f2399ee cb92f20	Mon May 9 16:37:03 2016 +0100	Merge fixes for huge BCF headers (PR #373)
+70f1fae	2cb33f9	Fri May 6 14:15:14 2016 +0100	Fixed uninitialised memory (queue shutdown).
+2cb33f9	f72add4	Fri May 6 12:38:36 2016 +0100	Fixed dependencies & .mk defs so Samtools links too (threading change).
+cd2d915	d8c1ca3	Thu Apr 28 11:07:15 2016 +0100	Fix potential infinite loop [minor]
+0454d47	10e3c2c	Wed Apr 27 11:18:53 2016 +0100	Fix len parameter type [minor]
+0f298ce	87141ea eeec649	Fri Apr 22 09:45:12 2016 +0100	Release 1.3.1: bug fix release, notably error checking
+eeec649	50c4f39 0e5af18	Thu Apr 21 12:23:26 2016 +0100	Merge vcf_parse_format() end-of-vector bug fix (PR #370)
+8f782d1	1afaf0c	Wed Mar 30 13:05:32 2016 +0100	VCF GT parsing fix
+68867ea	53c064c	Tue Mar 29 11:15:29 2016 +0100	Miscellaneous VCF parsing fixes
+1dee8d5	c618771 5af1b93	Mon Mar 21 16:40:56 2016 +0000	Merge CRAM decoding memory allocation fixes (PR #357)
+1a050b4	fc93dfc	Fri Mar 18 14:11:47 2016 +0000	Fixed memory allocation issue when decoding CRAM.
+f1eb18d	c62d1ff	Wed Mar 16 15:12:10 2016 +0000	Fixed a bug where we weren\'t setting fd->first_container on V2.x or V3.x files (io_lib r3789).
+c62d1ff	3ea35c9	Wed Mar 16 15:01:48 2016 +0000	Fixed multi threaded partial decoding. (Eg quitting after N reads)
+b2f29c8	fc93dfc	Wed Mar 16 09:55:25 2016 +0000	Minor fix to lzma error message.
+5523a23	26b3085	Mon Mar 14 16:52:32 2016 +0000	Fix tabix man page CSI option
+5220488	fc9c7bd	Thu Mar 10 14:41:19 2016 +0000	Tidy up error reporting and fix possible memory leaks.
+fc9c7bd	6d5124b	Thu Mar 10 13:44:12 2016 +0000	Fix warnings; don\'t mark bgzf_mt() as HTS_RESULT_USED
+6d5124b	c32590a	Thu Mar 10 11:21:07 2016 +0000	Add HTS_RESULT_USED to some function prototypes and fix resulting warnings.
+ecdc348	64b788f	Tue Mar 1 12:04:12 2016 +0000	Fixed build with -DTEST_MAIN.
+eb3481f	62ed90a	Thu Feb 18 16:51:38 2016 +0000	Bug fix to CRAM required_fields option.
+cad00ea	1e94726	Thu Feb 4 11:35:08 2016 +0000	Fix format string length computation
+f8441c3	4f98dcd ab9e80d	Wed Feb 3 16:32:14 2016 +0000	Merge pull request #312 from samtools/cram_stats_fix
+2805ae8	cc07c66	Tue Feb 2 09:46:44 2016 +0000	Fix compilation with ancient libcurl (7.18 to 7.21.x)
+92654ef	4c0c448	Tue Jan 26 14:21:58 2016 +0000	Fixed crash in CRAM generation with cigar ops > 2^27 in size.
+ab9e80d	df4a80e	Thu Jan 14 12:20:10 2016 +0000	Fixed a CRAM encoding assertion failure on repeated templates.
+87141ea	26229a3 0f6c185	Tue Dec 15 16:34:33 2015 +0000	Release 1.3: plugins, libcurl, CRAM v3.0, many bug fixes
+d9e9e3a	a2656aa	Thu Nov 26 16:03:20 2015 +0000	Fix error return value typos and clamp zfclose() return
+7e4d2b1	2e4226f	Fri Oct 30 15:09:47 2015 +0000	Fix plugin installation rules
+0e2bc68	df3fcad	Thu Oct 22 09:53:21 2015 +0100	fix type in bcf_remove_allele_set doc (minor)
+1e5c377	c700fb1 636d704	Mon Oct 12 16:45:23 2015 +0100	Merge pull request #285 from samtools/feature/fix.319
+c700fb1	1a7fdc5 4c35976	Mon Oct 12 15:17:17 2015 +0100	Merge pull request #287 from samtools/feature/fix.332
+34c3e59	91d4872	Mon Oct 12 15:12:30 2015 +0100	Fixed sam_hdr_add_PG to avoid va_copy requirement.
+1a7fdc5	91d4872	Mon Oct 12 11:05:54 2015 +0100	Fixed sam_hdr_add_PG to avoid va_copy requirement.
+66fbb28	d2ed7e6	Mon Oct 5 12:12:25 2015 +0100	Fixed a bug with CRAM compression level >= 6.
+d2ed7e6	8f3b53b	Thu Oct 1 11:38:36 2015 +0100	Fix incorrect asserts
+8f3b53b	d4482eb	Wed Sep 30 17:44:35 2015 +0100	Fix handling of BCF string dictionaries
+1e2ed48	297ac30	Mon Sep 28 10:28:00 2015 +0100	Fixed typo in vcf.h documentation
+0697d01	852650c	Fri Sep 25 15:01:49 2015 +0100	Fix in vcf filtering:
+d71004b	04997f6 4c66fe0	Mon Sep 14 18:02:42 2015 +0100	Merge VCF header trailing whitespace fix (PR #267)
+0004f1a	81b173e	Thu Sep 10 12:23:59 2015 +0100	Fixes bug that appeared with commit ca1bcefe.
+82203a2	5b0bb75	Mon Aug 24 17:38:57 2015 +0100	Fix whitespace [trivial]
+8eba63a	47da392	Wed Aug 19 17:40:49 2015 +0100	Fixed bug with non-reference base CRAMs and indexing.
+47da392	a72be23	Wed Aug 19 14:51:53 2015 +0100	Fixes https://github.com/samtools/samtools/issues/455
+d754151	23ba31e	Tue Aug 18 17:40:24 2015 +0100	Bug fix for CRAM index querying when the query sequence has zero entries in the index.  It was accessing element -1 in a NULL array.
+23ba31e	778653c	Mon Aug 17 17:18:16 2015 +0100	Remove debug printf [minor]
+4c82a74	8872c10	Wed Aug 5 09:12:14 2015 +0100	tabix: fixes --only-header option so that it now works!
+c313725	0dbb3b8	Tue Jul 28 15:03:45 2015 +0100	Fixed the ordering of enum so that the old CRAM_OPT enums stay constant.
+90cf5c4	26d2504 061c859	Mon Jul 27 13:26:49 2015 +0100	Remerge daviesrob/afl_2 (PR #215) with several fixes
+3a95a67	5c51f84	Tue Jun 30 17:48:47 2015 +0100	Fixed a bug in CRAM container num_blocks field when dealing with multiple slices per container.  It was counting the compression header per slice rather than only once.
+93ae5c6	36bb0b6	Tue Jun 23 15:04:54 2015 +0100	Fixed bugs in CRAM header manipulation.
+53a7528	9853332 e51893d	Fri Jun 19 17:40:23 2015 +0100	Merge fuzz fixes (PR #218 and #223)
+ea63c20	10c4920	Tue Jun 16 18:09:42 2015 +0100	Fix handling of zero-bit beta codec case.
+76f64da	8380601	Tue Jun 16 16:33:18 2015 +0100	Fix check on return value of sam_write1.
+10c4920	9de542c	Thu Jun 11 14:47:47 2015 +0100	Fix in VCF header parsing
+9de542c	826454f	Thu Jun 11 10:32:49 2015 +0100	Fix various spelling errors
+d75ed7a	d8172f9	Tue Jun 2 17:13:54 2015 +0100	CRAM ref of "*" bug-fix.
+949840b	f957727	Wed May 27 14:55:32 2015 +0100	Bug fixed cram_load_reference().
+f957727	4854ee6	Tue May 26 15:18:48 2015 +0100	Use bam_endpos() to fix bins for unmapped reads
+05cd2fa	8013558	Mon May 18 12:08:12 2015 +0100	Various fixes in cram_decode_seq.
+81d6ea6	f7be681	Mon May 18 12:08:06 2015 +0100	Fix buffer over-runs in cram_decode_seq for sequences starting beyond the ref
+a30f906	e33a6fe	Mon May 18 12:06:26 2015 +0100	Fix various reference related bugs in cram_decode_slice
+15a3be5	56f3d78	Fri May 15 11:41:04 2015 +0100	Fixed error handling in CRAM.
+1f626c1	41f1193	Thu May 14 12:26:51 2015 +0100	Fixed requests to output SAM when the default mode is "wb".
+2be9f9f	7e59273	Wed Apr 29 14:58:33 2015 +0100	Fixed compilation sign warning.
+b8720d0	ccd0a6b	Wed Apr 29 12:44:55 2015 +0100	Fixed buffer overrun in MD tag calculation.
+35746af	6185ab7	Fri Apr 24 10:13:56 2015 +0100	Fixed a Java/C integration failure.
+6185ab7	1a2e234	Thu Apr 23 17:31:06 2015 +0100	Bug fix to the CRC32 checking for Java/C integration.
+7a13faa	be6bd1e	Tue Apr 7 13:56:22 2015 +0100	fixes typo in perror
+4b4349a	5ffc4a2	Fri Mar 27 17:52:14 2015 +0000	Fixed the broken "special case" in index querying.
+8ca328a	3accd19 8cb307b	Tue Mar 17 15:39:52 2015 +0000	Merge minor MD5 API fixes
+6f64ca3	67c074e	Tue Mar 17 15:22:54 2015 +0000	Const fixes; define hts_md5_context instead of adding hts_md5_ctx
+fbb9e25	57a1015	Tue Mar 10 14:36:23 2015 +0000	Fix for unmapped reads with "*" sequence.  These were defaulting to a sequence length of -1 instead of 0 (it\'s unknown really), causing an attempt to extract -1 bytes.
+889ee01	47a2046	Thu Feb 26 09:15:03 2015 +0000	Configure fixes
+b255985	cc02b2e	Tue Feb 24 09:39:32 2015 +0000	Fixed cram header-ref parsing.
+cc02b2e	38b5cfd 18ac533	Mon Feb 23 15:01:26 2015 +0000	Merge fix to caching of remote .crai indices (PR #178)
+38b5cfd	b847349	Wed Feb 18 10:27:54 2015 +0000	Fixed faked up @SQ headers.
+694ff3f	24e0337	Tue Feb 17 17:31:12 2015 +0000	Fixed Makefile dependencies for hts_internal.h.
+24e0337	477e31e	Tue Feb 17 16:53:21 2015 +0000	Fixed additional prototype gaff.
+11cee57	e5a0124	Fri Feb 13 11:34:15 2015 +0000	Fixed .crai loading of local irods:... caches.
+d1eef28	90525e0	Wed Feb 11 11:45:42 2015 +0000	Fix dependencies
+bff5efb	5a0ee03 38b5374	Mon Feb 2 14:52:31 2015 +0000	Release 1.2: various bug fixes, htsfile utility, CRAM improvements, etc
+38b5374	38d93e2	Fri Jan 30 15:12:49 2015 +0000	Formatting fix for HTML man page
+61a79f1	b2cfe4e	Thu Jan 29 14:30:12 2015 +0000	Better index bugfix
+97a7933	91a471d	Wed Jan 28 14:14:05 2015 +0000	Bug fix to refs_from_header().
+91a471d	ef3bd19	Wed Jan 28 14:13:48 2015 +0000	Fixed unnecessary FAI building.
+e13b690	3768707	Mon Jan 26 12:26:48 2015 +0000	Fixes imported from Staden io_lib revisions 3792/3795.
+5f7a4ea	11a33a6	Thu Jan 8 17:06:49 2015 +0000	Fixed a bogus warning about using \'cp\' before initialised. (Bogus as it\'s promptly reassigned again, so tidied up the code.)
+11a33a6	f3e1602 ab23898	Wed Jan 7 09:33:28 2015 +0000	Merge pull request #160 from jkbonfield/fix_unsorted_cram
+ab23898	2b31b7d	Tue Jan 6 17:13:53 2015 +0000	Reverted the cram_encode_container change to call cram_ref_incr and added a ref incr in cram_get_ref instead. This better fixes the issue of sharing references between containers, fixing decoding as well as encoding.
+2b31b7d	8ad2912	Tue Jan 6 14:19:03 2015 +0000	More ref and memory management fixes.
+cba1bf0	f7caefc	Mon Jan 5 15:12:20 2015 +0000	Fixed memory leak when trying to O1 compress a block <= 4 bytes long.
+f7caefc	ca6f60e	Mon Jan 5 15:12:06 2015 +0000	Fixed a small memory leak where we didn\'t deallocate a cram_block that we had created but later culled due to containing zero bytes.
+ca6f60e	dcffda5	Mon Jan 5 15:11:08 2015 +0000	Fixed a memory leak when destroying a BYTE_ARRAY_LEN encoder.
+f3e1602	ed3efe9	Mon Jan 5 09:45:35 2015 +0000	Fix a typo, VCF contig length should be stored.
+20238f3	e5a964e	Fri Dec 12 14:07:48 2014 +0000	Fix various simple memory leaks (cf #138)
+5e76b1c	dfd6773	Mon Dec 8 20:48:33 2014 +0000	Fix alleles trimming with format Number=R/A/G tags
+89bfcc4	876bfe4	Fri Nov 28 11:44:14 2014 +0000	Fix comment in sam.h
+4770a41	bf7e0ec	Thu Nov 27 11:40:23 2014 +0000	Fixed the generation of read names to use record_counter properly, counting from 1, rather than slice:record-in-slice.
+3c4f33a	089c900	Thu Nov 13 14:46:57 2014 +0000	Fix ks_getuntil2() extra empty record at EOF bug
+089c900	83a4e30	Thu Nov 13 11:57:56 2014 +0000	Merge short read() bug fix from upstream
+29305dd	ee7343e	Mon Nov 10 10:43:08 2014 +0000	Add IDX to hdr tags of different type, fixes issue https://github.com/samtools/bcftools/issues/141
+54618dd	bd6f52a 7838da8	Mon Nov 10 10:08:26 2014 +0100	Merge pull request #144 from broadinstitute/broad_bcf_sr_add_reader_segfault_fix
+bd6f52a	c4043c5	Fri Nov 7 14:25:34 2014 +0000	Fix compilation when ALLOW_UAC is not defined
+4d13ff0	b96a302	Thu Nov 6 15:28:28 2014 +0000	Fix of memmove bug in bcf_remove_filter()
+b96a302	07c94ec	Thu Nov 6 15:25:24 2014 +0000	Fixed an incorrect EOF-style case when seeking multiple times.
+7a13d83	9e844e0	Wed Oct 29 17:13:12 2014 +0000	Fixed an error found via valgrind of test_view -D c1#pad1.tmp.cram.
+9e844e0	a98d88f	Wed Oct 29 17:10:38 2014 +0000	Fix bug spotted by valgrind when running "./test_view -D ce#unmap.tmp.cram".
+a98d88f	b28efa4	Wed Oct 29 16:57:18 2014 +0000	Fix a bug where hts_set_fai_filename() didn\'t pass this through to CRAM.  It appears this bug has been long standing, since https://github.com/samtools/htslib/commit/2402fc00fe1f2360cd9056173045f65bc0b683dc, but was not detected due to the tests finding the reference via a UR: @SQ tag instead.
+b0df3d1	5dec96b	Wed Oct 29 10:12:50 2014 +0000	Fix in bgzf\'s gzip reading plus added a test for this
+24c8699	43f2d11	Thu Oct 16 14:29:00 2014 +0100	Fix cram/rANS_* dependencies
+effc6fd	5ebf9b2 a0e35e0	Mon Oct 6 11:15:38 2014 +0100	Merge man page formatting fixes
+5ebf9b2	56d50b2	Fri Oct 3 15:01:47 2014 +0100	Fix regidx.o dependencies and htslib.mk; alphabetise
+a0e35e0	f2080d5	Thu Oct 2 10:23:12 2014 +0100	Formatting fixes for man page
+d6cdff6	eecc982	Thu Oct 2 09:52:35 2014 +0100	Fix for FSECONDARY reads; do not link into PNEXT/RNEXT.
+eecc982	0cdb7b1	Wed Oct 1 18:09:40 2014 +0100	Fixes for handling range requests while also multi-threading.
+d27ae83	f4b4b61	Wed Oct 1 12:57:10 2014 +0100	Fix in bcf regions which in some situations would skip first
+f4b4b61	5b98adc	Wed Oct 1 08:55:06 2014 +0100	Clean after regidx init failure; fixed build dependencies
+5a0ee03	f2af2ad dcefe5b	Tue Sep 23 15:39:41 2014 +0100	Release 1.1: various minor bug fixes
+1965be2	efa6537	Thu Sep 18 10:23:08 2014 +0100	Fixed generation of MD and NM tags in cram_decode_seq() when using a non-reference encoding. These cannot be stored or regenerated in such cases.
+bf2d07c	10958ff	Wed Sep 17 18:04:46 2014 +0100	Fixed bam_construct_seq to cope with qual being NULL.
+3ca319f	22718e5	Wed Sep 17 16:42:46 2014 +0100	Fixed the file format detection code so it handles CRAM v3.0 magic number as a valid CRAM file.
+a254285	ef7eeed	Wed Sep 17 14:42:53 2014 +0100	Minor gcc warnings fixups.
+6929b9c	5a840da	Wed Sep 17 13:56:22 2014 +0100	Bug fixed scramble -x as it was not correctly setting the RI data series for some tests.
+b73b527	100f2d0	Wed Sep 17 13:41:41 2014 +0100	Bug fix of use of TAG_ID macro and k vs key in hash for auxiliary headers.
+1de851b	37f42cd	Mon Sep 15 11:52:32 2014 +0100	Bug fix to the external decoders. If there is an attempt to decode 0 bytes then it no longer matters if the block does not exist. (This comes about when faced with silly CIGAR strings like "0S".)
+37f42cd	3d3f400	Mon Sep 15 11:30:00 2014 +0100	Fixed BETA codec so that it honours beta offset value for zero length codes.
+3f30883	575be14	Fri Sep 12 14:34:07 2014 +0100	Removed the .gz, .Z, .sz etc suffix searching when looking for reference files.
+6c6c75b	1903fd4	Tue Aug 26 14:05:46 2014 +0200	Make hts_idx_push no longer return 0 after the first unmapped read. This fixes idxstats
+4b024e1	232b77b	Fri Jul 11 20:02:13 2014 +0100	Bug fix in bcf_trim_alleles()
+dedd405	17d3d47 399b580	Fri Jul 11 09:26:34 2014 +0200	Merge pull request #113 from mcshane/feature/hts_file_type_fix
+17d3d47	51d9560	Thu Jul 10 13:45:05 2014 +0100	faidx: Fixed copy-and-paste documentation error
+8b17b24	45aaa8b	Thu Jun 26 16:38:03 2014 +0100	Fix copy/pasto
+b7c2a46	642783e 42775eb	Wed Jun 25 16:42:28 2014 +0100	Merge REF_PATH fixes and libcurl removal (PR #111)
+42775eb	cc23df1	Wed Jun 25 14:16:15 2014 +0100	Suppress compression suffix search on default EBI MD5 service
+cc23df1	5f406e5	Fri Jun 20 12:16:11 2014 +0100	Fixed REF_PATH to handle URLs better.
+3b87c0e	2504243	Thu Jun 19 15:14:17 2014 +0100	Improved bug fix of bcf1_sync() from the commit 2504243:
+2504243	a969d0f	Thu Jun 19 10:16:36 2014 +0100	Fixed bug in bcf1_sync. The main cause of the bug is as follows: bcf_unpack(bcf_rec, BCF_UN_STR); bcf_update_id(bcf_rec, id); This causes bcf_rec->d.shared_dirty to be set. duplicate = bcf_dup(bcf_rec); This calls bcf1_sync(). Since bcf_rec->d.shared_dirty is set, the shared data is re-created in tmp.s, bcf_rec->shared.s is freed and bcf_rec->shared.s = tmp.s. However, bcf_rec->unpack_ptr and bcf_rec->d.info[i].vptr still point to the old shared.s region which is invalidated. The fix is done by assigning bcf_rec->unpack_ptr and the vptr fields after tmp.s is fully constructed in bcf1_sync. I use unpack_offset and offset_array to track the offsets of these fields with respect to tmp.s
+a969d0f	9074f89	Thu Jun 19 08:48:54 2014 +0100	Fix in index initialization
+c8c5b31	0d4e155	Mon Jun 16 16:36:37 2014 +0100	vcf: Fix bcf_hdr_id2hrec, col_type parameter is needed as well
+3cdd62f	6172a08	Mon Jun 16 13:02:43 2014 +0100	vcf: Fixes in bcf_translate
+6172a08	6a5b9fd	Mon Jun 16 10:17:24 2014 +0100	vcf: Fix BCF syncing when only partially unpacked
+e8806c7	0c360be	Fri Jun 6 12:56:45 2014 +0100	Fix endianness problems outwith CRAM code
+b62e668	7e059de	Thu May 29 17:27:15 2014 +0100	Fix "unrecognized CIGAR operator" diagnostic
+7d11028	8d283ed	Thu May 29 13:53:03 2014 +0100	Fix forgotten s/razip/bgzip/
+8d283ed	e76b489	Wed May 28 14:01:02 2014 +0100	Sanitised the setting of fd->empty_container into one place. This also fixes the samtools bug #146.
+f99d5ba	70be28c	Thu May 1 14:04:37 2014 +0100	Fix bam_write1() error handling
+70be28c	5003f7b	Thu May 1 13:36:01 2014 +0100	Fix bgzf_write() and bgzf_flush_try() error handling
+0557506	9ed346d eb71ced	Mon Apr 28 11:18:19 2014 +0100	Merge CRAM indexing bug fixes (PR #85)
+eb71ced	09ba271	Mon Apr 28 11:12:52 2014 +0100	Better fix for container memory leak.
+d3bf5b6	e321182	Mon Apr 28 11:12:05 2014 +0100	Fixed two small memory leaks.
+e45b3f3	f38b5e2	Wed Apr 16 16:59:27 2014 +0100	Fix bgzip and tabix dependencies and link commands
+e321182	4a5dcf4	Thu Apr 10 16:45:02 2014 +0100	Bug fix to CRAM indexing and index usage.
+388abc7	df2c538	Wed Apr 9 16:57:14 2014 +0100	Fixed BCF output after bcf1_sync_alleles, simplified
+eed28cb	52ecc97	Tue Apr 8 11:09:24 2014 +0100	bcf_remove_alleles: Fix indexing range for Number=A alleles
+5c80322	f7953db acfeb8a	Thu Apr 3 09:09:12 2014 +0200	Merge pull request #82 from sm15/feature/bcf_calc_ac_bugfix
+9d640ff	3490604	Fri Mar 28 15:16:21 2014 +0000	Fixed off-by-one in bcf_get_format_values
+cc207d8	22dedbe	Mon Mar 24 09:05:23 2014 +0000	hts_idx: fixed indexing of NO_COOR blocks
+ec3a15a	0180921	Mon Mar 17 00:11:08 2014 +0100	Fixed comment typo
+fb23174	321c402	Thu Mar 13 14:07:18 2014 +0000	Fix typo in comment
+20df6b9	5c65920 ab84296	Wed Mar 5 16:11:52 2014 +0000	Merge sam_format1() and __skip_tag() fixes (PR #73)
+692bb41	78e237b	Fri Feb 28 12:43:08 2014 +0000	Fix sam_format1 failure on lines ending in integer/float tags and issue #63
+78e237b	1069b17	Thu Feb 27 16:29:02 2014 +0000	Fixed a bug when loading in fasta files consisting of all sequence on a single line and in lowercase.
+cb7f6e9	21ca653	Wed Feb 26 17:54:03 2014 +0000	fix remote fetching of regions for bam and vcf
+21ca653	bdb6a4a f6c37a5	Mon Feb 24 16:00:42 2014 +0000	Merge #68, fix incorrect length given to MD5 calculation
+f6c37a5	bcbfe37	Mon Feb 24 11:55:59 2014 +0000	Fixes incorrect MD5 calculation in cram_write_SAM_hdr
+dc45cfc	322b28b	Fri Feb 14 15:28:47 2014 +0000	Bug fix to the SAM header padding. It could go negative and then fail to write the header.
+322b28b	b932f95	Fri Feb 14 11:41:12 2014 +0000	Fixed EOF check. The usual code path had the correct check, but an empty cram triggered the incorrect code.
+843a063	c68d523	Thu Feb 13 11:58:58 2014 +0000	Fixed the iterator to be 1-based inclusive coordinates for CRAM.
+19ccc09	939f6ea	Thu Feb 13 11:15:45 2014 +0000	Fixed initialisation of CRAM indexing when the CRAM file contains refids that aren\'t sequential.
+9dbf592	4622eaf	Fri Jan 31 13:28:16 2014 +0000	Fix hseek() return value test
+4855f43	03f3fd7	Fri Jan 10 14:21:04 2014 +0000	vcf: fix in bcf_get_genotypes, sanity check too strict for GT
+3a4aac5	ae92627	Mon Dec 16 17:48:47 2013 +0000	Bug fix to EOF block writing when in multi-threaded mode (not yet supported in htslib\'s cram interface). It was writing the EOF block before flushing any pending threads.
+ae92627	a6cbed2	Mon Dec 16 17:39:13 2013 +0000	Bug fix to cram_next_slice().  The new while loop checking for non-empty blocks caused a crash when multi-threading.
+34227f8	1a39edb	Mon Dec 16 09:55:15 2013 +0000	Added missing return code checks.  Fixed \'x\' mode of mfreopen.
+70efcd9	3e96dd7	Mon Dec 16 09:50:07 2013 +0000	Bug fix to the zlib strategy tuning in multi-threaded mode. It could (legitimately) drive the number of trials negative, but this meant it never left the trial phase and consequentially encoding speed more or less halved the instant we asked for more than one encoding thread.
+9029156	0c084f2	Wed Dec 11 15:28:10 2013 +0000	vcf.c: Fixed a renaming artifact, bcf_clear1 should be bcf_clear
+5e770b3	0908d4c	Fri Dec 6 10:16:01 2013 +0000	vcf: bcf_update_format now sets the number of samples in VCF record which previously was responsibility of the user; Fix in bcf_itr_querys macro, non-existent bcf_name2id renamed to bcf_hdr_name2id
+13b445b	d6e1ad0	Tue Nov 19 16:42:47 2013 +0000	Fix pointer arithmetic [minor]
+69778ad	d038d8e	Wed Nov 6 15:32:07 2013 +0000	Fix bgzf_write() for large (> 2GB) blocks
+ae0de02	5b22605	Wed Nov 6 13:32:28 2013 +0000	synced reader: regions and targets now support VCF; Fix for match_alleles by reverting 0-terminating chr modification
+19beee0	65450dd	Wed Nov 6 09:45:23 2013 +0000	bcf reader: Fix in chr:pos type of regions
+2b7806d	6561746	Mon Nov 4 14:05:36 2013 +0000	Fixed return status checks of fread calls
+bef7597	3e18c41	Mon Oct 28 15:30:26 2013 +0000	Further fixing of auxiliary tag decoding.
+b185d95	c7612be	Thu Oct 24 16:25:01 2013 +0100	Fixed a bunch of code warnings produced by clang\'s static analyser.
+d80899b	18f6183 116ccd2	Thu Oct 24 14:41:12 2013 +0100	Merge CRAM copyright notices and data race fixes from jkbonfield
+c7612be	f149e78	Wed Oct 23 17:37:00 2013 +0100	Fixed a couple complaints from clang.
+e2e0a4b	c413e8a	Wed Oct 23 12:44:16 2013 +0100	Reverted a fix of "chr:pos-pos" index queries, the original version now works.
+116ccd2	d3803f3	Wed Oct 23 11:27:12 2013 +0100	Fixed a variety of multi-threading data races, detected through 1000 repeated runs of the same command at approximately the 2% failure level on unsorted data only.
+1282758	ba4e3fc	Tue Oct 22 13:29:55 2013 +0100	Fix tbx_itr_next() when given a textual (is_kstream) htsFile
+d3803f3	b5f5f16	Wed Oct 16 12:15:14 2013 +0100	Fixed errors in copyright due to pasting the MRC one and forgetting to change the organisation name. Oops!
+d359060	cf02167	Tue Oct 15 14:22:40 2013 +0100	Fixed CRAM to code with the 0x800 supplementary flag.
+35621c0	07d5457	Mon Oct 7 13:40:58 2013 +0100	synced_reader: Fixed an off by one error in bcf_sr_next_line() to properly match target alleles
+c6a1c65	2ea61c2	Tue Oct 1 12:30:36 2013 +0100	Fixed a rather surprising bug in CSI index access via hts_itr_next, before it was not possible to obtain BCF record at chr:pos-pos. The fix may have unexpected consequences in other situations and file formats, beware!
+30cf9e9	fb94dac	Tue Sep 24 15:30:47 2013 +0100	(io_lib r3470) Fixed re-calling refs2id so it clears cached r->last; the pointer becomes invalid.
+fd13d8c	aca31de	Mon Sep 16 15:05:58 2013 +0100	Fixes in targets/regions VCF synced reading, now regions work when streamed. Removed redundant get_fmt API calls
+193ac2f	aca31de	Fri Sep 13 15:37:02 2013 +0100	Fix -Wc++-compat warning / C++ compilation error
+aca31de	c9734f7	Fri Sep 13 14:57:25 2013 +0100	vcf: Non-critical vcf_parse1() errors must not go unnoticed by vcf_write1(). Fixed offending \\0\
+5bbaed6	c371324	Fri Sep 6 17:22:48 2013 +0100	Fix typo [minor]
+5750966	c88645c	Fri Sep 6 16:43:16 2013 +0100	Fix vcf_sweep.h dependencies
+a6e1c9f	60f315f	Thu Sep 5 10:37:02 2013 +0100	vcf: Minor bug fixes and API touches
+60f315f	fd086ed	Thu Sep 5 10:35:26 2013 +0100	synced_vcf_reader: new bcf_sr_get_line macro and fix in vcf/bcf index interator initialization
+fd086ed	cb5cacc	Thu Sep 5 10:33:08 2013 +0100	bgzf: Fixed typo in block_address calculation in bgzf_seek
+ff1465e	1013c35	Fri Aug 30 14:49:57 2013 +0100	This commit fixes issues in hts_open and bgzf with uncompressed BCF input, BGZF now detects uncompressed streams on the fly. Fixes in FILTER and FMT part of bcf1_sync.
+aac4601	b68bfbf	Wed Aug 21 10:27:04 2013 +0100	Alphabetise, fix whitespace [minor]
+9946dc7	fb60f0c	Thu Aug 8 13:46:09 2013 +0100	Fix union-based type-punning buglet
+6af2c1d	956f45b	Thu Aug 8 08:25:59 2013 +0100	[hts_open,bgzf,vcf] New flags for uncompressed input/output to distinguish between compressed/uncompressed BCF/VCF. Updates and fixes in BCF update functions. Removed old tests (now in samtools/bcftools repo) and added new.
+4b8c9b5	ab92989	Thu Jul 25 11:27:51 2013 +0100	Bug fix to stop sam view from converting \'H\' into \'Z\' types.
+ab92989	6d9e20e	Thu Jul 25 11:25:48 2013 +0100	Bug fix to handle blank headers in SAM files
+90ae62f	cf03c20	Tue Jul 23 16:49:36 2013 +0100	Added BGZF indexing and reindexing capability to bgzip. Fixed -b seeking.
+eeb41a7	1e6f3cf	Mon Jul 22 12:28:42 2013 +0100	Bug fix to khashification of process_one_read.
+7012805	0649ecb	Mon Jul 22 12:06:10 2013 +0100	A bit of a hack to set the header and references up properly for cram. This is a hack right now as it requires accessing internals of the fp, but it should be fixed in future by properly supporting methods to manipulate these fields for all data types rather than just cram (eg see scram.c in io_lib).
+0649ecb	e25066b	Mon Jul 22 12:05:18 2013 +0100	Bug fix to khash-ification of sam_hdr_add_lines
+5500ef0	fa5d1a1	Fri Jul 19 10:34:50 2013 +0100	Bug fix to stop sam view from converting \'H\' into \'Z\' types.
+fa5d1a1	417fc59	Fri Jul 19 10:15:01 2013 +0100	Bug fix to handle blank headers in SAM files.
+2424c14	518619b	Wed Jul 17 17:22:04 2013 +0100	Merged with attractivechaos/klib: - add upstream kvsprintf and rework ksprintf - add upstream printf attribute checks - use our kputw (has MIN_INT bug fix) - keep our extra functions (kputc_, kputsn_, kputl)
+e47feba	1994af5	Sun Jun 30 21:47:06 2013 +0100	vcf core lib, vcfsubset, vcfmerge: First step towards binary BCF output. Functional but probably buggy.
+efa9530	a634ce9	Wed Jun 19 09:09:45 2013 +0100	vcfcheck: Fixed a bug in initialization of frame-shift calculation; More detailed FS output
+3164242	49f9e95	Thu Jun 6 12:12:41 2013 +0100	vcffilter &friends: Filtering of indels now supported. Changes in vcfcheck, plot-vcfcheck and vcfquery to reflect that. More changes and fixes to come, but this version seems stable and fully functional.
+b281180	f15f7bc	Thu May 23 13:52:01 2013 +0100	vcfview: Fix in bcf_subset; force unpacking on VCF output
+a458ed8	c3622b8	Wed May 22 14:20:32 2013 +0100	Fix <stdarg.h> include
+8b095aa	8e14b56	Tue May 21 16:05:38 2013 +0100	Port fixes from samtools razf.c/h to htslib.
+fb0d88d	5b49a22	Thu May 16 10:23:34 2013 +0100	vcfmerge: Fixed subtle bugs revealed when merging FMT fields of different lengths; Append version string and command to the output VCF header
+12b827f	429216a	Tue May 14 13:17:00 2013 +0100	vcfcheck: Fixed a bug introduced by recent changed in synced reader
+99b8b89	ce6022e	Thu May 2 17:33:43 2013 +0100	Add const to char *\'s to ensure they can be called with fixed values without triggering compiler warnings
+974d20b	6a5a672	Thu May 2 16:45:22 2013 +0100	Fix crash on legacy files
+89f7e5d	944c4b0	Mon Apr 22 14:55:38 2013 +0100	gtcheck: fixed incorrect output, instead of uncertainty, the opposite (confidence) was reported before
+944c4b0	35ed1b5	Sat Apr 20 13:18:04 2013 +0100	vcfmerge: fix of copy-and-paste error in format field merging, use correct integer ranges
+35ed1b5	54868e8	Sat Apr 20 13:16:30 2013 +0100	vcfgtcheck: Fix in INFO/DP parsing, wrong ID was used before
+84901c3	4cf9350	Mon Apr 15 13:18:37 2013 +0100	bcf1_update_info fix: initialize bcf_info_t pointer, do not pass NULL
+4cf9350	7141bd5	Fri Apr 12 14:33:27 2013 +0100	vcffilter: fixed a typo, output file names now named correcly based on filter type
+2f5843a	73f147b	Fri Apr 12 10:39:27 2013 +0100	vcfquery fix: Allow a mask file with the -v option
+73f147b	eef8320	Thu Apr 11 10:47:43 2013 +0100	A few bugfixes from the previous two commits. New -S option in gtcheck and -H made work also in the cross-check mode
+eef8320	baa5708	Wed Apr 10 15:47:23 2013 +0100	gtcheck: Removed forgotten debugging line
+851df67	5cba9d8	Wed Apr 3 09:13:51 2013 +0100	bcf core lib: Fixed a silly bug from the last commit. FILTER=PASS indeed must come first, but only after the ##fileformat string.
+996f0de	d64ba91	Tue Mar 26 15:43:03 2013 +0000	bcf_set_iarray: fix in incrementing typed pointer
+7e47a55	5d91d67	Thu Mar 21 08:59:32 2013 +0000	vcfnorm: Bugfixes, more robust realignment, more sanity checks.
+5e9cebd	168452f 3fcccf2	Wed Mar 20 11:03:52 2013 -0700	Merge pull request #9 from kmsquire/fix_secondary_check
+3fcccf2	168452f	Wed Mar 20 11:01:09 2013 -0700	Bugfix: core is a member of bam1_t->core
+d191f5e	5963c16	Mon Mar 18 16:33:28 2013 +0000	vcfnorm fix: segfault on nasty case of indel; synced_reader fix: read from stdin
+60f4eac	17765c6	Wed Mar 13 09:39:21 2013 +0000	vcfgtcheck fix: added the command into main()
+17765c6	5f16541	Wed Mar 13 08:44:53 2013 +0000	vcfquery fix: throw an error when no VCF given with -l.
+a2d192f	ad34679	Tue Mar 12 13:45:10 2013 +0000	gtcheck: better output file names with -p dir/ prefix.
+2afe338	a63f58a	Fri Mar 1 12:39:29 2013 +0000	vcfcheck hotfix: Handle properly sample stats, cases where AC,AN are present in the header but not in the lines
+1f12f86	db4acc0	Fri Feb 15 11:33:58 2013 +0000	Fix handling of legacy tabix indexes with empty dictionary.
+e918535	d38cede	Tue Feb 12 17:02:47 2013 +0000	vcffilter: Allow fixed threshold filtering of annotations which are not used in SOM
+58e328b	88ee406	Wed Feb 6 14:18:14 2013 +0000	Fix in treatment of haploid Number=G tags. New category for structured header lines such as ALT=<ID=..>. Temporary solution to missing values in vectors: TODO!
+145e599	6185a7b	Thu Dec 20 09:39:22 2012 +0000	vcfcheck: --debug outputs to stdout rather than stderr and the output parsable
+420881b	b238605	Fri Dec 7 10:00:57 2012 +0000	htslib/vcf.c: free unused records, fixed a small memory leak
+3d24cd5	92217e5	Thu Nov 29 10:01:35 2012 +0000	plot-vcfcheck: Fix in merging per-sample average depth - average, not sum
+8af2d0a	f14716c	Thu Nov 15 16:44:25 2012 +0000	Fix: do not drop first record with both -B and -h
+d000f83	7dfbbe8	Thu Nov 15 15:34:04 2012 +0000	plot-vcfcheck: removed forgotten debugging comments; merge of allelic r2 column in GCsAF
+ebc767a	e25fb12	Thu Nov 15 14:23:22 2012 +0000	plot-vcfcheck: fixed forgotten .pdf extension string
+755907e	ab2a27c	Tue Nov 13 14:52:30 2012 +0000	plot-vcfcheck: fixex merging of per-sample stats
+8055bae	3b64be1	Sat Nov 10 17:17:33 2012 +0100	Fix in merge_alleles (expand REF if necessary); Normalize local copy of ALT,REF
+3b64be1	2d9a6cb	Wed Nov 7 02:37:19 2012 +0000	Fixed memset error in vcfmerge
+2d9a6cb	1bc5f6f	Tue Nov 6 05:00:31 2012 +0000	merge_format_field: fix in setting missing values
+8c3471e	6f59a40	Fri Oct 19 10:12:47 2012 +0100	Fixed a typo which rendered -n <cnt> ineffective.
+97e758e	e9a0809	Tue Oct 9 10:09:51 2012 +0100	Fix in variant type recognition: distinguish indels from complex events
+f56ce9a	a0dab49	Tue Sep 25 13:37:42 2012 +0100	Bug fix: variant type not checked in the absence of --collapse option, this affected all vcf* commands
+a0dab49	7be5993	Tue Sep 25 09:26:07 2012 +0100	Cumulative commit with many changes, including: - symlinking htscmd enables abbreviated commands - header manipulation routines in htslib/vcf.* - test suite for checking consistency - improvements and new features in existing vcf*commands - skeleton of vcfmerge (not fully functional yet) - bugfixes
+76bc90d	959db8d	Fri Sep 7 15:44:49 2012 +0100	Fix signed return going into unsigned variable
+c2a68d3	22543d6	Thu Sep 6 16:29:56 2012 +0100	Fixed typo, check i-th ALT instead of 1st in set_variant_types
+22543d6	633f436	Thu Sep 6 16:29:06 2012 +0100	Fixed typo, open with w instead of r
+46a866f	c8bdd76	Wed Sep 5 14:51:37 2012 +0100	Fix function prototypes for knetfile and bgzf to match system read and write.
+23a1aa4	2f3e234	Wed Aug 22 17:01:22 2012 +0100	Fix in calc_ac for missing GTs; Number of MNPs and other events in the summary table
+c251364	09f4cb6	Wed Aug 8 15:45:20 2012 +0100	Fix in per sample stats; Minor cosmetic improvements of plots
+2d16106	5dfae19	Mon Aug 6 16:21:37 2012 +0100	Documented the synced reader; More stats for vcfcheck: genotype concordance; Bugfixes
+5fb5791	dce457b	Wed Aug 1 09:13:22 2012 +0100	More stats: frameshifts ratio; bug fixes
+1fa4c89	9b6b318	Thu Jul 26 12:52:47 2012 -0400	bugfix: invalid memory access (fixed by petr)
+621aeb7	8de0693	Tue Jul 24 16:45:17 2012 +0100	Calculate AC,AN on fly if not in INFO; allow calling bcf_unpack() repeatedly without redoing the work; plot graphs using matplotlib; bugfixes
+8de0693	5508b9c	Tue Jul 24 16:41:30 2012 +0100	Calculate AC,AN on fly if not in INFO; allow calling bcf_unpack() repeatedly without redoing the work; plot graphs using matplotlib; bugfixes
+c8f1555	d133a54	Mon Jul 23 19:29:05 2012 +0100	Invalid read fix in hts_itr_query; Unsafe loop limits fix in vcf_parse1
+49b0749	92a96c9	Tue Jul 17 12:09:47 2012 -0400	bugfix: vcfview -G failing due to recent changes
+3110062	c1c36bf	Fri Jun 29 11:23:25 2012 -0400	bugfix: a typo
+cf0da03	c6e9c5f	Mon Jun 25 12:16:59 2012 -0400	bugfix: update_loff() run twice
+be1e4c1	73bc25e	Mon Jun 25 11:46:32 2012 -0400	bugfix
+73bc25e	112176a	Mon Jun 25 11:17:47 2012 -0400	bugfix in the new index; containing dbg code
+08c8bb5	0fd291d	Fri Jun 22 17:38:27 2012 -0400	bugfix: bin 0 is not sorted
+9ea927a	ffc8d65	Wed Jun 20 15:42:51 2012 -0400	bugfix: missing values are not filled sometimes
+f73f662	cc7b3c0	Wed Jun 20 10:33:21 2012 -0400	bugfix: wrong integer packing
+eda81c1	dc46744	Tue Jun 19 10:25:47 2012 -0400	fixed a few g++ warnings
+b9b4afa	1291adc	Mon Jun 18 10:56:22 2012 -0400	bugfix: hts index not working when n_seq is unknow
+e4813e9	20e7996	Thu Jun 14 15:20:49 2012 -0400	bugfix missing string not printed properly
+9aabfc0	ba50fb3	Thu Jun 14 10:50:55 2012 -0400	bugfix: parent merging not working
+13c21f2	1426dd5	Thu Jun 14 10:20:15 2012 -0400	fixed a couple of warnings
+0313740	16275c3	Wed May 16 11:50:12 2012 -0400	bugfix: bamshuf not working when collision
+8efb052	c9bda2f	Tue May 15 20:06:27 2012 -0400	fixed gcc warnings
+2244809	6053079	Mon May 14 23:47:40 2012 -0400	fixed g++ warnings
+7ec64b1	144b7ef	Mon May 14 17:27:16 2012 -0400	fix C++ compiling errors and warnings
+144b7ef	20ba14c	Mon May 14 17:11:03 2012 -0400	bugfix: one extra record from random access
+a631896	d27cec6	Mon May 14 12:27:43 2012 -0400	index load; bugfix: wrong offset of last chr
+75e3bd9	e546ed8	Sun May 13 18:00:12 2012 -0400	bugfix: compute "bin" in bam
+e546ed8	d8ddcc0	Sun May 13 15:21:56 2012 -0400	bugfix: uninitialized numbers
+b42cc73	6375f0c	Sun May 13 13:53:12 2012 -0400	bugfix: wrongly parse B arrays
+df979ba	feb86e1	Fri May 11 20:32:59 2012 -0400	bugfix: wrong returned value from knet_seek()
+df356d2	92290e0	Thu May 10 22:16:41 2012 -0400	bugfix: prematured output in bgzf-mt
+3127025	6a3a99a	Tue May 8 09:39:15 2012 -0400	bugfix: incorrect float
+6a3a99a	3f59614	Tue May 8 09:29:26 2012 -0400	bugfix: str in GT not encoded properly
+0860358	4081e7f	Fri May 4 15:40:44 2012 -0400	fixed a memory leak
+8bf3593	8901681	Fri May 4 11:40:51 2012 -0400	bugfix: missing "," in ALT
+f776393	791efdf	Thu May 3 00:43:50 2012 -0400	bugfix: in case of no FORMAT
+7dbaa13	976e97f	Wed May 2 23:33:42 2012 -0400	bugfix: segfault given Number=.
+976e97f	341a947	Wed May 2 23:11:26 2012 -0400	bugfix: -l not working; corner case of Number=.
+29015d5	4608878	Tue May 1 20:44:02 2012 -0400	bugfix: extra byte for string
+6959b7c	1003534	Tue May 1 20:19:55 2012 -0400	use two memory buffers to fix a bug
+b3e623b	07b4746	Tue May 1 17:29:29 2012 -0400	another bug fix
+ee9bc0d	d6028ed	Tue May 1 16:42:11 2012 -0400	fixed one bug, more to fix
+1344d39	a33c73e	Fri Feb 10 14:47:53 2012 +0000	Fix: allow custom formats
+87f69fe	70e9ba8	Thu Mar 31 20:38:03 2011 +0000	fixed two bugs due to recent changes
+4dedb83	08d08a2	Fri Jan 21 11:45:37 2011 +0000	Fix: Complain only when VCF is newer, not newer or same mtime
+3c60871	07f01ed	Tue Sep 7 14:13:25 2010 +0000	fixed a bug in C/Java when n_off == 0
+07f01ed	31c8bd3	Wed Aug 25 14:42:37 2010 +0000	Fix: Exit with an error rather than segfault when index is not present and region is queried
+9b14f2c	4fb1b67	Sat May 1 02:34:07 2010 +0000	* tabix-0.1.3-3 (r556) * fixed a small memory leak in knetfile * fixed a minor bug for remote downloading
+79d6239	7cacea8	Wed Apr 28 20:33:07 2010 +0000	* added the format specification * fixed a typo in bgzip
+ac9fc9f	15159c7	Thu Apr 22 13:46:10 2010 +0000	Fix in src/dst file detection and slight change of behaviour
+f79c886	81170d8	Mon Mar 29 14:58:48 2010 +0000	removed a line of debugging code
+81170d8	a2d85ec	Fri Mar 19 16:29:16 2010 +0000	* tabix-0.1.3 (r543) * fixed another off-by-one bug
+e7dc13d	05df526	Mon Nov 2 16:08:18 2009 +0000	* tabix-0.0.0-5 (r504) * fixed a critical bug in fetching data (a typo in fact) * support SAM (tested on ex1.sam) and VCF (not tested) * improve the command-line interface

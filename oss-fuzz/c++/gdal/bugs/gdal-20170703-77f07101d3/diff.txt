@@ -1,0 +1,39 @@
+diff --git a/gdal/frmts/vrt/vrtsourcedrasterband.cpp b/gdal/frmts/vrt/vrtsourcedrasterband.cpp
+index f1878c312b..44a2a959da 100644
+--- a/gdal/frmts/vrt/vrtsourcedrasterband.cpp
++++ b/gdal/frmts/vrt/vrtsourcedrasterband.cpp
+@@ -905,8 +905,11 @@ CPLErr VRTSourcedRasterBand::AddSource( VRTSource *poNewSource )
+         VRTSimpleSource* poSS = reinterpret_cast<VRTSimpleSource*>( poNewSource );
+         if( GetMetadataItem("NBITS", "IMAGE_STRUCTURE") != NULL)
+         {
+-            poSS->SetMaxValue(
+-                    (1 << atoi(GetMetadataItem("NBITS", "IMAGE_STRUCTURE")))-1);
++            int nBits = atoi(GetMetadataItem("NBITS", "IMAGE_STRUCTURE"));
++            if( nBits >= 1 && nBits <= 31 )
++            {
++                poSS->SetMaxValue( static_cast<int>((1U << nBits) -1) );
++            }
+         }
+ 
+         CheckSource( poSS );
+diff --git a/gdal/frmts/vrt/vrtsources.cpp b/gdal/frmts/vrt/vrtsources.cpp
+index b9a7844289..bb603b8c37 100644
+--- a/gdal/frmts/vrt/vrtsources.cpp
++++ b/gdal/frmts/vrt/vrtsources.cpp
+@@ -1162,12 +1162,12 @@ int VRTSimpleSource::NeedMaxValAdjustment() const
+     const char* pszNBITS =
+         m_poRasterBand->GetMetadataItem("NBITS", "IMAGE_STRUCTURE");
+     const int nBits = (pszNBITS) ? atoi(pszNBITS) : 0;
+-    const int nBandMaxValue = (1 << nBits) - 1;
+-    if( nBandMaxValue == 0 || nBandMaxValue > m_nMaxValue )
++    if( nBits >= 1 && nBits <= 31 )
+     {
+-        return TRUE;
++        const int nBandMaxValue = static_cast<int>((1U << nBits) - 1);
++        return nBandMaxValue > m_nMaxValue;
+     }
+-    return FALSE;
++    return TRUE;
+ }
+ 
+ /************************************************************************/

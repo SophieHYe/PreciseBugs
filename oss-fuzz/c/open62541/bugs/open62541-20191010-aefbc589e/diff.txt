@@ -1,0 +1,14 @@
+diff --git a/src/server/ua_subscription_events.c b/src/server/ua_subscription_events.c
+index 584818537..feaa2f6ce 100644
+--- a/src/server/ua_subscription_events.c
++++ b/src/server/ua_subscription_events.c
+@@ -13,7 +13,8 @@
+ UA_StatusCode
+ UA_MonitoredItem_removeNodeEventCallback(UA_Server *server, UA_Session *session,
+                                          UA_Node *node, void *data) {
+-    UA_assert(node->nodeClass == UA_NODECLASS_OBJECT);
++    if (node->nodeClass != UA_NODECLASS_OBJECT)
++        return UA_STATUSCODE_BADINVALIDARGUMENT;
+     UA_ObjectNode *on = (UA_ObjectNode*)node;
+     UA_MonitoredItem *remove = (UA_MonitoredItem*)data;
+ 

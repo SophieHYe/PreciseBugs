@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_dimension.cpp b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_dimension.cpp
+index 58b2893ad7..493d5ac601 100644
+--- a/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_dimension.cpp
++++ b/gdal/ogr/ogrsf_frmts/dxf/ogrdxf_dimension.cpp
+@@ -126,7 +126,12 @@ OGRFeature *OGRDXFLayer::TranslateDIMENSION()
+             break;
+         }
+     }
+-
++    if( nCode < 0 )
++    {
++        DXF_LAYER_READER_ERROR();
++        delete poFeature;
++        return NULL;
++    }
+     if( nCode == 0 )
+         poDS->UnreadValue();
+ 

@@ -1,0 +1,14 @@
+diff --git a/coders/png.c b/coders/png.c
+index f4445829b..d1a4f3005 100644
+--- a/coders/png.c
++++ b/coders/png.c
+@@ -5091,7 +5091,8 @@ static Image *ReadOneJNGImage(MngInfo *mng_info,
+ 
+   jng_image=DestroyImage(jng_image);
+ 
+-  if ((image_info->ping == MagickFalse) && (jng_color_type >= 12))
++  if ((image_info->ping == MagickFalse) && (alpha_image != (Image *) NULL) &&
++      (jng_color_type >= 12))
+     {
+       if (jng_alpha_compression_method == 0)
+         {

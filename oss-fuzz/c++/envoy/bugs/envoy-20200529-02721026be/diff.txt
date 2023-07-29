@@ -1,0 +1,13 @@
+diff --git a/ci/docker_ci.sh b/ci/docker_ci.sh
+index 53fd194647..5a49763158 100755
+--- a/ci/docker_ci.sh
++++ b/ci/docker_ci.sh
+@@ -41,7 +41,7 @@ fi
+ 
+ docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
+ 
+-for BUILD_TYPE in ${BUILD_TYPES}; do
++for BUILD_TYPE in "${BUILD_TYPES[@]}"; do
+     docker tag "${DOCKER_IMAGE_PREFIX}${BUILD_TYPE}:local" "${DOCKER_IMAGE_PREFIX}${BUILD_TYPE}${IMAGE_POSTFIX}:${IMAGE_NAME}"
+     docker push "${DOCKER_IMAGE_PREFIX}${BUILD_TYPE}${IMAGE_POSTFIX}:${IMAGE_NAME}"
+ 

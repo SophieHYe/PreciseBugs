@@ -1,0 +1,16 @@
+diff --cc gdal/frmts/vrt/vrtsources.cpp
+index e140297f82,e140297f82..ab53cfcf8a
+--- a/gdal/frmts/vrt/vrtsources.cpp
++++ b/gdal/frmts/vrt/vrtsources.cpp
+@@@ -500,9 -500,9 +500,9 @@@ CPLErr VRTSimpleSource::XMLInit( CPLXML
+      CPLXMLNode* psSourceFileNameNode = CPLGetXMLNode(psSrc,"SourceFilename");
+      const char *pszFilename =
+          psSourceFileNameNode ?
+--        CPLGetXMLValue(psSourceFileNameNode, nullptr, "") : "";
+++        CPLGetXMLValue(psSourceFileNameNode, nullptr, nullptr) : nullptr;
+  
+--    if( pszFilename[0] == '\0' )
+++    if( pszFilename == nullptr )
+      {
+          CPLError( CE_Warning, CPLE_AppDefined,
+                    "Missing <SourceFilename> element in VRTRasterBand." );

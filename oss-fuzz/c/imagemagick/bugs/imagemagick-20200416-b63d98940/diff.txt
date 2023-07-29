@@ -1,0 +1,12 @@
+diff --git a/coders/xcf.c b/coders/xcf.c
+index 5e33ca921..643721172 100644
+--- a/coders/xcf.c
++++ b/coders/xcf.c
+@@ -1042,6 +1042,7 @@ static MagickBooleanType ReadOneLayer(const ImageInfo *image_info,Image* image,
+     {
+       outLayer->image->background_color.alpha_trait=BlendPixelTrait;
+       outLayer->image->alpha_trait=BlendPixelTrait;
++      (void) SetImageBackgroundColor(outLayer->image,exception);
+     }
+ 
+   InitXCFImage(outLayer,exception);

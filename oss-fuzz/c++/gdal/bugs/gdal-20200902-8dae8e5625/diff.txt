@@ -1,0 +1,15 @@
+diff --git a/gdal/frmts/mrf/LERCV1/Lerc1Image.cpp b/gdal/frmts/mrf/LERCV1/Lerc1Image.cpp
+index 3412f8887e..85acead113 100644
+--- a/gdal/frmts/mrf/LERCV1/Lerc1Image.cpp
++++ b/gdal/frmts/mrf/LERCV1/Lerc1Image.cpp
+@@ -47,8 +47,9 @@ bool BitMaskV1::RLEdecompress(const Byte* src, size_t n) {
+         READ_COUNT;
+         n -= 2;
+         if (count < 0) { // negative count for repeats
+-            if (0 == n--)
++            if (0 == n)
+                 return false;
++            --n; // only decrement after checking for 0 to avoid a (harmless) unsigned integer overflow warning with ossfuzz
+             Byte b = *src++;
+             sz += count;
+             if (sz < 0)

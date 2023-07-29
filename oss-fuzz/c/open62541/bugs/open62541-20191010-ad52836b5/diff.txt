@@ -1,0 +1,56 @@
+diff --git a/deps/itoa.c b/deps/itoa.c
+index 40a2af6f5..ac85b5712 100644
+--- a/deps/itoa.c
++++ b/deps/itoa.c
+@@ -69,12 +69,23 @@ UA_UInt16 itoaUnsigned(UA_UInt64 value, char* buffer, UA_Byte base) {
+ /* adapted from http://www.techiedelight.com/implement-itoa-function-in-c/ to use UA_... types */
+ UA_UInt16 itoaSigned(UA_Int64 value, char* buffer) {
+     /* consider absolute value of number */
+-    UA_UInt64 n = (UA_UInt64)value;
+ 
+-    if(value < 0){
+-        n = (UA_UInt64)-value;
++
++    UA_UInt64 n;
++
++    /* Special case for UA_INT64_MIN which can not simply be negated */
++    /* it will cause a signed integer overflow */
++    if (value == UA_INT64_MIN) {
++        n = (UA_UInt64)UA_INT64_MAX + 1;
+     }
+-    
++    else {
++        n = (UA_UInt64)value;
++
++        if(value < 0){
++            n = (UA_UInt64)-value;
++        }
++    }
++
+     UA_UInt16 i = 0;
+     while (n) {
+         UA_UInt64 r = n % 10;
+diff --git a/include/open62541/types.h b/include/open62541/types.h
+index eeecb5451..fdcdea6e8 100644
+--- a/include/open62541/types.h
++++ b/include/open62541/types.h
+@@ -104,8 +104,8 @@ typedef uint32_t UA_UInt32;
+  * An integer value between -9 223 372 036 854 775 808 and
+  * 9 223 372 036 854 775 807. */
+ typedef int64_t UA_Int64;
+-#define UA_INT64_MIN ((int64_t)-9223372036854775808)
+-#define UA_INT64_MAX (int64_t)9223372036854775807
++#define UA_INT64_MAX (int64_t)9223372036854775807LL
++#define UA_INT64_MIN ((int64_t)-UA_INT64_MAX-1LL)
+ 
+ /**
+  * UInt64
+@@ -113,7 +113,7 @@ typedef int64_t UA_Int64;
+  * An integer value between 0 and 18 446 744 073 709 551 615. */
+ typedef uint64_t UA_UInt64;
+ #define UA_UINT64_MIN (uint64_t)0
+-#define UA_UINT64_MAX (uint64_t)18446744073709551615
++#define UA_UINT64_MAX (uint64_t)18446744073709551615ULL
+ 
+ /**
+  * Float

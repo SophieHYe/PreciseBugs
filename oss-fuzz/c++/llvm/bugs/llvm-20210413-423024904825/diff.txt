@@ -1,0 +1,98 @@
+diff --git a/compiler-rt/lib/fuzzer/FuzzerMutate.cpp b/compiler-rt/lib/fuzzer/FuzzerMutate.cpp
+index 5209b86641fb..90d3697742c0 100644
+--- a/compiler-rt/lib/fuzzer/FuzzerMutate.cpp
++++ b/compiler-rt/lib/fuzzer/FuzzerMutate.cpp
+@@ -69,6 +69,10 @@ static char RandCh(Random &Rand) {
+ 
+ size_t MutationDispatcher::Mutate_Custom(uint8_t *Data, size_t Size,
+                                          size_t MaxSize) {
++  if (EF->__msan_unpoison)
++    EF->__msan_unpoison(Data, Size);
++  if (EF->__msan_unpoison_param)
++    EF->__msan_unpoison_param(4);
+   return EF->LLVMFuzzerCustomMutator(Data, Size, MaxSize,
+                                      Rand.Rand<unsigned int>());
+ }
+@@ -83,9 +87,18 @@ size_t MutationDispatcher::Mutate_CustomCrossOver(uint8_t *Data, size_t Size,
+     return 0;
+   CustomCrossOverInPlaceHere.resize(MaxSize);
+   auto &U = CustomCrossOverInPlaceHere;
++
++  if (EF->__msan_unpoison) {
++    EF->__msan_unpoison(Data, Size);
++    EF->__msan_unpoison(Other.data(), Other.size());
++    EF->__msan_unpoison(U.data(), U.size());
++  }
++  if (EF->__msan_unpoison_param)
++    EF->__msan_unpoison_param(7);
+   size_t NewSize = EF->LLVMFuzzerCustomCrossOver(
+       Data, Size, Other.data(), Other.size(), U.data(), U.size(),
+       Rand.Rand<unsigned int>());
++
+   if (!NewSize)
+     return 0;
+   assert(NewSize <= MaxSize && "CustomCrossOver returned overisized unit");
+diff --git a/compiler-rt/test/fuzzer/MsanCustomMutator.cpp b/compiler-rt/test/fuzzer/MsanCustomMutator.cpp
+new file mode 100644
+index 000000000000..5c783e9c31d4
+--- /dev/null
++++ b/compiler-rt/test/fuzzer/MsanCustomMutator.cpp
+@@ -0,0 +1,47 @@
++// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
++// See https://llvm.org/LICENSE.txt for license information.
++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++
++// Triggers the bug described here:
++// https://github.com/google/oss-fuzz/issues/4605
++//
++// Tests that custom mutators do not cause MSan false positives.  We are careful
++// to use every parameter to ensure none cause false positives.
++
++#include <algorithm>
++#include <cstddef>
++#include <cstdint>
++#include <cstdio>
++#include <cstring>
++
++extern "C" {
++
++int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { return 0; }
++
++size_t LLVMFuzzerCustomMutator(uint8_t *Data, size_t Size, size_t MaxSize,
++                               unsigned int Seed) {
++  if (Seed == 7)
++    return 0;
++  if (MaxSize == 0)
++    return 0;
++  for (size_t I = 0; I < Size; ++I) {
++    if (Data[I] == 42) {
++      printf("BINGO\n");
++    }
++  }
++  return Size;
++}
++
++size_t LLVMFuzzerCustomCrossOver(
++    const uint8_t *Data1, size_t Size1, const uint8_t *Data2, size_t Size2,
++    uint8_t *Out, size_t MaxOutSize, unsigned int Seed) {
++  if (Seed == 7)
++    return 0;
++  size_t I = 0;
++  for (; I < Size1 && I < Size2 && I < MaxOutSize; ++I) {
++    Out[I] = std::min(Data1[I], Data2[I]);
++  }
++  return I;
++}
++
++} // extern "C"
+diff --git a/compiler-rt/test/fuzzer/msan-custom-mutator.test b/compiler-rt/test/fuzzer/msan-custom-mutator.test
+new file mode 100644
+index 000000000000..00fbae32048f
+--- /dev/null
++++ b/compiler-rt/test/fuzzer/msan-custom-mutator.test
+@@ -0,0 +1,5 @@
++REQUIRES: msan
++RUN: %msan_compiler %S/MsanCustomMutator.cpp -o %t
++RUN: %run %t -seed=1 -runs=1000 2>&1 | FileCheck %s
++
++CHECK-NOT: MemorySanitizer: use-of-uninitialized-value

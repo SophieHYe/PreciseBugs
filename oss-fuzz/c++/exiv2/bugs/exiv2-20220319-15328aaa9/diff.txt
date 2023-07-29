@@ -1,0 +1,25 @@
+diff --git a/include/exiv2/value.hpp b/include/exiv2/value.hpp
+index 27690e50a..051050ab9 100644
+--- a/include/exiv2/value.hpp
++++ b/include/exiv2/value.hpp
+@@ -13,6 +13,7 @@
+ #include <cstring>
+ #include <iomanip>
+ #include <map>
++#include <cmath>
+ 
+ // *****************************************************************************
+ // namespace extensions
+@@ -1251,7 +1252,7 @@ class ValueType : public Value {
+     const auto v = value_.at(n);
+     if (static_cast<decltype(v)>(std::numeric_limits<I>::min()) <= v &&
+         v <= static_cast<decltype(v)>(std::numeric_limits<I>::max())) {
+-      return static_cast<I>(v);
++      return static_cast<I>(std::round(v));
+     } else {
+       return 0;
+     }
+diff --git a/test/data/issue_2160_poc.jpg b/test/data/issue_2160_poc.jpg
+new file mode 100644
+index 000000000..5716ff41c
+Binary files /dev/null and b/test/data/issue_2160_poc.jpg differ

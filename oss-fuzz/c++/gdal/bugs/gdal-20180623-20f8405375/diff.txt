@@ -1,0 +1,34 @@
+diff --git a/gdal/frmts/rmf/rmfjpeg.cpp b/gdal/frmts/rmf/rmfjpeg.cpp
+index c4ebf5b637..07d0172cbb 100644
+--- a/gdal/frmts/rmf/rmfjpeg.cpp
++++ b/gdal/frmts/rmf/rmfjpeg.cpp
+@@ -171,6 +171,15 @@ int RMFDataset::JPEGDecompress(const GByte* pabyIn, GUInt32 nSizeIn,
+         }
+     }
+ 
++    if(setjmp(oJmpBuf))
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "RMF JPEG: Error decompress JPEG tile");
++        jpeg_destroy_decompress(&oJpegInfo);
++        VSIFree(pabyScanline);
++        return 0;
++    }
++
+     while(oJpegInfo.output_scanline < nImageHeight)
+     {
+         JSAMPROW    pabyBuffer[1];
+@@ -198,11 +207,11 @@ int RMFDataset::JPEGDecompress(const GByte* pabyIn, GUInt32 nSizeIn,
+                    pabyScanline, nRawScanLineSize);
+         }
+     }
+-
+-    VSIFree(pabyScanline);
+     jpeg_finish_decompress(&oJpegInfo);
+     jpeg_destroy_decompress(&oJpegInfo);
+ 
++    VSIFree(pabyScanline);
++
+     return oJpegInfo.output_scanline*nRawScanLineSize;
+ }
+ 

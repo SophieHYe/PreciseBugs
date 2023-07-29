@@ -1,0 +1,13 @@
+diff --git a/gdal/third_party/LercLib/BitStuffer2.cpp b/gdal/third_party/LercLib/BitStuffer2.cpp
+index b7a20523b9..aad5265823 100644
+--- a/gdal/third_party/LercLib/BitStuffer2.cpp
++++ b/gdal/third_party/LercLib/BitStuffer2.cpp
+@@ -193,6 +193,8 @@ bool BitStuffer2::Decode(const Byte** ppByte, size_t& nBytesRemaining, vector<un
+   }
+   else
+   {
++    if (numBits == 0)
++      return false;
+     if (nBytesRemaining < 1)
+       return false;
+ 

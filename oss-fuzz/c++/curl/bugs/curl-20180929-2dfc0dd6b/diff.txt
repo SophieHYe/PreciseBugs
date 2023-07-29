@@ -1,0 +1,24 @@
+diff --git a/lib/multi.c b/lib/multi.c
+index f20260977..9a98435e6 100644
+--- a/lib/multi.c
++++ b/lib/multi.c
+@@ -2005,12 +2005,16 @@ static CURLMcode multi_runsingle(struct Curl_multi *multi,
+             newurl = data->req.location;
+             data->req.location = NULL;
+             result = Curl_follow(data, newurl, FOLLOW_FAKE);
+-            if(result)
++            if(result) {
+               stream_error = TRUE;
++              result = multi_done(&data->easy_conn, result, TRUE);
++            }
+           }
+ 
+-          multistate(data, CURLM_STATE_DONE);
+-          rc = CURLM_CALL_MULTI_PERFORM;
++          if(!result) {
++            multistate(data, CURLM_STATE_DONE);
++            rc = CURLM_CALL_MULTI_PERFORM;
++          }
+         }
+       }
+       else if(comeback)

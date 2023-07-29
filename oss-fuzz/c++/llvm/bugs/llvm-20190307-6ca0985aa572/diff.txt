@@ -1,0 +1,113 @@
+diff --git a/llvm/include/llvm/Analysis/VectorUtils.h b/llvm/include/llvm/Analysis/VectorUtils.h
+index 321358e8b202..4d940860b63b 100644
+--- a/llvm/include/llvm/Analysis/VectorUtils.h
++++ b/llvm/include/llvm/Analysis/VectorUtils.h
+@@ -17,6 +17,7 @@
+ #include "llvm/Analysis/LoopAccessAnalysis.h"
+ #include "llvm/Analysis/TargetLibraryInfo.h"
+ #include "llvm/IR/IRBuilder.h"
++#include "llvm/Support/CheckedArithmetic.h"
+ 
+ namespace llvm {
+ 
+@@ -277,7 +278,11 @@ public:
+   bool insertMember(InstTy *Instr, int32_t Index, uint32_t NewAlign) {
+     assert(NewAlign && "The new member's alignment should be non-zero");
+ 
+-    int32_t Key = Index + SmallestKey;
++    // Make sure the key fits in an int32_t.
++    Optional<int32_t> MaybeKey = checkedAdd(Index, SmallestKey);
++    if (!MaybeKey)
++      return false;
++    int32_t Key = *MaybeKey;
+ 
+     // Skip if there is already a member with the same index.
+     if (Members.find(Key) != Members.end())
+@@ -285,13 +290,19 @@ public:
+ 
+     if (Key > LargestKey) {
+       // The largest index is always less than the interleave factor.
+-      if (Index >= static_cast<int>(Factor))
++      if (Index >= static_cast<int32_t>(Factor))
+         return false;
+ 
+       LargestKey = Key;
+     } else if (Key < SmallestKey) {
++
++      // Make sure the largest index fits in an int32_t.
++      Optional<int32_t> MaybeLargestIndex = checkedSub(LargestKey, Key);
++      if (!MaybeLargestIndex)
++        return false;
++
+       // The largest index is always less than the interleave factor.
+-      if (LargestKey - Key >= static_cast<int>(Factor))
++      if (*MaybeLargestIndex >= static_cast<int64_t>(Factor))
+         return false;
+ 
+       SmallestKey = Key;
+diff --git a/llvm/include/llvm/Support/CheckedArithmetic.h b/llvm/include/llvm/Support/CheckedArithmetic.h
+index 8f7fbde8c3ae..8a50e3d5ddf6 100644
+--- a/llvm/include/llvm/Support/CheckedArithmetic.h
++++ b/llvm/include/llvm/Support/CheckedArithmetic.h
+@@ -49,6 +49,15 @@ checkedAdd(T LHS, T RHS) {
+   return checkedOp(LHS, RHS, &llvm::APInt::sadd_ov);
+ }
+ 
++/// Subtract two signed integers \p LHS and \p RHS.
++/// \return Optional of sum if no signed overflow occurred,
++/// \c None otherwise.
++template <typename T>
++typename std::enable_if<std::is_signed<T>::value, llvm::Optional<T>>::type
++checkedSub(T LHS, T RHS) {
++  return checkedOp(LHS, RHS, &llvm::APInt::ssub_ov);
++}
++
+ /// Multiply two signed integers \p LHS and \p RHS.
+ /// \return Optional of product if no signed overflow occurred,
+ /// \c None otherwise.
+diff --git a/llvm/test/Transforms/LoopVectorize/X86/interleaved-accesses-large-gap.ll b/llvm/test/Transforms/LoopVectorize/X86/interleaved-accesses-large-gap.ll
+new file mode 100644
+index 000000000000..15ec344cc3dd
+--- /dev/null
++++ b/llvm/test/Transforms/LoopVectorize/X86/interleaved-accesses-large-gap.ll
+@@ -0,0 +1,40 @@
++; RUN: opt < %s  -loop-vectorize -mtriple x86_64 -S | FileCheck %s
++
++%struct.ST4 = type { i32, i32, i32, i32 }
++
++; The gaps between the memory access in this function are too large for
++; interleaving.
++
++; Test from https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=7560
++define void @test1(%struct.ST4* noalias %B) {
++; CHECK-LABEL: @test1
++; CHECK-NEXT:  entry:
++; CHECK-NEXT:    br label %for.body
++
++; CHECK-LABEL: for.body:
++; CHECK: store i32
++; CHECK: store i32
++; CHECK: store i32
++; CHECK: store i32
++; CHECK-NOT: store
++;
++entry:
++  br label %for.body
++
++for.body:                                         ; preds = %for.body, %entry
++  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.body ]
++  %p1 = getelementptr inbounds %struct.ST4, %struct.ST4* %B, i64 %indvars.iv, i32 0
++  store i32 65536, i32* %p1, align 4
++  %p2 = getelementptr i32, i32* %p1, i32 -2147483648
++  store i32 65536, i32* %p2, align 4
++  %p3 = getelementptr inbounds %struct.ST4, %struct.ST4* %B, i64 %indvars.iv, i32 2
++  store i32 10, i32* %p3, align 4
++  %p4 = getelementptr inbounds %struct.ST4, %struct.ST4* %B, i64 %indvars.iv, i32 3
++  store i32 12, i32* %p4, align 4
++  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
++  %exitcond = icmp eq i64 %indvars.iv.next, 1024
++  br i1 %exitcond, label %for.cond.cleanup, label %for.body
++
++for.cond.cleanup:                                 ; preds = %for.body
++  ret void
++}

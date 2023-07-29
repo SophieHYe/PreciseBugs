@@ -1,0 +1,15 @@
+diff --git a/poppler/Function.cc b/poppler/Function.cc
+index 39c09671..71992d95 100644
+--- a/poppler/Function.cc
++++ b/poppler/Function.cc
+@@ -295,6 +295,10 @@ SampledFunction::SampledFunction(Object *funcObj, Dict *dict) {
+     return;
+   }
+   sampleBits = obj1.getInt();
++  if (unlikely(sampleBits < 1 || sampleBits > 32)) {
++    error(errSyntaxError, -1, "Function invalid BitsPerSample");
++    return;
++  }
+   sampleMul = 1.0 / (pow(2.0, (double)sampleBits) - 1);
+ 
+   //----- Encode

@@ -1,0 +1,32 @@
+diff --git a/MagickCore/property.c b/MagickCore/property.c
+index 8fd2e58fc..685eabe87 100644
+--- a/MagickCore/property.c
++++ b/MagickCore/property.c
+@@ -1747,6 +1747,13 @@ static MagickBooleanType GetXMPProperty(const Image *image,const char *property)
+   xmp_profile=StringInfoToString(profile);
+   if (xmp_profile == (char *) NULL)
+     return(MagickFalse);
++  if ((strstr(xmp_profile,"<rdf:RDF") == (char *) NULL) ||
++      (strstr(xmp_profile,"<rdf:Description") == (char *) NULL) ||
++      (strstr(xmp_profile,"<x:") == (char *) NULL))
++    {
++      xmp_profile=DestroyString(xmp_profile);
++      return(MagickFalse);
++    }
+   for (p=xmp_profile; *p != '\0'; p++)
+     if ((*p == '<') && (*(p+1) == 'x'))
+       break;
+diff --git a/coders/ps.c b/coders/ps.c
+index 82e098c3f..6d3ff00d7 100644
+--- a/coders/ps.c
++++ b/coders/ps.c
+@@ -694,7 +694,8 @@ static Image *ReadPSImage(const ImageInfo *image_info,ExceptionInfo *exception)
+             break;
+         }
+         SetStringInfoLength(profile,i);
+-        (void) SetImageProfile(image,"xmp",profile,exception);
++        if (EOFBlob(image) == MagickFalse)
++          (void) SetImageProfile(image,"xmp",profile,exception);
+         profile=DestroyStringInfo(profile);
+         continue;
+       }

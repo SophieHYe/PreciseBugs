@@ -1,0 +1,148 @@
+7923b75	bc601ae	Thu Mar 2 17:02:32 2023 -0500	protoparse: fixes to issues reported in v1.15.0 (#554)
+220303e	fea8ba4	Wed Jan 25 15:53:37 2023 -0500	another fuzz test fix, even newer version of protocompile (#546)
+fea8ba4	d2a36df	Thu Jan 19 10:23:17 2023 -0500	newer protocompile with potential fix to fuzz test perf issue (#545)
+0facb74	3b27be2	Thu Nov 17 08:30:15 2022 -0500	desc/builder: fix missing detached leading comments (#539)
+25e6f5d	060cc04	Tue Jul 26 17:17:51 2022 -0400	protoparse: fix scoping issue for extendees and field type names; also fix articles in error messages (#520)
+438db46	1fd73d2	Sat Apr 16 19:46:38 2022 -0700	protoparse: fix panic in linker; handle synthetic oneofs (#512)
+3f69e23	0c2aedc	Mon Feb 14 13:14:48 2022 -0500	fix possible nil-dereference panic (#496)
+3240deb	e5b6528	Sun Feb 13 10:19:43 2022 -0500	protoprint: fix superfluous trailing space (#494)
+0e352eb	6224817	Sat Feb 12 22:07:21 2022 -0500	protoprint: fix bug where comments on method options were not included in output (#492)
+260eab9	d4949d2	Fri Feb 4 12:05:10 2022 -0500	protoparse: fix extension resolution in custom options to match protoc (#484)
+d02a936	602a8db	Tue Jan 18 12:01:22 2022 -0500	dynamic: fix octal escapes in object keys at MarshalJSONPB (#481)
+602a8db	36912e1	Tue Jan 18 11:23:04 2022 -0500	fix panic in linker if there is a symbol name collision between a file with an AST and one without (#477)
+329bde3	bcf8f24	Mon Nov 1 13:22:16 2021 -0400	fix bug in dynamic message: unmarshaling JSON into google.protobuf.Value when JSON value is an array (#443)
+bcf8f24	61218df	Sun Oct 31 11:34:50 2021 -0400	protoparse: another fix to parsing numeric literals (#437)
+22c2acd	833c417	Fri Oct 29 12:20:45 2021 -0400	protoparse: fix another edge case with options and oneofs (#434)
+db1a327	302c6b7	Tue Aug 17 14:12:03 2021 -0400	fix more inconsistencies between protoparse and protoc (#414)
+302c6b7	d3608fa	Thu Aug 5 11:46:51 2021 -0400	fix panics in protoparse identified by oss-fuzz (#412)
+a6abd35	05026f3	Fri May 28 23:15:22 2021 -0400	protoparse: take 2 on fixing symbol resolution to properly match protoc\'s C++-like namespace handling (#397)
+05026f3	2837af4	Thu May 27 16:26:29 2021 -0400	protoparse: fix symbol resolution to correctly mimic protoc behavior, which is more strict (#393)
+2837af4	8255811	Mon Apr 26 11:42:27 2021 -0400	desc/builder: fix typo that resulted in wrong message being removed from its parent (#390)
+ef73590	efe7c09	Wed Dec 9 23:50:34 2020 -0500	protoparse: fix recently introduced issue with trailing comment on last element in file (#374)
+8269465	a68abe2	Fri Nov 20 12:26:59 2020 -0500	fix double options in protoprint (#370)
+a68abe2	711a839	Fri Nov 20 09:01:09 2020 -0500	desc/builder: fixed tag assignments when message has mix of fields with and without tags (#365)
+711a839	0050302	Thu Nov 5 21:20:28 2020 -0500	fix missing public/weak modifiers for imports in protoprint (#367)
+cb62454	886271e	Sun Jul 19 23:30:22 2020 -0400	fix panic when extension value has map w/ no value (#340)
+3216fce	8d2d934	Mon Jul 13 10:45:33 2020 -0400	fix panic when protoparse consumes non-proto file (#337)
+887a08f	6294aea	Thu May 28 23:21:44 2020 -0400	protoparse: fix panic due to ErrorWithSourcePos being created with no position (#326)
+b6666e6	b97137b	Sun Apr 26 21:42:29 2020 -0400	refactor protoparse, fixes multiple issues (#316)
+b97137b	c1f7119	Thu Apr 16 16:12:47 2020 -0400	fix broken tests due to recent protobuf deprecations (#310)
+43f6903	10815c2	Thu Dec 5 20:57:20 2019 -0500	fix comments for fields that start with a dot (proto3 fields with fully-qualified type name) (#294)
+af6c2b7	5374ad0	Wed Oct 23 17:52:34 2019 -0400	fix unused assignments caught by staticcheck (#288)
+c0b9111	76f37dc	Thu Sep 19 07:27:04 2019 -0400	Fix text proto string field marshal issue. (#280)
+76f37dc	c47b58f	Sun Aug 25 11:34:01 2019 -0400	fix panic in protoparse (#272)
+9d66a93	b3561f5	Tue Aug 20 20:55:45 2019 -0400	fixup path separators in protoparse.ResolveFilenames so it works correctly on Windows (#269)
+b3561f5	c67d679	Tue Aug 20 15:19:05 2019 -0400	codec: fix code to work without XXX_Marshal (#268)
+e9bc1d6	bd35b72	Fri Aug 2 10:52:56 2019 -0400	Fix go.mod for Go 1.13 (#258)
+1d90f7f	6ff4792	Sun Jul 21 22:27:31 2019 -0400	update to using protoc 3.9.0; fix code-gen to match go.mod version of protoc-gen-go (#243)
+d24a736	3d62350	Wed Jul 17 13:52:12 2019 -0400	fix panic in binary decoding when skipping over data that has invalid length prefix (#235)
+3d62350	efa672c	Wed Jul 17 12:33:28 2019 -0400	protoprint: fix panics (#234)
+efa672c	d6619a5	Tue Jul 16 22:19:03 2019 -0400	protoparse: fix option source locations (#231)
+ae7b4b3	f5500d9 b894209	Tue Jul 2 20:40:30 2019 -0400	Merge pull request #226 from jhump/jh/fix-resolve-filenames
+efd29ef	528f44e 192fe12	Wed Jun 12 12:26:46 2019 -0400	Merge pull request #222 from jhump/jh/fix-issue-parsing-wk-imports
+af618f5	27593fd beea418	Sat Jun 8 21:53:12 2019 -0600	Merge pull request #218 from jhump/jh/fix-message-registry-base-urls
+beea418	49ba0a8	Sat Jun 8 21:44:04 2019 -0600	fix base URL bugs in ComputeURL
+0e05915	9d022f1	Wed Jun 5 16:54:00 2019 -0700	fix: return input type rather than reflect.Value from deleteBuilder
+9d022f1	f0c0d11 56b1822	Mon Jun 3 06:30:05 2019 -0700	Merge pull request #216 from jhump/jh/fix-ineffassign
+7ba873f	31febe9	Wed May 22 16:20:08 2019 -0400	Fix test
+3d80c92	aa18de2	Wed May 22 15:44:24 2019 -0400	Fix tests
+e0d034f	08a7f1e c34e654	Mon May 6 11:10:36 2019 -0400	Merge pull request #195 from jhump/jh/fix-panic-in-protoparse
+c34e654	08a7f1e	Mon May 6 10:31:36 2019 -0400	fix panic in protoparse when given empty file
+fbff474	712f996 34e7cd5	Tue Mar 26 14:10:43 2019 -0400	Merge pull request #182 from jhump/jh/fix-dynamic-msg-equal
+97dc99c	8bfeffd 62170ef	Fri Mar 22 11:36:47 2019 -0400	Merge pull request #177 from jhump/jh/fix-build
+62170ef	8bfeffd	Fri Mar 22 11:24:58 2019 -0400	fix build: staticcheck no longer supports Go 1.10
+d0f5a64	42f5a7e c4fc959	Mon Jan 7 12:37:22 2019 -0500	Merge pull request #173 from jhump/jh/fix-another-staticcheck-find
+42f5a7e	b5ebaab d488521	Wed Jan 2 16:20:33 2019 -0500	Merge pull request #172 from jhump/jh/fix-staticcheck-issues
+680d0eb	1b45079 16cf227	Wed Nov 21 22:07:19 2018 -0500	Merge pull request #168 from jhump/jh/fixes-to-dynamic-json
+16cf227	1b45079	Wed Nov 21 21:57:39 2018 -0500	fixes to handling of oneofs and explicit nil pointers
+8c07e98	9cb68d9 d6d5cfd	Mon Nov 12 16:55:04 2018 -0500	Merge pull request #164 from jhump/jh/fix-issue-in-converting-desc-to-ptype
+d6d5cfd	9cb68d9	Mon Nov 12 16:34:26 2018 -0500	flesh out test, add fixes where necessary
+4ccc86b	27ca361 b3a3e6d	Thu Nov 1 14:42:00 2018 -0400	Merge pull request #158 from jhump/jh/fix-json-for-null-value-empty-listvalue
+b3a3e6d	27ca361	Thu Nov 1 14:36:28 2018 -0400	fixes issue with unmarshalling "null" into google.protobuf.Value and [] into google.protobuf.ListValue in dynamic.Message JSON support
+fdca9c5	e459197	Wed Oct 24 15:37:21 2018 -0400	fix ParseFilesButDoNotLink to not require imports
+1e47e70	b28d968 023bc99	Fri Oct 12 08:47:33 2018 -0400	Merge pull request #155 from jhump/jh/fix-lint
+95c5cbb	a9d9a71 0a23c13	Fri Aug 3 17:49:09 2018 -0400	Merge pull request #146 from jhump/jh/fix-merging-oneofs
+0a23c13	a9d9a71	Fri Aug 3 17:34:48 2018 -0400	fix bugs in MergeFrom method of dynamic message when merging oneofs
+c9b9f2d	85730b2	Thu Aug 2 22:24:53 2018 -0400	add test to ForEachMapFieldEntry; fix short-circuit in checkType
+86d31fc	b80e542 63fe4b4	Sat Jul 28 13:48:11 2018 -0400	Merge pull request #141 from ktr0731/fix-nil-check-condition
+63fe4b4	b80e542	Sat Jul 28 16:11:38 2018 +0900	fix a condition of nil check
+b80e542	fb977cc 7f506dc	Tue Jul 24 13:46:47 2018 -0400	Merge pull request #137 from jhump/jh/fix-nits
+fb977cc	dec7eff b994d02	Tue Jul 24 11:54:25 2018 -0400	Merge pull request #140 from jhump/jh/fix-panic-in-protoparse-for-negative-enum-vals
+b994d02	dec7eff	Tue Jul 24 11:46:35 2018 -0400	fix panic in protoparse
+2f980a0	af795c8 38b1f05	Tue Jul 10 13:31:38 2018 +0200	Merge pull request #134 from birdayz/fix_oneof_default_values
+ffafe1e	bbf79cc	Tue Jul 10 13:09:33 2018 +0200	miscellaneous fixes * update generate target to first build goyacc * run \'make generate\' to re-gen protos * add ClearOneOfField to *dynamic.Message * couple small other fixes in protoparse
+8af43dd	4fbf4b3	Tue Jul 10 12:41:47 2018 +0200	fix build
+a5b4e44	dbd8524	Fri Jun 8 01:04:22 2018 -0400	fix typos in some comments
+db1e51d	ec792d8	Tue Jun 5 14:00:03 2018 -0400	flesh out a few remaining Go doc lint complaints; fix up protoprint to create directory (if necessary) before creating output files and also truncate any existing output files
+ec792d8	54f497f 82e413c	Mon Jun 4 12:55:26 2018 -0400	Merge pull request #127 from sitano/fix_staticcheck_ignore
+82e413c	54f497f	Mon Jun 4 18:31:21 2018 +0200	fix static check ignore
+9ed50c9	5c6d4ca 014e220	Wed May 30 23:20:30 2018 -0400	Merge pull request #125 from jhump/jh/fix-fix-fix
+014e220	5c6d4ca	Wed May 30 23:10:58 2018 -0400	update Makefile to run more checks; fix things in the codebase revealed by those checks
+ad5847c	5d1c5ad	Sun Apr 15 16:54:46 2018 -0700	fix formatting
+d1492ef	0e4f5cf	Wed Mar 28 23:41:15 2018 -0400	fix some grammar issues in README
+b3805a6	fb68ee8	Tue Mar 27 17:23:20 2018 +1100	take name prefix as we recurse up
+8dde89f	4a73b00	Tue Mar 27 17:09:44 2018 +1100	fixes to dynamic.(*Message).Descriptor
+6f4f3bb	19350c2 58bab37	Fri Mar 9 14:56:07 2018 -0500	Merge pull request #114 from jhump/jh/fix-bugs-in-protoparse
+58bab37	19350c2	Fri Mar 9 13:39:10 2018 -0500	fix nil-deref bug; improve error messages; fix confusing comment in protoprint
+19350c2	cc4400e f00f541	Thu Mar 1 20:28:26 2018 -0500	Merge pull request #112 from jhump/jh/fix-grammar-trailing-commas
+cc4400e	8be131f 21798fd	Tue Feb 27 14:05:19 2018 -0500	Merge pull request #111 from jhump/jh/fix-grammar-for-field-names-of-aggregate-literals
+21798fd	0171089	Tue Feb 27 13:51:03 2018 -0500	fix grammar to allow aggregate literals (in custom options) to refer to field names that overload keywords
+8be131f	da1dd30 0f0f51e	Tue Feb 27 13:49:41 2018 -0500	Merge pull request #110 from jhump/jh/fix-sfixed32-in-dynamic-msg
+0f0f51e	d12a27f	Tue Feb 27 13:39:34 2018 -0500	fix a bug in dynamic message regarding encoding/decoding sfixed32 fields; also fixes enums to allow negative values (since it is allowed by proto spec)
+8e19036	a975914	Thu Feb 22 09:49:38 2018 -0500	fix license to use correct text (so github recognizes it)
+a975914	8f3e3fd b300e0d	Mon Feb 19 16:11:44 2018 -0500	Merge pull request #104 from jhump/jh/fix-eof-race
+b300e0d	8f3e3fd	Mon Feb 19 16:02:25 2018 -0500	fix race condition: a server that does not support reflection can induce unexpected io.EOF in grpcreflect client
+8f3e3fd	b372feb fc47868	Sat Feb 17 20:17:01 2018 -0500	Merge pull request #103 from jhump/jh/fix-wkt-json-again
+fc47868	b372feb	Sat Feb 17 20:07:34 2018 -0500	recent well-known-type fix in unmarshaling JSON to dynamic message was buggy
+808b29e	84a628c	Sat Feb 17 17:56:59 2018 -0500	fix import order
+d1255fe	e8bfa08	Sat Feb 17 23:45:54 2018 +0100	Fix
+5102cf9	f7a2ad2	Sat Feb 17 17:25:55 2018 +0100	Consistency fix
+8ade26d	552326a d9473f9	Fri Feb 2 21:14:14 2018 -0500	Merge pull request #98 from jhump/jh/fix-panic-in-dynamic-message-merge
+d9473f9	552326a	Fri Feb 2 21:06:18 2018 -0500	fix panic caused by bad reflection
+70e3cd1	beb940b	Thu Nov 9 20:25:50 2017 -0800	Fix an issue causing the same aggregateValue even with different actual values.
+821b361	93697ce a166893	Tue Nov 7 16:33:17 2017 -0500	Merge pull request #83 from jhump/fix-linking-when-field-and-type-have-same-name
+a166893	93697ce	Tue Nov 7 16:07:08 2017 -0500	fix linking when field has same name as its type; de-dup jsonName and initCap functions
+93697ce	f9cbcdf 796eadb	Tue Nov 7 15:36:01 2017 -0500	Merge pull request #80 from jhump/fix-dynamic-message-merge
+796eadb	df9ff7c	Tue Nov 7 15:29:42 2017 -0500	fix dynamic message merging, from other messages as well as during de-serialization; fix merging of unknown extensions from generated message into dynamic message
+df9ff7c	d757c44 587481a	Sat Nov 4 21:55:37 2017 -0400	Merge pull request #79 from jhump/fix-fmt-errorf-arg-type
+587481a	d757c44	Sat Nov 4 21:48:14 2017 -0400	go tip provides compile-time checks for fmt arguments and caught a bug!
+e10bf99	6357c36	Fri Nov 3 10:03:50 2017 -0400	fix typo
+6357c36	4a27d44	Fri Nov 3 10:02:51 2017 -0400	fix CI for go tip version
+9afe18d	7364fe0 4ea1e4b	Tue Oct 17 15:08:42 2017 -0400	Merge pull request #72 from jhump/jh/fix-unmarshal-map-proto3
+4ea1e4b	7364fe0	Tue Oct 17 15:02:35 2017 -0400	fix issue when putting first value in a map field
+7364fe0	8083885 a935a4a	Mon Oct 16 22:27:39 2017 -0400	Merge pull request #70 from jhump/jh/fix-protoparse-maps-with-proto3
+a935a4a	8083885	Mon Oct 16 22:22:25 2017 -0400	fix parsing of map fields in proto3 files
+ea94232	03082d8	Fri Oct 13 00:21:30 2017 -0400	fix panic in dynamic.Message when setting bytes fields
+03082d8	13e5bf5	Fri Oct 13 00:03:02 2017 -0400	mostly doc updates; fix to recent breakage from grpc test protos moving to proto3
+af05fe2	4cdccaa 5088102	Tue Sep 19 22:45:21 2017 -0400	Merge pull request #56 from jhump/jh/fix-package-and-doc-for-msgregistry
+5088102	eb4dace	Tue Sep 19 22:39:44 2017 -0400	fix package and add package doc for msgregistry; remove old reference to MessageRegistry from dynamic package doc
+4cdccaa	7f62a15 70f34c9	Tue Sep 19 22:27:46 2017 -0400	Merge pull request #55 from jhump/jh/fix-line-endings-in-protoparse
+b9a81f4	89a86da 608dc46	Tue Sep 19 12:03:19 2017 -0400	Merge pull request #50 from jhump/jh/fix-compile-err-on-32bit-platforms
+89a86da	73532f9 3360dce	Mon Sep 18 21:58:58 2017 -0400	Merge pull request #48 from jhump/jh/fix-docs
+07494bb	a82bc95	Sun Sep 17 23:48:32 2017 -0400	Adds protoparse package, other related changes and fixes - New package can parse proto source files into descriptors - Several fixes to desc package, including bug in MessageDescriptor.IsExtension(int32),   and bug in handling of default values for bytes field (turns out that protoc-gen-go   had the same issue: https://github.com/golang/protobuf/issues/426) - Several fixes to dynamic package, mostly in the ConvertTo and ConvertFrom functions   that fix nil de-reference bugs; also a fix to proto3-handling of repeated fields   (packed by default, but protoc does not set "packed" option in descriptor) - Fix in testutils so that Eq considers Nan == Nan
+7eb93a9	830a2ab f96a620	Sun Sep 3 12:50:11 2017 -0400	Merge pull request #42 from jhump/fix-json-embedding-nondynamic
+1591278	da7c65e 8dfac35	Thu Aug 24 21:11:56 2017 -0400	Merge pull request #40 from jhump/jh/err-prefix
+e5c086f	d423923 e47c0eb	Sun Aug 13 09:17:27 2017 -0400	Merge pull request #35 from jhump/jh/fix-wkt-json
+d423923	b46f155 23a002f	Mon Aug 7 07:50:40 2017 -0400	Merge pull request #34 from kazegusuri/fix-map-default
+ea0f454	1d90b07	Sat Aug 5 23:03:48 2017 +0900	fix redandancy for test
+461a68a	c0060aa	Thu Jul 13 11:16:51 2017 -0400	adding new tests, fixing bugs found; also fixes and improvemnts to dynamic package doc
+c0060aa	ae7efcf	Mon Jul 10 21:50:36 2017 -0400	update wording and fix typo in README
+8194766	f5aa422	Sun Jul 9 21:07:51 2017 -0400	extension fixes
+d84c804	84d5447	Tue Jun 27 13:35:23 2017 -0400	update/fix doc comments; some refactoring of test method names (for clarity) and new test assertions for message registry
+84d5447	4a45b2e db4ee4f	Mon Jun 26 23:53:02 2017 -0400	Merge pull request #29 from jhump/some-more-fixes
+db4ee4f	4a45b2e	Mon Jun 26 23:48:52 2017 -0400	several fixes: * fix issue with converting unrecognized extensions into dynamic message * fix how nil *MessageFactory responds to NewMessage (make it consistent w/ zero value MessageFactory) * fix in JSON marshalling when indenting a non-dynamic message into the JSON of a dynamic message
+0a2e13e	8210f29	Thu May 25 17:51:57 2017 -0400	add test for marshaling unknown fields; fix various issues found
+4755405	18562e3 a6da073	Sun Apr 23 11:32:00 2017 -0400	Merge pull request #24 from jhump/jh/fix-proto3-setting-to-default-value
+e6a23c1	251c3b0	Sun Apr 23 10:58:51 2017 -0400	finish tests for ptypes stuff; address TODO in service descriptor resolution; several other fixes in dynamic_message.go for code paths previously unexercised
+39e197f	2909f0b 7bd2338	Wed Apr 19 20:14:08 2017 -0400	Merge pull request #22 from jhump/jh/fixes
+7bd2338	2909f0b	Wed Apr 19 18:19:30 2017 -0400	several fixes and doc updates - Fix bug in MessageFactory where it doesn\'t properly instantiates well-known types - Fix/update doc - Add XXX_MessageName method to dynamic.Message so it is compatible with proto.MessageName
+d3f5038	f88baf8	Fri Apr 14 10:52:54 2017 -0400	Address review comments, fix null write, Options for consistency
+cc58992	843a68e	Thu Apr 13 12:13:06 2017 -0400	Fix make invocation
+cf58c5b	5278731 9e2d02b	Thu Apr 13 11:40:40 2017 -0400	Merge pull request #16 from jhump/fix-more-proto3-panics
+9e2d02b	5278731	Thu Apr 13 11:36:55 2017 -0400	fix problems with de-serialization for proto3 repeated and map fields
+db63b9f	bdc68d3 864b3f8	Thu Apr 13 00:09:23 2017 -0400	Merge pull request #10 from jhump/jh/fix-panic-with-setting-repeated-field-proto3
+bdc68d3	c8f5f4a 8bf1e2f	Thu Apr 13 00:08:44 2017 -0400	Merge pull request #9 from jhump/jh/fix-doc-issues
+8bf1e2f	c8f5f4a	Thu Apr 13 00:08:12 2017 -0400	fix doc
+6188a36	dc70cd5	Sun Apr 2 15:29:22 2017 -0400	add tests for grpcdynamic.Stub; other fixes to get tests to pass
+dc70cd5	43c5c32 a41e187	Thu Mar 30 21:46:19 2017 -0400	Merge pull request #6 from jhump/jh/fixes
+a41e187	43c5c32	Thu Mar 30 21:44:17 2017 -0400	fix some small issues

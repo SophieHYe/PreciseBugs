@@ -1,0 +1,96 @@
+diff --git a/markdown_it/rules_block/blockquote.py b/markdown_it/rules_block/blockquote.py
+index e00fbf6..965a9e7 100644
+--- a/markdown_it/rules_block/blockquote.py
++++ b/markdown_it/rules_block/blockquote.py
+@@ -23,7 +23,10 @@ def blockquote(state: StateBlock, startLine: int, endLine: int, silent: bool):
+         return False
+ 
+     # check the block quote marker
+-    if state.srcCharCode[pos] != 0x3E:  # /* > */
++    try:
++        if state.srcCharCode[pos] != 0x3E:  # /* > */
++            return False
++    except IndexError:
+         return False
+     pos += 1
+ 
+diff --git a/markdown_it/rules_block/fence.py b/markdown_it/rules_block/fence.py
+index fb3c684..53bc6f2 100644
+--- a/markdown_it/rules_block/fence.py
++++ b/markdown_it/rules_block/fence.py
+@@ -66,8 +66,11 @@ def fence(state: StateBlock, startLine: int, endLine: int, silent: bool):
+             #  test
+             break
+ 
+-        if state.srcCharCode[pos] != marker:
+-            continue
++        try:
++            if state.srcCharCode[pos] != marker:
++                continue
++        except IndexError:
++            break
+ 
+         if state.sCount[nextLine] - state.blkIndent >= 4:
+             # closing fence should be indented less than 4 spaces
+diff --git a/markdown_it/rules_block/hr.py b/markdown_it/rules_block/hr.py
+index 22c6972..953bba2 100644
+--- a/markdown_it/rules_block/hr.py
++++ b/markdown_it/rules_block/hr.py
+@@ -20,7 +20,10 @@ def hr(state: StateBlock, startLine: int, endLine: int, silent: bool):
+     if state.sCount[startLine] - state.blkIndent >= 4:
+         return False
+ 
+-    marker = state.srcCharCode[pos]
++    try:
++        marker = state.srcCharCode[pos]
++    except IndexError:
++        return False
+     pos += 1
+ 
+     # Check hr marker: /* * */ /* - */ /* _ */
+diff --git a/markdown_it/rules_block/list.py b/markdown_it/rules_block/list.py
+index 9cf8c40..d9c5e55 100644
+--- a/markdown_it/rules_block/list.py
++++ b/markdown_it/rules_block/list.py
+@@ -13,7 +13,10 @@ def skipBulletListMarker(state: StateBlock, startLine: int):
+     pos = state.bMarks[startLine] + state.tShift[startLine]
+     maximum = state.eMarks[startLine]
+ 
+-    marker = state.srcCharCode[pos]
++    try:
++        marker = state.srcCharCode[pos]
++    except IndexError:
++        return -1
+     pos += 1
+     # Check bullet /* * */ /* - */ /* + */
+     if marker != 0x2A and marker != 0x2D and marker != 0x2B:
+diff --git a/tests/test_fuzzer.py b/tests/test_fuzzer.py
+new file mode 100644
+index 0000000..60cddda
+--- /dev/null
++++ b/tests/test_fuzzer.py
+@@ -0,0 +1,24 @@
++"""
++These tests are in response to reports from:
++https://github.com/google/oss-fuzz/tree/master/projects/markdown-it-py
++
++In the future, perhaps atheris could be directly used here,
++but it was not directly apparent how to integrate it into pytest.
++"""
++import pytest
++
++from markdown_it import MarkdownIt
++
++TESTS = {
++    55363: ">```\n>",
++    55367: ">-\n>\n>",
++    # 55371: "[](so&#4»0;!"  TODO this did not fail
++    # 55401: "?c_" * 100_000  TODO this did not fail
++}
++
++
++@pytest.mark.parametrize("raw_input", TESTS.values(), ids=TESTS.keys())
++def test_fuzzing(raw_input):
++    md = MarkdownIt()
++    md.parse(raw_input)
++    print(md.render(raw_input))

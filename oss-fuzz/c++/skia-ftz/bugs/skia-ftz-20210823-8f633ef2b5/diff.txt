@@ -1,0 +1,51 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 2c29eab92e..1aefe93730 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -96,6 +96,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz32156.sksl",
+   "/sksl/errors/Ossfuzz32587.sksl",
+   "/sksl/errors/Ossfuzz32851.sksl",
++  "/sksl/errors/Ossfuzz37457.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz37457.sksl b/resources/sksl/errors/Ossfuzz37457.sksl
+new file mode 100644
+index 0000000000..0cdfdaffaf
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz37457.sksl
+@@ -0,0 +1 @@
++float a[b];
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index e82e9c08e0..c4eeb8c88a 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -411,12 +411,14 @@ StatementArray IRGenerator::convertVarDeclarations(const ASTNode& decls,
+         std::unique_ptr<Expression> value;
+         auto iter = varDecl.begin();
+         if (iter != varDecl.end() && varData.fIsArray) {
+-            if (*iter) {
+-                arraySize = this->convertExpression(*iter++);
+-            } else {
++            if (!*iter) {
+                 this->errorReporter().error(decls.fOffset, "array must have a size");
+                 continue;
+             }
++            arraySize = this->convertExpression(*iter++);
++            if (!arraySize) {
++                continue;
++            }
+         }
+         if (iter != varDecl.end()) {
+             value = this->convertExpression(*iter);
+diff --git a/tests/sksl/errors/Ossfuzz37457.glsl b/tests/sksl/errors/Ossfuzz37457.glsl
+new file mode 100644
+index 0000000000..053c5023da
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz37457.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 1: unknown identifier 'b'
++1 error

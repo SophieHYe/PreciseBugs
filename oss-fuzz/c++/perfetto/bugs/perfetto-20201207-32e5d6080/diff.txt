@@ -1,0 +1,76 @@
+diff --git a/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc b/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
+index 6c735f9f2..8dd2c9a6f 100644
+--- a/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
++++ b/src/trace_processor/importers/proto/memory_tracker_snapshot_parser.cc
+@@ -132,7 +132,7 @@ void MemoryTrackerSnapshotParser::ReadProtoSnapshot(
+       std::unique_ptr<RawMemoryGraphNode> raw_graph_node(new RawMemoryGraphNode(
+           absolute_name, level_of_detail, node_id, std::move(entries)));
+       raw_graph_node->set_flags(flags);
+-      nodes_map.emplace(
++      nodes_map.insert(
+           std::make_pair(absolute_name, std::move(raw_graph_node)));
+     }
+ 
+@@ -146,12 +146,12 @@ void MemoryTrackerSnapshotParser::ReadProtoSnapshot(
+           MemoryAllocatorNodeId(edge.target_id()),
+           static_cast<int>(edge.importance()), edge.overridable()));
+ 
+-      edges_map.emplace(std::make_pair(MemoryAllocatorNodeId(edge.source_id()),
+-                                       std::move(graph_edge)));
++      edges_map.insert(std::make_pair(MemoryAllocatorNodeId(edge.source_id()),
++                                      std::move(graph_edge)));
+     }
+-    raw_nodes.emplace(
+-        pid, new RawProcessMemoryNode(level_of_detail, std::move(edges_map),
+-                                      std::move(nodes_map)));
++    std::unique_ptr<RawProcessMemoryNode> raw_node(new RawProcessMemoryNode(
++        level_of_detail, std::move(edges_map), std::move(nodes_map)));
++    raw_nodes.insert(std::make_pair(pid, std::move(raw_node)));
+   }
+ }
+ 
+diff --git a/src/trace_processor/trace_database_integrationtest.cc b/src/trace_processor/trace_database_integrationtest.cc
+index ba7aedf3b..a7067e7a6 100644
+--- a/src/trace_processor/trace_database_integrationtest.cc
++++ b/src/trace_processor/trace_database_integrationtest.cc
+@@ -265,12 +265,14 @@ TEST_F(TraceProcessorIntegrationTest, Clusterfuzz17805) {
+ #define MAYBE_Clusterfuzz21178 DISABLED_Clusterfuzz21178
+ #define MAYBE_Clusterfuzz21890 DISABLED_Clusterfuzz21890
+ #define MAYBE_Clusterfuzz23053 DISABLED_Clusterfuzz23053
++#define MAYBE_Clusterfuzz28338 DISABLED_Clusterfuzz28338
+ #else  // PERFETTO_DCHECK_IS_ON()
+ #define MAYBE_Clusterfuzz20215 Clusterfuzz20215
+ #define MAYBE_Clusterfuzz20292 Clusterfuzz20292
+ #define MAYBE_Clusterfuzz21178 Clusterfuzz21178
+ #define MAYBE_Clusterfuzz21890 Clusterfuzz21890
+ #define MAYBE_Clusterfuzz23053 Clusterfuzz23053
++#define MAYBE_Clusterfuzz28338 Clusterfuzz28338
+ #endif  // PERFETTO_DCHECK_IS_ON()
+ 
+ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz20215) {
+@@ -293,6 +295,10 @@ TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz23053) {
+   ASSERT_FALSE(LoadTrace("clusterfuzz_23053", 4096).ok());
+ }
+ 
++TEST_F(TraceProcessorIntegrationTest, MAYBE_Clusterfuzz28338) {
++  ASSERT_TRUE(LoadTrace("clusterfuzz_28338", 4096).ok());
++}
++
+ TEST_F(TraceProcessorIntegrationTest, RestoreInitialTables) {
+   ASSERT_TRUE(LoadTrace("android_sched_and_ps.pb").ok());
+ 
+diff --git a/tools/install-build-deps b/tools/install-build-deps
+index 451e77826..6eb7c7be2 100755
+--- a/tools/install-build-deps
++++ b/tools/install-build-deps
+@@ -217,8 +217,8 @@ BUILD_DEPS_HOST = [
+     # Example traces for regression tests.
+     Dependency(
+         'buildtools/test_data.zip',
+-        'https://storage.googleapis.com/perfetto/test-data-20201118-124359.zip',
+-        'a2ee2990503a983d0428ae39937436c96b03ed7c36648ca645418ece8b18a28c',
++        'https://storage.googleapis.com/perfetto/test-data-20201207-131703.zip',
++        '2c894eee8e19cb3247dd0aff14e7c4b14c09c305988e901f852fb004ea2e6716',
+         'all',
+     ),
+ 

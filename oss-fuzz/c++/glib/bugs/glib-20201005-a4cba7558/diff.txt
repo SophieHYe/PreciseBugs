@@ -1,0 +1,35 @@
+diff --git a/glib/guri.c b/glib/guri.c
+index e337c9e24..f04139b80 100644
+--- a/glib/guri.c
++++ b/glib/guri.c
+@@ -420,8 +420,13 @@ _uri_encoder (GString      *out,
+ 
+   while (p < end)
+     {
+-      if (allow_utf8 && *p >= 0x80 &&
+-          g_utf8_get_char_validated ((gchar *)p, end - p) > 0)
++      gunichar multibyte_utf8_char = 0;
++
++      if (allow_utf8 && *p >= 0x80)
++        multibyte_utf8_char = g_utf8_get_char_validated ((gchar *)p, end - p);
++
++      if (multibyte_utf8_char > 0 &&
++          multibyte_utf8_char != (gunichar) -1 && multibyte_utf8_char != (gunichar) -2)
+         {
+           gint len = g_utf8_skip [*p];
+           g_string_append_len (out, (gchar *)p, len);
+diff --git a/glib/tests/uri.c b/glib/tests/uri.c
+index 31bef2733..b3843b978 100644
+--- a/glib/tests/uri.c
++++ b/glib/tests/uri.c
+@@ -466,6 +466,10 @@ test_uri_escape_string (void)
+       { ":+ \\?#", NULL, FALSE, "%3A%2B%20%5C%3F%23" },
+       { "a+b:c", "+", FALSE, "a+b%3Ac" },
+       { "a+b:c\303\234", "+", TRUE, "a+b%3Ac\303\234" },
++      /* Incomplete UTF-8 sequence: */
++      { "\xfc\x3b\xd2", NULL, TRUE, "%FC%3B%D2" },
++      /* Invalid sequence: */
++      { "\xc3\xb1\xc3\x28", NULL, TRUE, "ñ%C3%28" },
+     };
+   gsize i;
+ 

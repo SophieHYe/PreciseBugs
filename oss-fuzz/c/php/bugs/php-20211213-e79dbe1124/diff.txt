@@ -1,0 +1,63 @@
+diff --git a/ext/opcache/jit/zend_jit.c b/ext/opcache/jit/zend_jit.c
+index 48d3d55d32..bbe879b9fd 100644
+--- a/ext/opcache/jit/zend_jit.c
++++ b/ext/opcache/jit/zend_jit.c
+@@ -2311,7 +2311,7 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 		}
+ 		end = ssa->cfg.blocks[b].start + ssa->cfg.blocks[b].len - 1;
+ 		for (i = ssa->cfg.blocks[b].start; i <= end; i++) {
+-			zend_ssa_op *ssa_op = &ssa->ops[i];
++			zend_ssa_op *ssa_op = ssa->ops ? &ssa->ops[i] : NULL;
+ 			opline = op_array->opcodes + i;
+ 			switch (opline->opcode) {
+ 				case ZEND_INIT_FCALL:
+@@ -2342,6 +2342,7 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 							res_use_info = -1;
+ 
+ 							if (opline->result_type == IS_CV
++							 && ssa->vars
+ 							 && ssa_op->result_use >= 0
+ 							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+@@ -2406,6 +2407,7 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 							res_use_info = -1;
+ 
+ 							if (opline->result_type == IS_CV
++							 && ssa->vars
+ 							 && ssa_op->result_use >= 0
+ 							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+@@ -2463,6 +2465,7 @@ static int zend_jit(const zend_op_array *op_array, zend_ssa *ssa, const zend_op
+ 							res_use_info = -1;
+ 
+ 							if (opline->result_type == IS_CV
++							 && ssa->vars
+ 							 && ssa_op->result_use >= 0
+ 							 && !ssa->vars[ssa_op->result_use].no_val) {
+ 								zend_jit_addr res_use_addr = RES_USE_REG_ADDR();
+diff --git a/ext/opcache/tests/jit/mod_006.phpt b/ext/opcache/tests/jit/mod_006.phpt
+new file mode 100644
+index 0000000000..b13ef68a8e
+--- /dev/null
++++ b/ext/opcache/tests/jit/mod_006.phpt
+@@ -0,0 +1,19 @@
++--TEST--
++JIT MOD: 005
++--INI--
++opcache.enable=1
++opcache.enable_cli=1
++opcache.file_update_protection=0
++opcache.jit_buffer_size=1M
++opcache.protect_memory=1
++--FILE--
++<?php
++function foo(){
++    $a = 1;
++    $b = $a % 0;
++    yield $b;
++}
++?>
++DONE
++--EXPECT--
++DONE
+\ No newline at end of file

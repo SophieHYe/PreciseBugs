@@ -1,0 +1,41 @@
+diff --git a/src/lib/protocols/florensia.c b/src/lib/protocols/florensia.c
+index 95a6d99d..8617f374 100644
+--- a/src/lib/protocols/florensia.c
++++ b/src/lib/protocols/florensia.c
+@@ -90,7 +90,8 @@ void ndpi_search_florensia(struct ndpi_detection_module_struct *ndpi_struct, str
+ 	ndpi_florensia_add_connection(ndpi_struct, flow);
+ 	return;
+       }
+-      if (flow->packet_counter < 10 && get_l16(packet->payload, 0) == packet->payload_packet_len) {
++      if (flow->packet_counter < 10 && packet->payload_packet_len >=2 &&
++	  get_l16(packet->payload, 0) == packet->payload_packet_len) {
+ 	NDPI_LOG_DBG2(ndpi_struct, "maybe florensia\n");
+ 	return;
+       }
+diff --git a/src/lib/protocols/http.c b/src/lib/protocols/http.c
+index a562aa03..6fe6cab3 100644
+--- a/src/lib/protocols/http.c
++++ b/src/lib/protocols/http.c
+@@ -855,7 +855,8 @@ static void check_content_type_and_change_protocol(struct ndpi_detection_module_
+       /* Matching on Content-Type.
+           OCSP:  application/ocsp-request, application/ocsp-response
+        */
+-      if(strncmp((const char *)packet->content_line.ptr, "application/ocsp-", 17) == 0) {
++      if(packet->content_line.len > 17 &&
++         strncmp((const char *)packet->content_line.ptr, "application/ocsp-", 17) == 0) {
+         NDPI_LOG_DBG2(ndpi_struct, "Found OCSP\n");
+         ndpi_set_detected_protocol(ndpi_struct, flow, NDPI_PROTOCOL_OCSP, NDPI_PROTOCOL_HTTP, NDPI_CONFIDENCE_DPI);
+       }
+diff --git a/src/lib/protocols/softether.c b/src/lib/protocols/softether.c
+index d5dce55f..ea59a9a9 100644
+--- a/src/lib/protocols/softether.c
++++ b/src/lib/protocols/softether.c
+@@ -97,7 +97,7 @@ static size_t dissect_softether_type(enum softether_value_type t,
+ 
+       v->value.ptr.raw = payload + 4;
+       u_int32_t siz = ntohl(get_u_int32_t(payload, 0));
+-      if(siz == 0 || (u_int64_t)payload_len < (u_int64_t)siz + 3)
++      if(siz == 0 || (u_int64_t)payload_len < (u_int64_t)siz + sizeof(siz))
+ 	return 0;
+ 
+       if(t == VALUE_DATA)

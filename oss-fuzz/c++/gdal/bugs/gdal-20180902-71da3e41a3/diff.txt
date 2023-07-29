@@ -1,0 +1,13 @@
+diff --git a/gdal/frmts/hfa/hfadataset.cpp b/gdal/frmts/hfa/hfadataset.cpp
+index 667757c784..2efe4bc14c 100644
+--- a/gdal/frmts/hfa/hfadataset.cpp
++++ b/gdal/frmts/hfa/hfadataset.cpp
+@@ -302,7 +302,7 @@ HFARasterAttributeTable::HFARasterAttributeTable(
+                 const double dfMin = poDTChild->GetDoubleField("minLimit");
+                 const int nBinCount = poDTChild->GetIntField("numBins");
+ 
+-                if( nBinCount == nRows && dfMax != dfMin && nBinCount != 0 )
++                if( nBinCount == nRows && dfMax != dfMin && nBinCount > 1 )
+                 {
+                     // Can't call SetLinearBinning since it will re-write
+                     // which we might not have permission to do.

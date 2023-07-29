@@ -1,0 +1,12 @@
+diff --git a/gdal/frmts/gsg/gsagdataset.cpp b/gdal/frmts/gsg/gsagdataset.cpp
+index f6539e3df6..f7c9174f8a 100644
+--- a/gdal/frmts/gsg/gsagdataset.cpp
++++ b/gdal/frmts/gsg/gsagdataset.cpp
+@@ -365,6 +365,7 @@ CPLErr GSAGRasterBand::IReadBlock( int nBlockXOff, int nBlockYOff,
+                           "Unexpected value in grid row %d (expected floating "
+                           "point value, found \"%s\").\n",
+                           nBlockYOff, szStart );
++                VSIFree( szLineBuf );
+                 return CE_Failure;
+             }
+ 

@@ -1,0 +1,14 @@
+diff --git a/poppler/GfxState.cc b/poppler/GfxState.cc
+index b5ee150b..09fc9793 100644
+--- a/poppler/GfxState.cc
++++ b/poppler/GfxState.cc
+@@ -3759,6 +3759,9 @@ GfxFunctionShading *GfxFunctionShading::parse(GfxResources *res, Dict *dict, Out
+     for (i = 0; i < nFuncsA; ++i) {
+       Object obj2 = obj1.arrayGet(i);
+       if (!(funcsA[i] = Function::parse(&obj2))) {
++	for (int j = 0; j < i; ++j) {
++	  delete funcsA[j];
++	}
+ 	return nullptr;
+       }
+     }

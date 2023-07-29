@@ -1,0 +1,12 @@
+diff --git a/frmts/ceos2/sar_ceosdataset.cpp b/frmts/ceos2/sar_ceosdataset.cpp
+index 50010817fb..f96162071a 100644
+--- a/frmts/ceos2/sar_ceosdataset.cpp
++++ b/frmts/ceos2/sar_ceosdataset.cpp
+@@ -1716,6 +1716,7 @@ void SAR_CEOSDataset::ScanForGCPs()
+     if( nGCPCount == 0 )
+     {
+         CPLFree(pasGCPList);
++        pasGCPList = nullptr;
+         ScanForMapProjection();
+         return;
+     }

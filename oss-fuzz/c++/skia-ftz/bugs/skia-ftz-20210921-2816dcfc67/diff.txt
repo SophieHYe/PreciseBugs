@@ -1,0 +1,171 @@
+diff --git a/gn/sksl_tests.gni b/gn/sksl_tests.gni
+index 5a18df93c2..6258e1878b 100644
+--- a/gn/sksl_tests.gni
++++ b/gn/sksl_tests.gni
+@@ -109,6 +109,7 @@ sksl_error_tests = [
+   "/sksl/errors/Ossfuzz38560.sksl",
+   "/sksl/errors/Ossfuzz38865.sksl",
+   "/sksl/errors/Ossfuzz38944.sksl",
++  "/sksl/errors/Ossfuzz39000.sksl",
+   "/sksl/errors/OverflowFloatLiteral.sksl",
+   "/sksl/errors/OverflowIntLiteral.sksl",
+   "/sksl/errors/OverflowInt64Literal.sksl",
+diff --git a/resources/sksl/errors/Ossfuzz39000.sksl b/resources/sksl/errors/Ossfuzz39000.sksl
+new file mode 100644
+index 0000000000..6a4e5057fd
+--- /dev/null
++++ b/resources/sksl/errors/Ossfuzz39000.sksl
+@@ -0,0 +1,2 @@
++q { int y; };
++G { int q=_; };
+diff --git a/src/sksl/SkSLIRGenerator.cpp b/src/sksl/SkSLIRGenerator.cpp
+index f430bf30f1..41383e1405 100644
+--- a/src/sksl/SkSLIRGenerator.cpp
++++ b/src/sksl/SkSLIRGenerator.cpp
+@@ -794,7 +794,7 @@ std::unique_ptr<SkSL::InterfaceBlock> IRGenerator::convertInterfaceBlock(const A
+         }
+     }
+     std::unique_ptr<SkSL::InterfaceBlock> result = std::make_unique<SkSL::InterfaceBlock>(
+-            intf.fOffset, var, id.fTypeName, id.fInstanceName, arraySize, symbols);
++            intf.fOffset, *var, id.fTypeName, id.fInstanceName, arraySize, symbols);
+     this->scanInterfaceBlock(*result);
+     return result;
+ }
+diff --git a/src/sksl/SkSLRehydrator.cpp b/src/sksl/SkSLRehydrator.cpp
+index 5d10c829dc..b9fab8bd59 100644
+--- a/src/sksl/SkSLRehydrator.cpp
++++ b/src/sksl/SkSLRehydrator.cpp
+@@ -285,7 +285,7 @@ std::unique_ptr<ProgramElement> Rehydrator::element() {
+             skstd::string_view typeName = this->readString();
+             skstd::string_view instanceName = this->readString();
+             int arraySize = this->readS8();
+-            return std::make_unique<InterfaceBlock>(/*offset=*/-1, &var->as<Variable>(), typeName,
++            return std::make_unique<InterfaceBlock>(/*offset=*/-1, var->as<Variable>(), typeName,
+                                                     instanceName, arraySize, nullptr);
+         }
+         case Rehydrator::kVarDeclarations_Command: {
+diff --git a/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp b/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
+index 4cdd5fd4fd..d42b6e265e 100644
+--- a/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
++++ b/src/sksl/codegen/SkSLSPIRVCodeGenerator.cpp
+@@ -3052,7 +3052,7 @@ SpvId SPIRVCodeGenerator::writeInterfaceBlock(const InterfaceBlock& intf, bool a
+                                                intfVar.storage()));
+             fSPIRVBonusVariables.insert(modifiedVar);
+             InterfaceBlock modifiedCopy(intf.fOffset,
+-                                        modifiedVar,
++                                        *modifiedVar,
+                                         intf.typeName(),
+                                         intf.instanceName(),
+                                         intf.arraySize(),
+@@ -3459,7 +3459,7 @@ void SPIRVCodeGenerator::writeUniformBuffer(std::shared_ptr<SymbolTable> topLeve
+ 
+     // Create an interface block object for this global variable.
+     fUniformBuffer.fInterfaceBlock = std::make_unique<InterfaceBlock>(
+-            /*offset=*/-1, fUniformBuffer.fInnerVariable.get(), kUniformBufferName,
++            /*offset=*/-1, *fUniformBuffer.fInnerVariable, kUniformBufferName,
+             kUniformBufferName, /*arraySize=*/0, topLevelSymbolTable);
+ 
+     // Generate an interface block and hold onto its ID.
+@@ -3528,7 +3528,7 @@ void SPIRVCodeGenerator::addRTFlipUniform(int offset) {
+         fProgram.fSymbols->add(std::make_unique<Field>(/*offset=*/-1, intfVar, /*field=*/0));
+     }
+     InterfaceBlock intf(/*offset=*/-1,
+-                        intfVar,
++                        *intfVar,
+                         name,
+                         /*instanceName=*/"",
+                         /*arraySize=*/0,
+diff --git a/src/sksl/dsl/DSLCore.cpp b/src/sksl/dsl/DSLCore.cpp
+index 4c140b7cc6..bc5b38fc6b 100644
+--- a/src/sksl/dsl/DSLCore.cpp
++++ b/src/sksl/dsl/DSLCore.cpp
+@@ -230,20 +230,22 @@ public:
+         if (!DSLWriter::Settings().fDSLMarkVarsDeclared) {
+             DSLWriter::MarkDeclared(var);
+         }
+-        auto intf = std::make_unique<SkSL::InterfaceBlock>(/*offset=*/-1,
+-                DSLWriter::Var(var), typeName, varName, arraySize, DSLWriter::SymbolTable());
+-        DSLWriter::IRGenerator().scanInterfaceBlock(*intf);
+-        DSLWriter::ProgramElements().push_back(std::move(intf));
+-        if (varName.empty()) {
+-            const std::vector<SkSL::Type::Field>& structFields = structType->fields();
+-            const SkSL::Variable* skslVar = DSLWriter::Var(var);
+-            for (size_t i = 0; i < structFields.size(); ++i) {
+-                DSLWriter::SymbolTable()->add(std::make_unique<SkSL::Field>(/*offset=*/-1,
+-                                                                            skslVar,
+-                                                                            i));
++        const SkSL::Variable* skslVar = DSLWriter::Var(var);
++        if (skslVar) {
++            auto intf = std::make_unique<SkSL::InterfaceBlock>(/*offset=*/-1,
++                    *skslVar, typeName, varName, arraySize, DSLWriter::SymbolTable());
++            DSLWriter::IRGenerator().scanInterfaceBlock(*intf);
++            DSLWriter::ProgramElements().push_back(std::move(intf));
++            if (varName.empty()) {
++                const std::vector<SkSL::Type::Field>& structFields = structType->fields();
++                for (size_t i = 0; i < structFields.size(); ++i) {
++                    DSLWriter::SymbolTable()->add(std::make_unique<SkSL::Field>(/*offset=*/-1,
++                                                                                skslVar,
++                                                                                i));
++                }
++            } else {
++                AddToSymbolTable(var);
+             }
+-        } else {
+-            AddToSymbolTable(var);
+         }
+         GetErrorReporter().reportPendingErrors(pos);
+         return var;
+diff --git a/src/sksl/ir/SkSLInterfaceBlock.h b/src/sksl/ir/SkSLInterfaceBlock.h
+index 0405e2e27d..1665446c1e 100644
+--- a/src/sksl/ir/SkSLInterfaceBlock.h
++++ b/src/sksl/ir/SkSLInterfaceBlock.h
+@@ -31,7 +31,7 @@ class InterfaceBlock final : public ProgramElement {
+ public:
+     static constexpr Kind kProgramElementKind = Kind::kInterfaceBlock;
+ 
+-    InterfaceBlock(int offset, const Variable* var, skstd::string_view typeName,
++    InterfaceBlock(int offset, const Variable& var, skstd::string_view typeName,
+                    skstd::string_view instanceName, int arraySize,
+                    std::shared_ptr<SymbolTable> typeOwner)
+     : INHERITED(offset, kProgramElementKind)
+@@ -42,11 +42,7 @@ public:
+     , fTypeOwner(std::move(typeOwner)) {}
+ 
+     const Variable& variable() const {
+-        return *fVariable;
+-    }
+-
+-    void setVariable(const Variable* var) {
+-        fVariable = var;
++        return fVariable;
+     }
+ 
+     skstd::string_view typeName() const {
+@@ -66,7 +62,7 @@ public:
+     }
+ 
+     std::unique_ptr<ProgramElement> clone() const override {
+-        return std::make_unique<InterfaceBlock>(fOffset, &this->variable(), this->typeName(),
++        return std::make_unique<InterfaceBlock>(fOffset, this->variable(), this->typeName(),
+                                                 this->instanceName(), this->arraySize(),
+                                                 SymbolTable::WrapIfBuiltin(this->typeOwner()));
+     }
+@@ -91,7 +87,7 @@ public:
+     }
+ 
+ private:
+-    const Variable* fVariable;
++    const Variable& fVariable;
+     skstd::string_view fTypeName;
+     skstd::string_view fInstanceName;
+     int fArraySize;
+diff --git a/tests/sksl/errors/Ossfuzz39000.glsl b/tests/sksl/errors/Ossfuzz39000.glsl
+new file mode 100644
+index 0000000000..163e3d437b
+--- /dev/null
++++ b/tests/sksl/errors/Ossfuzz39000.glsl
+@@ -0,0 +1,4 @@
++### Compilation failed:
++
++error: 2: expected ';', but found '='
++1 error

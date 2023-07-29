@@ -1,0 +1,14 @@
+diff --git a/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp b/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
+index 78e9968dd0..2b857b22c7 100644
+--- a/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
++++ b/gdal/ogr/ogrsf_frmts/gmlas/ogrgmlasreader.cpp
+@@ -2654,6 +2654,9 @@ static size_t SkipSpace( const char* pszValues, size_t i )
+ 
+ void GMLASReader::ProcessSWEDataArray(CPLXMLNode* psRoot)
+ {
++    if( m_oCurCtxt.m_poLayer == nullptr )
++        return;
++
+     CPLStripXMLNamespace( psRoot, "swe", true );
+     CPLXMLNode* psElementType = CPLGetXMLNode(psRoot, "elementType");
+     if( psElementType == nullptr )

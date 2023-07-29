@@ -1,0 +1,18 @@
+diff --git a/gdal/ogr/ogrsf_frmts/vfk/vfkdatablocksqlite.cpp b/gdal/ogr/ogrsf_frmts/vfk/vfkdatablocksqlite.cpp
+index f2a25df527..097b69167e 100644
+--- a/gdal/ogr/ogrsf_frmts/vfk/vfkdatablocksqlite.cpp
++++ b/gdal/ogr/ogrsf_frmts/vfk/vfkdatablocksqlite.cpp
+@@ -551,6 +551,13 @@ int VFKDataBlockSQLite::LoadGeometryPolygon()
+ 
+         /* clear */
+         ogrPolygon.empty();
++
++        /* free ring list */
++        for (PointListArray::iterator iRing = poRingList.begin(), eRing = poRingList.end();
++            iRing != eRing; ++iRing) {
++            delete (*iRing);
++            *iRing = nullptr;
++        }
+         poRingList.clear();
+ 
+         /* collect rings from lines */

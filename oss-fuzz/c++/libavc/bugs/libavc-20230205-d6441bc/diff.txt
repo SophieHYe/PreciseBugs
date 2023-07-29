@@ -1,0 +1,84 @@
+diff --git a/encoder/svc/isvce_api.c b/encoder/svc/isvce_api.c
+index 5ded31c..9567119 100644
+--- a/encoder/svc/isvce_api.c
++++ b/encoder/svc/isvce_api.c
+@@ -2481,9 +2481,10 @@ static WORD32 isvce_fill_num_mem_rec(void *pv_api_ip, void *pv_api_op)
+         total_size += sizeof(bitstrm_t);
+         total_size = ALIGN128(total_size);
+ 
+-        /* size of bit stream buffer */
++#if ENABLE_RE_ENC_AS_SKIP
+         total_size += sizeof(bitstrm_t);
+         total_size = ALIGN128(total_size);
++#endif
+ 
+         /* top nnz luma */
+         total_size += (max_mb_cols * 4 * sizeof(UWORD8));
+@@ -3527,14 +3528,13 @@ static WORD32 isvce_init_mem_rec(iv_obj_t *ps_codec_obj, void *pv_api_ip, void *
+ 
+                 /* bit stream ptr */
+                 ps_codec->as_process[i].s_entropy.ps_bitstrm = (bitstrm_t *) (pu1_buf + size);
+-                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm);
++                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm[0]);
+                 size = ALIGN128(size);
+ 
+ #if ENABLE_RE_ENC_AS_SKIP
+-                /* bit stream ptr */
+                 ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr =
+                     (bitstrm_t *) (pu1_buf + size);
+-                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr);
++                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr[0]);
+                 size = ALIGN128(size);
+ #endif
+ 
+@@ -3582,14 +3582,13 @@ static WORD32 isvce_init_mem_rec(iv_obj_t *ps_codec_obj, void *pv_api_ip, void *
+ 
+                 /* bit stream ptr */
+                 ps_codec->as_process[i].s_entropy.ps_bitstrm = (bitstrm_t *) (pu1_buf + size);
+-                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm);
++                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm[0]);
+                 size = ALIGN128(size);
+ 
+ #if ENABLE_RE_ENC_AS_SKIP
+-                /* bit stream ptr */
+                 ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr =
+                     (bitstrm_t *) (pu1_buf + size);
+-                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr);
++                size += sizeof(ps_codec->as_process[i].s_entropy.ps_bitstrm_after_slice_hdr[0]);
+                 size = ALIGN128(size);
+ #endif
+ 
+diff --git a/encoder/svc/isvce_process.c b/encoder/svc/isvce_process.c
+index bc3dcb0..ca790b0 100644
+--- a/encoder/svc/isvce_process.c
++++ b/encoder/svc/isvce_process.c
+@@ -301,7 +301,7 @@ WORD32 isvce_update_rc_post_enc(isvce_codec_t *ps_codec, WORD32 ctxt_sel, WORD32
+ 
+     /* current frame stats */
+     frame_info_t s_frame_info;
+-    picture_type_e rc_pic_type;
++    picture_type_e rc_pic_type = I_PIC;
+ 
+     /* temp var */
+     WORD32 i, j;
+@@ -423,18 +423,11 @@ WORD32 isvce_update_rc_post_enc(isvce_codec_t *ps_codec, WORD32 ctxt_sel, WORD32
+             if(ENABLE_ILP_MV)
+             {
+                 svc_layer_data_t *ps_layer_data;
+-                coordinates_t s_ref_frame_dims;
+-
+-                WORD32 i4_num_mbs;
+ 
+                 svc_au_data_t *ps_svc_au_data = ps_svc_ilp_data->ps_svc_au_data;
+ 
+-                s_ref_frame_dims.i4_abscissa =
+-                    ps_svc_ilp_data->ps_residual_bufs[ps_entropy->u1_spatial_layer_id].u4_width;
+-                s_ref_frame_dims.i4_ordinate =
+-                    ps_svc_ilp_data->ps_residual_bufs[ps_entropy->u1_spatial_layer_id].u4_height;
+-                i4_num_mbs = (s_ref_frame_dims.i4_abscissa * s_ref_frame_dims.i4_ordinate) /
+-                             (MB_SIZE * MB_SIZE);
++                WORD32 i4_num_mbs = (ps_proc->i4_ht_mbs * ps_proc->i4_wd_mbs) / (MB_SIZE * MB_SIZE);
++
+                 ps_layer_data = &ps_svc_au_data->ps_svc_layer_data[ps_entropy->u1_spatial_layer_id];
+ 
+                 memset(ps_layer_data->ps_mb_info, 0,

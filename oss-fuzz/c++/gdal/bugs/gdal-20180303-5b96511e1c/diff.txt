@@ -1,0 +1,25 @@
+diff --git a/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp b/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
+index aea1ac1fed..958a575e0e 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
+@@ -323,6 +323,7 @@ void AVCRawBinReadString(AVCRawBinFile *psFile, int nBytesToRead, GByte *pBuf)
+ {
+     const GByte *pszConvBuf;
+ 
++    memset(pBuf, 0, nBytesToRead);
+     AVCRawBinReadBytes(psFile, nBytesToRead, pBuf);
+ 
+     pBuf[nBytesToRead] = '\0';
+diff --git a/gdal/ogr/ogrsf_frmts/avc/ogravcbinlayer.cpp b/gdal/ogr/ogrsf_frmts/avc/ogravcbinlayer.cpp
+index f9861958ea..b9790d632f 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/ogravcbinlayer.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/ogravcbinlayer.cpp
+@@ -139,6 +139,8 @@ OGRFeature *OGRAVCBinLayer::GetFeature( GIntBig nFID )
+                                psInfo->eCoverType,
+                                m_psSection->eType,
+                                psInfo->psDBCSInfo);
++        if( hFile == nullptr )
++            return nullptr;
+     }
+ 
+ /* -------------------------------------------------------------------- */

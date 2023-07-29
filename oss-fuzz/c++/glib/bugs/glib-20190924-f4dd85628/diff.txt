@@ -1,0 +1,25 @@
+diff --git a/glib/gdatetime.c b/glib/gdatetime.c
+index 4557e3c76..3be4eba3d 100644
+--- a/glib/gdatetime.c
++++ b/glib/gdatetime.c
+@@ -1241,6 +1241,8 @@ g_date_time_new_week (GTimeZone *tz, gint year, gint week, gint week_day, gint h
+     return NULL;
+ 
+   dt = g_date_time_new (tz, year, 1, 4, 0, 0, 0);
++  if (dt == NULL)
++    return NULL;
+   g_date_time_get_week_number (dt, NULL, &jan4_week_day, NULL);
+   g_date_time_unref (dt);
+ 
+diff --git a/glib/tests/gdatetime.c b/glib/tests/gdatetime.c
+index d148cf528..4ecccb347 100644
+--- a/glib/tests/gdatetime.c
++++ b/glib/tests/gdatetime.c
+@@ -868,6 +868,7 @@ test_GDateTime_new_from_iso8601_2 (void)
+     */
+     { FALSE, "1719W462 407777-07", 0, 0, 0, 0, 0, 0, 0, 0 },
+     { FALSE, "4011090 260528Z", 0, 0, 0, 0, 0, 0, 0, 0 },
++    { FALSE, "0000W011 228214-22", 0, 0, 0, 0, 0, 0, 0, 0 },
+   };
+   GTimeZone *tz = NULL;
+   GDateTime *dt = NULL;

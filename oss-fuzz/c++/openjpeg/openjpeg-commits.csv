@@ -1,0 +1,928 @@
+b'1ee6d115	15c0dca5 59ec1f0a	Sun Mar 26 16:08:24 2023 +0200	Merge pull request #1463 from rouault/fix_570
+59ec1f0a	0f528e95	Sun Mar 26 14:03:59 2023 +0200	opj_jp2_read_header(): move setting icc_profile here instead in opj_jp2_decode()/get_tile() + add unit test (fixes #570)
+0f528e95	032b6e93	Fri Mar 17 18:16:35 2023 +0100	opj_jp2_read_header(): move setting color_space here instead in opj_jp2_decode()/get_tile() (fixes #570)
+1a8d13e2	97c3c8f5 8f3f837a	Tue Mar 7 15:58:24 2023 +0100	Merge pull request #1461 from rouault/fix_ci
+8f3f837a	97c3c8f5	Tue Mar 7 15:36:24 2023 +0100	Fix CI
+97c3c8f5	ee58d770 c33e3d4a	Tue Mar 7 15:14:11 2023 +0100	Merge pull request #1460 from rouault/fix_1459
+c33e3d4a	ee58d770	Tue Mar 7 13:08:24 2023 +0100	opj_t2_skip_packet_data(): avoid out-of-bounds reads on truncated images in non-strict mode (fixes #1459)
+ee58d770	2d606701	Tue Feb 7 01:08:38 2023 +0100	CMake: add missing GNUInstallDirs related substitutions (fixes #1424) (#1456)
+2d606701	be955619 6ab3ca69	Wed Oct 19 13:57:31 2022 +0200	Merge pull request #1448 from rouault/fix_1447
+6ab3ca69	be955619	Tue Oct 18 23:03:05 2022 +0200	Fix incorrect decoding of image with large number of progression levels
+be955619	49fea5c4	Fri Aug 12 15:48:41 2022 +0200	Fix Heap-buffer-overflow READ in opj_jp2_apply_pclr (#1441)
+e3f07dcc	ca749616 dd1a2d64	Thu Jun 30 12:57:39 2022 +0200	Merge pull request #1433 from rouault/fix_1432
+dd1a2d64	ca749616	Wed Jun 29 11:47:58 2022 +0200	opj_t1_encode_cblk(): avoid undefined behaviour on fuzzed input (fixes #1432)
+ca749616	0535bfc3 33824627	Mon Jun 27 23:21:58 2022 +0200	Merge pull request #1431 from rouault/fix_1430
+33824627	46b42b61	Mon Jun 27 12:03:45 2022 +0200	Build: fix linking of executables on some systems where TIFF/LCMS2 static libraries are not in system directories (fixes #1430)
+0535bfc3	52927287	Tue May 31 11:55:12 2022 +0200	HT_DEC: Fix opj_t1_allocate_buffers malloc size error (#1426) (fixes #1413)
+098bb874	46b42b61	Mon May 16 23:10:26 2022 +0200	Fix windows arm builds
+76c6a257	576f7211	Sun May 8 19:45:53 2022 +0200	opj_compress.c: usage formatting fix
+30e7c88b	7b474e6d ef36cd01	Sat May 7 11:52:09 2022 +0200	Merge pull request #1419 from rouault/fix_ci
+af4fd8d3	7b474e6d	Sat May 7 10:55:00 2022 +0200	tools/travis-ci/install.sh: git clone with https:// to fix \'The unauthenticated git protocol on port 9418 is no longer supported.\'
+7b474e6d	6a29f5a9 e33944ea	Sat May 7 10:23:26 2022 +0200	Merge pull request #1410 from rouault/fix_1404
+e33944ea	6a29f5a9	Sun Feb 13 10:42:47 2022 +0100	CMakeLists.txt: do not set INSTALL_NAME_DIR for MacOS builds for CMake >= 3.0 (fixes #1404)
+3837ff1b	883c31db 1462e940	Thu Feb 10 15:13:49 2022 +0100	Merge pull request #1408 from rouault/fix_ossfuzz_44544
+1462e940	883c31db	Thu Feb 10 14:30:13 2022 +0100	Avoid integer overflows in DWT. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=44544
+883c31db	99d555c0	Thu Feb 10 14:27:17 2022 +0100	Add support for partial bitstream decoding (#1407) (fixes #715)
+241e9e8e	d87fd927	Tue Jan 18 21:55:10 2022 +0100	Fix potential overflow related issues spotted by LGTM code analysis (#1402)
+d87fd927	a1eec9c4 70f5e0a0	Tue Jan 18 17:22:44 2022 +0100	Merge pull request #1401 from rouault/fix_1399
+70f5e0a0	a1eec9c4	Tue Jan 18 15:44:18 2022 +0100	opj_j2k_setup_encoder(): validate number of tiles to avoid illegal values and potential overflow (fixes #1399)
+a1eec9c4	6e4588f3	Sun Jan 16 18:54:00 2022 +0100	Fix unsigned vs OPJ_INT32 mismatches  (#1398)
+79c7d7af	fe2fa707	Wed Jan 12 13:46:10 2022 +0100	opj_compress/opj_uncompress: fix integer overflow in num_images (#1395)
+6ec9871e	ef73ad1c	Sun Dec 5 13:38:47 2021 +0100	Format source file with typo fixes
+ef73ad1c	667149ff	Sun Dec 5 13:32:09 2021 +0100	Fix singular/plural mismatch
+667149ff	90481203	Sun Dec 5 13:14:33 2021 +0100	Fix some typos (found by codespell)
+15594a3d	15615751	Sun Sep 26 12:37:59 2021 +0200	opj_dump.c: fix potential buffer overflow
+0544a088	f3d8c763	Sat Sep 25 12:59:04 2021 +0200	ht_dec.c: fix likely issue on big endian hosts (untested)
+ec651740	fd485f2f af8ed50a	Wed Sep 15 14:01:20 2021 +0200	Merge pull request #1380 from rouault/fix_verify_indent_pr
+af8ed50a	29818b8e	Wed Sep 15 13:40:50 2021 +0200	CI \'regular\': fix static builds when doing perf checks
+29818b8e	fd485f2f	Wed Sep 15 13:21:25 2021 +0200	verify-indentation.sh: fix for pull request from bar/master to foo/master
+0c196266	172583ab badbd93a	Wed Sep 8 13:16:52 2021 +0200	Merge pull request #1375 from rouault/fix_ossfuzz_11700_30646
+badbd93a	172583ab	Fri Sep 3 15:17:56 2021 +0200	Avoid integer overflows in DWT. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=11700 and https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=30646
+0afbdcf3	08ba6a16	Wed Jul 14 03:35:13 2021 +0200	Fix segfault in src/bin/jp2/opj_decompress.c due to uninitialized pointer (fixes #1368) (#1369)
+08ba6a16	67f8a1e4	Mon Jul 12 15:59:41 2021 +0200	Fix code formatting
+67f8a1e4	00beb209 e0993d07	Mon Jul 12 15:58:06 2021 +0200	Merge pull request #1366 from sebras/fix-out-of-bounds-access
+e0993d07	00beb209	Mon Jul 12 15:32:39 2021 +0200	opj_j2k_is_imf_compliant: Fix out of bounds access.
+00beb209	cc1919b1 c8ab3e58	Mon Jul 12 12:02:12 2021 +0200	Merge pull request #1365 from sebras/fix-warning-formatting
+c8ab3e58	cc1919b1	Mon Jul 12 03:43:30 2021 +0200	opj_j2k_is_imf_compliant: Fix argument formatting for warnings.
+26249085	e7d908d2 b5ec98f1	Mon Jun 7 15:48:42 2021 +0200	Merge pull request #1360 from rouault/travis_gcc_4_8_fix
+b5ec98f1	e7d908d2	Mon Jun 7 15:43:05 2021 +0200	.travis.yml: try to fix gcc 4.8 config by updating to xenial
+e7d908d2	7e4e09a7 f0629cb1	Mon Jun 7 13:56:11 2021 +0200	Merge pull request #1358 from rouault/compiler_warning_fixes
+f0629cb1	7e4e09a7	Mon Jun 7 13:28:26 2021 +0200	Fix various compiler warnings
+99c28c96	b6b8d28b	Tue Jun 1 22:39:27 2021 +0200	fix #1345: don\'t remove big endian test for other platforms
+05263eee	0bda7188 9727f3ac	Tue May 4 19:15:06 2021 +0200	Merge pull request #1348 from rouault/fix_kdu
+92c04711	0bda7188	Tue May 4 16:31:32 2021 +0200	tools/travis-ci/install.sh: fix links to Kakadu and jpylyzer binaries
+14f4c27e	0782cd07	Thu Jan 7 14:09:50 2021 +0100	Revert "Use INC_DIR for OPENJPEG_INCLUDE_DIRS (fixes uclouvain#1174)"
+0782cd07	07a45432 b6f0e413	Mon Jan 4 19:42:30 2021 +0100	Merge pull request #867 from pseiderer/fix-lcms2-static-linking-using-pgk-config
+2519439d	433edd0e	Thu Dec 31 14:54:59 2020 +0100	Fix Windows build
+7dd5497b	37ac30ce	Mon Dec 28 22:52:34 2020 +0100	Fix year in NEWS
+6c5acd4d	98a4c5c3 5d494a7e	Mon Dec 28 19:04:28 2020 +0100	Merge pull request #1308 from timgates42/bugfix_typo_produced
+5d494a7e	98a4c5c3	Wed Dec 16 21:19:17 2020 +1100	docs: fix simple typo, producted -> produced
+65586374	5d0a8b08	Thu Dec 10 10:22:25 2020 +1100	Use INC_DIR for OPENJPEG_INCLUDE_DIRS (fixes uclouvain#1174) This fixes the case where the cmake file is accessed via a symlink.
+5d0a8b08	43dd9ee1 8f5aff1d	Sat Dec 5 11:39:23 2020 +0100	Merge pull request #1304 from rouault/fix_1302
+8f5aff1d	43dd9ee1	Fri Dec 4 20:45:25 2020 +0100	pi.c: avoid out of bounds access with POC (fixes #1302)
+43dd9ee1	aaff099b 4ce7d285	Fri Dec 4 20:37:43 2020 +0100	Merge pull request #1303 from zodf0055980/fix#1283
+4ce7d285	aaff099b	Fri Dec 4 19:00:22 2020 +0800	Encoder: grow again buffer size in opj_tcd_code_block_enc_allocate_data() (fixes #1283)
+aaff099b	fb9eae5d 73fdf283	Wed Dec 2 23:56:57 2020 +0100	Merge pull request #1301 from rouault/fix_1299
+fc6abdbe	18b1138f 38d661a3	Wed Dec 2 23:56:30 2020 +0100	Merge pull request #1298 from rouault/fix_1297
+73fdf283	18b1138f	Wed Dec 2 14:10:16 2020 +0100	opj_j2k_write_sod(): avoid potential heap buffer overflow (fixes #1299) (probably master only)
+38d661a3	18b1138f	Wed Dec 2 13:13:26 2020 +0100	opj_t2_encode_packet(): avoid out of bound access of #1297, but likely not the proper fix
+18b1138f	630b485f c9380ed0	Wed Dec 2 10:05:39 2020 +0100	Merge pull request #1295 from rouault/fix_1293
+c9380ed0	6daf5f3e	Tue Dec 1 19:56:44 2020 +0100	opj_j2k_setup_encoder(): validate POC compno0 (fixes #1293)
+fbd30b06	2d119d03	Tue Dec 1 19:51:35 2020 +0100	opj_t2_encode_packet(): avoid out of bound access of #1294, but likely not the proper fix
+61ff143a	2d119d03 6daf5f3e	Tue Dec 1 11:35:59 2020 +0100	Merge pull request #1292 from rouault/fix_1286
+6daf5f3e	2d119d03	Mon Nov 30 23:29:06 2020 +0100	Encoder: avoid global buffer overflow on irreversible conversion when too many decomposition levels are specified (fixes #1286)
+b2072402	a2b2980a	Mon Nov 30 22:31:51 2020 +0100	pngtoimage(): fix wrong computation of x1,y1 if -d option is used, that would result in a heap buffer overflow (fixes #1284)
+649298dc	15cf3d95	Wed Nov 25 20:41:39 2020 +0800	Encoder: grow again buffer size in opj_tcd_code_block_enc_allocate_data() (fixes #1283)
+15cf3d95	eaa098b5	Mon Nov 23 18:14:02 2020 +0100	Encoder: grow again buffer size in opj_tcd_code_block_enc_allocate_data() (fixes #1283)
+eaa098b5	67ec360f	Mon Nov 23 13:49:05 2020 +0100	Encoder: grow buffer size in opj_tcd_code_block_enc_allocate_data() to avoid write heap buffer overflow in opj_mqc_flush (fixes #1283)
+67ec360f	491299eb	Mon Nov 23 13:38:27 2020 +0100	Fix typo in internal function name
+0f169867	cbee7891 0863ccf2	Wed Sep 16 11:52:10 2020 +0200	Merge pull request #1276 from rouault/fix_1243
+0863ccf2	cbee7891	Wed Sep 16 11:27:53 2020 +0200	Encoder: avoid uint32 overflow when allocating memory for codestream buffer (fixes #1243)
+cbee7891	172c8ae5 e8e258ab	Tue Jun 30 22:05:13 2020 +0200	Merge pull request #1262 from rouault/fix_1261
+e8e258ab	172c8ae5	Tue Jun 30 21:31:19 2020 +0200	opj_decompress: fix double-free on input directory with mix of valid and invalid images (CVE-2020-15389)
+172c8ae5	e252438d b028e8d1	Mon Jun 22 22:35:44 2020 +0200	Merge pull request #1260 from sebras/fix-issue-1259
+e252438d	98150d09 79b199a8	Mon Jun 22 22:12:08 2020 +0200	Merge pull request #1258 from sebras/fix-issue-1257
+adccbc83	3cd13055	Wed May 20 20:31:28 2020 +0200	Irreversible decoding: partially revert previous commit, to fix failures in test suite
+774889a3	b6b7e96b 271a71ef	Fri Apr 17 00:39:46 2020 +0200	Merge pull request #1244 from rouault/fix_pi_warnings
+040e1422	221a801a	Fri Apr 17 00:09:40 2020 +0200	jp3d/jpwl/mj2/jpip: Fix resource leaks (#1226)
+271a71ef	221a801a	Thu Apr 16 23:34:10 2020 +0200	Fix warnings about signed/unsigned casts in pi.c
+9c1cfb03	563ecfb5 1c540241	Wed Apr 1 22:00:19 2020 +0200	Merge pull request #1240 from rouault/fix_crash_opj_decompress
+fffe32ad	28881453	Wed Feb 12 15:55:02 2020 +0100	openjpeg.h: fix values of OPJ_PROFILE_IMF_ constants
+647f9b11	b63a433b 05f9b91e	Thu Jan 30 13:07:31 2020 +0100	Merge pull request #1232 from rouault/fix_1231
+46c1eff9	ac373737 024b8407	Sat Jan 11 11:29:11 2020 +0100	Merge pull request #1229 from rouault/fix_1228
+024b8407	ac373737	Sat Jan 11 01:51:58 2020 +0100	opj_j2k_update_image_dimensions(): reject images whose coordinates are beyond INT_MAX (fixes #1228)
+ac373737	9701b330 4cb1f663	Sun Nov 17 13:08:41 2019 +0100	Merge pull request #1217 from rouault/fix_ossfuzz_18979
+9701b330	cb332992	Sun Nov 17 03:09:59 2019 +0100	JPWL: convert: Fix buffer overflow reading an image file less than four characters (#1196)
+cb332992	5875a6b4 016f80ae	Sun Nov 17 02:47:26 2019 +0100	Merge pull request #1218 from rouault/fix_broken_abi_check
+016f80ae	5875a6b4	Sun Nov 17 02:26:54 2019 +0100	abi-check.sh: fix false postive ABI error, and display output error log
+4cb1f663	5875a6b4	Sun Nov 17 01:18:26 2019 +0100	pi.c: avoid integer overflow, resulting in later invalid access to memory in opj_t2_decode_packets(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=18979
+8db9d25d	f4d65783	Sat Jun 15 09:55:16 2019 +0200	opj_decompress_fuzzer: remove checks regarding input dimensions (fixes #1079)
+f4d65783	9b7620ee	Sun May 26 11:06:30 2019 +0200	test_decode_area.c: assign tdy to *ptileh instead of *ptilew (fixes #1195)
+9b7620ee	4f447c6e 3aef207f	Fri Apr 26 19:52:52 2019 +0200	Merge pull request #1185 from Young-X/fix
+4f447c6e	5dd75f62 a94cfbd5	Thu Apr 25 15:32:22 2019 +0200	Merge pull request #1192 from rouault/poc_fixes
+64231631	b86717fd	Thu Apr 25 14:40:56 2019 +0200	Fix POC in multi-tile scenarios: avoid almost endless loop when a tile has no POC settings
+6589c609	1e3a5756	Thu Apr 25 14:40:55 2019 +0200	opj_j2k_check_poc_val(): fix starting index for checking layer dimension
+1e3a5756	5dd75f62	Thu Apr 25 14:40:55 2019 +0200	compression: emit POC marker when only one single POC is requested (fixes #1191)
+69a7a312	d6b8aed5 5151426d	Fri Mar 29 12:25:39 2019 +0100	Merge pull request #1188 from rouault/fix_abi_check
+5151426d	d6b8aed5	Fri Mar 29 11:53:23 2019 +0100	abi-check.sh: fix broken download URL
+d6b8aed5	25b815dc a1d32a59	Fri Mar 29 11:52:38 2019 +0100	Merge pull request #1187 from rouault/fix_ubsan_in_opj_t1_encode_cblks
+a1d32a59	25b815dc	Fri Mar 29 11:17:39 2019 +0100	opj_t1_encode_cblks: fix UBSAN signed integer overflow
+e7640f58	e0f52128 05be3084	Fri Dec 7 21:27:38 2018 +0100	Merge pull request #1168 from Young-X/fix_dev
+05be3084	bd88611e	Wed Nov 28 14:44:06 2018 +0800	[JPWL] tgatoimage(): avoid excessive memory allocation attempt, and fixes unaligned load
+e0f52128	92023cd6 2e5ab1d9	Wed Nov 28 00:04:30 2018 +0100	Merge pull request #1170 from rouault/fix_color_apply_icc_profile
+46822d0e	619e1b08	Fri Nov 23 17:08:57 2018 +0800	[JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
+619e1b08	c5bd64ea	Fri Nov 23 17:08:56 2018 +0800	[JPWL] fix CVE-2018-16375
+c196b23b	948332e6	Fri Nov 16 09:40:31 2018 +0100	openjp3d: Int overflow fixed (#1159)
+cab352e2	0bc90e40	Wed Nov 7 18:53:18 2018 +0100	jp2: convert: fix null pointer dereference
+0bc90e40	0e6a5553	Thu Nov 1 09:05:26 2018 +0100	jp3d/jpwl convert: fix write stack buffer overflow
+948332e6	e52909f4	Wed Oct 31 20:44:30 2018 +0100	Fix some potential overflow issues (#1161)
+943db0f1	cd900d96	Wed Oct 31 16:16:22 2018 +0100	Fix several memory and resource leaks
+cd900d96	0e6a5553	Thu Oct 18 11:45:45 2018 +0200	opj_thread_pool_setup(): fix infinite waiting if a thread creation failed
+8fc09e50	aaf48ee6	Sat Sep 22 23:47:56 2018 +0200	opj_jp2_apply_pclr(): remove useless assert that can trigger on some files (fixes #1125)
+cc382476	564fbfb6	Sat Sep 22 23:12:39 2018 +0200	opj_mj2_extract: Check provided output prefix for length
+ccc4441a	c6ee0062 24fd3ce7	Sat Sep 22 22:54:51 2018 +0200	Merge pull request #1140 from bukatlib/fix_relpath
+1b9a81df	9d1a9dc2 c28ed521	Sat Sep 22 22:27:14 2018 +0200	Merge pull request #1149 from rouault/fix_knownfailures
+ca16fe55	9d1a9dc2	Sat Sep 22 14:51:50 2018 -0400	convertbmp: fix issues with zero bitmasks
+31a03b39	9d1a9dc2	Wed Sep 5 21:52:43 2018 +0200	openjp2/jp2: Fix two format strings
+3d6ffaf3	9d1a9dc2	Wed Sep 5 20:01:10 2018 +0200	Fix some typos in code comments and documentation
+d2205ba2	fd205f45 41706816	Wed Jun 20 16:26:24 2018 +0200	Merge pull request #1121 from rouault/fix_tnsot_zero
+41706816	0c913b0a	Wed Jun 20 15:28:53 2018 +0200	Add test cases for https://github.com/uclouvain/openjpeg/issues/1120 and https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2785
+0c913b0a	832dfd18	Wed Jun 20 15:12:47 2018 +0200	Avoid assertion when running opj_j2k_merge_ppt() several time due to e6674f7ed66abdb32a0be5944f618722b6a7b5d5 revert. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2785
+832dfd18	fd205f45	Wed Jun 20 14:54:20 2018 +0200	Revert "Avoid assertion in opj_j2k_merge_ppt() in case premature EOC is encountered in opj_j2k_read_tile_header(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2785. Credit to OSS Fuzz" (fixes #1120)
+fd205f45	2c7eb4fe	Sat Jun 16 16:17:58 2018 +0200	opj_compress: try to make help message of -c switch clearer (fixes #1117)
+2c7eb4fe	a59512e0	Mon Mar 12 14:24:20 2018 +0100	opj_compress: fix help message regarding default precinct size
+a59512e0	3910be8a 8ad94f68	Sun Mar 4 23:54:09 2018 +0100	Merge pull request #1104 from rouault/macos_fix
+8ad94f68	3910be8a	Sun Mar 4 23:30:53 2018 +0100	Fix Mac builds
+e98d0a20	31a347a9 d4d78272	Sun Mar 4 23:16:04 2018 +0100	Merge pull request #1094 from kbabioch/fix/missing-format-string-parameter
+31a347a9	b02e0d9c db6841a0	Sun Mar 4 23:13:45 2018 +0100	Merge pull request #1096 from kbabioch/fix/opj_mj2_extract-help
+b02e0d9c	564fbfb6 e351c22e	Sun Mar 4 23:10:48 2018 +0100	Merge pull request #1101 from kbabioch/fix/jp3d-sprintf-overflow
+db6841a0	564fbfb6	Fri Mar 2 15:19:21 2018 +0100	opj_mj2_extract: Rename output_location to output_prefix
+06f7d412	da5e8972	Sun Feb 18 14:38:16 2018 +0100	bench_dwt: fix wrong index in iteration (issue found by Fethi Migaou)
+24d08ff9	da5e8972	Wed Feb 14 17:46:38 2018 -0800	fix unchecked integer multiplication overflow
+cfc53951	d96d2b9a	Fri Feb 9 21:02:25 2018 +1100	Fixed typos
+4841292b	9d0d1a01	Fri Dec 15 16:49:33 2017 +0100	Fix resource leak (CID 179466)
+98cfdd31	936910cf	Thu Nov 30 14:48:34 2017 +0100	opj_j2k_read_cod: remove check for \'No more than one COD marker per tile\' (fixes #1043)
+936910cf	370d024d	Thu Nov 30 14:26:17 2017 +0100	Fix typo in comments
+66297f07	e8b6b54d	Mon Oct 9 11:40:43 2017 +0200	Unix build: fix regression of 2.3.0 where a shared-only or static-only build lacks the installation target for the library (#1019, fixes regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
+19e15787	68e596da	Thu Sep 21 14:06:03 2017 +0200	opj_j2k_get_default_thread_count(): validate value of OPJ_NUM_THREADS to fix Coverity 179465 and 179463
+68e596da	16b70165	Thu Sep 21 13:54:14 2017 +0200	Fix copy&paste error (Coverity CID 169394)
+9cba0576	8df07d58	Wed Sep 20 00:43:54 2017 +0200	Avoid index-out-of-bounds access when invoking opj_compress with -n 11 or higher. But not a proper fix itself (refs #493)
+c84e594c	82ab7eff	Tue Sep 19 18:35:07 2017 +0200	Fix badly named variable in function prototype (raised by cppcheck)
+fdef69b4	18f66963	Tue Sep 19 12:46:20 2017 +0200	Fix warnings and errors when compiling with a c++ compiler (#1021)
+18f66963	3dfc6ca2	Tue Sep 19 12:13:34 2017 +0200	Fix compilation with AppleClang 8.1.0.8020042 (#1020)
+28094e1e	33167ddc	Fri Sep 8 10:56:49 2017 +0200	opj_tcd_mct_decode(): avoid heap buffer overflow when components have not the same number of resolutions. Also fixes an issue with subtile decoding. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3331. Credit to OSS Fuzz
+5abd86b1	51a1dcaa	Thu Sep 7 18:01:33 2017 +0200	Properly fix cc893a4ebfaf8c42cf1221ac82c83df91e77340b to avoid heap-buffer-overflow when numcomps < 3
+cc893a4e	c67e1cd7	Thu Sep 7 15:32:54 2017 +0200	opj_tcd_mct_decode(): fix checks to verify MCT can be done safely. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3305 (master only)
+c67e1cd7	297f2021	Wed Sep 6 17:33:38 2017 +0200	Fix invalid access out of bounds, and bad behaviour, when calling repeatdly opj_get_decoded_tile() on an image with a color palette
+297f2021	003759a4	Wed Sep 6 16:49:28 2017 +0200	Fix 2.2.0 regression when reading codestream with reperated calls to opj_get_decoded_tile() where tile parts of a same tile are not consecutive
+003759a4	e656822f	Wed Sep 6 15:59:19 2017 +0200	Fix null pointer dereference on partial tile decoding when they are empty. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3297 (master only)
+d1299d96	d5153ba4	Fri Sep 1 16:30:39 2017 +0200	Fix compiler warning in release mode
+c37e360a	eee5104a	Fri Sep 1 16:30:35 2017 +0200	opj_tcd_init_tile(): fix typo on overflow detection condition (introduced in previous commit)
+6ce49bf5	04b70908	Fri Sep 1 10:26:18 2017 +0200	Fix undefined shift behaviour in opj_dwt_is_whole_tile_decoding(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3255. Credit to OSS Fuzz
+4776b15f	a55c024f	Mon Aug 28 18:08:13 2017 +0200	Add test for fix of a55c024fc6b917a409b85aeafd7326421c4aea34
+a55c024f	8f92fc97	Mon Aug 28 17:18:33 2017 +0200	Subtile decoding: fix overflows in subband coordinate computation that cause later buffer overflow. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3115. Credit to OSS Fuzz. master only
+8180eeac	c97666f7	Mon Aug 21 23:06:53 2017 +0200	test_tile_encoder: fix checks on argc
+c97666f7	24d069e3	Mon Aug 21 19:02:04 2017 +0200	j2k.c: fix comment, and remove FIXME
+e5285319	5597522c	Fri Aug 18 13:39:20 2017 +0200	pgxtoimage(): fix write stack buffer overflow (#997)
+028c504a	5d128060	Fri Aug 18 12:30:11 2017 +0200	test_decode_area: fix to make it work with odd image dimensions
+17ea17f4	fd8448ed	Thu Aug 17 19:05:29 2017 +0200	Fix -Wconversion warning
+fd8448ed	da046b73	Thu Aug 17 17:04:48 2017 +0200	bench_dwt.c: fix signedness related warnings
+da046b73	9f7d79fd	Thu Aug 17 17:02:40 2017 +0200	convert.c: fix recently introduced -Wsign-conversion warnings
+1ab6e0e0	2cd30c2b	Thu Aug 17 12:01:16 2017 +0200	opj_decompress_fuzzer.cpp: reject images with too big tiles. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2918. Credit to OSS Fuzz
+2cd30c2b	09e83407	Thu Aug 17 11:47:40 2017 +0200	tgatoimage(): avoid excessive memory allocation attempt, and fixes unaligned load (#995)
+09e83407	8e6c371e	Thu Aug 17 11:05:53 2017 +0200	Avoid asserting on assert(i == pcol) in opj_jp2_apply_pclr() by adding new check in opj_jp2_check_color(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=3068. Credit to OSS Fuzz
+1e387de7	c535531f	Wed Aug 16 17:39:20 2017 +0200	Fix build issue of JPWL by adding opj_image_data_alloc() and opj_image_data_free() to src/lib/openmj2 (#994)
+c535531f	dcac91b8	Wed Aug 16 17:20:29 2017 +0200	opj_t2_encode_packet(): fix potential write heap buffer overflow (#992)
+dcac91b8	af760007	Wed Aug 16 17:09:10 2017 +0200	opj_j2k_write_sot(): fix potential write heap buffer overflow (#991)
+af760007	ab4de904	Wed Aug 16 13:36:52 2017 +0200	tiftoimage(): fix read heap buffer overflow (#988)
+ab4de904	9624b2fa	Wed Aug 16 13:11:36 2017 +0200	imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
+9624b2fa	4241ae6f	Wed Aug 16 12:52:33 2017 +0200	opj_t2_encode_packet(): only emit an error about insufficiently large output buffer in FINAL_PASS mode. Fixes (master-only) regression added in 0b4fef6d1901254e41ab74ed681daba477d724c3
+4241ae6f	52d5690a	Tue Aug 15 11:55:58 2017 +0200	Fix assertion in debug mode / heap-based buffer overflow in opj_write_bytes_LE for Cinema profiles with numresolutions = 1 (#985)
+a35b4891	0b4fef6d	Thu Aug 10 16:58:36 2017 +0200	Fix argument order in error message of previous commit
+a316f36d	a4c93818	Thu Aug 10 14:43:16 2017 +0200	Fix crash on encoding if using opj_set_default_encoder_parameters() without defining tcp_numlayers
+5e200452	9203e8ec	Wed Aug 9 15:04:29 2017 +0200	Doc: fix error in previous commit
+9203e8ec	11b1ffb3	Wed Aug 9 14:50:59 2017 +0200	tcd.h: doc fixes and improvements
+0c07950c	0394f8d0	Tue Aug 8 18:05:37 2017 -0700	Fix remaining warning
+0c1fc059	f58aab9d	Mon Aug 7 18:32:52 2017 +0200	Complementary fix to previous commit
+61fb5dd7	793edc38	Mon Aug 7 18:32:49 2017 +0200	Fix crash on Windows due to b7594c0fcb9dd3aa6356d72c4a525d76168da689
+bc3cb741	57e36dbf	Mon Aug 7 16:44:28 2017 +0200	Changes for converttif.c to fix tsize_t
+2fbd4bb0	155fc2e2	Fri Aug 4 18:02:10 2017 +0200	opj_j2k_read_sot(): check current TPSot number regarding previous (non-zero) TNsot to avoid opj_j2k_merge_ppt() to be called several times. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2851. Credit to OSS Fuzz
+eb90d8ec	48125b0d	Wed Aug 2 16:50:11 2017 +0200	WIP: fix abi-check and automatic upload
+13cde9fa	9a6d41d2	Sun Jul 30 19:46:52 2017 +0200	src/lib/openjp2/*.h: use OPJ_ prefix for inclusion guards instead of reserved __ (#587)
+b716f861	22bf99ce	Sun Jul 30 19:26:47 2017 +0200	Fix breakage of 22bf99ce0220811bfce1562ee61423cb0245b683
+ffa9a4f6	c22cbd8b	Sun Jul 30 18:46:34 2017 +0200	Fix warnings in USE_JPIP compilation mode
+83342f2a	47483181	Sun Jul 30 18:18:59 2017 +0200	Fix Doxygen warnings (patch derived from Winfried\'s doxygen-dif.txt.zip, #849)
+e23e0c94	1ed8d677	Sun Jul 30 16:48:15 2017 +0200	Avoid p_stream->m_user_data_length >= (OPJ_UINT64)p_stream->m_byte_offset assertion in opj_stream_get_number_byte_left(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2786. Credit to OSS Fuzz
+1ed8d677	68832af2	Sun Jul 30 15:35:47 2017 +0200	opj_j2k_set_decode_area: replace assertions by runtime checks. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2795. Credit to OSS Fuzz
+68832af2	517bf6fd	Sun Jul 30 15:22:24 2017 +0200	opj_tcd_dc_level_shift_decode: avoid int32 overflow when prec == 31. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2799. Credit to OSS Fuzz
+517bf6fd	51eb86d8	Sat Jul 29 21:11:23 2017 +0200	src/bin/jpwl/convert.c: fix memleak (fix suggested by maddin200, #631)
+51eb86d8	397f62c0	Sat Jul 29 19:43:23 2017 +0200	Fix warnings in pi.c raised by VS11 analyze (#190)
+397f62c0	11445edd	Sat Jul 29 19:13:49 2017 +0200	Fix write heap buffer overflow in opj_mqc_byteout(). Discovered by Ke Liu of Tencent\'s Xuanwu LAB (#835)
+3fbe7136	5a3e7aaf	Sat Jul 29 18:38:16 2017 +0200	opj_tcd_get_decoded_tile_size(): fix potential UINT32 overflow (#854, CVE-2016-5152)
+784d4d47	2fa0fc61	Sat Jul 29 17:51:10 2017 +0200	Fix breakage of 2fa0fc61f2d546c8b67e7c5a9cbc61d98e1f7af0 (#970)
+db9ef99f	f6551f82	Sat Jul 29 16:34:35 2017 +0200	opj_t1_decode_cblk(): avoid undefined shift behaviour. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2487. Credit to OSS Fuzz
+f6551f82	9906fbf7	Sat Jul 29 16:29:11 2017 +0200	opj_t1_clbl_decode_processor(): avoid undefined behaviour if roishift >= 31. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2506. Credit to OSS Fuzz
+9906fbf7	71b4f5b1	Sat Jul 29 16:22:36 2017 +0200	Avoid assertion in opj_j2k_merge_ppt() in case premature EOC is encountered in opj_j2k_read_tile_header(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2785. Credit to OSS Fuzz
+71b4f5b1	d6654d90	Sat Jul 29 15:52:11 2017 +0200	opj_pi_next_pcrl(): avoid undefined shift behaviour. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2787. Credit to OSS Fuzz
+d6654d90	361c4506	Fri Jul 28 22:15:47 2017 +0200	opj_int_ceildiv(): fix int32 overflow. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2494. Credit to OSS Fuzz
+361c4506	7bdbe490	Fri Jul 28 22:06:26 2017 +0200	opj_tcd_dc_level_shift_decode(): avoid int overflow. Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2516. Credit to OSS Fuzz
+7bdbe490	16aeb928	Fri Jul 28 21:55:22 2017 +0200	Fix null pointer dereference in opj_jp2_apply_pclr(). Fixes https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=2558. Credit to OSS Fuzz
+16aeb928	c5bf5ef4	Fri Jul 28 21:39:30 2017 +0200	Fix null pointer dereference in opj_j2k_add_mct() (#895)
+820fcfe8	6c4e5bac	Thu Jul 27 19:35:35 2017 +0200	opj_j2k_update_image_data / opj_tcd_update_tile_data: fix unaligned load/store (#895)
+a88cbb6a	6c5fe940	Wed Jul 26 22:53:59 2017 +0200	Fix various undefined shift behaviour in pi.c
+5e795d90	2be20ce7	Wed Jul 26 21:06:38 2017 +0200	Spelling fixes (patch by ka7, #890, rebased on top of master)
+94cc97c5	8d2e69e3	Wed Jul 26 20:13:09 2017 +0200	opj_decompress: fix null pointer dereference on comps[].data on id_000167,sig_11,src_006079,op_havoc,rep_4 (#939)
+8d2e69e3	5c531998	Wed Jul 26 19:49:38 2017 +0200	Fix assertion / memory leak in opj_j2k_merge_ppt() on corrupted images (#939)
+60f8ddf5	a38c4496	Thu Jul 6 12:11:37 2017 +0200	Comment fix
+96d757cb	8fa405ee	Sat Jul 1 04:24:46 2017 +0200	Remove useless knownfailures (since LAZY encoding is fixed)
+8fa405ee	6239ed7b	Fri Jun 30 00:03:05 2017 +0200	IDWT 5x3: fix bug in AVX2 implementation (#953, #957)
+60267860	93aca847	Wed Jun 21 13:20:35 2017 +0200	Style fix
+93aca847	cdd3e83b	Wed Jun 21 12:54:40 2017 +0200	Fix mingw related warnings
+cdd3e83b	5c56933d	Wed Jun 21 12:49:01 2017 +0200	Fix clang warning about extraneous parentheses
+32b20b93	5f596cb2	Sat Jun 17 16:37:56 2017 +0200	Fix astyle issue
+5f596cb2	cc07aec6	Sat Jun 17 14:10:15 2017 +0200	Fix warning about unused arguments
+cc07aec6	36dd87ce	Sat Jun 17 14:09:31 2017 +0200	Fix warnings with recent GCC versions
+73d1510d	81c53117	Mon Jun 12 18:37:50 2017 +0200	Encoder: fix packet writing of empty sub-bands (#891, #892)
+81c53117	53d46fc7	Fri Jun 9 10:49:03 2017 +0200	T1: fix BYPASS/LAZY, TERMALL/RESTART and PTERM/ERTERM encoding modes. (#674)
+9b39fc4b	dde6cbab	Fri Jun 2 18:23:49 2017 +0200	Fix documentation of opj_t1_decode_cblks()
+7e8b5028	2ba861c3	Fri Jun 2 18:22:59 2017 +0200	t1_generate_luts.c: fix compiler warnings
+1957a498	40c0f42d	Tue May 23 17:06:46 2017 +0200	Fix compiler warnings
+4068363f	cd12414c	Tue May 23 16:16:32 2017 +0200	T1: fix VSC mode in encoder
+8728cfbc	83d7a6d4	Tue May 23 13:54:28 2017 +0200	t1.c: fix compiler warnings
+5f1e380b	9d8e1ecd	Tue May 16 09:31:07 2017 -0400	Fixed formatting issues ASTYLE
+20291aad	a18040e0 04980a8c	Wed May 3 12:41:02 2017 +0200	Merge pull request #915 from rouault/appveyor_fix_attempt
+04980a8c	a18040e0	Wed May 3 12:03:00 2017 +0200	Fix retrieval of jpylyzer in AppVeyor
+807da629	8c331283 4927b647	Wed May 3 11:46:01 2017 +0200	Merge pull request #914 from alexwlchan/fix-readme
+8c331283	7113c4e3	Fri Mar 3 23:23:39 2017 +0100	Fixed CRLF auto conversion issue in openjpeg-data #655
+b0791988	110d3189	Thu Sep 29 22:06:23 2016 +0200	fix abi-check and limit upload to website for master
+110d3189	cc0c71c3	Thu Sep 29 21:44:38 2016 +0200	fix abi-check
+cc0c71c3	5695ac15	Thu Sep 29 20:23:01 2016 +0200	fix abi-check
+fac916f7	8715ce27	Thu Sep 22 00:30:34 2016 +0200	Fix PNM file reading (#847)
+8715ce27	045aa4d9	Wed Sep 21 21:15:25 2016 +0200	Fix some issues reported by Coverity Scan (#846)
+045aa4d9	da940424	Wed Sep 21 13:17:09 2016 +0200	Fix potential out-of-bounds read (coverity)  (#844)
+0954bc11	1e699409	Wed Sep 14 00:12:43 2016 +0200	Fix some warnings (#838)
+893143c8	805972f4	Tue Sep 13 17:43:30 2016 +0800	Fix issue 833.
+b21a8317	5fb81d98	Thu Sep 8 22:14:19 2016 +0200	Fix coverity 113065 (CWE-484) (#824)
+ab22c5ba	4f9abb9a	Thu Sep 8 09:43:36 2016 +0200	opj_thread_pool: fix potential deadlock at thread pool destruction
+734d57d5	c16bc057	Tue Sep 6 22:33:26 2016 +0200	fix incrementing of "l_tcp->m_nb_mcc_records" in opj_j2k_read_mcc (#820)
+c16bc057	ea320dab	Tue Sep 6 07:55:49 2016 +0200	Fix an integer overflow issue (#809)
+d7e6b7de	ccd9ced4	Tue Sep 6 01:31:15 2016 +0200	Fix leak & invalid behavior of opj_jp2_read_ihdr (#818)
+e40c28c2	18da6155	Thu Jul 14 10:49:17 2016 +0200	jpwl: Remove non-portable data type u_int16_t (fix issue #796) (#797)
+18da6155	b3c42265	Tue Jul 12 00:45:51 2016 +0200	Fix dependency for pkg-config (issue #594) (#795)
+7092f7ea	107eb315	Mon May 23 16:00:28 2016 +0200	Fix MSVC210 build issue (use of C99 declaration after statement) introduced in ba1edf6cd41415594729bc90ad3b0008af48251e
+d1ca2b4f	8ba0de3e	Sun May 15 00:53:24 2016 +0200	WIP: debug travis run script
+1a8318f6	162f6199	Sun May 8 20:10:13 2016 +0200	Fix Out-of-Bounds Access in function opj_tgt_reset
+162f6199	8f9cc62b	Sun May 8 19:18:05 2016 +0200	Fix Heap Buffer Overflow in function color_cmyk_to_rgb
+8f9cc62b	44a499f2	Sun May 8 18:40:12 2016 +0200	Fix division by zero
+ba0cf122	da56086e e1e018a8	Mon May 2 14:34:32 2016 +0200	Merge pull request #767 from julienmalik/fix_memset_null_pointer
+e1e018a8	b51d0882	Mon May 2 12:13:24 2016 +0200	Fix UBSan gcc warning for first arg to memset non null
+cd77b600	f40a2ff2	Sat Apr 30 12:15:22 2016 +0200	Fix some coverity warnings
+f40a2ff2	be42e72d	Sat Apr 30 01:50:33 2016 +0200	Fix bad call to fclose with NULL pointer
+be42e72d	15f081c8	Sat Apr 30 01:12:16 2016 +0200	Fix warnings (#763)
+15f081c8	ad593c9e	Sat Apr 30 00:33:27 2016 +0200	Fix Out-Of-Bounds Read in sycc42x_to_rgb function (#745)
+ad593c9e	319fc971	Fri Apr 29 23:51:14 2016 +0200	Fix heap-buffer-overflow in color_esycc_to_rgb (#748)
+319fc971	e166e4a2	Fri Apr 29 23:49:17 2016 +0200	cppcheck fix for openjp2 (#740)
+29313eb5	e982d039	Thu Apr 28 13:16:43 2016 +0200	Fix unsigned int overflow reported by UBSan (#761)
+e982d039	66fd4977	Thu Apr 28 11:52:45 2016 +0200	Fix implicit float-to-bool conversions (#752)
+66fd4977	5947e10f	Thu Apr 28 00:18:37 2016 +0200	Fix unsigned int overflow reported by UBSan (#759)
+20789fed	5947e10f	Wed Apr 27 23:15:47 2016 +0200	Fix issue 135
+e6881e75	2296dc9e	Wed Apr 27 21:56:09 2016 +0200	Fix negative shift left reported by UBSan (#758)
+6f2ac3ee	c559c628	Tue Apr 26 22:06:06 2016 +0200	Fix negative shift left reported by UBSan (#757)
+40b5a53d	5c5ae1d5 e7797b97	Tue Apr 12 10:47:28 2016 +0200	Merge pull request #735 from senbox-org/cppcheck_fix_openjp2
+e7797b97	5c5ae1d5	Sat Apr 9 19:02:05 2016 +0200	Fix uninitialized variable reported by cppcheck
+5c5ae1d5	3767af52	Mon Jan 25 17:30:43 2016 +0100	fixed tile numbering
+87c0d7dc	0dd44e7d	Fri Jan 8 19:38:45 2016 +0100	[git/2.1 regression] Fix opj_write_tile() failure when numresolutions=1
+9cad6bc1	79b1c4cc	Wed Jan 6 21:40:09 2016 +0100	Fix fatal crash on 64 bit Linux
+79b1c4cc	a205f703	Wed Jan 6 21:40:01 2016 +0100	Fix whitespace issues in opj_malloc.c
+c00ee8bf	a205f703	Wed Jan 6 18:06:45 2016 +0100	Fix support of posix_memalign for Linux
+99c4f621	8f990593	Wed Jan 6 08:55:29 2016 +0100	Fix duplicate article in comments
+a834ab30	51efe919	Thu Dec 31 10:13:26 2015 +0100	Fix grammar in comment
+4ddc2627	5d56fb31	Fri Nov 27 21:38:41 2015 +0100	Fix typos
+e5ca873a	601aa38c	Sat Nov 7 02:06:22 2015 +0100	Fix missing bracket
+601aa38c	fb4be389	Sat Nov 7 02:04:10 2015 +0100	fix appveyor build
+fb4be389	c37d69b2	Sat Nov 7 01:35:43 2015 +0100	Fix undefined size jp2 box handling
+c37d69b2	a7771758	Mon Nov 2 22:28:30 2015 +0100	Fix Travis cmake install
+96808519	38ffbbe4 93a61459	Mon Nov 2 21:49:25 2015 +0100	Merge pull request #651 from stweil/fix
+ce26e523	7dfcbf9d	Sun Nov 1 16:56:50 2015 +0100	Fix compiler warnings
+7dfcbf9d	4ac50918	Sun Nov 1 16:54:38 2015 +0100	convert: Fix compiler warnings
+9f78c689	f080ab8c	Thu Oct 29 20:37:27 2015 +0100	Fix typo in comments
+a1fc83cc	4831bade	Mon Oct 19 12:14:27 2015 +0200	Fix HP compiler warning about redeclaration of function (#640)
+ad7eb563	4831bade	Sun Oct 18 19:52:57 2015 +0200	Fix format strings and unneeded assignment
+4831bade	05b3afd2 0cfe2ca4	Sun Oct 18 14:42:58 2015 +0200	Merge pull request #637 from stweil/fixes
+f9d47e28	8034ffde	Sun Oct 18 02:23:01 2015 +0200	Fix _aligned_malloc usage
+8034ffde	b3a15954	Sat Oct 17 02:55:09 2015 +0200	Fix inconsistent behavior of malloc(0)
+b3a15954	83249c31	Sat Oct 17 02:16:17 2015 +0200	Add missing checks. Fix crash on failed allocation.
+83249c31	dd81b589	Sat Oct 17 01:30:23 2015 +0200	Fixed crash on encoding
+b3c58176	bd3959dc	Thu Oct 15 10:53:33 2015 +0200	Fix OpenJPEG GitHub issue #633.
+51a67a9c	de0a9ed1	Mon Oct 12 21:25:53 2015 +0200	Minor style fix to remove c++ comments
+ab892926	dc869c29	Sat Oct 10 21:03:44 2015 +0200	Fix an issue with parenthesis
+891e7c29	d6093792	Sat Oct 10 18:29:37 2015 +0200	debug appveyor
+a01f7cde	53d7f70c	Sat Oct 10 18:01:43 2015 +0200	debug appveyor
+70a16d80	4560d270	Sat Oct 10 17:31:04 2015 +0200	Debug build
+1ed6ede7	d03c4770	Sat Oct 10 15:14:16 2015 +0200	Debug wget jpylyzer
+d03c4770	50b561e9	Sat Oct 10 15:08:25 2015 +0200	Continue debugging wget jpylyzer
+50b561e9	d5c460fc	Sat Oct 10 14:57:25 2015 +0200	Debug wget jpylyzer on appveyor
+5c3632b0	a4eade84	Fri Oct 9 22:24:51 2015 +0200	Remove travis debugging
+e224dee4	d2ddf006	Fri Oct 9 21:52:39 2015 +0200	travis debugging
+de0a9ed1	553714a8	Fri Oct 9 21:13:06 2015 +0200	Revert "Make sure to allocate on 16bits alignement. Fix issue #624"
+553714a8	bbef2a9d	Fri Oct 9 15:37:09 2015 +0200	Make sure to allocate on 16bits alignement. Fix issue #624
+c8ae3c52	07f65540	Wed Oct 7 20:53:57 2015 +0200	Fix warnings for C++
+8414870c	f8c82226	Wed Oct 7 12:28:12 2015 +0200	Fixed problem that C++ compilation failed because of enum variable.
+0cfe2ca4	05235963	Tue Sep 29 15:28:43 2015 +0200	Fix repository for JPEG2000 test data
+cf352af0	c59f464a	Tue Sep 29 09:28:34 2015 +0200	Fix up-scaling bit depth
+05235963	99fc1ab3	Tue Sep 29 05:57:09 2015 +0200	Fix typo in variable name
+99fc1ab3	838dfb80	Tue Sep 29 05:55:43 2015 +0200	Fix typos in comments and string
+4da7e961	b9ca8827	Fri Sep 25 00:39:05 2015 +0200	Fix resource leak
+b9ca8827	f9df8ba1	Fri Sep 25 00:08:34 2015 +0200	Fix resource leaks & unchecked resource allocations
+f9df8ba1	f82d7f3a	Thu Sep 24 23:32:03 2015 +0200	Fix some resource leaks
+faf63fdd	28153785	Wed Sep 23 21:09:19 2015 +0200	Fix warning in rle4 decoding
+55dbf8ac	c16c9179	Thu Sep 17 12:46:42 2015 +0200	Fix resource leak in opj_j2k_create_cstr_index
+c16c9179	a4e93c3b	Thu Sep 17 12:41:41 2015 +0200	Fix resource leak in opj_j2k_encode
+a4e93c3b	6cb56b36	Thu Sep 17 12:31:18 2015 +0200	fix resource leak in opj_j2k_decode_one_tile
+6e11b554	c6b2fdf5	Mon Sep 14 19:37:56 2015 +0200	Travis-ci add linux gcc x86_64 Debug
+c8a31176	49cbc11a	Sun Sep 13 14:51:00 2015 +0200	Fix function name
+c08bd897	1621df45	Sat Sep 12 20:06:31 2015 +0200	Travis fix error when no tests are done
+6c157b60	fc131a13	Sat Sep 12 16:37:47 2015 +0200	Fix Travis ASan build
+4f157f3c	41730e8c	Sat Sep 12 16:16:19 2015 +0200	Fix matrix for debug build
+41730e8c	82c238f5	Sat Sep 12 16:11:56 2015 +0200	Travis add debug config
+82c238f5	52c36b49	Sat Sep 12 15:52:13 2015 +0200	Fix OPJ_CI_SKIP_TESTS
+cc2ae754	b97aadcf	Sat Sep 12 05:50:57 2015 +0200	Fix build with gcc 4.6.3
+b97aadcf	1e2dcaf7	Sat Sep 12 05:44:52 2015 +0200	Fix travis build with make 2.8.7
+175eceb0	79819087	Sat Sep 12 03:19:42 2015 +0200	Fix matrix
+79819087	9258f8f6	Sat Sep 12 03:13:45 2015 +0200	Fix unbound variable
+41a96aee	897d2c0b	Sat Sep 12 02:59:49 2015 +0200	Fix fetching of openjpeg-data
+ccdce606	d7d9f847	Thu Sep 10 15:10:14 2015 +0200	Fix threshold calculation
+940100c2	c31fb68c	Sun Sep 6 17:24:03 2015 +0200	Fix potential use-after-free in opj_j2k_write_mco function
+c31fb68c	15d07f33	Sun Sep 6 17:18:37 2015 +0200	fix resource leak in jpwl
+8a95efcd	38770403	Sun Aug 23 11:43:38 2015 +0200	Fix some UBSan warnings
+38770403	589cc547	Sun Aug 23 11:38:04 2015 +0200	Fix some calculations in opj_tcd_init_tile
+d4ac2f61	fa9142b7	Fri Aug 21 20:17:55 2015 +0200	Fix formatting
+fa9142b7	f98df1c7	Fri Aug 21 20:15:50 2015 +0200	Fix formatting
+372c887a	75a33de3	Thu Jul 30 23:34:12 2015 +0200	Fix typo (that brakes building with \'-DBUILD_MJ2:bool=on\')
+45ccf501	15e4168e	Sun Jul 26 21:12:36 2015 +0200	Fix ARM build with Visual Studio
+85904a32	012f2295	Sun Jul 26 18:49:23 2015 +0200	Fix libtiff build with Visual Studio 2010
+635a3589	8f798864	Thu Jul 16 06:51:21 2015 +0200	Fix build warnings in converttif.c
+ba05549b	35ddb3ab	Wed Jul 8 11:13:31 2015 +0200	fix Suspicious code in j2k.c #517
+35ddb3ab	237ddd72	Sat Jul 4 17:33:28 2015 +0200	Fix CMake warning when testing for LFS
+c999b6c0	4e0de649	Sat Jul 4 00:04:55 2015 +0200	uclouvain/openjpeg#254 Add build option to disable the fix
+63476863	1a8f9291	Fri Jul 3 15:22:58 2015 +0200	fixed a few bugs
+c665e81a	c6c49865	Thu Jun 25 23:11:22 2015 +0200	Fix opj_write_bytes_BE (#518)
+8d770ece	0a0cb190	Tue Jun 16 15:07:20 2015 +1000	Fixed typos
+c0d7afe1	6def7e38	Wed Jun 3 20:56:13 2015 +0000	[trunk] Fix offset computations in opj_j2k_update_image_data
+6def7e38	73881d0e	Fri May 29 21:58:08 2015 +0000	[trunk] Fix wrong return value for opj_setup_encoder & opj_set_decoded_resolution_factor (fixes issue 497)
+73881d0e	e3291c4e	Thu May 28 22:16:49 2015 +0000	[trunk] Fix sscanf format specifier (fixes issue 494)
+e3291c4e	0fa5a17c	Wed May 27 23:05:16 2015 +0000	[trunk] Fix overflow in opj_image_comp_header_update (fixes issue 495)
+0fa5a17c	757f9394	Tue May 19 21:57:27 2015 +0000	[trunk] Correct potential double free on malloc failure in opj_j2k_copy_default_tcp_and_create_tcp (fixes issue 492)
+757f9394	daed8cc9	Tue May 19 21:24:44 2015 +0000	[trunk] Add check for number of layers & cblkw/cblkh values (fixes issue 475)
+daed8cc9	2d24b600	Tue May 19 20:13:37 2015 +0000	[trunk] Add check for at most 1 COD marker per tile. 1 COD marker for MH (fixes issue 476)
+2d24b600	8b5e2a51	Mon Feb 2 16:11:31 2015 +0000	[trunk] added overflow checks (fixes issue 431)
+8b5e2a51	3ed58589	Mon Feb 2 16:11:23 2015 +0000	[trunk] fixes a bug that prevented opj_decompress to take directory as input (fixes issue 463)
+3ed58589	7a8cdc4b	Sun Jan 25 16:59:39 2015 +0000	[trunk] use hidden visibility for static library (fixes issue 354)
+7a8cdc4b	4c0ed028	Tue Jan 20 16:29:16 2015 +0000	[trunk] fixed a bug encoutntered when multiple MCT markers are provided
+5d00b719	42132ed6	Thu Jan 15 18:16:29 2015 +0000	[trunk] fixed a buffer overflow in opj_tcd_init_decode_tile
+31f5efe4	78a7762e	Fri Dec 26 15:37:16 2014 +0000	[trunk] fixed typo in opj_decompress (fixes issue 465)
+78a7762e	33f52fb6	Tue Dec 23 16:05:19 2014 +0000	[trunk] removed unnecessary operation in opj_bio_flush (fixes issue 461)
+81abe5b3	4a092967	Tue Dec 23 15:06:23 2014 +0000	[trunk] fixed imagetoraw unsigned 16bits conversion (fixes issue 460)
+6922124c	59b84434	Mon Dec 22 18:39:14 2014 +0000	[trunk] fixed colorspace mapping for raw grayscale images (fixes issue 456)
+59b84434	bde5ba6a	Mon Dec 22 15:50:32 2014 +0000	[trunk] fixed component precision upscaling in opj_decompress (fixes issue 458)
+bde5ba6a	16240e21	Mon Dec 22 15:00:12 2014 +0000	[trunk] fixed compression check for 1 bit unsigned component (fixes issue 457)
+f1bae45c	65c07b42	Sat Dec 20 18:45:53 2014 +0000	[trunk] fixed BMP reading for 8bpp when width & 3 == 1
+3888daac	e966fef3	Sat Dec 20 13:27:30 2014 +0000	[trunk] fixed test issues (fixes issue 454)
+e966fef3	a504edf7	Sat Dec 20 13:03:11 2014 +0000	[trunk] fixed a possible overflow in opj_t1_encode_cblks call to opj_int_fix_mul (fixes issue 141)
+a504edf7	dde788b5	Sat Dec 20 12:42:40 2014 +0000	[trunk] fixed return value for compare_raw_files (fixes issue 453)
+58fc8645	c0cb119c	Thu Dec 18 22:56:38 2014 +0000	[trunk] Fixed a crash on illegal tile offset when decoding
+c0cb119c	9a21e1ee	Thu Dec 18 22:19:52 2014 +0000	[trunk] Fixed a crash on 0xh or wx0 image size decoding
+a0688a98	d0ce2ced	Sat Dec 13 12:29:22 2014 +0000	[trunk] Add SSE2/SSE41 implementations for mct.c (fixes issue 451)
+d0ce2ced	e05d2901	Sat Dec 13 10:27:21 2014 +0000	[trunk] Speed-up opj_int_fix_mul by removing unneeded operation
+e05d2901	c0710f55	Fri Dec 12 21:54:22 2014 +0000	[trunk] Reduce encoder code block memory usage for non 64x64 code block sizes (fixes issue 444)
+c0710f55	f0950273	Thu Dec 11 20:21:26 2014 +0000	[trunk] Fixed invalid check in in tiff reading method (fixes issue 449)
+8d320bbd	776b83dd	Tue Dec 9 12:09:08 2014 +0000	[trunk] check number of components when getting mct norm (fixes issue 436)
+776b83dd	04ace2a5	Tue Dec 9 05:44:55 2014 +0000	[trunk] Fixed compilation error under Visual Studio 2003 (fixes issue 351)
+04ace2a5	46afb746	Tue Dec 2 20:18:50 2014 +0000	[trunk] Fixed typo in opj_compress error report (fixes issue 350)
+46afb746	570dd13f	Tue Nov 25 23:57:37 2014 +0000	[trunk] removed warnings when configuring with CMake 3.x on MacOS (fixes issue 443)
+13bcb63b	0ba5d15b	Sat Nov 22 14:09:16 2014 +0000	[trunk] fixed pnmtoimage for odd pgm files (fixes issue 294)
+0ba5d15b	7e384460	Sat Nov 22 12:30:04 2014 +0000	[trunk] fixed warning in option to force rgb output in opj_decompress (fixes issue 282)
+7e384460	548aff34	Sat Nov 22 00:04:39 2014 +0000	[trunk] added option to force rgb output in opj_decompress (fixes issue 282 , fixes issue 286)
+548aff34	8397eac3	Fri Nov 21 21:35:43 2014 +0000	[trunk] added check for tile component data size overflow (fixes issue 432)
+8397eac3	a2c2d86d	Thu Nov 20 23:47:09 2014 +0000	[trunk] added check for pclr box validity (fixes issue 429)
+a2c2d86d	3bc360fc	Thu Nov 20 20:13:47 2014 +0000	[trunk] fixed memleak in abnormal condition (fixes issue 437)
+3bc360fc	ae1da375	Wed Nov 19 20:05:39 2014 +0000	[trunk] added option to force output bit depth in opj_decompress (fixes issue 283)
+ae1da375	f57f59b1	Wed Nov 19 19:08:09 2014 +0000	[trunk] replace OPJ_MACRO_TCD_ALLOCATE macro by inlined function (fixes issue 433)
+f57f59b1	b65e3ebd	Tue Nov 18 18:30:44 2014 +0000	[trunk] remove warning during build (fixes issue 435)
+b65e3ebd	50acc339	Tue Nov 18 00:07:50 2014 +0000	[trunk] fixed a bug leading to jpwl build failure & add related odd width/height sYCC tests (fixes issue 422)
+f123ce8f	c3629e37	Mon Nov 17 21:46:43 2014 +0000	[trunk] fixed a bug preventing palette image with cdef to decode properly using opj_get_decoded_tile (fixes issue 428)
+c3629e37	cf5153c5	Mon Nov 3 14:51:41 2014 +0000	[trunk] significantly reduces memory for single tile RGB encoding (fixes issue 375)
+cf5153c5	3b7dced8	Mon Nov 3 14:12:01 2014 +0000	[trunk] add a cdef box when alpha component is present (fixes issue 416)
+3b7dced8	03a410e0	Thu Oct 30 18:26:10 2014 +0000	[trunk] fixed a bug preventing palette image with cdef to decode properly (fixes issue 412)
+03a410e0	0a6eaaa6	Thu Oct 30 18:26:04 2014 +0000	[trunk] fixed a bug that was preventing image with per channel alpha to decode properly (fixes issue 414)
+0a6eaaa6	7f8f284e	Thu Oct 30 18:00:45 2014 +0000	[trunk] add a check on precinct size (fixes issue 420)
+d47f7a24	72802639	Wed Oct 22 22:52:01 2014 +0000	[trunk] workaround to make MD5 work under valgrind on MacOSX (fixes issue 410)
+3e1fad2d	d72940c5	Wed Oct 22 13:16:35 2014 +0000	[trunk] resets resno_decoded for each tile (fixes issue 399)
+d72940c5	ad4fad09	Wed Oct 22 13:16:12 2014 +0000	[trunk] resets code-blocks reused for other tiles than the first one (fixes issue 418)
+ad4fad09	aff9cb39	Wed Oct 22 10:30:35 2014 +0000	[trunk] add a check on mandatory headers in Main Header (fixes issue 408)
+aff9cb39	0a3f234d	Tue Oct 21 15:22:22 2014 +0000	[trunk] fixed invalid member values from opj_read_header or opj_decode (fixes issue 411)
+0a3f234d	efb70af0	Tue Oct 21 12:54:08 2014 +0000	[trunk] verify channel definitions is complete when cdef is present (fixes issue 397)
+efb70af0	e65303b9	Tue Oct 21 12:47:48 2014 +0000	[trunk] add a check on the number of resolution passed to cmdline (fixes issue 352)
+e65303b9	413de4fb	Tue Oct 21 12:35:16 2014 +0000	[trunk] added check on JP2_IHDR box (fixes issue 364)
+413de4fb	984351f8	Tue Oct 21 12:27:58 2014 +0000	[trunk] add a check on Zppm value in PPM markers (fixes issue 393)
+984351f8	f8796711	Wed Oct 15 10:24:49 2014 +0000	[trunk] Add option to call dsymutil on built binaries (fixes issue 409)
+f8796711	0b540067	Wed Oct 15 10:14:54 2014 +0000	[trunk] add a check on progression order (fixes issue 413)
+0b540067	3df347ed	Wed Oct 15 08:48:19 2014 +0000	[trunk] add a check for illegal SCod value (fixes issue 400)
+3df347ed	eb7c6d29	Tue Oct 14 15:15:09 2014 +0000	[trunk] additional checks for marker size inconsistency (fixes issue 363)
+eb7c6d29	f126eb0d	Mon Oct 6 21:05:32 2014 +0000	[trunk] fixed potential negative size params (fixes issue 390)
+7256e43c	a0a3af1d	Mon Oct 6 21:05:21 2014 +0000	[trunk] fixed PDF crash in Chrome (fixes issue 362)
+48832d94	06bd61b5	Fri Oct 3 10:15:28 2014 +0000	[trunk]fixes buffer overflow in t2.c
+06bd61b5	a1c754c7	Thu Oct 2 07:44:53 2014 +0000	[trunk] c++-style comment removed (fixes issue 407)
+a1c754c7	fef12769	Wed Oct 1 12:11:43 2014 +0000	[trunk] fixed warning from r2891
+fef12769	45f33cdb	Tue Sep 30 12:19:13 2014 +0000	[trunk] fixed bad use of case statement (fixes issue 381)
+1acfa211	2f3fd119	Tue Sep 30 09:48:26 2014 +0000	[trunk] fixes heap-buffer-overflow in parse_cmdline_encoder
+2720a1a4	31fd8d3f	Mon Sep 29 12:03:36 2014 +0000	[trunk] fixed tile numbering in output message (fixes issue 370)
+6868ee37	b9a247b5	Fri Sep 19 10:26:35 2014 +0000	added memory allocation checks (fixes issue 355)
+b9a247b5	50a205d2	Fri Sep 19 09:30:12 2014 +0000	fixes install name id on OSX builds (fixes issue 367)
+50a205d2	b0072bf6	Tue Sep 16 15:48:04 2014 +0000	[trunk] improve memory management (fixes issue 359)
+b0072bf6	2c810567	Tue Sep 16 15:38:11 2014 +0000	[trunk] allow compilation with MinGW32 (fixes issue 361)
+2c810567	0a1a29a7	Mon Jul 14 07:42:50 2014 +0000	[trunk] Changed error to warning when no EOC found in codestream (fixes issue 366)
+0a1a29a7	7d21871e	Thu Jul 3 16:05:56 2014 +0000	[trunk] replaced malloc with opj_malloc. (Fixes issue 368).
+7d21871e	a38b97fa	Thu Jul 3 09:15:13 2014 +0000	[trunk] fixes issue #357. MCT is automatically disabled when subsamppling is detected.
+45313a8d	b08135e7	Mon Apr 28 09:38:44 2014 +0000	[trunk] fixed warning in j2k.c about sign conversion
+b08135e7	4bac8488	Mon Apr 28 09:17:31 2014 +0000	[trunk] Finalize API for openjpeg 2.1 public header will only contains minimal information: major, minor and build version Prefix has been changed from OPENJPEG to OPJ for consistency SOVERSION has been removed from header (ABI vs API info) OPJ_VERSION string has been removed, since it is accessible already (PACKAGE_VERSION) Fixes issue 342
+4bac8488	de04302c	Mon Apr 28 07:54:33 2014 +0000	[trunk] Properly handle failure to compress (remove file) Fixes issue 323
+de04302c	997758f9	Mon Apr 28 07:44:39 2014 +0000	[trunk] Missing endianess setting Fixes issue 337
+997758f9	763214f7	Mon Apr 28 07:34:26 2014 +0000	[trunk] properly handle pkg-config on non-UNIX hosts Fixes issue 340
+763214f7	77e8dad5	Mon Apr 28 07:32:35 2014 +0000	[trunk] Provide #ifdef blockers for OpenJPEG Version Fixes issue 342
+77e8dad5	1758445a	Sun Apr 27 21:31:32 2014 +0000	[trunk] fixed typo in NEWS
+d8767cbc	7924d3a4	Thu Apr 24 08:51:29 2014 +0000	[trunk] fixed reference to opj_stream_set_user_data_v3 in jpip sources.
+7aece5e8	8d93eae6	Wed Apr 23 07:46:11 2014 +0000	[trunk]Replaced deprecated opj_stream_set_user_data function from API with its \'v3\' version, and removed all other \'v3\' suffixes from API.
+8d93eae6	9a3d660d	Tue Apr 22 21:22:49 2014 +0000	[trunk] fixed some warning and errors formatting and add a \'-version\' option to opj_compress and opj_decompress binaries
+9a3d660d	7199d9b5	Thu Apr 17 09:54:38 2014 +0000	[trunk] fixed warning related to r2837 and move new field at the end of parameters structure.
+f105cb54	4db41987	Wed Apr 2 16:37:07 2014 +0000	[trunk] removed debug message in CMakeLists.txt
+4db41987	616a3345	Wed Apr 2 16:25:40 2014 +0000	[trunk] fixed a bug triggering SEGFAULT on debug mode (uninitialized structure)
+616a3345	1f8d84a5	Thu Mar 27 15:07:58 2014 +0000	[trunk] Properly copy/paste code from the autotools gcc correctly fails compiling this code, I needed to move the code outside the main function to get the error. This actually match the autotools (incorrect) code. We\'ll see how they fix this code in future release. This make the code compatible with previous openjpeg version and remove C99 requirement. Fixes issue 316
+a54d757a	b5eb374f	Wed Mar 26 15:17:17 2014 +0000	[trunk] fixed warnings triggered on linux related to r2802
+5e1a0fad	c05118dc	Tue Mar 25 15:35:33 2014 +0000	[trunk] fixed bug related to r2791
+666f71b2	2b7d5b18	Tue Mar 25 13:29:11 2014 +0000	[trunk] fixed warning due induced by r2791
+18d5d25c	492d8ab7	Tue Mar 25 11:47:34 2014 +0000	[trunk] Make sure to not use alpha pointer if it is not an RGBA input Fixes issue 310
+5a70e97f	f4707da9	Mon Mar 24 09:49:04 2014 +0000	[trunk] Fix typo in comment (this is not j2k_dump)
+51ab074d	6d9e8a5a	Tue Mar 18 15:00:23 2014 +0000	[trunk] User can now control source/target java version Fixes issue 303
+6d9e8a5a	008de865	Tue Mar 18 14:43:47 2014 +0000	[trunk] Import git commit fc884aee2b69c78500e65c3d05bf216791a9ea4a from ghostscript team Fixes issue 296
+866cd28a	71a9f498	Mon Mar 17 15:02:49 2014 +0000	[trunk] Update BSD-4 copyright into a BSD-3 copyright Fixes issue 300
+a43d206b	15863e71	Fri Mar 14 15:10:31 2014 +0000	[trunk] Remove duplicate content from test_inline.c Thanks to Matthieu Darbois for report (and patch) Fixes issue 285
+7e1d0121	de746057	Fri Mar 14 15:01:13 2014 +0000	[trunk] Now that issue 165 dataset is in non regression repository, activate code to reject them Fixes issue 165
+de746057	e8abf1fb	Fri Mar 14 14:46:40 2014 +0000	[trunk] Fix issue with & vs && Fixes issue 277
+9d0bdf69	9194dfb9	Fri Mar 14 11:59:18 2014 +0000	[trunk] Apply final missing patch from sumatrapdf team: http://bugs.ghostscript.com/show_bug.cgi?id=694893 Update issue 231
+3a80b72a	3e33012b	Fri Mar 14 10:54:08 2014 +0000	[trunk] Add a temporary work around for issue 293 As described in the bug report the default allocation mecanism for codeblock data is too small for those dataset (16bits). We would need a finer (more granular) mecanism to reallocated only on demand. For now this help the two failing tests to pass. Fixes issue 293
+fd3f7ca2	6e22c4f6	Fri Mar 14 08:44:53 2014 +0000	[trunk] Remove warnings about unused values introduced in r2710 Thanks to Matthieu Darbois for patch Fixes issue 290
+565ef29a	68398b2a	Thu Mar 13 13:47:44 2014 +0000	[trunk] Make sure to reallocate ppm data buffer when multiple Ippm(i) buffer are found This handle the case where remaining data is exactly Nppm(i) Fixes issue 287
+92e07f3b	8447f0a3	Thu Mar 13 12:26:30 2014 +0000	[trunk] Fix test NR-DEC-issue171.jp2-71-decode-md5 after recent code change
+f0a2fdd5	32078465	Thu Mar 13 11:03:05 2014 +0000	[trunk] Fix compilation on VS2010 (snprintf is not C89). C++11 should avoid this in the future
+fe100fb4	c7b646e2	Thu Mar 13 10:35:41 2014 +0000	[trunk] Add debug code to extract decompressed image right before PCLR handling Update issue 235
+41add688	dd0d2c2f	Wed Mar 12 14:18:25 2014 +0000	[trunk] Make sure to use 8bits buffer when applying the ICC profile. Fixes issue 281
+dd0d2c2f	d38e32c0	Wed Mar 12 13:55:41 2014 +0000	[trunk] Add debug info to be able to test integration with littlecms
+6b51d11d	59270c39	Wed Mar 12 10:10:21 2014 +0000	[trunk] Make sure when reading POC that number of layers (layer end) is within acceptable bound. Fixes issue 80
+db82cf77	ddb1d577	Tue Mar 11 15:17:39 2014 +0000	[trunk] Add debug info to track issue 80 Update issue 80
+5dd77074	fa436eb3	Tue Mar 11 10:28:04 2014 +0000	[trunk] Fix remainings warnings on linux/32bits arch
+fcc658f1	2e7b8fb9	Tue Mar 11 09:11:35 2014 +0000	[trunk] Fix compilation errors when JPWL and/or MJ2 are build
+2e7b8fb9	1778e257	Mon Mar 10 16:43:04 2014 +0000	[trunk] Another final round of fixes for sign conversion warnings. Fixes issue 256
+1778e257	73c9e856	Mon Mar 10 16:17:12 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+73c9e856	76557d2e	Mon Mar 10 16:17:01 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+76557d2e	9095c736	Mon Mar 10 15:51:05 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+b01c1240	836ec059	Mon Mar 10 12:22:56 2014 +0000	[trunk] Fix simple sign conversion warnings only visible on 32bits arch
+76af73bc	f7bc0b49	Mon Mar 10 10:43:45 2014 +0000	[trunk] Fix inversion in code convention
+f7bc0b49	9155e989	Mon Mar 10 10:12:25 2014 +0000	[trunk] Fix typo in the code
+24966ffb	666ef53f	Mon Mar 10 09:36:14 2014 +0000	[trunk] Fix compilation when TIFF lib is neither found nor compiled
+e02ba050	b4789129	Mon Mar 10 08:25:08 2014 +0000	[trunk] Fix warnings about shadow variables
+ffad2fbe	cc1354eb	Fri Mar 7 14:14:31 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+cc1354eb	581d2ba8	Fri Mar 7 14:00:47 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+61348b20	e619e060	Fri Mar 7 13:43:15 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+e619e060	4f84d169	Fri Mar 7 13:40:54 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+4f84d169	71d244a5	Fri Mar 7 13:37:45 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+71d244a5	f9a0f869	Fri Mar 7 13:33:47 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+f9a0f869	33c472d7	Fri Mar 7 13:31:25 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+956b1a76	472ce191	Fri Mar 7 12:06:00 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+472ce191	740924fa	Fri Mar 7 12:01:41 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+740924fa	01b4bb54	Fri Mar 7 11:59:29 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+01b4bb54	ee3b0293	Fri Mar 7 11:57:37 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+ee3b0293	2a07d3d2	Fri Mar 7 11:43:50 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+2a07d3d2	e238148d	Fri Mar 7 11:28:34 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+e238148d	9d216954	Fri Mar 7 11:27:34 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+e4d077bc	76cd9b7f	Fri Mar 7 11:06:13 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+76cd9b7f	e71431ec	Fri Mar 7 10:25:16 2014 +0000	[trunk] Another round of fixes for sign conversion warnings. Update issue 256
+e71431ec	7b335eb6	Fri Mar 7 10:21:51 2014 +0000	[trunk] Fix simple warning about sign conversion Update issue 256
+7b335eb6	c0c08638	Fri Mar 7 10:19:39 2014 +0000	[trunk] Another of fixes for warning about sign conversion Update issue 256
+c0c08638	048c8302	Fri Mar 7 10:03:56 2014 +0000	[trunk] Fix warning about sign conversion Update issue 256
+048c8302	a7b051b1	Fri Mar 7 09:58:32 2014 +0000	[trunk] un-deprecated opj_stream_destroy API, import patch manually In some case user still want to be able to call opj_stream_destroy. Fixes issue 227
+a7b051b1	5f7ad58f	Fri Mar 7 09:44:32 2014 +0000	[trunk] Update memory management mecanism Fixes issue 253
+5f7ad58f	016b9fc0	Fri Mar 7 09:33:32 2014 +0000	[trunk] Remove self-assignement. Fixes issue 273
+016b9fc0	99b40e82	Fri Mar 7 09:15:27 2014 +0000	[trunk] Fix compilation in visual studio, inline cannot be used directly. Fixes issue 272
+a734e447	37128c34	Fri Mar 7 09:03:15 2014 +0000	[trunk] Remove TIFF warning handler. This help test suite run smoothly on windows by removing the message box. Fixes issue 276
+37128c34	f5630ab8	Fri Mar 7 08:48:47 2014 +0000	[trunk] Fix mem leaks reported by cppcheck
+275680bd	4d5d1f0f	Thu Mar 6 14:43:21 2014 +0000	[trunk] Make sure that all output files from the test suite are using a different output name Fixes issue 271
+1ef677f2	07193e2a	Tue Mar 4 10:32:26 2014 +0000	[trunk] Make sure to reject images such as 1336.pdf.asan.47.376.jp2 Fixes issue 267
+0c80fcff	51caff5d	Tue Mar 4 09:14:47 2014 +0000	[trunk] Add a TIFF compare function (PEAK/MSE) Fixes issue 100
+11f402b4	18049fe3	Mon Mar 3 12:00:24 2014 +0000	[trunk] Remove easy to fix warnings about conversion
+25255c4e	16febebd	Mon Mar 3 11:36:31 2014 +0000	[trunk] remove all api with invalid FILE* parameters which could leads to issues when applications are compiled with different flags from openjpeg. Fixes issue 198
+3ecccb74	3c7a7a16	Mon Mar 3 08:45:21 2014 +0000	[trunk] Fix md5 values for decode-md5 tests. Update issue 250
+6d0785a7	ec593a25	Sat Mar 1 10:41:46 2014 +0000	[trunk] Fix compilation on MSVC compiler
+a9e62687	fc855084	Fri Feb 28 14:54:37 2014 +0000	[trunk] Fix JPIP test with updated md5sum
+fc855084	b7bccf86	Fri Feb 28 14:52:58 2014 +0000	[trunk] Really apply r2460 this time, but fix the original typo in the submitted patch Update issue 225
+cbe77e24	1eb67ca4	Fri Feb 28 12:30:11 2014 +0000	[trunk] run test suite on dataset from issue 171 Fixes issue 171
+7a89d731	65503dad	Fri Feb 28 09:52:35 2014 +0000	[trunk] Merge final patch from issue 171 with code simplification. also handles signed case properly. Fixes issue 171
+65503dad	a3472624	Fri Feb 28 08:28:25 2014 +0000	[trunk] Fix find_path behavior within cross-compilation execution
+a3472624	6a6fa702	Thu Feb 27 17:21:00 2014 +0000	[trunk] Import patch from issue 218. No dataset to check, so blindly applied it. Fixes issue 218
+ad895fad	7c120281	Thu Feb 27 10:03:11 2014 +0000	[trunk] add issue 46 to the test suite Fixes issue 46
+8a4095b4	a7cc5b6a	Thu Feb 27 09:56:06 2014 +0000	[trunk] add a sentinel in debug code
+ac1dfd46	abf2f7f0	Wed Feb 26 17:13:46 2014 +0000	[trunk] Import test case from issue 208. This appears to be fixed now. Fixes issue 208
+abf2f7f0	1c209d71	Wed Feb 26 16:31:27 2014 +0000	[trunk] Run test suite on dataset from issue 211. Test is now passing nicely. Fixes issue 211
+6f3a7ef3	9f3687f9	Wed Feb 26 14:32:11 2014 +0000	[trunk] run test suite on input dataset from issue 134 Fixes issue 134
+9f3687f9	5e77c4e9	Wed Feb 26 14:28:17 2014 +0000	[trunk] fixes test NR-DEC-file409752.jp2-40-decode, use proper naming convention (need to keep file extension)
+51e37645	533d92aa	Wed Feb 26 11:22:34 2014 +0000	[trunk] Import patch from sumatrapdf team. This handle some Part-2 compliant file, by being more tolerant in COLR box. No testcase for now. Fixes issue 247
+005e75bd	5f3470fc	Wed Feb 26 11:16:32 2014 +0000	[trunk] Import (ugly) patch from sumatrapdf team. This feels like a hack rather than a solution. Fixes issue 226
+d5f71c2e	36a7d232	Wed Feb 26 09:51:37 2014 +0000	[trunk] Fix TestJPIP1 on case sensitive system
+b56fb96b	163c7e34	Wed Feb 26 09:35:11 2014 +0000	[trunk] Fix invalid write access in JPIP code.
+c55e164e	531cd5dd	Mon Feb 24 16:55:13 2014 +0000	[trunk] Make sure to always output pgx file. Handle case where multiple pgx files are generated. Fixes all tests.
+228e0a3d	f38e29d0	Mon Feb 24 14:55:32 2014 +0000	[trunk] Fix a simple mem leak
+f38e29d0	963283d7	Mon Feb 24 14:50:40 2014 +0000	[trunk] Fix two simple warnings about sign mismatch
+963283d7	c91044a4	Mon Feb 24 14:27:02 2014 +0000	[trunk] Fix warning about signed/unsigned mismatch
+33d8f089	e826e928	Mon Feb 24 08:52:44 2014 +0000	[trunk] Fix a warning about type conversion. Use a trick where unsigned wrapping is legal
+ff1a30d8	d143f49a	Thu Jan 23 16:33:13 2014 +0000	[trunk] added some tests for Cinema2k 48fps and Cinema 4k 24 fps. Fixed a bug in comparePGXimages.c leading to huge Test.xml file uploaded to DashBoard
+d143f49a	58698b78	Thu Jan 23 09:39:02 2014 +0000	[trunk] fixed another DCI compliance bug
+ee3f2ffa	c59124df	Wed Jan 22 18:41:34 2014 +0000	[trunk] fixed several bugs in cinema mode (2K 24/48 fps, and 4K). Trunk now produces compliant DCI code-streams.
+c59124df	7b14cf85	Thu Jan 16 14:21:14 2014 +0000	[trunk] fixed indentation in opj_compress.c, renamed 2 internal functions, added some comments
+7b14cf85	05f796d2	Thu Jan 16 12:55:14 2014 +0000	[trunk] fixed DCI-compliant codestream generation (-cinema2K and -
+05f796d2	bd8c91b3	Wed Oct 30 08:59:23 2013 +0000	trunk: fixed cmake config so as to be able to link opj_jpip_server with FCGI.
+bd8c91b3	7294cdef	Wed Oct 30 08:57:18 2013 +0000	trunk: fixed cmake config so as to be able to link opj_jpip_server with FCGI.
+4d7b6374	5855da5a	Tue Oct 15 19:17:51 2013 +0000	complete openjpeg2 pkgconfig support, bug #68
+5855da5a	34fd4935	Thu Sep 26 09:28:47 2013 +0000	[trunk] Import patch from bug #241
+1e414c8f	07e6994b	Sun Mar 17 18:16:03 2013 +0000	[trunk] correct issue 188 (thanks winfried) and add test about it. Fixes issue 188
+07e6994b	0abf4f8f	Sun Mar 17 17:08:12 2013 +0000	[trunk] use OPJ_ prefix on HAVE variable also for tests
+a13e4a77	6de2271e	Sun Mar 17 17:03:00 2013 +0000	[trunk] use everywhere the new opj_ prefix for HAVE variables and use the opj_apps_config file (thanks to winfried)
+021e2552	92b1e038	Wed Mar 13 15:17:35 2013 +0000	[trunk] use the opj_ prefix for the HAVE_FSEEKO variable
+a8c33ae2	e7bc30b4	Sun Mar 3 18:06:27 2013 +0000	[trunk] remove some unused variable from opj_config and rename other one with opj_ prefix
+efaefa21	42bd417a	Mon Feb 18 13:19:52 2013 +0000	[trunk] add the prefix opj_ to deprecated everywhere
+c03ca9c7	d5884afc	Sat Feb 16 17:31:22 2013 +0000	[trunk] rename deprecated macro with opj_ prefix and use it for opj_stream_destroy function
+ccd448d6	44fb3894	Thu Jan 3 14:26:38 2013 +0000	[trunk] JP3D: Fix issue with Z handling in packet iterator
+ad1532ed	caaec3bb	Thu Jan 3 14:22:34 2013 +0000	[trunk] JP3D: remove old debug
+59aa37fe	0adb43f0	Mon Dec 3 13:26:30 2012 +0000	[trunk] move typedef from opj_stdint.h to openjpeg.h and add an include of stdio.h in openjpeg.h. Fixes issue 197
+79801154	cab86a0d	Wed Nov 28 12:18:17 2012 +0000	[trunk] JP3D fix issue with Registration value in COM marker. Move COM marker just before COD.
+cab86a0d	be3a1da1	Wed Nov 28 12:04:40 2012 +0000	[trunk] jp3d: fix command line parsing for subsampling
+be3a1da1	650c5878	Wed Nov 28 11:46:16 2012 +0000	[trunk] Fix issue with ITU-T T.809 (05/2011)
+650c5878	d29c5760	Wed Nov 28 10:54:33 2012 +0000	[trunk] Fix compilation issue where size_t would be undefined
+59582baf	1ad85ac9	Mon Nov 26 16:24:29 2012 +0000	[trun[trunk] check if the dx and dy steps are not incorrect according to the JPEG2000 norm (thanks Even). Test associated to this issue should nicely fail. Fixes issue 194
+1ad85ac9	999a84c7	Mon Nov 26 16:13:32 2012 +0000	[trunk] check if the number of tiles is not incorrect regarding the JPEG2000 norm (thanks Even). Test associated to this issue should nicely fail. Fixes issue 163
+48e0d167	f14da66c	Mon Nov 26 15:58:14 2012 +0000	[trunk] check the index of the component in read_qcc (thanks Even). fixes issue 192
+14ab311d	02ab4363	Mon Nov 19 13:37:04 2012 +0000	[trunk] fix issue 191 (thanks Even)
+b3e467dc	c0259255	Fri Nov 16 09:19:11 2012 +0000	[trunk] Attempt to fix compilation error with mj2
+c0259255	9398bc17	Fri Nov 16 09:18:03 2012 +0000	[trunk] Attempt to fix compilation error with mj2
+fcf9fa36	583df79b	Fri Nov 16 08:29:43 2012 +0000	[trunk] add opj_ prefix to some internal define and use the new opj type instead of int and float in some files
+5433e4da	c3c59b01	Thu Nov 15 16:42:55 2012 +0000	[trunk] rename function with the new opj_ prefix
+c3c59b01	8eb481b6	Thu Nov 15 16:37:57 2012 +0000	[trunk] solve a potential bug when we test the realloc
+ce297bfa	ba1682c1	Thu Nov 15 14:22:13 2012 +0000	runk] fix the documentation of the API
+21b0ccf8	84c93c2f	Thu Nov 15 12:58:32 2012 +0000	[trunk] rename public symbols with OPJ_ prefix (enum part)
+84c93c2f	e3c2305f	Thu Nov 15 12:25:11 2012 +0000	[trunk] rename public symbols with OPJ_ prefix
+cb0eb855	569d0ec7	Tue Nov 13 11:18:58 2012 +0000	[trunk] manage the case where the SOT marker is alone, PSot=12 (case of PHR data). Fixes  issue 162
+e7174942	8f58b776	Thu Nov 8 16:45:27 2012 +0000	[trunk] Fix what looks like a copy/paste error
+1a579175	482d9b58	Mon Oct 29 16:07:24 2012 +0000	[trunk] Fix simple warning about unused variables
+5903dd7d	301b1ffb	Mon Oct 29 15:28:59 2012 +0000	[trunk] Remove temp fix now that mj2 is fixed
+759be641	ece2a2d6	Mon Oct 29 14:35:11 2012 +0000	[trunk] Fix remainings issues with doxygen doc
+fb69541c	e189679e	Mon Oct 29 13:27:39 2012 +0000	[trunk] Fix compilation when JPIP is OFF
+cf4529d0	9b6900b0	Thu Oct 25 15:50:58 2012 +0000	[trunk] use the opj_ prefix for last t1 functions
+9adbea78	fd194131	Thu Oct 25 10:41:55 2012 +0000	[trunk] Fix remaining issue with OPJ_CALLCONV
+4585b235	23a624f7	Thu Oct 25 08:15:41 2012 +0000	[trunk] Fix OpenJPWL compilation
+a0977266	76947f00	Thu Oct 25 06:58:30 2012 +0000	[trunk] Run fix_comment on invert.c
+9166d595	f1061c87	Wed Oct 24 13:18:12 2012 +0000	[trunk] use new opj prefix and type with raw functions
+216791c3	12c4e680	Wed Oct 24 09:29:34 2012 +0000	[trunk] Finalize dwt.v/.h with the v2 style : remove last functions already optimized, add opj_ prefix, use new name of the functions
+f2808de8	9b2897cc	Mon Oct 22 10:41:44 2012 +0000	[trunk] Fix java binding installation
+9b2897cc	3c469843	Mon Oct 15 15:52:43 2012 +0000	[trunk] Fix another set of issue with calling convention
+3c469843	98682e10	Mon Oct 15 15:50:05 2012 +0000	[trunk] Fix issue on windows OS. Need to explicitely state the calling convention
+d6bcb8b7	a501237a	Mon Oct 15 15:47:19 2012 +0000	[trunk] Fix JPIP compilation. Some prototypes were not respected.
+f6622c2f	b08b90d7	Mon Oct 15 13:00:31 2012 +0000	[trunk] fix a compilation error with windows and new public function opj_j2k_start_compress
+45869ce8	dff377a7	Mon Oct 15 11:57:47 2012 +0000	[trunk] Fix issue during renaming of man page
+dff377a7	b24cf8d1	Mon Oct 15 09:44:34 2012 +0000	[trunk] Fix compilation: - using mingw32 compiler (missing exported symbols) - using -fvisibility=hidden (gcc on UNIX)
+b24cf8d1	2ad90b7c	Mon Oct 15 09:43:28 2012 +0000	[trunk] Fix Java binding compilation. Need to link against openmj2 for now to resolve all symbols. Add a local indec.c (pulled from opj 1.5 branch)
+2ad90b7c	a40fc419	Mon Oct 15 08:38:48 2012 +0000	[trunk] Fix missing -lm to openjpwl
+a40fc419	3416c6d9	Mon Oct 15 08:13:27 2012 +0000	[trunk] Fix missing link to zlib
+3416c6d9	54c2bcb6	Mon Oct 15 08:09:31 2012 +0000	[trunk] Fix openmj2 compilation in static mode.
+54c2bcb6	44a5108e	Mon Oct 15 08:02:30 2012 +0000	[trunk] Fix compilation in static mode. Prevent duplicate symbols with convert.c implementation
+d8715871	772fcc96	Mon Oct 15 07:52:27 2012 +0000	[trunk] Fix issues in man pages.
+772fcc96	75b71047	Mon Oct 15 07:52:07 2012 +0000	[trunk] Fix installaiton of header file
+fe3c1f90	e30818ce	Mon Oct 15 07:31:05 2012 +0000	[trunk] Fix warning for no previous prototype by using static function
+e30818ce	2e30886a	Wed Oct 10 13:26:29 2012 +0000	[trunk] Fix advanced (and experimental) Java binding. As reported on the mailing list.
+2e30886a	b18ffbd0	Tue Oct 9 09:45:43 2012 +0000	[trunk] Fix openmj2/mj2 compilation
+eda4c26d	4b140e06	Fri Oct 5 09:20:05 2012 +0000	[trunk] Fix spelling. writting -> writing
+4b140e06	1fefa033	Fri Oct 5 09:10:15 2012 +0000	[trunk] rename int.h to opj_intmath.h and rename all its functions with opj_ prefix
+1fefa033	37ff9b02	Fri Oct 5 08:32:05 2012 +0000	[trunk] move fix_mul inside int.h and remove fix.h from the project
+f4a8f716	2d52e409	Wed Oct 3 15:06:58 2012 +0000	[trunk] update global functions of tgt with opj_ prefix
+c508923f	6c402479	Wed Oct 3 13:25:03 2012 +0000	[trunk] update pi_check_next_level with the opj_ prefix and change output type to be more convenient
+bd74db93	439337fb	Wed Oct 3 12:39:17 2012 +0000	[trunk] update local function of pi.c with the opj_ prefix and the new opj types
+439337fb	5ffe6f5a	Wed Oct 3 12:12:33 2012 +0000	[trunk] update mqc global functions with opj_ prefix
+f281f8cb	3a46e2d8	Wed Oct 3 11:38:12 2012 +0000	upadate mqc with new opj_type and use opj_ prefix for local functions
+6a84a178	df870e52	Wed Oct 3 09:47:50 2012 +0000	{trunk]update mct functions with opj_ prefix and new opj type add some comments
+df870e52	82afd3a8	Wed Oct 3 09:04:44 2012 +0000	[trunk] update global functions of bio.c with opj_prefix and new opj type
+82afd3a8	514fc720	Tue Oct 2 09:41:51 2012 +0000	[trunk] Set of warnings fix for gcc -pedantic
+394db7b7	3ad58ee1	Mon Oct 1 15:29:36 2012 +0000	[trunk] Remove old function tgt_create Fix some warnings about size_t
+00aa77f2	60fc79c7	Mon Oct 1 14:50:26 2012 +0000	[trunk] FolderReorgProposal fix. 3rd party variables were not set
+f501186b	fe6d9ed9	Mon Oct 1 12:29:09 2012 +0000	[trunk] Fix minor cmake style
+4466c31f	b2bebcf5	Mon Oct 1 10:20:31 2012 +0000	[trunk] Fix missing include directory
+b2bebcf5	de33ba02	Mon Oct 1 10:19:12 2012 +0000	[trunk] fix compilation on windows where getopt is not available
+de33ba02	465db444	Mon Oct 1 10:11:46 2012 +0000	[trunk] Fix missing getopt symbols on windows
+465db444	abdb8ee3	Mon Oct 1 10:08:01 2012 +0000	[trunk] FolderReorgProposal task: Fix openjp2 lib name
+abdb8ee3	aa6b4b49	Mon Oct 1 10:01:09 2012 +0000	[trunk] Fix a set of warnings about C90 issues
+cffc33a5	5db7b01f	Mon Oct 1 08:43:02 2012 +0000	[trunk] FolderReorgProposal task: fix jpip doxygen
+5db7b01f	1ca5ca83	Mon Oct 1 08:30:04 2012 +0000	[trunk] FolderReorgProposal task: Fix doxygen
+95f06f05	3bf4d635	Fri Sep 28 09:26:51 2012 +0000	[trunk] FolderReorgProposal task: fix JPWL
+a4fa18e9	f71af2a2	Fri Sep 28 08:59:10 2012 +0000	[trunk] FolderReorgProposal task: Fix Viewer
+34ffde67	e7cd9450	Thu Sep 27 14:42:08 2012 +0000	[trunk] Rename bio_create and bio_destroy with opj_ prefix
+e7cd9450	ccf0f05e	Thu Sep 27 14:36:30 2012 +0000	[trunk] udpate local functions of bio.c with opj_prefix and new opj types update opj_bio structure
+36672ad5	8bee3d89	Thu Sep 27 14:16:05 2012 +0000	[trunk] update some local function of t1 with opj_prefix and new opj type
+8bee3d89	cf212e55	Thu Sep 27 14:09:41 2012 +0000	 rename opj_t1_enc_clnpass and opj_t1_enc_clnpass_step with opj_ prefix and update types used in theses functions
+cf212e55	a00f61bd	Thu Sep 27 13:56:48 2012 +0000	[trunk]rename t1_enc_refpass_step and t1_enc_repass with opj_ prefix and update types used in theses functions
+70540f95	a545cb7c	Thu Sep 27 13:28:44 2012 +0000	[trunk] remove old v1 style t1_decode_cblk function and rename t1_decode_cblk_v2 to opj_t1_decode_cblk rename t1_dec_sigpass t1_dec_sigpass_step, t1_updateflags, t1_dec_refpass, t1_dec_refpass_step with opj_prefix and v2 type delete unused functions in new V2 t1 framework: t1_dec_refpass_raw, t1_dec_refpass_mqc, t1_dec_refpass_mqc_vsc, t1_dec_refpass_step_raw, t1_dec_refpass_step_mqc, t1_dec_refpass_step_mqc_vsc, t1_dec_sigpass_raw, t1_dec_sigpass_mqc, t1_dec_sigpass_mqc_vsc, t1_dec_sigpass_step_raw, t1_dec_sigpass_step_mqc, t1_dec_sigpass_step_mqc_vsc
+a9a13365	91036749	Thu Sep 27 09:54:35 2012 +0000	[trunk] update t2_getnumpasses from V2 branch and put opj_ prefix
+f8fc214b	7861bfa4	Thu Sep 27 09:14:58 2012 +0000	[trunk] rename local functions in t2 with opj_ prefix
+02734264	4a845f3d	Wed Sep 12 17:11:17 2012 +0000	[trunk] Fix possible code execution vuln
+4a845f3d	0452ebdf	Mon Sep 10 12:46:42 2012 +0000	[trunk] Fix one remaining issue with C90 compat
+1ff1401f	3991bbe5	Mon Sep 10 11:05:15 2012 +0000	[trunk] Fix Heap-based buffer-overflow when decoding openjpeg image
+3991bbe5	20beb093	Mon Sep 10 09:42:29 2012 +0000	[trunk] Fix some C90 issues.
+20beb093	3135642f	Mon Sep 10 09:04:47 2012 +0000	[trunk] Fix all C90 issues using gcc -pedantic -Wno-long-long to track them As a side effect, fix all comment style to remove extra gcc output
+47b18d89	3f5b474b	Thu Aug 30 16:34:17 2012 +0000	[trunk] COMP: Fix one warning identified by clang31 :  openjpeg/applications/codec/j2k_dump.c:362 col 29: warning: equality comparison with extraneous parentheses (thanks to Hans Johnson)
+44cec042	c60a84b6	Fri Aug 17 15:02:18 2012 +0000	fix a compilation error
+c60a84b6	3b953cc7	Fri Aug 17 14:56:42 2012 +0000	rename t1_enc_sigpass_step and t1_enc_sigpass with opj_ prefix and update type
+859ce396	7c6ea4ed	Fri Aug 17 13:47:45 2012 +0000	rename local functions and struct with opj_ prefix
+062ed998	d275fc90	Thu Aug 16 16:44:09 2012 +0000	rename local tcd functions with opj_ prefix
+dbc4c47b	e6d97ce9	Thu Aug 16 16:23:07 2012 +0000	remove deprecated v1 style function tcd_destroy; rename tcd_destroy_v2 to opj_tcd_destroy rename tcd_init_v2 to opj_tcd_init remove deprecated v1 style function tcd_malloc_encode remove deprecated v1 style function tcd_free_encode remove deprecated v1 style function tcd_init_encode remove deprecated v1 style function tcd_malloc_decode remove deprecated v1 style function tcd_malloc_decode_tile remove deprecated v1 style function tcd_makelayer_fixed; rename tcd_makelayer_fixed_v2 to opj_tcd_makelayer_fixed remove deprecated v1 style function tcd_rateallocate_fixed; rename tcd_rateallocate_fixed_v2 to opj_tcd_rateallocate_fixed remove deprecated v1 style function tcd_makelayer; rename tcd_makelayer_v2 to opj_tcd_makelayer remove deprecated v1 style function tcd_rateallocate; rename tcd_rateallocate_v2 to opj_tcd_rateallocate remove deprecated v1 style function tcd_encode_tile; rename tcd_encode_tile_v2 to opj_tcd_encode_tile
+b7473285	8b7107b8	Thu Aug 16 15:48:20 2012 +0000	rename tcd functions with opj_ prefix
+1f945417	ff43b4dc	Thu Aug 16 13:44:02 2012 +0000	rename j2k functions with opj_ prefix
+0c13350e	83a661c3	Thu Aug 16 13:28:52 2012 +0000	rename local j2k function with opj_ prefix
+9f874c00	b52cdf6a	Thu Aug 16 13:09:36 2012 +0000	rename local j2k function with opj_ prefix
+b52cdf6a	40e637d9	Thu Aug 16 13:07:36 2012 +0000	rename local j2k function with opj_ prefix
+fdeed496	fab7693d	Thu Aug 16 12:20:46 2012 +0000	rename local j2k function with opj_ prefix
+582323d6	a6522d37	Thu Aug 16 11:51:34 2012 +0000	rename j2k functions with opj_ prefix
+ec9aceb9	0e1c2e33	Mon Aug 13 10:10:25 2012 +0000	rename local jp2 functions with opj_ prefix
+fb2d6e88	e421cbac	Mon Aug 13 09:44:40 2012 +0000	rename local function in jp2.c with the opj_ prefix
+dd86b856	3ec9f5fa	Mon Aug 13 09:24:15 2012 +0000	rename jp2 functions with V2 style and opj_ prefix
+cc1d6017	e8c1b849	Mon Aug 13 08:30:00 2012 +0000	fix some warnings in jp2.c
+e8c1b849	de44b71b	Mon Aug 13 07:49:49 2012 +0000	fix compilation error with win platform
+de44b71b	df70c713	Fri Aug 10 17:15:57 2012 +0000	[trunk] fix possible memory leak on realloc failure
+b3269581	699edd43	Fri Aug 10 10:55:10 2012 +0000	rename local function in jp2.c with the opj_ prefix
+863aacae	00a2bf71	Fri Aug 10 09:27:45 2012 +0000	rename local functions with opj_ prefix in j2k.c (part 2)
+00a2bf71	6ac5acf7	Fri Aug 10 09:14:49 2012 +0000	rename local functions with opj_ prefix in j2k.c
+6ac5acf7	ce7583f1	Fri Aug 10 08:21:31 2012 +0000	rename some j2k decoding functions with new prefix opj_
+ce7583f1	24b10ac5	Fri Aug 10 08:07:30 2012 +0000	rename mct function read/write function with opj_ prefix
+f28fc6f2	5ba8d366	Wed Jul 11 14:59:41 2012 +0000	[trunk] Fix r156 to compile on compilers where false is not defined.
+5ba8d366	178236cc	Wed Jul 11 14:55:39 2012 +0000	[trunk] This fixes issues seen on PDF files
+178236cc	79a0533c	Tue Jul 10 13:09:45 2012 +0000	[trunk] Fix heap buffer overflow
+64363995	426ad6e3	Tue May 29 14:27:42 2012 +0000	[trunk] Fix a simple leak in test_tile_encoder
+806545df	b8cc257a	Tue May 29 13:44:27 2012 +0000	[trunk] Fix installation issues. Thanks to winfried for patch. Fixes issue 149
+717a7dbf	0fb65765	Mon May 14 17:25:10 2012 +0000	resolve bug under win arch with test_tile_encoder.c
+589b2479	6965e3e0	Mon May 14 14:36:24 2012 +0000	[trunk] Fix minor typo in error message.
+1023be33	595c00f5	Mon May 14 09:37:36 2012 +0000	add new functions in jp2 codec from v2 branches; solve bug in j2k_setup_encoder_v2
+595c00f5	5aaa5eab	Mon May 14 07:17:42 2012 +0000	[trunk] Fix remaining compilation errors
+70b24b02	af96c721	Mon May 14 07:11:02 2012 +0000	[trunk] Fix using proper v2 function
+821d7a89	e7c8a22c	Sun May 13 15:48:19 2012 +0000	remove a fixme about tcd_deallocate and encodind precint
+5652ccc7	055d429a	Wed May 2 13:30:41 2012 +0000	[trunk] correct a bug in jpip building induced by the previous commit
+df7e6560	d045409b	Mon Apr 23 09:16:17 2012 +0000	Fix a set of warnings reported by gcc in cio.c. This patch impact the API directly (remove left over 32bits API)
+d045409b	7f3f4cfd	Mon Apr 23 09:15:29 2012 +0000	Adding sentinel code for debug
+ef044d9f	9642c7f9	Tue Mar 27 08:11:14 2012 +0000	[trunk] attempt to fix clang/3.1 compilation error remotely
+9642c7f9	0c5193c5	Tue Mar 27 07:44:28 2012 +0000	[trunk] fix compilation on OS where ssize_t is not defined.
+f2c2b3fc	1228e0e9	Mon Mar 26 16:18:58 2012 +0000	[trunk] one more round of warnings fixes
+7e28fdc1	569bc026	Mon Mar 26 15:37:04 2012 +0000	[trunk] another round of compilation fixes
+569bc026	178309be	Mon Mar 26 15:04:49 2012 +0000	[trunk] another set of warnings fixes for LFS support
+178309be	2fb7ac9a	Mon Mar 26 14:50:34 2012 +0000	[trunk] Fix equality into test
+34b4ec36	86ed364d	Mon Mar 26 13:15:40 2012 +0000	[trunk] fix another simple warning
+1e3bc7c0	34df9f3d	Mon Mar 26 08:51:12 2012 +0000	[trunk] Fix a potential issue with truncation of pointers diff
+34df9f3d	72bb159a	Mon Mar 26 08:47:06 2012 +0000	[trunk] Fix some simple warnings reported by -Wconversion
+72bb159a	afe4e345	Mon Mar 26 08:41:48 2012 +0000	[trunk] fix compilation when jpwl option is ON.
+b9d271c1	b3931741	Mon Mar 19 14:24:26 2012 +0000	[trunk] Fix invalid truncation from off_t to int (thanks to -Wconversion for report)
+8e65846f	96d4d3f3	Mon Mar 19 09:11:58 2012 +0000	[trunk] add debug statement for Win7-VS2008-32bits-trunk-Debug-OSGeo4W
+96d4d3f3	811c01cc	Sat Mar 17 18:20:52 2012 +0000	[trunk] Quick fix for MS compilers which do not ship inttypes.h
+811c01cc	e2412777	Sat Mar 17 18:06:54 2012 +0000	[trunk] Fix compilation win32 with shared libs on (export symbol name)
+e2412777	b3f00d05	Sat Mar 17 18:06:22 2012 +0000	[trunk] Fix numerous warnings about signed vs unsigned comparison. Adapt opj_procedure type to what it should hev been IMHO. Start using PRIi64 for printf and int64_t
+7539577b	41ee6006	Sat Mar 17 14:51:40 2012 +0000	[trunk] Fix compilation when zlib.h is in user specified directory.
+41ee6006	813ba42c	Thu Mar 15 13:36:12 2012 +0000	[trunk] Fix compilation on 32bits/PowerPC arch (debian/linux)
+d9940f41	dd998e7f	Mon Mar 12 16:43:27 2012 +0000	[trunk] Fix issue with space
+3de14fc6	7f166eae	Sun Mar 11 15:12:31 2012 +0000	[trunk] Use stdint.h when available to compute fixed-type definition.
+4a267377	b9e216ac	Fri Mar 2 15:53:14 2012 +0000	[trunk] Fix a bunch of warning about C++ comments in C code.
+bc8a3c5b	c149db22	Fri Mar 2 10:42:11 2012 +0000	[trunk] correct bug when we expand the list of marker in a tile
+596b5cd7	8ff1ba32	Tue Dec 20 17:54:04 2011 +0000	Fix test NR-ENC-Bretagne2.ppm-4-encode on linux.
+8ff1ba32	a19d7e36	Tue Dec 20 17:11:22 2011 +0000	Fix strange line, as reported by lockalsash (gmail.com)
+cce1fc9c	79fee501	Tue Dec 6 09:46:40 2011 +0000	Apply patch from Brad Hards to fix some typos.
+79fee501	12dfaa2d	Sat Dec 3 17:26:59 2011 +0000	Apply doxygen fixes suggested by Brad Hards on opj mailing list.
+5c363b76	440adddc	Thu Dec 1 13:46:09 2011 +0000	[trunk] fix a bug during the creation of the codestream index
+440adddc	af9ad158	Thu Dec 1 10:50:14 2011 +0000	[trunk] fix warnings when printing large integers
+af9ad158	d569430c	Thu Dec 1 09:10:26 2011 +0000	[trunk] fix a warning about a recent commit (1104)
+d569430c	c39bea20	Thu Dec 1 09:02:04 2011 +0000	[trunk] fix compilation of j2k_random_access on Visual C++
+a361f618	8c2d8bc8	Wed Nov 30 19:41:57 2011 +0000	[trunk] fix call to opj_destroy_cstr_info_v2 in j2k_random_tile_access
+8c2d8bc8	563b56e0	Wed Nov 30 17:31:47 2011 +0000	[trunk] fix bug during random access to tile (tile already decoded)
+563b56e0	455f6758	Wed Nov 30 17:31:42 2011 +0000	[trunk] fix error about the way to detect the additional test suite
+3932e860	b3368a85	Tue Nov 29 09:28:02 2011 +0000	[trunk] fix error with new way to detect kdu_expand
+defe0b25	b68ed904	Mon Nov 28 15:32:33 2011 +0000	[trunk] fix definition of _FILE_OFFSET_BITS macro on platform where it is needed
+ab9a63bb	3a8438e1	Thu Nov 24 10:17:49 2011 +0000	Use cmake style define. Fix big endian issue on dual OS (eg. Tiger)
+8bcf78cd	ffc94497	Thu Nov 24 10:15:43 2011 +0000	fix variable name to be hidden
+1b52be62	e7e1ec6e	Mon Nov 21 17:18:33 2011 +0000	[trunk] WIP: fix bug with windows platform and j2k_dump
+e7e1ec6e	ff3c4410	Fri Nov 18 08:42:57 2011 +0000	[trunk] WIP: fix bug with windows platform and j2k_to_image
+ff3c4410	aaf6e843	Thu Nov 17 14:29:36 2011 +0000	[trunk] WIP: fix bug when decoding an area or a tile with special resolution
+b41cad58	39e12244	Wed Nov 16 20:00:13 2011 +0000	[trunk][JPIP] fixed opj_server execusion error (instant terminating) with autotool, cmake still need to be fixed
+39e12244	c4c01b61	Thu Nov 10 17:38:08 2011 +0000	[trunk] fix tests/nonregresion/CMakeList.txt
+c4c01b61	eb3cd22a	Wed Nov 9 16:15:15 2011 +0000	[trunk] WIP: fix get_decoded_tile function to avoid error with output image
+eb3cd22a	5b35f5fb	Wed Nov 9 14:47:44 2011 +0000	[trunk] fix bug with mj2 applications (credit to winfried)
+db7db678	8d7073ab	Tue Oct 25 22:16:56 2011 +0000	fixed client viewer to be compatible with server response header both Content-type and Content-Type
+fc01873d	81b9e785	Mon Oct 10 06:52:07 2011 +0000	[trunk] fix name
+81b9e785	cee45051	Mon Oct 10 06:51:08 2011 +0000	[trunk] add libopenjpeg-jpwl.pc.in. fix output when --disable-shared or --disable-static is passed to configure. Minor clean up of configure.ac.
+cee45051	4d4b29ea	Mon Oct 10 06:26:34 2011 +0000	[trunk] fix \'distcheck\' rule
+fd67d46b	ee0e8a3a	Thu Oct 6 08:05:00 2011 +0000	[trunk] WIP: fix build error with windows configuration induced by rev 960
+ee0e8a3a	f4734d6b	Wed Oct 5 16:27:16 2011 +0000	[trunk] WIP: fix the decoding process with conformance files and V2 framework
+f4734d6b	656628e6	Fri Sep 30 21:14:25 2011 +0000	* [vincent] fix autotools for various compilation problems * [vincent] fix indexer compilation. Patch from Winfried
+b8efd02c	a600d8f4	Tue Sep 27 12:32:28 2011 +0000	[trunk] WIP: fix some warnings about a static function and j2k_read_unk_v2
+de7793e9	a5e442d4	Tue Sep 27 12:00:06 2011 +0000	[trunk] WIP: fix some warnings from j2k_dump and index.c
+a5e442d4	51513c4e	Thu Sep 22 09:31:45 2011 +0000	[trunk] WIP: fix build compilation (with autotools) with MJ2 option (credit to Winfried)
+51513c4e	5d0b813c	Thu Sep 22 08:39:59 2011 +0000	WIP: fix build compilation error with windows platform about event_mgr management
+7062c01b	c0bad42e	Tue Sep 20 14:50:04 2011 +0000	WIP: fixed build issues with JPWL option ON
+c0bad42e	af7ebd96	Tue Sep 20 14:36:23 2011 +0000	WIP: fixed build issue with MJ2 option ON with new framework
+6ece3f67	3b30e425	Mon Sep 19 13:47:35 2011 +0000	WIP: enchance the new version with some bug fixes from v1 and from me
+6a1573c2	d26e1d78	Fri Sep 9 18:54:05 2011 +0000	TRUNK: fixed autotools for new indexer option
+bc7c3e44	480ca88b	Fri Sep 2 08:34:38 2011 +0000	fixed windows nighlty crash about one missing opj_getopt() (and warning with other platform)
+480ca88b	aba0e602	Thu Sep 1 13:32:42 2011 +0000	changed terminating status of opj_server in debug/non-server mode
+aba0e602	22a2f98c	Thu Sep 1 11:24:08 2011 +0000	renamed getopt.{c/h} to opj_getopt.{c/h} and forced the use of these files rather than the system ones. This fixed issue 78. Credit to Winfried.
+22a2f98c	aaa47850	Wed Aug 31 16:51:37 2011 +0000	fixed a segfault with fgets return value for some cases inside test function compare_dump_file()
+13c5f806	84d3b4de	Sat Aug 27 15:52:45 2011 +0000	fixed missing include directory in opj_client/opj_dec_server/CMakeLists.txt
+925a772d	95015f11	Fri Aug 26 21:46:42 2011 +0000	fixed cmake and autotools files to reflect recent indexer changes in JPIP
+dcbc7278	3b9d4c8d	Fri Aug 26 12:44:28 2011 +0000	fixed cmake and autotools files to reflect recent changes in JPIP
+3b9d4c8d	40fe9e6d	Fri Aug 26 11:50:50 2011 +0000	fixed Makefile.nix to load openjpeg library from this archive
+ef258914	c025f363	Mon Aug 22 13:13:00 2011 +0000	Properly close bug #73, by providing a test for it.
+c025f363	51187d06	Mon Aug 22 10:42:32 2011 +0000	updated INSTALL files, fixed a bug in CMakeLists.txt that prevented finding the data directory
+003f9f79	2880a679	Tue Aug 16 08:52:23 2011 +0000	fixed cmake support for openjpip
+2880a679	4d6cff7e	Mon Aug 15 13:22:46 2011 +0000	fixed a bug in autotools files that prevented libfcgi to be correctly found in some cases (patch from V.Torri)
+dc9a6592	751d2a0f	Thu Aug 11 14:29:03 2011 +0000	Fixed issue #76 (trunk)
+751d2a0f	e3e2dc1f	Thu Aug 11 12:22:31 2011 +0000	minor bug fix in configure.ac (credit to Vincent Torri)
+e3e2dc1f	4f329cbb	Thu Aug 11 08:37:11 2011 +0000	fixed build error with position of variable declaration after patch 856
+4f329cbb	0e8995aa	Thu Aug 11 08:21:28 2011 +0000	fixed wrong patch with the return value of fgets into convert.c file
+0e8995aa	78120308	Wed Aug 10 15:54:15 2011 +0000	fixed error with the return value of fgets into convert.c file
+6fb97942	9e419fda	Wed Aug 10 09:00:34 2011 +0000	fixed segfault with 123.j2c and bug.j2c images (thanks to Tim Mattox for his contribution to this patch)
+9e419fda	e634cd0d	Wed Aug 10 08:47:20 2011 +0000	fixed glibc error with broken2 and broken4 images
+a7f08e9b	06363c01	Mon Jul 25 07:31:52 2011 +0000	fixed issue 74 for trunk
+0358177c	875ac79d	Wed Jul 6 19:40:26 2011 +0000	bug fixed for error concerning parameter name modification, Makefile.nix also corrected
+875ac79d	9350a471	Wed Jul 6 10:21:25 2011 +0000	JPIP : fixed autotools to work with recent name changes
+a5130aeb	fa6aea80	Sun Jul 3 18:23:33 2011 +0000	fixed bmptoimage (see http://groups.google.com/group/openjpeg/browse_thread/thread/33a24c5896bf6391)
+fa6aea80	b09051fd	Sun Jul 3 17:56:49 2011 +0000	fixed handling of "jp2->meth" value (Restricted ICC profile handling currently not implemented)
+b09051fd	1837d6ef	Thu Jun 30 13:52:23 2011 +0000	fixed CTest configuration files
+74583409	3da66d4d	Fri Jun 3 13:44:58 2011 +0000	Fix some error with cmake
+645d7cab	d737981c	Thu May 26 09:32:34 2011 +0000	fixed paths in makefile.am
+b7969ce6	5cee7cfc	Tue May 24 09:30:25 2011 +0000	fixed a bug in autotools that prevented "make distcheck" to work properly (credit to Vincent Torri) ; added autotools for the "applications/jpip/tools" directory
+58658168	88f43b15	Mon May 23 20:30:20 2011 +0000	fixed autotools (broken since the new directory structure) and added autotools as a build method for jpip (credit to Vincent Torri)
+0c9f6a3a	18cb325a	Mon May 16 19:39:07 2011 +0000	fixed another bug related to the number of packets in a tile-part, not correctly taken into account when generating an index file during decoding
+18cb325a	ed71feac	Mon May 16 11:07:37 2011 +0000	fixed part of issue 69, when tile-part index is inconsistent with the total number of tile-parts
+fb29d47f	1dc2654b	Mon May 9 09:27:48 2011 +0000	OpenJPIP: small bug fixes to compile on win platform
+1dc2654b	2a5a6416	Sun May 8 10:49:06 2011 +0000	OpenJPIP: fixed several bugs in opj_server (removal of strsep function, duplication of query string) + some changes to compile opj_server under windows (replacement of strcasecmp(), bzero()).
+2a5a6416	175fd669	Sat Apr 16 12:09:16 2011 +0000	fixed a bug in mqc.c (see https://groups.google.com/d/topic/openjpeg/kQ1PbZUd19k/discussion, credit to Peter Wimmer)
+175fd669	31dba0b4	Sat Apr 16 12:03:45 2011 +0000	fixed wrong path in Doxyfile.dox
+27b894dd	6aaaa3ea	Thu Apr 14 10:13:25 2011 +0000	fixed applications/codec/CMakeLists.txt that prevented JPWL executables to be built with JPWL functionalities ; changed make all behaviour : DOC target removed from ALL
+e93d5a68	91419e0e	Tue Apr 12 17:24:30 2011 +0000	Fixed internal function names conflict with Jasper (http://code.google.com/p/openjpeg/issues/detail?id=30)
+91419e0e	74626a17	Tue Apr 12 17:05:47 2011 +0000	convert.c: ENDIAN condition removed, tiftoimage and imagetotif updated (ALPHA added for RGB and GRAY, correct handling of 12-bit precision), small bugfixes (credit to Winfried)
+74626a17	1ab46eef	Tue Apr 12 16:18:51 2011 +0000	small fix in configure.ac (credit to Vincent Torri)
+70177d55	1fd9603c	Thu Mar 24 09:50:20 2011 +0000	name fixing in variables related to liblcms
+279b67c8	19f9147e	Mon Mar 21 21:22:33 2011 +0000	fixed a bug that created a conflict between liblcms on the system and liblcms2 in the thirdparty directory
+6bda73ee	9f349b09	Thu Mar 10 17:08:50 2011 +0000	fixed lt_version in configure.ac
+91ce5625	a3df1f5c	Fri Mar 4 11:21:45 2011 +0000	now assume MinGW does not have dirent.h (actually have it but without opendir function). Fixed also a WIN32 check in jp3d/libjp3dvm/openjpeg3d.h.
+a3df1f5c	86edc0a4	Fri Mar 4 11:03:33 2011 +0000	small fix related to the formatting of the install report displayed at the end of install procedure
+99c3c5a4	a1920bc5	Sun Feb 6 16:39:26 2011 +0000	cmake : fixed installed links to openjpeg.h and openjpeg3d.h
+a1920bc5	9a811cb5	Sun Jan 30 21:33:55 2011 +0000	fixed warnings in jp2.c (signed compared to unsigned) and dwt.c (bad cast) ; removed depcomp file from trunk (automatically copied by automake in main folder)
+51f7cc68	c4252ed8	Thu Jan 13 20:18:53 2011 +0000	followup autotools fixes, adding DESTDIR support
+97c5fe05	5f1e13e7	Thu Jan 13 19:40:48 2011 +0000	fix symlink creation (cmake)
+08459fd9	985a163e	Tue Jan 11 08:21:13 2011 +0000	removed forgotten debug info in imagetopnm()
+73a6ed7c	56afd805	Sun Jan 2 18:10:09 2011 +0000	bug fixes to enable cmake compilation on WIN32 platform (see CHANGES for details)
+1dd92890	436d2f4b	Sat Dec 11 23:23:02 2010 +0000	fixed flags when building jp3d with MinGW
+02229c7c	1c2ed5cc	Fri Dec 3 11:57:00 2010 +0000	workaround for name clash when building static and dynamic on WIN32 (see http://www.vtk.org/Bug/view.php?id=10190 for description)
+1c2ed5cc	efc70957	Sun Nov 28 18:40:57 2010 +0000	fixed a bug in codec/convert.c that prevented to build executables with WIN32 compiler (thanks winfried)
+389166e8	2b314957	Thu Nov 25 11:58:26 2010 +0000	fix compilation and DLL creation of libopenjpeg with MSYS/MinGW (from vincent.torri, see issue 47 on googlecode)
+8faf300b	5c76f681	Wed Nov 17 08:39:24 2010 +0000	fixed missing argument in main CMakeLists.txt
+2a4563a6	af32de46	Thu Oct 28 14:34:37 2010 +0000	Fix installation rules in jpwl for CMake
+af32de46	f35d25c6	Tue Oct 26 16:46:01 2010 +0000	Installation fixes when using CMake
+f35d25c6	0dc7f6a2	Mon Oct 25 16:04:09 2010 +0000	Fix jp3dvm version
+0dc7f6a2	bb9232c9	Sun Oct 24 20:28:22 2010 +0000	Fixed doxygen data inside source code (from winfried)
+56dd722f	c2f44184	Fri Oct 22 09:43:06 2010 +0000	Currently the Visual Studio builds are broken in the SVN. Attached a patch to fix this issue (from szekerest)
+c5151996	b6102e20	Thu Oct 21 09:53:13 2010 +0000	fixed help display (patch from winfried)
+b6102e20	ddc9a278	Thu Oct 21 09:49:54 2010 +0000	fixed paths to png and tiff in CMakeLists.txt and fixed link to lcms library (patch from winfried)
+ddc9a278	e65ef3a2	Tue Oct 19 10:06:47 2010 +0000	fixed options and help display (patch from winfried)
+72b6fdb0	453af11e	Fri Oct 8 10:16:27 2010 +0000	fixed a bug in mj2.c that prevented extract_j2k_from_mj2 to build properly. Patch from winfried
+453af11e	eeefefd5	Tue Oct 5 19:17:01 2010 +0000	fixed CMakeLists.txt typo
+26e8f3fd	86864a2f	Wed Sep 1 00:52:26 2010 +0000	COMP: Fixing configuration for static builds. Fixing dependencies that several executables have on getopt.c, convert.c and index.c.
+34e59234	94b9942c	Wed Aug 11 08:47:21 2010 +0000	Fix case
+94b9942c	d5f9ea9f	Wed Jul 7 13:00:39 2010 +0000	Update README and Makefiles to promote cmake. Fix the README.cmake file.
+b96b24ce	fdf04af2	Fri Apr 16 17:14:29 2010 +0000	MACOSX : Fixed the XCode project file to link with the PNG library. Library and header should be located in /usr/local/lib/ and /usr/local/include/, respectively. Check http://ethan.tira-thompson.org/Mac_OS_X_Ports.html if it is not the case on your mac.
+fdf04af2	203a264f	Thu Apr 8 20:19:54 2010 +0000	[v1.4]Fixed issue 6 on google code. Variable "pi" not freed or pointed-to in function "pi_create_encode". Thanks to Kent Mein for reporting this. [v1.4]Fixed problem with Borland C++ Builder (Borland C do not have lrintf). Thanks Marek Mauder for this fix.
+203a264f	b5ff4ffe	Thu Apr 8 18:43:03 2010 +0000	[v1.4] Fixed pi.c bug (issue 15 on google code). Thanks to Anton Lionel for catching this.
+b5ff4ffe	6628a4df	Thu Apr 8 17:50:05 2010 +0000	Fixed MJ2 codec bugs (issues 23-24 on google code). Thanks to Winfried for these patches.
+6628a4df	627f484b	Thu Apr 8 17:34:40 2010 +0000	Fixed JP3D codec file format analyzer. Thanks to Krist\xc3\xb3f Ralovich for this patch.
+3ecae15d	c2da8234	Sun Mar 7 21:27:37 2010 +0000	Fixed small compatibility issues with win32 in codec (moved include <strings.h>)
+cb4702b4	c1a51d68	Thu Feb 18 16:36:21 2010 +0000	JP3D Module. Fixed issue when computing the number of elements in an array that leads to crash (thanks Kristof). Updated JP3D makefiles.
+9324bc4c	449d7bed	Fri Nov 6 12:52:54 2009 +0000	fixed MCT check bug in t1_getwmsedec. See http://groups.google.com/group/openjpeg/browse_thread/thread/d9d96dd4ec3e7443 for info
+449d7bed	bfd3fe8a	Thu Nov 5 16:39:02 2009 +0000	fixed "tiffio" header inclusion to use user version on Win32 system only (otherwise assume its existence in system headers).
+bfd3fe8a	9dbbc6ca	Thu Sep 10 12:29:51 2009 +0000	fixed minor bugs which were triggering warnings at compilation (different signedness, wrong pointer type, etc)
+9dbbc6ca	83abf567	Tue Sep 8 18:25:51 2009 +0000	openjpeg.c : fixed initialization of parameters->cp_disto_alloc/fixed_quality/fixed_alloc/tcp_numlayers because they were preventing to use the -q and -f options.
+83abf567	a695c8eb	Mon Aug 31 13:18:20 2009 +0000	JavaOpenJpegDecoder.c : fixed a signed/unsigned behaviour when returning form C to JAVA
+a695c8eb	a69db02b	Wed Oct 1 16:01:23 2008 +0000	ENH: fix svn properties
+73d84014	4a90f976	Fri Aug 22 16:18:17 2008 +0000	found a bug in tcd.c that was preventing to find the correct threshold in tcd_rateallocate.c for high-precision images. Applied a temporary patch but a better solution should be found.
+4a90f976	4da178b0	Thu Aug 21 16:00:44 2008 +0000	fixed a bug in image_to_j2k.c that was preventing the \'r\' option to work properly (everything was compressed lossless regardless of the specified rate).
+846bd364	295ad6b1	Thu Jun 12 14:55:12 2008 +0000	fixed a bug in dirent.h that prevented codec on Linux Alpha Systems to compile correctly. Thanks to RobinC.
+295ad6b1	f4d394d9	Thu May 22 16:39:40 2008 +0000	fixed a bug in j2k.c (j2k_write_sod) that allowed to get negative rates, thanks zhong1985624 for pointing this.
+65e5ff0f	2f3dd491	Thu May 22 09:54:44 2008 +0000	memory leak fixed in openjpeg.c (opj_destroy_cstr_info()), patch by Carsten Juttner
+6d1f3ecc	396cb1e1	Fri Feb 29 09:33:41 2008 +0000	Fixed openjpeg.c for proper initialization of codec context structures (dinfo in opj_create_compress() and opj_create_decompress(). Bug fix suggested by Andrey V. Kiselev Clean up of opj_aligned_malloc(), to just forgo the use of posix_memalign(), as apparently memalign() is what is working better for everyone. Patch by Callum.
+396cb1e1	ac0cc6df	Thu Feb 28 11:26:04 2008 +0000	Removed the J2KViewer module, which has been replaced by OPJViewer and fixed the error handling of j2k_decode in jp2.c, thanks to Robin Cornelius
+13209d25	9a6f0596	Wed Jan 16 19:01:13 2008 +0000	fixed opj_malloc.h for macosx (bugfix provided by janpeder, thanks)
+4051e87d	4619a94e	Fri Jan 4 15:43:57 2008 +0000	Patch by Callum Lerwick. Fixed error during encoding using tile option in tcd.c
+287fb0b8	847b082b	Fri Dec 21 10:19:01 2007 +0000	Bug fixed by David Bruken. Fixed memory allocation issue in opj_malloc.h. Possible errors in pi_create_encode handled
+5f995bcf	64ed560f	Wed Dec 19 13:57:57 2007 +0000	Fixed allocation problem in pi.c
+9e5d165e	efa5f797	Tue Nov 27 14:00:45 2007 +0000	Fixed the maximum number of resolutions a user can discard while decoding. Added an error state in J2K_STATE (j2k.c)
+efa5f797	c458af9c	Tue Nov 27 12:38:52 2007 +0000	Created the file index.c in the codec directory. This file handles the creation of index files, at encoding and decoding. Fixed bugs during the creation of the index (PCRL progression order)
+014694b0	6a1588c7	Thu Nov 8 14:52:45 2007 +0000	BUG: Fix name of project
+4bb06764	c38de072	Thu Nov 8 14:29:39 2007 +0000	Patches from Callum Lewick: Fixed some spelling errors in dwt.c.
+95d760a1	123a6806	Mon Nov 5 13:05:07 2007 +0000	Fixed a bug which prevented JPWL from working on multi-tiled images; added some more fields in the interface info structures (keep a list of markers, save start packet number for each tile)
+4b60f17b	6265dcfb	Thu Sep 27 12:20:12 2007 +0000	Patch from Callum Lewick. Fixed dwt.c where an alignment in buffer was problematic under x86_64.
+6265dcfb	7e40a947	Tue Sep 25 14:54:49 2007 +0000	BUG: Fix previous patch from Callum Lerwick. I have no clue what CMAKE_INSTALL_LIBDIR refers too. Bump up cmake 2.2 restriction to cmake 2.4 because of previous patch not backward compatible. Properly set the SOVERSION in a cross plateform way (yes WIN32 is a plateform)
+7e40a947	a6ba04cd	Wed Sep 19 14:56:19 2007 +0000	Fixed issues with generation of SOP marker.
+a6ba04cd	55c4c143	Tue Sep 18 13:07:29 2007 +0000	Fixed issues with Reading and Writing TIF images in convert.c to avoid segmentation fault. Fixed issues relating to using user specified rates for CINEMA option for multiple images.
+569bbb00	abfba20b	Mon Sep 17 14:00:43 2007 +0000	Fixed issues with cstr_info when codestream has components with different number of resolutions.
+abfba20b	09231c31	Wed Sep 12 09:04:03 2007 +0000	Patch from Callum Lerwick. Fixed the library linking so it links with the soversion properly set. Fixes up the install targets so that it interacts properly with RPM. Install target for MJ2. Sets some necessary and useful CFLAGS if gcc is in use.
+d70a0415	3816e0ed	Fri Sep 7 23:16:31 2007 +0000	Adapted the JPWL and OPJViewer code to new interface; fixed a samll bug in JPWL which created large EPBs even when null protection was specified
+53471a76	8ac5e702	Thu Sep 6 16:49:15 2007 +0000	ENH: Fix unitialized read in img_fol (we may need a smarter initialize than memset)
+c4313f0b	7a2d96ef	Fri Aug 31 10:55:15 2007 +0000	Fixed save capabilities in OPJViewer due to recent code upgrade
+d07fa5d9	c101f804	Tue Aug 28 10:13:58 2007 +0000	Fixed wrong destructors called in openjpeg.c Fixed bug in j2k_decode_jpt_stream
+bd0b6ec2	1d02a8b5	Fri Aug 24 13:46:44 2007 +0000	Fixed problem with _mm_malloc under OSX. Thanks to Callum Lerwick for solving that issue.
+adca5257	3810e943	Tue Aug 21 12:21:35 2007 +0000	Memory leaks fixed
+3810e943	ca2a0114	Tue Aug 21 12:13:54 2007 +0000	Aligned malloc using Intel\'s _mm_malloc(), cleanup on the t1 memory allocation, getting rid of some leftover debug code
+17f0828c	8298fd2b	Mon Aug 20 15:26:01 2007 +0000	Fixed _strnicmp bug
+7dcb817e	9cf692e8	Wed Aug 8 09:41:16 2007 +0000	Fixed the DCinema filesize allocation. It now includes the SOT marker size
+64d72b7b	b7ce1970	Wed Jul 18 09:45:59 2007 +0000	Fixed raw option to encode raw images with more than three components.
+4a50efe5	bdb18ab1	Thu Jul 12 08:31:01 2007 +0000	Fixed a bug in JPWL module, which prevented to exploit the full error correction capability of RS codes (e.g. it gave up at 5 errors, even if 6 were correctable); defined a JPWL_MAXIMUM_EPB_ROOM for better customization of the maximum dimension of EPBs (the dimension is pre-calculated on an hypothesis, if it goes beyond 65535 there will be problems, thus we give a little less than the max, let\'s say 65450)
+bdb18ab1	167fb633	Sun Jul 8 16:38:51 2007 +0000	fixed the size of the memory allocation in cio.c (confusion between bits and bytes)
+3d626da2	f428a306	Fri Jun 15 13:27:43 2007 +0000	Fixed the generation of index files. Now works with cinema formats.
+ea9335ff	adc1aacb	Mon Jun 4 13:23:26 2007 +0000	Bugs corrected in decoding of command line (getopt.c), in the handling of 16 bit files (t1.c and tcd.c) and the calculation of elapsed time for multiple tiles parts (tcd.c and tdc.h).
+814bab69	1f55aaf4	Thu May 31 09:13:44 2007 +0000	Fixed the handling of 16bit TIFF files for cinema compression. Modified "convert.c". Fixed the parameters used for cinema compression (9-7 transform used instead of 5-3). Modified "image_to_j2k.c"
+1f55aaf4	8be81110	Wed May 23 16:04:50 2007 +0000	Bug fixed by Sylvain Munaut. Change in the reading of the POC marker. Since COD/COC can be anywhere in the header, the decoder cannot always know while decoding the POC marker the value of numlayers and numresolution.
+1bec8fe0	7d06d7fb	Mon May 21 13:08:10 2007 +0000	Patch suggested by Callum Lerwick <seg@haxxed.com>: "Some formatting cleanups, so that the long function definitions and calls fit on screen. Use of prefix increment which is theoretically faster, in practice any sane compiler can optimize a postfix increment but its best not to count on such things. Consolidation of some redundant calculations in the inner loops, which becomes very useful in the future autovectorize patch."
+110b54c7	dbd132dc	Thu Apr 12 10:01:48 2007 +0000	Fixed Error in tiftoimage(). Modification in convert.c.
+0930d988	dd188116	Thu Apr 5 14:24:19 2007 +0000	fix.h, dwt.c and t1.c optimized. Thanks a lot to Dzonatas <dzonatas at dzonux.net> and Callum Lerwick <seg at haxxed.com> for these great patches !
+5a3c1ffe	144e1ff4	Wed Mar 28 08:44:21 2007 +0000	Fixed an historical bug in t1.c that leaded to the inclusion of useless 0xFF in the codestream. Thanks to Sylvain, Pascal and Parvatha !
+f7c9b018	6045158c	Fri Mar 23 14:08:15 2007 +0000	Fixed Makefile.osx and changed Readme.osx accordingly
+6045158c	694a173a	Wed Mar 21 13:01:15 2007 +0000	Fixed j2k_prog_order_list[]. Modifications in j2k.c. Fixed t1_decode_cblks. Modifications in t1.c.
+8bc6da2f	78003a01	Wed Mar 14 07:35:54 2007 +0000	Fixed linux makefile, with help from David Fries and Guido
+219dd65b	ba423fe3	Thu Mar 1 14:39:31 2007 +0000	COMP: Fix compilation of executable linking to TIFF lib.
+e5c5d106	2fb6da8d	Wed Feb 28 14:27:20 2007 +0000	fixed a bug in context numerotation that prevented the RESET switch to work correctly : mqc_reset_enc in mqc.c
+8a75823e	e841b131	Fri Feb 23 01:23:05 2007 +0000	Fixed a copy-and-paste type assignment error (bool instead of int) in the JPWL section of decoder parameters structure in openjpeg.h; minor type-casting in jpwl_lib.c. As a result, now OPJViewer should run correctly when built against the most current SVN trunk of LibOpenJPEG.lib
+3adfd186	9e42842b	Tue Dec 5 18:20:04 2006 +0000	* Better fix of the TPH EPBs bug in JPWL module * Fixed the UEP bug in JPWL module + Added some lines in the help of JPWL_image_to_j2k
+9e42842b	a8591daa	Mon Dec 4 17:26:16 2006 +0000	Bug fix explanation
+9eaaf55f	dc069254	Mon Dec 4 15:28:48 2006 +0000	Fixed the following bug: - when using -W h,h0 the EPBs in TPHs always get a "not latest in current header" signature, even if they are really the latest.
+15949d43	696cd710	Tue Oct 31 18:10:03 2006 +0000	fixed a cast problem in the maxlen variable
+696cd710	2d416a80	Tue Oct 31 17:37:01 2006 +0000	removed a debug test in the version just committed
+2d416a80	b5654312	Tue Oct 31 17:11:15 2006 +0000	fixed a bug in the computation of the mantissa (mu)
+173ccf70	7860407c	Fri Aug 18 10:10:47 2006 +0000	fixed a bug in j2k_to_image.c, that prevented the -l option to work correctly.
+7860407c	4d6bd497	Fri Aug 4 10:12:14 2006 +0000	fixed a bug in pi.c, line 473, that appeared when more than 100 precincts were generated in a resolution level
+4b3aabeb	1093244d	Sat Jul 22 03:35:17 2006 +0000	ENH: Fix warning about assignment discards qualifiers from pointer target type
+0577ed8e	4f87b9ab	Sat Jul 22 03:27:36 2006 +0000	STYLE: Fix style issue
+abe8e93c	f222743e	Fri Jul 21 21:07:18 2006 +0000	ENH: Marking const char * what should be const char *. TODO need to fix code for imagetopgx.
+817681fb	f0721df1	Sun Mar 19 18:51:32 2006 +0000	fixed a bug in t1.c that prevented in some cases a true lossless compression (thanks to Don Mimlitch for reporting this bug)
+01085064	b883da43	Sun Feb 19 21:12:20 2006 +0000	COMP: Fix warning about C++ comment
+b883da43	6a4572a5	Sat Feb 18 12:52:52 2006 +0000	COMP: Fix declaration hides parameter len
+6a4572a5	fba75d93	Sat Feb 18 12:51:35 2006 +0000	COMP: Fix declaration hides parameter len
+f31d963a	5e0948c1	Sat Feb 4 18:39:46 2006 +0000	fixed a bug in codec/convert.c::imagetobmp
+355b88c1	74c1b363	Tue Jan 31 21:26:11 2006 +0000	fixed various minor warnings occuring under icc9 and bcc32, added MSVC project and compiler directives to build a \'standard\' WIN32 DLL
+74c1b363	9ffd9e66	Tue Jan 31 19:45:17 2006 +0000	COMP: Fix compilation on MINGW
+72de930d	8a662fa4	Fri Jan 27 16:29:41 2006 +0000	fixed two initialization problems in t1.c and tcd.c
+8a662fa4	7546f19b	Thu Jan 26 20:02:04 2006 +0000	fixed various minor warnings occuring under gcc, added corrections proposed in the forum
+5ff45287	6b27c32e	Wed Jan 25 16:02:12 2006 +0000	ENH: Fix compilation on mingw32 and borland
+44869986	2f75846b	Wed Jan 25 15:54:10 2006 +0000	BUG: Try to fix the shell script
+2f75846b	ec2b3b3b	Wed Jan 25 15:45:01 2006 +0000	fixed a problem in convert.c when multiple comments
+ec2b3b3b	b9b72f19	Wed Jan 25 15:21:28 2006 +0000	COMP: Fix compilation on mingw (already had itoa) and borland (need __int64)
+a1ec600b	06185ea2	Wed Jan 25 09:04:36 2006 +0000	fix.c : replaced "WIN32" by "_MSC_VER" for int64
+fc42b3ec	5432a70c	Wed Jan 25 09:00:40 2006 +0000	fix.c : replaced "WIN32" by "_MSC_VER" for int64
+6a52f1a9	197b0505	Fri Jan 20 16:53:05 2006 +0000	fixed various minor warnings with gdcm patches
+197b0505	f8d899c4	Thu Jan 19 20:25:44 2006 +0000	fixed a bug in jp2_read_ihdr (need to allocate jp2->comps)
+d5ecae07	8f9f70f9	Wed Jan 18 20:10:58 2006 +0000	fixed a bug in opj_cio_open when saving 48-bit images (wrong buffer size calculation)
+34c8a555	fe33ebe8	Thu Dec 8 14:47:40 2005 +0000	fixed a bug when specifying a rate \'-r\' => no distortion info was available in the index
+fe33ebe8	237bb546	Thu Dec 8 11:01:59 2005 +0000	fixed a bug in t1_getwmsedec (stepsize was divided by 8192)
+7ee36c3a	7f8f4756	Thu Oct 27 07:49:29 2005 +0000	1) quantization stepsizes stored as float instead of shifted integers -> fixes a pb of precision when using very small stepsizes. 2)  bug fixed when decoding until bitplane 0 -> r-value (1/2) added to the coefficient.
+ac634b16	a0513798	Wed Sep 21 08:11:27 2005 +0000	bug fixed when asking for an index with more than (layer*resolutions*100) packets per tile (2nd correction)
+a0513798	8f4d6bbe	Tue Sep 20 15:40:13 2005 +0000	bug fixed when asking for an index with more than (layer*resolutions*100) packets per tile
+8f4d6bbe	cd98a4f7	Tue Sep 13 14:17:09 2005 +0000	bug fixed when freeing the memory allocated if ppm-marker or ppt-marker is used
+cd98a4f7	e25e7e76	Tue Sep 13 14:11:41 2005 +0000	bug fixed when freeing the memory allocated if ppm-marker or ppt-marker is used
+de75303c	32ba9920	Mon Jul 18 15:21:56 2005 +0000	Several bugs fixed when dealing with pgx-files with more than 8 bpp and the fixed_quality feature.
+81f68843	0130af0f	Tue Apr 19 09:18:51 2005 +0000	bug while freeing memory (mj2_free) fixed
+0130af0f	2cbcbb25	Tue Apr 19 09:17:55 2005 +0000	Bug while writing huge MOOV boxes fixed. Thanks to Valentin Mesaros !
+34a6c13a	542f0600	Thu Feb 10 16:22:01 2005 +0000	Input file format bug fixed (2)
+542f0600	fdbca0fc	Thu Feb 10 16:16:18 2005 +0000	Input file format bug fixed
+fdbca0fc	632902d7	Wed Feb 9 10:26:22 2005 +0000	Minor bugs in error messages fixed
+632902d7	9310f1b4	Wed Feb 9 10:08:48 2005 +0000	Added tk->visual_w and tk->visual_h variables, specifying the track\'s visual presentation size as fixed-point 16.16 values.
+8323900f	c83ae739	Tue Feb 1 16:30:06 2005 +0000	Bug with number of layers to decode fixed
+ba1cf545	bfb2f9f5	Fri Jan 14 08:14:01 2005 +0000	Bug with mj2_read_struct fixed (problem when reading MJ2 files starting with the MOOV box fixed)
+bfb2f9f5	13b8ecfe	Mon Jan 3 17:39:30 2005 +0000	Luke Lee optimization for fix_mul... Thanks to him
+f25acae0	9225f53d	Wed Dec 8 09:08:13 2004 +0000	Modifications in handling of JP2 files to increase modularity of JP2.c Memory leak fixed with jp2 files
+0d4a38f3	2410db2a	Fri Oct 8 07:08:25 2004 +0000	Bug with -F argument fixed
+2410db2a	e1278bc6	Wed Oct 6 08:58:27 2004 +0000	Memory leak bug fixed in the read_mdat() function
+e1278bc6	899439a9	Wed Oct 6 07:12:36 2004 +0000	Small bug corrected: unsigned int to int conversion at line 417
+899439a9	02e3a4ec	Thu Sep 9 13:34:20 2004 +0000	Bug with tk->imagefile pointer fixed
+7250ce06	2ebe5f2c	Mon Sep 6 15:53:36 2004 +0000	Bug with sound and hint tracks fixed
+0abe8e19	bc5c5115	Tue Aug 24 13:36:45 2004 +0000	Fixed bugs. Thanks to Dereck !
+bc5c5115	61ac1853	Fri Aug 6 14:13:51 2004 +0000	* Inserted tool for memory leaks fixing in debug mode * Fixed some memory leaks in the decoder (some are still present when multiple tiles!)
+0ee21bdb	d116ca5d	Tue Aug 3 14:20:04 2004 +0000	Bug fixed in lossless mode
+26a630da	2c273028	Tue Aug 3 14:06:10 2004 +0000	Bug fixed in lossless mode
+2e2ba14c	9fa68ca8	Fri Jul 30 09:22:22 2004 +0000	Bug fixed in pgx-file reading
+9fa68ca8	d38080aa	Wed Jul 21 05:18:57 2004 +0000	Bug fixed in MQ decoder initialization (keyword comment : initbug1)
+d38080aa	aa6c1d28	Tue Jul 20 05:40:55 2004 +0000	* Bug fixed in jpt decoding * Bug fixed in pcrl progression order (profile-1 compliance) * Change in tcd_dump
+5da1d86a	54b04573	Fri Jul 16 13:16:39 2004 +0000	Bug on jp2_struct->comps memory allocation fixed
+ba0042bf	70ed4ae9	Fri Jul 16 10:31:10 2004 +0000	Memory leaks at decoding fixed
+47dfe606	cc034349	Fri Jul 16 10:22:59 2004 +0000	Memory leaks at decoding fixed
+cc034349	9653207b	Fri Jul 16 09:57:26 2004 +0000	Fixed bug (compatibility between index_create and j2k_decode)
+9653207b	82eea41d	Fri Jul 16 09:52:24 2004 +0000	Multiple tile bug fixed (line 438)
+82eea41d	8d212160	Fri Jul 16 09:14:31 2004 +0000	Memory leaks fixed (line 1592: frees data of all components of current tile)
+e28d3d63	c81b74d9	Fri Jul 16 08:59:15 2004 +0000	Comment introcudec (Created by OpenJPEG version 0.9) + Memory leaks fixed
+c81b74d9	17a559b4	Thu Jul 15 15:52:44 2004 +0000	  Bugfix Makefile / jp2.c & jp2.h
+17a559b4	0e9da058	Wed Jul 14 15:32:56 2004 +0000	(Sampling + Offset) incompatibility bug fixed
+0e9da058	75cb7a7b	Wed Jul 14 15:15:07 2004 +0000	fixed bug from previous revision
+75cb7a7b	c020831f	Wed Jul 14 13:00:57 2004 +0000	Memory leak fix + Comment inserted in codestream: "Created by OpenJPEG version 0.9"
+55e5910d	de5a22ae	Wed Jul 14 08:52:15 2004 +0000	* PPM markers handling modified (comment keyword : ppmbug1) * empty resolution level or subband handling (comment keyword : sizebug1) * index_on field forwarded to j2k_cp_t structure
+bc563fc5	f50f66c0	Tue Jul 13 09:17:17 2004 +0000	* Quantization bug fixed when using 9x7 DWT (comment keyword : quantizbug1)
+f50f66c0	651f98ad	Fri Jul 9 14:37:12 2004 +0000	scalar_derived quantization type bug fixed (2)
+651f98ad	132d8947	Fri Jul 9 14:04:06 2004 +0000	Bug fixed for scalar_derived quantization type
+132d8947	af26e850	Fri Jul 9 10:12:16 2004 +0000	Bug fixed in pgx-format
+3cb27c39	71e60bf8	Tue Jul 6 07:50:05 2004 +0000	Fixed bug for rate option
+a4911967	32e7b152	Fri May 7 13:50:47 2004 +0000	* Fixed_quality option added : specifying -q psnr1,psnr2,psnr3,... at the command line when encoding an image generates layers with the corresponding psnr. You have to specify values in the increase order. This option is incompatible with "-r" or "-f" options.

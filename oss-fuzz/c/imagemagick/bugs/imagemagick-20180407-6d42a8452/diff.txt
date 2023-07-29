@@ -1,0 +1,12 @@
+diff --git a/coders/dng.c b/coders/dng.c
+index f467476fd..9a108d069 100644
+--- a/coders/dng.c
++++ b/coders/dng.c
+@@ -304,6 +304,7 @@ static Image *ReadDNGImage(const ImageInfo *image_info,ExceptionInfo *exception)
+       {
+         (void) ThrowMagickException(exception,GetMagickModule(),CoderError,
+           libraw_strerror(errcode),"`%s'",image->filename);
++        libraw_close(raw_info);
+         return(DestroyImageList(image));
+       }
+     image->columns=raw_info->sizes.width;

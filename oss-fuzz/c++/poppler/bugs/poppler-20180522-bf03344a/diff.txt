@@ -1,0 +1,14 @@
+diff --git a/poppler/SecurityHandler.cc b/poppler/SecurityHandler.cc
+index a643f45f..bdfd89f8 100644
+--- a/poppler/SecurityHandler.cc
++++ b/poppler/SecurityHandler.cc
+@@ -315,6 +315,9 @@ StandardSecurityHandler::~StandardSecurityHandler() {
+ }
+ 
+ GBool StandardSecurityHandler::isUnencrypted() {
++  if (!ok) {
++    return gTrue;
++  }
+   return encVersion == -1 && encRevision == -1;
+ }
+ 

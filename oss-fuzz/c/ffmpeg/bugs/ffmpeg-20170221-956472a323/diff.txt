@@ -1,0 +1,26 @@
+diff --git a/libavcodec/rv40.c b/libavcodec/rv40.c
+index e5ba215b68..dfeebda838 100644
+--- a/libavcodec/rv40.c
++++ b/libavcodec/rv40.c
+@@ -189,7 +189,7 @@ static int rv40_decode_intra_types(RV34DecContext *r, GetBitContext *gb, int8_t
+             A = ptr[-r->intra_types_stride + 1]; // it won't be used for the last coefficient in a row
+             B = ptr[-r->intra_types_stride];
+             C = ptr[-1];
+-            pattern = A + (B << 4) + (C << 8);
++            pattern = A + B * (1 << 4) + C * (1 << 8);
+             for(k = 0; k < MODE2_PATTERNS_NUM; k++)
+                 if(pattern == rv40_aic_table_index[k])
+                     break;
+diff --git a/libavcodec/rv40dsp.c b/libavcodec/rv40dsp.c
+index 19b0e93696..95ba0a9259 100644
+--- a/libavcodec/rv40dsp.c
++++ b/libavcodec/rv40dsp.c
+@@ -449,7 +449,7 @@ static av_always_inline void rv40_weak_loop_filter(uint8_t *src,
+         if (u > 3 - (filter_p1 && filter_q1))
+             continue;
+ 
+-        t <<= 2;
++        t *= 1 << 2;
+         if (filter_p1 && filter_q1)
+             t += src[-2*step] - src[1*step];
+ 

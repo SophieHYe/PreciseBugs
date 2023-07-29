@@ -1,0 +1,143 @@
+diff --git a/gdal/ogr/ogrsf_frmts/tiger/tigeraltname.cpp b/gdal/ogr/ogrsf_frmts/tiger/tigeraltname.cpp
+index 2b301455df..4963ea12ba 100644
+--- a/gdal/ogr/ogrsf_frmts/tiger/tigeraltname.cpp
++++ b/gdal/ogr/ogrsf_frmts/tiger/tigeraltname.cpp
+@@ -96,6 +96,13 @@ OGRFeature *TigerAltName::GetFeature( int nRecordId )
+     if( fpPrimary == NULL )
+         return NULL;
+ 
++    if( psRTInfo->nRecordLength > static_cast<int>(sizeof(achRecord)) )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Record length too large" );
++        return NULL;
++    }
++
+     if( VSIFSeekL( fpPrimary, nRecordId * nRecordLength, SEEK_SET ) != 0 )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+diff --git a/gdal/ogr/ogrsf_frmts/tiger/tigercompletechain.cpp b/gdal/ogr/ogrsf_frmts/tiger/tigercompletechain.cpp
+index 6a10c11a11..0477cd9976 100644
+--- a/gdal/ogr/ogrsf_frmts/tiger/tigercompletechain.cpp
++++ b/gdal/ogr/ogrsf_frmts/tiger/tigercompletechain.cpp
+@@ -392,6 +392,13 @@ OGRFeature *TigerCompleteChain::GetFeature( int nRecordId )
+     if( fpPrimary == NULL )
+         return NULL;
+ 
++    if( psRT1Info->nRecordLength > static_cast<int>(sizeof(achRecord)) )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Record length too large" );
++        return NULL;
++    }
++
+     if( VSIFSeekL( fpPrimary, (nRecordId+nRT1RecOffset) * nRecordLength,
+                   SEEK_SET ) != 0 )
+     {
+@@ -427,6 +434,14 @@ OGRFeature *TigerCompleteChain::GetFeature( int nRecordId )
+         char    achRT3Rec[OGR_TIGER_RECBUF_LEN];
+         int     nRT3RecLen = psRT3Info->nRecordLength + nRecordLength - psRT1Info->nRecordLength;
+ 
++        if( psRT3Info->nRecordLength > static_cast<int>(sizeof(achRT3Rec)) )
++        {
++            CPLError( CE_Failure, CPLE_AppDefined,
++                    "Record length too large" );
++            delete poFeature;
++            return NULL;
++        }
++
+         if( VSIFSeekL( fpRT3, nRecordId * nRT3RecLen, SEEK_SET ) != 0 )
+         {
+             CPLError( CE_Failure, CPLE_FileIO,
+diff --git a/gdal/ogr/ogrsf_frmts/tiger/tigerfilebase.cpp b/gdal/ogr/ogrsf_frmts/tiger/tigerfilebase.cpp
+index fc605ed0e8..660c0dbfc5 100644
+--- a/gdal/ogr/ogrsf_frmts/tiger/tigerfilebase.cpp
++++ b/gdal/ogr/ogrsf_frmts/tiger/tigerfilebase.cpp
+@@ -565,6 +565,13 @@ OGRFeature *TigerFileBase::GetFeature( int nRecordId )
+     if( fpPrimary == NULL )
+         return NULL;
+ 
++    if( psRTInfo->nRecordLength > static_cast<int>(sizeof(achRecord)) )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Record length too large" );
++        return NULL;
++    }
++
+     if( VSIFSeekL( fpPrimary, nRecordId * nRecordLength, SEEK_SET ) != 0 )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+diff --git a/gdal/ogr/ogrsf_frmts/tiger/tigerpoint.cpp b/gdal/ogr/ogrsf_frmts/tiger/tigerpoint.cpp
+index 253e2d174d..1dd32ece3f 100644
+--- a/gdal/ogr/ogrsf_frmts/tiger/tigerpoint.cpp
++++ b/gdal/ogr/ogrsf_frmts/tiger/tigerpoint.cpp
+@@ -63,6 +63,13 @@ OGRFeature *TigerPoint::GetFeature( int nRecordId,
+     if( fpPrimary == NULL )
+         return NULL;
+ 
++    if( psRTInfo->nRecordLength > static_cast<int>(sizeof(achRecord)) )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Record length too large" );
++        return NULL;
++    }
++
+     if( VSIFSeekL( fpPrimary, nRecordId * nRecordLength, SEEK_SET ) != 0 ) {
+         CPLError( CE_Failure, CPLE_FileIO,
+                   "Failed to seek to %d of %sP",
+diff --git a/gdal/ogr/ogrsf_frmts/tiger/tigerpolygon.cpp b/gdal/ogr/ogrsf_frmts/tiger/tigerpolygon.cpp
+index 2f5cbaa883..6d04b2ca09 100644
+--- a/gdal/ogr/ogrsf_frmts/tiger/tigerpolygon.cpp
++++ b/gdal/ogr/ogrsf_frmts/tiger/tigerpolygon.cpp
+@@ -474,7 +474,7 @@ bool TigerPolygon::SetModule( const char * pszModuleIn )
+ OGRFeature *TigerPolygon::GetFeature( int nRecordId )
+ 
+ {
+-  char        achRecord[OGR_TIGER_RECBUF_LEN];
++    char        achRecord[OGR_TIGER_RECBUF_LEN];
+ 
+     if( nRecordId < 0 || nRecordId >= nFeatures )
+     {
+@@ -490,6 +490,13 @@ OGRFeature *TigerPolygon::GetFeature( int nRecordId )
+     if( fpPrimary == NULL )
+         return NULL;
+ 
++    if( nRecordLength > static_cast<int>(sizeof(achRecord)) )
++    {
++        CPLError( CE_Failure, CPLE_AppDefined,
++                  "Record length too large" );
++        return NULL;
++    }
++
+     if( VSIFSeekL( fpPrimary, nRecordId * nRecordLength, SEEK_SET ) != 0 )
+     {
+         CPLError( CE_Failure, CPLE_FileIO,
+@@ -521,12 +528,20 @@ OGRFeature *TigerPolygon::GetFeature( int nRecordId )
+     if( fpRTS != NULL )
+     {
+         char    achRTSRec[OGR_TIGER_RECBUF_LEN];
++        if( psRTSInfo->nRecordLength > static_cast<int>(sizeof(achRTSRec)) )
++        {
++            CPLError( CE_Failure, CPLE_AppDefined,
++                    "Record length too large" );
++            delete poFeature;
++            return NULL;
++        }
+ 
+         if( VSIFSeekL( fpRTS, nRecordId * nRTSRecLen, SEEK_SET ) != 0 )
+         {
+             CPLError( CE_Failure, CPLE_FileIO,
+                       "Failed to seek to %d of %sS",
+                       nRecordId * nRTSRecLen, pszModule );
++            delete poFeature;
+             return NULL;
+         }
+ 
+@@ -535,6 +550,7 @@ OGRFeature *TigerPolygon::GetFeature( int nRecordId )
+             CPLError( CE_Failure, CPLE_FileIO,
+                       "Failed to read record %d of %sS",
+                       nRecordId, pszModule );
++            delete poFeature;
+             return NULL;
+         }
+ 

@@ -1,0 +1,21 @@
+diff --git a/src/hb-ot-var-hvar-table.hh b/src/hb-ot-var-hvar-table.hh
+index 80925c5cb..f1c8cdfb9 100644
+--- a/src/hb-ot-var-hvar-table.hh
++++ b/src/hb-ot-var-hvar-table.hh
+@@ -265,6 +265,8 @@ struct hvarvvar_subset_plan_t
+     for (unsigned int i = 0; i < inner_maps.length; i++)
+       inner_maps[i].init ();
+ 
++    if (unlikely (!inner_sets.length || !inner_maps.length)) return;
++
+     bool retain_adv_map = false;
+     index_map_plans[0].init (*index_maps[0], outer_map, inner_sets, plan);
+     if (index_maps[0] == &Null(DeltaSetIndexMap))
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-hb-subset-fuzzer-5641053680173056 b/test/fuzzing/fonts/clusterfuzz-testcase-hb-subset-fuzzer-5641053680173056
+new file mode 100644
+index 000000000..760167fc6
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-hb-subset-fuzzer-5641053680173056 differ
+diff --git a/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5650879734874112 b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5650879734874112
+new file mode 100644
+index 000000000..24da16e0a
+Binary files /dev/null and b/test/fuzzing/fonts/clusterfuzz-testcase-minimized-hb-subset-fuzzer-5650879734874112 differ

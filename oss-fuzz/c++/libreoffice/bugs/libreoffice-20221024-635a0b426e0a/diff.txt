@@ -1,0 +1,62 @@
+diff --git a/include/o3tl/safeint.hxx b/include/o3tl/safeint.hxx
+index c697a93164aa..a32c6beea142 100644
+--- a/include/o3tl/safeint.hxx
++++ b/include/o3tl/safeint.hxx
+@@ -27,7 +27,7 @@
+ namespace o3tl
+ {
+ 
+-template <typename T> inline T saturating_add(T a, T b)
++template <typename T> inline constexpr T saturating_add(T a, T b)
+ {
+     if (b >= 0) {
+         if (a <= std::numeric_limits<T>::max() - b) {
+@@ -44,7 +44,7 @@ template <typename T> inline T saturating_add(T a, T b)
+     }
+ }
+ 
+-template <typename T> inline T saturating_sub(T a, T b)
++template <typename T> inline constexpr T saturating_sub(T a, T b)
+ {
+     if (b >= 0) {
+         if (a >= std::numeric_limits<T>::min() + b) {
+diff --git a/include/o3tl/unit_conversion.hxx b/include/o3tl/unit_conversion.hxx
+index 67830f0d16d7..7f0053627f50 100644
+--- a/include/o3tl/unit_conversion.hxx
++++ b/include/o3tl/unit_conversion.hxx
+@@ -98,11 +98,20 @@ constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d, bool& bOverflow, sal_I
+ template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+ constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
+ {
+-    if (!isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m))
++    if (sal_Int64 d_2 = d / 2; !isBetween(n, (SAL_MIN_INT64 + d_2) / m, (SAL_MAX_INT64 - d_2) / m))
+     {
+-        if (m > d && !isBetween(n, SAL_MIN_INT64 / m * d + d / 2, SAL_MAX_INT64 / m * d - d / 2))
+-            return n > 0 ? SAL_MAX_INT64 : SAL_MIN_INT64; // saturate
+-        return (n >= 0 ? n + d / 2 : n - d / 2) / d * m; // divide before multiplication
++        if (n >= 0)
++        {
++            if (m > d && std::make_unsigned_t<I>(n) > sal_uInt64(SAL_MAX_INT64 / m * d - d_2))
++                return SAL_MAX_INT64; // saturate
++            return saturating_add<sal_uInt64>(n, d_2) / d * m; // divide before multiplication
++        }
++        else if constexpr (std::is_signed_v<I>) // n < 0; don't compile for unsigned n
++        {
++            if (m > d && n < SAL_MIN_INT64 / m * d + d_2)
++                return SAL_MIN_INT64; // saturate
++            return saturating_sub<sal_Int64>(n, d_2) / d * m; // divide before multiplication
++        }
+     }
+     return MulDiv(n, m, d);
+ }
+diff --git a/o3tl/qa/test-unit_conversion.cxx b/o3tl/qa/test-unit_conversion.cxx
+index 8b2c05c54549..d140f1da7ec6 100644
+--- a/o3tl/qa/test-unit_conversion.cxx
++++ b/o3tl/qa/test-unit_conversion.cxx
+@@ -878,4 +878,6 @@ static_assert(o3tl::toTwips(20, o3tl::Length::mm) == 1134);
+ // 847 100thmm used to represent 24pt
+ static_assert(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100) == 847);
+ 
++static_assert(o3tl::convertSaturate(SAL_MAX_INT64, 72, 127) == 5228998320106644552); // no overflow
++
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

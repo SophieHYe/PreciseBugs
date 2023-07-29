@@ -1,0 +1,34 @@
+diff --git a/src/elf.cc b/src/elf.cc
+index 3bc8316..2a355f2 100644
+--- a/src/elf.cc
++++ b/src/elf.cc
+@@ -111,6 +111,13 @@ static string_view StrictSubstr(string_view data, size_t off, size_t n) {
+   return data.substr(off, n);
+ }
+ 
++static string_view StrictSubstr(string_view data, size_t off) {
++  if (off > data.size()) {
++    THROW("ELF region out-of-bounds");
++  }
++  return data.substr(off);
++}
++
+ static size_t AlignUp(size_t offset, size_t granularity) {
+   // Granularity must be a power of two.
+   return (offset + granularity - 1) & ~(granularity - 1);
+@@ -214,9 +221,9 @@ class ElfFile {
+         name_ = name_.substr(0, name_.size() - 1);
+       }
+ 
+-      remaining_ = remaining_.substr(AlignUp(ptr->n_namesz, 4));
++      remaining_ = StrictSubstr(remaining_, AlignUp(ptr->n_namesz, 4));
+       descriptor_ = StrictSubstr(remaining_, 0, ptr->n_descsz);
+-      remaining_ = remaining_.substr(AlignUp(ptr->n_descsz, 4));
++      remaining_ = StrictSubstr(remaining_, AlignUp(ptr->n_descsz, 4));
+     }
+ 
+    public:
+diff --git a/tests/testdata/fuzz_corpus/2eb47f37b3b0b4bb84cc55d0125d9bb7d176b1c5 b/tests/testdata/fuzz_corpus/2eb47f37b3b0b4bb84cc55d0125d9bb7d176b1c5
+new file mode 100644
+index 0000000..d0fb464
+Binary files /dev/null and b/tests/testdata/fuzz_corpus/2eb47f37b3b0b4bb84cc55d0125d9bb7d176b1c5 differ

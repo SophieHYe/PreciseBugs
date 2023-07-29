@@ -1,0 +1,34 @@
+diff --git a/Userland/Libraries/LibCrypto/ASN1/DER.cpp b/Userland/Libraries/LibCrypto/ASN1/DER.cpp
+index 1a411e35a3..5c443e8ec6 100644
+--- a/Userland/Libraries/LibCrypto/ASN1/DER.cpp
++++ b/Userland/Libraries/LibCrypto/ASN1/DER.cpp
+@@ -176,7 +176,7 @@ Result<const BitmapView, DecodeError> Decoder::decode_bit_string(ReadonlyBytes d
+         return DecodeError::InvalidInputFormat;
+ 
+     auto unused_bits = data[0];
+-    auto total_size_in_bits = data.size() * 8;
++    auto total_size_in_bits = (data.size() - 1) * 8;
+ 
+     if (unused_bits > total_size_in_bits)
+         return DecodeError::Overflow;
+diff --git a/Userland/Libraries/LibCrypto/PK/RSA.h b/Userland/Libraries/LibCrypto/PK/RSA.h
+index c598100da5..137f1f2f5f 100644
+--- a/Userland/Libraries/LibCrypto/PK/RSA.h
++++ b/Userland/Libraries/LibCrypto/PK/RSA.h
+@@ -31,8 +31,6 @@ public:
+     {
+     }
+ 
+-    //--stuff it should do
+-
+     const Integer& modulus() const { return m_modulus; }
+     const Integer& public_exponent() const { return m_public_exponent; }
+     size_t length() const { return m_length; }
+@@ -66,7 +64,6 @@ public:
+     {
+     }
+ 
+-    //--stuff it should do
+     const Integer& modulus() const { return m_modulus; }
+     const Integer& private_exponent() const { return m_private_exponent; }
+     const Integer& public_exponent() const { return m_public_exponent; }

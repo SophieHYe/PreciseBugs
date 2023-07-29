@@ -1,0 +1,35 @@
+diff --git a/Zend/tests/assert/expect_015.phpt b/Zend/tests/assert/expect_015.phpt
+index 72f13ff83f..7f8b0a0935 100644
+--- a/Zend/tests/assert/expect_015.phpt
++++ b/Zend/tests/assert/expect_015.phpt
+@@ -94,7 +94,7 @@ L0:
+ 	}
+ }));
+ 
+-assert(0 && ($a = function &(array &$a, X $b = null) use ($c,&$d) : X {
++assert(0 && ($a = function &(?array &$a, X $b = null) use ($c,&$d) : X {
+ 	class A {
+ 		use T1, T2 {
+ 			T1::foo insteadof foo;
+@@ -244,7 +244,7 @@ Warning: assert(): assert(0 && ($a = function &(array &$a, X $b = null) use($c,
+ 
+ })) failed in %sexpect_015.php on line %d
+ 
+-Warning: assert(): assert(0 && ($a = function &(array &$a, X $b = null) use($c, &$d): X {
++Warning: assert(): assert(0 && ($a = function &(?array &$a, X $b = null) use($c, &$d): X {
+     class A {
+         use T1, T2 {
+             T1::foo insteadof foo;
+diff --git a/Zend/zend_ast.c b/Zend/zend_ast.c
+index 876200bee8..d007e01480 100644
+--- a/Zend/zend_ast.c
++++ b/Zend/zend_ast.c
+@@ -1463,7 +1463,7 @@ simple_list:
+ 			}
+ 			break;
+ 		case ZEND_AST_TYPE:
+-			switch (ast->attr) {
++			switch (ast->attr & ~ZEND_TYPE_NULLABLE) {
+ 				case IS_ARRAY:    APPEND_STR("array");
+ 				case IS_CALLABLE: APPEND_STR("callable");
+ 				EMPTY_SWITCH_DEFAULT_CASE();

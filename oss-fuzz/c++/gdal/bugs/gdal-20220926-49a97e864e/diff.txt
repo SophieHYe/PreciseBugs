@@ -1,0 +1,36 @@
+diff --git a/ogr/ogrsf_frmts/cad/libopencad/cadgeometry.h b/ogr/ogrsf_frmts/cad/libopencad/cadgeometry.h
+index 25eefdb8f5..7f8241c39f 100644
+--- a/ogr/ogrsf_frmts/cad/libopencad/cadgeometry.h
++++ b/ogr/ogrsf_frmts/cad/libopencad/cadgeometry.h
+@@ -430,6 +430,13 @@ public:
+         NONE = 0, CENTIMETER = 2, INCH = 5
+     };
+ 
++    static bool IsValidResolutionUnit(int nVal)
++    {
++        return nVal == ResolutionUnit::NONE ||
++               nVal == ResolutionUnit::CENTIMETER ||
++               nVal == ResolutionUnit::INCH;
++    }
++
+     CADImage();
+     virtual ~CADImage(){}
+ 
+diff --git a/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp b/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+index 9549567838..5f9d1a6970 100644
+--- a/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
++++ b/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+@@ -1425,8 +1425,11 @@ CADGeometry * DWGFileR2000::GetGeometry( size_t iLayerIndex, long dHandle, long
+                 image->setImageSizeInPx( imageSizeInPx );
+                 CADVector pixelSizeInACADUnits( cadImageDef->dfXPixelSize, cadImageDef->dfYPixelSize );
+                 image->setPixelSizeInACADUnits( pixelSizeInACADUnits );
+-                image->setResolutionUnits(
+-                    static_cast<CADImage::ResolutionUnit>( cadImageDef->dResUnits ) );
++                if( CADImage::IsValidResolutionUnit( cadImageDef->dResUnits ) )
++                {
++                    image->setResolutionUnits(
++                        static_cast<CADImage::ResolutionUnit>( cadImageDef->dResUnits ) );
++                }
+                 bool bTransparency = (cadImage->dDisplayProps & 0x08) != 0;
+                 image->setOptions( bTransparency,
+                                    cadImage->bClipping,

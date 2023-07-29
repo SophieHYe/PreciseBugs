@@ -1,0 +1,14 @@
+diff --git a/src/projections/isea.cpp b/src/projections/isea.cpp
+index 659ca790..7dc890e0 100644
+--- a/src/projections/isea.cpp
++++ b/src/projections/isea.cpp
+@@ -105,7 +105,8 @@ static void hexbin2(double width, double x, double y, long *i, long *j) {
+     iy = lround(ry);
+     rz = floor(z + 0.5);
+     iz = lround(rz);
+-    if( fabs(rx + ry + rz) > std::numeric_limits<int>::max() ) {
++    if( fabs(rx + ry) > std::numeric_limits<int>::max() ||
++        fabs(rx + ry + rz) > std::numeric_limits<int>::max() ) {
+         throw "Integer overflow";
+     }
+ 

@@ -1,0 +1,57 @@
+diff --cc autotest/ogr/ogr_factory.py
+index df7ed44a18,df7ed44a18..7f5273bece
+--- a/autotest/ogr/ogr_factory.py
++++ b/autotest/ogr/ogr_factory.py
+@@@ -548,18 -548,18 +548,5 @@@ def test_ogr_factory_8()
+              pytest.fail(dst_geom.ExportToIsoWkt())
+  
+  
+--###############################################################################
+--# Test forceTo()
+--
+  
+--def test_ogr_factory_failed_forceTo():
+--
+--    tests = [('MULTICURVE ZM ((0.0 0.0,0 0,0 0,0 0,0.0 0.0))', ogr.wkbTINM, 'MULTICURVE ZM ((0.0 0.0,0 0,0 0,0 0,0.0 0.0))'),]
+--    for (src_wkt, target_type, exp_wkt) in tests:
+--        src_geom = ogr.CreateGeometryFromWkt(src_wkt)
+--        dst_geom = ogr.ForceTo(src_geom, target_type)
+  
+--        if ogrtest.check_feature_geometry(dst_geom, exp_wkt):
+--            print(src_wkt)
+--            print(target_type)
+--            pytest.fail(dst_geom.ExportToIsoWkt())
+diff --cc ogr/ogrgeometryfactory.cpp
+index 0ccb27fdec,0ccb27fdec..a51695a523
+--- a/ogr/ogrgeometryfactory.cpp
++++ b/ogr/ogrgeometryfactory.cpp
+@@@ -4845,21 -4845,21 +4845,17 @@@ OGRGeometry * OGRGeometryFactory::force
+          {
+              OGRGeometry* poSubGeom = poGC->getGeometryRef(0);
+              if( poSubGeom )
+--            {
+                  poSubGeom->assignSpatialReference(
+                      poGeom->getSpatialReference());
+--                poGC->removeGeometry(0, FALSE);
+--                OGRGeometry* poRet = forceTo(poSubGeom->clone(), eTargetType, papszOptions);
+--                if( OGR_GT_IsSubClassOf(wkbFlatten(poRet->getGeometryType()),
+--                                        eTargetType) )
+--                {
+--                    delete poGC;
+--                    delete poSubGeom;
+--                    return poRet;
+--                }
+--                poGC->addGeometryDirectly(poSubGeom);
+--                delete poRet;
+++            poGC->removeGeometry(0, FALSE);
+++            OGRGeometry* poRet = forceTo(poSubGeom, eTargetType, papszOptions);
+++            if( OGR_GT_IsSubClassOf(wkbFlatten(poRet->getGeometryType()),
+++                                    eTargetType) )
+++            {
+++                delete poGC;
+++                return poRet;
+              }
+++            poGC->addGeometryDirectly(poSubGeom);
+          }
+      }
+      else if( OGR_GT_IsSubClassOf(eType, wkbCurvePolygon) &&

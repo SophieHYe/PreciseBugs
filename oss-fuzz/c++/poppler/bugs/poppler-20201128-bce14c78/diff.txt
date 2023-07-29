@@ -1,0 +1,15 @@
+diff --git a/poppler/XRef.cc b/poppler/XRef.cc
+index 3747c6e7..b92c925b 100644
+--- a/poppler/XRef.cc
++++ b/poppler/XRef.cc
+@@ -1250,7 +1250,9 @@ void XRef::removeDocInfo()
+ 
+     trailerDict.dictRemove("Info");
+ 
+-    removeIndirectObject(infoObjRef.getRef());
++    if (likely(infoObjRef.isRef())) {
++        removeIndirectObject(infoObjRef.getRef());
++    }
+ }
+ 
+ bool XRef::getStreamEnd(Goffset streamStart, Goffset *streamEnd)

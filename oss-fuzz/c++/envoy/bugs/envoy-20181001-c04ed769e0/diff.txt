@@ -1,0 +1,59 @@
+diff --git a/source/common/router/header_parser.cc b/source/common/router/header_parser.cc
+index 0425d53139..9471954c36 100644
+--- a/source/common/router/header_parser.cc
++++ b/source/common/router/header_parser.cc
+@@ -240,6 +240,12 @@ HeaderParserPtr HeaderParser::configure(
+   HeaderParserPtr header_parser = configure(headers_to_add);
+ 
+   for (const auto& header : headers_to_remove) {
++    // We reject :-prefix (e.g. :path) removal here. This is dangerous, since other aspects of
++    // request finalization assume their existence and they are needed for well-formedness in most
++    // cases.
++    if (header[0] == ':') {
++      throw EnvoyException(":-prefixed headers may not be removed");
++    }
+     header_parser->headers_to_remove_.emplace_back(header);
+   }
+ 
+diff --git a/test/common/router/config_impl_test.cc b/test/common/router/config_impl_test.cc
+index 919833172d..dc7af1f7c2 100644
+--- a/test/common/router/config_impl_test.cc
++++ b/test/common/router/config_impl_test.cc
+@@ -1006,6 +1006,30 @@ virtual_hosts:
+   }
+ }
+ 
++// Validate that we can't remove :-prefixed request headers.
++TEST(RouteMatcherTest, TestRequestHeadersToRemoveNoPseudoHeader) {
++  for (const std::string& header : {":path", ":authority", ":method", ":scheme", ":status",
++                                    ":protocol", ":no-chunks", ":status"}) {
++    const std::string yaml = fmt::format(R"EOF(
++name: foo
++virtual_hosts:
++  - name: www2
++    domains: ["*"]
++    request_headers_to_remove:
++      - {}
++)EOF",
++                                         header);
++
++    NiceMock<Server::Configuration::MockFactoryContext> factory_context;
++    NiceMock<Envoy::RequestInfo::MockRequestInfo> request_info;
++
++    envoy::api::v2::RouteConfiguration route_config = parseRouteConfigurationFromV2Yaml(yaml);
++
++    EXPECT_THROW_WITH_MESSAGE(TestConfigImpl config(route_config, factory_context, true),
++                              EnvoyException, ":-prefixed headers may not be removed");
++  }
++}
++
+ TEST(RouteMatcherTest, Priority) {
+   std::string json = R"EOF(
+ {
+diff --git a/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5142800207708160 b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5142800207708160
+new file mode 100644
+index 0000000000..c6926be35c
+--- /dev/null
++++ b/test/common/router/route_corpus/clusterfuzz-testcase-minimized-route_fuzz_test-5142800207708160
+@@ -0,0 +1 @@
++config {   virtual_hosts {     name: " "     domains: "*"     routes {       match {         path: "/"       }       route {         cluster: " "         prefix_rewrite: " "       }     }   }   request_headers_to_remove: ":path" }

@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index c85c21418..96b4e218f 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -328,8 +328,6 @@ static MagickBooleanType ReadHEICImageHandle(const ImageInfo *image_info,
+     }
+   error=heif_decode_image(image_handle,&heif_image,heif_colorspace_RGB,chroma,
+     decode_options);
+-  if (IsHEIFSuccess(image,&error,exception) == MagickFalse)
+-    return(MagickFalse);
+   heif_decoding_options_free(decode_options);
+   if (IsHEIFSuccess(image,&error,exception) == MagickFalse)
+     return(MagickFalse);

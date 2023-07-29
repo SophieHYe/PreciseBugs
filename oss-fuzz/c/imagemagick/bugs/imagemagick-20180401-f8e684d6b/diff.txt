@@ -1,0 +1,14 @@
+diff --git a/coders/pict.c b/coders/pict.c
+index 132b637e8..5c8554b38 100644
+--- a/coders/pict.c
++++ b/coders/pict.c
+@@ -1211,7 +1211,8 @@ static Image *ReadPICTImage(const ImageInfo *image_info,
+                   }
+               }
+             if (EOFBlob(image) != MagickFalse)
+-              break;
++              ThrowPICTException(CorruptImageError,
++                "InsufficientImageDataInFile");
+             if (ReadRectangle(image,&source) == MagickFalse)
+               ThrowPICTException(CorruptImageError,"ImproperImageHeader");
+             if (ReadRectangle(image,&destination) == MagickFalse)

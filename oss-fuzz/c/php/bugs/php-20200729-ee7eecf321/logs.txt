@@ -1,0 +1,1 @@
+commit ee7eecf321fb480485fce7efce0d6deb8629870eAuthor: Nikita Popov <nikita.ppv@gmail.com>Date:   Wed Jul 29 15:51:47 2020 +0200    Fix leak with nullsafe operator with constant LHS        Followup to 5303bcdd32e8171399c2c60bf431e5304a66c39a. We need to    perform the addref after emitting the opline, because that might    intern the string.        Fixes oss-fuzz #24479.

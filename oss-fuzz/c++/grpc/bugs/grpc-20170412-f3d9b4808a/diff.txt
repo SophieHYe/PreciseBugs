@@ -1,0 +1,55 @@
+diff --git a/src/core/lib/channel/http_server_filter.c b/src/core/lib/channel/http_server_filter.c
+index c1e49ffacc..ebcde5315f 100644
+--- a/src/core/lib/channel/http_server_filter.c
++++ b/src/core/lib/channel/http_server_filter.c
+@@ -240,9 +240,9 @@ static grpc_error *server_filter_incoming_metadata(grpc_exec_ctx *exec_ctx,
+       const int k_url_safe = 1;
+       grpc_slice_buffer_add(
+           &calld->read_slice_buffer,
+-          grpc_base64_decode(exec_ctx,
+-                             (const char *)GRPC_SLICE_START_PTR(query_slice),
+-                             k_url_safe));
++          grpc_base64_decode_with_len(
++              exec_ctx, (const char *)GRPC_SLICE_START_PTR(query_slice),
++              GRPC_SLICE_LENGTH(query_slice), k_url_safe));
+       grpc_slice_buffer_stream_init(&calld->read_stream,
+                                     &calld->read_slice_buffer, 0);
+       calld->seen_path_with_query = true;
+diff --git a/test/core/end2end/fuzzers/server_fuzzer_corpus/clusterfuzz-testcase-5595941564317696 b/test/core/end2end/fuzzers/server_fuzzer_corpus/clusterfuzz-testcase-5595941564317696
+new file mode 100644
+index 0000000000..335ce87196
+Binary files /dev/null and b/test/core/end2end/fuzzers/server_fuzzer_corpus/clusterfuzz-testcase-5595941564317696 differ
+diff --git a/tools/run_tests/generated/tests.json b/tools/run_tests/generated/tests.json
+index 12d48f219d..188b77586e 100644
+--- a/tools/run_tests/generated/tests.json
++++ b/tools/run_tests/generated/tests.json
+@@ -150787,6 +150787,29 @@
+     ], 
+     "uses_polling": false
+   }, 
++  {
++    "args": [
++      "test/core/end2end/fuzzers/server_fuzzer_corpus/clusterfuzz-testcase-5595941564317696"
++    ], 
++    "ci_platforms": [
++      "linux"
++    ], 
++    "cpu_cost": 0.1, 
++    "exclude_configs": [
++      "tsan"
++    ], 
++    "exclude_iomgrs": [
++      "uv"
++    ], 
++    "flaky": false, 
++    "language": "c", 
++    "name": "server_fuzzer_one_entry", 
++    "platforms": [
++      "mac", 
++      "linux"
++    ], 
++    "uses_polling": false
++  }, 
+   {
+     "args": [
+       "test/core/end2end/fuzzers/server_fuzzer_corpus/clusterfuzz-testcase-6312731374256128"

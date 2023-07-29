@@ -1,0 +1,16 @@
+diff --git a/gdal/frmts/usgsdem/usgsdemdataset.cpp b/gdal/frmts/usgsdem/usgsdemdataset.cpp
+index 2b80c9b317..c688649d14 100644
+--- a/gdal/frmts/usgsdem/usgsdemdataset.cpp
++++ b/gdal/frmts/usgsdem/usgsdemdataset.cpp
+@@ -807,7 +807,10 @@ int USGSDEMDataset::LoadFromFile(VSILFILE *InDem)
+         adfGeoTransform[5] = (-dydelta) / 3600.0;
+     }
+ 
+-    if (!GDALCheckDatasetDimensions(nRasterXSize, nRasterYSize))
++    // IReadBlock() not ready for more than INT_MAX pixels, and that
++    // would behave badly
++    if (!GDALCheckDatasetDimensions(nRasterXSize, nRasterYSize) ||
++        nRasterXSize > INT_MAX / nRasterYSize)
+     {
+         return FALSE;
+     }

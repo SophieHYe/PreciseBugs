@@ -1,0 +1,103 @@
+diff --git a/gdal/ogr/ogrsf_frmts/avc/avc.h b/gdal/ogr/ogrsf_frmts/avc/avc.h
+index 15c33b80b8..15367d7198 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/avc.h
++++ b/gdal/ogr/ogrsf_frmts/avc/avc.h
+@@ -667,6 +667,7 @@ void        AVCRawBinClose(AVCRawBinFile *psInfo);
+ void        AVCRawBinFSeek(AVCRawBinFile *psInfo, int nOffset, int nFrom);
+ GBool       AVCRawBinEOF(AVCRawBinFile *psInfo);
+ void        AVCRawBinSetFileDataSize(AVCRawBinFile *psInfo, int nDataSize);
++int AVCRawBinIsFileGreaterThan(AVCRawBinFile *psFile, vsi_l_offset nSize);
+ 
+ void        AVCRawBinReadBytes(AVCRawBinFile *psInfo, int nBytesToRead,
+                                GByte *pBuf);
+diff --git a/gdal/ogr/ogrsf_frmts/avc/avc_bin.cpp b/gdal/ogr/ogrsf_frmts/avc/avc_bin.cpp
+index a28602ae63..b46dd7fa16 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/avc_bin.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/avc_bin.cpp
+@@ -823,6 +823,12 @@ int _AVCBinReadNextArc(AVCRawBinFile *psFile, AVCArc *psArc,
+     numVertices    = AVCRawBinReadInt32(psFile);
+     if( numVertices < 0 || numVertices > 100 * 1024 * 1024 )
+         return -1;
++    if( numVertices > 10 * 1024 * 1024 &&
++        !AVCRawBinIsFileGreaterThan(psFile,
++                numVertices * ((nPrecision == AVC_SINGLE_PREC) ? 8 : 16)) )
++    {
++        return -1;
++    }
+ 
+     /* Realloc the vertices array only if it needs to grow...
+      * do not realloc to a smaller size.
+@@ -949,6 +955,11 @@ int _AVCBinReadNextPal(AVCRawBinFile *psFile, AVCPal *psPal,
+     numArcs            = AVCRawBinReadInt32(psFile);
+     if( numArcs < 0 || numArcs > 100 * 1024 * 1024 )
+         return -1;
++    if( numArcs > 10 * 1024 * 1024 &&
++        !AVCRawBinIsFileGreaterThan(psFile, numArcs * sizeof(int) * 3) )
++    {
++        return -1;
++    }
+ 
+     /* Realloc the arc list array only if it needs to grow...
+      * do not realloc to a smaller size.
+@@ -1052,6 +1063,11 @@ int _AVCBinReadNextCnt(AVCRawBinFile *psFile, AVCCnt *psCnt,
+     numLabels      = AVCRawBinReadInt32(psFile);
+     if( numLabels < 0 || numLabels > 100 * 1024 * 1024 )
+         return -1;
++    if( numLabels > 10 * 1024 * 1024 &&
++        !AVCRawBinIsFileGreaterThan(psFile, numLabels * sizeof(int)) )
++    {
++        return -1;
++    }
+ 
+     /* Realloc the LabelIds array only if it needs to grow...
+      * do not realloc to a smaller size.
+@@ -1400,6 +1416,12 @@ int _AVCBinReadNextTxt(AVCRawBinFile *psFile, AVCTxt *psTxt,
+                 100 * 1024 * 1024 - ABS(psTxt->numVerticesArrow) )
+         return -1;
+     numVertices = ABS(psTxt->numVerticesLine) + ABS(psTxt->numVerticesArrow);
++    if( numVertices > 10 * 1024 * 1024 &&
++        !AVCRawBinIsFileGreaterThan(psFile,
++                numVertices * ((nPrecision == AVC_SINGLE_PREC) ? 8 : 16)) )
++    {
++        return -1;
++    }
+ 
+     if (psTxt->pasVertices == nullptr || numVertices > numVerticesBefore)
+         psTxt->pasVertices = (AVCVertex*)CPLRealloc(psTxt->pasVertices,
+@@ -1495,6 +1517,12 @@ int _AVCBinReadNextPCCoverageTxt(AVCRawBinFile *psFile, AVCTxt *psTxt,
+     numVertices = ABS(psTxt->numVerticesLine);
+     if( numVertices < 2 )
+         return -1;
++    if( numVertices > 10 * 1024 * 1024 &&
++        !AVCRawBinIsFileGreaterThan(psFile,
++                numVertices * ((nPrecision == AVC_SINGLE_PREC) ? 8 : 16)) )
++    {
++        return -1;
++    }
+ 
+     if (psTxt->pasVertices == nullptr || numVertices > numVerticesBefore)
+         psTxt->pasVertices = (AVCVertex*)CPLRealloc(psTxt->pasVertices,
+diff --git a/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp b/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
+index 1fd37fc97d..5a816c86e9 100644
+--- a/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
++++ b/gdal/ogr/ogrsf_frmts/avc/avc_rawbin.cpp
+@@ -216,6 +216,19 @@ void AVCRawBinSetFileDataSize(AVCRawBinFile *psFile, int nFileDataSize)
+     }
+ }
+ 
++/**********************************************************************
++ *                      AVCRawBinIsFileGreaterThan()
++ *
++ **********************************************************************/
++int AVCRawBinIsFileGreaterThan(AVCRawBinFile *psFile, vsi_l_offset nSize)
++{
++    vsi_l_offset nCurPos = VSIFTellL(psFile->fp);
++    VSIFSeekL(psFile->fp, 0, SEEK_END);
++    bool bRet = VSIFTellL(psFile->fp) >= nSize;
++    VSIFSeekL(psFile->fp, nCurPos, SEEK_SET);
++    return bRet;
++}
++
+ /**********************************************************************
+  *                          AVCRawBinReadBytes()
+  *

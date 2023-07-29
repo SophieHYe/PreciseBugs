@@ -1,0 +1,13 @@
+diff --git a/coders/heic.c b/coders/heic.c
+index e5a30bf6c..71a01e951 100644
+--- a/coders/heic.c
++++ b/coders/heic.c
+@@ -786,6 +786,8 @@ static MagickBooleanType decodeGrid(HEICImageContext *ctx,
+   unsigned int
+     i, flags;
+ 
++  if (ctx->itemInfo == (HEICItemInfo *) NULL)
++    ThrowAndReturn("no atoms defined");
+   for (i = 1; i <= (ssize_t) ctx->idsCount; i++) {
+     HEICItemInfo
+       *info = &ctx->itemInfo[i];

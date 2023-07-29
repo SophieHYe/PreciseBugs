@@ -1,0 +1,59 @@
+diff --git a/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java b/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
+index 70736cdb9..c1d204258 100644
+--- a/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
++++ b/src/main/java/com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.java
+@@ -445,22 +445,26 @@ _coercedTypeDesc());
+                 }
+                 value = value.substring(extMarkerIx + 2);
+ 
+-                if (value.indexOf('_') < 0 && value.indexOf('-') < 0) {
+-                    return new Locale.Builder().setLanguage(first)
+-                            .setRegion(second).setVariant(third).setScript(value).build();
+-                }
+-                if (value.indexOf('_') < 0) {
+-                    ix = value.indexOf('-');
++                int underscoreIx = value.indexOf('_');
++                if (underscoreIx < 0) {
++                    int hyphenIx = value.indexOf('-');
++                    if (hyphenIx < 0) {
++                        return new Locale.Builder().setLanguage(first)
++                                .setRegion(second)
++                                .setVariant(third)
++                                .setScript(value)
++                                .build();
++                    }
+                     return new Locale.Builder().setLanguage(first)
+                             .setRegion(second).setVariant(third)
+-                            .setExtension(value.charAt(0), value.substring(ix + 1))
++                            .setExtension(value.charAt(0), value.substring(hyphenIx + 1))
+                             .build();
+                 }
+-                ix = value.indexOf('_');
+                 return new Locale.Builder().setLanguage(first)
+                         .setRegion(second).setVariant(third)
+-                        .setScript(value.substring(0, ix))
+-                        .setExtension(value.charAt(ix + 1), value.substring(ix + 3))
++                        .setScript(value.substring(0, underscoreIx))
++                        .setExtension(value.charAt(underscoreIx + 1),
++                                value.substring(Math.min(value.length(), underscoreIx + 3)))
+                         .build();
+             } catch (IllformedLocaleException ex) {
+                 // should we really just swallow the exception?
+diff --git a/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java b/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
+index 57d758b66..31e490e1b 100644
+--- a/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
++++ b/src/test/java/com/fasterxml/jackson/databind/deser/jdk/LocaleDeserTest.java
+@@ -237,4 +237,13 @@ public class LocaleDeserTest extends BaseMapTest
+         assertEquals(expected.getExtension('x'), actual.getExtension('x'));
+         assertEquals(expected.getScript(), actual.getScript());
+     }
++
++    // https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=47034
++    // @since 2.14
++    public void testStringBoundsIssue() throws Exception
++    {
++        Locale loc = MAPPER.readValue(getClass().getResourceAsStream("/fuzz/oss-fuzz-47034.json"),
++                Locale.class);
++        assertNotNull(loc);
++    }
+ }

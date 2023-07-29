@@ -1,0 +1,19 @@
+diff --git a/fofi/FoFiType1C.cc b/fofi/FoFiType1C.cc
+index 2dd4675d..ca1327c2 100644
+--- a/fofi/FoFiType1C.cc
++++ b/fofi/FoFiType1C.cc
+@@ -1433,9 +1433,11 @@ void FoFiType1C::cvtGlyph(int offset, int nBytes, GooString *charBuf, const Type
+                     cvtNum(ops[k + 5].num, ops[k + 5].isFP, charBuf);
+                     charBuf->append((char)8);
+                 }
+-                cvtNum(ops[k].num, ops[k].isFP, charBuf);
+-                cvtNum(ops[k + 1].num, ops[k + 1].isFP, charBuf);
+-                charBuf->append((char)5);
++                if (likely(k + 1 < nOps)) {
++                    cvtNum(ops[k].num, ops[k].isFP, charBuf);
++                    cvtNum(ops[k + 1].num, ops[k + 1].isFP, charBuf);
++                    charBuf->append((char)5);
++                }
+                 nOps = 0;
+                 openPath = true;
+                 break;

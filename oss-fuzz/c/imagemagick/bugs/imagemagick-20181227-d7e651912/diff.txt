@@ -1,0 +1,27 @@
+diff --git a/coders/caption.c b/coders/caption.c
+index 759ef5cef..80f1a3320 100644
+--- a/coders/caption.c
++++ b/coders/caption.c
+@@ -169,6 +169,7 @@ static Image *ReadCAPTIONImage(const ImageInfo *image_info,
+       MagickFalse,gravity);
+   split=MagickFalse;
+   status=MagickTrue;
++  (void) memset(&metrics,0,sizeof(metrics));
+   if (image->columns == 0)
+     {
+       text=AcquireString(caption);
+diff --git a/coders/label.c b/coders/label.c
+index 54bb0ffdb..3e543a349 100644
+--- a/coders/label.c
++++ b/coders/label.c
+@@ -138,9 +138,7 @@ static Image *ReadLABELImage(const ImageInfo *image_info,
+       ThrowReaderException(ImageError,"WidthOrHeightExceedsLimit");
+     }
+   draw_info->text=ConstantString(label);
+-  metrics.width=0.0;
+-  metrics.height=0.0;
+-  metrics.ascent=0.0;
++  (void) memset(&metrics,0,sizeof(metrics));
+   status=GetMultilineTypeMetrics(image,draw_info,&metrics,exception);
+   if ((image->columns == 0) && (image->rows == 0))
+     {
