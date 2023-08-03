@@ -1,0 +1,10 @@
+--- /OHLCSeriesCollection.java	2023-07-03 18:37:25.741539047 +0000
++++ /Chart-26/source/org/jfree/data/time/ohlc/OHLCSeriesCollection.java	2023-07-03 18:37:25.741539047 +0000
+@@ -349,6 +349,7 @@
+     public Object clone() throws CloneNotSupportedException {
+         OHLCSeriesCollection clone 
+                 = (OHLCSeriesCollection) super.clone();
++ 
+         clone.data = (List) ObjectUtilities.deepClone(this.data);
+         return clone;
+     }

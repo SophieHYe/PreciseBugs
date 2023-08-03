@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:53:54.684123542 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:53:54.684123542 +0000
+@@ -1090,8 +1090,8 @@
+                     LengthAdjustmentType.CONTRACT, labelOffsetType);
+         }
+         else if (orientation == PlotOrientation.VERTICAL) {
+-            anchorRect = markerOffset.createAdjustedRectangle(markerArea,
+-                    labelOffsetType, LengthAdjustmentType.CONTRACT);
++anchorRect = markerOffset.createAdjustedRectangle ( markerArea, LengthAdjustmentType.CONTRACT, labelOffsetType ) ;anchorRect = markerOffset.createAdjustedRectangle ( markerArea, labelOffsetType, LengthAdjustmentType.CONTRACT ) ;
++ 
+         }
+         return RectangleAnchor.coordinates(anchorRect, anchor);
+ 

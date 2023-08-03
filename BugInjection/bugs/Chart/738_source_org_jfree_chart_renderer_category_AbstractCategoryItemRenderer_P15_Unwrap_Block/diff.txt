@@ -1,0 +1,16 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:44:58.803391464 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:44:58.807391410 +0000
+@@ -736,9 +736,10 @@
+                     dataArea.getMaxX(), value);
+         }
+         else if (orientation == PlotOrientation.VERTICAL) {
+-            line = new Line2D.Double(value, dataArea.getMinY(), value,
+-                    dataArea.getMaxY());
+-        }
++ 
++line = new java.awt.geom.Line2D.Double(value, dataArea.getMinY(), value, dataArea.getMaxY()); 
++ 
++ 
+ 
+         Paint paint = plot.getDomainGridlinePaint();
+         if (paint == null) {

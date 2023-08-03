@@ -1,0 +1,13 @@
+--- /SymbolAxis.java	2023-07-03 18:35:06.159434447 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:35:06.159434447 +0000
+@@ -552,8 +552,8 @@
+                 if (i > 0) {
+                     double avgTickLabelLength = (previousDrawnTickLabelLength 
+                             + tickLabelLength) / 2.0;
+-                    if (Math.abs(xx - previousDrawnTickLabelPos) 
+-                            < avgTickLabelLength) {
++if  ( Math.max ( xx - previousDrawnTickLabelLength ) < avgTickLabelLength )  {
++ 
+                         tickLabelsOverlapping = true;
+                     }
+                 }

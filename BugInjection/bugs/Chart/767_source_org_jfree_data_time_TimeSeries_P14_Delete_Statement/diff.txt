@@ -1,0 +1,14 @@
+--- /TimeSeries.java	2023-07-03 18:41:09.138505295 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:09.138505295 +0000
+@@ -765,8 +765,9 @@
+         long index = Long.MAX_VALUE; 
+         try {
+             Method m = RegularTimePeriod.class.getDeclaredMethod(
+-                    "createInstance", new Class[] {Class.class, Date.class, 
+-                    TimeZone.class});
++ 
++ 
++ 
+             RegularTimePeriod newest = (RegularTimePeriod) m.invoke(
+                     this.timePeriodClass, new Object[] {this.timePeriodClass,
+                             new Date(latest), TimeZone.getDefault()});

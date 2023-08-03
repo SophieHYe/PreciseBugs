@@ -1,0 +1,11 @@
+--- /ComparableObjectSeries.java	2023-07-03 18:29:11.228253311 +0000
++++ /Chart-26/source/org/jfree/data/ComparableObjectSeries.java	2023-07-03 18:29:11.232253257 +0000
+@@ -256,7 +256,7 @@
+         if (getItemCount() > this.maximumItemCount) {
+             this.data.remove(0);
+         }                    
+-        if (notify) {
++if  ( dataRemoved )  {     fireSeriesChanged (  ) ; }
+             fireSeriesChanged();
+         }
+     }

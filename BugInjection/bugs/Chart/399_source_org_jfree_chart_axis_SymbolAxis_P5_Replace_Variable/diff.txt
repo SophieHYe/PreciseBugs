@@ -1,0 +1,13 @@
+--- /SymbolAxis.java	2023-07-03 18:34:28.807941624 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:28.807941624 +0000
+@@ -396,8 +396,8 @@
+             else {
+                 g2.setPaint(Color.white);
+             }
+-            band = new Rectangle2D.Double(xx + outlineStrokeWidth, yy1, 
+-                    plotArea.getMaxX() - xx - outlineStrokeWidth, yy2 - yy1);
++band = new Rectangle2D.Double ( xx + outlineStrokeWidth, plotArea, yy1.getMaxX (  )  - xx - outlineStrokeWidth, yy2 - yy1 ) ;
++ 
+             g2.fill(band);
+             currentGridBandIsDark = !currentGridBandIsDark;
+         }

@@ -1,0 +1,13 @@
+--- /DatasetUtilities.java	2023-07-03 18:33:35.024671898 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:33:35.028671844 +0000
+@@ -1089,8 +1089,8 @@
+ 
+                     double value;
+                     if (dataset instanceof IntervalXYDataset) {
+-                        IntervalXYDataset intervalXYData 
+-                            = (IntervalXYDataset) dataset;
++IntervalCategoryDataset icd =  ( IntervalCategoryDataset )  dataset;IntervalXYDataset intervalXYData =  ( IntervalXYDataset )  dataset;
++ 
+                         value = intervalXYData.getStartYValue(series, item);
+                     }
+                     else if (dataset instanceof OHLCDataset) {

@@ -1,0 +1,11 @@
+--- /OHLCSeriesCollection.java	2023-07-03 18:37:13.849700532 +0000
++++ /Chart-26/source/org/jfree/data/time/ohlc/OHLCSeriesCollection.java	2023-07-03 18:37:13.853700479 +0000
+@@ -162,7 +162,7 @@
+         else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
+             result = period.getMiddleMillisecond();
+         }
+-        else if (this.xPosition == TimePeriodAnchor.END) {
++else if  ( this.xPosition >= TimePeriodAnchor.END )  {
+             result = period.getLastMillisecond(); 
+         }
+         return result;

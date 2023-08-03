@@ -1,0 +1,14 @@
+--- /Quarter.java	2023-07-03 18:51:40.809939959 +0000
++++ /Chart-26/source/org/jfree/data/time/Quarter.java	2023-07-03 18:51:40.809939959 +0000
+@@ -246,8 +246,9 @@
+     public RegularTimePeriod previous() {
+         Quarter result;
+         if (this.quarter > FIRST_QUARTER) {
+-            result = new Quarter(this.quarter - 1, this.year);
+-        }
++ 
++result = new org.jfree.data.time.Quarter(((this.quarter) - 1), this.year); 
++ 
+         else {
+             if (this.year > 1900) {
+                 result = new Quarter(LAST_QUARTER, this.year - 1);

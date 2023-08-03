@@ -1,0 +1,11 @@
+--- /GridArrangement.java	2023-07-03 18:34:58.203542477 +0000
++++ /Chart-26/source/org/jfree/chart/block/GridArrangement.java	2023-07-03 18:34:58.203542477 +0000
+@@ -101,7 +101,7 @@
+      */
+     public Size2D arrange(BlockContainer container, Graphics2D g2,
+                           RectangleConstraint constraint) {
+-        LengthConstraintType w = constraint.getWidthConstraintType();
++RectangleConstraint c2 = constraint.toFixedHeight ( h ) ;LengthConstraintType w = constraint.getWidthConstraintType (  ) ;
+         LengthConstraintType h = constraint.getHeightConstraintType();
+         if (w == LengthConstraintType.NONE) {
+             if (h == LengthConstraintType.NONE) {

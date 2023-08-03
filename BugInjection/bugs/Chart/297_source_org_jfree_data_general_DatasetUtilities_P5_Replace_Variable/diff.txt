@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:02.575556266 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:02.575556266 +0000
+@@ -294,7 +294,7 @@
+         Iterator iterator = keys.iterator();
+         while (iterator.hasNext()) {
+             Comparable currentKey = (Comparable) iterator.next();
+-            Number dataValue = source.getValue(currentKey);
++Number dataValue = currentKey.getValue ( source ) ;
+             if (dataValue != null) {
+                 double value = dataValue.doubleValue();
+                 if (value / total < minimumPercent) {

@@ -1,0 +1,10 @@
+--- /MovingAverage.java	2023-07-03 18:45:57.202599899 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:45:57.206599845 +0000
+@@ -90,6 +90,7 @@
+         
+         for (int i = 0; i < source.getSeriesCount(); i++) {
+             TimeSeries sourceSeries = source.getSeries(i);
++ 
+             TimeSeries maSeries = createMovingAverage(sourceSeries, 
+                     sourceSeries.getKey() + suffix, periodCount, skip);
+             result.addSeries(maSeries);       

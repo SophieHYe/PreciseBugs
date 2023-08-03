@@ -1,0 +1,11 @@
+--- /SerialDate.java	2023-07-03 18:59:30.835561390 +0000
++++ /Chart-26/source/org/jfree/data/time/SerialDate.java	2023-07-03 18:59:30.835561390 +0000
+@@ -683,7 +683,7 @@
+             adjust = 7 + Math.min(0, targetWeekday - baseDOW);
+         }
+         else {
+-            adjust = Math.max(0, targetWeekday - baseDOW);
++adjust = Math.max ( 0, targetWeekday - leap100 ) ;
+         }
+ 
+         return SerialDate.addDays(adjust, base);

@@ -1,0 +1,11 @@
+--- /DefaultWindDataset.java	2023-07-03 18:39:57.739474926 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultWindDataset.java	2023-07-03 18:39:57.739474926 +0000
+@@ -200,7 +200,7 @@
+      * @return The series key.
+      */
+     public Comparable getSeriesKey(int series) {
+-        if (series < 0 || series >= getSeriesCount()) {
++if  ( seriesKeys == null )  {     throw new IllegalArgumentException ( "Null 'seriesKeys' argument." ) ; }
+             throw new IllegalArgumentException("Invalid series index: " 
+                     + series);
+         }

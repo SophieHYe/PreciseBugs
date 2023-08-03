@@ -1,0 +1,14 @@
+--- /FixedMillisecond.java	2023-07-03 18:50:58.326516299 +0000
++++ /Chart-26/source/org/jfree/data/time/FixedMillisecond.java	2023-07-03 18:50:58.326516299 +0000
+@@ -122,8 +122,9 @@
+         RegularTimePeriod result = null;
+         long t = this.time.getTime();
+         if (t != Long.MIN_VALUE) {
+-            result = new FixedMillisecond(t - 1);
+-        }
++ 
++result = new org.jfree.data.time.FixedMillisecond((t - 1)); 
++ 
+         return result;
+     }
+ 

@@ -1,0 +1,11 @@
+--- /SubSeriesDataset.java	2023-07-03 18:34:39.331798726 +0000
++++ /Chart-26/source/org/jfree/data/general/SubSeriesDataset.java	2023-07-03 18:34:39.331798726 +0000
+@@ -227,7 +227,7 @@
+     public double getCloseValue(int series, int item) {
+         double result = Double.NaN;
+         Number close = getClose(series, item);
+-        if (close != null) {
++if  ( close != this )  {
+             result = close.doubleValue();   
+         }
+         return result;   

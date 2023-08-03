@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:58.829552487 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:58.829552487 +0000
+@@ -674,7 +674,7 @@
+         for (s = 0; s < nDataPoints; s++) {
+             // check whether the "valueHistory" array member exists; if not, 
+             // create them:
+-            if (this.valueHistory[s] == null) {
++if  ( this.valueHistory[s] != null )  {
+                 this.valueHistory[s] = new ValueSequence(this.historyCount);
+             }
+             this.valueHistory[s].enterData(this.newestAt, newData[s]);

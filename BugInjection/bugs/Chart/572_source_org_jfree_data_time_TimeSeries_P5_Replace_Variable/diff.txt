@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:40:27.223074528 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:40:27.227074474 +0000
+@@ -569,7 +569,7 @@
+      */
+     public void add(RegularTimePeriod period, double value, boolean notify) {
+         // defer argument checking...
+-        TimeSeriesDataItem item = new TimeSeriesDataItem(period, value);
++TimeSeriesDataItem item = new TimeSeriesDataItem ( value, period ) ;
+         add(item, notify);
+     }
+ 

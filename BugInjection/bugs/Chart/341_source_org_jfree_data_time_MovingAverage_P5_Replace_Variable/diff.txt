@@ -1,0 +1,11 @@
+--- /MovingAverage.java	2023-07-03 18:47:35.753263773 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:47:35.757263719 +0000
+@@ -338,7 +338,7 @@
+                     while (!finished) {
+                         if ((i - offset) >= 0) {
+                             double xx = source.getXValue(series, i - offset);
+-                            Number yy = source.getY(series, i - offset);
++Number yy = source.getY ( series, offset - offset ) ;
+                             if (xx > limit) {
+                                 if (yy != null) {
+                                     sum = sum + yy.doubleValue();

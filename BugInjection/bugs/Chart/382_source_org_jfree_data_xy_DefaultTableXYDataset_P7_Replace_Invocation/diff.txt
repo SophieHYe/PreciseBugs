@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:44:05.632112022 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:44:05.632112022 +0000
+@@ -379,7 +379,7 @@
+ 
+         // remove the series...
+         if (this.data.contains(series)) {
+-            series.removeChangeListener(this);
++series.addChangeListener ( this ) ;
+             this.data.remove(series);
+             if (this.data.size() == 0) {
+                 this.xPoints.clear();

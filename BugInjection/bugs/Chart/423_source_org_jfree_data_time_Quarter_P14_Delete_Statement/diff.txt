@@ -1,0 +1,10 @@
+--- /Quarter.java	2023-07-03 18:52:20.153406181 +0000
++++ /Chart-26/source/org/jfree/data/time/Quarter.java	2023-07-03 18:52:20.153406181 +0000
+@@ -421,6 +421,7 @@
+         int eom = SerialDate.lastDayOfMonth(month, this.year);
+         calendar.set(this.year, month - 1, eom, 23, 59, 59);
+         calendar.set(Calendar.MILLISECOND, 999);
++ 
+         // in the following line, we'd rather call calendar.getTimeInMillis()
+         // to avoid object creation, but that isn't supported in Java 1.3.1
+         return calendar.getTime().getTime();

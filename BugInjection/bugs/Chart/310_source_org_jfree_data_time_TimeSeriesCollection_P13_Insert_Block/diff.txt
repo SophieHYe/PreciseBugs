@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:53.232957361 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:53.236957307 +0000
+@@ -307,7 +307,7 @@
+      * @param series  the series (<code>null</code> not permitted).
+      */
+     public void addSeries(TimeSeries series) {
+-        if (series == null) {
++if  ( anchor == null )  {     throw new IllegalArgumentException ( "Null 'anchor' argument." ) ; }
+             throw new IllegalArgumentException("Null 'series' argument.");
+         }
+         this.data.add(series);

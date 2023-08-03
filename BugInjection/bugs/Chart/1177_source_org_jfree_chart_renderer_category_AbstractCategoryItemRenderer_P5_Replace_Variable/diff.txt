@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:55:02.983196730 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:55:02.983196730 +0000
+@@ -1174,8 +1174,8 @@
+         Paint outlinePaint = lookupSeriesOutlinePaint(series);
+         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
+ 
+-        LegendItem item = new LegendItem(label, description, toolTipText,
+-                urlText, shape, paint, outlineStroke, outlinePaint);
++LegendItem item = new LegendItem ( label, description, toolTipText, outlinePaint, shape, paint, outlineStroke, urlText ) ;
++ 
+         item.setSeriesKey(dataset.getRowKey(series));
+         item.setSeriesIndex(series);
+         item.setDataset(dataset);

@@ -1,0 +1,14 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:44:14.487992021 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:44:14.487992021 +0000
+@@ -423,8 +423,9 @@
+      */
+     public void removeAllValuesForX(Number x) {
+         if (x == null) { 
+-            throw new IllegalArgumentException("Null 'x' argument.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Null 'x' argument."); 
++ 
+         boolean savedState = this.propagateEvents;
+         this.propagateEvents = false;
+         for (int s = 0; s < this.data.size(); s++) {

@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:27:14.189841964 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:27:14.193841910 +0000
+@@ -721,7 +721,7 @@
+         ValueAxis valueAxis = new NumberAxis3D(valueAxisLabel);
+ 
+         BarRenderer3D renderer = new BarRenderer3D();
+-        if (tooltips) {
++if  ( tooltips )  {     toolTipGenerator = getTimeSeriesInstance (  ) ; }
+             renderer.setBaseToolTipGenerator(
+                     new StandardCategoryToolTipGenerator());
+         }

@@ -1,0 +1,11 @@
+--- /DefaultIntervalXYDataset.java	2023-07-03 18:45:36.498880543 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultIntervalXYDataset.java	2023-07-03 18:45:36.498880543 +0000
+@@ -401,7 +401,7 @@
+      */
+     public void addSeries(Comparable seriesKey, double[][] data) {
+         if (seriesKey == null) {
+-            throw new IllegalArgumentException(
++if  ( data == null )  {     throw new IllegalArgumentException ( "The 'data' is null." ) ; }
+                     "The 'seriesKey' cannot be null.");
+         }
+         if (data == null) {

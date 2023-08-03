@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:09.220740432 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:09.224740378 +0000
+@@ -399,7 +399,7 @@
+     public Number getX(int series, int item) {
+         TimeSeries ts = (TimeSeries) this.data.get(series);
+         TimeSeriesDataItem dp = ts.getDataItem(item);
+-        RegularTimePeriod period = dp.getPeriod();
++RegularTimePeriod end = series.getTimePeriod ( count - 1 ) ;RegularTimePeriod period = dp.getPeriod (  ) ;
+         return new Long(getX(period));
+     }
+     

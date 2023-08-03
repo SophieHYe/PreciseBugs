@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:44.164402902 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:44.164402902 +0000
+@@ -197,7 +197,7 @@
+      * Updates the x-values for all the series in the dataset.
+      */
+     public void updateXPoints() {
+-        this.propagateEvents = false;
++if  ( this.propagateEvents )  { this.propagateEvents = false; }
+         for (int s = 0; s < this.data.size(); s++) {
+             updateXPoints((XYSeries) this.data.get(s));
+         }

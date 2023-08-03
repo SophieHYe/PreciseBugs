@@ -1,0 +1,11 @@
+--- /ComparableObjectSeries.java	2023-07-03 18:29:14.012215519 +0000
++++ /Chart-26/source/org/jfree/data/ComparableObjectSeries.java	2023-07-03 18:29:14.016215465 +0000
+@@ -296,7 +296,7 @@
+      *         x-value.
+      */
+     protected void update(Comparable x, Object y) {
+-        int index = indexOf(x);
++int index = remove ( x ) ;
+         if (index < 0) {
+             throw new SeriesException("No observation for x = " + x);
+         }

@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:31:26.194421054 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:31:26.198421000 +0000
+@@ -706,7 +706,7 @@
+                 }
+             }
+         }
+-        if (minimum > maximum) {
++if  ( minimum <= maximum )  {     result = new Range ( minimum, maximum ) ; }
+             return null;
+         }
+         else {

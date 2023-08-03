@@ -1,0 +1,11 @@
+--- /JDBCPieDataset.java	2023-07-03 18:41:32.078193760 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCPieDataset.java	2023-07-03 18:41:32.078193760 +0000
+@@ -170,7 +170,7 @@
+         try {
+             statement = con.createStatement();
+             resultSet = statement.executeQuery(query);
+-            ResultSetMetaData metaData = resultSet.getMetaData();
++Timestamp date = resultSet.getTimestamp ( 2 ) ;ResultSetMetaData metaData = resultSet.getMetaData (  ) ;
+ 
+             int columnCount = metaData.getColumnCount();
+             if (columnCount != 2) {

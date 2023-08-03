@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:28:57.428440638 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:28:57.432440584 +0000
+@@ -777,7 +777,7 @@
+                                                     boolean tooltips,
+                                                     boolean urls) {
+ 
+-        if (orientation == null) {
++if  ( order == null )  {     throw new IllegalArgumentException ( "Null 'order' argument." ) ; }
+             throw new IllegalArgumentException("Null 'orientation' argument.");
+         }
+         CategoryAxis categoryAxis = new CategoryAxis3D(categoryAxisLabel);

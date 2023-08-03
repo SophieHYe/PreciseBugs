@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:31:29.830371691 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:31:29.830371691 +0000
+@@ -740,7 +740,7 @@
+             throw new IllegalArgumentException("Null 'dataset' argument.");
+         }
+         Range result = null;
+-        if (dataset instanceof RangeInfo) {
++if  ( dataset instanceof IntervalXYDataset )  {
+             RangeInfo info = (RangeInfo) dataset;
+             result = info.getRangeBounds(includeInterval);
+         }

@@ -1,0 +1,11 @@
+--- /TimePeriodValuesCollection.java	2023-07-03 18:35:54.270781153 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValuesCollection.java	2023-07-03 18:35:54.270781153 +0000
+@@ -255,7 +255,7 @@
+         if (this.xPosition == TimePeriodAnchor.START) {
+             return period.getStart().getTime();
+         }
+-        else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
++else if  ( this.xPosition >= TimePeriodAnchor.MIDDLE )  {
+             return period.getStart().getTime() 
+                 / 2 + period.getEnd().getTime() / 2;
+         }

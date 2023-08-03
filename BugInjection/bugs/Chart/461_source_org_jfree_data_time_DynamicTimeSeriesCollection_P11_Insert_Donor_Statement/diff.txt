@@ -1,0 +1,13 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:07.338251461 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:07.338251461 +0000
+@@ -458,8 +458,8 @@
+             );
+         }
+         if (this.valueHistory[seriesNumber] == null) {
+-            this.valueHistory[seriesNumber] 
+-                = new ValueSequence(this.historyCount);
++this.valueHistory = new ValueSequence[nSeries];this.valueHistory[seriesNumber] = new ValueSequence ( this.historyCount ) ;
++ 
+             this.seriesCount++;
+         }  
+         // But if that series array already exists, just overwrite its contents

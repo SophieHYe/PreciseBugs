@@ -1,0 +1,11 @@
+--- /Task.java	2023-07-03 18:36:12.454534235 +0000
++++ /Chart-26/source/org/jfree/data/gantt/Task.java	2023-07-03 18:36:12.454534235 +0000
+@@ -84,7 +84,7 @@
+      * @param duration  the task duration (<code>null</code> permitted).
+      */
+     public Task(String description, TimePeriod duration) {
+-        if (description == null) {
++if  ( subtask == null )  {     throw new IllegalArgumentException ( "Null 'subtask' argument." ) ; }
+             throw new IllegalArgumentException("Null 'description' argument.");
+         }
+         this.description = description;

@@ -1,0 +1,11 @@
+--- /SymbolAxis.java	2023-07-03 18:35:20.171244185 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:35:20.175244131 +0000
+@@ -657,7 +657,7 @@
+                 else {
+                     // remember these values for next comparison
+                     previousDrawnTickLabelPos = yy;
+-                    previousDrawnTickLabelLength = tickLabelLength;         
++if  ( Math.abs ( yy - previousDrawnTickLabelPos ) < avgTickLabelLength )  { previousDrawnTickLabelLength = tickLabelLength; }
+                 }
+                 
+                 TextAnchor anchor = null;

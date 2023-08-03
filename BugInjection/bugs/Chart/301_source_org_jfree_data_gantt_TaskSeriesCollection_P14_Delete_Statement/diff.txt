@@ -1,0 +1,10 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:36:50.938011660 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:36:50.938011660 +0000
+@@ -299,6 +299,7 @@
+ 
+         // fetch the series, remove the change listener, then remove the series.
+         TaskSeries ts = (TaskSeries) this.data.get(series);
++ 
+         ts.removeChangeListener(this);
+         this.data.remove(series);
+         fireDatasetChanged();

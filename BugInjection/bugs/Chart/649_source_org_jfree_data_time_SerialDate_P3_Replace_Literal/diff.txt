@@ -1,0 +1,11 @@
+--- /SerialDate.java	2023-07-03 18:59:18.851724053 +0000
++++ /Chart-26/source/org/jfree/data/time/SerialDate.java	2023-07-03 18:59:18.851724053 +0000
+@@ -646,7 +646,7 @@
+         final int adjust;
+         final int baseDOW = base.getDayOfWeek();
+         if (baseDOW > targetWeekday) {
+-            adjust = Math.min(0, targetWeekday - baseDOW);
++adjust = Math.min ( serialDayNumber, targetWeekday - baseDOW ) ;
+         }
+         else {
+             adjust = -7 + Math.max(0, targetWeekday - baseDOW);

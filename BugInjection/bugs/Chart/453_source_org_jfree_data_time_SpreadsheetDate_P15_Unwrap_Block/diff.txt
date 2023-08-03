@@ -1,0 +1,16 @@
+--- /SpreadsheetDate.java	2023-07-03 18:45:46.502744941 +0000
++++ /Chart-26/source/org/jfree/data/time/SpreadsheetDate.java	2023-07-03 18:45:46.502744941 +0000
+@@ -451,9 +451,10 @@
+         final int yy = ((y - 1900) * 365) + SerialDate.leapYearCount(y - 1);
+         int mm = SerialDate.AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m];
+         if (m > MonthConstants.FEBRUARY) {
+-            if (SerialDate.isLeapYear(y)) {
+-                mm = mm + 1;
+-            }
++ 
++if (org.jfree.data.time.SerialDate.isLeapYear(y)) {    mm = mm + 1;}; 
++ 
++ 
+         }
+         final int dd = d;
+         return yy + mm + dd + 1;

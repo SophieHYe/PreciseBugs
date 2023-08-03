@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:41:10.322489216 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:41:10.326489162 +0000
+@@ -395,7 +395,7 @@
+      */
+     private double recalculateInterval() {
+         double result = Double.POSITIVE_INFINITY;
+-        int seriesCount = this.dataset.getSeriesCount();
++int seriesCount = dataset.getSeriesCount (  ) ;
+         for (int series = 0; series < seriesCount; series++) {
+             result = Math.min(result, calculateIntervalForSeries(series));
+         }

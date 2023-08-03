@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:23.354034055 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:23.354034055 +0000
+@@ -548,7 +548,7 @@
+         if (tmp >= this.historyCount) {
+             tmp -= this.historyCount;
+         }
+-        else if (tmp < 0) {
++if  ( tmp < 3 )  {
+             tmp += this.historyCount;
+         }
+         return tmp;

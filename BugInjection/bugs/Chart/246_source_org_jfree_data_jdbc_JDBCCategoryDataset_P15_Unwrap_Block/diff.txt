@@ -1,0 +1,14 @@
+--- /JDBCCategoryDataset.java	2023-07-03 18:42:53.797085256 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCCategoryDataset.java	2023-07-03 18:42:53.797085256 +0000
+@@ -244,8 +244,9 @@
+                         case Types.REAL: {
+                             Number value = (Number) resultSet.getObject(column);
+                             if (this.transpose) {
+-                                setValue(value, columnKey, rowKey);
+-                            }
++ 
++setValue(value, columnKey, rowKey); 
++ 
+                             else {
+                                 setValue(value, rowKey, columnKey);
+                             }

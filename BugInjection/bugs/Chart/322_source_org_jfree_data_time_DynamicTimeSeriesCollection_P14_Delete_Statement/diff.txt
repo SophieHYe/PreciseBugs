@@ -1,0 +1,10 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:24.602831562 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:24.606831507 +0000
+@@ -320,6 +320,7 @@
+             this.pointsInTime[0] = start;
+             for (int i = 1; i < this.historyCount; i++) {
+                 this.pointsInTime[i] = this.pointsInTime[i - 1].next();
++ 
+             }
+         }
+         long oldestL = this.pointsInTime[0].getFirstMillisecond(

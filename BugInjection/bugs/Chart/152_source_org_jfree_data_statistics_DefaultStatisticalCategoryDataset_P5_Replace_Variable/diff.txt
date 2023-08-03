@@ -1,0 +1,13 @@
+--- /DefaultStatisticalCategoryDataset.java	2023-07-03 19:15:05.210876237 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultStatisticalCategoryDataset.java	2023-07-03 19:15:05.210876237 +0000
+@@ -149,8 +149,8 @@
+      */
+     public Number getMeanValue(Comparable rowKey, Comparable columnKey) {
+         Number result = null;
+-        MeanAndStandardDeviation masd
+-            = (MeanAndStandardDeviation) this.data.getObject(rowKey, columnKey);
++MeanAndStandardDeviation masd =  ( MeanAndStandardDeviation )  rowKey.getObject ( this.data, columnKey ) ;
++ 
+         if (masd != null) {
+             result = masd.getMean();
+         }

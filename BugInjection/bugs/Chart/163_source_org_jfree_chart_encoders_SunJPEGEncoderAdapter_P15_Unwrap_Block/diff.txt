@@ -1,0 +1,14 @@
+--- /SunJPEGEncoderAdapter.java	2023-07-03 19:16:06.574043078 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/SunJPEGEncoderAdapter.java	2023-07-03 19:16:06.574043078 +0000
+@@ -161,8 +161,9 @@
+             throw new IllegalArgumentException("Null 'image' argument.");
+         }
+         if (outputStream == null) {
+-            throw new IllegalArgumentException("Null 'outputStream' argument.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Null 'outputStream' argument."); 
++ 
+         Iterator iterator = ImageIO.getImageWritersByFormatName("jpeg");
+         ImageWriter writer = (ImageWriter) iterator.next();
+         ImageWriteParam p = writer.getDefaultWriteParam();

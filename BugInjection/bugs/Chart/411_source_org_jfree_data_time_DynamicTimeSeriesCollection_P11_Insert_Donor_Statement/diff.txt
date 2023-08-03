@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:51.734463272 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:51.734463272 +0000
+@@ -408,7 +408,7 @@
+         // Avoid IndexOutOfBoundsException:
+         int srcLength = values.length;
+         int copyLength = this.historyCount;
+-        boolean fillNeeded = false;
++boolean extremaChanged = false;boolean fillNeeded = false;
+         if (srcLength < this.historyCount) {
+             fillNeeded = true;
+             copyLength = srcLength;

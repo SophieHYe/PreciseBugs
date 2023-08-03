@@ -1,0 +1,11 @@
+--- /Month.java	2023-07-03 18:55:38.054720783 +0000
++++ /Chart-26/source/org/jfree/data/time/Month.java	2023-07-03 18:55:38.058720728 +0000
+@@ -227,7 +227,7 @@
+      */
+     public RegularTimePeriod previous() {
+         Month result;
+-        if (this.month != MonthConstants.JANUARY) {
++if  (  ( this.month )  !=  ( MonthConstants.DECEMBER )  )  {     result = new Month (  (  ( this.month )  + 1 ) , this.year ) ; }else {     if  (  ( this.year )  < 9999 )  {         result = new Month ( MonthConstants.JANUARY,  (  ( this.year )  + 1 )  ) ;     }else {         result = null;     } }
+             result = new Month(this.month - 1, this.year);
+         }
+         else {

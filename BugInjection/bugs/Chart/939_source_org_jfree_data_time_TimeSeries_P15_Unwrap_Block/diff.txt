@@ -1,0 +1,14 @@
+--- /TimeSeries.java	2023-07-03 18:41:51.841925354 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:51.845925300 +0000
+@@ -937,8 +937,9 @@
+             endIndex = endIndex - 1;    // so this is last item BEFORE end 
+         }
+         if (endIndex < 0) {
+-            emptyRange = true;
+-        }
++ 
++emptyRange = true; 
++ 
+         if (emptyRange) {
+             TimeSeries copy = (TimeSeries) super.clone();
+             copy.data = new java.util.ArrayList();

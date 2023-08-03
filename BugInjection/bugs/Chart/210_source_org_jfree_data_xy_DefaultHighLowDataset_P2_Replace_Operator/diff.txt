@@ -1,0 +1,11 @@
+--- /DefaultHighLowDataset.java	2023-07-03 18:35:54.182782348 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultHighLowDataset.java	2023-07-03 18:35:54.186782293 +0000
+@@ -207,7 +207,7 @@
+     public double getHighValue(int series, int item) {
+         double result = Double.NaN;
+         Number high = getHigh(series, item);
+-        if (high != null) {
++if  ( high == null )  {
+             result = high.doubleValue();   
+         }
+         return result;   

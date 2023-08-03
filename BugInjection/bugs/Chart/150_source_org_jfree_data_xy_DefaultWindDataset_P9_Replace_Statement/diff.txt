@@ -1,0 +1,11 @@
+--- /DefaultWindDataset.java	2023-07-03 18:39:41.019701985 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultWindDataset.java	2023-07-03 18:39:41.019701985 +0000
+@@ -147,7 +147,7 @@
+                         xNumber = (Number) xObject;
+                     }
+                     else {
+-                        if (xObject instanceof Date) {
++if  ( xObject instanceof Number )  {
+                             Date xDate = (Date) xObject;
+                             xNumber = new Long(xDate.getTime());
+                         }

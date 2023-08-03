@@ -1,0 +1,11 @@
+--- /XYSeriesCollection.java	2023-07-03 18:44:47.723541626 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeriesCollection.java	2023-07-03 18:44:47.723541626 +0000
+@@ -132,7 +132,7 @@
+      */
+     public void removeSeries(int series) {
+ 
+-        if ((series < 0) || (series >= getSeriesCount())) {
++if  ( width < 0.0 )  {     throw new IllegalArgumentException ( "Negative 'width' argument." ) ; }
+             throw new IllegalArgumentException("Series index out of bounds.");
+         }
+ 

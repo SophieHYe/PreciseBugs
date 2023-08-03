@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:40.893124790 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:40.897124735 +0000
+@@ -213,7 +213,7 @@
+             throw new IllegalArgumentException("Null 'anchor' argument.");
+         }
+         this.xPosition = anchor;
+-        notifyListeners(new DatasetChangeEvent(this, this));    
++fireDatasetChanged ( new DatasetChangeEvent ( this, this )  ) ;
+     }
+     
+     /**

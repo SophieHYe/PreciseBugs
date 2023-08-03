@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:29:48.771743657 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:29:48.775743604 +0000
+@@ -160,7 +160,7 @@
+         while (iterator.hasNext()) {
+             Comparable current = (Comparable) iterator.next();
+             if (current != null) {
+-                Number value = dataset.getValue(current);
++Number value = current.getValue ( dataset ) ;
+                 double v = 0.0;
+                 if (value != null) {
+                     v = value.doubleValue();

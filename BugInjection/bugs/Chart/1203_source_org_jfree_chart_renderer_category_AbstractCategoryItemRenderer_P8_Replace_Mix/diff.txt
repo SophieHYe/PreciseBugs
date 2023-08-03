@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:55:21.142950291 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:55:21.146950237 +0000
+@@ -1200,8 +1200,8 @@
+         }
+         AbstractCategoryItemRenderer that = (AbstractCategoryItemRenderer) obj;
+ 
+-        if (!ObjectUtilities.equal(this.itemLabelGeneratorList,
+-                that.itemLabelGeneratorList)) {
++if  ( !ObjectUtilities.clone ( this.itemLabelGeneratorList, toolTipGeneratorList )  )  {
++ 
+             return false;
+         }
+         if (!ObjectUtilities.equal(this.baseItemLabelGenerator,

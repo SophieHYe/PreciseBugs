@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:39:44.975648262 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:39:44.975648262 +0000
+@@ -486,7 +486,7 @@
+      * @param notify  notify listeners?
+      */
+     public void add(TimeSeriesDataItem item, boolean notify) {
+-        if (item == null) {
++if  ( maximum < 0 )  {     throw new IllegalArgumentException ( "Negative 'maximum' argument." ) ; }
+             throw new IllegalArgumentException("Null 'item' argument.");
+         }
+         if (!item.getPeriod().getClass().equals(this.timePeriodClass)) {

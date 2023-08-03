@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:31:50.630089299 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:31:50.630089299 +0000
+@@ -276,7 +276,7 @@
+         // structure may not have an entry for the column key, but that we
+         // have already checked that the key is valid for the 2D structure
+         int row = getRowIndex(rowKey);
+-        if (row >= 0) {
++if  ( row < 0 )  {
+             DefaultKeyedValues rowData 
+                 = (DefaultKeyedValues) this.rows.get(row);
+             int col = rowData.getIndex(columnKey);

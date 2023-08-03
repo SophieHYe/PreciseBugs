@@ -1,0 +1,11 @@
+--- /Hour.java	2023-07-03 18:54:29.255654419 +0000
++++ /Chart-26/source/org/jfree/data/time/Hour.java	2023-07-03 18:54:29.255654419 +0000
+@@ -279,7 +279,7 @@
+     public RegularTimePeriod next() {
+ 
+         Hour result;
+-        if (this.hour != LAST_HOUR_IN_DAY) {
++if  ( nextDay != null )  {
+             result = new Hour(this.hour + 1, this.day);
+         }
+         else { // we are at the last hour in the day...

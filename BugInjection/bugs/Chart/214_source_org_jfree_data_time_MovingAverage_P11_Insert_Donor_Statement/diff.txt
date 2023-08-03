@@ -1,0 +1,11 @@
+--- /MovingAverage.java	2023-07-03 18:46:55.093815070 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:46:55.093815070 +0000
+@@ -211,7 +211,7 @@
+                     "than or equal to 2.");
+         }
+ 
+-        TimeSeries result = new TimeSeries(name, source.getTimePeriodClass());
++TimeSeries sourceSeries = source.getSeries ( i ) ;TimeSeries result = new TimeSeries ( name, source.getTimePeriodClass (  )  ) ;
+         double rollingSumForPeriod = 0.0;
+         for (int i = 0; i < source.getItemCount(); i++) {
+             // get the current data item...

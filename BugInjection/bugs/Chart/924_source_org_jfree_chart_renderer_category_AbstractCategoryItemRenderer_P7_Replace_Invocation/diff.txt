@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:52:46.957042513 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:52:46.961042459 +0000
+@@ -921,7 +921,7 @@
+                 return;
+             }
+ 
+-            final Composite savedComposite = g2.getComposite();
++final Composite savedComposite = g2 .setComposite ( savedComposite )  ;
+             g2.setComposite(AlphaComposite.getInstance(
+                     AlphaComposite.SRC_OVER, marker.getAlpha()));
+ 

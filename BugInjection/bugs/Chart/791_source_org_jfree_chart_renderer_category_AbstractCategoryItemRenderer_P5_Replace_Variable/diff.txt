@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:45:44.050778178 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:45:44.050778178 +0000
+@@ -788,8 +788,8 @@
+                     dataArea.getMaxY());
+         }
+         else if (orientation == PlotOrientation.VERTICAL) {
+-            line = new Line2D.Double(dataArea.getMinX(), v,
+-                    dataArea.getMaxX(), v);
++line = new Line2D.Double ( v.getMinX (  ) , dataArea, dataArea.getMaxX (  ) , v ) ;
++ 
+         }
+ 
+         Paint paint = plot.getRangeGridlinePaint();

@@ -1,0 +1,12 @@
+--- /DatasetUtilities.java	2023-07-03 18:31:22.746467865 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:31:22.750467811 +0000
+@@ -700,7 +700,8 @@
+                 int itemCount = dataset.getItemCount(series);
+                 for (int item = 0; item < itemCount; item++) {
+                     lvalue = dataset.getXValue(series, item);
+-                    uvalue = lvalue;
++ 
++ 
+                     minimum = Math.min(minimum, lvalue);
+                     maximum = Math.max(maximum, uvalue);
+                 }

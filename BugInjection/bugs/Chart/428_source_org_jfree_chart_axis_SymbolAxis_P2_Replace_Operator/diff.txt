@@ -1,0 +1,11 @@
+--- /SymbolAxis.java	2023-07-03 18:34:47.751684398 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:47.751684398 +0000
+@@ -425,7 +425,7 @@
+             double minRange = getAutoRangeMinimumSize();
+             if (range < minRange) {
+                 upper = (upper + lower + minRange) / 2;
+-                lower = (upper + lower - minRange) / 2;
++lower =  ( upper  <<  lower - minRange )  / 2;
+             }
+ 
+             // this ensure that the grid bands will be displayed correctly.

@@ -1,0 +1,11 @@
+--- /SymbolAxis.java	2023-07-03 18:34:27.851954604 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:27.851954604 +0000
+@@ -391,7 +391,7 @@
+             yy2 = valueToJava2D(tick.getValue() - 0.5d, plotArea, 
+                     RectangleEdge.LEFT);
+             if (currentGridBandIsDark) {
+-                g2.setPaint(this.gridBandPaint);
++g2.clip ( gridBandPaint ) ;
+             }
+             else {
+                 g2.setPaint(Color.white);

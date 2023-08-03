@@ -1,0 +1,12 @@
+--- /SunJPEGEncoderAdapter.java	2023-07-03 19:16:11.993969489 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/SunJPEGEncoderAdapter.java	2023-07-03 19:16:11.993969489 +0000
+@@ -170,7 +170,8 @@
+         p.setCompressionQuality(this.quality);
+         ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);
+         writer.setOutput(ios);
+-        writer.write(null, new IIOImage(bufferedImage, null, null), p);
++ 
++ 
+         ios.flush();
+         writer.dispose();
+         ios.close();

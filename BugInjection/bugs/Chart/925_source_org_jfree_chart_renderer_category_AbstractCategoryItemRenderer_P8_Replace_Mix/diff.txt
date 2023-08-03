@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:52:56.780909221 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:52:56.784909167 +0000
+@@ -922,8 +922,8 @@
+             }
+ 
+             final Composite savedComposite = g2.getComposite();
+-            g2.setComposite(AlphaComposite.getInstance(
+-                    AlphaComposite.SRC_OVER, marker.getAlpha()));
++g2.setComposite ( AlphaComposite.getInstance ( AlphaComposite.SRC_OVER, marker .getLabelPaint (  )   )  ) ;
++ 
+ 
+             PlotOrientation orientation = plot.getOrientation();
+             double v = axis.valueToJava2D(value, dataArea,

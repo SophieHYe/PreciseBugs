@@ -1,0 +1,11 @@
+--- /DatasetReader.java	2023-07-03 18:33:09.253021819 +0000
++++ /Chart-26/source/org/jfree/data/xml/DatasetReader.java	2023-07-03 18:33:09.253021819 +0000
+@@ -92,7 +92,7 @@
+         try {
+             SAXParser parser = factory.newSAXParser();
+             PieDatasetHandler handler = new PieDatasetHandler();
+-            parser.parse(in, handler);
++parser.parse ( handler, in ) ;
+             result = handler.getDataset();
+         }
+         catch (SAXException e) {

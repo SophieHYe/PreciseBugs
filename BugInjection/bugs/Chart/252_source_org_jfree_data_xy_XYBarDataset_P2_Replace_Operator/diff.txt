@@ -1,0 +1,11 @@
+--- /XYBarDataset.java	2023-07-03 18:43:09.048878648 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYBarDataset.java	2023-07-03 18:43:09.052878594 +0000
+@@ -249,7 +249,7 @@
+     public Number getEndX(int series, int item) {
+         Number result = null;
+         Number xnum = this.underlying.getX(series, item);
+-        if (xnum != null) {
++if  ( xnum == null )  {
+              result = new Double(xnum.doubleValue() + this.barWidth / 2.0);   
+         }
+         return result;   

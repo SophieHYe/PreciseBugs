@@ -1,0 +1,11 @@
+--- /PieDatasetHandler.java	2023-07-03 18:32:58.293170626 +0000
++++ /Chart-26/source/org/jfree/data/xml/PieDatasetHandler.java	2023-07-03 18:32:58.293170626 +0000
+@@ -98,7 +98,7 @@
+                              Attributes atts) throws SAXException {
+ 
+         DefaultHandler current = getCurrentHandler();
+-        if (current != this) {
++if  ( qName.equals ( PIEDATASET_TAG )  )  {     this.dataset = new DefaultPieDataset (  ) ; }else     if  ( qName.equals ( ITEM_TAG )  )  {         ItemHandler subhandler = new ItemHandler ( this, this ) ;         getSubHandlers (  ) .push ( subhandler ) ;         subhandler.startElement ( namespaceURI, localName, qName, atts ) ;     }
+             current.startElement(namespaceURI, localName, qName, atts);
+         }
+         else if (qName.equals(PIEDATASET_TAG)) {

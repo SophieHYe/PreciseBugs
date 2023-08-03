@@ -1,0 +1,11 @@
+--- /RendererUtilities.java	2023-07-03 18:32:25.069621713 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/RendererUtilities.java	2023-07-03 18:32:25.069621713 +0000
+@@ -175,7 +175,7 @@
+             }
+             while (high - low > 1) {
+                 double midV = dataset.getXValue(series, mid);
+-                if (midV <= xHigh) {
++if  ( midV > xHigh )  {
+                     low = mid;
+                 }
+                 else {

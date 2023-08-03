@@ -1,0 +1,11 @@
+--- /TimeTableXYDataset.java	2023-07-03 18:38:26.396715370 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeTableXYDataset.java	2023-07-03 18:38:26.396715370 +0000
+@@ -429,7 +429,7 @@
+      */
+     private long getXValue(TimePeriod period) {
+         long result = 0L;
+-        if (this.xPosition == TimePeriodAnchor.START) {
++if  ( this.xPosition >= TimePeriodAnchor.START )  {
+             result = period.getStart().getTime();
+         }
+         else if (this.xPosition == TimePeriodAnchor.MIDDLE) {

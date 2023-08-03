@@ -1,0 +1,12 @@
+--- /MovingAverage.java	2023-07-03 18:46:14.094370913 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:46:14.094370913 +0000
+@@ -153,7 +153,8 @@
+                     while ((offset < periodCount) && (!finished)) {
+                         if ((i - offset) >= 0) {
+                             TimeSeriesDataItem item = source.getDataItem(
+-                                    i - offset);
++ 
++ 
+                             RegularTimePeriod p = item.getPeriod();
+                             Number v = item.getValue();
+                             long currentIndex = p.getSerialIndex();

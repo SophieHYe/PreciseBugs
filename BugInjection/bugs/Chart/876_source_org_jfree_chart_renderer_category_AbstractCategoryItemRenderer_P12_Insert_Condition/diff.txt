@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:47:03.997694348 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:47:04.001694295 +0000
+@@ -873,7 +873,7 @@
+                 area = new Rectangle2D.Double(v0, dataArea.getMinY(),
+                         (v1 - v0), dataArea.getHeight());
+             }
+-            g2.setPaint(marker.getPaint());
++if  ( marker.getDrawAsLine (  )  )  { g2.setPaint ( marker.getPaint (  )  ) ; }
+             g2.fill(area);
+             bounds = area;
+         }

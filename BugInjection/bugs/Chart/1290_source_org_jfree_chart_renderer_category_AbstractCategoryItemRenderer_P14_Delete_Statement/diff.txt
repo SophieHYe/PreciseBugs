@@ -1,0 +1,10 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:57:28.677219447 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:57:28.681219394 +0000
+@@ -1288,6 +1288,7 @@
+         if (generator != null) {
+             Font labelFont = getItemLabelFont(row, column);
+             Paint paint = getItemLabelPaint(row, column);
++ 
+             g2.setFont(labelFont);
+             g2.setPaint(paint);
+             String label = generator.generateLabel(dataset, row, column);

@@ -1,0 +1,13 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:27.604152191 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:27.604152191 +0000
+@@ -538,8 +538,8 @@
+      */
+     public Number getMinOutlier(int row, int column) {
+         Number result = null;
+-        BoxAndWhiskerItem item = (BoxAndWhiskerItem) this.data.getObject(
+-                row, column);
++BoxAndWhiskerItem item =  ( BoxAndWhiskerItem )  row.getObject ( this.data, column ) ;
++ 
+         if (item != null) {
+             result = item.getMinOutlier();
+         }

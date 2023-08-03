@@ -1,0 +1,11 @@
+--- /XYSeriesCollection.java	2023-07-03 18:45:12.527205461 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeriesCollection.java	2023-07-03 18:45:12.527205461 +0000
+@@ -452,7 +452,7 @@
+      * @param width  the width (negative values not permitted).
+      */
+     public void setIntervalWidth(double width) {
+-        if (width < 0.0) {
++if  ( width <= 0.0 )  {
+             throw new IllegalArgumentException("Negative 'width' argument.");
+         }
+         this.intervalDelegate.setFixedIntervalWidth(width);

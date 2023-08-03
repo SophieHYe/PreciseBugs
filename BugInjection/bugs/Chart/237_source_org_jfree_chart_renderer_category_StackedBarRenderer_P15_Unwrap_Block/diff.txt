@@ -1,0 +1,18 @@
+--- /StackedBarRenderer.java	2023-07-03 19:01:23.306034706 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:01:23.306034706 +0000
+@@ -235,10 +235,11 @@
+         CategoryAxis xAxis = plot.getDomainAxisForDataset(rendererIndex);
+         CategoryDataset data = plot.getDataset(rendererIndex);
+         if (data != null) {
+-            PlotOrientation orientation = plot.getOrientation();
+-            double space = 0.0;
+-            if (orientation == PlotOrientation.HORIZONTAL) {
+-                space = dataArea.getHeight();
++ 
++org.jfree.chart.plot.PlotOrientation orientation = plot.getOrientation(); double space = 0.0; if (orientation == (org.jfree.chart.plot.PlotOrientation.HORIZONTAL)) {    space = dataArea.getHeight();}else    if (orientation == (org.jfree.chart.plot.PlotOrientation.VERTICAL)) {        space = dataArea.getWidth();    }; double maxWidth = space * (getMaximumBarWidth()); int columns = data.getColumnCount(); double categoryMargin = 0.0; if (columns > 1) {    categoryMargin = xAxis.getCategoryMargin();}; double used = space * (((1 - (xAxis.getLowerMargin())) - (xAxis.getUpperMargin())) - categoryMargin); if (columns > 0) {    state.setBarWidth(java.lang.Math.min((used / columns), maxWidth));}else {    state.setBarWidth(java.lang.Math.min(used, maxWidth));}; 
++ 
++ 
++ 
+             }
+             else if (orientation == PlotOrientation.VERTICAL) {
+                 space = dataArea.getWidth();

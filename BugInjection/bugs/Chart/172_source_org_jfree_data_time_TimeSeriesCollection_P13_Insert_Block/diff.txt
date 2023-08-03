@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:35.693195341 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:35.693195341 +0000
+@@ -169,7 +169,7 @@
+     public TimeSeriesCollection(TimeSeries series, TimeZone zone) {
+ 
+         if (zone == null) {
+-            zone = TimeZone.getDefault();
++if  ( zone == null )  {     zone = getDefault (  ) ; }
+         }
+         this.workingCalendar = Calendar.getInstance(zone);
+         this.data = new ArrayList();

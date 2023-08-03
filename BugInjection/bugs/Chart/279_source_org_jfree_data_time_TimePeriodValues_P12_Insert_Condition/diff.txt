@@ -1,0 +1,11 @@
+--- /TimePeriodValues.java	2023-07-03 19:05:20.434815627 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValues.java	2023-07-03 19:05:20.438815572 +0000
+@@ -276,7 +276,7 @@
+             long maxStart = getDataItem(this.maxStartIndex).getPeriod()
+                 .getStart().getTime();
+             if (start > maxStart) {
+-                this.maxStartIndex = index;           
++if  ( this.maxStartIndex >= 0 )  { this.maxStartIndex = index; }
+             }
+         }
+         else {

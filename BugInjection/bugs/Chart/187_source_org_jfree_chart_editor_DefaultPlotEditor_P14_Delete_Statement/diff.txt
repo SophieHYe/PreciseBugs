@@ -1,0 +1,10 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:05:23.402775334 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:05:23.406775280 +0000
+@@ -185,6 +185,7 @@
+         }
+         else if (plot instanceof XYPlot) {
+             XYItemRenderer renderer = ((XYPlot) plot).getRenderer();
++ 
+             if (renderer instanceof StandardXYItemRenderer) {
+                 StandardXYItemRenderer r = (StandardXYItemRenderer) renderer;
+                 this.drawLines = Boolean.valueOf(r.getPlotLines());

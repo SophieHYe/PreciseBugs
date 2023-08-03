@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:56:49.277754184 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:56:49.277754184 +0000
+@@ -1292,7 +1292,7 @@
+             g2.setPaint(paint);
+             String label = generator.generateLabel(dataset, row, column);
+             ItemLabelPosition position = null;
+-            if (!negative) {
++if  ( notify )  {
+                 position = getPositiveItemLabelPosition(row, column);
+             }
+             else {

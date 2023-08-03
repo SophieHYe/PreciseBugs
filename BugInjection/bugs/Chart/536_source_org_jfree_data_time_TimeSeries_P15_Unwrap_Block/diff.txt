@@ -1,0 +1,14 @@
+--- /TimeSeries.java	2023-07-03 18:40:24.063117442 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:40:24.063117442 +0000
+@@ -534,8 +534,9 @@
+         if (added) {
+             // check if this addition will exceed the maximum item count...
+             if (getItemCount() > this.maximumItemCount) {
+-                this.data.remove(0);
+-            }
++ 
++this.data.remove(0); 
++ 
+ 
+             removeAgedItems(false);  // remove old items if necessary, but
+                                      // don't notify anyone, because that

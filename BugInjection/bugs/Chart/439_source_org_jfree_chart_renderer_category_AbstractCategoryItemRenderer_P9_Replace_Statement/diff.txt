@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:44:06.268103405 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:44:06.268103405 +0000
+@@ -436,7 +436,7 @@
+     public void setSeriesToolTipGenerator(int series,
+             CategoryToolTipGenerator generator, boolean notify) {
+         this.toolTipGeneratorList.set(series, generator);
+-        if (notify) {
++if  ( !negative )  {
+             notifyListeners(new RendererChangeEvent(this));
+         }
+     }

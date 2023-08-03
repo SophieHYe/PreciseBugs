@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:29:43.611813705 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:29:43.615813651 +0000
+@@ -152,7 +152,7 @@
+      */
+     public static double calculatePieDatasetTotal(PieDataset dataset) {
+         if (dataset == null) {
+-            throw new IllegalArgumentException("Null 'dataset' argument.");
++if  ( samples < 2 )  {     throw new IllegalArgumentException ( "Requires 'samples' > 1" ) ; }
+         }
+         List keys = dataset.getKeys();
+         double totalValue = 0;

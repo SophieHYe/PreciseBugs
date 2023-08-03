@@ -1,0 +1,11 @@
+--- /RangeType.java	2023-07-03 18:31:34.046314451 +0000
++++ /Chart-26/source/org/jfree/data/RangeType.java	2023-07-03 18:31:34.046314451 +0000
+@@ -126,7 +126,7 @@
+      * @throws ObjectStreamException if there is a problem.
+      */
+     private Object readResolve() throws ObjectStreamException {
+-        if (this.equals(RangeType.FULL)) {
++if  ( this.equals ( POSITIVE )  )  {     return POSITIVE; }else     if  ( this.equals ( NEGATIVE )  )  {         return NEGATIVE;     }
+             return RangeType.FULL;
+         }
+         else if (this.equals(RangeType.POSITIVE)) {

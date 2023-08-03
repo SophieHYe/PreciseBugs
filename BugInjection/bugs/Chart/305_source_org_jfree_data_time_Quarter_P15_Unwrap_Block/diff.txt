@@ -1,0 +1,18 @@
+--- /Quarter.java	2023-07-03 18:51:57.973707100 +0000
++++ /Chart-26/source/org/jfree/data/time/Quarter.java	2023-07-03 18:51:57.973707100 +0000
+@@ -303,10 +303,11 @@
+     public boolean equals(Object obj) {
+ 
+         if (obj != null) {
+-            if (obj instanceof Quarter) {
+-                Quarter target = (Quarter) obj;
+-                return (this.quarter == target.getQuarter()
+-                        && (this.year == target.getYearValue()));
++ 
++if (obj instanceof org.jfree.data.time.Quarter) {    org.jfree.data.time.Quarter target = ((org.jfree.data.time.Quarter) (obj));    return ((this.quarter) == (target.getQuarter())) && ((this.year) == (target.getYearValue()));}else {    return false;}; 
++ 
++ 
++ 
+             }
+             else {
+                 return false;

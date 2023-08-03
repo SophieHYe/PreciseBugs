@@ -1,0 +1,11 @@
+--- /Day.java	2023-07-03 18:36:16.266482473 +0000
++++ /Chart-26/source/org/jfree/data/time/Day.java	2023-07-03 18:36:16.266482473 +0000
+@@ -163,7 +163,7 @@
+         if (zone == null) {
+             throw new IllegalArgumentException("Null 'zone' argument.");
+         }
+-        Calendar calendar = Calendar.getInstance(zone);
++Calendar calendar = Calendar.getInstance ( RegularTimePeriod.DEFAULT_TIME_ZONE ) ;
+         calendar.setTime(time);
+         int d = calendar.get(Calendar.DAY_OF_MONTH);
+         int m = calendar.get(Calendar.MONTH) + 1;

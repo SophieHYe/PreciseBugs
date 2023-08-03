@@ -1,0 +1,11 @@
+--- /TimePeriodValuesCollection.java	2023-07-03 18:36:05.586627495 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValuesCollection.java	2023-07-03 18:36:05.586627495 +0000
+@@ -362,7 +362,7 @@
+     public double getDomainUpperBound(boolean includeInterval) {
+         double result = Double.NaN;
+         Range r = getDomainBounds(includeInterval);
+-        if (r != null) {
++if  ( position == null )  {
+             result = r.getUpperBound();
+         }
+         return result;

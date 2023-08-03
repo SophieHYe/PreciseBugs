@@ -1,0 +1,11 @@
+--- /Second.java	2023-07-03 18:49:37.839608077 +0000
++++ /Chart-26/source/org/jfree/data/time/Second.java	2023-07-03 18:49:37.839608077 +0000
+@@ -249,7 +249,7 @@
+     public RegularTimePeriod next() {
+         
+         Second result = null;
+-        if (this.second != LAST_SECOND_IN_MINUTE) {
++if  ( this.second >= LAST_SECOND_IN_MINUTE )  {
+             result = new Second(this.second + 1, getMinute());
+         }
+         else {

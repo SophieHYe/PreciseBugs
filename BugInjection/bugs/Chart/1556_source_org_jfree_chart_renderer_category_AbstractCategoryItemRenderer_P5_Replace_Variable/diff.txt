@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 19:01:01.142335566 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 19:01:01.142335566 +0000
+@@ -1553,8 +1553,8 @@
+         if (urlster != null) {
+             url = urlster.generateURL(dataset, row, column);
+         }
+-        CategoryItemEntity entity = new CategoryItemEntity(hotspot, tip, url,
+-                dataset, dataset.getRowKey(row), dataset.getColumnKey(column));
++CategoryItemEntity entity = new CategoryItemEntity ( hotspot, column, url, dataset, dataset.getRowKey ( row ) , dataset.getColumnKey ( tip )  ) ;
++ 
+         entities.add(entity);
+ 
+     }

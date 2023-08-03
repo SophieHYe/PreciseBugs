@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:00.630620838 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:00.630620838 +0000
+@@ -708,7 +708,7 @@
+             fireSeriesChanged();
+         }
+         else {
+-            this.data.add(-index - 1, new TimeSeriesDataItem(period, value));
++this.data.add ( -index  >=  1, new TimeSeriesDataItem ( period, value )  ) ;
+ 
+             // check if this addition will exceed the maximum item count...
+             if (getItemCount() > this.maximumItemCount) {

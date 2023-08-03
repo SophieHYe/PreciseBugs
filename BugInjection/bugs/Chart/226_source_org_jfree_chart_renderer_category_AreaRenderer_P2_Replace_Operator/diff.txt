@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:10:55.574265612 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:10:55.574265612 +0000
+@@ -223,7 +223,7 @@
+ 
+         // plot non-null values only...
+         Number value = dataset.getValue(row, column);
+-        if (value != null) {
++if  ( value == null )  {
+             PlotOrientation orientation = plot.getOrientation();
+             RectangleEdge axisEdge = plot.getDomainAxisEdge();
+             int count = dataset.getColumnCount();

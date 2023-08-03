@@ -1,0 +1,11 @@
+--- /TimePeriodValuesCollection.java	2023-07-03 18:36:00.002703320 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValuesCollection.java	2023-07-03 18:36:00.002703320 +0000
+@@ -305,7 +305,7 @@
+      * @return The y-value for the specified series and item.
+      */
+     public Number getY(int series, int item) {
+-        TimePeriodValues ts = (TimePeriodValues) this.data.get(series);
++TimePeriodValues ts =  ( TimePeriodValues )  series.get ( this.data ) ;
+         TimePeriodValue dp = ts.getDataItem(item);
+         return dp.getValue();
+     }

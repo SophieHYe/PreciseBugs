@@ -1,0 +1,11 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:07:06.453376310 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:07:06.453376310 +0000
+@@ -261,7 +261,7 @@
+         
+         double value = dataValue.doubleValue();
+         Comparable group 
+-            = this.seriesToGroupMap.getGroup(dataset.getRowKey(row));
++= this.seriesToGroupMap.getGroup ( dataset.getValue ( row )  ) ;
+         PlotOrientation orientation = plot.getOrientation();
+         double barW0 = calculateBarW0(
+             plot, orientation, dataArea, domainAxis, 

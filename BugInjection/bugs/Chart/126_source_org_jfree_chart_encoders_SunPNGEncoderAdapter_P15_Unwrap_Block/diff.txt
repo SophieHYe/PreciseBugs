@@ -1,0 +1,14 @@
+--- /SunPNGEncoderAdapter.java	2023-07-03 19:16:20.589852779 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/SunPNGEncoderAdapter.java	2023-07-03 19:16:20.589852779 +0000
+@@ -124,8 +124,9 @@
+             throw new IllegalArgumentException("Null 'image' argument.");
+         }
+         if (outputStream == null) {
+-            throw new IllegalArgumentException("Null 'outputStream' argument.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Null 'outputStream' argument."); 
++ 
+         ImageIO.write(bufferedImage, ImageFormat.PNG, outputStream);
+     }
+ 

@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:46.640369355 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:46.640369355 +0000
+@@ -201,7 +201,7 @@
+         for (int s = 0; s < this.data.size(); s++) {
+             updateXPoints((XYSeries) this.data.get(s));
+         }
+-        if (this.autoPrune) {
++if  ( savedState )  {
+             prune();
+         }
+         this.propagateEvents = true;

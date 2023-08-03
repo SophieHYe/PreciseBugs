@@ -1,0 +1,12 @@
+--- /StackedBarRenderer.java	2023-07-03 19:01:47.617704686 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:01:47.617704686 +0000
+@@ -252,7 +252,8 @@
+ 
+             double used = space * (1 - xAxis.getLowerMargin() 
+                                      - xAxis.getUpperMargin()
+-                                     - categoryMargin);
++ 
++ 
+             if (columns > 0) {
+                 state.setBarWidth(Math.min(used / columns, maxWidth));
+             }

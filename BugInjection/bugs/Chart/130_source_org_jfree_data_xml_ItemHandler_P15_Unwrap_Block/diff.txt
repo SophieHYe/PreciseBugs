@@ -1,0 +1,16 @@
+--- /ItemHandler.java	2023-07-03 18:33:04.729083243 +0000
++++ /Chart-26/source/org/jfree/data/xml/ItemHandler.java	2023-07-03 18:33:04.729083243 +0000
+@@ -128,9 +128,10 @@
+                              Attributes atts) throws SAXException {
+ 
+         if (qName.equals(ITEM_TAG)) {
+-            KeyHandler subhandler = new KeyHandler(this.root, this);
+-            this.root.pushSubHandler(subhandler);
+-        }
++ 
++org.jfree.data.xml.KeyHandler subhandler = new org.jfree.data.xml.KeyHandler(this.root, this); this.root.pushSubHandler(subhandler); 
++ 
++ 
+         else if (qName.equals(VALUE_TAG)) {
+             ValueHandler subhandler = new ValueHandler(this.root, this);
+             this.root.pushSubHandler(subhandler);

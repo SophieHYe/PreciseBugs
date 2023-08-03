@@ -1,0 +1,12 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:51.412982055 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:51.412982055 +0000
+@@ -278,7 +278,8 @@
+         TimeSeries result = null;
+         Iterator iterator = this.data.iterator();
+         while (iterator.hasNext()) {
+-            TimeSeries series = (TimeSeries) iterator.next();
++ 
++ 
+             Comparable k = series.getKey();
+             if (k != null && k.equals(key)) {
+                 result = series;

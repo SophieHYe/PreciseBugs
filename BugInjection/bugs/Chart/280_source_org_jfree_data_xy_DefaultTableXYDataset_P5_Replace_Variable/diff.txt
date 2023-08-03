@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:52.860285080 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:52.864285025 +0000
+@@ -277,7 +277,7 @@
+      * @return The x-value for the specified series and item.
+      */
+     public Number getX(int series, int item) {
+-        XYSeries s = (XYSeries) this.data.get(series);
++XYSeries s =  ( XYSeries )  series.get ( this.data ) ;
+         XYDataItem dataItem = s.getDataItem(item);
+         return dataItem.getX();
+     }

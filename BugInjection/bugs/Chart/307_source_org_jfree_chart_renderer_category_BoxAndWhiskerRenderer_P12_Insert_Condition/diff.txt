@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:16:06.338046283 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:16:06.338046283 +0000
+@@ -304,7 +304,7 @@
+                 categoryMargin = domainAxis.getCategoryMargin();
+             }
+             if (rows > 1) {
+-                currentItemMargin = getItemMargin();
++if  ( ! ( this.itemMargin == that.itemMargin )  )  { currentItemMargin = getItemMargin (  ) ; }
+             }
+             double used = space * (1 - domainAxis.getLowerMargin() 
+                                      - domainAxis.getUpperMargin()

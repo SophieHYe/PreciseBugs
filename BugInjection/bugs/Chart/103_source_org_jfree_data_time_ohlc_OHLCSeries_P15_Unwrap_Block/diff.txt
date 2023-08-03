@@ -1,0 +1,18 @@
+--- /OHLCSeries.java	2023-07-03 18:36:56.537935616 +0000
++++ /Chart-26/source/org/jfree/data/time/ohlc/OHLCSeries.java	2023-07-03 18:36:56.537935616 +0000
+@@ -101,10 +101,11 @@
+     public void add(RegularTimePeriod period, double open, double high, 
+             double low, double close) {
+         if (getItemCount() > 0) {
+-            OHLCItem item0 = (OHLCItem) this.getDataItem(0);
+-            if (!period.getClass().equals(item0.getPeriod().getClass())) {
+-                throw new IllegalArgumentException(
+-                        "Can't mix RegularTimePeriod class types.");
++ 
++org.jfree.data.time.ohlc.OHLCItem item0 = ((org.jfree.data.time.ohlc.OHLCItem) (this.getDataItem(0))); if (!(period.getClass().equals(item0.getPeriod().getClass()))) {    throw new java.lang.IllegalArgumentException("Can't mix RegularTimePeriod class types.");}; 
++ 
++ 
++ 
+             }
+         }
+         super.add(new OHLCItem(period, open, high, low, close), true);

@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:29:57.979618658 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:29:57.983618603 +0000
+@@ -237,7 +237,7 @@
+         DefaultPieDataset result = new DefaultPieDataset();
+         int rowCount = dataset.getRowCount();
+         for (int i = 0; i < rowCount; i++) {
+-            Comparable rowKey = dataset.getRowKey(i);
++Comparable rowKey = dataset .getRowIndex ( rowKey )  ;
+             result.setValue(rowKey, dataset.getValue(i, column));
+         }
+         return result;

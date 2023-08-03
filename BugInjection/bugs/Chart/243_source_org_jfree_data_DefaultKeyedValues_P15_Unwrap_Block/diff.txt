@@ -1,0 +1,16 @@
+--- /DefaultKeyedValues.java	2023-07-03 18:30:01.895565497 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues.java	2023-07-03 18:30:01.895565497 +0000
+@@ -241,9 +241,10 @@
+         }
+         int keyIndex = getIndex(key);
+         if (keyIndex >= 0) {
+-            DefaultKeyedValue kv = (DefaultKeyedValue) this.data.get(keyIndex);
+-            kv.setValue(value);
+-        }
++ 
++org.jfree.data.DefaultKeyedValue kv = ((org.jfree.data.DefaultKeyedValue) (this.data.get(keyIndex))); kv.setValue(value); 
++ 
++ 
+         else {
+             KeyedValue kv = new DefaultKeyedValue(key, value);
+             this.data.add(kv);

@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:13.298170558 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:13.302170505 +0000
+@@ -508,7 +508,7 @@
+         }
+         // else  [implicit here]
+         int newIndex = toFetch + this.oldestAt;
+-        if (newIndex >= this.historyCount) {
++if  ( this.oldestAt >= this.historyCount )  {
+             newIndex -= this.historyCount;
+         }
+         return newIndex;

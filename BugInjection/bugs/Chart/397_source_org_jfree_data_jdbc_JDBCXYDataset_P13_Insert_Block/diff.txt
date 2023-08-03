@@ -1,0 +1,11 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:10.237675526 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:10.237675526 +0000
+@@ -394,7 +394,7 @@
+         }
+         finally {
+             if (resultSet != null) {
+-                try {
++if  ( resultSet != null )  {     try {         resultSet.close (  ) ;     } catch  ( Exception e )  {     } }
+                     resultSet.close();
+                 }
+                 catch (Exception e) {

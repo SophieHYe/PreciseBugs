@@ -1,0 +1,11 @@
+--- /DefaultIntervalCategoryDataset.java	2023-07-03 18:39:34.035796828 +0000
++++ /Chart-26/source/org/jfree/data/category/DefaultIntervalCategoryDataset.java	2023-07-03 18:39:34.035796828 +0000
+@@ -646,7 +646,7 @@
+     public List getRowKeys() {
+         // the CategoryDataset interface expects a list of series, but
+         // we've stored them in an array...
+-        if (this.seriesKeys == null) {
++if  (  ( this.categoryKeys )  == null )  {     return new ArrayList (  ) ; }else {     return unmodifiableList ( asList ( this.categoryKeys )  ) ; }
+             return new java.util.ArrayList();
+         }
+         else {

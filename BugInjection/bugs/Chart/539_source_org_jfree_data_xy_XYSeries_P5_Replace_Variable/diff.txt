@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:42:17.125581982 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:17.129581928 +0000
+@@ -536,7 +536,7 @@
+             // Collections.binarySearch() and tells us where to insert the
+             // new item...otherwise it will be just -1 and we should just
+             // append the value to the list...
+-            if (this.autoSort) {
++if  ( notify )  {
+                 this.data.add(-index - 1, new XYDataItem(x, y));
+             }
+             else {

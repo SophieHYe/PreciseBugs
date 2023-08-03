@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:40:54.754700636 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:40:54.754700636 +0000
+@@ -297,7 +297,7 @@
+     public Number getEndX(int series, int item) {
+         Number endX = null;
+         Number x = this.dataset.getX(series, item);
+-        if (x != null) {
++if  ( 1.0 - getIntervalPositionFactor (  ) )  {
+             endX = new Double(x.doubleValue() 
+                 + ((1.0 - getIntervalPositionFactor()) * getIntervalWidth())); 
+         }

@@ -1,0 +1,11 @@
+--- /AbstractXYDataset.java	2023-07-03 18:34:18.056087616 +0000
++++ /Chart-26/source/org/jfree/data/xy/AbstractXYDataset.java	2023-07-03 18:34:18.060087561 +0000
+@@ -75,7 +75,7 @@
+     public double getXValue(int series, int item) {
+         double result = Double.NaN;
+         Number x = getX(series, item);
+-        if (x != null) {
++if  ( x != this )  {
+             result = x.doubleValue();   
+         }
+         return result;   

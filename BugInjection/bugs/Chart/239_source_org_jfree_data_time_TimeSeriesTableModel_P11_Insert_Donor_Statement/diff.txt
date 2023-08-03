@@ -1,0 +1,11 @@
+--- /TimeSeriesTableModel.java	2023-07-03 19:04:33.039459056 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesTableModel.java	2023-07-03 19:04:33.039459056 +0000
+@@ -236,7 +236,7 @@
+             if (column == 1) {
+                 try {
+                     Double v = Double.valueOf(value.toString());
+-                    this.series.update(row, v);
++this.series.addChangeListener ( this ) ;this.series.update ( row, v ) ;
+ 
+                 }
+                 catch (NumberFormatException nfe) {

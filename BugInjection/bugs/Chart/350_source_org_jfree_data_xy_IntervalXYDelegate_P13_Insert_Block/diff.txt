@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:41:04.162572871 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:41:04.162572871 +0000
+@@ -347,7 +347,7 @@
+     public double getDomainUpperBound(boolean includeInterval) {
+         double result = Double.NaN;
+         Range r = getDomainBounds(includeInterval);
+-        if (r != null) {
++if  ( r != null )  {     result = r.getLowerBound (  ) ; }
+             result = r.getUpperBound();
+         }
+         return result;

@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:41:12.762456080 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:41:12.762456080 +0000
+@@ -409,7 +409,7 @@
+      */
+     private double calculateIntervalForSeries(int series) {
+         double result = Double.POSITIVE_INFINITY;
+-        int itemCount = this.dataset.getItemCount(series);
++Number x = this.dataset.getX ( series, item ) ;int itemCount = this.dataset.getItemCount ( series ) ;
+         if (itemCount > 1) {
+             double prev = this.dataset.getXValue(series, 0);
+             for (int item = 1; item < itemCount; item++) {

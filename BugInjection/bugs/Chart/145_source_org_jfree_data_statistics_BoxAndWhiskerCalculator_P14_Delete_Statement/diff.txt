@@ -1,0 +1,10 @@
+--- /BoxAndWhiskerCalculator.java	2023-07-03 19:11:19.201944819 +0000
++++ /Chart-26/source/org/jfree/data/statistics/BoxAndWhiskerCalculator.java	2023-07-03 19:11:19.205944765 +0000
+@@ -143,6 +143,7 @@
+             double value = number.doubleValue();
+             if (value > upperOutlierThreshold) {
+                 outliers.add(number);
++ 
+                 if (value > maxOutlier && value <= upperFaroutThreshold) {
+                     maxOutlier = value;
+                 }

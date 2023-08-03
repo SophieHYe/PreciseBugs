@@ -1,0 +1,11 @@
+--- /DefaultHighLowDataset.java	2023-07-03 18:36:01.034689307 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultHighLowDataset.java	2023-07-03 18:36:01.034689307 +0000
+@@ -275,7 +275,7 @@
+     public double getOpenValue(int series, int item) {
+         double result = Double.NaN;
+         Number open = getOpen(series, item);
+-        if (open != null) {
++if  ( volume != null )  {     result = volume.doubleValue (  ) ; }
+             result = open.doubleValue();   
+         }
+         return result;   

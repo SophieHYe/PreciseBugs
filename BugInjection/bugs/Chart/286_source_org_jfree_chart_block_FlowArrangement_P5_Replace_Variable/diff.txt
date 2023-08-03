@@ -1,0 +1,11 @@
+--- /FlowArrangement.java	2023-07-03 18:49:03.812069595 +0000
++++ /Chart-26/source/org/jfree/chart/block/FlowArrangement.java	2023-07-03 18:49:03.812069595 +0000
+@@ -283,7 +283,7 @@
+ 
+         // first arrange without constraints, and see if this fits within
+         // the required ranges...
+-        Size2D s1 = arrangeNN(container, g2);
++Size2D s1 = arrangeNN ( g2, container ) ;
+         if (constraint.getWidthRange().contains(s1.width)) {
+             return s1;  // TODO: we didn't check the height yet
+         }

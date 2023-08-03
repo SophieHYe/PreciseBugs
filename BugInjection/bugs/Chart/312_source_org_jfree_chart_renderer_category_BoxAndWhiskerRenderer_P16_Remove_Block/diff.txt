@@ -1,0 +1,15 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:16:10.157994417 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:16:10.157994417 +0000
+@@ -310,9 +310,10 @@
+                                      - domainAxis.getUpperMargin()
+                                      - categoryMargin - currentItemMargin);
+             if ((rows * columns) > 0) {
+-                state.setBarWidth(used / (dataset.getColumnCount() 
++ 
++ 
+                         * dataset.getRowCount()));
+-            }
++ 
+             else {
+                 state.setBarWidth(used);
+             }

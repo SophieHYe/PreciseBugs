@@ -1,0 +1,13 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:03.788471186 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:03.788471186 +0000
+@@ -484,8 +484,8 @@
+      */
+     public Number getMinRegularValue(Comparable rowKey, Comparable columnKey) {
+         Number result = null;
+-        BoxAndWhiskerItem item = (BoxAndWhiskerItem) this.data.getObject(
+-                rowKey, columnKey);
++BoxAndWhiskerItem item =  ( BoxAndWhiskerItem )  columnKey.getObject ( rowKey, this.data ) ;
++ 
+         if (item != null) {
+             result = item.getMinRegularValue();
+         }

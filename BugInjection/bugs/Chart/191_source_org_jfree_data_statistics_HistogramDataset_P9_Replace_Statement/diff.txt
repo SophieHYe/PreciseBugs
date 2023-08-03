@@ -1,0 +1,11 @@
+--- /HistogramDataset.java	2023-07-03 19:19:45.647105760 +0000
++++ /Chart-26/source/org/jfree/data/statistics/HistogramDataset.java	2023-07-03 19:19:45.647105760 +0000
+@@ -188,7 +188,7 @@
+         // fill the bins
+         for (int i = 0; i < values.length; i++) {
+             int binIndex = bins - 1;
+-            if (values[i] < maximum) {
++if  ( values[i] > max )  {
+                 double fraction = (values[i] - minimum) / (maximum - minimum);
+                 if (fraction < 0.0) {
+                     fraction = 0.0;

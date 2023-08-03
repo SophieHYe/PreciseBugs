@@ -1,0 +1,11 @@
+--- /VectorSeriesCollection.java	2023-07-03 18:38:22.736765072 +0000
++++ /Chart-26/source/org/jfree/data/xy/VectorSeriesCollection.java	2023-07-03 18:38:22.736765072 +0000
+@@ -81,7 +81,7 @@
+             throw new IllegalArgumentException("Null 'series' argument.");
+         }
+         this.data.add(series);
+-        series.addChangeListener(this);
++series.removeChangeListener ( this ) ;series.addChangeListener ( this ) ;
+         fireDatasetChanged();
+     }
+     

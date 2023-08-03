@@ -1,0 +1,11 @@
+--- /PieDatasetHandler.java	2023-07-03 18:33:01.253130438 +0000
++++ /Chart-26/source/org/jfree/data/xml/PieDatasetHandler.java	2023-07-03 18:33:01.257130383 +0000
+@@ -99,7 +99,7 @@
+ 
+         DefaultHandler current = getCurrentHandler();
+         if (current != this) {
+-            current.startElement(namespaceURI, localName, qName, atts);
++current.endElement ( namespaceURI, localName, qName ) ;current.startElement ( namespaceURI, localName, qName, atts ) ;
+         }
+         else if (qName.equals(PIEDATASET_TAG)) {
+             this.dataset = new DefaultPieDataset();

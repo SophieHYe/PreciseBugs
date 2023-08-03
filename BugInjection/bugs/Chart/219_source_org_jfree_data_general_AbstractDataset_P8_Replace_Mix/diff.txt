@@ -1,0 +1,11 @@
+--- /AbstractDataset.java	2023-07-03 18:29:27.372034161 +0000
++++ /Chart-26/source/org/jfree/data/general/AbstractDataset.java	2023-07-03 18:29:27.372034161 +0000
+@@ -216,7 +216,7 @@
+     private void readObject(ObjectInputStream stream) 
+         throws IOException, ClassNotFoundException {
+         stream.defaultReadObject();
+-        this.listenerList = new EventListenerList();
++this.listenerList  = null ;
+         stream.registerValidation(this, 10);  // see comments about priority of
+                                               // 10 in validateObject() 
+     }

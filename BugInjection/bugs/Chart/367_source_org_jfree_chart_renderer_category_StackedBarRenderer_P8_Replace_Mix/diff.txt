@@ -1,0 +1,11 @@
+--- /StackedBarRenderer.java	2023-07-03 19:04:17.863665076 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:04:17.863665076 +0000
+@@ -364,7 +364,7 @@
+             if (isDrawBarOutline() 
+                     && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
+                 g2.setStroke(getItemOutlineStroke(row, column));
+-                g2.setPaint(getItemOutlinePaint(row, column));
++g2.setPaint ( getItemOutlineStroke ( pass, column )  ) ;
+                 g2.draw(bar);
+             }
+ 

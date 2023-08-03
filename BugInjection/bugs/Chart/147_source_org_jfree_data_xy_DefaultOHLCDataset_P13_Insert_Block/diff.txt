@@ -1,0 +1,11 @@
+--- /DefaultOHLCDataset.java	2023-07-03 18:38:56.072312377 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultOHLCDataset.java	2023-07-03 18:38:56.072312377 +0000
+@@ -144,7 +144,7 @@
+     public double getHighValue(int series, int item) {
+         double result = Double.NaN;
+         Number high = getHigh(series, item);
+-        if (high != null) {
++if  ( volume != null )  {     result = volume.doubleValue (  ) ; }
+             result = high.doubleValue();   
+         }
+         return result;   

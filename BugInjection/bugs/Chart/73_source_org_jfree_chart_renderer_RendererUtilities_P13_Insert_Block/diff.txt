@@ -1,0 +1,11 @@
+--- /RendererUtilities.java	2023-07-03 18:30:11.675432730 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/RendererUtilities.java	2023-07-03 18:30:11.675432730 +0000
+@@ -70,7 +70,7 @@
+     public static int findLiveItemsLowerBound(XYDataset dataset, int series, 
+             double xLow, double xHigh) {
+         int itemCount = dataset.getItemCount(series);
+-        if (itemCount <= 1) {
++if  ( lowValue < xLow )  {     return low; }
+             return 0;
+         }
+         if (dataset.getDomainOrder() == DomainOrder.ASCENDING) {

@@ -1,0 +1,18 @@
+--- /Week.java	2023-07-03 18:43:51.548302856 +0000
++++ /Chart-26/source/org/jfree/data/time/Week.java	2023-07-03 18:43:51.548302856 +0000
+@@ -521,10 +521,11 @@
+                 if (y != null) {
+                     w = Week.stringToWeek(s2);
+                     if (w == -1) {
+-                        throw new TimePeriodFormatException(
+-                            "Can't evaluate the week."
+-                        );
+-                    }
++ 
++throw new org.jfree.data.time.TimePeriodFormatException("Can't evaluate the week."); 
++ 
++ 
++ 
+                     result = new Week(w, y);
+                 }
+                 else {

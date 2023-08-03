@@ -1,0 +1,16 @@
+--- /Day.java	2023-07-03 19:03:18.736467753 +0000
++++ /Chart-26/source/org/jfree/data/time/Day.java	2023-07-03 19:03:18.736467753 +0000
+@@ -285,9 +285,10 @@
+         Day result;
+         int serial = this.serialDate.toSerial();
+         if (serial < SerialDate.SERIAL_UPPER_BOUND) {
+-            SerialDate tomorrow = SerialDate.createInstance(serial + 1);
+-            return new Day(tomorrow);
+-        }
++ 
++org.jfree.data.time.SerialDate tomorrow = org.jfree.data.time.SerialDate.createInstance((serial + 1)); return new org.jfree.data.time.Day(tomorrow); 
++ 
++ 
+         else {
+             result = null;
+         }

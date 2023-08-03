@@ -1,0 +1,14 @@
+--- /StackedBarRenderer.java	2023-07-03 19:01:13.882162632 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:01:13.882162632 +0000
+@@ -211,8 +211,9 @@
+      */
+     public Range findRangeBounds(CategoryDataset dataset) {
+         if (this.renderAsPercentages) {
+-            return new Range(0.0, 1.0);   
+-        }
++ 
++return new org.jfree.data.Range(0.0, 1.0); 
++ 
+         else {
+             return DatasetUtilities.findStackedRangeBounds(dataset, getBase());
+         }

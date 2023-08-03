@@ -1,0 +1,16 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:44.906555956 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:44.906555956 +0000
+@@ -395,9 +395,10 @@
+                 + "cannot add null array of values.");
+         }
+         if (seriesNumber >= this.valueHistory.length) {
+-            throw new IllegalArgumentException("TimeSeriesDataset.addSeries(): "
+-                + "cannot add more series than specified in c'tor");
+-        }
++ 
++throw new java.lang.IllegalArgumentException(("TimeSeriesDataset.addSeries(): " + "cannot add more series than specified in c'tor")); 
++ 
++ 
+         if (this.valueHistory[seriesNumber] == null) {
+             this.valueHistory[seriesNumber] 
+                 = new ValueSequence(this.historyCount);

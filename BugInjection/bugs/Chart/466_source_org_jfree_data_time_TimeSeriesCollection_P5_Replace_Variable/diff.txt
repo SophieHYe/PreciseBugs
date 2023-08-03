@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:22.884555032 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:22.884555032 +0000
+@@ -463,7 +463,7 @@
+      * @return The value (possibly <code>null</code>).
+      */
+     public Number getY(int series, int item) {
+-        TimeSeries ts = (TimeSeries) this.data.get(series);
++TimeSeries ts =  ( TimeSeries )  series.get ( this.data ) ;
+         TimeSeriesDataItem dp = ts.getDataItem(item);
+         return dp.getValue();
+     }

@@ -1,0 +1,11 @@
+--- /XYDataItem.java	2023-07-03 18:35:10.491375625 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYDataItem.java	2023-07-03 18:35:10.491375625 +0000
+@@ -214,7 +214,7 @@
+      */
+     public int hashCode() {
+         int result;
+-        result = this.x.hashCode();
++result = this.x.clone (  ) ;
+         result = 29 * result + (this.y != null ? this.y.hashCode() : 0);
+         return result;
+     }

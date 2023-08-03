@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:34:07.796226925 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:34:07.796226925 +0000
+@@ -1143,7 +1143,7 @@
+         // hasn't implemented RangeInfo, so we'll have to iterate...
+         else {
+ 
+-            double maximum = Double.NEGATIVE_INFINITY;
++if  ( minimum == Double.POSITIVE_INFINITY )  { double maximum = Double.NEGATIVE_INFINITY; }
+             int seriesCount = dataset.getRowCount();
+             int itemCount = dataset.getColumnCount();
+             for (int series = 0; series < seriesCount; series++) {

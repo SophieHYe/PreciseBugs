@@ -1,0 +1,13 @@
+--- /TimePeriodValuesCollection.java	2023-07-03 18:36:14.522506154 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValuesCollection.java	2023-07-03 18:36:14.522506154 +0000
+@@ -407,8 +407,8 @@
+                                 s2 + (e2 - s2) / 2);
+                     }
+                     else if (this.xPosition == TimePeriodAnchor.END) {
+-                        TimePeriod minEnd = series.getTimePeriod(
+-                                series.getMinEndIndex());
++TimePeriod minEnd = series.getTimePeriod ( series.getDataItem (  )  ) ;
++ 
+                         temp = new Range(minEnd.getEnd().getTime(), 
+                                 end.getEnd().getTime());
+                     }

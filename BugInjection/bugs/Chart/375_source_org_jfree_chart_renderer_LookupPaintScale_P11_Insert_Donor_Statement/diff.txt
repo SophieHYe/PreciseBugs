@@ -1,0 +1,11 @@
+--- /LookupPaintScale.java	2023-07-03 18:40:01.307426473 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/LookupPaintScale.java	2023-07-03 18:40:01.307426473 +0000
+@@ -372,7 +372,7 @@
+     private void readObject(ObjectInputStream stream) 
+             throws IOException, ClassNotFoundException {
+         stream.defaultReadObject();
+-        this.defaultPaint = SerialUtilities.readPaint(stream);
++this.defaultPaint = defaultPaint;this.defaultPaint = SerialUtilities.readPaint ( stream ) ;
+     }
+ 
+ }

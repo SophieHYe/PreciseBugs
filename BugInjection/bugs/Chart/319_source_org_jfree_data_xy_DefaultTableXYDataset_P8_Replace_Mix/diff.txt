@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:56.780231966 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:56.780231966 +0000
+@@ -316,7 +316,7 @@
+      *         <code>null</code>). 
+      */
+     public Number getY(int series, int index) {
+-        XYSeries ts = (XYSeries) this.data.get(series);
++XYSeries ts =  ( XYSeries )  this.data.remove ( index ) ;
+         XYDataItem dataItem = ts.getDataItem(index);
+         return dataItem.getY();
+     }

@@ -1,0 +1,18 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:05:15.354884591 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:05:15.354884591 +0000
+@@ -186,10 +186,11 @@
+         else if (plot instanceof XYPlot) {
+             XYItemRenderer renderer = ((XYPlot) plot).getRenderer();
+             if (renderer instanceof StandardXYItemRenderer) {
+-                StandardXYItemRenderer r = (StandardXYItemRenderer) renderer;
+-                this.drawLines = Boolean.valueOf(r.getPlotLines());
+-                this.drawShapes = Boolean.valueOf(r.getBaseShapesVisible());
+-            }
++ 
++org.jfree.chart.renderer.xy.StandardXYItemRenderer r = ((org.jfree.chart.renderer.xy.StandardXYItemRenderer) (renderer)); this.drawLines = java.lang.Boolean.valueOf(r.getPlotLines()); this.drawShapes = java.lang.Boolean.valueOf(r.getBaseShapesVisible()); 
++ 
++ 
++ 
+         }
+ 
+         setLayout(new BorderLayout());

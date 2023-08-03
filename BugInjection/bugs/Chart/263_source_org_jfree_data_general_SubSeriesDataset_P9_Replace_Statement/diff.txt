@@ -1,0 +1,11 @@
+--- /SubSeriesDataset.java	2023-07-03 18:34:41.967762934 +0000
++++ /Chart-26/source/org/jfree/data/general/SubSeriesDataset.java	2023-07-03 18:34:41.967762934 +0000
+@@ -260,7 +260,7 @@
+     public double getVolumeValue(int series, int item) {
+         double result = Double.NaN;
+         Number volume = getVolume(series, item);
+-        if (volume != null) {
++if  ( low != null )  {
+             result = volume.doubleValue();   
+         }
+         return result;   

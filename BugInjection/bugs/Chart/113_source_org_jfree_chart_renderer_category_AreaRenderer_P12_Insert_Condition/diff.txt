@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:10:01.806995606 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:10:01.810995553 +0000
+@@ -110,7 +110,7 @@
+      */
+     public AreaRenderer() {
+         super();
+-        this.endType = AreaRendererEndType.TAPER;
++if  ( this.endType == AreaRendererEndType.TRUNCATE )  { this.endType = AreaRendererEndType.TAPER; }
+     }
+ 
+     /**

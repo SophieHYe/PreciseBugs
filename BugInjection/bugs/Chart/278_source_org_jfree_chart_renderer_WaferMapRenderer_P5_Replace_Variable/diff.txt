@@ -1,0 +1,11 @@
+--- /WaferMapRenderer.java	2023-07-03 18:36:21.786407517 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/WaferMapRenderer.java	2023-07-03 18:36:21.786407517 +0000
+@@ -275,7 +275,7 @@
+         for (Iterator i = uniqueValues.iterator(); i.hasNext();) {
+             Number value = (Number) i.next();
+             while (value.doubleValue() > cutPoint) {
+-                cutPoint += valueStep;
++cutPoint += valueRange;
+                 paint++;
+                 if (paint > this.paintLimit) {
+                     paint = this.paintLimit;

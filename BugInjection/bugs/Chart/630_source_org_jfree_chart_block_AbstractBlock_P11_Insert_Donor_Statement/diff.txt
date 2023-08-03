@@ -1,0 +1,11 @@
+--- /AbstractBlock.java	2023-07-03 18:56:32.829977410 +0000
++++ /Chart-26/source/org/jfree/chart/block/AbstractBlock.java	2023-07-03 18:56:32.833977355 +0000
+@@ -627,7 +627,7 @@
+     private void readObject(ObjectInputStream stream) 
+         throws IOException, ClassNotFoundException {
+         stream.defaultReadObject();
+-        this.bounds = (Rectangle2D) SerialUtilities.readShape(stream);
++clone.bounds =  ( Rectangle2D )  ShapeUtilities.clone ( this.bounds ) ;this.bounds =  ( Rectangle2D )  SerialUtilities.readShape ( stream ) ;
+     }
+ 
+ }

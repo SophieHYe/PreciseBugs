@@ -1,0 +1,11 @@
+--- /XYBarDataset.java	2023-07-03 18:42:57.565034215 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYBarDataset.java	2023-07-03 18:42:57.569034160 +0000
+@@ -78,7 +78,7 @@
+     public XYBarDataset(XYDataset underlying, double barWidth) {
+         this.underlying = underlying;   
+         this.underlying.addChangeListener(this);
+-        this.barWidth = barWidth;
++if  ( this.barWidth != that.barWidth )  { this.barWidth = barWidth; }
+     }
+     
+     /**

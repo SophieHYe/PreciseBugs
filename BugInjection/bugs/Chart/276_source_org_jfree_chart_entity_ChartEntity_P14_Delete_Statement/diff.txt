@@ -1,0 +1,10 @@
+--- /ChartEntity.java	2023-07-03 19:19:24.091394947 +0000
++++ /Chart-26/source/org/jfree/chart/entity/ChartEntity.java	2023-07-03 19:19:24.091394947 +0000
+@@ -274,6 +274,7 @@
+         PathIterator pi = shape.getPathIterator(null, 1.0);
+         while (!pi.isDone()) {
+             pi.currentSegment(coords);
++ 
+             if (first) {
+                 first = false;
+                 result.append((int) coords[0]);

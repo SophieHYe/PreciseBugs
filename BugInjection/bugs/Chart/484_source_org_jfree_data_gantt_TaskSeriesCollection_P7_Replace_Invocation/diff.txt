@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:37:12.253722205 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:37:12.257722151 +0000
+@@ -481,7 +481,7 @@
+      */
+     public int getSubIntervalCount(Comparable rowKey, Comparable columnKey) {
+         int result = 0;
+-        int row = getRowIndex(rowKey);
++int row = getColumnIndex ( rowKey ) ;
+         TaskSeries series = (TaskSeries) this.data.get(row);
+         Task task = series.get(columnKey.toString());
+         if (task != null) {

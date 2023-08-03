@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:33:37.584637139 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:33:37.588637085 +0000
+@@ -1101,7 +1101,7 @@
+                         value = dataset.getYValue(series, item);
+                     }
+                     if (!Double.isNaN(value)) {
+-                        minimum = Math.min(minimum, value);
++if  ( value != null )  {     minimum = min ( minimum, value.doubleValue (  )  ) ; }
+                     }
+ 
+                 }

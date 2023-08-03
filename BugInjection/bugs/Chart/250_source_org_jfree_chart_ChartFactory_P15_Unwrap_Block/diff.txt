@@ -1,0 +1,14 @@
+--- /ChartFactory.java	2023-07-03 17:50:48.511502115 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 17:50:48.515502060 +0000
+@@ -248,8 +248,9 @@
+                     StandardPieToolTipGenerator.DEFAULT_SECTION_LABEL_FORMAT));
+         }
+         if (urls) {
+-            plot.setURLGenerator(new StandardPieURLGenerator());
+-        }
++ 
++plot.setURLGenerator(new org.jfree.chart.urls.StandardPieURLGenerator()); 
++ 
+         return new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, 
+                 legend);
+ 

@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:45.853057492 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:45.857057438 +0000
+@@ -259,7 +259,7 @@
+      * @return The series.
+      */
+     public TimeSeries getSeries(int series) {
+-        if ((series < 0) || (series >= getSeriesCount())) {
++if  ( series == null )  {     throw new IllegalArgumentException ( "Null 'series' argument." ) ; }
+             throw new IllegalArgumentException(
+                 "The 'series' argument is out of bounds (" + series + ").");
+         }

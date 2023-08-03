@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:32:44.653355819 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:32:44.653355819 +0000
+@@ -901,7 +901,7 @@
+             throw new IllegalArgumentException("Null 'orientation' argument.");
+         }
+         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
+-        ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
++ValueAxis valueAxis = ValueAxis valueAxis =  new DateAxis ( timeAxisLabel )  ;
+ 
+         StackedAreaRenderer renderer = new StackedAreaRenderer();
+         if (tooltips) {

@@ -1,0 +1,14 @@
+--- /ColumnArrangement.java	2023-07-03 18:32:33.093512771 +0000
++++ /Chart-26/source/org/jfree/chart/block/ColumnArrangement.java	2023-07-03 18:32:33.097512717 +0000
+@@ -321,8 +321,9 @@
+                 y = y + sizes[i].height + this.verticalGap;
+             }
+             if (blockCount > 1) {
+-                height = height + this.verticalGap * (blockCount - 1);   
+-            }
++ 
++height = height + ((this.verticalGap) * (blockCount - 1)); 
++ 
+             if (this.horizontalAlignment != HorizontalAlignment.LEFT) {
+                 for (int i = 0; i < blocks.size(); i++) {
+                     //Block b = (Block) blocks.get(i);

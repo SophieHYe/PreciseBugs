@@ -1,0 +1,14 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:44:31.755758023 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:44:31.755758023 +0000
+@@ -545,8 +545,9 @@
+             CategoryURLGenerator generator, boolean notify) {
+         this.urlGeneratorList.set(series, generator);
+         if (notify) {
+-            notifyListeners(new RendererChangeEvent(this));
+-        }
++ 
++notifyListeners(new org.jfree.chart.event.RendererChangeEvent(this)); 
++ 
+     }
+ 
+     /**

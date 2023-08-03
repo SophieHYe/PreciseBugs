@@ -1,0 +1,10 @@
+--- /Millisecond.java	2023-07-03 18:48:16.024717680 +0000
++++ /Chart-26/source/org/jfree/data/time/Millisecond.java	2023-07-03 18:48:16.024717680 +0000
+@@ -153,6 +153,7 @@
+      */
+     public Millisecond(Date time, TimeZone zone) {
+         Calendar calendar = Calendar.getInstance(zone);
++ 
+         calendar.setTime(time);
+         this.millisecond = calendar.get(Calendar.MILLISECOND);
+         this.second = (byte) calendar.get(Calendar.SECOND);

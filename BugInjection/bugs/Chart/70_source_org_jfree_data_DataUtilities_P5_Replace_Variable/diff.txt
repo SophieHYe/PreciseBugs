@@ -1,0 +1,11 @@
+--- /DataUtilities.java	2023-07-03 18:31:22.482471450 +0000
++++ /Chart-26/source/org/jfree/data/DataUtilities.java	2023-07-03 18:31:22.482471450 +0000
+@@ -67,7 +67,7 @@
+         double total = 0.0;
+         int rowCount = data.getRowCount();
+         for (int r = 0; r < rowCount; r++) {
+-            Number n = data.getValue(r, column);
++Number n = column.getValue ( r, data ) ;
+             if (n != null) {
+                 total += n.doubleValue();   
+             }

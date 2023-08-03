@@ -1,0 +1,10 @@
+--- /OutlierListCollection.java	2023-07-03 18:40:36.938942582 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/OutlierListCollection.java	2023-07-03 18:40:36.942942528 +0000
+@@ -180,6 +180,7 @@
+     private boolean updateOutlierList(OutlierList list, Outlier outlier) {
+         boolean result = false;
+         result = list.add(outlier);
++ 
+         list.updateAveragedOutlier();
+         list.setMultiple(true);
+         return result;

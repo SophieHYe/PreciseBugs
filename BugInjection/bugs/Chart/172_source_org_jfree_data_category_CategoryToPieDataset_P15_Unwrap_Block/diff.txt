@@ -1,0 +1,18 @@
+--- /CategoryToPieDataset.java	2023-07-03 18:40:06.555355204 +0000
++++ /Chart-26/source/org/jfree/data/category/CategoryToPieDataset.java	2023-07-03 18:40:06.555355204 +0000
+@@ -170,10 +170,11 @@
+     public Number getValue(int item) {
+         Number result = null;
+         if (item < 0 || item >= getItemCount()) {
+-            // this will include the case where the underlying dataset is null
+-            throw new IndexOutOfBoundsException(
+-                    "The 'item' index is out of bounds.");
+-        }
++ 
++throw new java.lang.IndexOutOfBoundsException("The 'item' index is out of bounds."); 
++ 
++ 
++ 
+         if (this.extract == TableOrder.BY_ROW) {
+             result = this.source.getValue(this.index, item);
+         }

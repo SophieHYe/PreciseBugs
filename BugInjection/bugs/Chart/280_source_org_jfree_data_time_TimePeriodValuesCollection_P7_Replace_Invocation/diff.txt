@@ -1,0 +1,11 @@
+--- /TimePeriodValuesCollection.java	2023-07-03 18:35:55.710761600 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValuesCollection.java	2023-07-03 18:35:55.710761600 +0000
+@@ -277,7 +277,7 @@
+      * @return The starting X value for the specified series and item.
+      */
+     public Number getStartX(int series, int item) {
+-        TimePeriodValues ts = (TimePeriodValues) this.data.get(series);
++TimePeriodValues ts =  ( TimePeriodValues )  this.data.add ( series ) ;
+         TimePeriodValue dp = ts.getDataItem(item);
+         return new Long(dp.getPeriod().getStart().getTime());
+     }

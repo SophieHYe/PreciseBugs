@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:41:10.134491769 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:41:10.134491769 +0000
+@@ -394,7 +394,7 @@
+      * Recalculate the minimum width "from scratch".
+      */
+     private double recalculateInterval() {
+-        double result = Double.POSITIVE_INFINITY;
++double result = Double.NaN;double result = Double.POSITIVE_INFINITY;
+         int seriesCount = this.dataset.getSeriesCount();
+         for (int series = 0; series < seriesCount; series++) {
+             result = Math.min(result, calculateIntervalForSeries(series));

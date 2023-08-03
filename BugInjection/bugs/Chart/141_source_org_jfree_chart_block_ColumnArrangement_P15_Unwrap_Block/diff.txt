@@ -1,0 +1,16 @@
+--- /ColumnArrangement.java	2023-07-03 18:29:25.344061691 +0000
++++ /Chart-26/source/org/jfree/chart/block/ColumnArrangement.java	2023-07-03 18:29:25.344061691 +0000
+@@ -139,9 +139,10 @@
+             }
+         }
+         else if (w == LengthConstraintType.FIXED) {
+-            if (h == LengthConstraintType.NONE) {
+-                throw new RuntimeException("Not implemented.");  
+-            }
++ 
++if (h == (LengthConstraintType.NONE)) {    throw new java.lang.RuntimeException("Not implemented.");}else    if (h == (LengthConstraintType.FIXED)) {        return arrangeFF(container, g2, constraint);    }else        if (h == (LengthConstraintType.RANGE)) {            throw new java.lang.RuntimeException("Not implemented.");        }    ; 
++ 
++ 
+             else if (h == LengthConstraintType.FIXED) {
+                 return arrangeFF(container, g2, constraint); 
+             }

@@ -1,0 +1,11 @@
+--- /CategoryToPieDataset.java	2023-07-03 18:40:20.535165353 +0000
++++ /Chart-26/source/org/jfree/data/category/CategoryToPieDataset.java	2023-07-03 18:40:20.535165353 +0000
+@@ -220,7 +220,7 @@
+     public int getIndex(Comparable key) {
+         int result = -1;
+         if (this.source != null) {
+-            if (this.extract == TableOrder.BY_ROW) {
++if  ( keyIndex !=  ( -1 )  )  {     if  (  ( this.extract )  ==  ( BY_ROW )  )  {         result = getValue ( this.index, keyIndex ) ;     }else         if  (  ( this.extract )  ==  ( BY_COLUMN )  )  {             result = getValue ( keyIndex, this.index ) ;         }      }
+                 result = this.source.getColumnIndex(key);
+             }
+             else if (this.extract == TableOrder.BY_COLUMN) {

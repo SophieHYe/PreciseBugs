@@ -1,0 +1,12 @@
+--- /StackedBarRenderer.java	2023-07-03 19:01:46.377721518 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:01:46.377721518 +0000
+@@ -236,7 +236,8 @@
+         CategoryDataset data = plot.getDataset(rendererIndex);
+         if (data != null) {
+             PlotOrientation orientation = plot.getOrientation();
+-            double space = 0.0;
++ 
++ 
+             if (orientation == PlotOrientation.HORIZONTAL) {
+                 space = dataArea.getHeight();
+             }

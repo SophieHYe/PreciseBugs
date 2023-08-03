@@ -1,0 +1,13 @@
+--- /DefaultTitleEditor.java	2023-07-03 19:13:08.624459173 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultTitleEditor.java	2023-07-03 19:13:08.624459173 +0000
+@@ -110,8 +110,8 @@
+      */
+     public DefaultTitleEditor(Title title) {
+ 
+-        TextTitle t = (title != null ? (TextTitle) title 
+-                : new TextTitle(localizationResources.getString("Title")));
++JLabel titleLabel = new JLabel ( localizationResources.getString ( "Text" )  ) ;TextTitle t =  ( title != null ?  ( TextTitle )  title : new TextTitle ( localizationResources.getString ( "Title" )  )  ) ;
++ 
+         this.showTitle = (title != null);
+         this.titleFont = t.getFont();
+         this.titleField = new JTextField(t.getText());

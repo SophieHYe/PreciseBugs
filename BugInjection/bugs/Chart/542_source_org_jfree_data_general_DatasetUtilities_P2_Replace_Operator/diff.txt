@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:40.743038114 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:40.747038060 +0000
+@@ -539,7 +539,7 @@
+ 
+         for (int item = 0; item < itemCount; item++) {
+             Number y = dataset.getValue(item);
+-            if (y != null) {
++if  ( y == null )  {
+                 double yy = y.doubleValue();
+                 if (yy > 0.0) {
+                     return false;

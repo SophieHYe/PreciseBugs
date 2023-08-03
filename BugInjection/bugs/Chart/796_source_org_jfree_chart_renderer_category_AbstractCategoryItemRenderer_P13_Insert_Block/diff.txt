@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:46:00.478555491 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:46:00.482555436 +0000
+@@ -793,7 +793,7 @@
+         }
+ 
+         Paint paint = plot.getRangeGridlinePaint();
+-        if (paint == null) {
++if  ( stroke == null )  {     stroke = DEFAULT_GRIDLINE_STROKE; }
+             paint = CategoryPlot.DEFAULT_GRIDLINE_PAINT;
+         }
+         g2.setPaint(paint);

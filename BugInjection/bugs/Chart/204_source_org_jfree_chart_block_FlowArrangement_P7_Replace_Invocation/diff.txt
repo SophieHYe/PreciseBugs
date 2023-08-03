@@ -1,0 +1,15 @@
+--- /FlowArrangement.java	2023-07-03 18:48:36.008446673 +0000
++++ /Chart-26/source/org/jfree/chart/block/FlowArrangement.java	2023-07-03 18:48:36.008446673 +0000
+@@ -201,9 +201,9 @@
+                     // place in this row (truncated) anyway
+                     block.setBounds(
+                         new Rectangle2D.Double(
+-                            x, y, Math.min(size.width, width - x), size.height
+-                        )
+-                    );
++x, y, Math .max ( hGap , maxHeight )  , size.height ) ) ;
++ 
++ 
+                     x = 0.0;
+                     y = y + size.height + this.verticalGap;
+                 }

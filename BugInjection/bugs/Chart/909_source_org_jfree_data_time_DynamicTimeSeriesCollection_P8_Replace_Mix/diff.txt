@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:02:33.197085955 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:02:33.197085955 +0000
+@@ -906,7 +906,7 @@
+     private long getX(RegularTimePeriod period) {
+         switch (this.position) {
+             case (START) : 
+-                return period.getFirstMillisecond(this.workingCalendar);
++return period.getLastMillisecond ( workingCalendar ) ;
+             case (MIDDLE) : 
+                 return period.getMiddleMillisecond(this.workingCalendar);
+             case (END) : 

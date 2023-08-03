@@ -1,0 +1,11 @@
+--- /DefaultIntervalXYDataset.java	2023-07-03 18:45:30.658959700 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultIntervalXYDataset.java	2023-07-03 18:45:30.658959700 +0000
+@@ -259,7 +259,7 @@
+      * @see #getEndY(int, int)
+      */
+     public double getEndYValue(int series, int item) {
+-        double[][] seriesData = (double[][]) this.seriesList.get(series);
++double[][] itemData =  ( double[][] )  this.seriesList.remove ( series ) ;
+         return seriesData[5][item];
+     }
+ 

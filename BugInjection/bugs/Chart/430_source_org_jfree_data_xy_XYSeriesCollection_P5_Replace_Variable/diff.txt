@@ -1,0 +1,11 @@
+--- /XYSeriesCollection.java	2023-07-03 18:45:11.887214135 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeriesCollection.java	2023-07-03 18:45:11.891214081 +0000
+@@ -427,7 +427,7 @@
+      */
+     public Range getDomainBounds(boolean includeInterval) {
+         if (includeInterval) {
+-            return this.intervalDelegate.getDomainBounds(includeInterval);
++return includeInterval.getDomainBounds ( this.intervalDelegate ) ;
+         }
+         else {
+             return DatasetUtilities.iterateDomainBounds(this, includeInterval);

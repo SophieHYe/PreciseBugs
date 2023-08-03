@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:31:31.378350674 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:31:31.382350619 +0000
+@@ -742,7 +742,7 @@
+         Range result = null;
+         if (dataset instanceof RangeInfo) {
+             RangeInfo info = (RangeInfo) dataset;
+-            result = info.getRangeBounds(includeInterval);
++return findRangeBounds ( dataset, true ) ;result = info.getRangeBounds ( includeInterval ) ;
+         }
+         else {
+             result = iterateCategoryRangeBounds(dataset, includeInterval);

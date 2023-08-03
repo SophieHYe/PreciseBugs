@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:15:24.374616042 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:15:24.374616042 +0000
+@@ -251,7 +251,7 @@
+         }
+         Shape shape = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
+         Paint paint = lookupSeriesPaint(series);
+-        Paint outlinePaint = lookupSeriesOutlinePaint(series);
++Paint outlinePaint = lookupSeriesOutlinePaint ( datasetIndex ) ;
+         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
+         LegendItem result = new LegendItem(label, description, toolTipText, 
+                 urlText, shape, paint, outlineStroke, outlinePaint);

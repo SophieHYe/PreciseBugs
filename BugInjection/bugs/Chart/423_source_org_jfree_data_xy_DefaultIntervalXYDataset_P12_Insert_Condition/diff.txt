@@ -1,0 +1,11 @@
+--- /DefaultIntervalXYDataset.java	2023-07-03 18:45:46.874739898 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultIntervalXYDataset.java	2023-07-03 18:45:46.878739843 +0000
+@@ -420,7 +420,7 @@
+         }
+         int seriesIndex = indexOf(seriesKey);
+         if (seriesIndex == -1) {  // add a new series
+-            this.seriesKeys.add(seriesKey);
++if  ( !this.seriesKeys.equals ( that.seriesKeys )  )  { this.seriesKeys.add ( seriesKey ) ; }
+             this.seriesList.add(data);
+         }
+         else {  // replace an existing series

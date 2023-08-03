@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:41:04.770564615 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:41:04.774564560 +0000
+@@ -365,7 +365,7 @@
+     public Range getDomainBounds(boolean includeInterval) {
+         // first get the range without the interval, then expand it for the
+         // interval width
+-        Range range = DatasetUtilities.findDomainBounds(this.dataset, false);
++Range range = DatasetUtilities.findDomainBounds ( this.dataset, true ) ;
+         if (includeInterval && range != null) {
+             double lowerAdj = getIntervalWidth() * getIntervalPositionFactor();
+             double upperAdj = getIntervalWidth() - lowerAdj;

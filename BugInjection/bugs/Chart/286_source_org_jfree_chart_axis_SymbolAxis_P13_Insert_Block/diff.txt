@@ -1,0 +1,11 @@
+--- /SymbolAxis.java	2023-07-03 18:34:17.152099890 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:17.152099890 +0000
+@@ -283,7 +283,7 @@
+         if (RectangleEdge.isTopOrBottom(edge)) {
+             drawGridBandsHorizontal(g2, plotArea, dataArea, true, ticks);
+         }
+-        else if (RectangleEdge.isLeftOrRight(edge)) {
++if  ( isLeftOrRight ( edge )  )  {     ticks = refreshTicksVertical ( g2, dataArea, edge ) ; }
+             drawGridBandsVertical(g2, plotArea, dataArea, true, ticks);
+         }
+         g2.setClip(savedClip);

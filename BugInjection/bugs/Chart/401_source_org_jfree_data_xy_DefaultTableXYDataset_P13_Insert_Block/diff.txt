@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:44:09.024066060 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:44:09.028066006 +0000
+@@ -398,7 +398,7 @@
+     public void removeSeries(int series) {
+ 
+         // check arguments...
+-        if ((series < 0) || (series > getSeriesCount())) {
++if  ( x == null )  {     throw new IllegalArgumentException ( "Null 'x' argument." ) ; }
+             throw new IllegalArgumentException("Index outside valid range.");
+         }
+ 

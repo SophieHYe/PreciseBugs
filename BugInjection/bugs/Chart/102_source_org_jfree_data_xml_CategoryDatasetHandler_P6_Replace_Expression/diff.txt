@@ -1,0 +1,11 @@
+--- /CategoryDatasetHandler.java	2023-07-03 18:33:24.940808815 +0000
++++ /Chart-26/source/org/jfree/data/xml/CategoryDatasetHandler.java	2023-07-03 18:33:24.940808815 +0000
+@@ -99,7 +99,7 @@
+                              Attributes atts) throws SAXException {
+ 
+         DefaultHandler current = getCurrentHandler();
+-        if (current != this) {
++if  ( "Element not recognised: " + qName )  {
+             current.startElement(namespaceURI, localName, qName, atts);
+         }
+         else if (qName.equals(CATEGORYDATASET_TAG)) {

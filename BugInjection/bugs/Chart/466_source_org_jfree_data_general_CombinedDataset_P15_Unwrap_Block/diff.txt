@@ -1,0 +1,14 @@
+--- /CombinedDataset.java	2023-07-03 18:35:48.274862572 +0000
++++ /Chart-26/source/org/jfree/data/general/CombinedDataset.java	2023-07-03 18:35:48.274862572 +0000
+@@ -464,8 +464,9 @@
+     public Number getEndY(int series, int item) {
+         DatasetInfo di = getDatasetInfo(series);
+         if (di.data instanceof IntervalXYDataset) {
+-            return ((IntervalXYDataset) di.data).getEndY(di.series, item);
+-        }
++ 
++return ((org.jfree.data.xy.IntervalXYDataset) (di.data)).getEndY(di.series, item); 
++ 
+         else {
+             return getY(series, item);
+         }

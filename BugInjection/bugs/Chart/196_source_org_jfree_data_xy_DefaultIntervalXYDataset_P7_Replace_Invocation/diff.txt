@@ -1,0 +1,11 @@
+--- /DefaultIntervalXYDataset.java	2023-07-03 18:45:27.123007629 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultIntervalXYDataset.java	2023-07-03 18:45:27.127007575 +0000
+@@ -193,7 +193,7 @@
+      * @see #getStartX(int, int)
+      */
+     public double getStartXValue(int series, int item) {
+-        double[][] seriesData = (double[][]) this.seriesList.get(series);
++double[][] seriesData =  ( double[][] )  this.seriesList.remove ( series ) ;
+         return seriesData[1][item];
+     }
+ 

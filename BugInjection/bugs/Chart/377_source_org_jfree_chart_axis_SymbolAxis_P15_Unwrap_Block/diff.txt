@@ -1,0 +1,14 @@
+--- /SymbolAxis.java	2023-07-03 18:34:24.799996044 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:24.799996044 +0000
+@@ -375,8 +375,9 @@
+         double outlineStrokeWidth;
+         Stroke outlineStroke = getPlot().getOutlineStroke();
+         if (outlineStroke != null && outlineStroke instanceof BasicStroke) {
+-            outlineStrokeWidth = ((BasicStroke) outlineStroke).getLineWidth();
+-        }
++ 
++outlineStrokeWidth = ((java.awt.BasicStroke) (outlineStroke)).getLineWidth(); 
++ 
+         else {
+             outlineStrokeWidth = 1d;
+         }

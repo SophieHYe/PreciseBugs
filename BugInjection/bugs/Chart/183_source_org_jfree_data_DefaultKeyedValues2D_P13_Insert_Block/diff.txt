@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:31:43.194190255 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:31:43.194190255 +0000
+@@ -180,7 +180,7 @@
+      * @see #getColumnIndex(Comparable)
+      */
+     public int getRowIndex(Comparable key) {
+-        if (key == null) {
++if  ( rowKey == null )  {     throw new IllegalArgumentException ( "Null 'rowKey' argument." ) ; }
+             throw new IllegalArgumentException("Null 'key' argument.");
+         }
+         if (this.sortRowKeys) {

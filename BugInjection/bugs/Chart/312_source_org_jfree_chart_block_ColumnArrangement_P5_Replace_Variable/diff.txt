@@ -1,0 +1,11 @@
+--- /ColumnArrangement.java	2023-07-03 18:32:56.761191426 +0000
++++ /Chart-26/source/org/jfree/chart/block/ColumnArrangement.java	2023-07-03 18:32:56.765191373 +0000
+@@ -309,7 +309,7 @@
+         if (blockCount > 0) {
+             Size2D[] sizes = new Size2D[blocks.size()];
+             for (int i = 0; i < blocks.size(); i++) {
+-                Block block = (Block) blocks.get(i);
++Block block =  ( Block )  i.get ( blocks ) ;
+                 sizes[i] = block.arrange(g2, RectangleConstraint.NONE);
+                 height = height + sizes[i].getHeight();
+                 maxWidth = Math.max(sizes[i].width, maxWidth);

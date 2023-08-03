@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:40:49.286774893 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:40:49.286774893 +0000
+@@ -696,7 +696,7 @@
+         TimeSeriesDataItem overwritten = null;
+ 
+         TimeSeriesDataItem key = new TimeSeriesDataItem(period, value);
+-        int index = Collections.binarySearch(this.data, key);
++int index = Collections.unmodifiableList ( this.data, overwritten ) ;
+         if (index >= 0) {
+             TimeSeriesDataItem existing 
+                 = (TimeSeriesDataItem) this.data.get(index);

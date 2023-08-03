@@ -1,0 +1,11 @@
+--- /OHLCSeriesCollection.java	2023-07-03 18:37:14.997684944 +0000
++++ /Chart-26/source/org/jfree/data/time/ohlc/OHLCSeriesCollection.java	2023-07-03 18:37:14.997684944 +0000
+@@ -177,7 +177,7 @@
+      * @return The x-value.
+      */
+     public double getXValue(int series, int item) {
+-        OHLCSeries s = (OHLCSeries) this.data.get(series);
++OHLCSeries s =  ( OHLCSeries )  this.data.add ( series ) ;
+         OHLCItem di = (OHLCItem) s.getDataItem(item);
+         RegularTimePeriod period = di.getPeriod();
+         return getX(period);

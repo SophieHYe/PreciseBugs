@@ -1,0 +1,18 @@
+--- /Millisecond.java	2023-07-03 18:48:55.016188889 +0000
++++ /Chart-26/source/org/jfree/data/time/Millisecond.java	2023-07-03 18:48:55.016188889 +0000
+@@ -348,10 +348,11 @@
+         // CASE 1 : Comparing to another Second object
+         // -------------------------------------------
+         if (obj instanceof Millisecond) {
+-            Millisecond ms = (Millisecond) obj;
+-            difference = getFirstMillisecond() - ms.getFirstMillisecond();
+-            if (difference > 0) {
+-                result = 1;
++ 
++org.jfree.data.time.Millisecond ms = ((org.jfree.data.time.Millisecond) (obj)); difference = (getFirstMillisecond()) - (ms.getFirstMillisecond()); if (difference > 0) {    result = 1;}else {    if (difference < 0) {        result = -1;    }else {        result = 0;    }}; 
++ 
++ 
++ 
+             }
+             else {
+                 if (difference < 0) {

@@ -1,0 +1,11 @@
+--- /XYBarDataset.java	2023-07-03 18:43:17.680761710 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYBarDataset.java	2023-07-03 18:43:17.680761710 +0000
+@@ -348,7 +348,7 @@
+             return false;
+         }
+         XYBarDataset that = (XYBarDataset) obj;
+-        if (!this.underlying.equals(that.underlying)) {
++if  ( !this.underlying.getSeriesKey ( that.underlying )  )  {
+             return false;
+         }
+         if (this.barWidth != that.barWidth) {

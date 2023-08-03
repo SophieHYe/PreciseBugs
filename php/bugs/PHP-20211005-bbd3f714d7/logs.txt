@@ -1,1 +1,0 @@
-commit bbd3f714d7a39b11b876ffca0b37520abadbef89Author: Nikita Popov <nikita.ppv@gmail.com>Date:  Tue Oct 5 11:26:32 2021 +0200  Fix COPY_TMP live range construction after optimization    If we optimize the FREE away, we should switch to constructing  a normal live range, rather than a split live range.    Fixes oss-fuzz #39548.

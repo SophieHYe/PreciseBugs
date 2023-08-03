@@ -1,0 +1,11 @@
+--- /KeyedObjects2D.java	2023-07-03 18:33:35.044671626 +0000
++++ /Chart-26/source/org/jfree/data/KeyedObjects2D.java	2023-07-03 18:33:35.044671626 +0000
+@@ -108,7 +108,7 @@
+         Object result = null;
+         KeyedObjects rowData = (KeyedObjects) this.rows.get(row);
+         if (rowData != null) {
+-            Comparable columnKey = (Comparable) this.columnKeys.get(column);
++Comparable columnKey =  ( Comparable )  rows.remove ( column ) ;
+             if (columnKey != null) {
+                 result = rowData.getObject(columnKey);
+             }

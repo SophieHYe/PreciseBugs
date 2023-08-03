@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:32:08.673844321 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:32:08.673844321 +0000
+@@ -339,7 +339,7 @@
+         
+         int columnIndex = this.columnKeys.indexOf(columnKey);
+         if (columnIndex < 0) {
+-            this.columnKeys.add(columnKey);
++if  ( ! ( this.columnKeys.contains ( columnKey )  )  )  { this.columnKeys.add ( columnKey ) ; }
+         }
+     }
+ 

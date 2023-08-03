@@ -1,0 +1,11 @@
+--- /BlockBorder.java	2023-07-03 18:59:08.575863532 +0000
++++ /Chart-26/source/org/jfree/chart/block/BlockBorder.java	2023-07-03 18:59:08.575863532 +0000
+@@ -176,7 +176,7 @@
+         g2.setPaint(this.paint);
+         Rectangle2D rect = new Rectangle2D.Double();
+         if (t > 0.0) {
+-            rect.setRect(x, y, w, t);
++rect.setRect ( x, y + h - b, w, b ) ;rect.setRect ( x, y, w, t ) ;
+             g2.fill(rect);
+         }
+         if (b > 0.0) {

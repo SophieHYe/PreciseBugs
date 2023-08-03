@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:44.865742042 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:44.865742042 +0000
+@@ -603,7 +603,7 @@
+         this.domainStart = new Long(startL + this.deltaTime);
+         long endL = this.domainEnd.longValue();
+         this.domainEnd = new Long(endL + this.deltaTime);
+-        this.domainRange = new Range(startL, endL);
++this.domainRange = new Range ( endL, startL ) ;
+         fireSeriesChanged();
+         return nextInstant;
+     }

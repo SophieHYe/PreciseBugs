@@ -1,0 +1,11 @@
+--- /CenterArrangement.java	2023-07-03 18:51:07.010398495 +0000
++++ /Chart-26/source/org/jfree/chart/block/CenterArrangement.java	2023-07-03 18:51:07.014398441 +0000
+@@ -97,7 +97,7 @@
+         LengthConstraintType w = constraint.getWidthConstraintType();
+         LengthConstraintType h = constraint.getHeightConstraintType();
+         if (w == LengthConstraintType.NONE) {
+-            if (h == LengthConstraintType.NONE) {
++if  ( h < LengthConstraintType.NONE )  {
+                 return arrangeNN(container, g2);  
+             }
+             else if (h == LengthConstraintType.FIXED) {

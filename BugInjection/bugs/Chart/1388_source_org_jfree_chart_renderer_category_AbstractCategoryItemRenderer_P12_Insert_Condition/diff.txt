@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:59:09.395852402 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:59:09.395852402 +0000
+@@ -1385,7 +1385,7 @@
+         }
+         if (this.legendItemURLGenerator instanceof PublicCloneable) {
+             clone.legendItemURLGenerator = (CategorySeriesLabelGenerator)
+-                    ObjectUtilities.clone(this.legendItemURLGenerator);
++if  ( !ObjectUtilities.equal ( this.baseURLGenerator, that.baseURLGenerator )  )  { ObjectUtilities.clone ( this.legendItemURLGenerator ) ; }
+         }
+         return clone;
+     }

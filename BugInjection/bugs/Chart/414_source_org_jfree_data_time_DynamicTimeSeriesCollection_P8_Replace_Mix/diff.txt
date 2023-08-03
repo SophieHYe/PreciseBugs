@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:53.406440576 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:53.410440522 +0000
+@@ -411,7 +411,7 @@
+         boolean fillNeeded = false;
+         if (srcLength < this.historyCount) {
+             fillNeeded = true;
+-            copyLength = srcLength;
++copyLength =  oldestAt;
+         }
+         //{
+         for (i = 0; i < copyLength; i++) { // deep copy from values[], caller 

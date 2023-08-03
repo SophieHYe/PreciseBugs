@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:13:02.764538735 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:13:02.764538735 +0000
+@@ -225,7 +225,7 @@
+         Number value = dataset.getValue(row, column);
+         if (value != null) {
+             PlotOrientation orientation = plot.getOrientation();
+-            RectangleEdge axisEdge = plot.getDomainAxisEdge();
++RectangleEdge edge = plot.getRangeAxisEdge (  ) ;RectangleEdge axisEdge = plot.getDomainAxisEdge (  ) ;
+             int count = dataset.getColumnCount();
+             float x0 = (float) domainAxis.getCategoryStart(column, count, 
+                     dataArea, axisEdge);

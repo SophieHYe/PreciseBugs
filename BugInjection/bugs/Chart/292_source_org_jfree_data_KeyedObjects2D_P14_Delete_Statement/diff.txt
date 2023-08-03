@@ -1,0 +1,12 @@
+--- /KeyedObjects2D.java	2023-07-03 18:33:49.916469698 +0000
++++ /Chart-26/source/org/jfree/data/KeyedObjects2D.java	2023-07-03 18:33:49.916469698 +0000
+@@ -290,7 +290,8 @@
+     public void removeColumn(Comparable columnKey) {
+         Iterator iterator = this.rows.iterator();
+         while (iterator.hasNext()) {
+-            KeyedObjects rowData = (KeyedObjects) iterator.next();
++ 
++ 
+             rowData.removeValue(columnKey);
+         }
+         this.columnKeys.remove(columnKey);

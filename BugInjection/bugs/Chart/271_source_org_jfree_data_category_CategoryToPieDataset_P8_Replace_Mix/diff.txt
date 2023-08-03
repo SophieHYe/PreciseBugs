@@ -1,0 +1,11 @@
+--- /CategoryToPieDataset.java	2023-07-03 18:40:39.678905372 +0000
++++ /Chart-26/source/org/jfree/data/category/CategoryToPieDataset.java	2023-07-03 18:40:39.678905372 +0000
+@@ -268,7 +268,7 @@
+                 result = this.source.getValue(this.index, keyIndex);
+             }
+             else if (this.extract == TableOrder.BY_COLUMN) {
+-                result = this.source.getValue(keyIndex, this.index);
++result = this.source.getColumnKey ( keyIndex, result ) ;
+             }
+         }
+         return result;

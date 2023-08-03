@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:13:54.379837938 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:13:54.379837938 +0000
+@@ -272,7 +272,7 @@
+             float yz = (float) rangeAxis.valueToJava2D(0.0, dataArea, edge);
+ 
+             g2.setPaint(getItemPaint(row, column));
+-            g2.setStroke(getItemStroke(row, column));
++if  ( !getItemVisible ( row, column )  )  { g2.setStroke ( getItemStroke ( row, column )  ) ; }
+ 
+             GeneralPath area = new GeneralPath();
+ 

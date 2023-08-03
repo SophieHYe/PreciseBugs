@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:56.817579799 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:56.817579799 +0000
+@@ -665,7 +665,7 @@
+      */
+     public void appendData(float[] newData) {
+         int nDataPoints = newData.length;
+-        if (nDataPoints > this.valueHistory.length) {
++if  ( seriesNumber >= this.valueHistory.length )  {
+             throw new IllegalArgumentException(
+                "More data than series to put them in"
+             );

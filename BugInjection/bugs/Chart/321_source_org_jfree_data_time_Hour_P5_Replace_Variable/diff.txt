@@ -1,0 +1,11 @@
+--- /Hour.java	2023-07-03 18:54:42.559473886 +0000
++++ /Chart-26/source/org/jfree/data/time/Hour.java	2023-07-03 18:54:42.559473886 +0000
+@@ -318,7 +318,7 @@
+         int year = this.day.getYear();
+         int month = this.day.getMonth() - 1;
+         int dom = this.day.getDayOfMonth();
+-        calendar.set(year, month, dom, this.hour, 0, 0);
++calendar.set ( dom, month, year, this.hour, 0, 0 ) ;
+         calendar.set(Calendar.MILLISECOND, 0);
+         //return calendar.getTimeInMillis();  // this won't work for JDK 1.3
+         return calendar.getTime().getTime();

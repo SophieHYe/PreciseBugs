@@ -1,0 +1,16 @@
+--- /JDBCCategoryDataset.java	2023-07-03 18:43:08.460886613 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCCategoryDataset.java	2023-07-03 18:43:08.460886613 +0000
+@@ -294,9 +294,10 @@
+         }
+         finally {
+             if (resultSet != null) {
+-                try {
+-                    resultSet.close();
+-                }
++ 
++try {    resultSet.close();} catch (java.lang.Exception e) {}; 
++ 
++ 
+                 catch (Exception e) {
+                     // report this?
+                 }

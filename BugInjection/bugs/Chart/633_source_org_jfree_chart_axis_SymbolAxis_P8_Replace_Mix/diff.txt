@@ -1,0 +1,11 @@
+--- /SymbolAxis.java	2023-07-03 18:35:18.331269170 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:35:18.335269116 +0000
+@@ -630,7 +630,7 @@
+                 double yy = valueToJava2D(currentTickValue, dataArea, edge);
+                 String tickLabel;
+                 NumberFormat formatter = getNumberFormatOverride();
+-                if (formatter != null) {
++if  ( formatter != this )  {
+                     tickLabel = formatter.format(currentTickValue);
+                 }
+                 else {

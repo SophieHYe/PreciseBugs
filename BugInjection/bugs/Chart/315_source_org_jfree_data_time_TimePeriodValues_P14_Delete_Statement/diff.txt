@@ -1,0 +1,12 @@
+--- /TimePeriodValues.java	2023-07-03 19:06:14.654079547 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValues.java	2023-07-03 19:06:14.654079547 +0000
+@@ -313,7 +313,8 @@
+         
+         if (this.minEndIndex >= 0) {
+             long minEnd = getDataItem(this.minEndIndex).getPeriod().getEnd()
+-                .getTime();
++ 
++ 
+             if (end < minEnd) {
+                 this.minEndIndex = index;           
+             }

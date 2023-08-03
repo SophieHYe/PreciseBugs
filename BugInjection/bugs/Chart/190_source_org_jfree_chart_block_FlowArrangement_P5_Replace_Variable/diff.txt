@@ -1,0 +1,11 @@
+--- /FlowArrangement.java	2023-07-03 18:48:41.312374742 +0000
++++ /Chart-26/source/org/jfree/chart/block/FlowArrangement.java	2023-07-03 18:48:41.312374742 +0000
+@@ -187,7 +187,7 @@
+         List itemsInRow = new ArrayList();
+         for (int i = 0; i < blocks.size(); i++) {
+             Block block = (Block) blocks.get(i);
+-            Size2D size = block.arrange(g2, RectangleConstraint.NONE);
++Size2D size = g2.arrange ( block, RectangleConstraint.NONE ) ;
+             if (x + size.width <= width) {
+                 itemsInRow.add(block);
+                 block.setBounds(

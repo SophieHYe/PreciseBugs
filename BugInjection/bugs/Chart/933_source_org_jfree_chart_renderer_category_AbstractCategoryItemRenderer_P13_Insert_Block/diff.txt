@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:52:19.969408677 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:52:19.973408623 +0000
+@@ -930,7 +930,7 @@
+                     plot.getRangeAxisEdge());
+             Line2D line = null;
+             if (orientation == PlotOrientation.HORIZONTAL) {
+-                line = new Line2D.Double(v, dataArea.getMinY(), v,
++if  ( orientation ==  ( VERTICAL )  )  {     line = new Double ( v, dataArea.getMinY (  ) , v, dataArea.getMaxY (  )  ) ; }
+                         dataArea.getMaxY());
+             }
+             else if (orientation == PlotOrientation.VERTICAL) {

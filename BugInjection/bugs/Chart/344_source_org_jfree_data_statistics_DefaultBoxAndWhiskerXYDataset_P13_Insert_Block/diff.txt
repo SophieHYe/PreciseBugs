@@ -1,0 +1,11 @@
+--- /DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:10:06.422932936 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:10:06.422932936 +0000
+@@ -341,7 +341,7 @@
+     public Number getMinOutlier(int series, int item) {
+         Number result = null;
+         BoxAndWhiskerItem stats = (BoxAndWhiskerItem) this.items.get(item);
+-        if (stats != null) {
++if  ( stats != null )  {     result = stats.getMinRegularValue (  ) ; }
+             result = stats.getMinOutlier();
+         }
+         return result;

@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:39:33.687801554 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:39:33.687801554 +0000
+@@ -404,7 +404,7 @@
+      */
+     public Collection getTimePeriodsUniqueToOtherSeries(TimeSeries series) {
+ 
+-        Collection result = new java.util.ArrayList();
++Collection result = new java.util. LinkedHashSet  (  ) ;
+         for (int i = 0; i < series.getItemCount(); i++) {
+             RegularTimePeriod period = series.getTimePeriod(i);
+             int index = getIndex(period);

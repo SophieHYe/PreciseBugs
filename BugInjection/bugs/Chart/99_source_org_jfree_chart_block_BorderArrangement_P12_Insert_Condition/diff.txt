@@ -1,0 +1,11 @@
+--- /BorderArrangement.java	2023-07-03 18:37:09.497759630 +0000
++++ /Chart-26/source/org/jfree/chart/block/BorderArrangement.java	2023-07-03 18:37:09.497759630 +0000
+@@ -96,7 +96,7 @@
+     public void add(Block block, Object key) {
+         
+         if (key == null) {
+-            this.centerBlock = block;
++if  ( this.centerBlock != null )  { this.centerBlock = block; }
+         }
+         else {
+             RectangleEdge edge = (RectangleEdge) key;

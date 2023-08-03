@@ -1,0 +1,14 @@
+--- /DefaultIntervalCategoryDataset.java	2023-07-03 18:39:06.228174460 +0000
++++ /Chart-26/source/org/jfree/data/category/DefaultIntervalCategoryDataset.java	2023-07-03 18:39:06.228174460 +0000
+@@ -457,8 +457,9 @@
+         }
+         int itemIndex = getColumnIndex(category);
+         if (itemIndex < 0) {
+-            throw new UnknownKeyException("Unknown 'category' key.");
+-        }
++ 
++throw new org.jfree.data.UnknownKeyException("Unknown 'category' key."); 
++ 
+         return getEndValue(seriesIndex, itemIndex);
+     }
+ 

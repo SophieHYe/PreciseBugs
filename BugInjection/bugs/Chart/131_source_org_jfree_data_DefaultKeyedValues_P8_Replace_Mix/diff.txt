@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues.java	2023-07-03 18:29:53.947673393 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues.java	2023-07-03 18:29:53.947673393 +0000
+@@ -128,7 +128,7 @@
+      */
+     public Comparable getKey(int index) {
+         Comparable result = null;
+-        KeyedValue item = (KeyedValue) this.data.get(index);
++KeyedValue item =  ( KeyedValue )  data.remove ( index ) ;
+         if (item != null) {
+             result = item.getKey();
+         }

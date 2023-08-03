@@ -1,0 +1,13 @@
+--- /ChartEntity.java	2023-07-03 19:19:38.427202633 +0000
++++ /Chart-26/source/org/jfree/chart/entity/ChartEntity.java	2023-07-03 19:19:38.427202633 +0000
+@@ -316,8 +316,8 @@
+             tag.append("<area shape=\"" + getShapeType() + "\"" + " coords=\"" 
+                     + getShapeCoords() + "\"");
+             if (hasToolTip) {
+-                tag.append(toolTipTagFragmentGenerator.generateToolTipFragment(
+-                        this.toolTipText));
++tag.append ( this.toolTipText.generateToolTipFragment ( toolTipTagFragmentGenerator )  ) ;
++ 
+             }
+             if (hasURL) {
+                 tag.append(urlTagFragmentGenerator.generateURLFragment(

@@ -1,0 +1,13 @@
+--- /DefaultStatisticalCategoryDataset.java	2023-07-03 19:16:12.465963081 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultStatisticalCategoryDataset.java	2023-07-03 19:16:12.465963081 +0000
+@@ -383,8 +383,8 @@
+         }
+         else {
+             if (!Double.isNaN(this.minimumRangeValue) 
+-                    && !Double.isNaN(this.maximumRangeValue))
+-            result = new Range(this.minimumRangeValue, this.maximumRangeValue);            
++&& !Double.isNaN ( minimumRangeValueIncStdDev )  ) result = new Range ( this.minimumRangeValue, this.maximumRangeValue ) ;
++ 
+         }
+         return result;
+     }

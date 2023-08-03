@@ -1,0 +1,15 @@
+--- /TimeSeries.java	2023-07-03 18:41:09.830495898 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:09.830495898 +0000
+@@ -764,9 +764,9 @@
+         // find the serial index of the period specified by 'latest'
+         long index = Long.MAX_VALUE; 
+         try {
+-            Method m = RegularTimePeriod.class.getDeclaredMethod(
+-                    "createInstance", new Class[] {Class.class, Date.class, 
+-                    TimeZone.class});
++Method m = RegularTimePeriod.class.getDeclaredMethod ( "createInstanceInstanc", new Class[] {Class.class, Date.class, TimeZone.class} ) ;
++ 
++ 
+             RegularTimePeriod newest = (RegularTimePeriod) m.invoke(
+                     this.timePeriodClass, new Object[] {this.timePeriodClass,
+                             new Date(latest), TimeZone.getDefault()});

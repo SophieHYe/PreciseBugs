@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:23.039278458 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:23.043278404 +0000
+@@ -429,7 +429,7 @@
+         for (int r = 0; r < data.length; r++) {
+             columnCount = Math.max(columnCount, data[r].length);
+         }
+-        if (columnKeys.length != columnCount) {
++if  (  ( rowKeys.length )  !=  ( data.length )  )  {     throw new IllegalArgumentException (  ( "The number of row keys does not match the number of rows in " + "the data array." )  ) ; }
+             throw new IllegalArgumentException(
+                 "The number of column keys does not match the number of "
+                 + "columns in the data array."

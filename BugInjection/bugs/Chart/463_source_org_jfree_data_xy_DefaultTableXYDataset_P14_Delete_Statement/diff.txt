@@ -1,0 +1,12 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:44:24.807852177 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:44:24.807852177 +0000
+@@ -461,7 +461,8 @@
+         HashSet hs = (HashSet) this.xPoints.clone();
+         Iterator iterator = hs.iterator();
+         while (iterator.hasNext()) {
+-            Number x = (Number) iterator.next();
++ 
++ 
+             if (canPrune(x)) {
+                 removeAllValuesForX(x);
+             }

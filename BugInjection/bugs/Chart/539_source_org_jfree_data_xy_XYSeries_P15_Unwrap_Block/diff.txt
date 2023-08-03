@@ -1,0 +1,14 @@
+--- /XYSeries.java	2023-07-03 18:42:23.141500471 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:23.141500471 +0000
+@@ -537,8 +537,9 @@
+             // new item...otherwise it will be just -1 and we should just
+             // append the value to the list...
+             if (this.autoSort) {
+-                this.data.add(-index - 1, new XYDataItem(x, y));
+-            }
++ 
++this.data.add(((-index) - 1), new org.jfree.data.xy.XYDataItem(x, y)); 
++ 
+             else {
+                 this.data.add(new XYDataItem(x, y));
+             }

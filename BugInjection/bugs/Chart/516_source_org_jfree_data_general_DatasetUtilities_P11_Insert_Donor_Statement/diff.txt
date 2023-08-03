@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:38.699065863 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:38.703065809 +0000
+@@ -513,7 +513,7 @@
+             double x = start + (step * i);
+             series.add(x, f.getValue(x));
+         }
+-        XYSeriesCollection collection = new XYSeriesCollection(series);
++XYSeries series = new XYSeries ( seriesKey ) ;XYSeriesCollection collection = new XYSeriesCollection ( series ) ;
+         return collection;
+ 
+     }

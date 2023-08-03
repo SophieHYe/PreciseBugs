@@ -1,0 +1,11 @@
+--- /StackedBarRenderer.java	2023-07-03 19:01:22.002052408 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:01:22.002052408 +0000
+@@ -234,7 +234,7 @@
+         // calculate the bar width
+         CategoryAxis xAxis = plot.getDomainAxisForDataset(rendererIndex);
+         CategoryDataset data = plot.getDataset(rendererIndex);
+-        if (data != null) {
++if  ( data != this )  {
+             PlotOrientation orientation = plot.getOrientation();
+             double space = 0.0;
+             if (orientation == PlotOrientation.HORIZONTAL) {

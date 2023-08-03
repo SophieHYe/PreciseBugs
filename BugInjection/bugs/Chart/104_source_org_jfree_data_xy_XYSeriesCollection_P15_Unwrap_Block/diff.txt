@@ -1,0 +1,16 @@
+--- /XYSeriesCollection.java	2023-07-03 18:44:43.451599521 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeriesCollection.java	2023-07-03 18:44:43.451599521 +0000
+@@ -102,9 +102,10 @@
+         this.intervalDelegate = new IntervalXYDelegate(this, false);
+         addChangeListener(this.intervalDelegate);
+         if (series != null) {
+-            this.data.add(series);
+-            series.addChangeListener(this);
+-        }
++ 
++this.data.add(series); series.addChangeListener(this); 
++ 
++ 
+     }
+     
+     /**

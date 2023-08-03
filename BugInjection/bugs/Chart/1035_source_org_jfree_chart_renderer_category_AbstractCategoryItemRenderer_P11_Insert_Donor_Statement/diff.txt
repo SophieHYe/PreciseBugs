@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:50:27.134939422 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:50:27.134939422 +0000
+@@ -1032,7 +1032,7 @@
+                     double y0 = dataArea.getMinY();
+                     double y1 = dataArea.getMaxY();
+                     g2.setPaint(im.getOutlinePaint());
+-                    g2.setStroke(im.getOutlineStroke());
++Stroke stroke = plot.getDomainGridlineStroke (  ) ;g2.setStroke ( im.getOutlineStroke (  )  ) ;
+                     if (range.contains(start)) {
+                         line.setLine(start2d, y0, start2d, y1);
+                         g2.draw(line);

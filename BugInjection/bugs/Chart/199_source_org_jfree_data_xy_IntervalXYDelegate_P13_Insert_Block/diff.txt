@@ -1,0 +1,11 @@
+--- /IntervalXYDelegate.java	2023-07-03 18:40:43.646851486 +0000
++++ /Chart-26/source/org/jfree/data/xy/IntervalXYDelegate.java	2023-07-03 18:40:43.650851432 +0000
+@@ -196,7 +196,7 @@
+      */
+     public void setIntervalPositionFactor(double d) {
+         if (d < 0.0 || 1.0 < d) {
+-            throw new IllegalArgumentException(
++if  (  ( d < 0.0 )  ||  ( 1.0 < d )  )  {     throw new IllegalArgumentException ( "Argument 'd' outside valid range." ) ; }
+                     "Argument 'd' outside valid range.");
+         }
+         this.intervalPositionFactor = d;

@@ -1,0 +1,11 @@
+--- /CategoryToPieDataset.java	2023-07-03 18:40:16.835215600 +0000
++++ /Chart-26/source/org/jfree/data/category/CategoryToPieDataset.java	2023-07-03 18:40:16.839215545 +0000
+@@ -201,7 +201,7 @@
+             throw new IndexOutOfBoundsException("Invalid 'index': " + index);
+         }
+         if (this.extract == TableOrder.BY_ROW) {
+-            result = this.source.getColumnKey(index);
++result = index.getColumnKey ( this.source ) ;
+         }
+         else if (this.extract == TableOrder.BY_COLUMN) {
+             result = this.source.getRowKey(index);

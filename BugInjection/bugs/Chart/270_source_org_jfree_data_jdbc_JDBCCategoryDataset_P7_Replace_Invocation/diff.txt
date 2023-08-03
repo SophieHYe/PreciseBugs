@@ -1,0 +1,13 @@
+--- /JDBCCategoryDataset.java	2023-07-03 18:43:02.648965346 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCCategoryDataset.java	2023-07-03 18:43:02.648965346 +0000
+@@ -267,8 +267,8 @@
+                         case Types.CHAR:
+                         case Types.VARCHAR:
+                         case Types.LONGVARCHAR: {
+-                            String string 
+-                                = (String) resultSet.getObject(column);
++String string =  ( String )  resultSet .getMetaData (  )  ;
++ 
+                             try {
+                                 Number value = Double.valueOf(string);
+                                 if (this.transpose) {

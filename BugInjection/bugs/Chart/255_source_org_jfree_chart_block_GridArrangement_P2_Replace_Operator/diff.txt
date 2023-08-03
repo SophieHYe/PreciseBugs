@@ -1,0 +1,15 @@
+--- /GridArrangement.java	2023-07-03 18:36:39.146171785 +0000
++++ /Chart-26/source/org/jfree/chart/block/GridArrangement.java	2023-07-03 18:36:39.146171785 +0000
+@@ -252,9 +252,9 @@
+                 maxH = Math.max(maxH, s.getHeight());
+             }
+         }
+-        RectangleConstraint constraint3 = constraint.toFixedHeight(
+-            maxH * this.rows
+-        );
++RectangleConstraint constraint3 = constraint.toFixedHeight ( maxH / this.rows ) ;
++ 
++ 
+         return arrange(container, g2, constraint3);
+     }
+ 

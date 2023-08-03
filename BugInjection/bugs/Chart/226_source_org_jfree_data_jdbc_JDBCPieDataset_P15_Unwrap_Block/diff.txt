@@ -1,0 +1,16 @@
+--- /JDBCPieDataset.java	2023-07-03 18:41:28.498242377 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCPieDataset.java	2023-07-03 18:41:28.498242377 +0000
+@@ -224,9 +224,10 @@
+                 }
+             }
+             if (statement != null) {
+-                try {
+-                    statement.close();
+-                }
++ 
++try {    statement.close();} catch (java.lang.Exception e) {    java.lang.System.err.println("JDBCPieDataset: swallowing exception.");}; 
++ 
++ 
+                 catch (Exception e) {
+                     System.err.println("JDBCPieDataset: swallowing exception.");
+                 }

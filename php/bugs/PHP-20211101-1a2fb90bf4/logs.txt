@@ -1,1 +1,0 @@
-commit 1a2fb90bf459f2ab918e02dff63c803f24a354a9Author: Nikita Popov <nikita.ppv@gmail.com>Date:  Mon Nov 1 11:42:36 2021 +0100  Fix finally exception chaining on recursion    In this case zend_exception_set_previous() would destroy the  fast_call exception and further accesses on ex would be invalid.  We should only update ex if we update EG(exception).    Fixes oss-fuzz #40464.

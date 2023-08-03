@@ -1,0 +1,11 @@
+--- /DefaultOHLCDataset.java	2023-07-03 18:39:04.984191353 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultOHLCDataset.java	2023-07-03 18:39:04.984191353 +0000
+@@ -263,7 +263,7 @@
+      */
+     public double getVolumeValue(int series, int item) {
+         double result = Double.NaN;
+-        Number volume = getVolume(series, item);
++Number volume = getVolume ( item, series ) ;
+         if (volume != null) {
+             result = volume.doubleValue();   
+         }

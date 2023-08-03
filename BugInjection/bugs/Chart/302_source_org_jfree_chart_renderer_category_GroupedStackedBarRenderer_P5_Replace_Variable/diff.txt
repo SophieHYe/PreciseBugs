@@ -1,0 +1,13 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:08:36.700151079 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:08:36.700151079 +0000
+@@ -299,8 +299,8 @@
+         else {
+             translatedBase = rangeAxis.valueToJava2D(negativeBase, dataArea, 
+                     location);
+-            translatedValue = rangeAxis.valueToJava2D(negativeBase + value, 
+-                    dataArea, location);
++translatedValue = rangeAxis.valueToJava2D ( negativeBase + value, location, dataArea ) ;
++ 
+         }
+         double barL0 = Math.min(translatedBase, translatedValue);
+         double barLength = Math.max(Math.abs(translatedValue - translatedBase),

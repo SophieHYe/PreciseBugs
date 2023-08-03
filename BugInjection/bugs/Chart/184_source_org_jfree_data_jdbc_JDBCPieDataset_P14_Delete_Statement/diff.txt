@@ -1,0 +1,12 @@
+--- /JDBCPieDataset.java	2023-07-03 18:41:33.662172248 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCPieDataset.java	2023-07-03 18:41:33.666172194 +0000
+@@ -182,7 +182,8 @@
+             int columnType = metaData.getColumnType(2);
+             double value = Double.NaN;
+             while (resultSet.next()) {
+-                Comparable key = resultSet.getString(1);
++ 
++ 
+                 switch (columnType) {
+                     case Types.NUMERIC:
+                     case Types.REAL:

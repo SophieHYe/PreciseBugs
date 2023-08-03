@@ -1,0 +1,14 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:10.856718235 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:10.860718181 +0000
+@@ -413,8 +413,9 @@
+     protected synchronized long getX(RegularTimePeriod period) {
+         long result = 0L;
+         if (this.xPosition == TimePeriodAnchor.START) {
+-            result = period.getFirstMillisecond(this.workingCalendar);
+-        }
++ 
++result = period.getFirstMillisecond(this.workingCalendar); 
++ 
+         else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
+             result = period.getMiddleMillisecond(this.workingCalendar);
+         }

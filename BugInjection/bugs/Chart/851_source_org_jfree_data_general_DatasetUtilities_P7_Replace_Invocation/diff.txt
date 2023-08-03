@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:31:55.606021742 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:31:55.610021687 +0000
+@@ -848,7 +848,7 @@
+     public static Range iterateXYRangeBounds(XYDataset dataset) {
+         double minimum = Double.POSITIVE_INFINITY;
+         double maximum = Double.NEGATIVE_INFINITY;
+-        int seriesCount = dataset.getSeriesCount();
++int seriesCount = dataset.getItemCount (  ) ;
+         for (int series = 0; series < seriesCount; series++) {
+             int itemCount = dataset.getItemCount(series);
+             for (int item = 0; item < itemCount; item++) {

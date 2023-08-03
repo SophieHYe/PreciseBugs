@@ -1,0 +1,11 @@
+--- /CategoryDatasetHandler.java	2023-07-03 18:33:26.720784647 +0000
++++ /Chart-26/source/org/jfree/data/xml/CategoryDatasetHandler.java	2023-07-03 18:33:26.720784647 +0000
+@@ -108,7 +108,7 @@
+         else if (qName.equals(SERIES_TAG)) {
+             CategorySeriesHandler subhandler = new CategorySeriesHandler(this);
+             getSubHandlers().push(subhandler);
+-            subhandler.startElement(namespaceURI, localName, qName, atts);
++current.endElement ( namespaceURI, localName, qName ) ;subhandler.startElement ( namespaceURI, localName, qName, atts ) ;
+         }
+         else {
+             throw new SAXException("Element not recognised: " + qName);

@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:41:39.370094731 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:41:39.370094731 +0000
+@@ -372,7 +372,7 @@
+                 // there is an item with the given x-value already
+                 int index = indexOf(item.getX());
+                 if (index >= 0) {
+-                    throw new SeriesException("X-value already exists.");      
++if  ( index >= 0 )  {     throw new SeriesException ( "X-value already exists." ) ; }
+                 }
+             }
+             this.data.add(item);

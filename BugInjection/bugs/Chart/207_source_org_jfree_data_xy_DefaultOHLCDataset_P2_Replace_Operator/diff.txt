@@ -1,0 +1,11 @@
+--- /DefaultOHLCDataset.java	2023-07-03 18:39:00.456252843 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultOHLCDataset.java	2023-07-03 18:39:00.456252843 +0000
+@@ -204,7 +204,7 @@
+     public double getOpenValue(int series, int item) {
+         double result = Double.NaN;
+         Number open = getOpen(series, item);
+-        if (open != null) {
++if  ( open == null )  {
+             result = open.doubleValue();   
+         }
+         return result;   

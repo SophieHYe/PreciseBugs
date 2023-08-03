@@ -1,0 +1,16 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:09:33.171384387 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:09:33.175384333 +0000
+@@ -571,9 +571,10 @@
+                 rangeAxis = p.getRangeAxis();
+             }
+             else if (plot instanceof XYPlot) {
+-                XYPlot p = (XYPlot) plot;
+-                rangeAxis = p.getRangeAxis();
+-            }
++ 
++org.jfree.chart.plot.XYPlot p = ((org.jfree.chart.plot.XYPlot) (plot)); rangeAxis = p.getRangeAxis(); 
++ 
++ 
+             if (rangeAxis != null) {
+                 this.rangeAxisPropertyPanel.setAxisProperties(rangeAxis);
+             }

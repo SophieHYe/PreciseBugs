@@ -1,0 +1,16 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:58:01.764770365 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:58:01.768770311 +0000
+@@ -1343,9 +1343,10 @@
+         }
+ 
+         if (this.toolTipGeneratorList != null) {
+-            clone.toolTipGeneratorList
+-                    = (ObjectList) this.toolTipGeneratorList.clone();
+-        }
++ 
++clone.toolTipGeneratorList = ((org.jfree.chart.util.ObjectList) (this.toolTipGeneratorList.clone())); 
++ 
++ 
+ 
+         if (this.baseToolTipGenerator != null) {
+             if (this.baseToolTipGenerator instanceof PublicCloneable) {

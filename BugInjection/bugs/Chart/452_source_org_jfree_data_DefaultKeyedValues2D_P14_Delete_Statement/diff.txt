@@ -1,0 +1,12 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:32:33.445507992 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:32:33.445507992 +0000
+@@ -450,7 +450,8 @@
+     public void removeColumn(Comparable columnKey) {
+         Iterator iterator = this.rows.iterator();
+         while (iterator.hasNext()) {
+-            DefaultKeyedValues rowData = (DefaultKeyedValues) iterator.next();
++ 
++ 
+             rowData.removeValue(columnKey);
+         }
+         this.columnKeys.remove(columnKey);

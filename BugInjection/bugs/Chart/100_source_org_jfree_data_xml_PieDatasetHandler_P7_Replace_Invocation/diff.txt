@@ -1,0 +1,11 @@
+--- /PieDatasetHandler.java	2023-07-03 18:32:57.997174645 +0000
++++ /Chart-26/source/org/jfree/data/xml/PieDatasetHandler.java	2023-07-03 18:32:57.997174645 +0000
+@@ -97,7 +97,7 @@
+                              String qName,
+                              Attributes atts) throws SAXException {
+ 
+-        DefaultHandler current = getCurrentHandler();
++DefaultHandler current = getSubHandlers (  ) ;
+         if (current != this) {
+             current.startElement(namespaceURI, localName, qName, atts);
+         }

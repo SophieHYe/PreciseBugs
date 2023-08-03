@@ -1,0 +1,11 @@
+--- /AbstractIntervalXYDataset.java	2023-07-03 18:35:28.087136698 +0000
++++ /Chart-26/source/org/jfree/data/xy/AbstractIntervalXYDataset.java	2023-07-03 18:35:28.087136698 +0000
+@@ -83,7 +83,7 @@
+     public double getEndXValue(int series, int item) {
+         double result = Double.NaN;
+         Number x = getEndX(series, item);
+-        if (x != null) {
++if  ( x != this )  {
+             result = x.doubleValue();   
+         }
+         return result;   

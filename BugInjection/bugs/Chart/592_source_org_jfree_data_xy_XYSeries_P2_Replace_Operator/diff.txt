@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:42:33.261363404 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:33.261363404 +0000
+@@ -589,7 +589,7 @@
+         for (int i = 0; i < itemCount; i++) {
+             result[0][i] = this.getX(i).doubleValue();
+             Number y = getY(i);
+-            if (y != null) {
++if  ( y == null )  {
+                 result[1][i] = y.doubleValue();
+             }
+             else {

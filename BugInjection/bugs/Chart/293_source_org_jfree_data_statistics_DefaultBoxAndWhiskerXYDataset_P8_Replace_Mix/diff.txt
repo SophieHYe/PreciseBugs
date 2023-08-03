@@ -1,0 +1,11 @@
+--- /DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:09:44.639228690 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:09:44.643228636 +0000
+@@ -290,7 +290,7 @@
+      */
+     public Number getQ3Value(int series, int item) {
+         Number result = null;
+-        BoxAndWhiskerItem stats = (BoxAndWhiskerItem) this.items.get(item);
++BoxAndWhiskerItem stats =  ( BoxAndWhiskerItem )  items.add ( item ) ;
+         if (stats != null) {
+             result = stats.getQ3();
+         }

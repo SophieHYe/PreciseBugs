@@ -1,0 +1,11 @@
+--- /SunJPEGEncoderAdapter.java	2023-07-03 19:16:07.290033357 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/SunJPEGEncoderAdapter.java	2023-07-03 19:16:07.290033357 +0000
+@@ -160,7 +160,7 @@
+         if (bufferedImage == null) {
+             throw new IllegalArgumentException("Null 'image' argument.");
+         }
+-        if (outputStream == null) {
++if  (  ( quality < 0.0F )  ||  ( quality > 1.0F )  )  {     throw new IllegalArgumentException ( "The 'quality' must be in the range 0.0f to 1.0f" ) ; }
+             throw new IllegalArgumentException("Null 'outputStream' argument.");
+         }
+         Iterator iterator = ImageIO.getImageWritersByFormatName("jpeg");

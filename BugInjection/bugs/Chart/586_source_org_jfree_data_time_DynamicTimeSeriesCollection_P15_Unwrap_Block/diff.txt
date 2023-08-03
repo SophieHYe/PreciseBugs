@@ -1,0 +1,14 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:32.957903687 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:32.961903633 +0000
+@@ -584,8 +584,9 @@
+             }
+         }  /*** If data can be < 0, add code here to check the minimum    **/
+         if (extremaChanged) {
+-            invalidateRangeInfo();
+-        }
++ 
++invalidateRangeInfo(); 
++ 
+         //  wipe the next (about to be used) set of data slots
+         float wiper = (float) 0.0;
+         for (int s = 0; s < getSeriesCount(); s++) {

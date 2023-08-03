@@ -1,0 +1,11 @@
+--- /BlockBorder.java	2023-07-03 18:59:34.579510571 +0000
++++ /Chart-26/source/org/jfree/chart/block/BlockBorder.java	2023-07-03 18:59:34.579510571 +0000
+@@ -208,7 +208,7 @@
+             return false;   
+         }
+         BlockBorder that = (BlockBorder) obj;
+-        if (!this.insets.equals(that.insets)) {
++if  ( !this.insets.calculateRightInset ( that.insets )  )  {
+             return false;   
+         }
+         if (!PaintUtilities.equal(this.paint, that.paint)) {

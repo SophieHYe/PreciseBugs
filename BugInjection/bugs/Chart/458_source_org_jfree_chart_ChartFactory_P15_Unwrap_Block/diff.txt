@@ -1,0 +1,18 @@
+--- /ChartFactory.java	2023-07-03 18:15:39.091268589 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:15:39.095268535 +0000
+@@ -456,10 +456,11 @@
+         }
+ 
+         if (urls) {
+-            PieURLGenerator urlGenerator = new StandardPieURLGenerator();
+-            PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
+-            pp.setURLGenerator(urlGenerator);
+-        }
++ 
++org.jfree.chart.urls.PieURLGenerator urlGenerator = new org.jfree.chart.urls.StandardPieURLGenerator(); org.jfree.chart.plot.PiePlot pp = ((org.jfree.chart.plot.PiePlot) (plot.getPieChart().getPlot())); pp.setURLGenerator(urlGenerator); 
++ 
++ 
++ 
+ 
+         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
+                 plot, legend);

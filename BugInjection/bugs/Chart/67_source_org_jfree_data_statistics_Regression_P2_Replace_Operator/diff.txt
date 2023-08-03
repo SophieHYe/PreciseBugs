@@ -1,0 +1,11 @@
+--- /Regression.java	2023-07-03 19:12:34.632920684 +0000
++++ /Chart-26/source/org/jfree/data/statistics/Regression.java	2023-07-03 19:12:34.632920684 +0000
+@@ -64,7 +64,7 @@
+     public static double[] getOLSRegression(double[][] data) {
+ 
+         int n = data.length;
+-        if (n < 2) {
++if  ( n <= 2 )  {
+             throw new IllegalArgumentException("Not enough data.");
+         }
+ 

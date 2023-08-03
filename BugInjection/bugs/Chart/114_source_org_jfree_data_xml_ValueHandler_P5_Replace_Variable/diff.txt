@@ -1,0 +1,11 @@
+--- /ValueHandler.java	2023-07-03 18:33:21.272858618 +0000
++++ /Chart-26/source/org/jfree/data/xml/ValueHandler.java	2023-07-03 18:33:21.272858618 +0000
+@@ -111,7 +111,7 @@
+                            String localName,
+                            String qName) throws SAXException {
+ 
+-        if (qName.equals(VALUE_TAG)) {
++if  ( namespaceURI.equals ( VALUE_TAG )  )  {
+             Number value;
+             try {
+                 value = Double.valueOf(this.currentText.toString());

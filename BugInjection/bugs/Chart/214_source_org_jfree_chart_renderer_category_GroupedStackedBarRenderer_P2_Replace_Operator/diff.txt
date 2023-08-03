@@ -1,0 +1,11 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:06:16.066060378 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:06:16.066060378 +0000
+@@ -211,7 +211,7 @@
+             this.seriesToGroupMap.getGroup(plot.getDataset().getRowKey(row))
+         );
+         int categoryCount = getColumnCount();
+-        if (groupCount > 1) {
++if  ( groupCount == 1 )  {
+             double groupGap = space * getItemMargin() 
+                               / (categoryCount * (groupCount - 1));
+             double groupW = calculateSeriesWidth(

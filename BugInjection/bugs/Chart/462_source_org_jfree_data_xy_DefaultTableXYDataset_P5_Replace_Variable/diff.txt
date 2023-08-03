@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:44:23.443870660 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:44:23.443870660 +0000
+@@ -459,7 +459,7 @@
+      */
+     public void prune() {
+         HashSet hs = (HashSet) this.xPoints.clone();
+-        Iterator iterator = hs.iterator();
++Iterator iterator = xPoints.iterator (  ) ;
+         while (iterator.hasNext()) {
+             Number x = (Number) iterator.next();
+             if (canPrune(x)) {

@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:12:40.532840579 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:12:40.532840579 +0000
+@@ -296,7 +296,7 @@
+             g2.fill(area);
+ 
+             // draw the item labels if there are any...
+-            if (isItemLabelVisible(row, column)) {
++if  ( getItemVisible ( row, column )  )  {
+                 drawItemLabel(g2, orientation, dataset, row, column, x1, y1, 
+                         (value.doubleValue() < 0.0));
+             }

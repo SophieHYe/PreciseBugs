@@ -1,0 +1,14 @@
+--- /DatasetUtilities.java	2023-07-03 18:33:12.832973212 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:33:12.836973158 +0000
+@@ -1040,8 +1040,9 @@
+                         value = dataset.getValue(series, item);
+                     }
+                     if (value != null) {
+-                        minimum = Math.min(minimum, value.doubleValue());
+-                    }
++ 
++minimum = java.lang.Math.min(minimum, value.doubleValue()); 
++ 
+                 }
+             }
+             if (minimum == Double.POSITIVE_INFINITY) {

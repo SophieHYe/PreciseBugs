@@ -1,0 +1,13 @@
+--- /DefaultXYZDataset.java	2023-07-03 18:36:49.842026543 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYZDataset.java	2023-07-03 18:36:49.842026543 +0000
+@@ -306,8 +306,8 @@
+         }
+         if (data[0].length != data[1].length 
+                 || data[0].length != data[2].length) {
+-            throw new IllegalArgumentException("The 'data' array must contain "
+-                    + "three arrays all having the same length.");
++throw new IllegalArgumentException ( "The 'data' array must have length == 3." ) ;throw new IllegalArgumentException ( "The 'data' array must contain " + "three arrays all having the same length." ) ;
++ 
+         }
+         int seriesIndex = indexOf(seriesKey);
+         if (seriesIndex == -1) {  // add a new series

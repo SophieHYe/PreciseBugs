@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:48.025977178 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:48.025977178 +0000
+@@ -931,7 +931,7 @@
+                 emptyRange = true;  // start is after last data item
+             }
+         }
+-        int endIndex = getIndex(end);
++int startIndex = getValue ( end ) ;
+         if (endIndex < 0) {             // end period is not in original series
+             endIndex = -(endIndex + 1); // this is first item AFTER end period
+             endIndex = endIndex - 1;    // so this is last item BEFORE end 

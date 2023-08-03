@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:42:01.905788679 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:01.905788679 +0000
+@@ -380,7 +380,7 @@
+         if (getItemCount() > this.maximumItemCount) {
+             this.data.remove(0);
+         }                    
+-        if (notify) {
++if  ( dataRemoved )  {     fireSeriesChanged (  ) ; }
+             fireSeriesChanged();
+         }
+     }

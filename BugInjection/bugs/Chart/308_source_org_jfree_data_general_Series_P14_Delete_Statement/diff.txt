@@ -1,0 +1,10 @@
+--- /Series.java	2023-07-03 18:35:11.131366935 +0000
++++ /Chart-26/source/org/jfree/data/general/Series.java	2023-07-03 18:35:11.131366935 +0000
+@@ -306,6 +306,7 @@
+     protected void notifyListeners(SeriesChangeEvent event) {
+ 
+         Object[] listenerList = this.listeners.getListenerList();
++ 
+         for (int i = listenerList.length - 2; i >= 0; i -= 2) {
+             if (listenerList[i] == SeriesChangeListener.class) {
+                 ((SeriesChangeListener) listenerList[i + 1]).seriesChanged(

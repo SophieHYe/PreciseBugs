@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:31:39.350242442 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:31:39.354242389 +0000
+@@ -143,7 +143,7 @@
+     public Number getValue(int row, int column) {
+         Number result = null;
+         DefaultKeyedValues rowData = (DefaultKeyedValues) this.rows.get(row);
+-        if (rowData != null) {
++if  ( key == null )  {
+             Comparable columnKey = (Comparable) this.columnKeys.get(column);
+             // the row may not have an entry for this key, in which case the 
+             // return value is null

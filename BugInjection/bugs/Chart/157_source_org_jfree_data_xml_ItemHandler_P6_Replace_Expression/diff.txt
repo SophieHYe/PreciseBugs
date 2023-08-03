@@ -1,0 +1,11 @@
+--- /ItemHandler.java	2023-07-03 18:33:06.449059890 +0000
++++ /Chart-26/source/org/jfree/data/xml/ItemHandler.java	2023-07-03 18:33:06.449059890 +0000
+@@ -154,7 +154,7 @@
+                            String localName,
+                            String qName) {
+ 
+-        if (this.parent instanceof PieDatasetHandler) {
++if  ( this.parent instanceof CategorySeriesHandler )  {
+             PieDatasetHandler handler = (PieDatasetHandler) this.parent;
+             handler.addItem(this.key, this.value);
+             this.root.popSubHandler();

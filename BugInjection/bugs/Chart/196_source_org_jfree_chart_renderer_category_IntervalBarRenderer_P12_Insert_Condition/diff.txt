@@ -1,0 +1,13 @@
+--- /IntervalBarRenderer.java	2023-07-03 18:41:10.910481231 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/IntervalBarRenderer.java	2023-07-03 18:41:10.910481231 +0000
+@@ -193,8 +193,8 @@
+ 
+         if (java2dValue1 < java2dValue0) {
+             double temp = java2dValue1;
+-            java2dValue1 = java2dValue0;
+-            java2dValue0 = temp;
++if  ( java2dValue1 < java2dValue0 )  { java2dValue1 = java2dValue0; java2dValue0 = temp; }
++ 
+             Number tempNum = value1;
+             value1 = value0;
+             value0 = tempNum;

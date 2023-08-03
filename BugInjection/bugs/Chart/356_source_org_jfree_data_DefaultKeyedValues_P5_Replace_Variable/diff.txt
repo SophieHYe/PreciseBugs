@@ -1,0 +1,13 @@
+--- /DefaultKeyedValues.java	2023-07-03 18:30:11.171439572 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues.java	2023-07-03 18:30:11.175439518 +0000
+@@ -353,8 +353,8 @@
+      * @param order  the sort order (<code>null</code> not permitted).
+      */
+     public void sortByValues(SortOrder order) {
+-        Comparator comparator = new KeyedValueComparator(
+-                KeyedValueComparatorType.BY_VALUE, order);
++Comparator comparator = new KeyedValueComparator ( order, KeyedValueComparatorType.BY_VALUE ) ;
++ 
+         Collections.sort(this.data, comparator);
+     }
+ 

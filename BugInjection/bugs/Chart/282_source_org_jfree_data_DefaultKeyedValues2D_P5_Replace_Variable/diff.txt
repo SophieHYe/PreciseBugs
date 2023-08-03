@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:31:52.538063395 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:31:52.538063395 +0000
+@@ -279,7 +279,7 @@
+         if (row >= 0) {
+             DefaultKeyedValues rowData 
+                 = (DefaultKeyedValues) this.rows.get(row);
+-            int col = rowData.getIndex(columnKey);
++int col = columnKey.getIndex ( rowData ) ;
+             return (col >= 0 ? rowData.getValue(col) : null);
+         }
+         else {

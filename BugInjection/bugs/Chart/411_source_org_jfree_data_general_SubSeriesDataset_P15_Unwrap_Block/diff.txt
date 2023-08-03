@@ -1,0 +1,18 @@
+--- /SubSeriesDataset.java	2023-07-03 18:34:47.871682769 +0000
++++ /Chart-26/source/org/jfree/data/general/SubSeriesDataset.java	2023-07-03 18:34:47.871682769 +0000
+@@ -409,10 +409,11 @@
+      */
+     public Number getEndY(int series,  int item) {
+         if (this.parent instanceof IntervalXYDataset) {
+-            return ((IntervalXYDataset) this.parent).getEndY(
+-                this.map[series], item
+-            );
+-        }
++ 
++return ((org.jfree.data.xy.IntervalXYDataset) (this.parent)).getEndY(this.map[series], item); 
++ 
++ 
++ 
+         else {
+             return getY(series, item);
+         }

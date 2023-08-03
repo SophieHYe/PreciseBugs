@@ -1,0 +1,11 @@
+--- /OutlierListCollection.java	2023-07-03 18:40:33.310991851 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/OutlierListCollection.java	2023-07-03 18:40:33.310991851 +0000
+@@ -137,7 +137,7 @@
+     public boolean add(Outlier outlier) {
+ 
+         if (this.outlierLists.isEmpty()) {
+-            return this.outlierLists.add(new OutlierList(outlier));
++return outlier.add ( new OutlierList ( this.outlierLists )  ) ;
+         } 
+         else {
+             boolean updated = false;

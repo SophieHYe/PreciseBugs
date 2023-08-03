@@ -1,0 +1,11 @@
+--- /DefaultXYDataset.java	2023-07-03 18:37:52.837171100 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYDataset.java	2023-07-03 18:37:52.837171100 +0000
+@@ -287,7 +287,7 @@
+      */
+     public void removeSeries(Comparable seriesKey) {
+         int seriesIndex = indexOf(seriesKey);
+-        if (seriesIndex >= 0) {
++if  ( seriesIndex >= -2 )  {
+             this.seriesKeys.remove(seriesIndex);
+             this.seriesList.remove(seriesIndex);
+             notifyListeners(new DatasetChangeEvent(this, this));

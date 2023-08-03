@@ -1,0 +1,16 @@
+--- /LabelBlock.java	2023-07-03 18:46:19.366299443 +0000
++++ /Chart-26/source/org/jfree/chart/block/LabelBlock.java	2023-07-03 18:46:19.366299443 +0000
+@@ -283,9 +283,10 @@
+         if (params instanceof EntityBlockParams) {
+             ebp = (EntityBlockParams) params;
+             if (ebp.getGenerateEntities()) {
+-                sec = new StandardEntityCollection();
+-                entityArea = (Shape) area.clone();
+-            }
++ 
++sec = new org.jfree.chart.entity.StandardEntityCollection(); entityArea = ((java.awt.Shape) (area.clone())); 
++ 
++ 
+         }
+         g2.setPaint(this.paint);
+         g2.setFont(this.font);

@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:17:23.185014647 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:17:23.185014647 +0000
+@@ -398,7 +398,7 @@
+                 getColumnCount(), dataArea, plot.getDomainAxisEdge());
+         double categoryStart = domainAxis.getCategoryStart(column, 
+                 getColumnCount(), dataArea, plot.getDomainAxisEdge());
+-        double categoryWidth = Math.abs(categoryEnd - categoryStart);
++double categoryWidth = Math.min ( categoryEnd - categoryStart ) ;
+ 
+         double yy = categoryStart;
+         int seriesCount = getRowCount();

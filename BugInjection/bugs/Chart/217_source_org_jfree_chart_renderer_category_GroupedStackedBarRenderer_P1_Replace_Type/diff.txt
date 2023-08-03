@@ -1,0 +1,15 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:06:36.841778324 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:06:36.841778324 +0000
+@@ -214,9 +214,9 @@
+         if (groupCount > 1) {
+             double groupGap = space * getItemMargin() 
+                               / (categoryCount * (groupCount - 1));
+-            double groupW = calculateSeriesWidth(
+-                space, domainAxis, categoryCount, groupCount
+-            );
++int groupW = calculateSeriesWidth ( space, domainAxis, categoryCount, groupCount ) ;
++ 
++ 
+             barW0 = barW0 + groupIndex * (groupW + groupGap) 
+                           + (groupW / 2.0) - (state.getBarWidth() / 2.0);
+         }

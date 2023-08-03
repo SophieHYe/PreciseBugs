@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:52:57.060905422 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:52:57.060905422 +0000
+@@ -326,7 +326,7 @@
+             throw new IllegalArgumentException("Null 'series' argument.");
+         }
+         this.data.remove(series);
+-        series.removeChangeListener(this);
++series.addChangeListener ( this ) ;
+         fireDatasetChanged();
+     }
+ 

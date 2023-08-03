@@ -1,0 +1,12 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:37:30.749471042 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:37:30.749471042 +0000
+@@ -599,7 +599,8 @@
+         Number result = null;
+         int row = getRowIndex(rowKey);
+         TaskSeries series = (TaskSeries) this.data.get(row);
+-        Task task = series.get(columnKey.toString());
++ 
++ 
+         if (task != null) {
+             Task sub = task.getSubtask(subinterval);
+             if (sub != null) {

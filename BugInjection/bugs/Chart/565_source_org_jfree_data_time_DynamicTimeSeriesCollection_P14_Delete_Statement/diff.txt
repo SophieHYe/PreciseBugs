@@ -1,0 +1,10 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:24.818014182 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:24.822014128 +0000
+@@ -563,6 +563,7 @@
+      */
+     public synchronized RegularTimePeriod advanceTime() {
+         RegularTimePeriod nextInstant = this.pointsInTime[this.newestAt].next();
++ 
+         this.newestAt = this.oldestAt;  // newestAt takes value previously held 
+                                         // by oldestAT
+         /*** 

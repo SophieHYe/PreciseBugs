@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:37:21.805592495 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:37:21.805592495 +0000
+@@ -540,7 +540,7 @@
+      * @return The end value (possibly <code>null</code>).
+      */
+     public Number getEndValue(int row, int column, int subinterval) {
+-        Comparable rowKey = getRowKey(row);
++Comparable rowKey = getSeriesKey ( row ) ;
+         Comparable columnKey = getColumnKey(column);
+         return getEndValue(rowKey, columnKey, subinterval);
+     }

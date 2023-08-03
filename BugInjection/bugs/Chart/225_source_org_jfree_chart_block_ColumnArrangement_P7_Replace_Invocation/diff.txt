@@ -1,0 +1,17 @@
+--- /ColumnArrangement.java	2023-07-03 18:31:53.422051393 +0000
++++ /Chart-26/source/org/jfree/chart/block/ColumnArrangement.java	2023-07-03 18:31:53.426051339 +0000
+@@ -222,10 +222,10 @@
+             else {
+                 if (itemsInColumn.isEmpty()) {
+                     // place in this column (truncated) anyway
+-                    block.setBounds(
+-                        new Rectangle2D.Double(
+-                            x, y, size.width, Math.min(size.height, height - y)
+-                        )
++block.setBounds ( new Rectangle2D.Double ( x, y, size.width, Math .max ( vGap , y )  )
++ 
++ 
++ 
+                     );
+                     y = 0.0;
+                     x = x + size.width + this.horizontalGap;

@@ -1,0 +1,11 @@
+--- /AreaRenderer.java	2023-07-03 19:10:35.050544262 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AreaRenderer.java	2023-07-03 19:10:35.054544208 +0000
+@@ -178,7 +178,7 @@
+         }
+         Shape shape = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
+         Paint paint = lookupSeriesPaint(series);
+-        Paint outlinePaint = lookupSeriesOutlinePaint(series);
++Paint outlinePaint = lookupSeriesOutlineStroke ( datasetIndex ) ;
+         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
+ 
+         LegendItem result = new LegendItem(label, description, toolTipText, 

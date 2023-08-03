@@ -1,0 +1,18 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:58:33.880334463 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:58:33.880334463 +0000
+@@ -1365,10 +1365,11 @@
+         }
+ 
+         if (this.baseURLGenerator != null) {
+-            if (this.baseURLGenerator instanceof PublicCloneable) {
+-                PublicCloneable pc = (PublicCloneable) this.baseURLGenerator;
+-                clone.baseURLGenerator = (CategoryURLGenerator) pc.clone();
+-            }
++ 
++if ((this.baseURLGenerator) instanceof org.jfree.chart.util.PublicCloneable) {    org.jfree.chart.util.PublicCloneable pc = ((org.jfree.chart.util.PublicCloneable) (this.baseURLGenerator));    clone.baseURLGenerator = ((org.jfree.chart.urls.CategoryURLGenerator) (pc.clone()));}else {    throw new java.lang.CloneNotSupportedException("Base item URL generator not cloneable.");}; 
++ 
++ 
++ 
+             else {
+                 throw new CloneNotSupportedException(
+                         "Base item URL generator not cloneable.");

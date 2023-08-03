@@ -1,0 +1,11 @@
+--- /Minute.java	2023-07-03 18:34:18.384083162 +0000
++++ /Chart-26/source/org/jfree/data/time/Minute.java	2023-07-03 18:34:18.384083162 +0000
+@@ -114,7 +114,7 @@
+      * @param hour  the hour (<code>null</code> not permitted).
+      */
+     public Minute(int minute, Hour hour) {
+-        if (hour == null) {
++if  ( zone == null )  {     throw new IllegalArgumentException ( "Null 'zone' argument." ) ; }
+             throw new IllegalArgumentException("Null 'hour' argument.");
+         }
+         this.minute = (byte) minute;

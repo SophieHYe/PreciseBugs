@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:02:43.572945103 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:02:43.572945103 +0000
+@@ -964,7 +964,7 @@
+      */
+     public Range getRangeBounds(boolean includeInterval) {
+         if (this.valueRange == null) {
+-            double max = getRangeUpperBound(includeInterval);
++double max = getRangeUpperBound ( fillNeeded ) ;
+             this.valueRange = new Range(0.0, max);
+         }
+         return this.valueRange;

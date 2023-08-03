@@ -1,0 +1,11 @@
+--- /ImageEncoderFactory.java	2023-07-03 19:15:19.706679421 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/ImageEncoderFactory.java	2023-07-03 19:15:19.706679421 +0000
+@@ -112,7 +112,7 @@
+             imageEncoder = (ImageEncoder) imageEncoderClass.newInstance();
+         } 
+         catch (Exception e) {
+-            throw new IllegalArgumentException(e.toString());
++throw new IllegalArgumentException ( "Unsupported image format - " + format ) ;throw new IllegalArgumentException  (" ")  ;
+         }
+         return imageEncoder;
+     }

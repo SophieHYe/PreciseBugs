@@ -1,0 +1,16 @@
+--- /XYBarDataset.java	2023-07-03 18:43:19.752733639 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYBarDataset.java	2023-07-03 18:43:19.752733639 +0000
+@@ -374,9 +374,10 @@
+     public Object clone() throws CloneNotSupportedException {
+         XYBarDataset clone = (XYBarDataset) super.clone();
+         if (this.underlying instanceof PublicCloneable) {
+-            clone.underlying 
+-                    = (XYDataset) ((PublicCloneable) this.underlying).clone();
+-        }
++ 
++clone.underlying = ((org.jfree.data.xy.XYDataset) (((org.jfree.chart.util.PublicCloneable) (this.underlying)).clone())); 
++ 
++ 
+         return clone;
+     }
+ 

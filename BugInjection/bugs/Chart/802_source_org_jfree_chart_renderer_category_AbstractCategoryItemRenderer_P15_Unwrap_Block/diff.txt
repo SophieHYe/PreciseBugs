@@ -1,0 +1,14 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:46:10.566418739 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:46:10.566418739 +0000
+@@ -800,8 +800,9 @@
+ 
+         Stroke stroke = plot.getRangeGridlineStroke();
+         if (stroke == null) {
+-            stroke = CategoryPlot.DEFAULT_GRIDLINE_STROKE;
+-        }
++ 
++stroke = org.jfree.chart.plot.CategoryPlot.DEFAULT_GRIDLINE_STROKE; 
++ 
+         g2.setStroke(stroke);
+ 
+         g2.draw(line);

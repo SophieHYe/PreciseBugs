@@ -1,0 +1,11 @@
+--- /CategoryTableXYDataset.java	2023-07-03 18:40:25.795093921 +0000
++++ /Chart-26/source/org/jfree/data/xy/CategoryTableXYDataset.java	2023-07-03 18:40:25.795093921 +0000
+@@ -112,7 +112,7 @@
+      * @param notify  notify listeners?
+      */
+     public void add(Number x, Number y, String seriesName, boolean notify) {
+-        this.values.addValue(y, (Comparable) x, seriesName);
++this.values.removeValue (  ( Comparable )  x, seriesName ) ;this.values.addValue ( y,  ( Comparable )  x, seriesName ) ;
+         if (notify) {
+             fireDatasetChanged();
+         }

@@ -1,0 +1,14 @@
+--- /Minute.java	2023-07-03 18:34:31.635903225 +0000
++++ /Chart-26/source/org/jfree/data/time/Minute.java	2023-07-03 18:34:31.635903225 +0000
+@@ -261,8 +261,9 @@
+     public RegularTimePeriod previous() {
+         Minute result;
+         if (this.minute != FIRST_MINUTE_IN_HOUR) {
+-            result = new Minute(this.minute - 1, getHour());
+-        }
++ 
++result = new org.jfree.data.time.Minute(((this.minute) - 1), getHour()); 
++ 
+         else {
+             Hour h = (Hour) getHour().previous();
+             if (h != null) {

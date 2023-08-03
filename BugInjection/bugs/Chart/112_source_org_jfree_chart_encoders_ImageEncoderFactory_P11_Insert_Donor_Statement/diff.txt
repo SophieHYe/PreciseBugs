@@ -1,0 +1,11 @@
+--- /ImageEncoderFactory.java	2023-07-03 19:15:19.466682679 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/ImageEncoderFactory.java	2023-07-03 19:15:19.470682624 +0000
+@@ -109,7 +109,7 @@
+         }
+         try {
+             Class imageEncoderClass = Class.forName(className);
+-            imageEncoder = (ImageEncoder) imageEncoderClass.newInstance();
++ImageEncoder imageEncoder = newInstance ( format ) ;imageEncoder =  ( ImageEncoder )  imageEncoderClass.newInstance (  ) ;
+         } 
+         catch (Exception e) {
+             throw new IllegalArgumentException(e.toString());

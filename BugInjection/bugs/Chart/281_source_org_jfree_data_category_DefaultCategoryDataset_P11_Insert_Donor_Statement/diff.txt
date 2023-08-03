@@ -1,0 +1,11 @@
+--- /DefaultCategoryDataset.java	2023-07-03 18:41:01.646607040 +0000
++++ /Chart-26/source/org/jfree/data/category/DefaultCategoryDataset.java	2023-07-03 18:41:01.646607040 +0000
+@@ -278,7 +278,7 @@
+                                Comparable rowKey, 
+                                Comparable columnKey) {
+         double existing = 0.0;
+-        Number n = getValue(rowKey, columnKey);
++this.data.removeValue ( rowKey, columnKey ) ;Number n = getValue ( rowKey, columnKey ) ;
+         if (n != null) {
+             existing = n.doubleValue();
+         }

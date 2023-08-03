@@ -1,0 +1,14 @@
+--- /Week.java	2023-07-03 18:42:52.917097177 +0000
++++ /Chart-26/source/org/jfree/data/time/Week.java	2023-07-03 18:42:52.917097177 +0000
+@@ -312,8 +312,9 @@
+ 
+         Week result;
+         if (this.week < 52) {
+-            result = new Week(this.week + 1, this.year);
+-        }
++ 
++result = new org.jfree.data.time.Week(((this.week) + 1), this.year); 
++ 
+         else {
+             Calendar calendar = Calendar.getInstance();
+             calendar.set(this.year, Calendar.DECEMBER, 31);

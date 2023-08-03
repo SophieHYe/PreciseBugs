@@ -1,0 +1,14 @@
+--- /XIntervalSeriesCollection.java	2023-07-03 18:37:20.641608302 +0000
++++ /Chart-26/source/org/jfree/data/xy/XIntervalSeriesCollection.java	2023-07-03 18:37:20.641608302 +0000
+@@ -78,8 +78,9 @@
+      */
+     public void addSeries(XIntervalSeries series) {
+         if (series == null) {
+-            throw new IllegalArgumentException("Null 'series' argument.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Null 'series' argument."); 
++ 
+         this.data.add(series);
+         series.addChangeListener(this);
+         fireDatasetChanged();

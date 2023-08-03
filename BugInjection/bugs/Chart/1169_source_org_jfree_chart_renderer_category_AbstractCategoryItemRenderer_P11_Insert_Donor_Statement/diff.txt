@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:54:46.439421235 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:54:46.439421235 +0000
+@@ -1166,8 +1166,8 @@
+         }
+         String urlText = null;
+         if (this.legendItemURLGenerator != null) {
+-            urlText = this.legendItemURLGenerator.generateLabel(dataset,
+-                    series);
++String label = this.legendItemLabelGenerator.generateLabel ( dataset, series ) ;urlText = this.legendItemURLGenerator.generateLabel ( dataset, series ) ;
++ 
+         }
+         Shape shape = lookupSeriesShape(series);
+         Paint paint = lookupSeriesPaint(series);

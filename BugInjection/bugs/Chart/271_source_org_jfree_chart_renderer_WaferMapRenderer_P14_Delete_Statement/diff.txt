@@ -1,0 +1,10 @@
+--- /WaferMapRenderer.java	2023-07-03 18:36:14.990499799 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/WaferMapRenderer.java	2023-07-03 18:36:14.990499799 +0000
+@@ -269,6 +269,7 @@
+      */
+     private void makeValueIndex(Number max, Number min, Set uniqueValues) {
+         double valueRange = max.doubleValue() - min.doubleValue();
++ 
+         double valueStep = valueRange / this.paintLimit;
+         int paint = 0;
+         double cutPoint = min.doubleValue() + valueStep;

@@ -1,0 +1,13 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:58:16.672568024 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:58:16.676567970 +0000
+@@ -1351,8 +1351,8 @@
+             if (this.baseToolTipGenerator instanceof PublicCloneable) {
+                 PublicCloneable pc
+                         = (PublicCloneable) this.baseToolTipGenerator;
+-                clone.baseToolTipGenerator
+-                        = (CategoryToolTipGenerator) pc.clone();
++clone.baseURLGenerator =  ( CategoryURLGenerator )  pc.clone (  ) ;clone.baseToolTipGenerator =  ( CategoryToolTipGenerator )  pc.clone (  ) ;
++ 
+             }
+             else {
+                 throw new CloneNotSupportedException(

@@ -1,0 +1,13 @@
+--- /Week.java	2023-07-03 18:43:00.344996556 +0000
++++ /Chart-26/source/org/jfree/data/time/Week.java	2023-07-03 18:43:00.344996556 +0000
+@@ -317,8 +317,8 @@
+         else {
+             Calendar calendar = Calendar.getInstance();
+             calendar.set(this.year, Calendar.DECEMBER, 31);
+-            int actualMaxWeek 
+-                = calendar.getActualMaximum(Calendar.WEEK_OF_YEAR);
++int actualMaxWeek = calendar.getActualMaximum ( Calendar.year ) ;
++ 
+             if (this.week < actualMaxWeek) {
+                 result = new Week(this.week + 1, this.year);
+             }

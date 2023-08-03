@@ -1,0 +1,13 @@
+--- /DefaultStatisticalCategoryDataset.java	2023-07-03 19:15:28.230563687 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultStatisticalCategoryDataset.java	2023-07-03 19:15:28.230563687 +0000
+@@ -296,8 +296,8 @@
+      */
+     public void add(Number mean, Number standardDeviation,
+                     Comparable rowKey, Comparable columnKey) {
+-        MeanAndStandardDeviation item = new MeanAndStandardDeviation(
+-                mean, standardDeviation);
++MeanAndStandardDeviation item = new MeanAndStandardDeviation ( mean, mean ) ;
++ 
+         this.data.addObject(item, rowKey, columnKey);
+         double m = 0.0;
+         double sd = 0.0;

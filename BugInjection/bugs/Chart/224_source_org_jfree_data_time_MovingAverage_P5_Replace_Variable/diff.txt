@@ -1,0 +1,13 @@
+--- /MovingAverage.java	2023-07-03 18:47:00.493741857 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:47:00.497741803 +0000
+@@ -221,8 +221,8 @@
+ 
+             if (i > pointCount - 1) {
+                 // remove the point i-periodCount out of the rolling sum.
+-                TimeSeriesDataItem startOfMovingAvg = source.getDataItem(
+-                        i - pointCount);
++TimeSeriesDataItem startOfMovingAvg = i.getDataItem ( source - pointCount ) ;
++ 
+                 rollingSumForPeriod -= startOfMovingAvg.getValue()
+                         .doubleValue();
+                 result.add(period, rollingSumForPeriod / pointCount);

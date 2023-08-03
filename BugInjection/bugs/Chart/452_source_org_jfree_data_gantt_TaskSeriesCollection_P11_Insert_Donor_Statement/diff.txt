@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:37:09.013766202 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:37:09.017766148 +0000
+@@ -449,7 +449,7 @@
+     public Number getPercentComplete(Comparable rowKey, Comparable columnKey) {
+         Number result = null;
+         int row = getRowIndex(rowKey);
+-        TaskSeries series = (TaskSeries) this.data.get(row);
++TaskSeries series =  ( TaskSeries )  this.data.get ( index ) ;TaskSeries series =  ( TaskSeries )  this.data.get ( row ) ;
+         Task task = series.get(columnKey.toString());
+         if (task != null) {
+             result = task.getPercentComplete();

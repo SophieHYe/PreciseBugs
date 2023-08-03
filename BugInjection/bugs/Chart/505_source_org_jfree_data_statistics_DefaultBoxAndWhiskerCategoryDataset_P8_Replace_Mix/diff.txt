@@ -1,0 +1,13 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:12.824350176 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:12.828350123 +0000
+@@ -502,8 +502,8 @@
+      */
+     public Number getMaxRegularValue(int row, int column) {
+         Number result = null;
+-        BoxAndWhiskerItem item = (BoxAndWhiskerItem) this.data.getObject(
+-                row, column);
++BoxAndWhiskerItem item =  ( BoxAndWhiskerItem )  this.data.getObject ( column, column ) ;
++ 
+         if (item != null) {
+             result = item.getMaxRegularValue();
+         }

@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:15:13.591613946 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:15:13.595613892 +0000
+@@ -449,7 +449,7 @@
+         plot.setOutlineStroke(null);
+ 
+         if (tooltips) {
+-            PieToolTipGenerator tooltipGenerator 
++if  ( tooltips )  {     renderer.setBaseToolTipGenerator ( new StandardCategoryToolTipGenerator (  )  ) ; }
+                 = new StandardPieToolTipGenerator();
+             PiePlot pp = (PiePlot) plot.getPieChart().getPlot();
+             pp.setToolTipGenerator(tooltipGenerator);

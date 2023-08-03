@@ -1,1 +1,0 @@
-commit a07c1f56aac1c0f6c8334760009b678cbf9d6138Author: Nikita Popov <nikita.ppv@gmail.com>Date:  Wed Sep 2 10:13:42 2020 +0200  Fix infinite loop on string offset during by-ref list assign    There is a deeper underlying issue here, in that the opcodes violate  VM write-fetch safety, but let's fix the infinite loop first.    This fixes oss-fuzz #25352.

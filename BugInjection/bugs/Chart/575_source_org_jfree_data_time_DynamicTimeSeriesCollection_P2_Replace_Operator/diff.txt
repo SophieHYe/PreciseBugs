@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:26.285994255 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:26.289994201 +0000
+@@ -572,7 +572,7 @@
+         //   Y-max and Y-range data:
+         boolean extremaChanged = false;
+         float oldMax = 0.0f;
+-        if (this.maxValue != null) {
++if  ( this.maxValue == null )  {
+             oldMax = this.maxValue.floatValue();
+         }
+         for (int s = 0; s < getSeriesCount(); s++) {

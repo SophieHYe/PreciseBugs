@@ -1,0 +1,11 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:09:14.967631534 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:09:14.971631480 +0000
+@@ -322,7 +322,7 @@
+             itemPaint = getGradientPaintTransformer().transform(gp, bar);
+         }
+         g2.setPaint(itemPaint);
+-        g2.fill(bar);
++g2.fill ( dataArea ) ;
+         if (isDrawBarOutline() 
+                 && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
+             g2.setStroke(getItemStroke(row, column));

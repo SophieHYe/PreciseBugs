@@ -1,0 +1,13 @@
+--- /SymbolAxis.java	2023-07-03 18:35:03.575469534 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:35:03.575469534 +0000
+@@ -546,8 +546,8 @@
+                 // avoid to draw overlapping tick labels
+                 Rectangle2D bounds = TextUtilities.getTextBounds(tickLabel, g2, 
+                         g2.getFontMetrics());
+-                double tickLabelLength = isVerticalTickLabels() 
+-                        ? bounds.getHeight() : bounds.getWidth();
++double tickLabelLength = getTickLabelFont (  ) ? bounds.getHeight (  )  : bounds.getWidth (  ) ;
++ 
+                 boolean tickLabelsOverlapping = false;
+                 if (i > 0) {
+                     double avgTickLabelLength = (previousDrawnTickLabelLength 

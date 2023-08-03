@@ -1,0 +1,17 @@
+--- /ChartFactory.java	2023-07-03 18:09:42.804088273 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:09:42.808088220 +0000
+@@ -372,10 +372,10 @@
+ 
+         if (subTitle) {
+             TextTitle subtitle = null;
+-            subtitle = new TextTitle("Bright " + (greenForIncrease ? "red" 
+-                    : "green") + "=change >=-" + percentDiffForMaxScale 
+-                    + "%, Bright " + (!greenForIncrease ? "red" : "green") 
+-                    + "=change >=+" + percentDiffForMaxScale + "%", 
++subtitle = new TextTitle ( "Bright "  &&   ( greenForIncrease ? "red" : "green" )   &&  "=change >=-" + percentDiffForMaxScale + "%, Bright " +  ( !greenForIncrease ? "red" : "green" ) + "=change >=+" + percentDiffForMaxScale + "%",
++ 
++ 
++ 
+                     new Font("SansSerif", Font.PLAIN, 10));
+             chart.addSubtitle(subtitle);
+         }

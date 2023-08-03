@@ -1,0 +1,13 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:31.061393202 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:31.061393202 +0000
+@@ -265,8 +265,8 @@
+                         case Types.BIGINT:
+                         case Types.SMALLINT:
+                             ++numberOfValidColumns;
+-                            columnTypes[column] = type;
+-                            break;
++if  ( columnTypes[column] != Types.NULL )  { columnTypes[column] = type; break; }
++ 
+                         default:
+                             columnTypes[column] = Types.NULL;
+                             break;

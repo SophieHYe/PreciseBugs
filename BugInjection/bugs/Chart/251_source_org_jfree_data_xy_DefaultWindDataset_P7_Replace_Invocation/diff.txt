@@ -1,0 +1,11 @@
+--- /DefaultWindDataset.java	2023-07-03 18:40:01.615422290 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultWindDataset.java	2023-07-03 18:40:01.619422236 +0000
+@@ -248,7 +248,7 @@
+      */
+     public Number getWindDirection(int series, int item) {
+         List oneSeriesData = (List) this.allSeriesData.get(series);
+-        WindDataItem windItem = (WindDataItem) oneSeriesData.get(item);
++WindDataItem windItem =  ( WindDataItem )  oneSeriesData.add ( item ) ;
+         return windItem.getWindDirection();
+     }
+ 

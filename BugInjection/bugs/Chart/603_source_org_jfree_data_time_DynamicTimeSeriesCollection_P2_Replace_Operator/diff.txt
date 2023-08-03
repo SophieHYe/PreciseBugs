@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:39.885809643 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:39.885809643 +0000
+@@ -600,7 +600,7 @@
+         }
+         // Update the domain limits:
+         long startL = this.domainStart.longValue();  //(time is kept in msec)
+-        this.domainStart = new Long(startL + this.deltaTime);
++this.domainStart = new Long ( startL  ||  this.deltaTime ) ;
+         long endL = this.domainEnd.longValue();
+         this.domainEnd = new Long(endL + this.deltaTime);
+         this.domainRange = new Range(startL, endL);

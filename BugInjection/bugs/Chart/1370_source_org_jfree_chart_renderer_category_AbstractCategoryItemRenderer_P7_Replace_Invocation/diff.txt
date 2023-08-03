@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:58:41.448231744 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:58:41.448231744 +0000
+@@ -1367,7 +1367,7 @@
+         if (this.baseURLGenerator != null) {
+             if (this.baseURLGenerator instanceof PublicCloneable) {
+                 PublicCloneable pc = (PublicCloneable) this.baseURLGenerator;
+-                clone.baseURLGenerator = (CategoryURLGenerator) pc.clone();
++clone.baseURLGenerator =  ( CategoryURLGenerator )  pc .hashCode (  )  ;
+             }
+             else {
+                 throw new CloneNotSupportedException(

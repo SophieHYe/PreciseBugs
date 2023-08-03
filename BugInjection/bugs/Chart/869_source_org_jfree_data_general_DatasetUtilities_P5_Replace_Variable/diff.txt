@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:32:05.041893631 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:32:05.041893631 +0000
+@@ -866,7 +866,7 @@
+                     uvalue = highLowData.getHighValue(series, item);
+                 }
+                 else {
+-                    lvalue = dataset.getYValue(series, item);
++lvalue = series.getYValue ( dataset, item ) ;
+                     uvalue = lvalue;
+                 }
+                 if (!Double.isNaN(lvalue)) {

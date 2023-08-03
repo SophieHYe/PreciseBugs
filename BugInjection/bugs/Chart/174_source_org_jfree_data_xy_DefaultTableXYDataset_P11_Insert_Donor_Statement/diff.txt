@@ -1,0 +1,11 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:40.460453087 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:40.460453087 +0000
+@@ -171,7 +171,7 @@
+         this.propagateEvents = false;
+         for (int itemNo = 0; itemNo < series.getItemCount(); itemNo++) {
+             Number xValue = series.getX(itemNo);
+-            seriesXPoints.add(xValue);
++dataSeries.add ( xValue, null ) ;seriesXPoints.add ( xValue ) ;
+             if (!this.xPoints.contains(xValue)) {
+                 this.xPoints.add(xValue);
+                 int seriesCount = this.data.size();

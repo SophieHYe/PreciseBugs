@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:43:56.872230719 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:43:56.872230719 +0000
+@@ -386,7 +386,7 @@
+         CategoryToolTipGenerator result = null;
+         result = getSeriesToolTipGenerator(row);
+         if (result == null) {
+-            result = this.baseToolTipGenerator;
++if  ( this.baseToolTipGenerator != null )  { result = this.baseToolTipGenerator; }
+         }
+         return result;
+     }

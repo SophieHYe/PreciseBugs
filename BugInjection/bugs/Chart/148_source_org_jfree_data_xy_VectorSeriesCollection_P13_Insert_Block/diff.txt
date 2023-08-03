@@ -1,0 +1,11 @@
+--- /VectorSeriesCollection.java	2023-07-03 18:38:27.340702551 +0000
++++ /Chart-26/source/org/jfree/data/xy/VectorSeriesCollection.java	2023-07-03 18:38:27.340702551 +0000
+@@ -145,7 +145,7 @@
+      *     range <code>0</code> to <code>getSeriesCount() - 1</code>.
+      */
+     public VectorSeries getSeries(int series) {
+-        if ((series < 0) || (series >= getSeriesCount())) {
++if  ( series == null )  {     throw new IllegalArgumentException ( "Null 'series' argument." ) ; }
+             throw new IllegalArgumentException("Series index out of bounds");
+         }
+         return (VectorSeries) this.data.get(series);

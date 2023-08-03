@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:06.335079528 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:06.335079528 +0000
+@@ -277,7 +277,7 @@
+ 
+         // the first initialization must precede creation of the ValueSet array:
+         this.maximumItemCount = nMoments;  // establishes length of each array
+-        this.historyCount = nMoments;
++this.historyCount =  maximumItemCount;
+         this.seriesKeys = new Comparable[nSeries];
+         // initialize the members of "seriesNames" array so they won't be null:
+         for (int i = 0; i < nSeries; i++) {

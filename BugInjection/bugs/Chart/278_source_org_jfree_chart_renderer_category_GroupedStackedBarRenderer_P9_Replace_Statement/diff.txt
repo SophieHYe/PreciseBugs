@@ -1,0 +1,11 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:07:37.692952192 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:07:37.696952137 +0000
+@@ -275,7 +275,7 @@
+             if (group.equals(this.seriesToGroupMap.getGroup(
+                     dataset.getRowKey(i)))) {
+                 Number v = dataset.getValue(i, column);
+-                if (v != null) {
++if  ( entities != null )  {
+                     double d = v.doubleValue();
+                     if (d > 0) {
+                         positiveBase = positiveBase + d;

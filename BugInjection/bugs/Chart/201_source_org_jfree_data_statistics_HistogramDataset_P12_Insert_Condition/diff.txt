@@ -1,0 +1,11 @@
+--- /HistogramDataset.java	2023-07-03 19:19:48.647065504 +0000
++++ /Chart-26/source/org/jfree/data/statistics/HistogramDataset.java	2023-07-03 19:19:48.651065450 +0000
+@@ -198,7 +198,7 @@
+                 // which will cause an IndexOutOfBoundsException - see bug
+                 // report 1553088
+                 if (binIndex >= bins) {
+-                    binIndex = bins - 1;
++if  ( binIndex >= bins )  { binIndex = bins - 1; }
+                 }
+             }
+             HistogramBin bin = (HistogramBin) binList.get(binIndex);

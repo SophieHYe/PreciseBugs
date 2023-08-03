@@ -1,0 +1,14 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:07:12.177298601 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:07:12.181298546 +0000
+@@ -311,8 +311,9 @@
+ 
+         Axis domainAxis = null;
+         if (plot instanceof CategoryPlot) {
+-            domainAxis = ((CategoryPlot) plot).getDomainAxis();
+-        }
++ 
++domainAxis = ((org.jfree.chart.plot.CategoryPlot) (plot)).getDomainAxis(); 
++ 
+         else if (plot instanceof XYPlot) {
+             domainAxis = ((XYPlot) plot).getDomainAxis();
+         }

@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:27.594254654 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:27.598254601 +0000
+@@ -876,7 +876,7 @@
+         if (start < 0) {
+             throw new IllegalArgumentException("Requires start >= 0.");
+         }
+-        if (end < start) {
++if  ( end == null )  {
+             throw new IllegalArgumentException("Requires start <= end.");
+         }
+         TimeSeries copy = (TimeSeries) super.clone();

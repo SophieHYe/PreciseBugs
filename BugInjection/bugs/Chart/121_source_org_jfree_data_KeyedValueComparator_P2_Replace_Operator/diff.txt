@@ -1,0 +1,11 @@
+--- /KeyedValueComparator.java	2023-07-03 18:30:51.338894264 +0000
++++ /Chart-26/source/org/jfree/data/KeyedValueComparator.java	2023-07-03 18:30:51.338894264 +0000
+@@ -118,7 +118,7 @@
+         KeyedValue kv1 = (KeyedValue) o1;
+         KeyedValue kv2 = (KeyedValue) o2;
+ 
+-        if (this.type == KeyedValueComparatorType.BY_KEY) {
++if  ( this.type != KeyedValueComparatorType.BY_KEY )  {
+             if (this.order.equals(SortOrder.ASCENDING)) {
+                 result = kv1.getKey().compareTo(kv2.getKey());
+             }

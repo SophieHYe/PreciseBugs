@@ -1,0 +1,14 @@
+--- /CategoryTableXYDataset.java	2023-07-03 18:40:32.223006627 +0000
++++ /Chart-26/source/org/jfree/data/xy/CategoryTableXYDataset.java	2023-07-03 18:40:32.227006573 +0000
+@@ -291,8 +291,9 @@
+      */
+     public Range getDomainBounds(boolean includeInterval) {
+         if (includeInterval) {
+-            return this.intervalDelegate.getDomainBounds(includeInterval);
+-        }
++ 
++return this.intervalDelegate.getDomainBounds(includeInterval); 
++ 
+         else {
+             return DatasetUtilities.iterateDomainBounds(this, includeInterval);
+         }

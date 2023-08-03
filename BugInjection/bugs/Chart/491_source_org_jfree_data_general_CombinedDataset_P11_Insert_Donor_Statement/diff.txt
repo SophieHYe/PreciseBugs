@@ -1,0 +1,13 @@
+--- /CombinedDataset.java	2023-07-03 18:35:52.918799512 +0000
++++ /Chart-26/source/org/jfree/data/general/CombinedDataset.java	2023-07-03 18:35:52.918799512 +0000
+@@ -488,8 +488,8 @@
+         for (int i = 0; i < this.datasetInfo.size(); i++) {
+             SeriesDataset child = getDatasetInfo(i).data;
+             if (child instanceof CombinationDataset) {
+-                SeriesDataset childParent 
+-                    = ((CombinationDataset) child).getParent();
++int[] childMap =  (  ( CombinationDataset )  child ) .getMap (  ) ;SeriesDataset childParent =  (  ( CombinationDataset )  child ) .getParent (  ) ;
++ 
+                 if (parent == null) {
+                     parent = childParent;
+                 }

@@ -1,0 +1,10 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:36:53.821972498 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:36:53.825972444 +0000
+@@ -317,6 +317,7 @@
+         Iterator iterator = this.data.iterator();
+         while (iterator.hasNext()) {
+             TaskSeries series = (TaskSeries) iterator.next();
++ 
+             series.removeChangeListener(this);
+         }
+ 

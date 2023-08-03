@@ -1,0 +1,11 @@
+--- /ChartEntity.java	2023-07-03 19:19:40.939168930 +0000
++++ /Chart-26/source/org/jfree/chart/entity/ChartEntity.java	2023-07-03 19:19:40.939168930 +0000
+@@ -320,7 +320,7 @@
+                         this.toolTipText));
+             }
+             if (hasURL) {
+-                tag.append(urlTagFragmentGenerator.generateURLFragment(
++if  ( hasToolTip )  {     tag.append ( toolTipTagFragmentGenerator.generateToolTipFragment ( this.toolTipText )  ) ; }
+                         this.urlText));
+             }
+             // if there is a tool tip, we expect it to generate the title and

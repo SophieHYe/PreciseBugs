@@ -1,1 +1,0 @@
-commit f302430c721c8f8004ef97c9c051b2327ed069f4Author: Dmitry Stogov <dmitry@zend.com>Date:  Thu Nov 25 13:33:26 2021 +0300  Fixed incorrect DCE for ADD_ARRAY_ELEMENT instruction    DCE might remove INIT_ARRAY instruction but then keep the related  ADD_ARRAY_ELEMENT, becuse its both operands need to be freed.    Fixes oss-fuzz #41309

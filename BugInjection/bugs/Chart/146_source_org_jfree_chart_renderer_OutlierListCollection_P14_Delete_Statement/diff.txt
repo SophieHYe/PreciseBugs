@@ -1,0 +1,10 @@
+--- /OutlierListCollection.java	2023-07-03 18:40:31.123021566 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/OutlierListCollection.java	2023-07-03 18:40:31.123021566 +0000
+@@ -144,6 +144,7 @@
+             for (Iterator iterator = this.outlierLists.iterator(); 
+                  iterator.hasNext();) {
+                 OutlierList list = (OutlierList) iterator.next();
++ 
+                 if (list.isOverlapped(outlier)) {
+                     updated = updateOutlierList(list, outlier);
+                 }

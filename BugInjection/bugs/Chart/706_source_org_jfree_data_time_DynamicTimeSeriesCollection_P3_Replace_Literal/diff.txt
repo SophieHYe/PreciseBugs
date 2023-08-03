@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:02:14.653337682 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:02:14.653337682 +0000
+@@ -703,7 +703,7 @@
+              }
+              this.valueHistory[s].enterData(insertionIndex, newData[s]);
+          }
+-         if (refresh > 0) {
++if  ( refresh > nDataPoints )  {
+              insertionIndex++;
+              if (insertionIndex % refresh == 0) {
+                  fireSeriesChanged();

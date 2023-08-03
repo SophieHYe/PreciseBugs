@@ -1,0 +1,10 @@
+--- /ValueHandler.java	2023-07-03 18:33:22.012848570 +0000
++++ /Chart-26/source/org/jfree/data/xml/ValueHandler.java	2023-07-03 18:33:22.012848570 +0000
+@@ -115,6 +115,7 @@
+             Number value;
+             try {
+                 value = Double.valueOf(this.currentText.toString());
++ 
+                 if (((Double) value).isNaN()) {
+                     value = null;
+                 }

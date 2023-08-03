@@ -1,0 +1,10 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:14.041623865 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:14.041623865 +0000
+@@ -250,6 +250,7 @@
+             for (int column = 0; column < numberOfColumns; column++) {
+                 try {
+                     int type = metaData.getColumnType(column + 1);
++ 
+                     switch (type) {
+ 
+                         case Types.NUMERIC:

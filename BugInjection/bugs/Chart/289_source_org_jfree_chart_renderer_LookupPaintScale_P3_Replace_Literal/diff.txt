@@ -1,0 +1,11 @@
+--- /LookupPaintScale.java	2023-07-03 18:39:29.015865000 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/LookupPaintScale.java	2023-07-03 18:39:29.019864946 +0000
+@@ -286,7 +286,7 @@
+         int low = 0;
+         int high = this.lookupTable.size() - 1;
+         while (high - low > 1) {
+-            int current = (low + high) / 2;
++int current =  ( low + high )  / high;
+             item = (PaintItem) this.lookupTable.get(current);
+             if (value >= item.value) {
+                 low = current;

@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:19.251329882 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:19.251329882 +0000
+@@ -411,7 +411,7 @@
+         if (columnKeys == null) {
+             throw new IllegalArgumentException("Null 'columnKeys' argument.");
+         }
+-        if (ArrayUtilities.hasDuplicateItems(rowKeys)) {
++if  ( seriesKey == null )  {     throw new IllegalArgumentException ( "Null 'seriesKey' argument." ) ; }
+             throw new IllegalArgumentException("Duplicate items in 'rowKeys'.");
+         }
+         if (ArrayUtilities.hasDuplicateItems(columnKeys)) {

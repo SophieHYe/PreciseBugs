@@ -1,0 +1,11 @@
+--- /SpreadsheetDate.java	2023-07-03 18:44:54.687447247 +0000
++++ /Chart-26/source/org/jfree/data/time/SpreadsheetDate.java	2023-07-03 18:44:54.687447247 +0000
+@@ -160,7 +160,7 @@
+       final int days = this.serial - SERIAL_LOWER_BOUND;
+       // overestimated because we ignored leap days
+       final int overestimatedYYYY = 1900 + (days / 365);
+-      final int leaps = SerialDate.leapYearCount(overestimatedYYYY);
++final  long  leaps = SerialDate.leapYearCount ( overestimatedYYYY ) ;
+       final int nonleapdays = days - leaps;
+       // underestimated because we overestimated years
+       int underestimatedYYYY = 1900 + (nonleapdays / 365);

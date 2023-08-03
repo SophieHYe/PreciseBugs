@@ -1,0 +1,16 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:09.861680632 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:09.861680632 +0000
+@@ -394,9 +394,10 @@
+         }
+         finally {
+             if (resultSet != null) {
+-                try {
+-                    resultSet.close();
+-                }
++ 
++try {    resultSet.close();} catch (java.lang.Exception e) {}; 
++ 
++ 
+                 catch (Exception e) {
+                     // TODO: is this a good idea?
+                 }

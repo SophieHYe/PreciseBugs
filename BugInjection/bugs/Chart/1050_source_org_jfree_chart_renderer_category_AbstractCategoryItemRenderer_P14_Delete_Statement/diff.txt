@@ -1,0 +1,12 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:51:58.289702813 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:51:58.293702758 +0000
+@@ -1048,7 +1048,8 @@
+             RectangleAnchor anchor = marker.getLabelAnchor();
+             if (label != null) {
+                 Font labelFont = marker.getLabelFont();
+-                g2.setFont(labelFont);
++ 
++ 
+                 g2.setPaint(marker.getLabelPaint());
+                 Point2D coordinates = calculateRangeMarkerTextAnchorPoint(
+                         g2, orientation, dataArea, rect,

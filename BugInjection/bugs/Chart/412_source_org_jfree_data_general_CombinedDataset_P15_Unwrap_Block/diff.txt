@@ -1,0 +1,14 @@
+--- /CombinedDataset.java	2023-07-03 18:35:41.302957242 +0000
++++ /Chart-26/source/org/jfree/data/general/CombinedDataset.java	2023-07-03 18:35:41.302957242 +0000
+@@ -410,8 +410,9 @@
+     public Number getStartX(int series, int item) {
+         DatasetInfo di = getDatasetInfo(series);
+         if (di.data instanceof IntervalXYDataset) {
+-            return ((IntervalXYDataset) di.data).getStartX(di.series, item);
+-        }
++ 
++return ((org.jfree.data.xy.IntervalXYDataset) (di.data)).getStartX(di.series, item); 
++ 
+         else {
+             return getX(series, item);
+         }

@@ -1,0 +1,18 @@
+--- /BoxAndWhiskerCalculator.java	2023-07-03 19:12:12.645219214 +0000
++++ /Chart-26/source/org/jfree/data/statistics/BoxAndWhiskerCalculator.java	2023-07-03 19:12:12.645219214 +0000
+@@ -222,10 +222,11 @@
+         double result = Double.NaN;
+         int count = values.size();
+         if (count > 0) {
+-            if (count % 2 == 1) {
+-                if (count > 1) {
+-                    result = Statistics.calculateMedian(values, count / 2, 
+-                            count - 1);
++ 
++if ((count % 2) == 1) {    if (count > 1) {        result = org.jfree.data.statistics.Statistics.calculateMedian(values, (count / 2), (count - 1));    }else {        result = org.jfree.data.statistics.Statistics.calculateMedian(values, 0, 0);    }}else {    result = org.jfree.data.statistics.Statistics.calculateMedian(values, (count / 2), (count - 1));}; 
++ 
++ 
++ 
+                 }
+                 else {
+                     result = Statistics.calculateMedian(values, 0, 0);

@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:57:54.496869012 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:57:54.496869012 +0000
+@@ -1334,7 +1334,7 @@
+                 PublicCloneable pc
+                         = (PublicCloneable) this.baseItemLabelGenerator;
+                 clone.baseItemLabelGenerator
+-                        = (CategoryItemLabelGenerator) pc.clone();
++= getItemLabelGenerator ( row, column ) ;=  ( CategoryItemLabelGenerator )  pc.clone (  ) ;
+             }
+             else {
+                 throw new CloneNotSupportedException(

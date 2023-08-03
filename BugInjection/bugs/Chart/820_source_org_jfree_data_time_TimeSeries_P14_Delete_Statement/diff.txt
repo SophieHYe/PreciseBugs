@@ -1,0 +1,10 @@
+--- /TimeSeries.java	2023-07-03 18:41:18.754374706 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:18.758374652 +0000
+@@ -818,6 +818,7 @@
+         int index = getIndex(period);
+         if (index >= 0) {
+             this.data.remove(index);
++ 
+             fireSeriesChanged();
+         }
+     }

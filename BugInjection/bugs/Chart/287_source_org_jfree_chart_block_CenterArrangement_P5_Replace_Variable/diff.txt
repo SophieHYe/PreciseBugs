@@ -1,0 +1,11 @@
+--- /CenterArrangement.java	2023-07-03 18:52:08.581563180 +0000
++++ /Chart-26/source/org/jfree/chart/block/CenterArrangement.java	2023-07-03 18:52:08.581563180 +0000
+@@ -284,7 +284,7 @@
+     protected Size2D arrangeNN(BlockContainer container, Graphics2D g2) {
+         List blocks = container.getBlocks();
+         Block b = (Block) blocks.get(0);
+-        Size2D s = b.arrange(g2, RectangleConstraint.NONE);
++Size2D s = g2.arrange ( b, RectangleConstraint.NONE ) ;
+         b.setBounds(new Rectangle2D.Double(0.0, 0.0, s.width, s.height));
+         return new Size2D(s.width, s.height);  
+     }

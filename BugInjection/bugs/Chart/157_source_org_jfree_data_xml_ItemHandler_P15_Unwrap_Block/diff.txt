@@ -1,0 +1,18 @@
+--- /ItemHandler.java	2023-07-03 18:33:06.517058967 +0000
++++ /Chart-26/source/org/jfree/data/xml/ItemHandler.java	2023-07-03 18:33:06.517058967 +0000
+@@ -155,10 +155,11 @@
+                            String qName) {
+ 
+         if (this.parent instanceof PieDatasetHandler) {
+-            PieDatasetHandler handler = (PieDatasetHandler) this.parent;
+-            handler.addItem(this.key, this.value);
+-            this.root.popSubHandler();
+-        }
++ 
++org.jfree.data.xml.PieDatasetHandler handler = ((org.jfree.data.xml.PieDatasetHandler) (this.parent)); handler.addItem(this.key, this.value); this.root.popSubHandler(); 
++ 
++ 
++ 
+         else if (this.parent instanceof CategorySeriesHandler) {
+             CategorySeriesHandler handler = (CategorySeriesHandler) this.parent;
+             handler.addItem(this.key, this.value);

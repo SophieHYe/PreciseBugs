@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:25:36.899162351 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:25:36.903162297 +0000
+@@ -672,7 +672,7 @@
+                     new StandardCategoryToolTipGenerator());
+         }
+         if (urls) {
+-            renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
++if  ( tooltips )  {     renderer.setBaseToolTipGenerator ( new StandardXYZToolTipGenerator (  )  ) ; }
+         }
+ 
+         CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, 

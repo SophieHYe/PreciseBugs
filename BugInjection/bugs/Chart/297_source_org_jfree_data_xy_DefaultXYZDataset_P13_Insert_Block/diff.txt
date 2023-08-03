@@ -1,0 +1,11 @@
+--- /DefaultXYZDataset.java	2023-07-03 18:36:45.586084335 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYZDataset.java	2023-07-03 18:36:45.586084335 +0000
+@@ -294,7 +294,7 @@
+      */
+     public void addSeries(Comparable seriesKey, double[][] data) {
+         if (seriesKey == null) {
+-            throw new IllegalArgumentException(
++if  ( data == null )  {     throw new IllegalArgumentException ( "The 'data' is null." ) ; }
+                     "The 'seriesKey' cannot be null.");
+         }
+         if (data == null) {

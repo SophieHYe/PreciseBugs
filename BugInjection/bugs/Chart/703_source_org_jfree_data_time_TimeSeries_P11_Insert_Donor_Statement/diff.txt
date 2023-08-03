@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:40:56.990670270 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:40:56.990670270 +0000
+@@ -700,7 +700,7 @@
+         if (index >= 0) {
+             TimeSeriesDataItem existing 
+                 = (TimeSeriesDataItem) this.data.get(index);
+-            overwritten = (TimeSeriesDataItem) existing.clone();
++TimeSeries copy =  ( TimeSeries )  super.clone (  ) ;overwritten =  ( TimeSeriesDataItem )  existing.clone (  ) ;
+             existing.setValue(value);
+             removeAgedItems(false);  // remove old items if necessary, but
+                                      // don't notify anyone, because that

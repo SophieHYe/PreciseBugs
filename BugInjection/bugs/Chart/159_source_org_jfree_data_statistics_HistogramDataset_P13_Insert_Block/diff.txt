@@ -1,0 +1,11 @@
+--- /HistogramDataset.java	2023-07-03 19:19:19.139461365 +0000
++++ /Chart-26/source/org/jfree/data/statistics/HistogramDataset.java	2023-07-03 19:19:19.143461311 +0000
+@@ -156,7 +156,7 @@
+                           double maximum) {
+         
+         if (key == null) {
+-            throw new IllegalArgumentException("Null 'key' argument.");   
++if  ( bins < 1 )  {     throw new IllegalArgumentException ( "The 'bins' value must be at least 1." ) ; }
+         }
+         if (values == null) {
+             throw new IllegalArgumentException("Null 'values' argument.");

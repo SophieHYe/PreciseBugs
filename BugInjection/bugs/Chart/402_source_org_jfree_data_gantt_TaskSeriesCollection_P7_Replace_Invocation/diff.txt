@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:37:01.293871034 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:37:01.293871034 +0000
+@@ -399,7 +399,7 @@
+     public Number getEndValue(Comparable rowKey, Comparable columnKey) {
+         Number result = null;
+         int row = getRowIndex(rowKey);
+-        TaskSeries series = (TaskSeries) this.data.get(row);
++TaskSeries series =  ( TaskSeries )  this.data .iterator (  )  ;
+         Task task = series.get(columnKey.toString());
+         if (task != null) {
+             TimePeriod duration = task.getDuration();

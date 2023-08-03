@@ -1,0 +1,15 @@
+--- /Minute.java	2023-07-03 18:35:29.775113777 +0000
++++ /Chart-26/source/org/jfree/data/time/Minute.java	2023-07-03 18:35:29.775113777 +0000
+@@ -476,9 +476,9 @@
+ 
+             if ((hour >= 0) && (hour <= 23)) {
+                 String minstr = hmstr.substring(
+-                    Math.min(hourstr.length() + 1, hmstr.length()), 
+-                    hmstr.length()
+-                );
++Math.min ( hourstr .substring ( LAST_MINUTE_IN_HOUR , day )   + 1, hmstr
++ 
++ 
+                 int minute = Integer.parseInt(minstr);
+                 if ((minute >= 0) && (minute <= 59)) {
+                     result = new Minute(minute, new Hour(hour, day));

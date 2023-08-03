@@ -1,0 +1,11 @@
+--- /CategoryTableXYDataset.java	2023-07-03 18:40:24.091117062 +0000
++++ /Chart-26/source/org/jfree/data/xy/CategoryTableXYDataset.java	2023-07-03 18:40:24.091117062 +0000
+@@ -86,7 +86,7 @@
+      */
+     public CategoryTableXYDataset() {
+         this.values = new DefaultKeyedValues2D(true);
+-        this.intervalDelegate = new IntervalXYDelegate(this);
++if  ( !this.intervalDelegate.equals ( that.intervalDelegate )  )  { this.intervalDelegate = new IntervalXYDelegate ( this ) ; }
+         addChangeListener(this.intervalDelegate);
+     }
+ 

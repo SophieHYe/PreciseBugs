@@ -1,0 +1,18 @@
+--- /LookupPaintScale.java	2023-07-03 18:39:30.583843707 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/LookupPaintScale.java	2023-07-03 18:39:30.583843707 +0000
+@@ -296,10 +296,11 @@
+             }
+         }
+         if (high > low) {
+-            item = (PaintItem) this.lookupTable.get(high);
+-            if (value < item.value) {
+-                item = (PaintItem) this.lookupTable.get(low);
+-            }
++ 
++item = ((org.jfree.chart.renderer.LookupPaintScale.PaintItem) (this.lookupTable.get(high))); if (value < (item.value)) {    item = ((org.jfree.chart.renderer.LookupPaintScale.PaintItem) (this.lookupTable.get(low)));}; 
++ 
++ 
++ 
+         }
+         return (item != null ? item.paint : this.defaultPaint);
+     }

@@ -1,0 +1,13 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:21.780570012 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:21.784569958 +0000
+@@ -450,8 +450,8 @@
+     public synchronized Number getEndX(int series, int item) {
+         TimeSeries ts = (TimeSeries) this.data.get(series);
+         TimeSeriesDataItem dp = ts.getDataItem(item);
+-        return new Long(dp.getPeriod().getLastMillisecond(
+-                this.workingCalendar));
++return return  new Long ( dp.getPeriod (  ) .getFirstMillisecond ( this.workingCalendar )  )  .getLastMillisecond ( this.workingCalendar )  ) ;
++ 
+     }
+ 
+     /**

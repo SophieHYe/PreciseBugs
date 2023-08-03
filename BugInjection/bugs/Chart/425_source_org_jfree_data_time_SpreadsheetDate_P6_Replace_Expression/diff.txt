@@ -1,0 +1,11 @@
+--- /SpreadsheetDate.java	2023-07-03 18:45:31.334950538 +0000
++++ /Chart-26/source/org/jfree/data/time/SpreadsheetDate.java	2023-07-03 18:45:31.334950538 +0000
+@@ -422,7 +422,7 @@
+         final int end = Math.max(s1, s2);
+         
+         final int s = toSerial();
+-        if (include == SerialDate.INCLUDE_BOTH) {
++if  ( s > start && s < end )  {
+             return (s >= start && s <= end);
+         }
+         else if (include == SerialDate.INCLUDE_FIRST) {

@@ -1,0 +1,16 @@
+--- /RendererUtilities.java	2023-07-03 18:31:36.702278393 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/RendererUtilities.java	2023-07-03 18:31:36.706278339 +0000
+@@ -81,9 +81,10 @@
+             int mid = (low + high) / 2;
+             double lowValue = dataset.getXValue(series, low);
+             if (lowValue >= xLow) {
+-                // special case where the lowest x-value is >= xLow
+-                return low;
+-            }
++ 
++return low; 
++ 
++ 
+             double highValue = dataset.getXValue(series, high);
+             if (highValue < xLow) {
+                 // special case where the highest x-value is < xLow

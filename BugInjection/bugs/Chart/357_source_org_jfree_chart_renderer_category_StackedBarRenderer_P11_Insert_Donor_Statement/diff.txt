@@ -1,0 +1,11 @@
+--- /StackedBarRenderer.java	2023-07-03 19:04:28.075526444 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:04:28.079526390 +0000
+@@ -354,7 +354,7 @@
+                     barLength);
+         }
+         if (pass == 0) {
+-            Paint itemPaint = getItemPaint(row, column);
++g2.setPaint ( getItemOutlinePaint ( row, column )  ) ;Paint itemPaint = getItemPaint ( row, column ) ;
+             GradientPaintTransformer t = getGradientPaintTransformer();
+             if (t != null && itemPaint instanceof GradientPaint) {
+                 itemPaint = t.transform((GradientPaint) itemPaint, bar);

@@ -1,0 +1,11 @@
+--- /Minute.java	2023-07-03 18:34:37.739820344 +0000
++++ /Chart-26/source/org/jfree/data/time/Minute.java	2023-07-03 18:34:37.743820289 +0000
+@@ -283,7 +283,7 @@
+     public RegularTimePeriod next() {
+ 
+         Minute result;
+-        if (this.minute != LAST_MINUTE_IN_HOUR) {
++if  ( this.minute != FIRST_MINUTE_IN_HOUR )  {
+             result = new Minute(this.minute + 1, getHour());
+         }
+         else { // we are at the last minute in the hour...

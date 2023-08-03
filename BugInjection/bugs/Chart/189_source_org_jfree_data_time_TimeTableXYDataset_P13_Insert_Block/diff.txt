@@ -1,0 +1,11 @@
+--- /TimeTableXYDataset.java	2023-07-03 18:38:15.248866756 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeTableXYDataset.java	2023-07-03 18:38:15.252866702 +0000
+@@ -186,7 +186,7 @@
+      * @param anchor  the anchor position (<code>null</code> not permitted).
+      */
+     public void setXPosition(TimePeriodAnchor anchor) {
+-        if (anchor == null) {
++if  ( zone == null )  {     throw new IllegalArgumentException ( "Null 'zone' argument." ) ; }
+             throw new IllegalArgumentException("Null 'anchor' argument.");
+         }
+         this.xPosition = anchor;

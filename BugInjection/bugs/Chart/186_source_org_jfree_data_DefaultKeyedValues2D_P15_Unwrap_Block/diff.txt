@@ -1,0 +1,14 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:31:43.674183738 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:31:43.678183683 +0000
+@@ -184,8 +184,9 @@
+             throw new IllegalArgumentException("Null 'key' argument.");
+         }
+         if (this.sortRowKeys) {
+-            return Collections.binarySearch(this.rowKeys, key);
+-        }
++ 
++return java.util.Collections.binarySearch(this.rowKeys, key); 
++ 
+         else {
+             return this.rowKeys.indexOf(key);
+         }

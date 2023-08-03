@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:46:24.458230413 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:46:24.462230358 +0000
+@@ -838,7 +838,7 @@
+                 AlphaComposite.SRC_OVER, marker.getAlpha()));
+ 
+         PlotOrientation orientation = plot.getOrientation();
+-        Rectangle2D bounds = null;
++Rectangle2D anchorRect = null;Rectangle2D bounds = null;
+         if (marker.getDrawAsLine()) {
+             double v = axis.getCategoryMiddle(columnIndex,
+                     dataset.getColumnCount(), dataArea,

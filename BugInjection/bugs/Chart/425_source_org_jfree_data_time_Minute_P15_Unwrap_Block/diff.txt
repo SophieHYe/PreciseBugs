@@ -1,0 +1,18 @@
+--- /Minute.java	2023-07-03 18:35:01.115502937 +0000
++++ /Chart-26/source/org/jfree/data/time/Minute.java	2023-07-03 18:35:01.115502937 +0000
+@@ -423,10 +423,11 @@
+         // CASE 1 : Comparing to another Minute object
+         // -------------------------------------------
+         if (o1 instanceof Minute) {
+-            Minute m = (Minute) o1;
+-            result = getHour().compareTo(m.getHour());
+-            if (result == 0) {
+-                result = this.minute - m.getMinute();
++ 
++org.jfree.data.time.Minute m = ((org.jfree.data.time.Minute) (o1)); result = getHour().compareTo(m.getHour()); if (result == 0) {    result = (this.minute) - (m.getMinute());}; 
++ 
++ 
++ 
+             }
+         }
+ 

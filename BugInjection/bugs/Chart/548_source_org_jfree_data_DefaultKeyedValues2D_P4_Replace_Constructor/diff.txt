@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues2D.java	2023-07-03 18:32:52.433250188 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues2D.java	2023-07-03 18:32:52.433250188 +0000
+@@ -545,7 +545,7 @@
+         DefaultKeyedValues2D clone = (DefaultKeyedValues2D) super.clone();
+         // for the keys, a shallow copy should be fine because keys
+         // should be immutable...
+-        clone.columnKeys = new java.util.ArrayList(this.columnKeys);
++clone.columnKeys = clone.columnKeys =  java.util.new ArrayList ( this.rowKeys )  ;
+         clone.rowKeys = new java.util.ArrayList(this.rowKeys);
+         
+         // but the row data requires a deep copy

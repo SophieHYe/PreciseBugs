@@ -1,0 +1,15 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:47:42.393173739 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:47:42.393173739 +0000
+@@ -861,9 +861,9 @@
+             double v0 = axis.getCategoryStart(columnIndex,
+                     dataset.getColumnCount(), dataArea,
+                     plot.getDomainAxisEdge());
+-            double v1 = axis.getCategoryEnd(columnIndex,
+-                    dataset.getColumnCount(), dataArea,
+-                    plot.getDomainAxisEdge());
++double v1 = axis.getCategoryEnd ( columnIndex, dataset .getRowCount (  )  , dataArea, plot.getDomainAxisEdge (  )  ) ;
++ 
++ 
+             Rectangle2D area = null;
+             if (orientation == PlotOrientation.HORIZONTAL) {
+                 area = new Rectangle2D.Double(dataArea.getMinX(), v0,

@@ -1,0 +1,11 @@
+--- /BorderArrangement.java	2023-07-03 18:38:51.420375550 +0000
++++ /Chart-26/source/org/jfree/chart/block/BorderArrangement.java	2023-07-03 18:38:51.420375550 +0000
+@@ -226,7 +226,7 @@
+             h[4] = size.height;
+         }
+         double width = Math.max(w[0], Math.max(w[1], w[2] + w[4] + w[3]));
+-        double centerHeight = Math.max(h[2], Math.max(h[3], h[4]));
++double height = h[0] + h[1] + Math.max ( h[2], Math.max ( h[3], h[4] )  ) ;double centerHeight = Math.max ( h[2], Math.max ( h[3], h[4] )  ) ;
+         double height = h[0] + h[1] + centerHeight;
+         if (this.topBlock != null) {
+             this.topBlock.setBounds(

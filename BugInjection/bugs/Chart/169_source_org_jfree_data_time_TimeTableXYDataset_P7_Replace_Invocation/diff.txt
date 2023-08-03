@@ -1,0 +1,11 @@
+--- /TimeTableXYDataset.java	2023-07-03 18:38:14.252880281 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeTableXYDataset.java	2023-07-03 18:38:14.252880281 +0000
+@@ -166,7 +166,7 @@
+      */
+     public void setDomainIsPointsInTime(boolean flag) {
+         this.domainIsPointsInTime = flag;
+-        notifyListeners(new DatasetChangeEvent(this, this));
++fireDatasetChanged ( new DatasetChangeEvent ( this, this )  ) ;
+     }
+     
+     /**

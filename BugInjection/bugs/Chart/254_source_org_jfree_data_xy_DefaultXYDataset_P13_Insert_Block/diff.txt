@@ -1,0 +1,11 @@
+--- /DefaultXYDataset.java	2023-07-03 18:37:43.721294890 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYDataset.java	2023-07-03 18:37:43.721294890 +0000
+@@ -251,7 +251,7 @@
+      *     second containing the y-values). 
+      */
+     public void addSeries(Comparable seriesKey, double[][] data) {
+-        if (seriesKey == null) {
++if  (  ( data[0].length )  !=  ( data[1].length )  )  {     throw new IllegalArgumentException ( "The 'data' array must contain two arrays with equal length." ) ; }
+             throw new IllegalArgumentException(
+                     "The 'seriesKey' cannot be null.");
+         }

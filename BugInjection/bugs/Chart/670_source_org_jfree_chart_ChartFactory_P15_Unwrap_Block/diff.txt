@@ -1,0 +1,16 @@
+--- /ChartFactory.java	2023-07-03 18:25:19.959392233 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:25:19.963392178 +0000
+@@ -668,9 +668,10 @@
+ 
+         StackedBarRenderer renderer = new StackedBarRenderer();
+         if (tooltips) {
+-            renderer.setBaseToolTipGenerator(
+-                    new StandardCategoryToolTipGenerator());
+-        }
++ 
++renderer.setBaseToolTipGenerator(new org.jfree.chart.labels.StandardCategoryToolTipGenerator()); 
++ 
++ 
+         if (urls) {
+             renderer.setBaseURLGenerator(new StandardCategoryURLGenerator());
+         }

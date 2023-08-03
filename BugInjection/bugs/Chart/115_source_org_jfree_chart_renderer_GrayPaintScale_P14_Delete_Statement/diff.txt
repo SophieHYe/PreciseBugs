@@ -1,0 +1,12 @@
+--- /GrayPaintScale.java	2023-07-03 18:38:03.637024442 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/GrayPaintScale.java	2023-07-03 18:38:03.637024442 +0000
+@@ -113,7 +113,8 @@
+      */
+     public Paint getPaint(double value) {
+         double v = Math.max(value, this.lowerBound);
+-        v = Math.min(v, this.upperBound);
++ 
++ 
+         int g = (int) ((value - this.lowerBound) / (this.upperBound 
+                 - this.lowerBound) * 255.0);
+         return new Color(g, g, g);

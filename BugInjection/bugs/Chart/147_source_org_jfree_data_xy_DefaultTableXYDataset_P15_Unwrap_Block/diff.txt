@@ -1,0 +1,18 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:28.552614419 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:28.552614419 +0000
+@@ -145,10 +145,11 @@
+             throw new IllegalArgumentException("Null 'series' argument.");
+         }
+         if (series.getAllowDuplicateXValues()) {
+-            throw new IllegalArgumentException(
+-                "Cannot accept XYSeries that allow duplicate values. "
+-                + "Use XYSeries(seriesName, <sort>, false) constructor."
+-            );
++ 
++throw new java.lang.IllegalArgumentException(("Cannot accept XYSeries that allow duplicate values. " + "Use XYSeries(seriesName, <sort>, false) constructor.")); 
++ 
++ 
++ 
+         }
+         updateXPoints(series);
+         this.data.add(series);

@@ -1,0 +1,11 @@
+--- /DefaultOHLCDataset.java	2023-07-03 18:39:02.996218350 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultOHLCDataset.java	2023-07-03 18:39:02.996218350 +0000
+@@ -234,7 +234,7 @@
+     public double getCloseValue(int series, int item) {
+         double result = Double.NaN;
+         Number close = getClose(series, item);
+-        if (close != null) {
++if  ( close == null )  {
+             result = close.doubleValue();   
+         }
+         return result;   

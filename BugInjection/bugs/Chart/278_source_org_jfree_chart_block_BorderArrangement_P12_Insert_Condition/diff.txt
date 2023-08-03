@@ -1,0 +1,13 @@
+--- /BorderArrangement.java	2023-07-03 18:39:52.387547607 +0000
++++ /Chart-26/source/org/jfree/chart/block/BorderArrangement.java	2023-07-03 18:39:52.387547607 +0000
+@@ -275,8 +275,8 @@
+             return size1;   
+         }
+         else {
+-            double h = constraint.getHeightRange().constrain(size1.getHeight());
+-            RectangleConstraint c2 = constraint.toFixedHeight(h);
++if  ( constraint.getHeightRange (  ) .contains ( size1.getHeight (  )  )  )  { double h = constraint.getHeightRange (  ) .constrain ( size1.getHeight (  )  ) ; RectangleConstraint c2 = constraint.toFixedHeight ( h ) ; }
++ 
+             return arrange(container, g2, c2);   
+         }
+     }

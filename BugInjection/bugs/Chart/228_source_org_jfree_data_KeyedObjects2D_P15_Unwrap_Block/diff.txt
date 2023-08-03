@@ -1,0 +1,14 @@
+--- /KeyedObjects2D.java	2023-07-03 18:33:41.332586250 +0000
++++ /Chart-26/source/org/jfree/data/KeyedObjects2D.java	2023-07-03 18:33:41.332586250 +0000
+@@ -226,8 +226,9 @@
+         KeyedObjects row;
+         int rowIndex = this.rowKeys.indexOf(rowKey);
+         if (rowIndex >= 0) {
+-            row = (KeyedObjects) this.rows.get(rowIndex);
+-        }
++ 
++row = ((org.jfree.data.KeyedObjects) (this.rows.get(rowIndex))); 
++ 
+         else {
+             this.rowKeys.add(rowKey);
+             row = new KeyedObjects();

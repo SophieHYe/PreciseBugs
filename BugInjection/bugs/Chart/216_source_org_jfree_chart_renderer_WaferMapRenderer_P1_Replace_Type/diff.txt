@@ -1,0 +1,11 @@
+--- /WaferMapRenderer.java	2023-07-03 18:35:49.190850133 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/WaferMapRenderer.java	2023-07-03 18:35:49.190850133 +0000
+@@ -213,7 +213,7 @@
+         WaferMapDataset data = this.plot.getDataset();
+         Number dataMin = data.getMinValue();
+         Number dataMax = data.getMaxValue();
+-        Set uniqueValues = data.getUniqueValues();
++List  uniqueValues = data.getUniqueValues (  ) ;
+         if (uniqueValues.size() <= this.paintLimit) {
+             int count = 0; // assign a color for each unique value
+             for (Iterator i = uniqueValues.iterator(); i.hasNext();) {

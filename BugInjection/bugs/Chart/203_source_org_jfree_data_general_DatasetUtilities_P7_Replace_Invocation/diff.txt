@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:29:52.263696254 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:29:52.263696254 +0000
+@@ -200,7 +200,7 @@
+     public static PieDataset createPieDatasetForRow(CategoryDataset dataset, 
+                                                     int row) {
+         DefaultPieDataset result = new DefaultPieDataset();
+-        int columnCount = dataset.getColumnCount();
++int columnCount = dataset .getColumnKey ( row )  ;
+         for (int current = 0; current < columnCount; current++) {
+             Comparable columnKey = dataset.getColumnKey(current);
+             result.setValue(columnKey, dataset.getValue(row, current));

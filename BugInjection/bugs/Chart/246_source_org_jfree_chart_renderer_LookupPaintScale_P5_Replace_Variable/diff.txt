@@ -1,0 +1,11 @@
+--- /LookupPaintScale.java	2023-07-03 18:38:54.884328510 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/LookupPaintScale.java	2023-07-03 18:38:54.884328510 +0000
+@@ -243,7 +243,7 @@
+      */
+     public void add(double value, Paint paint) {
+         PaintItem item = new PaintItem(value, paint);
+-        int index = Collections.binarySearch(this.lookupTable, item);
++int index = Collections.binarySearch ( item, this.lookupTable ) ;
+         if (index >= 0) {
+             this.lookupTable.set(index, item);
+         }

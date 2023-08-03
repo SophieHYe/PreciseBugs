@@ -1,0 +1,14 @@
+--- /WaferMapDataset.java	2023-07-03 18:29:17.240171701 +0000
++++ /Chart-26/source/org/jfree/data/general/WaferMapDataset.java	2023-07-03 18:29:17.240171701 +0000
+@@ -146,8 +146,9 @@
+     public void setValue(Number value, Comparable chipx, Comparable chipy) {
+         this.data.setValue(value, chipx, chipy);
+         if (isMaxValue(value)) {
+-            this.maxValue = (Double) value;
+-        }
++ 
++this.maxValue = ((java.lang.Double) (value)); 
++ 
+         if (isMinValue(value)) {
+             this.minValue = (Double) value;
+         }

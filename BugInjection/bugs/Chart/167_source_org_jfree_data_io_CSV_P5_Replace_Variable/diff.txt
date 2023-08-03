@@ -1,0 +1,17 @@
+--- /CSV.java	2023-07-03 18:43:47.504357649 +0000
++++ /Chart-26/source/org/jfree/data/io/CSV.java	2023-07-03 18:43:47.508357594 +0000
+@@ -164,10 +164,10 @@
+                     Double value = Double.valueOf(
+                         removeStringDelimiters(line.substring(start, i))
+                     );
+-                    dataset.addValue(
+-                        value, rowKey, 
+-                        (Comparable) columnKeys.get(fieldIndex - 1)
+-                    );
++dataset.addValue ( columnKeys, rowKey, ( Comparable )  value.get ( fieldIndex - 1 ) ) ;
++ 
++ 
++ 
+                 }
+                 start = i + 1;
+                 fieldIndex++;

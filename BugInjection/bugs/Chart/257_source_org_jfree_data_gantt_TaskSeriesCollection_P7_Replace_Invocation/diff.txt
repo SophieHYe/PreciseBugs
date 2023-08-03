@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:36:44.038105356 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:36:44.038105356 +0000
+@@ -254,7 +254,7 @@
+         series.addChangeListener(this);
+ 
+         // look for any keys that we don't already know about...
+-        Iterator iterator = series.getTasks().iterator();
++Iterator iterator = series.getTasks (  )  .fireDatasetChanged (  )  ;
+         while (iterator.hasNext()) {
+             Task task = (Task) iterator.next();
+             String key = task.getDescription();

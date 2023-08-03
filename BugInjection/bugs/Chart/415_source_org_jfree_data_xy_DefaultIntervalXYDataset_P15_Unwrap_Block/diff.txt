@@ -1,0 +1,18 @@
+--- /DefaultIntervalXYDataset.java	2023-07-03 18:45:42.110804474 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultIntervalXYDataset.java	2023-07-03 18:45:42.110804474 +0000
+@@ -413,10 +413,11 @@
+         }
+         int length = data[0].length;
+         if (length != data[1].length || length != data[2].length 
+-                || length != data[3].length || length != data[4].length 
+-                || length != data[5].length) {
+-            throw new IllegalArgumentException(
+-                "The 'data' array must contain two arrays with equal length.");
++ 
++throw new java.lang.IllegalArgumentException("The 'data' array must contain two arrays with equal length."); 
++ 
++ 
++ 
+         }
+         int seriesIndex = indexOf(seriesKey);
+         if (seriesIndex == -1) {  // add a new series

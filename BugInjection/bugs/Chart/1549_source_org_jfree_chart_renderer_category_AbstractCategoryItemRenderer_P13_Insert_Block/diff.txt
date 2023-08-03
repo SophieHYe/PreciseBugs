@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 19:00:38.286645816 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 19:00:38.286645816 +0000
+@@ -1546,7 +1546,7 @@
+         String tip = null;
+         CategoryToolTipGenerator tipster = getToolTipGenerator(row, column);
+         if (tipster != null) {
+-            tip = tipster.generateToolTip(dataset, row, column);
++if  ( tipster != null )  {     tip = tipster.generateToolTip ( dataset, row, column ) ; }
+         }
+         String url = null;
+         CategoryURLGenerator urlster = getURLGenerator(row, column);

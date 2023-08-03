@@ -1,0 +1,11 @@
+--- /StackedBarRenderer.java	2023-07-03 19:03:19.544456784 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:03:19.548456730 +0000
+@@ -340,7 +340,7 @@
+             translatedValue = rangeAxis.valueToJava2D(negativeBase + value, 
+                     dataArea, location);
+         }
+-        double barL0 = Math.min(translatedBase, translatedValue);
++double barL0 = Math.min ( translatedBase, positiveBase ) ;
+         double barLength = Math.max(Math.abs(translatedValue - translatedBase),
+                 getMinimumBarLength());
+ 

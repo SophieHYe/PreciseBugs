@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:32.638722482 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:32.638722482 +0000
+@@ -330,7 +330,7 @@
+         );
+         this.deltaTime = nextL - oldestL;
+         this.oldestAt = 0;
+-        this.newestAt = this.historyCount - 1;
++this.newestAt = oldestAt - 1;
+         findDomainLimits();
+         return this.deltaTime;
+ 

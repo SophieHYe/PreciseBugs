@@ -1,0 +1,13 @@
+--- /SpreadsheetDate.java	2023-07-03 18:45:13.523191962 +0000
++++ /Chart-26/source/org/jfree/data/time/SpreadsheetDate.java	2023-07-03 18:45:13.523191962 +0000
+@@ -197,8 +197,8 @@
+       this.month = mm - 1;
+ 
+       // what's left is d(+1);
+-      this.day = this.serial - ss2 
+-                 - daysToEndOfPrecedingMonth[this.month] + 1;
++this.day = this.serial  >>  ss2 - daysToEndOfPrecedingMonth[this.month] + 1;
++ 
+ 
+     }
+ 

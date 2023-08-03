@@ -1,0 +1,11 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:07.837708119 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:07.837708119 +0000
+@@ -379,7 +379,7 @@
+                         if (testValue != null) {
+                             double test = ((Number) testValue).doubleValue();
+                         
+-                            if (test < this.minValue) {
++if  ( test >  ( this.maxValue )  )  {     this.maxValue = test; }
+                                 this.minValue = test;
+                             }
+                             if (test > this.maxValue) {

@@ -1,0 +1,10 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:49:54.595380804 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:49:54.595380804 +0000
+@@ -1018,6 +1018,7 @@
+                     double x1 = dataArea.getMaxX();
+                     g2.setPaint(im.getOutlinePaint());
+                     g2.setStroke(im.getOutlineStroke());
++ 
+                     if (range.contains(start)) {
+                         line.setLine(x0, start2d, x1, start2d);
+                         g2.draw(line);

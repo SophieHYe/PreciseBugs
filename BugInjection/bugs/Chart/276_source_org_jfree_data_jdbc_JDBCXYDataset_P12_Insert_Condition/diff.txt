@@ -1,0 +1,13 @@
+--- /JDBCXYDataset.java	2023-07-03 18:42:14.429618596 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:42:14.429618596 +0000
+@@ -273,8 +273,8 @@
+                     }
+                 }
+                 catch (SQLException e) {
+-                    columnTypes[column] = Types.NULL;
+-                    throw e;
++if  ( columnTypes[column] != Types.NULL )  { columnTypes[column] = Types.NULL; throw e; }
++ 
+                 }
+             }
+ 

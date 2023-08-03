@@ -1,0 +1,11 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:05:13.210913697 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:05:13.210913697 +0000
+@@ -175,7 +175,7 @@
+         else if (plot instanceof XYPlot) {
+             this.plotOrientation = ((XYPlot) plot).getOrientation();
+         }
+-        if (plot instanceof CategoryPlot) {
++if  ( renderer instanceof StandardXYItemRenderer )  {
+             CategoryItemRenderer renderer = ((CategoryPlot) plot).getRenderer();
+             if (renderer instanceof LineAndShapeRenderer) {
+                 LineAndShapeRenderer r = (LineAndShapeRenderer) renderer;

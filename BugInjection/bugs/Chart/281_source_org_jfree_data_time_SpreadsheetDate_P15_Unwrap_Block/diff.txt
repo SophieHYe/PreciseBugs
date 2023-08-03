@@ -1,0 +1,16 @@
+--- /SpreadsheetDate.java	2023-07-03 18:45:17.211141975 +0000
++++ /Chart-26/source/org/jfree/data/time/SpreadsheetDate.java	2023-07-03 18:45:17.211141975 +0000
+@@ -279,9 +279,10 @@
+     public boolean equals(final Object object) {
+ 
+         if (object instanceof SerialDate) {
+-            final SerialDate s = (SerialDate) object;
+-            return (s.toSerial() == this.toSerial());
+-        }
++ 
++final org.jfree.data.time.SerialDate s = ((org.jfree.data.time.SerialDate) (object)); return (s.toSerial()) == (this.toSerial()); 
++ 
++ 
+         else {
+             return false;
+         }

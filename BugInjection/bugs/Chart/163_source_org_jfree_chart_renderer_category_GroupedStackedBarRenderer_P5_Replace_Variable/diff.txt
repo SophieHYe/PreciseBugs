@@ -1,0 +1,15 @@
+--- /GroupedStackedBarRenderer.java	2023-07-03 19:05:55.214343462 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/GroupedStackedBarRenderer.java	2023-07-03 19:05:55.218343408 +0000
+@@ -160,9 +160,9 @@
+                 itemMargin = getItemMargin();   
+             }
+ 
+-            double used = space * (1 - xAxis.getLowerMargin() 
+-                                     - xAxis.getUpperMargin()
+-                                     - categoryMargin - itemMargin);
++double used = space *  ( 1 - categoryMargin.getLowerMargin (  ) - xAxis.getUpperMargin (  ) - xAxis - itemMargin ) ;
++ 
++ 
+             if (columns > 0) {
+                 state.setBarWidth(Math.min(used / columns, maxWidth));
+             }

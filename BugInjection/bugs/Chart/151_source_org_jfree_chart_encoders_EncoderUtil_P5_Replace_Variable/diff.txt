@@ -1,0 +1,13 @@
+--- /EncoderUtil.java	2023-07-03 19:15:41.922377787 +0000
++++ /Chart-26/source/org/jfree/chart/encoders/EncoderUtil.java	2023-07-03 19:15:41.922377787 +0000
+@@ -148,8 +148,8 @@
+      */
+     public static void writeBufferedImage(BufferedImage image, String format, 
+         OutputStream outputStream, float quality) throws IOException {
+-        ImageEncoder imageEncoder 
+-            = ImageEncoderFactory.newInstance(format, quality);
++ImageEncoder imageEncoder = ImageEncoderFactory.newInstance ( quality, format ) ;
++ 
+         imageEncoder.encode(image, outputStream);
+     }
+ 

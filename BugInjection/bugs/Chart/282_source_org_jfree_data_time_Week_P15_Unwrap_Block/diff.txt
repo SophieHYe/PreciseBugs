@@ -1,0 +1,14 @@
+--- /Week.java	2023-07-03 18:42:44.133216144 +0000
++++ /Chart-26/source/org/jfree/data/time/Week.java	2023-07-03 18:42:44.133216144 +0000
+@@ -280,8 +280,9 @@
+ 
+         Week result;
+         if (this.week != FIRST_WEEK_IN_YEAR) {
+-            result = new Week(this.week - 1, this.year);
+-        }
++ 
++result = new org.jfree.data.time.Week(((this.week) - 1), this.year); 
++ 
+         else {
+             // we need to work out if the previous year has 52 or 53 weeks...
+             if (this.year > 1900) {

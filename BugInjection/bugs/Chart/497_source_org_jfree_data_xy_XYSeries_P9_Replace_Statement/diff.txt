@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:42:12.213648690 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:12.213648690 +0000
+@@ -494,7 +494,7 @@
+      */
+     public void update(Number x, Number y) {
+         int index = indexOf(x);
+-        if (index < 0) {
++if  ( index >= 0 )  {
+             throw new SeriesException("No observation for x = " + x);
+         }
+         else {

@@ -1,0 +1,11 @@
+--- /MovingAverage.java	2023-07-03 18:46:01.658539495 +0000
++++ /Chart-26/source/org/jfree/data/time/MovingAverage.java	2023-07-03 18:46:01.662539440 +0000
+@@ -116,7 +116,7 @@
+             String name, int periodCount, int skip) {
+ 
+         if (source == null) {
+-            throw new IllegalArgumentException("Null source.");
++if  ( skip < 0.0 )  {     throw new IllegalArgumentException ( "skip must be >= " ) ; }
+         }
+ 
+         if (periodCount < 1) {

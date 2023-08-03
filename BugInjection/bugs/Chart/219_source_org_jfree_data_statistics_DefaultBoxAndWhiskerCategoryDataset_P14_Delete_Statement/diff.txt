@@ -1,0 +1,12 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:16:57.825353810 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:16:57.825353810 +0000
+@@ -217,7 +217,8 @@
+     public Number getMeanValue(Comparable rowKey, Comparable columnKey) {
+         Number result = null;
+         BoxAndWhiskerItem item = (BoxAndWhiskerItem) this.data.getObject(
+-                rowKey, columnKey);
++ 
++ 
+         if (item != null) {
+             result = item.getMean();
+         }

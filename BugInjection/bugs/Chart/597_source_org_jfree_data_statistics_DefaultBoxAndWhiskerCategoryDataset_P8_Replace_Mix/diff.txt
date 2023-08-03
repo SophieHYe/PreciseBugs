@@ -1,0 +1,11 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:49.599857429 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:18:49.603857375 +0000
+@@ -594,7 +594,7 @@
+         Number result = null;
+         BoxAndWhiskerItem item = (BoxAndWhiskerItem) this.data.getObject(
+                 rowKey, columnKey);
+-        if (item != null) {
++if  ( item != this )  {
+             result = item.getMaxOutlier();
+         }
+         return result;

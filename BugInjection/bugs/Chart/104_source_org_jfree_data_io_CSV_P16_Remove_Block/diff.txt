@@ -1,0 +1,14 @@
+--- /CSV.java	2023-07-03 18:43:19.420738137 +0000
++++ /Chart-26/source/org/jfree/data/io/CSV.java	2023-07-03 18:43:19.420738137 +0000
+@@ -102,8 +102,9 @@
+         String line = reader.readLine();
+         while (line != null) {
+             if (lineIndex == 0) {  // first line contains column keys
+-                columnKeys = extractColumnKeys(line);
+-            }
++ 
++ 
++ 
+             else {  // remaining lines contain a row key and data values
+                 extractRowKeyAndData(line, dataset, columnKeys);
+             }

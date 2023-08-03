@@ -1,0 +1,15 @@
+--- /BorderArrangement.java	2023-07-03 18:38:11.144922487 +0000
++++ /Chart-26/source/org/jfree/chart/block/BorderArrangement.java	2023-07-03 18:38:11.144922487 +0000
+@@ -187,9 +187,9 @@
+         double[] w = new double[5];
+         double[] h = new double[5];
+         if (this.topBlock != null) {
+-            Size2D size = this.topBlock.arrange(
+-                g2, RectangleConstraint.NONE
+-            );
++Size2D size = topBlock.setBounds ( g2, RectangleConstraint.NONE ) ;
++ 
++ 
+             w[0] = size.width;
+             h[0] = size.height;
+         }

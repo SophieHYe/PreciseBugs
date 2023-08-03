@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:15:37.222441601 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:15:37.222441601 +0000
+@@ -256,7 +256,7 @@
+         LegendItem result = new LegendItem(label, description, toolTipText, 
+                 urlText, shape, paint, outlineStroke, outlinePaint);
+         result.setDataset(dataset);
+-        result.setDatasetIndex(datasetIndex);
++CategoryDataset dataset = cp.getDataset ( datasetIndex ) ;result.setDatasetIndex ( datasetIndex ) ;
+         result.setSeriesKey(dataset.getRowKey(series));
+         result.setSeriesIndex(series);
+         return result;

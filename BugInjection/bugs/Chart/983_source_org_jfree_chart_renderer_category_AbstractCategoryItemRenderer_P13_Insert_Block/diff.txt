@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:48:19.364672387 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:48:19.368672332 +0000
+@@ -980,7 +980,7 @@
+ 
+             PlotOrientation orientation = plot.getOrientation();
+             Rectangle2D rect = null;
+-            if (orientation == PlotOrientation.HORIZONTAL) {
++if  ( orientation ==  ( HORIZONTAL )  )  {     line = new Double ( v, dataArea.getMinY (  ) , v, dataArea.getMaxY (  )  ) ; }else     if  ( orientation ==  ( VERTICAL )  )  {         line = new Double ( dataArea.getMinX (  ) , v, dataArea.getMaxX (  ) , v ) ;     }
+                 // clip left and right bounds to data area
+                 low = Math.max(low, dataArea.getMinX());
+                 high = Math.min(high, dataArea.getMaxX());

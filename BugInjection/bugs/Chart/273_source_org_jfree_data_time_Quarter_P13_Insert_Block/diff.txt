@@ -1,0 +1,11 @@
+--- /Quarter.java	2023-07-03 18:51:50.569807548 +0000
++++ /Chart-26/source/org/jfree/data/time/Quarter.java	2023-07-03 18:51:50.569807548 +0000
+@@ -270,7 +270,7 @@
+             result = new Quarter(this.quarter + 1, this.year);
+         }
+         else {
+-            if (this.year < 9999) {
++if  (  ( this.year )  > 1900 )  {     result = new Quarter ( LAST_QUARTER,  (  ( this.year )  - 1 )  ) ; }else {     result = null; }
+                 result = new Quarter(FIRST_QUARTER, this.year + 1);
+             }
+             else {

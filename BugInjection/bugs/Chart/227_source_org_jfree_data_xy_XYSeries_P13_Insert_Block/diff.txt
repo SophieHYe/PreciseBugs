@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:41:29.318231242 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:41:29.318231242 +0000
+@@ -224,7 +224,7 @@
+             this.data.remove(0);   
+             dataRemoved = true;
+         }
+-        if (dataRemoved) {
++if  ( notify )  {     fireSeriesChanged (  ) ; }
+             fireSeriesChanged();
+         }
+     }

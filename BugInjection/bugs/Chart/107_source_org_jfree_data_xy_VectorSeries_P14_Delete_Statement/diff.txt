@@ -1,0 +1,10 @@
+--- /VectorSeries.java	2023-07-03 18:35:32.979070271 +0000
++++ /Chart-26/source/org/jfree/data/xy/VectorSeries.java	2023-07-03 18:35:32.979070271 +0000
+@@ -105,6 +105,7 @@
+      */
+     public ComparableObjectItem remove(int index) {
+         VectorDataItem result = (VectorDataItem) this.data.remove(index);
++ 
+         fireSeriesChanged();
+         return result;
+     }

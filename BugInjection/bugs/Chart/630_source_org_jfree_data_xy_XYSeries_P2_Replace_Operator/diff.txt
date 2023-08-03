@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:42:41.589250603 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:42:41.593250550 +0000
+@@ -627,7 +627,7 @@
+         XYSeries copy = (XYSeries) super.clone();
+         copy.data = new java.util.ArrayList();
+         if (this.data.size() > 0) {
+-            for (int index = start; index <= end; index++) {
++for  ( int index = start; index < end; index++ )  {
+                 XYDataItem item = (XYDataItem) this.data.get(index);
+                 XYDataItem clone = (XYDataItem) item.clone();
+                 try {

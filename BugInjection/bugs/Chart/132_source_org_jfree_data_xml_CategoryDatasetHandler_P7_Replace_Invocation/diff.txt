@@ -1,0 +1,11 @@
+--- /CategoryDatasetHandler.java	2023-07-03 18:33:28.828756025 +0000
++++ /Chart-26/source/org/jfree/data/xml/CategoryDatasetHandler.java	2023-07-03 18:33:28.832755971 +0000
+@@ -129,7 +129,7 @@
+                            String localName,
+                            String qName) throws SAXException {
+ 
+-        DefaultHandler current = getCurrentHandler();
++DefaultHandler current = getSubHandlers (  ) ;
+         if (current != this) {
+             current.endElement(namespaceURI, localName, qName);
+         }

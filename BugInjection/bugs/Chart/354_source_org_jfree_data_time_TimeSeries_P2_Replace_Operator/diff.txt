@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:39:29.523858102 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:39:29.527858047 +0000
+@@ -351,7 +351,7 @@
+      */
+     public TimeSeriesDataItem getDataItem(RegularTimePeriod period) {
+         int index = getIndex(period);
+-        if (index >= 0) {
++if  ( index < 0 )  {
+             return (TimeSeriesDataItem) this.data.get(index);
+         }
+         else {

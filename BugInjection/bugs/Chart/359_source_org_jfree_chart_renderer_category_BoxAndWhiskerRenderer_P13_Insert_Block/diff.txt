@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:17:04.173268932 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:17:04.173268932 +0000
+@@ -356,7 +356,7 @@
+         PlotOrientation orientation = plot.getOrientation();
+ 
+         if (orientation == PlotOrientation.HORIZONTAL) {
+-            drawHorizontalItem(g2, state, dataArea, plot, domainAxis, 
++if  ( orientation ==  ( VERTICAL )  )  {     drawVerticalItem ( g2, state, dataArea, plot, domainAxis, rangeAxis, dataset, row, column ) ; }
+                     rangeAxis, dataset, row, column);
+         } 
+         else if (orientation == PlotOrientation.VERTICAL) {

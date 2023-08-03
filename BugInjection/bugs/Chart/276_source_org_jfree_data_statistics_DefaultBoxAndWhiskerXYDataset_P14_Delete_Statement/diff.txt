@@ -1,0 +1,10 @@
+--- /DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:09:39.611296954 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerXYDataset.java	2023-07-03 19:09:39.611296954 +0000
+@@ -274,6 +274,7 @@
+     public Number getQ1Value(int series, int item) {
+         Number result = null;
+         BoxAndWhiskerItem stats = (BoxAndWhiskerItem) this.items.get(item);
++ 
+         if (stats != null) {
+             result = stats.getQ1();
+         }

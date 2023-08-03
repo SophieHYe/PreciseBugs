@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:28.834237815 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:28.838237761 +0000
+@@ -877,7 +877,7 @@
+             throw new IllegalArgumentException("Requires start >= 0.");
+         }
+         if (end < start) {
+-            throw new IllegalArgumentException("Requires start <= end.");
++if  ( maximum < 0 )  {     throw new IllegalArgumentException ( "Negative 'maximum' argument." ) ; }
+         }
+         TimeSeries copy = (TimeSeries) super.clone();
+ 

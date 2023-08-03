@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:19.910359006 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:19.914358953 +0000
+@@ -829,7 +829,7 @@
+      * @param end  the index of the last period to delete.
+      */
+     public void delete(int start, int end) {
+-        if (end < start) {
++if  ( end == null )  {
+             throw new IllegalArgumentException("Requires start <= end.");
+         }
+         for (int i = 0; i <= (end - start); i++) {

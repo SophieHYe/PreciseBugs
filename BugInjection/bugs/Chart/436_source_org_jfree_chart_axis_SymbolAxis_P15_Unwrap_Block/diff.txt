@@ -1,0 +1,16 @@
+--- /SymbolAxis.java	2023-07-03 18:34:37.259826861 +0000
++++ /Chart-26/source/org/jfree/chart/axis/SymbolAxis.java	2023-07-03 18:34:37.259826861 +0000
+@@ -434,9 +434,10 @@
+ 
+             if (getAutoRangeIncludesZero()) {
+                 if (getAutoRangeStickyZero()) {
+-                    if (upper <= 0.0) {
+-                        upper = 0.0;
+-                    }
++ 
++if (upper <= 0.0) {    upper = 0.0;}else {    upper = upper + upperMargin;}; if (lower >= 0.0) {    lower = 0.0;}else {    lower = lower - lowerMargin;}; 
++ 
++ 
+                     else {
+                         upper = upper + upperMargin;
+                     }

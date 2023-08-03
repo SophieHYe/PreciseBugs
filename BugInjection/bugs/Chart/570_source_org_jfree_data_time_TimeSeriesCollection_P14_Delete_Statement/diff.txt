@@ -1,0 +1,10 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:51.660164575 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:51.660164575 +0000
+@@ -568,6 +568,7 @@
+         while (iterator.hasNext()) {
+             TimeSeries series = (TimeSeries) iterator.next();
+             int count = series.getItemCount();
++ 
+             if (count > 0) {
+                 RegularTimePeriod start = series.getTimePeriod(0);
+                 RegularTimePeriod end = series.getTimePeriod(count - 1);

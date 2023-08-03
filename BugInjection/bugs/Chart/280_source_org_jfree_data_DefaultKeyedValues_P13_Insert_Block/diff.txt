@@ -1,0 +1,11 @@
+--- /DefaultKeyedValues.java	2023-07-03 18:30:05.043522762 +0000
++++ /Chart-26/source/org/jfree/data/DefaultKeyedValues.java	2023-07-03 18:30:05.047522708 +0000
+@@ -277,7 +277,7 @@
+      * @since 1.0.6
+      */
+     public void insertValue(int position, Comparable key, Number value) {
+-        if (position < 0 || position > this.data.size()) {
++if  ( key == null )  {     throw new IllegalArgumentException ( "Null 'key' argument." ) ; }
+             throw new IllegalArgumentException("'position' out of bounds.");
+         }
+         if (key == null) {

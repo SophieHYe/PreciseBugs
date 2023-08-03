@@ -1,0 +1,10 @@
+--- /DefaultXYDataset.java	2023-07-03 18:38:06.024992014 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYDataset.java	2023-07-03 18:38:06.024992014 +0000
+@@ -362,6 +362,7 @@
+         DefaultXYDataset clone = (DefaultXYDataset) super.clone();
+         clone.seriesKeys = new java.util.ArrayList(this.seriesKeys);
+         clone.seriesList = new ArrayList(this.seriesList.size());
++ 
+         for (int i = 0; i < this.seriesList.size(); i++) {
+             double[][] data = (double[][]) this.seriesList.get(i);
+             double[] x = data[0];

@@ -1,0 +1,10 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:01:51.525651636 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:01:51.525651636 +0000
+@@ -628,6 +628,7 @@
+         for (int s = 0; s < getSeriesCount(); s++) {
+             for (int i = 0; i < this.historyCount; i++) {
+                 double tmp = getYValue(s, i);
++ 
+                 if (tmp > max) {
+                     max = tmp;
+                 }

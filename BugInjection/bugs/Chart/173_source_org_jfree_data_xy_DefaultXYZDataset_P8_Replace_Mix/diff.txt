@@ -1,0 +1,11 @@
+--- /DefaultXYZDataset.java	2023-07-03 18:36:40.742150113 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultXYZDataset.java	2023-07-03 18:36:40.746150058 +0000
+@@ -170,7 +170,7 @@
+      * @see #getX(int, int)
+      */
+     public double getXValue(int series, int item) {
+-        double[][] seriesData = (double[][]) this.seriesList.get(series);
++double[][] itemData =  ( double[][] )  this.seriesList.remove ( series ) ;
+         return seriesData[0][item];
+     }
+ 

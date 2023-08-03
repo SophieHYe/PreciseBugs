@@ -1,0 +1,14 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:07:29.329065743 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:07:29.333065688 +0000
+@@ -330,8 +330,9 @@
+ 
+         Axis rangeAxis = null;
+         if (plot instanceof CategoryPlot) {
+-            rangeAxis = ((CategoryPlot) plot).getRangeAxis();
+-        }
++ 
++rangeAxis = ((org.jfree.chart.plot.CategoryPlot) (plot)).getRangeAxis(); 
++ 
+         else if (plot instanceof XYPlot) {
+             rangeAxis = ((XYPlot) plot).getRangeAxis();
+         }

@@ -1,0 +1,11 @@
+--- /CenterArrangement.java	2023-07-03 18:51:29.198097492 +0000
++++ /Chart-26/source/org/jfree/chart/block/CenterArrangement.java	2023-07-03 18:51:29.198097492 +0000
+@@ -174,7 +174,7 @@
+             return s;   
+         }
+         else {
+-            RectangleConstraint c = constraint.toFixedHeight(
++if  ( constraint.getHeightRange (  ) .contains ( s.height )  )  {     return s; }else {     RectangleConstraint c = constraint.toFixedHeight ( constraint.getHeightRange (  ) .constrain ( s.getHeight (  )  )  ) ;     return arrangeFF ( container, g2, c ) ; }
+                     constraint.getHeightRange().constrain(s.getHeight()));
+             return arrangeFF(container, g2, c);
+         }

@@ -1,0 +1,16 @@
+--- /DatasetUtilities.java	2023-07-03 18:33:26.856782800 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:33:26.860782746 +0000
+@@ -1094,9 +1094,10 @@
+                         value = intervalXYData.getStartYValue(series, item);
+                     }
+                     else if (dataset instanceof OHLCDataset) {
+-                        OHLCDataset highLowData = (OHLCDataset) dataset;
+-                        value = highLowData.getLowValue(series, item);
+-                    }
++ 
++org.jfree.data.xy.OHLCDataset highLowData = ((org.jfree.data.xy.OHLCDataset) (dataset)); value = highLowData.getLowValue(series, item); 
++ 
++ 
+                     else {
+                         value = dataset.getYValue(series, item);
+                     }

@@ -1,0 +1,11 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:36:58.425909979 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:36:58.425909979 +0000
+@@ -366,7 +366,7 @@
+         Task task = series.get(columnKey.toString());
+         if (task != null) {
+             TimePeriod duration = task.getDuration();
+-            if (duration != null) {
++if  ( duration != null )  {     result = new Long ( duration.getEnd (  ) .getTime (  )  ) ; }
+                 result = new Long(duration.getStart().getTime());
+             }
+         }

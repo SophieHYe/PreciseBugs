@@ -1,0 +1,11 @@
+--- /TimeSeriesCollection.java	2023-07-03 18:53:28.340481002 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeriesCollection.java	2023-07-03 18:53:28.340481002 +0000
+@@ -509,7 +509,7 @@
+         for (int i = 0; i < timeSeries.getItemCount(); i++) {
+             Number x = getX(series, i);
+             long m = x.longValue();
+-            if (m <= milliseconds) {
++if  ( m >= milliseconds )  {
+                 result[0] = i;
+             }
+             if (m >= milliseconds) {

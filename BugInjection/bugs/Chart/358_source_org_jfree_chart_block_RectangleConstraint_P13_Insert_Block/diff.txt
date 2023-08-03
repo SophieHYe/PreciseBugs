@@ -1,0 +1,11 @@
+--- /RectangleConstraint.java	2023-07-03 18:58:06.400707443 +0000
++++ /Chart-26/source/org/jfree/chart/block/RectangleConstraint.java	2023-07-03 18:58:06.400707443 +0000
+@@ -355,7 +355,7 @@
+         }
+         else if (this.widthConstraintType == LengthConstraintType.RANGE) {
+             result.width = this.widthRange.constrain(base.width);
+-            if (this.heightConstraintType == LengthConstraintType.NONE) {
++if  (  ( this.heightConstraintType )  ==  ( LengthConstraintType.RANGE )  )  {     result.height = constrain ( base.height ) ; }else     if  (  ( this.heightConstraintType )  ==  ( LengthConstraintType.FIXED )  )  {         result.height = this.height;     }
+                 result.height = base.height;
+             }
+             else if (this.heightConstraintType == LengthConstraintType.RANGE) {

@@ -1,0 +1,11 @@
+--- /ChartFactory.java	2023-07-03 18:17:38.949644717 +0000
++++ /Chart-26/source/org/jfree/chart/ChartFactory.java	2023-07-03 18:17:38.953644662 +0000
+@@ -489,7 +489,7 @@
+ 
+         PiePlot3D plot = new PiePlot3D(dataset);
+         plot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
+-        if (tooltips) {
++if  ( tooltips )  {     toolTipGenerator = getTimeSeriesInstance (  ) ; }
+             plot.setToolTipGenerator(new StandardPieToolTipGenerator());
+         }
+         if (urls) {

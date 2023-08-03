@@ -1,0 +1,11 @@
+--- /Millisecond.java	2023-07-03 18:48:40.692383150 +0000
++++ /Chart-26/source/org/jfree/data/time/Millisecond.java	2023-07-03 18:48:40.692383150 +0000
+@@ -273,7 +273,7 @@
+     public long getSerialIndex() {
+         long hourIndex = this.day.getSerialIndex() * 24L + this.hour;
+         long minuteIndex = hourIndex * 60L + this.minute;
+-        long secondIndex = minuteIndex * 60L + this.second;
++long secondIndex = this.second * 60L + minuteIndex;
+         return secondIndex * 1000L + this.millisecond;
+     }
+ 

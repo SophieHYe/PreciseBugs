@@ -1,0 +1,10 @@
+--- /Vector.java	2023-07-03 18:38:44.184473814 +0000
++++ /Chart-26/source/org/jfree/data/xy/Vector.java	2023-07-03 18:38:44.184473814 +0000
+@@ -139,6 +139,7 @@
+     public int hashCode() {
+         int result = 193;
+         long temp = Double.doubleToLongBits(this.x);
++ 
+         result = 37 * result + (int) (temp ^ (temp >>> 32));
+         temp = Double.doubleToLongBits(this.y);
+         result = 37 * result + (int) (temp ^ (temp >>> 32));

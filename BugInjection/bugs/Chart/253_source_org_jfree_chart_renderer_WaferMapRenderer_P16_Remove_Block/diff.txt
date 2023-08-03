@@ -1,0 +1,14 @@
+--- /WaferMapRenderer.java	2023-07-03 18:36:06.206619076 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/WaferMapRenderer.java	2023-07-03 18:36:06.206619076 +0000
+@@ -251,8 +251,9 @@
+         for (Iterator i = uniqueValues.iterator(); i.hasNext();) {
+             this.paintIndex.put(i.next(), new Integer(paint));
+             if (++count % valuesPerColor == 0) {
+-                paint++;
+-            }
++ 
++ 
++ 
+             if (paint > this.paintLimit) {
+                 paint = this.paintLimit;
+             }

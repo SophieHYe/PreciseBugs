@@ -1,0 +1,11 @@
+--- /XIntervalSeriesCollection.java	2023-07-03 18:37:26.813524490 +0000
++++ /Chart-26/source/org/jfree/data/xy/XIntervalSeriesCollection.java	2023-07-03 18:37:26.813524490 +0000
+@@ -180,7 +180,7 @@
+      */
+     public Number getStartX(int series, int item) {
+         XIntervalSeries s = (XIntervalSeries) this.data.get(series);
+-        XIntervalDataItem di = (XIntervalDataItem) s.getDataItem(item);
++XIntervalDataItem di =  ( XIntervalDataItem )  item.getDataItem ( s ) ;
+         return new Double(di.getXLowValue());
+     }
+ 

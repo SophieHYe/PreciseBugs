@@ -1,0 +1,15 @@
+--- /IntervalBarRenderer.java	2023-07-03 18:42:17.601575518 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/IntervalBarRenderer.java	2023-07-03 18:42:17.601575518 +0000
+@@ -208,9 +208,9 @@
+ 
+         if (orientation == PlotOrientation.HORIZONTAL) {
+             // BAR Y
+-            rectY = domainAxis.getCategoryStart(
+-                column, getColumnCount(), dataArea, domainAxisLocation
+-            );
++rectY = domainAxis.getCategoryStart ( column, getRowCount (  ) , dataArea, rangeAxisLocation ) ;
++ 
++ 
+             if (seriesCount > 1) {
+                 double seriesGap = dataArea.getHeight() * getItemMargin()
+                                    / (categoryCount * (seriesCount - 1));

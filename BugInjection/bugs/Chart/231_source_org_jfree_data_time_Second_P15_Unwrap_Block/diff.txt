@@ -1,0 +1,14 @@
+--- /Second.java	2023-07-03 18:49:32.587679311 +0000
++++ /Chart-26/source/org/jfree/data/time/Second.java	2023-07-03 18:49:32.587679311 +0000
+@@ -229,8 +229,9 @@
+         
+         Second result = null;
+         if (this.second != FIRST_SECOND_IN_MINUTE) {
+-            result = new Second(this.second - 1, getMinute());
+-        }
++ 
++result = new org.jfree.data.time.Second(((this.second) - 1), getMinute()); 
++ 
+         else {
+             Minute previous = (Minute) getMinute().previous();
+             if (previous != null) {

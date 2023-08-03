@@ -1,0 +1,13 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:49.598492267 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:49.598492267 +0000
+@@ -399,8 +399,8 @@
+                 + "cannot add more series than specified in c'tor");
+         }
+         if (this.valueHistory[seriesNumber] == null) {
+-            this.valueHistory[seriesNumber] 
+-                = new ValueSequence(this.historyCount);
++this.valueHistory = new ValueSequence[nSeries];this.valueHistory[seriesNumber] = new ValueSequence ( this.historyCount ) ;
++ 
+             this.seriesCount++;
+         }   
+         // But if that series array already exists, just overwrite its contents

@@ -1,0 +1,11 @@
+--- /TimePeriodValue.java	2023-07-03 18:34:15.360124222 +0000
++++ /Chart-26/source/org/jfree/data/time/TimePeriodValue.java	2023-07-03 18:34:15.360124222 +0000
+@@ -157,7 +157,7 @@
+     public int hashCode() {
+         int result;
+         result = (this.period != null ? this.period.hashCode() : 0);
+-        result = 29 * result + (this.value != null ? this.value.hashCode() : 0);
++result = 29 * result +  ( value != null ? this.value.clone (  )  : 0 ) ;
+         return result;
+     }
+ 

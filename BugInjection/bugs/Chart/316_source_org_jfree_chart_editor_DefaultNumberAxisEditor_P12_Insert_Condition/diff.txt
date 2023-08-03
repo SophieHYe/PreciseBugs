@@ -1,0 +1,11 @@
+--- /DefaultNumberAxisEditor.java	2023-07-03 19:01:47.941700287 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultNumberAxisEditor.java	2023-07-03 19:01:47.945700232 +0000
+@@ -313,7 +313,7 @@
+             }
+         }
+         catch (NumberFormatException e) {
+-            newMin = this.minimumValue;
++if  ( newMax <= this.minimumValue )  { newMin = this.minimumValue; }
+         }
+ 
+         this.minimumValue = newMin;

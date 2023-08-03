@@ -1,0 +1,14 @@
+--- /TaskSeriesCollection.java	2023-07-03 18:36:47.582057231 +0000
++++ /Chart-26/source/org/jfree/data/gantt/TaskSeriesCollection.java	2023-07-03 18:36:47.582057231 +0000
+@@ -275,8 +275,9 @@
+      */
+     public void remove(TaskSeries series) {
+         if (series == null) {
+-            throw new IllegalArgumentException("Null 'series' argument.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Null 'series' argument."); 
++ 
+         if (this.data.contains(series)) {
+             series.removeChangeListener(this);
+             this.data.remove(series);

@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:37.011088779 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:37.011088779 +0000
+@@ -507,7 +507,7 @@
+             throw new IllegalArgumentException("Requires 'samples' > 1");
+         }
+ 
+-        XYSeries series = new XYSeries(seriesKey);
++XYSeries series = new XYSeriesCollection ( series )  ;
+         double step = (end - start) / samples;
+         for (int i = 0; i <= samples; i++) {
+             double x = start + (step * i);

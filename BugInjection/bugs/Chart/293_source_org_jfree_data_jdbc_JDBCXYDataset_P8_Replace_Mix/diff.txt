@@ -1,0 +1,11 @@
+--- /JDBCXYDataset.java	2023-07-03 18:41:44.874019983 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:41:44.878019929 +0000
+@@ -290,7 +290,7 @@
+             /// Get the column names and cache them.
+             int currentColumn = 0;
+             for (int column = 1; column < numberOfColumns; column++) {
+-                if (columnTypes[column] != Types.NULL) {
++if  ( rowNumTypes[column] != Types.NULL )  {
+                     this.columnNames[currentColumn] 
+                         = metaData.getColumnLabel(column + 1);
+                     ++currentColumn;

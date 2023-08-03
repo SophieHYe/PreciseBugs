@@ -1,0 +1,11 @@
+--- /XYSeries.java	2023-07-03 18:41:42.466052685 +0000
++++ /Chart-26/source/org/jfree/data/xy/XYSeries.java	2023-07-03 18:41:42.466052685 +0000
+@@ -343,7 +343,7 @@
+ 
+         if (this.autoSort) {
+             int index = Collections.binarySearch(this.data, item);
+-            if (index < 0) {
++if  ( index >= 0 )  {
+                 this.data.add(-index - 1, item);
+             }
+             else {

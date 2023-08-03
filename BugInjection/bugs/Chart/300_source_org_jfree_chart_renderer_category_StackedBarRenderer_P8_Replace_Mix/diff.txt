@@ -1,0 +1,11 @@
+--- /StackedBarRenderer.java	2023-07-03 19:02:06.753444922 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/StackedBarRenderer.java	2023-07-03 19:02:06.753444922 +0000
+@@ -297,7 +297,7 @@
+         double value = dataValue.doubleValue();
+         double total = 0.0;  // only needed if calculating percentages
+         if (this.renderAsPercentages) {
+-            total = DataUtilities.calculateColumnTotal(dataset, column);
++total =  DataUtilities.calculateColumnTotal ( null, column ) ;
+             value = value / total;
+         }
+         

@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:53:30.368453485 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:53:30.368453485 +0000
+@@ -982,7 +982,7 @@
+             Rectangle2D rect = null;
+             if (orientation == PlotOrientation.HORIZONTAL) {
+                 // clip left and right bounds to data area
+-                low = Math.max(low, dataArea.getMinX());
++low = Math .min ( low , v )  ;
+                 high = Math.min(high, dataArea.getMaxX());
+                 rect = new Rectangle2D.Double(low,
+                         dataArea.getMinY(), high - low,

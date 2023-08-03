@@ -1,0 +1,11 @@
+--- /DefaultPlotEditor.java	2023-07-03 19:10:33.366567124 +0000
++++ /Chart-26/source/org/jfree/chart/editor/DefaultPlotEditor.java	2023-07-03 19:10:33.366567124 +0000
+@@ -615,7 +615,7 @@
+             if (plot instanceof CategoryPlot) {
+                 CategoryPlot p = (CategoryPlot) plot;
+                 CategoryItemRenderer r = p.getRenderer();
+-                if (r instanceof LineAndShapeRenderer) {
++if  ( r instanceof StandardXYItemRenderer )  {
+                     ((LineAndShapeRenderer) r).setBaseShapesVisible(
+                         this.drawShapes.booleanValue()
+                     );

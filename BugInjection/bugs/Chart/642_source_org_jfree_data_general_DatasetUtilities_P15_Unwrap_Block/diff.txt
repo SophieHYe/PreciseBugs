@@ -1,0 +1,16 @@
+--- /DatasetUtilities.java	2023-07-03 18:30:54.810847129 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:30:54.810847129 +0000
+@@ -640,9 +640,10 @@
+         Range result = null;
+         // if the dataset implements DomainInfo, life is easier
+         if (dataset instanceof DomainInfo) {
+-            DomainInfo info = (DomainInfo) dataset;
+-            result = info.getDomainBounds(includeInterval);
+-        }
++ 
++org.jfree.data.DomainInfo info = ((org.jfree.data.DomainInfo) (dataset)); result = info.getDomainBounds(includeInterval); 
++ 
++ 
+         else {
+             result = iterateDomainBounds(dataset, includeInterval);
+         }

@@ -1,0 +1,11 @@
+--- /TimeSeries.java	2023-07-03 18:41:43.190042853 +0000
++++ /Chart-26/source/org/jfree/data/time/TimeSeries.java	2023-07-03 18:41:43.190042853 +0000
+@@ -920,7 +920,7 @@
+             throw new IllegalArgumentException("Null 'end' argument.");
+         }
+         if (start.compareTo(end) > 0) {
+-            throw new IllegalArgumentException(
++if  ( maximum < 0 )  {     throw new IllegalArgumentException ( "Negative 'maximum' argument." ) ; }
+                     "Requires start on or before end.");
+         }
+         boolean emptyRange = false;

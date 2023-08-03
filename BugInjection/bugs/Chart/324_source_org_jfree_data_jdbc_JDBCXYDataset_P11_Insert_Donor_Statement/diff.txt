@@ -1,0 +1,11 @@
+--- /JDBCXYDataset.java	2023-07-03 18:41:42.742048937 +0000
++++ /Chart-26/source/org/jfree/data/jdbc/JDBCXYDataset.java	2023-07-03 18:41:42.742048937 +0000
+@@ -321,7 +321,7 @@
+             // Get all rows.
+             // rows = new ArrayList();
+             while (resultSet.next()) {
+-                ArrayList newRow = new ArrayList();
++ArrayList row =  ( ArrayList )  this.rows.get ( 0 ) ;ArrayList newRow = new ArrayList (  ) ;
+                 for (int column = 0; column < numberOfColumns; column++) {
+                     Object xObject = resultSet.getObject(column + 1);
+                     switch (columnTypes[column]) {

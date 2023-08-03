@@ -1,0 +1,12 @@
+--- /DefaultTableXYDataset.java	2023-07-03 18:43:43.160416505 +0000
++++ /Chart-26/source/org/jfree/data/xy/DefaultTableXYDataset.java	2023-07-03 18:43:43.160416505 +0000
+@@ -185,7 +185,8 @@
+         }
+         Iterator iterator = this.xPoints.iterator();
+         while (iterator.hasNext()) {
+-            Number xPoint = (Number) iterator.next();
++ 
++ 
+             if (!seriesXPoints.contains(xPoint)) {
+                 series.add(xPoint, null);
+             }

@@ -1,0 +1,11 @@
+--- /DatasetUtilities.java	2023-07-03 18:32:30.301550677 +0000
++++ /Chart-26/source/org/jfree/data/general/DatasetUtilities.java	2023-07-03 18:32:30.305550624 +0000
+@@ -919,7 +919,7 @@
+                     if (dataset instanceof IntervalXYDataset) {
+                         IntervalXYDataset intervalXYData 
+                             = (IntervalXYDataset) dataset;
+-                        value = intervalXYData.getStartXValue(series, item);
++value = series.getStartXValue ( intervalXYData, item ) ;
+                     }
+                     else {
+                         value = dataset.getXValue(series, item);

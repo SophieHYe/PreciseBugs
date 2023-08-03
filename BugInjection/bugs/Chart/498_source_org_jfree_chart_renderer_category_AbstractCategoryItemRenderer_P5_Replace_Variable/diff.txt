@@ -1,0 +1,11 @@
+--- /AbstractCategoryItemRenderer.java	2023-07-03 18:44:14.519991588 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2023-07-03 18:44:14.523991533 +0000
+@@ -495,7 +495,7 @@
+      */
+     public CategoryURLGenerator getURLGenerator(int row, int column) {
+         CategoryURLGenerator generator 
+-                = (CategoryURLGenerator) this.urlGeneratorList.get(row);
++=  ( CategoryURLGenerator )  row.get ( this.urlGeneratorList ) ;
+         if (generator == null) {
+             generator = this.baseURLGenerator;
+         }

@@ -1,0 +1,11 @@
+--- /BoxAndWhiskerRenderer.java	2023-07-03 19:15:44.110348080 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/category/BoxAndWhiskerRenderer.java	2023-07-03 19:15:44.110348080 +0000
+@@ -286,7 +286,7 @@
+ 
+         // calculate the box width
+         CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);
+-        CategoryDataset dataset = plot.getDataset(rendererIndex);
++CategoryDataset dataset = rendererIndex.getDataset ( plot ) ;
+         if (dataset != null) {
+             int columns = dataset.getColumnCount();
+             int rows = dataset.getRowCount();

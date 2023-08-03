@@ -1,0 +1,11 @@
+--- /DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:17:51.124640741 +0000
++++ /Chart-26/source/org/jfree/data/statistics/DefaultBoxAndWhiskerCategoryDataset.java	2023-07-03 19:17:51.124640741 +0000
+@@ -438,7 +438,7 @@
+      */
+     public double getRangeUpperBound(boolean includeInterval) {
+         double result = Double.NaN;
+-        if (this.maximumRangeValue != null) {
++if  ( this.maximumRangeValue == null )  {
+             result = this.maximumRangeValue.doubleValue();
+         }
+         return result;

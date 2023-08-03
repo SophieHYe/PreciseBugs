@@ -1,0 +1,11 @@
+--- /CSV.java	2023-07-03 18:43:37.532492756 +0000
++++ /Chart-26/source/org/jfree/data/io/CSV.java	2023-07-03 18:43:37.532492756 +0000
+@@ -158,7 +158,7 @@
+             if (line.charAt(i) == this.fieldDelimiter) {
+                 if (fieldIndex == 0) {  // first field contains the row key
+                     String key = line.substring(start, i);
+-                    rowKey = removeStringDelimiters(key);
++keys.add ( removeStringDelimiters ( key )  ) ;rowKey = removeStringDelimiters ( key ) ;
+                 }
+                 else {  // remaining fields contain values
+                     Double value = Double.valueOf(

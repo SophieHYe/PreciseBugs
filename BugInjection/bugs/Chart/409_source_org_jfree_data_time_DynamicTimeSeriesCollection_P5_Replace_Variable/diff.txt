@@ -1,0 +1,11 @@
+--- /DynamicTimeSeriesCollection.java	2023-07-03 19:00:50.974473589 +0000
++++ /Chart-26/source/org/jfree/data/time/DynamicTimeSeriesCollection.java	2023-07-03 19:00:50.978473534 +0000
+@@ -406,7 +406,7 @@
+         // But if that series array already exists, just overwrite its contents
+ 
+         // Avoid IndexOutOfBoundsException:
+-        int srcLength = values.length;
++int srcLength = values;
+         int copyLength = this.historyCount;
+         boolean fillNeeded = false;
+         if (srcLength < this.historyCount) {
