@@ -1,0 +1,11 @@
+--- /FractionFormat.java	2023-07-03 21:32:31.655028589 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/FractionFormat.java	2023-07-03 21:32:31.655028589 +0000
+@@ -170,7 +170,7 @@
+             FieldPosition pos) {
+         
+         pos.setBeginIndex(0);
+-        pos.setEndIndex(0);
++pos.setIndex ( pos.getIndex (  )  - 1 ) ;pos.setEndIndex ( 0 ) ;
+ 
+         getNumeratorFormat().format(fraction.getNumerator(), toAppendTo, pos);
+         toAppendTo.append(" / ");

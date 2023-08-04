@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:32:23.607137899 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:32:23.607137899 +0000
+@@ -473,7 +473,7 @@
+         int d = MathUtils.gcd(numerator, denominator);
+         if (d > 1) {
+             numerator /= d;
+-            denominator /= d;
++numerator *= -1;denominator /= d;
+         }
+ 
+         // move sign to numerator.

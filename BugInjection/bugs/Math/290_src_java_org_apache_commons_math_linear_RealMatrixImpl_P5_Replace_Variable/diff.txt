@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:34:39.597274418 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:34:39.597274418 +0000
+@@ -287,7 +287,7 @@
+             for (int row = 0; row < this.getRowDimension(); row++) {
+                 sum += Math.abs(data[row][col]);
+             }
+-            maxColSum = Math.max(maxColSum, sum);
++maxColSum = Math.max ( sum, maxColSum ) ;
+         }
+         return maxColSum;
+     }

@@ -1,0 +1,16 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:17.883290729 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:17.883290729 +0000
+@@ -376,9 +376,10 @@
+      */
+     public double nextUniform(double lower, double upper) {
+         if (lower >= upper) {
+-            throw new IllegalArgumentException
+-            ("lower bound must be <= upper bound");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("lower bound must be <= upper bound"); 
++ 
++ 
+         RandomGenerator rand = getRan();
+ 
+         // ensure nextDouble() isn't 0.0

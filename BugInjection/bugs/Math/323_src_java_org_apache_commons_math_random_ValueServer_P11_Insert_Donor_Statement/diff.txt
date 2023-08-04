@@ -1,0 +1,11 @@
+--- /ValueServer.java	2023-07-03 21:28:01.042704418 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/ValueServer.java	2023-07-03 21:28:01.042704418 +0000
+@@ -320,7 +320,7 @@
+         if ((str = filePointer.readLine()) == null) {
+             closeReplayFile();
+             resetReplayFile();
+-            str = filePointer.readLine();
++filePointer.close (  ) ;str = filePointer.readLine (  ) ;
+         }
+         return new Double(str).doubleValue();
+     }

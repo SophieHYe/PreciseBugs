@@ -1,0 +1,12 @@
+--- /Fraction.java	2023-07-03 21:31:48.927608936 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:48.927608936 +0000
+@@ -361,7 +361,8 @@
+         // exercise 7.  we're going to use a BigInteger.
+         // t = u(v'/d1) +/- v(u'/d1)
+         BigInteger uvp = BigInteger.valueOf(numerator)
+-        .multiply(BigInteger.valueOf(fraction.denominator/d1));
++ 
++ 
+         BigInteger upv = BigInteger.valueOf(fraction.numerator)
+         .multiply(BigInteger.valueOf(denominator/d1));
+         BigInteger t = isAdd ? uvp.add(upv) : uvp.subtract(upv);

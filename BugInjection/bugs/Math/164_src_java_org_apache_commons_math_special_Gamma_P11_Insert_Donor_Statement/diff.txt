@@ -1,0 +1,11 @@
+--- /Gamma.java	2023-07-03 21:30:00.961075452 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Gamma.java	2023-07-03 21:30:00.961075452 +0000
+@@ -161,7 +161,7 @@
+             ret = 1.0 - regularizedGammaQ(a, x, epsilon, maxIterations);
+         } else {
+             // calculate series
+-            double n = 0.0; // current element index
++double sum = 0.0;double n = 0.0;
+             double an = 1.0 / a; // n-th element in the series
+             double sum = an; // partial sum
+             while (Math.abs(an) > epsilon && n < maxIterations) {

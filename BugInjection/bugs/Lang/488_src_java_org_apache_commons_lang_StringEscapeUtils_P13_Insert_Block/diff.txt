@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-03 22:03:36.949570311 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-03 22:03:36.949570311 +0000
+@@ -485,7 +485,7 @@
+      * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
+      */
+     public static void escapeHtml(Writer writer, String string) throws IOException {
+-        if (writer == null ) {
++if  ( out == null )  {     throw new IllegalArgumentException ( "The Writer must not be null" ) ; }
+             throw new IllegalArgumentException ("The Writer must not be null.");
+         }
+         if (string == null) {

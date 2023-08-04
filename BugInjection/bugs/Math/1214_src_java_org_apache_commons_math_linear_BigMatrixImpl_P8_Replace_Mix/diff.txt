@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:45:26.920419430 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:45:26.924419374 +0000
+@@ -1211,7 +1211,7 @@
+      * @throws InvalidMatrixException if the matrix is non-square or singular.
+      */
+     protected BigMatrix getLUMatrix() throws InvalidMatrixException {
+-        if (lu == null) {
++if  ( lu == this )  {
+             luDecompose();
+         }
+         return new BigMatrixImpl(lu);

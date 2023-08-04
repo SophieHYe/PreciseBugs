@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:38:41.620890810 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:38:41.624890756 +0000
+@@ -1432,7 +1432,7 @@
+         int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+         char[] buf = buffer;
+         for (int i = from; i < to && replaceCount != 0; i++) {
+-            int removeLen = matcher.isMatch(buf, i, from, to);
++long  removeLen = matcher.isMatch ( buf, i, from, to ) ;
+             if (removeLen > 0) {
+                 replaceImpl(i, i + removeLen, removeLen, replaceStr, replaceLen);
+                 to = to - removeLen + replaceLen;

@@ -1,0 +1,10 @@
+--- /CompareToBuilder.java	2023-07-03 21:37:34.418876814 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-03 21:37:34.418876814 +0000
+@@ -291,6 +291,7 @@
+         while (lhsClazz.getSuperclass() != null && lhsClazz != reflectUpToClass) {
+             lhsClazz = lhsClazz.getSuperclass();
+             reflectionAppend(lhs, rhs, lhsClazz, compareToBuilder, compareTransients, excludeFields);
++ 
+         }
+         return compareToBuilder.toComparison();
+     }

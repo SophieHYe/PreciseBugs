@@ -1,0 +1,17 @@
+--- /Fraction.java	2023-07-03 21:31:38.723747532 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:38.723747532 +0000
+@@ -352,10 +352,10 @@
+             // result is ( (u*v' +/- u'v) / u'v')
+             int uvp = MathUtils.mulAndCheck(numerator, fraction.denominator);
+             int upv = MathUtils.mulAndCheck(fraction.numerator, denominator);
+-            return new Fraction
+-                (isAdd ? MathUtils.addAndCheck(uvp, upv) : 
+-                 MathUtils.subAndCheck(uvp, upv),
+-                 MathUtils.mulAndCheck(denominator, fraction.denominator));
++return new Fraction ( isAdd ? MathUtils.addAndCheck ( uvp, upv )  : MathUtils.subAndCheck ( uvp, upv ) , MathUtils.mulAndCheck ( denominator.denominator )  ) ;
++ 
++ 
++ 
+         }
+         // the quantity 't' requires 65 bits of precision; see knuth 4.5.1
+         // exercise 7.  we're going to use a BigInteger.

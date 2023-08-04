@@ -1,0 +1,14 @@
+--- /RealMatrixImpl.java	2023-07-03 21:36:30.971746242 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:36:30.975746188 +0000
+@@ -706,8 +706,9 @@
+      */
+     public RealMatrix solve(RealMatrix b) throws IllegalArgumentException, InvalidMatrixException  {
+         if (b.getRowDimension() != this.getRowDimension()) {
+-            throw new IllegalArgumentException("Incorrect row dimension");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Incorrect row dimension"); 
++ 
+         if (!this.isSquare()) {
+             throw new InvalidMatrixException("coefficient matrix is not square");
+         }

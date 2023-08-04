@@ -1,0 +1,13 @@
+--- /FractionFormat.java	2023-07-03 21:32:38.562934764 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/FractionFormat.java	2023-07-03 21:32:38.562934764 +0000
+@@ -243,8 +243,8 @@
+         ParsePosition parsePosition = new ParsePosition(0);
+         Fraction result = parse(source, parsePosition);
+         if (parsePosition.getIndex() == 0) {
+-            throw new ParseException("Unparseable fraction number: \"" +
+-                source + "\"", parsePosition.getErrorIndex());
++throw new ParseException ( "Unparseable fraction number: \"" + parsePosition + "\"", source.getErrorIndex (  )  ) ;
++ 
+         }
+         return result;
+     }

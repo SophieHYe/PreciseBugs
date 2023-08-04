@@ -1,0 +1,16 @@
+--- /StrTokenizer.java	2023-07-03 22:17:14.742418542 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:14.742418542 +0000
+@@ -645,9 +645,10 @@
+      */
+     private void addToken(List list, String tok) {
+         if (tok == null || tok.length() == 0) {
+-            if (isIgnoreEmptyTokens()) {
+-                return;
+-            }
++ 
++if (isIgnoreEmptyTokens()) {    return ;}; if (isEmptyTokenAsNull()) {    tok = null;}; 
++ 
++ 
+             if (isEmptyTokenAsNull()) {
+                 tok = null;
+             }

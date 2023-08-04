@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:34.232698885 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:34.232698885 +0000
+@@ -153,7 +153,7 @@
+     public void load(File file) throws IOException {
+         BufferedReader in = new BufferedReader(new FileReader(file));
+         try {
+-            DataAdapter da = new StreamDataAdapter(in);
++DataAdapter da = new ArrayDataAdapter ( in ) ;DataAdapter da = new StreamDataAdapter ( in ) ;
+             try {
+                 da.computeStats();
+             } catch (Exception e) {

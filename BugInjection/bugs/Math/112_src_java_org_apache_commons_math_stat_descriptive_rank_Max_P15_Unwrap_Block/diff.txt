@@ -1,0 +1,18 @@
+--- /Max.java	2023-07-03 21:26:29.935942107 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/rank/Max.java	2023-07-03 21:26:29.935942107 +0000
+@@ -110,10 +110,11 @@
+     public double evaluate(final double[] values, final int begin, final int length) {
+         double max = Double.NaN;
+         if (test(values, begin, length)) {
+-            max = values[begin];
+-            for (int i = begin; i < begin + length; i++) {
+-                if (!Double.isNaN(values[i])) {
+-                    max = (max > values[i]) ? max : values[i];
++ 
++max = values[begin]; for (int i = begin; i < (begin + length); i++) {    if (!(java.lang.Double.isNaN(values[i]))) {        max = (max > (values[i])) ? max : values[i];    }}; 
++ 
++ 
++ 
+                 }
+             }
+         }

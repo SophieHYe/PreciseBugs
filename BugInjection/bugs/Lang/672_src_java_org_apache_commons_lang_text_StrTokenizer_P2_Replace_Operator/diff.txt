@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:17:18.486367511 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:18.490367457 +0000
+@@ -669,7 +669,7 @@
+     private int readNextToken(char[] chars, int start, int len, StrBuilder workArea, List tokens) {
+         // skip all leading whitespace, unless it is the
+         // field delimiter or the quote character
+-        while (start < len) {
++while  ( start <= len )  {
+             int removeLen = Math.max(
+                     getIgnoredMatcher().isMatch(chars, start, start, len),
+                     getTrimmerMatcher().isMatch(chars, start, start, len));

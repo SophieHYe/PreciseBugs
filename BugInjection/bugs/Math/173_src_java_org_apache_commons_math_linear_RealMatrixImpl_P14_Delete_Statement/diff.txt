@@ -1,0 +1,12 @@
+--- /RealMatrixImpl.java	2023-07-03 21:34:02.789780098 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:34:02.789780098 +0000
+@@ -171,7 +171,8 @@
+         }
+         int rowCount = this.getRowDimension();
+         int columnCount = this.getColumnDimension();
+-        double[][] outData = new double[rowCount][columnCount];
++ 
++ 
+         for (int row = 0; row < rowCount; row++) {
+             for (int col = 0; col < columnCount; col++) {
+                 outData[row][col] = data[row][col] - m.getEntry(row, col);

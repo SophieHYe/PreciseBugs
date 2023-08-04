@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:30:34.147528575 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:30:34.151528520 +0000
+@@ -873,7 +873,7 @@
+         if (width > 0) {
+             ensureCapacity(size + width);
+             String str = (obj == null ? getNullText() : obj.toString());
+-            int strLen = str.length();
++int strLen = str .getChars ( chars )  ;
+             if (strLen >= width) {
+                 str.getChars(0, strLen, buffer, size);
+             } else {

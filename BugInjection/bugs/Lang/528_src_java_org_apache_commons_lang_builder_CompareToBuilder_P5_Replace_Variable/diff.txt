@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-03 21:38:44.021923838 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-03 21:38:44.021923838 +0000
+@@ -525,7 +525,7 @@
+      * @return this - used to chain append calls
+      */
+     public CompareToBuilder append(byte lhs, byte rhs) {
+-        if (comparison != 0) {
++if  ( superCompareTo != 0 )  {
+             return this;
+         }
+         comparison = ((lhs < rhs) ? -1 : ((lhs > rhs) ? 1 : 0));

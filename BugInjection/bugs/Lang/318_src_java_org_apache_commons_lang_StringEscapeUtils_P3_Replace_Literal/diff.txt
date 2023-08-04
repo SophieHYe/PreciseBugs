@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-03 22:03:03.814021362 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-03 22:03:03.818021308 +0000
+@@ -315,7 +315,7 @@
+                     try {
+                         int value = Integer.parseInt(unicode.toString(), 16);
+                         out.write((char) value);
+-                        unicode.setLength(0);
++unicode.setLength ( -3 ) ;
+                         inUnicode = false;
+                         hadSlash = false;
+                     } catch (NumberFormatException nfe) {

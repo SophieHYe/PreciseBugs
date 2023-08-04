@@ -1,0 +1,11 @@
+--- /AbstractStorelessUnivariateStatistic.java	2023-07-03 21:26:41.975778540 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/AbstractStorelessUnivariateStatistic.java	2023-07-03 21:26:41.975778540 +0000
+@@ -132,7 +132,7 @@
+         if (test(values, begin, length)) {
+             int k = begin + length;
+             for (int i = begin; i < k; i++) {
+-                increment(values[i]);
++incrementAll ( values, begin, length ) ;increment ( values[i] ) ;
+             }   
+         }
+     }

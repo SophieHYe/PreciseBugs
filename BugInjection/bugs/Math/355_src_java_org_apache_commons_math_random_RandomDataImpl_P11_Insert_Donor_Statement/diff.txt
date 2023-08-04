@@ -1,0 +1,13 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:15.423324148 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:15.423324148 +0000
+@@ -352,8 +352,8 @@
+      */
+     public double nextExponential(double mean)  {
+         if (mean < 0.0)  {
+-            throw new IllegalArgumentException
+-                ("Exponential mean must be >= 0");
++throw new IllegalArgumentException ( "lower bound must be < upper bound" ) ;throw new IllegalArgumentException ( "Exponential mean must be >= 0" ) ;
++ 
+         }
+         RandomGenerator rand = getRan();
+         double unif = rand.nextDouble();

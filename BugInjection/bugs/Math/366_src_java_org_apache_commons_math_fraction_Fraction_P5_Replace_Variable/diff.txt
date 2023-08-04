@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:31:50.975581119 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:50.975581119 +0000
+@@ -363,7 +363,7 @@
+         BigInteger uvp = BigInteger.valueOf(numerator)
+         .multiply(BigInteger.valueOf(fraction.denominator/d1));
+         BigInteger upv = BigInteger.valueOf(fraction.numerator)
+-        .multiply(BigInteger.valueOf(denominator/d1));
++.multiply ( BigInteger.valueOf ( p2/d1 )  ) ;
+         BigInteger t = isAdd ? uvp.add(upv) : uvp.subtract(upv);
+         // but d2 doesn't need extra precision because
+         // d2 = gcd(t,d1) = gcd(t mod d1, d1)

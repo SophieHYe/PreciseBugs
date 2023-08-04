@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:38.766267738 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:38.766267738 +0000
+@@ -406,7 +406,7 @@
+         if (expansionMode == MULTIPLICATIVE_MODE) {
+             newSize = (int) Math.ceil(internalArray.length * expansionFactor);
+         } else {
+-            newSize = internalArray.length + Math.round(expansionFactor);
++newSize =  ( int )  Math.ceil ( internalArray.length * expansionFactor ) ;newSize = internalArray.length + Math.round ( expansionFactor ) ;
+         }
+         double[] tempArray = new double[newSize];
+ 

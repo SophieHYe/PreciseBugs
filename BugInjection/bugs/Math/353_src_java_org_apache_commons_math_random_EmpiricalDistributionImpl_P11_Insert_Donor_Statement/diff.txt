@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:54.740420265 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:54.740420265 +0000
+@@ -350,7 +350,7 @@
+ 
+         // Filling data in binStats Array
+         DataAdapterFactory aFactory = new DataAdapterFactory();
+-        DataAdapter da = aFactory.getAdapter(in);
++DataAdapter da = new ArrayDataAdapter ( in ) ;DataAdapter da = aFactory.getAdapter ( in ) ;
+         try {
+             da.computeBinStats(min, delta);
+         } catch (Exception e) {

@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:46.882157459 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:46.886157405 +0000
+@@ -573,7 +573,7 @@
+             throw new ArrayIndexOutOfBoundsException(msg);
+         }
+         if (index + 1 > numElements) {
+-            numElements = index + 1;
++numElements -= i;numElements = index + 1;
+         }       
+         if ((startIndex + index) >= internalArray.length) {
+             expandTo(startIndex + (index + 1));

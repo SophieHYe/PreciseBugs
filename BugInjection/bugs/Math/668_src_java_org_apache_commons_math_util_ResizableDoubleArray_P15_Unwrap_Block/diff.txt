@@ -1,0 +1,18 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:54.270057074 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:54.270057074 +0000
+@@ -666,10 +666,11 @@
+      */
+     private synchronized boolean shouldContract() {
+         if (expansionMode == MULTIPLICATIVE_MODE) { 
+-            return (internalArray.length / numElements) > contractionCriteria;
+-        } else {
+-            return (internalArray.length - numElements) > contractionCriteria;
+-        }
++ 
++return ((internalArray.length) / (numElements)) > (contractionCriteria); 
++ 
++ 
++ 
+     }
+ 
+     /**

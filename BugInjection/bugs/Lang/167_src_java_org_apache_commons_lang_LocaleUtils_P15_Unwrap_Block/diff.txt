@@ -1,0 +1,14 @@
+--- /LocaleUtils.java	2023-07-03 22:06:17.819380613 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/LocaleUtils.java	2023-07-03 22:06:17.819380613 +0000
+@@ -165,8 +165,9 @@
+         if (locale != null) {
+             list.add(locale);
+             if (locale.getVariant().length() > 0) {
+-                list.add(new Locale(locale.getLanguage(), locale.getCountry()));
+-            }
++ 
++list.add(new java.util.Locale(locale.getLanguage(), locale.getCountry())); 
++ 
+             if (locale.getCountry().length() > 0) {
+                 list.add(new Locale(locale.getLanguage(), ""));
+             }

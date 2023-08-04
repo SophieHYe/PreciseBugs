@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:43:43.756785425 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:43:43.760785371 +0000
+@@ -1811,7 +1811,7 @@
+             return -1;
+         }
+         int len = size;
+-        char[] buf = buffer;
++char otherBuf[] = other.buffer;char[] buf = buffer;
+         for (int i = startIndex; i < len; i++) {
+             if (matcher.isMatch(buf, i, startIndex, len) > 0) {
+                 return i;

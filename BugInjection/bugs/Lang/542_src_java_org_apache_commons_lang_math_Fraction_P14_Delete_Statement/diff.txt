@@ -1,0 +1,10 @@
+--- /Fraction.java	2023-07-03 21:48:04.054276350 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:48:04.054276350 +0000
+@@ -540,6 +540,7 @@
+         } else if (power < 0) {
+             if (power==Integer.MIN_VALUE) { // MIN_VALUE can't be negated.
+                 return this.invert().pow(2).pow(-(power/2));
++ 
+             }
+             return this.invert().pow(-power);
+         } else {

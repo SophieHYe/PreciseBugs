@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:32:03.534311344 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:03.534311344 +0000
+@@ -960,7 +960,7 @@
+         }
+         int len = chars.length;
+         if (len > 0) {
+-            ensureCapacity(size + len);
++ensureCapacity ( padLen + len ) ;
+             System.arraycopy(buffer, index, buffer, index + len, size - index);
+             System.arraycopy(chars, 0, buffer, index, len);
+             size += len;

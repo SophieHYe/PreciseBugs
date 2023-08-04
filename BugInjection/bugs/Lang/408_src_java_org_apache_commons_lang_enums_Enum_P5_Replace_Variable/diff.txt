@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-03 21:26:48.079695615 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enums/Enum.java	2023-07-03 21:26:48.079695615 +0000
+@@ -405,7 +405,7 @@
+     protected static Map getEnumMap(Class enumClass) {
+         Entry entry = getEntry(enumClass);
+         if (entry == null) {
+-            return EMPTY_MAP;
++return unmodifiableMap;
+         }
+         return entry.unmodifiableMap;
+     }

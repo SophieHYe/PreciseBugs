@@ -1,0 +1,11 @@
+--- /TDistributionImpl.java	2023-07-03 21:30:38.972559130 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/TDistributionImpl.java	2023-07-03 21:30:38.976559075 +0000
+@@ -110,7 +110,7 @@
+         if (p == 0) {
+             return Double.NEGATIVE_INFINITY;
+         }
+-        if (p == 1) {
++if  ( p <= 1 )  {
+             return Double.POSITIVE_INFINITY;
+         }
+         return super.inverseCumulativeProbability(p);

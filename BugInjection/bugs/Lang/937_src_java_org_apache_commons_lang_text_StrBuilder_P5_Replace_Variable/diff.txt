@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:31:07.151079140 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:31:07.155079086 +0000
+@@ -934,7 +934,7 @@
+             str = nullText;
+         }
+         int strLen = (str == null ? 0 : str.length());
+-        if (strLen > 0) {
++if  ( separatorLen > 0 )  {
+             int newSize = size + strLen;
+             ensureCapacity(newSize);
+             System.arraycopy(buffer, index, buffer, index + strLen, size - index);

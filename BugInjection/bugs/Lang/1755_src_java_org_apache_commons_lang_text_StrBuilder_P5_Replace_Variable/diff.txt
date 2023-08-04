@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:42:38.177674859 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:42:38.177674859 +0000
+@@ -1752,7 +1752,7 @@
+      * @return the first index of the string, or -1 if not found
+      */
+     public int indexOf(String str, int startIndex) {
+-        startIndex = (startIndex < 0 ? 0 : startIndex);
++startIndex =  ( newSize < 0 ? 0 : startIndex ) ;
+         if (str == null || startIndex >= size) {
+             return -1;
+         }

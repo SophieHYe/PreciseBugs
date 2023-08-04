@@ -1,0 +1,17 @@
+--- /EqualsBuilder.java	2023-07-03 21:27:33.615077014 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-03 21:27:33.615077014 +0000
+@@ -272,10 +272,11 @@
+                 testClass = rhsClass;
+             }
+         } else if (rhsClass.isInstance(lhs)) {
+-            testClass = rhsClass;
+-            if (!lhsClass.isInstance(rhs)) {
++ 
++testClass = rhsClass; if (!(lhsClass.isInstance(rhs))) {    testClass = lhsClass;}; 
++ 
+                 // lhsClass is a subclass of rhsClass
+-                testClass = lhsClass;
++ 
+             }
+         } else {
+             // The two classes are not related.

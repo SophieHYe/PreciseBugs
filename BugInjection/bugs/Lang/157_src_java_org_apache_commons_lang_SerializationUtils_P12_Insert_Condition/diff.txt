@@ -1,0 +1,11 @@
+--- /SerializationUtils.java	2023-07-03 21:19:56.781284555 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/SerializationUtils.java	2023-07-03 21:19:56.781284555 +0000
+@@ -154,7 +154,7 @@
+         if (inputStream == null) {
+             throw new IllegalArgumentException("The InputStream must not be null");
+         }
+-        ObjectInputStream in = null;
++if  ( inputStream == null )  { ObjectInputStream in = null; }
+         try {
+             // stream closed in the finally
+             in = new ObjectInputStream(inputStream);

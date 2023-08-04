@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:57.138018105 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:57.142018050 +0000
+@@ -784,7 +784,7 @@
+      */
+     public static String[] getRootCauseStackTrace(Throwable throwable) {
+         if (throwable == null) {
+-            return ArrayUtils.EMPTY_STRING_ARRAY;
++if  ( throwable == null )  {     return EMPTY_STRING_ARRAY; }
+         }
+         Throwable throwables[] = getThrowables(throwable);
+         int count = throwables.length;

@@ -1,0 +1,14 @@
+--- /DateUtils.java	2023-07-03 21:37:59.906527755 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-03 21:37:59.906527755 +0000
+@@ -893,8 +893,9 @@
+      */
+     public static Iterator iterator(Object focus, int rangeStyle) {
+         if (focus == null) {
+-            throw new IllegalArgumentException("The date must not be null");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("The date must not be null"); 
++ 
+         if (focus instanceof Date) {
+             return iterator((Date) focus, rangeStyle);
+         } else if (focus instanceof Calendar) {

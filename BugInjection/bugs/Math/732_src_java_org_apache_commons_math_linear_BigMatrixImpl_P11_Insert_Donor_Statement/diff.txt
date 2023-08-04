@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:02.871205038 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:02.871205038 +0000
+@@ -729,7 +729,7 @@
+     public BigMatrix transpose() {
+         int nRows = this.getRowDimension();
+         int nCols = this.getColumnDimension();
+-        BigMatrixImpl out = new BigMatrixImpl(nCols, nRows);
++BigMatrixImpl subMatrix = new BigMatrixImpl ( selectedRows.length, selectedColumns.length ) ;BigMatrixImpl out = new BigMatrixImpl ( nCols, nRows ) ;
+         BigDecimal[][] outData = out.getDataRef();
+         for (int row = 0; row < nRows; row++) {
+             for (int col = 0; col < nCols; col++) {

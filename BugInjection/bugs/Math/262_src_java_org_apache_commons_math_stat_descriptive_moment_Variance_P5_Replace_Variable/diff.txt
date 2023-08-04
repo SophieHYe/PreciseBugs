@@ -1,0 +1,11 @@
+--- /Variance.java	2023-07-03 21:25:17.628924470 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/moment/Variance.java	2023-07-03 21:25:17.628924470 +0000
+@@ -259,7 +259,7 @@
+                     accum += Math.pow((values[i] - mean), 2.0);
+                     accum2 += (values[i] - mean);
+                 }
+-                if (isBiasCorrected) {
++if  ( incMoment )  {
+                     var = (accum - (Math.pow(accum2, 2) / ((double) length))) /
+                     (double) (length - 1);
+                 } else {

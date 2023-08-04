@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-03 21:33:14.642442114 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-03 21:33:14.646442058 +0000
+@@ -375,7 +375,7 @@
+             }
+ 
+         } else if (value instanceof short[]) {
+-            if (detail) {
++if  ( detail )  {     appendDetail ( buffer, fieldName, value ) ; }else {     appendSummary ( buffer, fieldName, value ) ; }
+                 appendDetail(buffer, fieldName, (short[]) value);
+             } else {
+                 appendSummary(buffer, fieldName, (short[]) value);

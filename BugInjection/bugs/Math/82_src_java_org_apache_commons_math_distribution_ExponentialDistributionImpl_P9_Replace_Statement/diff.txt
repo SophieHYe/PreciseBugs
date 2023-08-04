@@ -1,0 +1,11 @@
+--- /ExponentialDistributionImpl.java	2023-07-03 21:30:22.368784662 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/ExponentialDistributionImpl.java	2023-07-03 21:30:22.368784662 +0000
+@@ -79,7 +79,7 @@
+      */
+     public double cumulativeProbability(double x) throws MathException{
+         double ret;
+-        if (x <= 0.0) {
++if  ( mean <= 0.0 )  {
+             ret = 0.0;
+         } else {
+             ret = 1.0 - Math.exp(-x / getMean());

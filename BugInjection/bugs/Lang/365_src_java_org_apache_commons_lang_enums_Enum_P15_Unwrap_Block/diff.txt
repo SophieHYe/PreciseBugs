@@ -1,0 +1,14 @@
+--- /Enum.java	2023-07-03 21:26:42.451772073 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enums/Enum.java	2023-07-03 21:26:42.455772019 +0000
+@@ -363,8 +363,9 @@
+     protected Object readResolve() {
+         Entry entry = (Entry) cEnumClasses.get(getEnumClass());
+         if (entry == null) {
+-            return null;
+-        }
++ 
++return null; 
++ 
+         return (Enum) entry.map.get(getName());
+     }
+     

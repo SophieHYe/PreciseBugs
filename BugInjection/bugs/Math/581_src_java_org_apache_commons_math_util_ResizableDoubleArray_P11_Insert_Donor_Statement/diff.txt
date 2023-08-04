@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:49.514121697 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:49.514121697 +0000
+@@ -578,7 +578,7 @@
+         if ((startIndex + index) >= internalArray.length) {
+             expandTo(startIndex + (index + 1));
+         }    
+-        internalArray[startIndex + index] = value;
++internalArray[startIndex +  ( numElements - 1 ) ] = value;internalArray[startIndex + index] = value;
+     }
+ 
+     /**

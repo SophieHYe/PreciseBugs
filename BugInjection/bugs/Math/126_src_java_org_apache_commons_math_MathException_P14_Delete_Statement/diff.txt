@@ -1,0 +1,10 @@
+--- /MathException.java	2023-07-03 21:28:07.654614599 +0000
++++ /Math-106/src/java/org/apache/commons/math/MathException.java	2023-07-03 21:28:07.654614599 +0000
+@@ -124,6 +124,7 @@
+         synchronized (out) {
+             PrintWriter pw = new PrintWriter(out, false);
+             printStackTrace(pw);
++ 
+             // Flush the PrintWriter before it's GC'ed.
+             pw.flush();
+         }

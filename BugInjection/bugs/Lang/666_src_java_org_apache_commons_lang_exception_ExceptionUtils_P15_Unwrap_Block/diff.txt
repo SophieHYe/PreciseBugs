@@ -1,0 +1,18 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:36.986291924 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:36.986291924 +0000
+@@ -664,10 +664,11 @@
+             return -1;
+         }
+         if (subclass) {
+-            for (int i = fromIndex; i < throwables.length; i++) {
+-                if (type.isAssignableFrom(throwables[i].getClass())) {
+-                    return i;
+-                }
++ 
++for (int i = fromIndex; i < (throwables.length); i++) {    if (type.isAssignableFrom(throwables[i].getClass())) {        return i;    }}; 
++ 
++ 
++ 
+             }
+         } else {
+             for (int i = fromIndex; i < throwables.length; i++) {

@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-03 21:56:25.099449785 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-03 21:56:25.099449785 +0000
+@@ -466,7 +466,7 @@
+                 case 'F' :
+                     try {
+                         Float f = NumberUtils.createFloat(numeric);
+-                        if (!(f.isInfinite() || (f.floatValue() == 0.0F && !allZeros))) {
++if  ( ! ( f.isInfinite (  )  ||  ( f.floatValue (  )  <= 0.0F && !allZeros )  )  )  {
+                             //If it's too big for a float or the float value = 0 and the string
+                             //has non-zeros in it, then float does not have the precision we want
+                             return f;

@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:28.858402366 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:28.858402366 +0000
+@@ -250,7 +250,7 @@
+     public synchronized void addElement(double value) {
+         numElements++;
+         if ((startIndex + numElements) > internalArray.length) {
+-            expand();
++contract (  ) ;
+         }
+         internalArray[startIndex + (numElements - 1)] = value;
+         if (shouldContract()) {

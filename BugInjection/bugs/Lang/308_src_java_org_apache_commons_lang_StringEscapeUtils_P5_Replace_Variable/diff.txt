@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-03 22:02:05.014821782 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-03 22:02:05.018821728 +0000
+@@ -305,7 +305,7 @@
+         boolean inUnicode = false;
+         for (int i = 0; i < sz; i++) {
+             char ch = str.charAt(i);
+-            if (inUnicode) {
++if  ( hadSlash )  {
+                 // if in unicode, then we're reading unicode
+                 // values in somehow
+                 unicode.append(ch);

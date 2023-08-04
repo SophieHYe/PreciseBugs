@@ -1,0 +1,11 @@
+--- /FractionFormat.java	2023-07-03 21:32:40.126913521 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/FractionFormat.java	2023-07-03 21:32:40.126913521 +0000
+@@ -257,7 +257,7 @@
+      * @return the parsed {@link Fraction} object.
+      */
+     public Fraction parse(String source, ParsePosition pos) {
+-        int initialIndex = pos.getIndex();
++pos.setIndex ( pos.getIndex (  )  - 1 ) ;int initialIndex = pos.getIndex (  ) ;
+ 
+         // parse whitespace
+         parseAndIgnoreWhitespace(source, pos);

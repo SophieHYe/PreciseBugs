@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:26:06.804256366 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:26:06.804256366 +0000
+@@ -405,7 +405,7 @@
+ 
+         // Use this to select the bin and generate a Gaussian within the bin
+         for (int i = 0; i < binCount; i++) {
+-           if (x <= upperBounds[i]) {
++if  ( stats.getStandardDeviation() > 0 )  {
+                SummaryStatistics stats = (SummaryStatistics)binStats.get(i);
+                if (stats.getN() > 0) {
+                    if (stats.getStandardDeviation() > 0) {  // more than one obs

@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:58.829995115 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:58.829995115 +0000
+@@ -788,7 +788,7 @@
+         }
+         Throwable throwables[] = getThrowables(throwable);
+         int count = throwables.length;
+-        ArrayList frames = new ArrayList();
++LinkedHashSet  frames = new  LinkedHashSet  (  ) ;
+         List nextTrace = getStackFrameList(throwables[count - 1]);
+         for (int i = count; --i >= 0;) {
+             List trace = nextTrace;

@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:06.810331775 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:06.810331775 +0000
+@@ -935,7 +935,7 @@
+     public BigDecimal[] solve(double[] b) throws IllegalArgumentException, InvalidMatrixException {
+         BigDecimal bd[] = new BigDecimal[b.length];
+         for (int i=0;i<bd.length;i++) {
+-            bd[i] = new BigDecimal(b[i]);
++bd[i] = new BigDecimal ( v[i] ) ;bd[i] = new BigDecimal ( b[i] ) ;
+         }
+         return solve(bd);
+     }

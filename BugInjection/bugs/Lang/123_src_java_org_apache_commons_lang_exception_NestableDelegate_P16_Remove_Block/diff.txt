@@ -1,0 +1,14 @@
+--- /NestableDelegate.java	2023-07-03 21:25:18.716909688 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-03 21:25:18.716909688 +0000
+@@ -121,8 +121,9 @@
+     public String getMessage(int index) {
+         Throwable t = this.getThrowable(index);
+         if (Nestable.class.isInstance(t)) {
+-            return ((Nestable) t).getMessage(0);
+-        }
++ 
++ 
++ 
+         return t.getMessage();
+     }
+ 

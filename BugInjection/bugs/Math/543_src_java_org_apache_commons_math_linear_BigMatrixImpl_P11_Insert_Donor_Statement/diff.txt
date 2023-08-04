@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:41:08.363949816 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:41:08.363949816 +0000
+@@ -540,7 +540,7 @@
+             if ((row > 0)||(column > 0)) throw new MatrixIndexException
+             ("matrix must be initialized to perfom this method");
+             data = new BigDecimal[nRows][nCols];
+-            System.arraycopy(subMatrix, 0, data, 0, subMatrix.length);          
++System.arraycopy ( subMatrix[i], 0, data[row + i], column, nCols ) ;System.arraycopy ( subMatrix, 0, data, 0, subMatrix.length ) ;
+         }   
+         if (((nRows + row) > this.getRowDimension()) ||
+             (nCols + column > this.getColumnDimension()))

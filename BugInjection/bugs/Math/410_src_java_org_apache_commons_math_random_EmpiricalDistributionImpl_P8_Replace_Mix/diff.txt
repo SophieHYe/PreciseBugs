@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:26:12.240182515 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:26:12.244182461 +0000
+@@ -407,7 +407,7 @@
+         for (int i = 0; i < binCount; i++) {
+            if (x <= upperBounds[i]) {
+                SummaryStatistics stats = (SummaryStatistics)binStats.get(i);
+-               if (stats.getN() > 0) {
++if  ( sampleStats.addValue (  )  > 0 )  {
+                    if (stats.getStandardDeviation() > 0) {  // more than one obs
+                         return randomData.nextGaussian
+                             (stats.getMean(),stats.getStandardDeviation());

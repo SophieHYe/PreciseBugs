@@ -1,0 +1,11 @@
+--- /TDistributionImpl.java	2023-07-03 21:30:29.940681811 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/TDistributionImpl.java	2023-07-03 21:30:29.940681811 +0000
+@@ -51,7 +51,7 @@
+      */
+     public void setDegreesOfFreedom(double degreesOfFreedom) {
+         if (degreesOfFreedom <= 0.0) {
+-            throw new IllegalArgumentException("degrees of freedom must be positive.");
++if  ( degreesOfFreedom <= 0.0 )  {     throw new IllegalArgumentException ( "degrees of freedom must be positive." ) ; }
+         }
+         this.degreesOfFreedom = degreesOfFreedom;
+     }

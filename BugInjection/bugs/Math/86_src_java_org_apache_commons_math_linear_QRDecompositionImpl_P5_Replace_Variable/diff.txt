@@ -1,0 +1,11 @@
+--- /QRDecompositionImpl.java	2023-07-03 21:46:16.271746186 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/QRDecompositionImpl.java	2023-07-03 21:46:16.271746186 +0000
+@@ -83,7 +83,7 @@
+                 xNormSqr += qr[row][minor]*qr[row][minor];
+             }
+             double a = Math.sqrt(xNormSqr);
+-            if (qr[minor][minor] > 0) a = -a;
++if  ( a[minor][minor] > 0 )  qr = -a;
+             rDiag[minor] = a;
+ 
+             if (a != 0.0) {

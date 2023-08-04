@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:21:47.954695514 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:21:47.958695460 +0000
+@@ -328,8 +328,9 @@
+      */
+     public StrBuilder deleteCharAt(int index) {
+         if (index < 0 || index >= size) {
+-            throw new StringIndexOutOfBoundsException(index);
+-        }
++ 
++throw new java.lang.StringIndexOutOfBoundsException(index); 
++ 
+         deleteImpl(index, index + 1, 1);
+         return this;
+     }

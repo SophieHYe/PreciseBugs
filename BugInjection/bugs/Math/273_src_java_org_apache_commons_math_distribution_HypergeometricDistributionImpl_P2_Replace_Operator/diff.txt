@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:47.558072540 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:47.562072485 +0000
+@@ -270,7 +270,7 @@
+         int[] domain = getDomain(n, m, k);
+         if (x < domain[0]) {
+             ret = 1.0;
+-        } else if(x > domain[1]) {
++} else if ( x >= domain[1] )  {
+             ret = 0.0;
+         } else {
+             ret = innerCumulativeProbability(domain[1], x, -1, n, m, k);

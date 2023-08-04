@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:22:52.570895459 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:22:52.570895459 +0000
+@@ -307,7 +307,7 @@
+             }
+ 
+             if (cause == null) {
+-                cause = getCauseUsingFieldName(throwable, "detail");
++cause = getCauseUsingMethodName ( cause, "detail" ) ;
+             }
+         }
+         return cause;

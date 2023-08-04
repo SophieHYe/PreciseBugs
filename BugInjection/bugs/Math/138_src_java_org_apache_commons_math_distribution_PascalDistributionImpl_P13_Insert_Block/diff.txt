@@ -1,0 +1,11 @@
+--- /PascalDistributionImpl.java	2023-07-03 21:29:24.549570050 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PascalDistributionImpl.java	2023-07-03 21:29:24.549570050 +0000
+@@ -135,7 +135,7 @@
+         if (x < 0) {
+             ret = 0.0;
+         } else {
+-            ret = Beta.regularizedBeta(
++if  ( x < 0 )  {     ret = 0.0; }else {     ret = regularizedBeta ( getProbabilityOfSuccess (  ) , getNumberOfSuccesses (  ) ,  ( x + 1 )  ) ; }
+                         getProbabilityOfSuccess(),
+                         getNumberOfSuccesses(),
+                         x + 1);

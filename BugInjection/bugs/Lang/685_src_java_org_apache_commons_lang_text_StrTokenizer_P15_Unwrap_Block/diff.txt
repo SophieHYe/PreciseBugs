@@ -1,0 +1,16 @@
+--- /StrTokenizer.java	2023-07-03 22:17:36.686119448 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:36.690119392 +0000
+@@ -683,9 +683,10 @@
+         
+         // handle reaching end
+         if (start >= len) {
+-            addToken(tokens, "");
+-            return -1;
+-        }
++ 
++addToken(tokens, ""); return -1; 
++ 
++ 
+         
+         // handle empty token
+         int delimLen = getDelimiterMatcher().isMatch(chars, start, start, len);

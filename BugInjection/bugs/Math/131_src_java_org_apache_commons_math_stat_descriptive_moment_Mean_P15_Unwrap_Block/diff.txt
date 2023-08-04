@@ -1,0 +1,17 @@
+--- /Mean.java	2023-07-03 21:25:44.904553895 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/moment/Mean.java	2023-07-03 21:25:44.904553895 +0000
+@@ -129,9 +129,10 @@
+      */
+     public double evaluate(final double[] values,final int begin, final int length) {
+         if (test(values, begin, length)) {
+-            Sum sum = new Sum();
+-            return sum.evaluate(values, begin, length) / ((double) length);
+-        }
++ 
++org.apache.commons.math.stat.descriptive.summary.Sum sum = new org.apache.commons.math.stat.descriptive.summary.Sum(); return (sum.evaluate(values, begin, length)) / ((double) (length)); 
++ 
++ 
+         return Double.NaN;
+     }
+ }
+\ No newline at end of file

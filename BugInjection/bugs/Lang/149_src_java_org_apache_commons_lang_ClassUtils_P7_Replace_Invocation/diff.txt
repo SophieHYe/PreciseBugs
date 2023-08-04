@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-03 22:08:54.485242840 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-03 22:08:54.485242840 +0000
+@@ -146,7 +146,7 @@
+         if (className.length() == 0) {
+             return StringUtils.EMPTY;
+         }
+-        char[] chars = className.toCharArray();
++char[] chars = className .valueOf ( PACKAGE_SEPARATOR_CHAR )  ;
+         int lastDot = 0;
+         for (int i = 0; i < chars.length; i++) {
+             if (chars[i] == PACKAGE_SEPARATOR_CHAR) {

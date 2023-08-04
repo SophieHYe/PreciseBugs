@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:31:54.579532168 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:54.583532113 +0000
+@@ -371,7 +371,7 @@
+         int d2 = (tmodd1==0)?d1:MathUtils.gcd(tmodd1, d1);
+ 
+         // result is (t/d2) / (u'/d1)(v'/d2)
+-        BigInteger w = t.divide(BigInteger.valueOf(d2));
++int tmodd1 = t.mod ( BigInteger.valueOf ( d1 )  ) .intValue (  ) ;BigInteger w = t.divide ( BigInteger.valueOf ( d2 )  ) ;
+         if (w.bitLength() > 31) {
+             throw new ArithmeticException
+             ("overflow: numerator too large after multiply");

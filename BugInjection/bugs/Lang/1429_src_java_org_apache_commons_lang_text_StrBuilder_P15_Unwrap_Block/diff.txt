@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:38:11.113306200 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:38:11.113306200 +0000
+@@ -1427,8 +1427,9 @@
+             StrMatcher matcher, String replaceStr,
+             int from, int to, int replaceCount) {
+         if (matcher == null || size == 0) {
+-            return this;
+-        }
++ 
++return this; 
++ 
+         int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+         char[] buf = buffer;
+         for (int i = from; i < to && replaceCount != 0; i++) {

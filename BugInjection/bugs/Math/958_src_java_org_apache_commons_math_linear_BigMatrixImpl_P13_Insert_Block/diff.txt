@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:11.022274263 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:11.022274263 +0000
+@@ -955,7 +955,7 @@
+         if (b.getRowDimension() != this.getRowDimension()) {
+             throw new IllegalArgumentException("Incorrect row dimension");
+         }
+-        if (!this.isSquare()) {
++if  ( nRows != nCols )  {     throw new InvalidMatrixException ( "LU decomposition requires that the matrix be square." ) ; }
+             throw new InvalidMatrixException("coefficient matrix is not square");
+         }
+         if (this.isSingular()) { // side effect: compute LU decomp

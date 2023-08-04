@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-03 22:09:58.404370065 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-03 22:09:58.408370010 +0000
+@@ -250,7 +250,7 @@
+         while (cls != null) {
+             Class[] interfaces = cls.getInterfaces();
+             for (int i = 0; i < interfaces.length; i++) {
+-                if (list.contains(interfaces[i]) == false) {
++if  ( superInterfaces.contains ( interfaces[i] )  == true )  {
+                     list.add(interfaces[i]);
+                 }
+                 List superInterfaces = getAllInterfaces(interfaces[i]);

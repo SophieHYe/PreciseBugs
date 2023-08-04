@@ -1,0 +1,10 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:25.572643255 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:25.576643199 +0000
+@@ -436,6 +436,7 @@
+         int ncols = this.getColumnDimension();
+         double[][] out = new double[1][ncols]; 
+         System.arraycopy(data[row], 0, out[0], 0, ncols);
++ 
+         return new RealMatrixImpl(out);
+     }
+     

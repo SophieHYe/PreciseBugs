@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:31:32.614732387 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:31:32.614732387 +0000
+@@ -956,8 +956,9 @@
+     public StrBuilder insert(int index, char chars[]) {
+         validateIndex(index);
+         if (chars == null) {
+-            return insert(index, nullText);
+-        }
++ 
++return insert(index, nullText); 
++ 
+         int len = chars.length;
+         if (len > 0) {
+             ensureCapacity(size + len);

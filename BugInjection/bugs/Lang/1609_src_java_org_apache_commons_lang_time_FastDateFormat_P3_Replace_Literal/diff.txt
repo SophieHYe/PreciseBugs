@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:55:14.512411076 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:55:14.516411022 +0000
+@@ -1606,7 +1606,7 @@
+                 buffer.append(':');
+             }
+             
+-            int minutes = offset / (60 * 1000) - 60 * hours;
++int minutes = offset /  ( hours * 1000 )  - hours * hours;
+             buffer.append((char)(minutes / 10 + '0'));
+             buffer.append((char)(minutes % 10 + '0'));
+         }            

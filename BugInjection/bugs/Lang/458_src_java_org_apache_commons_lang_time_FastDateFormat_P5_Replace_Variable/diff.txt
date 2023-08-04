@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:41:05.843984256 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:41:05.843984256 +0000
+@@ -455,7 +455,7 @@
+             key = new Pair(key, locale);
+         }
+ 
+-        FastDateFormat format = (FastDateFormat) cDateTimeInstanceCache.get(key);
++FastDateFormat format =  ( FastDateFormat )  key.get ( cDateTimeInstanceCache ) ;
+         if (format == null) {
+             if (locale == null) {
+                 locale = Locale.getDefault();

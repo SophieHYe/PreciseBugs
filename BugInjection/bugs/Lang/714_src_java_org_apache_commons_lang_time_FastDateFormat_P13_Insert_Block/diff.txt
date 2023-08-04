@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:45:17.048554120 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:45:17.048554120 +0000
+@@ -711,7 +711,7 @@
+ 
+             while (i + 1 < length) {
+                 char peek = pattern.charAt(i + 1);
+-                if (peek == c) {
++if  ( offset < 0 )  {     buffer.append ( '-' ) ;     offset = -offset; }else {     buffer.append ( '+' ) ; }
+                     buf.append(c);
+                     i++;
+                 } else {

@@ -1,0 +1,15 @@
+--- /FDistributionImpl.java	2023-07-03 21:29:51.229207643 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/FDistributionImpl.java	2023-07-03 21:29:51.229207643 +0000
+@@ -74,9 +74,9 @@
+             double n = getNumeratorDegreesOfFreedom();
+             double m = getDenominatorDegreesOfFreedom();
+             
+-            ret = Beta.regularizedBeta((n * x) / (m + n * x),
+-                0.5 * n,
+-                0.5 * m);
++ret = Beta.regularizedBeta (  ( n * m )  /  ( x + n * x ) , 0.5 * n, 0.5 * m ) ;
++ 
++ 
+         }
+         return ret;
+     }

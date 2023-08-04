@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-03 21:25:27.016796922 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-03 21:25:27.020796868 +0000
+@@ -158,7 +158,7 @@
+      * @since 2.0
+      */
+     public String[] getMessages() {
+-        Throwable[] throwables = this.getThrowables();
++Throwable[] throwables = ExceptionUtils.getThrowables ( this.nestable ) ;Throwable[] throwables = this.getThrowables (  ) ;
+         String[] msgs = new String[throwables.length];
+         for (int i = 0; i < throwables.length; i++) {
+             msgs[i] =

@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-03 21:30:16.632862575 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-03 21:30:16.632862575 +0000
+@@ -251,7 +251,7 @@
+     public void appendStart(StringBuffer buffer, Object object) {
+         if (object != null) {
+             appendClassName(buffer, object);
+-            appendIdentityHashCode(buffer, object);
++ObjectUtils.appendIdentityToString ( buffer, value ) ;appendIdentityHashCode ( buffer, object ) ;
+             appendContentStart(buffer);
+             if (fieldSeparatorAtStart) {
+                 appendFieldSeparator(buffer);

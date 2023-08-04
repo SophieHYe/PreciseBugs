@@ -1,0 +1,16 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:33:53.693905115 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:33:53.697905060 +0000
+@@ -627,9 +627,10 @@
+             return false;
+         }
+         if (Modifier.isTransient(field.getModifiers()) && !this.isAppendTransients()) {
+-            // Reject transient fields.
+-            return false;
+-        }
++ 
++ 
++ 
++ 
+         if (Modifier.isStatic(field.getModifiers()) && !this.isAppendStatics()) {
+             // Rject static fields.
+             return false;

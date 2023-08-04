@@ -1,0 +1,11 @@
+--- /ExponentialDistributionImpl.java	2023-07-03 21:30:27.464715443 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/ExponentialDistributionImpl.java	2023-07-03 21:30:27.464715443 +0000
+@@ -157,7 +157,7 @@
+     protected double getInitialDomain(double p) {
+         // TODO: try to improve on this estimate
+         // Exponential is skewed to the left, therefore, P(X < &mu;) > .5
+-        if (p < .5) {
++if  ( x <= 0.0 )  {
+             // use 1/2 mean
+             return getMean() * .5;
+         } else {

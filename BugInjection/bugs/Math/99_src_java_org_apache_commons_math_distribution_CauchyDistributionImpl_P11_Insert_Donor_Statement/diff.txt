@@ -1,0 +1,13 @@
+--- /CauchyDistributionImpl.java	2023-07-03 21:29:03.933850091 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/CauchyDistributionImpl.java	2023-07-03 21:29:03.933850091 +0000
+@@ -96,8 +96,8 @@
+     public double inverseCumulativeProbability(double p) {
+         double ret;
+         if (p < 0.0 || p > 1.0) {
+-            throw new IllegalArgumentException
+-                ("probability argument must be between 0 and 1 (inclusive)");
++throw new IllegalArgumentException ( "Scale must be positive." ) ;throw new IllegalArgumentException ( "probability argument must be between 0 and 1  ( inclusive ) " ) ;
++ 
+         } else if (p == 0) {
+             ret = Double.NEGATIVE_INFINITY;
+         } else  if (p == 1) {

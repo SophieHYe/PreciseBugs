@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:41:23.531742533 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:41:23.535742479 +0000
+@@ -567,7 +567,7 @@
+         int ncols = this.getColumnDimension();
+         BigDecimal[][] out = new BigDecimal[1][ncols]; 
+         System.arraycopy(data[row], 0, out[0], 0, ncols);
+-        return new BigMatrixImpl(out);
++return new BigMatrixImpl ( subMatrixData ) ;
+     } 
+     
+     /**

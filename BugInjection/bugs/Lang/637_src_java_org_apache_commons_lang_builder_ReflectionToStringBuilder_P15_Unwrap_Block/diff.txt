@@ -1,0 +1,17 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:33:57.137857778 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:33:57.137857778 +0000
+@@ -635,10 +635,11 @@
+             return false;
+         }
+         if (this.getExcludeFieldNames() != null
+-            && Arrays.binarySearch(this.getExcludeFieldNames(), field.getName()) >= 0) {
++ 
++return false; 
+             // Reject fields from the getExcludeFieldNames list.
+-            return false;
+-        }
++ 
++ 
+         return true;
+     }
+ 

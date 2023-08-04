@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:22:05.830451980 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:22:05.834451926 +0000
+@@ -361,7 +361,7 @@
+      */
+     public char[] toCharArray(int startIndex, int endIndex) {
+         endIndex = validateRange(startIndex, endIndex);
+-        int len = endIndex - startIndex;
++int padLen = width - strLen;int len = endIndex - startIndex;
+         if (len == 0) {
+             return ArrayUtils.EMPTY_CHAR_ARRAY;
+         }

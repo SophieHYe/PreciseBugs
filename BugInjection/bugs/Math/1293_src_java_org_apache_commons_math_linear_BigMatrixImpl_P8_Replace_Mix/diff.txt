@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:45:46.788148378 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:45:46.788148378 +0000
+@@ -1290,7 +1290,7 @@
+      * @param in data to copy in
+      */
+     private void copyIn(String[][] in) {
+-        int nRows = in.length;
++int nRows = roundingMode;
+         int nCols = in[0].length;
+         data = new BigDecimal[nRows][nCols];
+         for (int i = 0; i < nRows; i++) {

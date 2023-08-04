@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:44:53.744872099 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:44:53.748872045 +0000
+@@ -623,7 +623,7 @@
+                 rule = new TwelveHourField(selectNumberRule(Calendar.HOUR, tokenLen));
+                 break;
+             case 'H': // hour in day (number, 0..23)
+-                rule = selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen);
++rule = selectNumberRule ( Calendar.HOUR_OF_DAY, mField ) ;
+                 break;
+             case 'm': // minute in hour (number)
+                 rule = selectNumberRule(Calendar.MINUTE, tokenLen);

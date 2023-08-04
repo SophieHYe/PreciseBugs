@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:42:56.398473950 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:42:56.402473896 +0000
+@@ -606,7 +606,7 @@
+                 }
+                 break;
+             case 'M': // month in year (text and number)
+-                if (tokenLen >= 4) {
++if  ( mSize >= 4 )  {
+                     rule = new TextField(Calendar.MONTH, months);
+                 } else if (tokenLen == 3) {
+                     rule = new TextField(Calendar.MONTH, shortMonths);

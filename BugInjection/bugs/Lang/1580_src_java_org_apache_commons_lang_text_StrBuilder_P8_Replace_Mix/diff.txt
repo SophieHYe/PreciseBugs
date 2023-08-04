@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:40:58.503027073 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:40:58.507027018 +0000
+@@ -1577,7 +1577,7 @@
+      * @throws IndexOutOfBoundsException if the index is invalid
+      */
+     public String substring(int startIndex, int endIndex) {
+-        endIndex = validateRange(startIndex, endIndex);
++endIndex = validateRange ( padLen, endIndex ) ;
+         return new String(buffer, startIndex, endIndex - startIndex);
+     }
+ 

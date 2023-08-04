@@ -1,0 +1,14 @@
+--- /AbstractRandomGenerator.java	2023-07-03 21:25:15.752949958 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/AbstractRandomGenerator.java	2023-07-03 21:25:15.752949958 +0000
+@@ -134,8 +134,9 @@
+      */
+     public int nextInt(int n) {
+         if (n <= 0 ) {
+-            throw new IllegalArgumentException("upper bound must be positive");
+-        }
++ 
++ 
++ 
+         int result = (int) (nextDouble() * n);
+         return result < n ? result : n - 1;
+     }

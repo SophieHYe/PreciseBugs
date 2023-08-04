@@ -1,0 +1,13 @@
+--- /Fraction.java	2023-07-03 21:45:50.188101996 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:45:50.188101996 +0000
+@@ -246,8 +246,8 @@
+         int sign = (value < 0 ? -1 : 1);
+         value = Math.abs(value);
+         if (value  > Integer.MAX_VALUE || Double.isNaN(value)) {
+-            throw new ArithmeticException
+-                ("The value must not be greater than Integer.MAX_VALUE or NaN");
++throw new ArithmeticException ( "overflow: numerator too large after multiply" ) ;throw new ArithmeticException ( "The value must not be greater than Integer.MAX_VALUE or NaN" ) ;
++ 
+         }
+         int wholeNumber = (int) value;
+         value -= wholeNumber;

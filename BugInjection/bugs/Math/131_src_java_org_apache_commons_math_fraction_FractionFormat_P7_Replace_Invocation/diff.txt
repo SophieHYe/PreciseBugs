@@ -1,0 +1,11 @@
+--- /FractionFormat.java	2023-07-03 21:32:29.399059231 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/FractionFormat.java	2023-07-03 21:32:29.399059231 +0000
+@@ -128,7 +128,7 @@
+      * @return the complex format specific to the given locale.
+      */
+     public static FractionFormat getProperInstance(Locale locale) {
+-        NumberFormat f = getDefaultNumberFormat(locale);
++NumberFormat f = getImproperInstance ( locale ) ;
+         return new ProperFractionFormat(f);
+     }
+     

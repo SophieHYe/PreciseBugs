@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:46.862604173 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:46.862604173 +0000
+@@ -882,7 +882,7 @@
+     public BigDecimal[] preMultiply(BigDecimal[] v) throws IllegalArgumentException {
+         int nRows = this.getRowDimension();
+         if (v.length != nRows) {
+-            throw new IllegalArgumentException("vector has wrong length");
++if  ( nRows == 0 )  {     throw new IllegalArgumentException ( "Matrix must have at least one row." ) ; }
+         }
+         int nCols = this.getColumnDimension();
+         BigDecimal[] out = new BigDecimal[nCols];

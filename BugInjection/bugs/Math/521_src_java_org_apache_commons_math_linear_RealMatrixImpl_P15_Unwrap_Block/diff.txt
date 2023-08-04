@@ -1,0 +1,14 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:43.796393206 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:43.800393152 +0000
+@@ -519,8 +519,9 @@
+     public double getEntry(int row, int column)
+         throws MatrixIndexException {
+         if (!isValidCoordinate(row,column)) {
+-            throw new MatrixIndexException("matrix entry does not exist");
+-        }
++ 
++throw new org.apache.commons.math.linear.MatrixIndexException("matrix entry does not exist"); 
++ 
+         return data[row][column];
+     }
+ 

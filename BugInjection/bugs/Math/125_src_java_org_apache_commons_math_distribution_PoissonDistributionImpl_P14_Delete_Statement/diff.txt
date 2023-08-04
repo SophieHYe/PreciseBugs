@@ -1,0 +1,12 @@
+--- /PoissonDistributionImpl.java	2023-07-03 21:29:46.301274582 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PoissonDistributionImpl.java	2023-07-03 21:29:46.305274528 +0000
+@@ -123,7 +123,8 @@
+     public double normalApproximateProbability(int x) throws MathException {
+         NormalDistribution normal = DistributionFactory.newInstance()
+                 .createNormalDistribution(getMean(),
+-                        Math.sqrt(getMean()));
++ 
++ 
+ 
+         // calculate the probability using half-correction
+         return normal.cumulativeProbability(x + 0.5);

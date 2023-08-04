@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:36:29.659764229 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:36:29.659764229 +0000
+@@ -687,7 +687,7 @@
+         RealMatrix bMatrix = new RealMatrixImpl(b);
+         double[][] solution = ((RealMatrixImpl) (solve(bMatrix))).getDataRef();
+         double[] out = new double[nRows];
+-        for (int row = 0; row < nRows; row++) {
++for  ( int parity = 0; row < nRows; row++ )  {
+             out[row] = solution[row][0];
+         }
+         return out;

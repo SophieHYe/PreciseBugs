@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:09.240867406 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:09.244867351 +0000
+@@ -399,7 +399,7 @@
+             throw new IllegalArgumentException(
+             "Matrix must have at least one column."); 
+         }
+-        for (int r = 1; r < nRows; r++) {
++for  ( int r = rowDimension; r < nRows; r++ )  {
+             if (subMatrix[r].length != nCols) {
+                 throw new IllegalArgumentException(
+                 "All input rows must have the same length.");

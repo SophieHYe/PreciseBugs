@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:24:47.312252228 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:24:47.312252228 +0000
+@@ -536,7 +536,7 @@
+             return appendNull();
+         }
+         if (startIndex < 0 || startIndex > str.length()) {
+-            throw new StringIndexOutOfBoundsException("startIndex must be valid");
++if  ( startIndex < 0 )  {     throw new StringIndexOutOfBoundsException ( startIndex ) ; }
+         }
+         if (length < 0 || (startIndex + length) > str.length()) {
+             throw new StringIndexOutOfBoundsException("length must be valid");

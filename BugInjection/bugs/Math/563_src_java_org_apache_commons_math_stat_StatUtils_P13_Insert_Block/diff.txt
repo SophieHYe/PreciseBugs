@@ -1,0 +1,11 @@
+--- /StatUtils.java	2023-07-03 21:27:57.642750605 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/StatUtils.java	2023-07-03 21:27:57.642750605 +0000
+@@ -560,7 +560,7 @@
+     public static double sumDifference(final double[] sample1, final double[] sample2)
+         throws IllegalArgumentException {
+         int n = sample1.length;
+-        if (n  != sample2.length || n < 1) {
++if  (  ( n < 2 )  ||  ( n !=  ( sample2.length )  )  )  {     throw new IllegalArgumentException ( "Input array lengths must be equal and at least 2." ) ; }
+             throw new IllegalArgumentException 
+                 ("Input arrays must have the same (positive) length.");
+         }

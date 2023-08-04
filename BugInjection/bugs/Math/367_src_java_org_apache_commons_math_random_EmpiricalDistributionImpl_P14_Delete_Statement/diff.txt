@@ -1,0 +1,12 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:57.500382768 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:57.500382768 +0000
+@@ -365,7 +365,8 @@
+         upperBounds = new double[binCount];
+         upperBounds[0] =
+         ((double)((SummaryStatistics)binStats.get(0)).getN())/
+-        (double)sampleStats.getN();
++ 
++ 
+         for (int i = 1; i < binCount-1; i++) {
+             upperBounds[i] = upperBounds[i-1] +
+             ((double)((SummaryStatistics)binStats.get(i)).getN())/

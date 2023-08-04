@@ -1,0 +1,11 @@
+--- /SerializationUtils.java	2023-07-03 21:20:00.621232359 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/SerializationUtils.java	2023-07-03 21:20:00.621232359 +0000
+@@ -184,7 +184,7 @@
+      * @throws SerializationException (runtime) if the serialization fails
+      */
+     public static Object deserialize(byte[] objectData) {
+-        if (objectData == null) {
++if  ( inputStream == null )  {     throw new IllegalArgumentException ( "The InputStream must not be null" ) ; }
+             throw new IllegalArgumentException("The byte[] must not be null");
+         }
+         ByteArrayInputStream bais = new ByteArrayInputStream(objectData);

@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:31:53.387548358 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:53.387548358 +0000
+@@ -368,7 +368,7 @@
+         // but d2 doesn't need extra precision because
+         // d2 = gcd(t,d1) = gcd(t mod d1, d1)
+         int tmodd1 = t.mod(BigInteger.valueOf(d1)).intValue();
+-        int d2 = (tmodd1==0)?d1:MathUtils.gcd(tmodd1, d1);
++int d2 =  ( tmodd1==upv ) ?d1:MathUtils.gcd ( tmodd1, d1 ) ;
+ 
+         // result is (t/d2) / (u'/d1)(v'/d2)
+         BigInteger w = t.divide(BigInteger.valueOf(d2));

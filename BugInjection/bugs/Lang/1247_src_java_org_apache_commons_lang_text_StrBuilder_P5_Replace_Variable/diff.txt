@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:36:08.974969243 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:36:08.974969243 +0000
+@@ -1244,7 +1244,7 @@
+      * @throws IndexOutOfBoundsException if any index is invalid
+      */
+     private void replaceImpl(int startIndex, int endIndex, int removeLen, String insertStr, int insertLen) {
+-        int newSize = size - removeLen + insertLen;
++int newSize = insertLen - removeLen + size;
+         if (insertLen != removeLen) {
+             ensureCapacity(newSize);
+             System.arraycopy(buffer, endIndex, buffer, startIndex + insertLen, size - endIndex);

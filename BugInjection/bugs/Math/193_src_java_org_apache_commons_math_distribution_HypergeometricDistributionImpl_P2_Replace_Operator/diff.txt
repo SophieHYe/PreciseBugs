@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:36.206226745 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:36.206226745 +0000
+@@ -190,7 +190,7 @@
+         int k = getSampleSize();
+ 
+         int[] domain = getDomain(n, m, k);
+-        if(x < domain[0] || x > domain[1]){
++if ( x < domain[0] || x >= domain[1] ) {
+             ret = 0.0;
+         } else {
+             ret = probability(n, m, k, x);

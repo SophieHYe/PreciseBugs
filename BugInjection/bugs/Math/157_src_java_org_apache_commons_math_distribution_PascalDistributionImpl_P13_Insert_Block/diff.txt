@@ -1,0 +1,11 @@
+--- /PascalDistributionImpl.java	2023-07-03 21:29:28.629514629 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PascalDistributionImpl.java	2023-07-03 21:29:28.629514629 +0000
+@@ -154,7 +154,7 @@
+         if (x < 0) {
+             ret = 0.0;
+         } else {
+-            ret = MathUtils.binomialCoefficientDouble(x + getNumberOfSuccesses() - 1,
++if  ( x < 0 )  {     ret = 0.0; }else {     ret =  (  ( binomialCoefficientDouble (  (  ( x +  ( getNumberOfSuccesses (  )  )  )  - 1 ) ,  (  ( getNumberOfSuccesses (  )  )  - 1 )  )  )  *  ( pow ( getProbabilityOfSuccess (  ) , getNumberOfSuccesses (  )  )  )  )  *  ( pow (  ( 1.0 -  ( getProbabilityOfSuccess (  )  )  ) , x )  ) ; }
+                     getNumberOfSuccesses() - 1) *
+                   Math.pow(getProbabilityOfSuccess(), getNumberOfSuccesses()) *
+                   Math.pow(1.0 - getProbabilityOfSuccess(),

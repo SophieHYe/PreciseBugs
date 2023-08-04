@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-03 21:34:49.333140720 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-03 21:34:49.341140610 +0000
+@@ -341,7 +341,7 @@
+         reflectionAppend(object, clazz, builder, testTransients, excludeFields);
+         while (clazz.getSuperclass() != null && clazz != reflectUpToClass) {
+             clazz = clazz.getSuperclass();
+-            reflectionAppend(object, clazz, builder, testTransients, excludeFields);
++reflectionAppend ( object, builder, clazz, testTransients, excludeFields ) ;
+         }
+         return builder.toHashCode();
+     }

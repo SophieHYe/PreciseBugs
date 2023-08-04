@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:38:26.273099782 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:38:26.281099674 +0000
+@@ -1437,7 +1437,7 @@
+                 replaceImpl(i, i + removeLen, removeLen, replaceStr, replaceLen);
+                 to = to - removeLen + replaceLen;
+                 i = i + replaceLen - 1;
+-                if (replaceCount > 0) {
++if  ( startIndex < 0 )  {     return -1; }
+                     replaceCount--;
+                 }
+             }

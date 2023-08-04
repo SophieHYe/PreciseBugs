@@ -1,0 +1,11 @@
+--- /Gamma.java	2023-07-03 21:30:44.960477795 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Gamma.java	2023-07-03 21:30:44.960477795 +0000
+@@ -231,7 +231,7 @@
+             ret = Double.NaN;
+         } else if (x == 0.0) {
+             ret = 1.0;
+-        } else if (x < a || a < 1.0) {
++} else if  ( ret < a || a < 1.0 )  {
+             // use regularizedGammaP because it should converge faster in this
+             // case.
+             ret = 1.0 - regularizedGammaP(a, x, epsilon, maxIterations);

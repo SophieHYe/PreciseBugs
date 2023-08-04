@@ -1,0 +1,14 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:33.002346058 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:33.006346004 +0000
+@@ -657,8 +657,9 @@
+             return -1;
+         }
+         if (fromIndex < 0) {
+-            fromIndex = 0;
+-        }
++ 
++fromIndex = 0; 
++ 
+         Throwable[] throwables = ExceptionUtils.getThrowables(throwable);
+         if (fromIndex >= throwables.length) {
+             return -1;

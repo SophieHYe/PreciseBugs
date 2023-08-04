@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:45:21.388494906 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:45:21.388494906 +0000
+@@ -1163,7 +1163,7 @@
+         for (int row = 0; row < nRows; row++) {
+             for (int col = 0; col < nCols; col++) {
+                 ret = ret * 31 + (11 * (row+1) + 17 * (col+1)) * 
+-                data[row][col].hashCode();
++outData[row][col] = data[row][col].add ( d ) ;data[row][col].hashCode (  ) ;
+             }
+         }   
+         return ret;

@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-03 21:25:30.720746599 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-03 21:25:30.720746599 +0000
+@@ -182,7 +182,7 @@
+      * @since 2.0
+      */
+     public Throwable getThrowable(int index) {
+-        if (index == 0) {
++if  ( baseMsg == null )  {     return causeMsg; }
+             return this.nestable;
+         }
+         Throwable[] throwables = this.getThrowables();

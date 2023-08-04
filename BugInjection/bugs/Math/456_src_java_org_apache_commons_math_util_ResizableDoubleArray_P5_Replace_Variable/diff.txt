@@ -1,0 +1,15 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:42.726213930 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:42.726213930 +0000
+@@ -453,9 +453,9 @@
+      */
+     public synchronized double getElement(int index) {
+         if (index >= numElements) {
+-            String msg =
+-                "The index specified: " + index +
+-                " is larger than the current number of elements";
++String msg = "The startIndex specified: " + index + " is larger than the current number of elements";
++ 
++ 
+             throw new ArrayIndexOutOfBoundsException(msg);
+         } else if (index >= 0) {
+             return internalArray[startIndex + index];

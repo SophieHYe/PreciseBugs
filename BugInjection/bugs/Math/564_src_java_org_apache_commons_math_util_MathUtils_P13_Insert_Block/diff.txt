@@ -1,0 +1,11 @@
+--- /MathUtils.java	2023-07-03 21:22:40.835054936 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-03 21:22:40.839054882 +0000
+@@ -561,7 +561,7 @@
+             unscaled = Math.floor(unscaled);
+             break;
+         case BigDecimal.ROUND_FLOOR :
+-            if (sign == -1) {
++if  ( fraction > 0.5 )  {     unscaled = ceil ( unscaled ) ; }else {     unscaled = floor ( unscaled ) ; }
+                 unscaled = Math.ceil(unscaled);
+             } else {
+                 unscaled = Math.floor(unscaled);

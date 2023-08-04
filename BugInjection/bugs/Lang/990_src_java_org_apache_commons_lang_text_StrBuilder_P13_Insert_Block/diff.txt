@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:32:28.573970374 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:28.573970374 +0000
+@@ -987,7 +987,7 @@
+         if (offset < 0 || offset > chars.length) {
+             throw new StringIndexOutOfBoundsException("Invalid offset: " + offset);
+         }
+-        if (length < 0 || offset + length > chars.length) {
++if  (  ( index < 0 )  ||  ( index >=  ( size )  )  )  {     throw new StringIndexOutOfBoundsException ( index ) ; }
+             throw new StringIndexOutOfBoundsException("Invalid length: " + length);
+         }
+         if (length > 0) {

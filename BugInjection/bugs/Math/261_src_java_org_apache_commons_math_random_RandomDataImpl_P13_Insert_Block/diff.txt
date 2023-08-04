@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:26:55.575593782 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:26:55.579593727 +0000
+@@ -258,7 +258,7 @@
+      * @return the random integer.
+      */
+     public int nextSecureInt(int lower, int upper) {
+-          if (lower >= upper) {
++if  ( lower >= upper )  {     throw new IllegalArgumentException ( "upper bound must be > lower bound" ) ; }
+               throw new IllegalArgumentException
+                 ("lower bound must be < upper bound");
+           }

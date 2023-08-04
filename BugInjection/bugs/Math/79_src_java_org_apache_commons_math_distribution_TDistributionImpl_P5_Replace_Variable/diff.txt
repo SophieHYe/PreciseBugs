@@ -1,0 +1,17 @@
+--- /TDistributionImpl.java	2023-07-03 21:30:35.536605801 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/TDistributionImpl.java	2023-07-03 21:30:35.536605801 +0000
+@@ -76,10 +76,10 @@
+         if (x == 0.0) {
+             ret = 0.5;
+         } else {
+-            double t =
+-                Beta.regularizedBeta(
+-                    getDegreesOfFreedom() / (getDegreesOfFreedom() + (x * x)),
+-                    0.5 * getDegreesOfFreedom(),
++double t = Beta.regularizedBeta ( getDegreesOfFreedom (  )  /  ( getDegreesOfFreedom (  )  +  ( ret * x )  ) , 0.5 * getDegreesOfFreedom (  ) ,
++ 
++ 
++ 
+                     0.5);
+             if (x < 0.0) {
+                 ret = 0.5 * t;

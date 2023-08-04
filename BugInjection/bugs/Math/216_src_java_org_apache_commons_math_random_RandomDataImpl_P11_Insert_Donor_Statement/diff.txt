@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:26:46.807712896 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:26:46.807712896 +0000
+@@ -213,7 +213,7 @@
+        } catch (NoSuchAlgorithmException ex) {
+            return null; // gulp FIXME? -- this *should* never fail.
+        }
+-       alg.reset();
++rand.setSeed ( seed ) ;alg.reset (  ) ;
+ 
+        //Compute number of iterations required (40 bytes each)
+        int numIter = (len / 40) + 1;

@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-03 21:54:39.144892770 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-03 21:54:39.148892715 +0000
+@@ -398,7 +398,7 @@
+         if (str == null) {
+             return null;
+         }
+-        if (StringUtils.isBlank(str)) {
++if  ( isEmpty ( str )  )  {     return false; }
+             throw new NumberFormatException("A blank string is not a valid number");
+         }  
+         if (str.startsWith("--")) {

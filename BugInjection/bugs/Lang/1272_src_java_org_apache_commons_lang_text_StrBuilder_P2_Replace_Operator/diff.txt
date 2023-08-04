@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:36:37.622579172 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:36:37.622579172 +0000
+@@ -1269,7 +1269,7 @@
+     public StrBuilder replace(int startIndex, int endIndex, String replaceStr) {
+         endIndex = validateRange(startIndex, endIndex);
+         int insertLen = (replaceStr == null ? 0 : replaceStr.length());
+-        replaceImpl(startIndex, endIndex, endIndex - startIndex, replaceStr, insertLen);
++replaceImpl ( startIndex, endIndex, endIndex  <  startIndex, replaceStr, insertLen ) ;
+         return this;
+     }
+ 

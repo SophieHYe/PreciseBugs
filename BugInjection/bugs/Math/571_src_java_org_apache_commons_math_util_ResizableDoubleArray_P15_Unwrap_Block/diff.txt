@@ -1,0 +1,16 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:45.470176645 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:45.470176645 +0000
+@@ -569,9 +569,10 @@
+      */
+     public synchronized void setElement(int index, double value) {
+         if (index < 0) {
+-            String msg = "Cannot set an element at a negative index";
+-            throw new ArrayIndexOutOfBoundsException(msg);
+-        }
++ 
++java.lang.String msg = "Cannot set an element at a negative index"; throw new java.lang.ArrayIndexOutOfBoundsException(msg); 
++ 
++ 
+         if (index + 1 > numElements) {
+             numElements = index + 1;
+         }       

@@ -1,0 +1,18 @@
+--- /StrBuilder.java	2023-07-03 22:21:14.867146304 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:21:14.871146250 +0000
+@@ -234,10 +234,11 @@
+      */
+     public StrBuilder minimizeCapacity() {
+         if (buffer.length > length()) {
+-            char[] old = buffer;
+-            buffer = new char[length()];
+-            System.arraycopy(old, 0, buffer, 0, size);
+-        }
++ 
++char[] old = buffer; buffer = new char[length()]; java.lang.System.arraycopy(old, 0, buffer, 0, size); 
++ 
++ 
++ 
+         return this;
+     }
+ 

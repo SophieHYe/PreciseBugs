@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:51:55.139126894 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:51:55.143126839 +0000
+@@ -1654,7 +1654,7 @@
+                 return true;
+             }
+             if (obj instanceof TimeZoneDisplayKey) {
+-                TimeZoneDisplayKey other = (TimeZoneDisplayKey)obj;
++if  ( tokenLen == 1 )  {     rule = INSTANCE_NO_COLON; }else {     rule = INSTANCE_COLON; }
+                 return
+                     mTimeZone.equals(other.mTimeZone) &&
+                     mStyle == other.mStyle &&

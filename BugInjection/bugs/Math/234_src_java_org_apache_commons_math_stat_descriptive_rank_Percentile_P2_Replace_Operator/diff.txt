@@ -1,0 +1,11 @@
+--- /Percentile.java	2023-07-03 21:26:26.703986014 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/rank/Percentile.java	2023-07-03 21:26:26.703986014 +0000
+@@ -231,7 +231,7 @@
+      * than or equal to 100
+      */
+     public void setQuantile(final double p) {
+-        if (p <= 0 || p > 100) {
++if  ( p <= 0 || p >= 100 )  {
+             throw new IllegalArgumentException("Illegal quantile value: " + p);
+         }
+         quantile = p;

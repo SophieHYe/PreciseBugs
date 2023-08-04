@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:34:01.752701563 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:34:01.756701509 +0000
+@@ -1019,7 +1019,7 @@
+             size += 4;
+         } else {
+             ensureCapacity(size + 5);
+-            System.arraycopy(buffer, index, buffer, index + 5, size - index);
++System.arraycopy ( buffer, index, buffer, index + 5, size  ||  index ) ;
+             buffer[index++] = 'f';
+             buffer[index++] = 'a';
+             buffer[index++] = 'l';

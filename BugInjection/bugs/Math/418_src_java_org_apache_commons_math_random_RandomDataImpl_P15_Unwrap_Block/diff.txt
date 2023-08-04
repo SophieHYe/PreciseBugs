@@ -1,0 +1,16 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:23.911208840 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:23.915208785 +0000
+@@ -416,9 +416,10 @@
+      */
+     private SecureRandom getSecRan() {
+         if (secRand == null) {
+-            secRand = new SecureRandom();
+-            secRand.setSeed(System.currentTimeMillis());
+-        }
++ 
++secRand = new java.security.SecureRandom(); secRand.setSeed(java.lang.System.currentTimeMillis()); 
++ 
++ 
+         return secRand;
+     }
+ 

@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:44:11.117453862 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:44:11.121453808 +0000
+@@ -650,7 +650,7 @@
+                 rule = selectNumberRule(Calendar.WEEK_OF_MONTH, tokenLen);
+                 break;
+             case 'a': // am/pm marker (text)
+-                rule = new TextField(Calendar.AM_PM, AmPmStrings);
++rule = rule =  new TextField ( MONTH, shortMonths )  ;
+                 break;
+             case 'k': // hour in day (1..24)
+                 rule = new TwentyFourHourField(selectNumberRule(Calendar.HOUR_OF_DAY, tokenLen));

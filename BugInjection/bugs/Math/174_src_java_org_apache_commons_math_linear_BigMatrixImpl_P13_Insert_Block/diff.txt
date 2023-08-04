@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:39:03.337659510 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:39:03.341659456 +0000
+@@ -171,7 +171,7 @@
+         }
+         for (int row = 1; row < nRows; row++) {
+             if (d[row].length != nCols) {
+-                throw new IllegalArgumentException(
++if  ( nCols == 0 )  {     throw new IllegalArgumentException ( "Matrix must have at least one column." ) ; }
+                 "All input rows must have the same length.");
+             }
+         }

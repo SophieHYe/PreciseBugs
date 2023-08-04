@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:52.744270459 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:52.744270459 +0000
+@@ -559,7 +559,7 @@
+      */
+     public double getDeterminant() throws InvalidMatrixException {
+         if (!isSquare()) {
+-            throw new InvalidMatrixException("matrix is not square");
++return false;
+         }
+         if (isSingular()) {   // note: this has side effect of attempting LU decomp if lu == null
+             return 0d;

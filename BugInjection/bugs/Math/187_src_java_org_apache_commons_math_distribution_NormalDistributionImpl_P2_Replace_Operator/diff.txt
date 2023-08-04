@@ -1,0 +1,11 @@
+--- /NormalDistributionImpl.java	2023-07-03 21:29:18.225655953 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java	2023-07-03 21:29:18.229655898 +0000
+@@ -184,7 +184,7 @@
+     protected double getInitialDomain(double p) {
+         double ret;
+ 
+-        if (p < .5) {
++if  ( p <= .5 )  {
+             ret = getMean() - getStandardDeviation();
+         } else if (p > .5) {
+             ret = getMean() + getStandardDeviation();

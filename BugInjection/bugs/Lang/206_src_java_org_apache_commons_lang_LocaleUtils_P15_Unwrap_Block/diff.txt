@@ -1,0 +1,18 @@
+--- /LocaleUtils.java	2023-07-03 22:06:34.179157940 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/LocaleUtils.java	2023-07-03 22:06:34.179157940 +0000
+@@ -204,10 +204,11 @@
+     public static Set availableLocaleSet() {
+         Set set = cAvailableLocaleSet;
+         if (set == null) {
+-            set = new HashSet(availableLocaleList());
+-            set = Collections.unmodifiableSet(set);
+-            cAvailableLocaleSet = set;
+-        }
++ 
++set = new java.util.HashSet(org.apache.commons.lang.LocaleUtils.availableLocaleList()); set = java.util.Collections.unmodifiableSet(set); org.apache.commons.lang.LocaleUtils.cAvailableLocaleSet = set; 
++ 
++ 
++ 
+         return set;
+     }
+ 

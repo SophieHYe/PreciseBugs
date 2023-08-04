@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:38.194275510 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:38.194275510 +0000
+@@ -403,7 +403,7 @@
+         // is 1.000000000000000001.  The newly calculated size will be 
+         // rounded up to 2 after the multiplication is performed.
+         int newSize = 0;
+-        if (expansionMode == MULTIPLICATIVE_MODE) {
++if  ( MULTIPLICATIVE_MODE == expansionMode )  {
+             newSize = (int) Math.ceil(internalArray.length * expansionFactor);
+         } else {
+             newSize = internalArray.length + Math.round(expansionFactor);

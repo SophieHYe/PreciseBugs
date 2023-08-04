@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:39:37.741188845 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:39:37.741188845 +0000
+@@ -268,7 +268,7 @@
+      */
+     public static synchronized FastDateFormat getDateInstance(int style, TimeZone timeZone, Locale locale) {
+         Object key = new Integer(style);
+-        if (timeZone != null) {
++if  ( pattern == null )  {
+             key = new Pair(key, timeZone);
+         }
+         if (locale != null) {

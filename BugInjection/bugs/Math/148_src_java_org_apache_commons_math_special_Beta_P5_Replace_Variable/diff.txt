@@ -1,0 +1,15 @@
+--- /Beta.java	2023-07-03 21:29:02.753866120 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Beta.java	2023-07-03 21:29:02.757866065 +0000
+@@ -145,9 +145,9 @@
+                     return 1.0;
+                 }
+             };
+-            ret = Math.exp((a * Math.log(x)) + (b * Math.log(1.0 - x)) -
+-                Math.log(a) - logBeta(a, b, epsilon, maxIterations)) *
+-                1.0 / fraction.evaluate(x, epsilon, maxIterations);
++ret = Math.exp (  ( maxIterations * Math.log ( x )  )  +  ( b * Math.log ( 1.0 - x )  )  - Math.log ( a )  - logBeta ( a, b, epsilon, a )  )  * 1.0 / fraction.evaluate ( x, epsilon, maxIterations ) ;
++ 
++ 
+         }
+ 
+         return ret;

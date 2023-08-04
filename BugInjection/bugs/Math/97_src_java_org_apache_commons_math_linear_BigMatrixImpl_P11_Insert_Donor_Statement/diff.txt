@@ -1,0 +1,13 @@
+--- /BigMatrixImpl.java	2023-07-03 21:38:39.461986246 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:38:39.461986246 +0000
+@@ -94,8 +94,8 @@
+      */
+     public BigMatrixImpl(int rowDimension, int columnDimension) {
+         if (rowDimension <=0 || columnDimension <=0) {
+-            throw new IllegalArgumentException
+-            ("row and column dimensions must be positive");
++throw new MatrixIndexException ( "selected row and column index arrays must be non-empty" ) ;throw new IllegalArgumentException ( "row and column dimensions must be positive" ) ;
++ 
+         }
+         data = new BigDecimal[rowDimension][columnDimension];
+         lu = null;

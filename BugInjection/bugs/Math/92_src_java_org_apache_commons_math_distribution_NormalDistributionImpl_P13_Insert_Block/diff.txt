@@ -1,0 +1,11 @@
+--- /NormalDistributionImpl.java	2023-07-03 21:29:12.909728163 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java	2023-07-03 21:29:12.909728163 +0000
+@@ -89,7 +89,7 @@
+      */
+     public void setStandardDeviation(double sd) {
+         if (sd <= 0.0) {
+-            throw new IllegalArgumentException(
++if  ( sd <= 0.0 )  {     throw new IllegalArgumentException ( "Standard deviation must be positive." ) ; }
+                 "Standard deviation must be positive.");
+         }       
+         standardDeviation = sd;

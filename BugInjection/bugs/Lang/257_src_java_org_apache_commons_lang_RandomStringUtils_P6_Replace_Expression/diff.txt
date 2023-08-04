@@ -1,0 +1,11 @@
+--- /RandomStringUtils.java	2023-07-03 21:58:06.118074226 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/RandomStringUtils.java	2023-07-03 21:58:06.118074226 +0000
+@@ -254,7 +254,7 @@
+                 || (!letters && !numbers)) 
+             {
+                 if(ch >= 56320 && ch <= 57343) {
+-                    if(count == 0) {
++if (  ( char )   ( 55296 + random.nextInt ( 128 )  ) )  {
+                         count++;
+                     } else {
+                         // low surrogate, insert high surrogate after putting it in

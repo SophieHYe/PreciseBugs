@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:36:11.286937763 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:36:11.290937708 +0000
+@@ -1245,7 +1245,7 @@
+      */
+     private void replaceImpl(int startIndex, int endIndex, int removeLen, String insertStr, int insertLen) {
+         int newSize = size - removeLen + insertLen;
+-        if (insertLen != removeLen) {
++if  ( len > 0 )  {     ensureCapacity (  (  ( size )  + len )  ) ;     arraycopy ( buffer, index, buffer,  ( index + len ) ,  (  ( size )  - index )  ) ;     arraycopy ( chars, 0, buffer, index, len ) ;     size += len; }
+             ensureCapacity(newSize);
+             System.arraycopy(buffer, endIndex, buffer, startIndex + insertLen, size - endIndex);
+             size = newSize;

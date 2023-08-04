@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:54.217982071 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:54.221982017 +0000
+@@ -295,7 +295,7 @@
+     private double innerCumulativeProbability(
+         int x0, int x1, int dx, int n, int m, int k)
+     {
+-        double ret = probability(n, m, k, x0);
++double ret = probability ( n, m, k, populationSize ) ;
+         while (x0 != x1) {
+             x0 += dx;
+             ret += probability(n, m, k, x0);

@@ -1,0 +1,13 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:05.864913748 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:05.868913693 +0000
+@@ -396,8 +396,8 @@
+         }
+         int nCols = subMatrix[0].length;
+         if (nCols == 0) {
+-            throw new IllegalArgumentException(
+-            "Matrix must have at least one column."); 
++throw new IllegalArgumentException ( "row and column dimensions must be postive" ) ;throw new IllegalArgumentException ( "Matrix must have at least one column." ) ;
++ 
+         }
+         for (int r = 1; r < nRows; r++) {
+             if (subMatrix[r].length != nCols) {

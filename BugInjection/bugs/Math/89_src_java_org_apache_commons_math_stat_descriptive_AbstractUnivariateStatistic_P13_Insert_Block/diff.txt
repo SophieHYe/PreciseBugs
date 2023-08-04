@@ -1,0 +1,11 @@
+--- /AbstractUnivariateStatistic.java	2023-07-03 21:25:56.704393582 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/AbstractUnivariateStatistic.java	2023-07-03 21:25:56.704393582 +0000
+@@ -86,7 +86,7 @@
+         }
+         
+         if (begin + length > values.length) {
+-            throw new IllegalArgumentException(
++if  ( begin < 0 )  {     throw new IllegalArgumentException ( "start position cannot be negative" ) ; }
+                 "begin + length > values.length");
+         }
+ 

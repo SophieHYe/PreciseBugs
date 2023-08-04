@@ -1,0 +1,18 @@
+--- /Variance.java	2023-07-03 21:25:12.792990173 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/moment/Variance.java	2023-07-03 21:25:12.792990173 +0000
+@@ -210,10 +210,11 @@
+             if (length == 1) {
+                 var = 0.0;
+             } else if (length > 1) {
+-                Mean mean = new Mean();
+-                double m = mean.evaluate(values, begin, length);
+-                var = evaluate(values, m, begin, length);
+-            }
++ 
++org.apache.commons.math.stat.descriptive.moment.Mean mean = new org.apache.commons.math.stat.descriptive.moment.Mean(); double m = mean.evaluate(values, begin, length); var = evaluate(values, m, begin, length); 
++ 
++ 
++ 
+         }
+         return var;
+     }

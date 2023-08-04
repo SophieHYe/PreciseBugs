@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-03 21:27:50.938841676 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-03 21:27:50.938841676 +0000
+@@ -325,7 +325,7 @@
+             if (!excludedFieldList.contains(f.getName())
+                 && (f.getName().indexOf('$') == -1)
+                 && (useTransients || !Modifier.isTransient(f.getModifiers()))
+-                && (!Modifier.isStatic(f.getModifiers()))) {
++&&  ( !Modifier.isStatic ( f .getName (  )   )  )  )  {
+                 try {
+                     builder.append(f.get(lhs), f.get(rhs));
+                 } catch (IllegalAccessException e) {

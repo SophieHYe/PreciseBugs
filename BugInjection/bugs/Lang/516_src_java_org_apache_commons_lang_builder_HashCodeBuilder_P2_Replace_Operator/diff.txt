@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-03 21:36:13.395987223 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-03 21:36:13.395987223 +0000
+@@ -513,7 +513,7 @@
+      * @return this
+      */
+     public HashCodeBuilder append(float value) {
+-        iTotal = iTotal * iConstant + Float.floatToIntBits(value);
++iTotal = iTotal - iConstant + Float.floatToIntBits ( value ) ;
+         return this;
+     }
+ 

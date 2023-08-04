@@ -1,0 +1,11 @@
+--- /Frequency.java	2023-07-03 21:23:59.521985712 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/Frequency.java	2023-07-03 21:23:59.525985658 +0000
+@@ -95,7 +95,7 @@
+     public void addValue(Object v) {
+         Object obj = v;
+         if (v instanceof Integer) {
+-           obj = new Long(((Integer) v).longValue());
++if  ( v instanceof Integer )  {     return getCount (  (  ( Integer )   ( v )  ) .longValue (  )  ) ; }
+         }
+         try {
+             Long count = (Long) freqTable.get(obj);

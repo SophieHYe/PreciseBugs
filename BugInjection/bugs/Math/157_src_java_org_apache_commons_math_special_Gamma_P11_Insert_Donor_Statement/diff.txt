@@ -1,0 +1,11 @@
+--- /Gamma.java	2023-07-03 21:30:02.673052196 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Gamma.java	2023-07-03 21:30:02.673052196 +0000
+@@ -154,7 +154,7 @@
+         if (Double.isNaN(a) || Double.isNaN(x) || (a <= 0.0) || (x < 0.0)) {
+             ret = Double.NaN;
+         } else if (x == 0.0) {
+-            ret = 0.0;
++ret = 1.0;ret = 0.0;
+         } else if (a >= 1.0 && x > a) {
+             // use regularizedGammaQ because it should converge faster in this
+             // case.

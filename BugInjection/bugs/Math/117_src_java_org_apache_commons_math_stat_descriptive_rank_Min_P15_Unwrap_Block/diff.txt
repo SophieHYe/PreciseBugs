@@ -1,0 +1,14 @@
+--- /Min.java	2023-07-03 21:26:36.051859019 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/rank/Min.java	2023-07-03 21:26:36.051859019 +0000
+@@ -115,8 +115,9 @@
+             min = values[begin];
+             for (int i = begin; i < begin + length; i++) {
+                 if (!Double.isNaN(values[i])) {
+-                    min = (min < values[i]) ? min : values[i];
+-                }
++ 
++min = (min < (values[i])) ? min : values[i]; 
++ 
+             }
+         }
+         return min;

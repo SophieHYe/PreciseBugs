@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:50:21.672400494 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:50:21.672400494 +0000
+@@ -803,7 +803,7 @@
+             throw new IllegalArgumentException("The fraction must not be null");
+         }
+         if (fraction.numerator == 0) {
+-            throw new ArithmeticException("The fraction to divide by must not be zero");
++if  ( denominator < 0 )  {     throw new ArithmeticException ( "The denominator must not be negative" ) ; }
+         }
+         return multiplyBy(fraction.invert());
+     }

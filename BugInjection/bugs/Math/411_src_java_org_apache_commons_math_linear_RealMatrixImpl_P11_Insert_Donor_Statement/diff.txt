@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:12.608821176 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:12.608821176 +0000
+@@ -408,7 +408,7 @@
+         if (data == null) {
+             if ((row > 0)||(column > 0)) throw new MatrixIndexException
+                 ("matrix must be initialized to perfom this method");
+-            data = new double[nRows][nCols];
++data = new double[rowDimension][columnDimension];data = new double[nRows][nCols];
+             System.arraycopy(subMatrix, 0, data, 0, subMatrix.length);          
+         }   
+         if (((nRows + row) > this.getRowDimension()) ||

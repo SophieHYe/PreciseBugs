@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:46:47.555319502 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:46:47.555319502 +0000
+@@ -846,7 +846,7 @@
+      * @return the specified string buffer
+      */
+     public StringBuffer format(Date date, StringBuffer buf) {
+-        Calendar c = new GregorianCalendar(mTimeZone);
++Calendar c = new GregorianCalendar ( tz ) ;
+         c.setTime(date);
+         return applyRules(c, buf);
+     }

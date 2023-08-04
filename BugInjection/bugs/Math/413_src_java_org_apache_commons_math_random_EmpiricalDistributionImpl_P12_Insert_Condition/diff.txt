@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:26:09.084225391 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:26:09.084225391 +0000
+@@ -410,7 +410,7 @@
+                if (stats.getN() > 0) {
+                    if (stats.getStandardDeviation() > 0) {  // more than one obs
+                         return randomData.nextGaussian
+-                            (stats.getMean(),stats.getStandardDeviation());
++if  ( stats.getStandardDeviation (  )  > 0 )  { ( stats.getMean (  ) ,stats.getStandardDeviation (  )  ) ; }
+                    } else {
+                        return stats.getMean(); // only one obs in bin
+                    }

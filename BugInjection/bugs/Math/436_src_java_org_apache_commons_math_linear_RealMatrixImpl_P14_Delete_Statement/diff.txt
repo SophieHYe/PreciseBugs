@@ -1,0 +1,10 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:23.908666089 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:23.908666089 +0000
+@@ -434,6 +434,7 @@
+             throw new MatrixIndexException("illegal row argument");
+         }
+         int ncols = this.getColumnDimension();
++ 
+         double[][] out = new double[1][ncols]; 
+         System.arraycopy(data[row], 0, out[0], 0, ncols);
+         return new RealMatrixImpl(out);

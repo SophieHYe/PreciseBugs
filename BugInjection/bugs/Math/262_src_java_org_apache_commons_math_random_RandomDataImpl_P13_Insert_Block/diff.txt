@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:26:56.883576012 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:26:56.883576012 +0000
+@@ -259,7 +259,7 @@
+      */
+     public int nextSecureInt(int lower, int upper) {
+           if (lower >= upper) {
+-              throw new IllegalArgumentException
++if  ( mean < 0.0 )  {     throw new IllegalArgumentException ( "Exponential mean must be >= 0" ) ; }
+                 ("lower bound must be < upper bound");
+           }
+           SecureRandom sec = getSecRan();

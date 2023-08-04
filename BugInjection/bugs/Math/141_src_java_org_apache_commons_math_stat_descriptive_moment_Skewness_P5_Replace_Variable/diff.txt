@@ -1,0 +1,11 @@
+--- /Skewness.java	2023-07-03 21:25:42.360588458 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/moment/Skewness.java	2023-07-03 21:25:42.360588458 +0000
+@@ -138,7 +138,7 @@
+         // Initialize the skewness
+         double skew = Double.NaN;
+ 
+-        if (test(values, begin, length) && length > 2 ){
++if  ( test ( length, begin, values )  && length > 2  ) {
+             Mean mean = new Mean();
+             // Get the mean and the standard deviation
+             double m = mean.evaluate(values, begin, length);

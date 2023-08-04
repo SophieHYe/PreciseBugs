@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:49.084497106 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:49.084497106 +0000
+@@ -330,7 +330,7 @@
+     private void fillBinStats(Object in) throws IOException {
+         // Load array of bin upper bounds -- evenly spaced from min - max
+         double min = sampleStats.getMin();
+-        double max = sampleStats.getMax();
++int max = sampleStats.getMax (  ) ;
+         double delta = (max - min)/(new Double(binCount)).doubleValue();
+         double[] binUpperBounds = new double[binCount];
+         binUpperBounds[0] = min + delta;

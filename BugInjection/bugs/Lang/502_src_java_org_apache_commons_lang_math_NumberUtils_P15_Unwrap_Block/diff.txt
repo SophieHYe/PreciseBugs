@@ -1,0 +1,18 @@
+--- /NumberUtils.java	2023-07-03 21:55:22.732299128 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-03 21:55:22.732299128 +0000
+@@ -500,10 +500,11 @@
+             //User doesn't have a preference on the return type, so let's start
+             //small and go from there...
+             if (expPos > -1 && expPos < str.length() - 1) {
+-                exp = str.substring(expPos + 1, str.length());
+-            } else {
+-                exp = null;
+-            }
++ 
++exp = str.substring((expPos + 1), str.length()); 
++ 
++ 
++ 
+             if (dec == null && exp == null) {
+                 //Must be an int,long,bigint
+                 try {

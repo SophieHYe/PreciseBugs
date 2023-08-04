@@ -1,0 +1,13 @@
+--- /RandomDataImpl.java	2023-07-03 21:26:40.475798917 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:26:40.475798917 +0000
+@@ -179,8 +179,8 @@
+      */
+     public long nextLong(long lower, long upper) {
+         if (lower >= upper) {
+-            throw new IllegalArgumentException
+-                ("upper bound must be > lower bound");
++throw throw  new IllegalArgumentException ( "sample size must be > 0" )  ;
++ 
+         }
+         RandomGenerator rand = getRan();
+         return lower + (long) (rand.nextDouble() * (upper - lower + 1));

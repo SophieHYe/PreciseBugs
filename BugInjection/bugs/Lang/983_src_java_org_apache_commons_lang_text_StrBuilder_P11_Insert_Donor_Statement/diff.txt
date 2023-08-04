@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:32:07.282260308 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:07.286260252 +0000
+@@ -980,7 +980,7 @@
+      * @throws IndexOutOfBoundsException if any index is invalid
+      */
+     public StrBuilder insert(int index, char chars[], int offset, int length) {
+-        validateIndex(index);
++index = indexOf ( str, index ) ;validateIndex ( index ) ;
+         if (chars == null) {
+             return insert(index, nullText);
+         }

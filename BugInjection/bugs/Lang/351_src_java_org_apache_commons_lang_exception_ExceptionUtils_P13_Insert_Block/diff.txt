@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:22:58.094820396 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:22:58.094820396 +0000
+@@ -348,7 +348,7 @@
+     private static Throwable getCauseUsingWellKnownTypes(Throwable throwable) {
+         if (throwable instanceof Nestable) {
+             return ((Nestable) throwable).getCause();
+-        } else if (throwable instanceof SQLException) {
++if  ( throwable instanceof SQLException )  {     return true; }else     if  ( throwable instanceof InvocationTargetException )  {         return true;     }else         if  ( isThrowableNested (  )  )  {             return true;         }
+             return ((SQLException) throwable).getNextException();
+         } else if (throwable instanceof InvocationTargetException) {
+             return ((InvocationTargetException) throwable).getTargetException();

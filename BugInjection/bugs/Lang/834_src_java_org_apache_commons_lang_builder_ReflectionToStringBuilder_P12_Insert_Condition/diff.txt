@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:34:21.477523314 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:34:21.481523258 +0000
+@@ -831,7 +831,7 @@
+      */
+     public ReflectionToStringBuilder setExcludeFieldNames(String[] excludeFieldNamesParam) {
+         if (excludeFieldNamesParam == null) {
+-            this.excludeFieldNames = null;
++if  ( excludeFieldNamesParam == null )  { this.excludeFieldNames = null; }
+         } else {
+             this.excludeFieldNames = (String[])toNoNullStringArray(excludeFieldNamesParam);
+             Arrays.sort(this.excludeFieldNames);

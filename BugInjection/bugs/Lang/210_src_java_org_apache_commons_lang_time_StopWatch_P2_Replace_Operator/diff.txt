@@ -1,0 +1,11 @@
+--- /StopWatch.java	2023-07-03 21:21:33.023976470 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/StopWatch.java	2023-07-03 21:21:33.023976470 +0000
+@@ -207,7 +207,7 @@
+      */
+     public long getTime() {
+         if(this.runningState == STATE_STOPPED || this.runningState == STATE_SUSPENDED) {
+-            return this.stopTime - this.startTime;
++return this.stopTime  <  this.startTime;
+         } else
+         if(this.runningState == STATE_UNSTARTED) {
+             return 0;

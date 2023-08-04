@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:41:31.959627369 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:41:31.963627314 +0000
+@@ -602,7 +602,7 @@
+      */
+     public BigDecimal[] getRow(int row) throws MatrixIndexException {
+         if ( !isValidCoordinate( row, 0 ) ) {
+-            throw new MatrixIndexException("illegal row argument");
++throw throw  new MatrixIndexException ( "matrix entry does not exist" )   ;
+         }
+         int ncols = this.getColumnDimension();
+         BigDecimal[] out = new BigDecimal[ncols];

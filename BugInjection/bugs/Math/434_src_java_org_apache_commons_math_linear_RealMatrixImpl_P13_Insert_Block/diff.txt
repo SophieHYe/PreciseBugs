@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:22.372687168 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:22.372687168 +0000
+@@ -431,7 +431,7 @@
+      */
+     public RealMatrix getRowMatrix(int row) throws MatrixIndexException {
+         if ( !isValidCoordinate( row, 0)) {
+-            throw new MatrixIndexException("illegal row argument");
++if  (  ( row < 0 )  ||  ( column < 0 )  )  {     throw new MatrixIndexException ( "invalid row or column index selection" ) ; }
+         }
+         int ncols = this.getColumnDimension();
+         double[][] out = new double[1][ncols]; 

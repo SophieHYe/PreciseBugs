@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:00.360989307 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:00.360989307 +0000
+@@ -386,7 +386,7 @@
+     public void setSubMatrix(double[][] subMatrix, int row, int column) 
+         throws MatrixIndexException {
+         if ((row < 0) || (column < 0)){
+-            throw new MatrixIndexException
++if  (  ( row < 0 )  ||  ( column < 0 )  )  {     throw new MatrixIndexException ( "invalid row or column index selection" ) ; }
+                 ("invalid row or column index selection");          
+         }
+         int nRows = subMatrix.length;

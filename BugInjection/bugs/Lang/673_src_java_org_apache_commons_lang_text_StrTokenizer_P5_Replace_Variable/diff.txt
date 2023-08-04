@@ -1,0 +1,15 @@
+--- /StrTokenizer.java	2023-07-03 22:17:34.394150686 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:34.394150686 +0000
+@@ -670,9 +670,9 @@
+         // skip all leading whitespace, unless it is the
+         // field delimiter or the quote character
+         while (start < len) {
+-            int removeLen = Math.max(
+-                    getIgnoredMatcher().isMatch(chars, start, start, len),
+-                    getTrimmerMatcher().isMatch(chars, start, start, len));
++int removeLen = Math.max ( getIgnoredMatcher (  ) .isMatch ( len, start, start, chars ) , getTrimmerMatcher (  ) .isMatch ( chars, start, start, len )  ) ;
++ 
++ 
+             if (removeLen == 0 ||
+                 getDelimiterMatcher().isMatch(chars, start, start, len) > 0 ||
+                 getQuoteMatcher().isMatch(chars, start, start, len) > 0) {

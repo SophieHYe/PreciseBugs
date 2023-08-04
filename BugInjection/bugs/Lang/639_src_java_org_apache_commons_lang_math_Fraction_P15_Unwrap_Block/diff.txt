@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-03 21:48:51.485629720 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:48:51.485629720 +0000
+@@ -637,8 +637,9 @@
+         /* assert x>=0 && y>=0; */
+         long m = ((long)x)*((long)y);
+         if (m > Integer.MAX_VALUE) {
+-            throw new ArithmeticException("overflow: mulPos");
+-        }
++ 
++throw new java.lang.ArithmeticException("overflow: mulPos"); 
++ 
+         return (int)m;
+     }
+     

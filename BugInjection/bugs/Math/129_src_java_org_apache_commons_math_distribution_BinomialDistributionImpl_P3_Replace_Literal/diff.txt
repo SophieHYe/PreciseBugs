@@ -1,0 +1,11 @@
+--- /BinomialDistributionImpl.java	2023-07-03 21:28:05.686641333 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/BinomialDistributionImpl.java	2023-07-03 21:28:05.690641278 +0000
+@@ -126,7 +126,7 @@
+      */
+     public double cumulativeProbability(int x) throws MathException {
+         double ret;
+-        if (x < 0) {
++if  ( x < -2 )  {
+             ret = 0.0;
+         } else if (x >= getNumberOfTrials()) {
+             ret = 1.0;

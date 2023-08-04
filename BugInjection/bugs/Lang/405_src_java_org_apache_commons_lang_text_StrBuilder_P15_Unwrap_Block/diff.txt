@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:22:40.053985745 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:22:40.057985690 +0000
+@@ -403,8 +403,9 @@
+             throw new StringIndexOutOfBoundsException(endIndex);
+         }
+         if (startIndex > endIndex) {
+-            throw new StringIndexOutOfBoundsException("end < start");
+-        }
++ 
++throw new java.lang.StringIndexOutOfBoundsException("end < start"); 
++ 
+         System.arraycopy(buffer, startIndex, destination, destinationIndex, endIndex - startIndex);
+     }
+ 

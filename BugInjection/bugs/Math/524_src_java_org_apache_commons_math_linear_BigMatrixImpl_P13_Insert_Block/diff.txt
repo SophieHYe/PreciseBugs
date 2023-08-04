@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:40:51.116185556 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:40:51.120185501 +0000
+@@ -521,7 +521,7 @@
+             ("invalid row or column index selection");          
+         }
+         int nRows = subMatrix.length;
+-        if (nRows == 0) {
++if  (  ( rowDimension <= 0 )  ||  ( columnDimension <= 0 )  )  {     throw new IllegalArgumentException ( "row and column dimensions must be positive" ) ; }
+             throw new IllegalArgumentException(
+             "Matrix must have at least one row."); 
+         }

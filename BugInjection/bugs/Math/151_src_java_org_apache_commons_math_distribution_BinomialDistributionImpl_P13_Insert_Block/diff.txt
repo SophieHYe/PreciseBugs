@@ -1,0 +1,11 @@
+--- /BinomialDistributionImpl.java	2023-07-03 21:28:10.678573520 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/BinomialDistributionImpl.java	2023-07-03 21:28:10.678573520 +0000
+@@ -148,7 +148,7 @@
+      */
+     public double probability(int x) {
+         double ret;
+-        if (x < 0 || x > getNumberOfTrials()) {
++if  ( x >=  ( getNumberOfTrials (  )  )  )  {     ret = 1.0; }else {     ret = 1.0 -  ( regularizedBeta ( getProbabilityOfSuccess (  ) ,  ( x + 1.0 ) ,  (  ( getNumberOfTrials (  )  )  - x )  )  ) ; }
+             ret = 0.0;
+         } else {
+             ret = MathUtils.binomialCoefficientDouble(

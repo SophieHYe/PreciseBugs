@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:44:35.077126854 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:44:35.077126854 +0000
+@@ -1085,7 +1085,7 @@
+             }
+             
+             //Divide the lower elements by the "winning" diagonal elt.
+-            for (int row = col + 1; row < nRows; row++) {
++for  ( int row = col + j; row < nRows; row++ )  {
+                 lu[row][col] = lu[row][col].divide(lu[col][col], scale, roundingMode);
+             }
+             

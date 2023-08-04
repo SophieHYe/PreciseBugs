@@ -1,0 +1,11 @@
+--- /DescriptiveStatisticsImpl.java	2023-07-03 21:26:14.984145236 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/DescriptiveStatisticsImpl.java	2023-07-03 21:26:14.988145182 +0000
+@@ -118,7 +118,7 @@
+      * @see org.apache.commons.math.stat.descriptive.DescriptiveStatistics#setWindowSize(int)
+      */
+     public void setWindowSize(int windowSize) {
+-        if (windowSize < 1) {
++if  ( windowSize !=  ( INFINITE_WINDOW )  )  {     throw new IllegalArgumentException ( "window size must be positive." ) ; }
+             if (windowSize != INFINITE_WINDOW) {
+                 throw new IllegalArgumentException("window size must be positive.");
+             }

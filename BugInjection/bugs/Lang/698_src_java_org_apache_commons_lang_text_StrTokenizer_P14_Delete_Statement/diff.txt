@@ -1,0 +1,10 @@
+--- /StrTokenizer.java	2023-07-03 22:17:47.425973067 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:47.425973067 +0000
+@@ -696,6 +696,7 @@
+         
+         // handle found token
+         int quoteLen = getQuoteMatcher().isMatch(chars, start, start, len);
++ 
+         if (quoteLen > 0) {
+             return readWithQuotes(chars, start + quoteLen, len, workArea, tokens, start, quoteLen);
+         }

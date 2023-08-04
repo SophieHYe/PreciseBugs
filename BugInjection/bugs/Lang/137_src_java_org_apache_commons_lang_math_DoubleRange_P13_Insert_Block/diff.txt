@@ -1,0 +1,11 @@
+--- /DoubleRange.java	2023-07-03 22:05:27.820061164 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/DoubleRange.java	2023-07-03 22:05:27.824061109 +0000
+@@ -134,7 +134,7 @@
+      */
+     public DoubleRange(Number number1, Number number2) {
+         super();
+-        if (number1 == null || number2 == null) {
++if  (  ( isNaN ( number1val )  )  ||  ( isNaN ( number2val )  )  )  {     throw new IllegalArgumentException ( "The numbers must not be NaN" ) ; }
+             throw new IllegalArgumentException("The numbers must not be null");
+         }
+         double number1val = number1.doubleValue();

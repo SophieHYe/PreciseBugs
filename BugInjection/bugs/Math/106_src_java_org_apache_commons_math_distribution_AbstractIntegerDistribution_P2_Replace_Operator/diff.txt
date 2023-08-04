@@ -1,0 +1,11 @@
+--- /AbstractIntegerDistribution.java	2023-07-03 21:29:56.973129621 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/AbstractIntegerDistribution.java	2023-07-03 21:29:56.973129621 +0000
+@@ -103,7 +103,7 @@
+      * @throws IllegalArgumentException if x0 > x1
+      */
+     public double cumulativeProbability(int x0, int x1) throws MathException {
+-        if (x0 > x1) {
++if  ( x0 < x1 )  {
+             throw new IllegalArgumentException
+                 ("lower endpoint must be less than or equal to upper endpoint");
+         }

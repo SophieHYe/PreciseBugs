@@ -1,0 +1,13 @@
+--- /Fraction.java	2023-07-03 21:45:22.100485191 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:45:22.104485137 +0000
+@@ -181,8 +181,8 @@
+         } else {
+             numeratorValue = whole * (long)denominator + numerator;
+         }
+-        if (numeratorValue < Integer.MIN_VALUE ||
+-                numeratorValue > Integer.MAX_VALUE)  {
++if  ( numeratorValue > MAX_VALUE )   {
++ 
+             throw new ArithmeticException("Numerator too large to represent as an Integer.");
+         }
+         return new Fraction((int) numeratorValue, denominator);

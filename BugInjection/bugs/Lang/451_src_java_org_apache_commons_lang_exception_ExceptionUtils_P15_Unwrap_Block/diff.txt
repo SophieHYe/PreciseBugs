@@ -1,0 +1,18 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:09.974658966 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:09.974658966 +0000
+@@ -449,10 +449,11 @@
+         } else if (throwable instanceof SQLException) {
+             return true;
+         } else if (throwable instanceof InvocationTargetException) {
+-            return true;
+-        } else if (isThrowableNested()) {
+-            return true;
+-        }
++ 
++return true; 
++ 
++ 
++ 
+ 
+         Class cls = throwable.getClass();
+         for (int i = 0, isize = CAUSE_METHOD_NAMES.length; i < isize; i++) {

@@ -1,0 +1,10 @@
+--- /ChiSquaredDistributionImpl.java	2023-07-03 21:28:14.210525541 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/ChiSquaredDistributionImpl.java	2023-07-03 21:28:14.210525541 +0000
+@@ -40,6 +40,7 @@
+      */
+     public ChiSquaredDistributionImpl(double degreesOfFreedom) {
+         super();
++ 
+         setGamma(DistributionFactory.newInstance().createGammaDistribution(
+             degreesOfFreedom / 2.0, 2.0));
+     }

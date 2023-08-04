@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:19.587267580 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:19.591267526 +0000
+@@ -376,7 +376,7 @@
+      */
+     public double nextUniform(double lower, double upper) {
+         if (lower >= upper) {
+-            throw new IllegalArgumentException
++if  ( mean < 0.0 )  {     throw new IllegalArgumentException ( "Exponential mean must be >= 0" ) ; }
+             ("lower bound must be <= upper bound");
+         }
+         RandomGenerator rand = getRan();

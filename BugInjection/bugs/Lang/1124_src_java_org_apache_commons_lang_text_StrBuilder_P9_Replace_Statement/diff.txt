@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:34:40.184178255 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:34:40.184178255 +0000
+@@ -1121,7 +1121,7 @@
+     public StrBuilder delete(int startIndex, int endIndex) {
+         endIndex = validateRange(startIndex, endIndex);
+         int len = endIndex - startIndex;
+-        if (len > 0) {
++if  ( insertLen > 0 )  {
+             deleteImpl(startIndex, endIndex, len);
+         }
+         return this;

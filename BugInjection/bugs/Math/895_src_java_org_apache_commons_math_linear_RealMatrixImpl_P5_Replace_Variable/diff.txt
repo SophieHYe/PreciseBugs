@@ -1,0 +1,13 @@
+--- /RealMatrixImpl.java	2023-07-03 21:38:05.950444999 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:38:05.950444999 +0000
+@@ -892,8 +892,8 @@
+         }
+         for (int row = 0; row < nRows; row++) {
+             for (int col = 0; col < nCols; col++) {
+-                if (Double.doubleToLongBits(data[row][col]) != 
+-                    Double.doubleToLongBits(m.getEntry(row, col))) {
++if  ( Double.doubleToLongBits ( data[row][col] )  != Double.doubleToLongBits ( m.getEntry ( rowCount, col )  )  )  {
++ 
+                     return false;
+                 }
+             }

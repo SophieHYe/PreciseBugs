@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:22.110942226 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:22.110942226 +0000
+@@ -826,7 +826,7 @@
+         if (!isSquare()) {
+             throw new IllegalArgumentException("matrix is not square");
+         }
+-        BigDecimal trace = data[0][0];
++BigDecimal tmp = ZERO;BigDecimal trace = data[0][0];
+         for (int i = 1; i < this.getRowDimension(); i++) {
+             trace = trace.add(data[i][i]);
+         }

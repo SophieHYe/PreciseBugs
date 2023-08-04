@@ -1,0 +1,10 @@
+--- /Fraction.java	2023-07-03 21:31:37.843759485 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:31:37.847759431 +0000
+@@ -348,6 +348,7 @@
+         // if denominators are randomly distributed, d1 will be 1 about 61%
+         // of the time.
+         int d1 = MathUtils.gcd(denominator, fraction.denominator);
++ 
+         if (d1==1) {
+             // result is ( (u*v' +/- u'v) / u'v')
+             int uvp = MathUtils.mulAndCheck(numerator, fraction.denominator);

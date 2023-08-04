@@ -1,0 +1,15 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:39.714179092 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:39.714179092 +0000
+@@ -210,9 +210,9 @@
+      * @return PMF for the distribution. 
+      */
+     private double probability(int n, int m, int k, int x) {
+-        return Math.exp(MathUtils.binomialCoefficientLog(m, x) +
+-            MathUtils.binomialCoefficientLog(n - m, k - x) -
+-            MathUtils.binomialCoefficientLog(n, k));
++return Math.exp ( MathUtils.binomialCoefficientLog ( m, populationSize )  + MathUtils.binomialCoefficientLog ( n - m, k - x )  - MathUtils.binomialCoefficientLog ( n, k )  ) ;
++ 
++ 
+     }
+ 
+     /**

@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:18:00.333797144 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:18:00.333797144 +0000
+@@ -730,7 +730,7 @@
+             // quoting mode can occur several times throughout a string
+             // we must switch between quoting and non-quoting until we
+             // encounter a non-quoted delimiter, or end of string
+-            if (quoting) {
++if  ( ignoreEmptyTokens )  {
+                 // In quoting mode
+                 
+                 // If we've found a quote character, see if it's

@@ -1,0 +1,11 @@
+--- /TransformerMap.java	2023-07-03 21:23:24.018468133 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/TransformerMap.java	2023-07-03 21:23:24.022468078 +0000
+@@ -139,7 +139,7 @@
+         if (o instanceof Number || o instanceof String) {
+             value = defaultTransformer.transform(o);
+         } else {
+-            NumberTransformer trans = getTransformer(o.getClass());
++NumberTransformer trans = removeTransformer ( o.getClass (  )  ) ;
+             if (trans != null) {
+                 value = trans.transform(o);
+             }

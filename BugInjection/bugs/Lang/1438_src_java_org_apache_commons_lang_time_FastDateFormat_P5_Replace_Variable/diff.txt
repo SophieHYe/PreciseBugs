@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:50:04.828630046 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:50:04.828630046 +0000
+@@ -1435,7 +1435,7 @@
+          */
+         public void appendTo(StringBuffer buffer, Calendar calendar) {
+             int value = calendar.get(Calendar.HOUR);
+-            if (value == 0) {
++if  ( padding == 0 )  {
+                 value = calendar.getLeastMaximum(Calendar.HOUR) + 1;
+             }
+             mRule.appendTo(buffer, value);

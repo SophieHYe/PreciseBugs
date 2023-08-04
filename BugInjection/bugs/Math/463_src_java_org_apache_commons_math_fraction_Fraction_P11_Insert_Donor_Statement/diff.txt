@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:32:19.531193260 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:32:19.531193260 +0000
+@@ -460,7 +460,7 @@
+         // simplify fraction.
+         int gcd = MathUtils.gcd(numerator, denominator);
+         numerator /= gcd;
+-        denominator /= gcd;
++numerator *= -1;denominator /= gcd;
+         return new Fraction(numerator, denominator);
+     }
+     

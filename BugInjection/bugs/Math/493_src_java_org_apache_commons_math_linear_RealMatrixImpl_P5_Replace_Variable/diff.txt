@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:35:39.292454998 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:35:39.292454998 +0000
+@@ -490,7 +490,7 @@
+      * @throws MatrixIndexException if the specified column index is not valid
+      */
+     public double[] getColumn(int col) throws MatrixIndexException {
+-        if ( !isValidCoordinate(0, col) ) {
++if  (  !isValidCoordinate ( 0, ncols )   )  {
+             throw new MatrixIndexException("illegal column argument");
+         }
+         int nRows = this.getRowDimension();

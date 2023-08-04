@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:55.550485530 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:55.554485475 +0000
+@@ -886,7 +886,7 @@
+         }
+         int nCols = this.getColumnDimension();
+         BigDecimal[] out = new BigDecimal[nCols];
+-        for (int col = 0; col < nCols; col++) {
++for  ( int col = ncols; col < nCols; col++ )  {
+             BigDecimal sum = ZERO;
+             for (int i = 0; i < nRows; i++) {
+                 sum = sum.add(data[i][col].multiply(v[i]));

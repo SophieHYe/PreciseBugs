@@ -1,0 +1,16 @@
+--- /BigMatrixImpl.java	2023-07-03 21:39:09.785571285 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:39:09.785571285 +0000
+@@ -214,9 +214,10 @@
+      */
+     public BigMatrix add(BigMatrix m) throws IllegalArgumentException {
+         if (this.getColumnDimension() != m.getColumnDimension() ||
+-                this.getRowDimension() != m.getRowDimension()) {
+-            throw new IllegalArgumentException("matrix dimension mismatch");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("matrix dimension mismatch"); 
++ 
++ 
+         int rowCount = this.getRowDimension();
+         int columnCount = this.getColumnDimension();
+         BigDecimal[][] outData = new BigDecimal[rowCount][columnCount];

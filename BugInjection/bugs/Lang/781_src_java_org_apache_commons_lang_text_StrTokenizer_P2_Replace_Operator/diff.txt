@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:19:27.508609130 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:19:27.508609130 +0000
+@@ -778,7 +778,7 @@
+                 
+                 // check for ignored (outside quotes), and ignore
+                 int ignoredLen = getIgnoredMatcher().isMatch(chars, pos, start, len);
+-                if (ignoredLen > 0) {
++if  ( ignoredLen < 0 )  {
+                     pos += ignoredLen;
+                     continue;
+                 }

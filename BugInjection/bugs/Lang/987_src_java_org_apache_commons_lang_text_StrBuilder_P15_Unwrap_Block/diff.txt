@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:32:18.622105892 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:18.626105836 +0000
+@@ -985,8 +985,9 @@
+             return insert(index, nullText);
+         }
+         if (offset < 0 || offset > chars.length) {
+-            throw new StringIndexOutOfBoundsException("Invalid offset: " + offset);
+-        }
++ 
++throw new java.lang.StringIndexOutOfBoundsException(("Invalid offset: " + offset)); 
++ 
+         if (length < 0 || offset + length > chars.length) {
+             throw new StringIndexOutOfBoundsException("Invalid length: " + length);
+         }

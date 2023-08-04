@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:38:28.602134891 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:38:28.606134837 +0000
+@@ -999,7 +999,7 @@
+         double[][] out = new double[nRows][this.getColumnDimension()];
+         // can't copy 2-d array in one shot, otherwise get row references
+         for (int i = 0; i < nRows; i++) {
+-            System.arraycopy(data[i], 0, out[i], 0, data[i].length);
++System.arraycopy ( subMatrix[i], 0, data[row + i], column, nCols ) ;System.arraycopy ( data[i], 0, out[i], 0, data[i].length ) ;
+         }
+         return out;
+     }

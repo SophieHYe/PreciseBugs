@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:35.941934031 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:35.941934031 +0000
+@@ -986,7 +986,7 @@
+         // Solve UX = Y
+         for (int col = nCol - 1; col >= 0; col--) {
+             for (int j = 0; j < nColB; j++) {
+-                bp[col][j] = bp[col][j].divide(lu[col][col], scale, roundingMode);
++lu[row][col] = lu[row][col].divide ( lu[col][col], scale, roundingMode ) ;bp[col][j] = bp[col][j].divide ( lu[col][col], scale, roundingMode ) ;
+             }
+             for (int i = 0; i < col; i++) {
+                 for (int j = 0; j < nColB; j++) {

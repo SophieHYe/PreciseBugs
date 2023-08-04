@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:54.940417547 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:54.940417547 +0000
+@@ -354,7 +354,7 @@
+         try {
+             da.computeBinStats(min, delta);
+         } catch (Exception e) {
+-            if(e instanceof RuntimeException){
++if ( ! e instanceof RuntimeException ) {
+                 throw new RuntimeException(e.getMessage());
+             }else{
+                 throw new IOException(e.getMessage());

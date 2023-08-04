@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-03 21:32:12.639286870 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:32:12.639286870 +0000
+@@ -447,8 +447,9 @@
+         }
+         // allow 2^k/-2^31 as a valid fraction (where k>0)
+         if (denominator==Integer.MIN_VALUE && (numerator&1)==0) {
+-            numerator/=2; denominator/=2;
+-        }
++ 
++numerator /= 2; denominator /= 2; 
++ 
+         if (denominator < 0) {
+             if (numerator==Integer.MIN_VALUE ||
+                     denominator==Integer.MIN_VALUE) {

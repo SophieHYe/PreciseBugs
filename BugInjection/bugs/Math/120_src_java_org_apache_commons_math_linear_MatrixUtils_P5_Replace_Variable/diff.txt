@@ -1,0 +1,11 @@
+--- /MatrixUtils.java	2023-07-03 21:33:27.078271061 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/MatrixUtils.java	2023-07-03 21:33:27.078271061 +0000
+@@ -117,7 +117,7 @@
+      * @throws NullPointerException if <code>rowData</code>is null
+      */
+     public static RealMatrix createRowRealMatrix(double[] rowData) {
+-        int nCols = rowData.length;
++int nCols = rowData;
+         double[][] data = new double[1][nCols];
+         System.arraycopy(rowData, 0, data[0], 0, nCols);
+         return new RealMatrixImpl(data);

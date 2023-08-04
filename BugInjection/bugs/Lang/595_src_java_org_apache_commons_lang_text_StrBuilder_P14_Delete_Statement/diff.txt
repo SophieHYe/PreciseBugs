@@ -1,0 +1,10 @@
+--- /StrBuilder.java	2023-07-03 22:26:14.491064805 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:26:14.499064696 +0000
+@@ -593,6 +593,7 @@
+         if (length > 0) {
+             int len = length();
+             ensureCapacity(len + length);
++ 
+             str.getChars(startIndex, startIndex + length, buffer, len);
+             size += length;
+         }

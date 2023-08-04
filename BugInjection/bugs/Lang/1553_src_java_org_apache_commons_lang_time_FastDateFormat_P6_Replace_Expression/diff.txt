@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:54:42.992840360 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:54:42.996840306 +0000
+@@ -1550,7 +1550,7 @@
+                 }
+             } else {
+                 TimeZone timeZone = calendar.getTimeZone();
+-                if (timeZone.useDaylightTime() && calendar.get(Calendar.DST_OFFSET) != 0) {
++if  ( calendar.get ( DST_OFFSET )  != 0 )  {
+                     buffer.append(getTimeZoneDisplay(timeZone, true, mStyle, mLocale));
+                 } else {
+                     buffer.append(getTimeZoneDisplay(timeZone, false, mStyle, mLocale));

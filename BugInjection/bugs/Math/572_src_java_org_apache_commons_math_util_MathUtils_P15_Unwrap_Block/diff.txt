@@ -1,0 +1,18 @@
+--- /MathUtils.java	2023-07-03 21:22:41.963039608 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-03 21:22:41.971039499 +0000
+@@ -570,10 +570,11 @@
+         case BigDecimal.ROUND_HALF_DOWN : {
+             double fraction = Math.abs(unscaled - Math.floor(unscaled));
+             if (fraction > 0.5) {
+-                unscaled = Math.ceil(unscaled);
+-            } else {
+-                unscaled = Math.floor(unscaled);
+-            }
++ 
++unscaled = java.lang.Math.ceil(unscaled); 
++ 
++ 
++ 
+             break;
+         }
+         case BigDecimal.ROUND_HALF_EVEN : {

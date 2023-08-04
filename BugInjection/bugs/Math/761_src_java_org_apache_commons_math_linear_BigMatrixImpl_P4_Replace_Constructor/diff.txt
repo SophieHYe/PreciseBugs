@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:08.383129741 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:08.383129741 +0000
+@@ -758,7 +758,7 @@
+      */
+     public BigDecimal getDeterminant() throws InvalidMatrixException {
+         if (!isSquare()) {
+-            throw new InvalidMatrixException("matrix is not square");
++throw throw  new InvalidMatrixException ( "Matrix is singular." )   ;
+         }
+         if (isSingular()) {   // note: this has side effect of attempting LU decomp if lu == null
+             return ZERO;

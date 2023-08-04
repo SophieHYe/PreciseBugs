@@ -1,0 +1,14 @@
+--- /CompareToBuilder.java	2023-07-03 21:37:27.742968261 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-03 21:37:27.746968205 +0000
+@@ -280,8 +280,9 @@
+             return 0;
+         }
+         if (lhs == null || rhs == null) {
+-            throw new NullPointerException();
+-        }
++ 
++throw new java.lang.NullPointerException(); 
++ 
+         Class lhsClazz = lhs.getClass();
+         if (!lhsClazz.isInstance(rhs)) {
+             throw new ClassCastException();

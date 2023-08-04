@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:41:28.431675576 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:41:28.435675522 +0000
+@@ -583,7 +583,7 @@
+             throw new MatrixIndexException("illegal column argument");
+         }
+         int nRows = this.getRowDimension();
+-        BigDecimal[][] out = new BigDecimal[nRows][1]; 
++BigDecimal[][] bp = new BigDecimal[nRowB][nColB];BigDecimal[][] out = new BigDecimal[nRows][1];
+         for (int row = 0; row < nRows; row++) {
+             out[row][0] = data[row][column];
+         }

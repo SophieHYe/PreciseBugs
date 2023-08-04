@@ -1,0 +1,11 @@
+--- /WeibullDistributionImpl.java	2023-07-03 21:30:15.680875506 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/WeibullDistributionImpl.java	2023-07-03 21:30:15.680875506 +0000
+@@ -97,7 +97,7 @@
+         if (p < 0.0 || p > 1.0) {
+             throw new IllegalArgumentException
+                 ("probability argument must be between 0 and 1 (inclusive)");
+-        } else if (p == 0) {
++} else if  ( p < 0 )  {
+             ret = 0.0;
+         } else  if (p == 1) {
+             ret = Double.POSITIVE_INFINITY;

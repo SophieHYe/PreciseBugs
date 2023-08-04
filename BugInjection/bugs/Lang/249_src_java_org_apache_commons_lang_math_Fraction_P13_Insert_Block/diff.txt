@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:45:49.824106962 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:45:49.824106962 +0000
+@@ -246,7 +246,7 @@
+         int sign = (value < 0 ? -1 : 1);
+         value = Math.abs(value);
+         if (value  > Integer.MAX_VALUE || Double.isNaN(value)) {
+-            throw new ArithmeticException
++if  (  ( value >  ( MAX_VALUE )  )  ||  ( isNaN ( value )  )  )  {     throw new ArithmeticException ( "The value must not be greater than Integer.MAX_VALUE or NaN" ) ; }
+                 ("The value must not be greater than Integer.MAX_VALUE or NaN");
+         }
+         int wholeNumber = (int) value;

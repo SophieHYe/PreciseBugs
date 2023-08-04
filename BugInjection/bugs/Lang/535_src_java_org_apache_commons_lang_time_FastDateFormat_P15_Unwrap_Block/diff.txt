@@ -1,0 +1,14 @@
+--- /FastDateFormat.java	2023-07-03 21:38:42.457945242 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:38:42.461945188 +0000
+@@ -533,8 +533,9 @@
+         
+         mTimeZoneForced = (timeZone != null);
+         if (timeZone == null) {
+-            timeZone = TimeZone.getDefault();
+-        }
++ 
++timeZone = java.util.TimeZone.getDefault(); 
++ 
+         mTimeZone = timeZone;
+         
+         mLocaleForced = (locale != null);

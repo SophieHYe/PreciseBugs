@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:34:33.628267524 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:34:33.632267470 +0000
+@@ -1119,7 +1119,7 @@
+      * @throws IndexOutOfBoundsException if the index is invalid
+      */
+     public StrBuilder delete(int startIndex, int endIndex) {
+-        endIndex = validateRange(startIndex, endIndex);
++deleteImpl ( startIndex, endIndex, len ) ;endIndex = validateRange ( startIndex, endIndex ) ;
+         int len = endIndex - startIndex;
+         if (len > 0) {
+             deleteImpl(startIndex, endIndex, len);

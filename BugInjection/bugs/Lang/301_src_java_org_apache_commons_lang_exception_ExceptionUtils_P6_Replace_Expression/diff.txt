@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:22:42.099037760 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:22:42.099037760 +0000
+@@ -298,7 +298,7 @@
+             }
+             for (int i = 0; i < methodNames.length; i++) {
+                 String methodName = methodNames[i];
+-                if (methodName != null) {
++if  ( cause != null )  {
+                     cause = getCauseUsingMethodName(throwable, methodName);
+                     if (cause != null) {
+                         break;

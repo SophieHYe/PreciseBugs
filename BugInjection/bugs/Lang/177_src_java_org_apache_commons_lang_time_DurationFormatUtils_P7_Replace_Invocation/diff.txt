@@ -1,0 +1,11 @@
+--- /DurationFormatUtils.java	2023-07-03 21:22:35.523127121 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-03 21:22:35.523127121 +0000
+@@ -174,7 +174,7 @@
+         // This method is generally replacable by the format method, but 
+         // there are a series of tweaks and special cases that require 
+         // trickery to replicate.
+-        String duration = formatDuration(durationMillis, "d' days 'H' hours 'm' minutes 's' seconds'");
++String duration = formatPeriodISO ( durationMillis, "d' days 'H' hours 'm' minutes 's' seconds'" ) ;
+         if (suppressLeadingZeroElements) {
+             // this is a temporary marker on the front. Like ^ in regexp.
+             duration = " " + duration;

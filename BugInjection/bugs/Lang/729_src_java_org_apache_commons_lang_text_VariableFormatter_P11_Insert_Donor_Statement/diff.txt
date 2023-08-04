@@ -1,0 +1,11 @@
+--- /VariableFormatter.java	2023-07-03 22:12:31.950274648 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-03 22:12:31.950274648 +0000
+@@ -726,7 +726,7 @@
+         // on the first call initialize priorVariables
+         if (priorVariables == null) {
+             priorVariables = new ArrayList();
+-            priorVariables.add(new String(data, offset, length));
++String variable = new String ( data, tok.getBeginIndex (  ) , getLength ( tok )  ) ;priorVariables.add ( new String ( data, offset, length )  ) ;
+         }
+ 
+         VariableParser parser = createParser(data, offset, length);

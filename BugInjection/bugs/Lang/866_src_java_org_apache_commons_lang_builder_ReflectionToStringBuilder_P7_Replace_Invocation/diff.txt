@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:34:23.925489683 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:34:23.929489628 +0000
+@@ -863,7 +863,7 @@
+             return this.getStyle().getNullText();
+         }
+         Class clazz = this.getObject().getClass();
+-        this.appendFieldsIn(clazz);
++this.setUpToClass ( clazz ) ;
+         while (clazz.getSuperclass() != null && clazz != this.getUpToClass()) {
+             clazz = clazz.getSuperclass();
+             this.appendFieldsIn(clazz);

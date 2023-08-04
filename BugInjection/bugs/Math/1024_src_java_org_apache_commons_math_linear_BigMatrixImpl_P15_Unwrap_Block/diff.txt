@@ -1,0 +1,14 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:50.513735104 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:50.517735050 +0000
+@@ -1022,8 +1022,9 @@
+         int nRows = this.getRowDimension();
+         int nCols = this.getColumnDimension();
+         if (nRows != nCols) {
+-            throw new InvalidMatrixException("LU decomposition requires that the matrix be square.");
+-        }
++ 
++throw new org.apache.commons.math.linear.InvalidMatrixException("LU decomposition requires that the matrix be square."); 
++ 
+         lu = this.getData();
+         
+         // Initialize permutation array and parity

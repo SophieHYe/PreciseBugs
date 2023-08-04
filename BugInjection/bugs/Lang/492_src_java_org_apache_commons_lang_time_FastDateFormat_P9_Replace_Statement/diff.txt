@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:41:33.303609005 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:41:33.307608950 +0000
+@@ -489,7 +489,7 @@
+     static synchronized String getTimeZoneDisplay(TimeZone tz, boolean daylight, int style, Locale locale) {
+         Object key = new TimeZoneDisplayKey(tz, daylight, style, locale);
+         String value = (String) cTimeZoneDisplayCache.get(key);
+-        if (value == null) {
++if  ( pattern == null )  {
+             // This is a very slow call, so cache the results.
+             value = tz.getDisplayName(daylight, style, locale);
+             cTimeZoneDisplayCache.put(key, value);

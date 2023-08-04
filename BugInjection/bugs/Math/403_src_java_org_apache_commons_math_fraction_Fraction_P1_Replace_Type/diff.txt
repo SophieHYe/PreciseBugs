@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:32:00.203455780 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:32:00.203455780 +0000
+@@ -400,7 +400,7 @@
+         }
+         // knuth 4.5.1
+         // make sure we don't overflow unless the result *must* overflow.
+-        int d1 = MathUtils.gcd(numerator, fraction.denominator);
++short  d1 = MathUtils.gcd ( numerator, fraction.denominator ) ;
+         int d2 = MathUtils.gcd(fraction.numerator, denominator);
+         return getReducedFraction
+         (MathUtils.mulAndCheck(numerator/d1, fraction.numerator/d2),

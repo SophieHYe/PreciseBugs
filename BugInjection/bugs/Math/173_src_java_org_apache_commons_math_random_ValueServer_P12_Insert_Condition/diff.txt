@@ -1,0 +1,13 @@
+--- /ValueServer.java	2023-07-03 21:27:55.118784893 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/ValueServer.java	2023-07-03 21:27:55.118784893 +0000
+@@ -170,8 +170,8 @@
+     public void computeDistribution(int binCount)
+             throws IOException {
+         empiricalDistribution = new EmpiricalDistributionImpl(binCount);
+-        empiricalDistribution.load(valuesFileURL);
+-        mu = empiricalDistribution.getSampleStats().getMean();
++if  (  ( empiricalDistribution == null )  || ( empiricalDistribution.getBinStats (  ) .size (  )  == 0 )  )  { empiricalDistribution.load ( valuesFileURL ) ; mu = empiricalDistribution.getSampleStats (  ) .getMean (  ) ; }
++ 
+         sigma = empiricalDistribution.getSampleStats().getStandardDeviation();
+     }
+ 

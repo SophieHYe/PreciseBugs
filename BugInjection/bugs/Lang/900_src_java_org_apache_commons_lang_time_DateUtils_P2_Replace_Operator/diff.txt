@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-03 21:38:07.434424680 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-03 21:38:07.434424680 +0000
+@@ -897,7 +897,7 @@
+         }
+         if (focus instanceof Date) {
+             return iterator((Date) focus, rangeStyle);
+-        } else if (focus instanceof Calendar) {
++} else if  ( focus  !=  Calendar )  {
+             return iterator((Calendar) focus, rangeStyle);
+         } else {
+             throw new ClassCastException("Could not iterate based on " + focus);

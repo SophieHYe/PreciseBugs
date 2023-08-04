@@ -1,0 +1,17 @@
+--- /HashCodeBuilder.java	2023-07-03 21:34:55.617054438 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-03 21:34:55.617054438 +0000
+@@ -367,10 +367,10 @@
+         AccessibleObject.setAccessible(fields, true);
+         for (int i = 0; i < fields.length; i++) {
+             Field f = fields[i];
+-            if (!excludedFieldList.contains(f.getName())
+-                && (f.getName().indexOf('$') == -1)
+-                && (useTransients || !Modifier.isTransient(f.getModifiers()))
+-                && (!Modifier.isStatic(f.getModifiers()))) {
++if  ( !excludedFieldList.contains ( f.getName (  )  ) &&  ( f.getName (  ) .indexOf ( '$' )  == -1 ) &&  ( useTransients || !Modifier.isTransient ( f .getName (  )   )  ) &&  ( !Modifier.isStatic ( f
++ 
++ 
++ 
+                 try {
+                     builder.append(f.get(object));
+                 } catch (IllegalAccessException e) {

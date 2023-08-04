@@ -1,0 +1,11 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:29.768759533 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:29.768759533 +0000
+@@ -105,7 +105,7 @@
+     public void load(double[] in) {
+         DataAdapter da = new ArrayDataAdapter(in);
+         try {
+-            da.computeStats();
++da.computeBinStats ( min, delta ) ;da.computeStats (  ) ;
+             fillBinStats(in);
+         } catch (Exception e) {
+             throw new RuntimeException(e.getMessage());

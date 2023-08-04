@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:32:30.449944829 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:30.453944775 +0000
+@@ -990,7 +990,7 @@
+         if (length < 0 || offset + length > chars.length) {
+             throw new StringIndexOutOfBoundsException("Invalid length: " + length);
+         }
+-        if (length > 0) {
++if  ( oldEnd > 0 )  {
+             ensureCapacity(size + length);
+             System.arraycopy(buffer, index, buffer, index + length, size - index);
+             System.arraycopy(chars, offset, buffer, index, length);

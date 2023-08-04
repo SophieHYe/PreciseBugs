@@ -1,0 +1,14 @@
+--- /StrTokenizer.java	2023-07-03 22:16:50.766745351 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:16:50.766745351 +0000
+@@ -555,8 +555,9 @@
+      */
+     public Object previous() {
+         if (hasPrevious()) {
+-            return tokens[--tokenPos];
+-        }
++ 
++return tokens[(--(tokenPos))]; 
++ 
+         throw new NoSuchElementException();
+     }
+ 

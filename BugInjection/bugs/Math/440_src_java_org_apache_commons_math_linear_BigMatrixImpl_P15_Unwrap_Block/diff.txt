@@ -1,0 +1,18 @@
+--- /BigMatrixImpl.java	2023-07-03 21:40:29.580479952 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:40:29.580479952 +0000
+@@ -438,10 +438,11 @@
+     public BigMatrix getSubMatrix(int startRow, int endRow, int startColumn,
+             int endColumn) throws MatrixIndexException {
+         if (startRow < 0 || startRow > endRow || endRow > data.length ||
+-                startColumn < 0 || startColumn > endColumn ||
+-                endColumn > data[0].length ) {
+-            throw new MatrixIndexException(
+-            "invalid row or column index selection");
++ 
++throw new org.apache.commons.math.linear.MatrixIndexException("invalid row or column index selection"); 
++ 
++ 
++ 
+         }
+         BigMatrixImpl subMatrix = new BigMatrixImpl(endRow - startRow+1,
+                 endColumn - startColumn+1);

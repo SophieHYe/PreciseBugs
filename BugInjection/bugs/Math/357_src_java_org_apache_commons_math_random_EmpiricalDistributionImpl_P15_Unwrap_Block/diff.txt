@@ -1,0 +1,18 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:54.992416841 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:54.992416841 +0000
+@@ -355,10 +355,11 @@
+             da.computeBinStats(min, delta);
+         } catch (Exception e) {
+             if(e instanceof RuntimeException){
+-                throw new RuntimeException(e.getMessage());
+-            }else{
+-                throw new IOException(e.getMessage());
+-            }
++ 
++throw new java.lang.RuntimeException(e.getMessage()); 
++ 
++ 
++ 
+         }
+ 
+         // Assign upperBounds based on bin counts

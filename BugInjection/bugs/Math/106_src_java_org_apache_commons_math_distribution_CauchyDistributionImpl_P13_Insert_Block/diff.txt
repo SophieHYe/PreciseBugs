@@ -1,0 +1,11 @@
+--- /CauchyDistributionImpl.java	2023-07-03 21:29:02.133874541 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/CauchyDistributionImpl.java	2023-07-03 21:29:02.137874487 +0000
+@@ -103,7 +103,7 @@
+         } else  if (p == 1) {
+             ret = Double.POSITIVE_INFINITY;
+         } else {
+-            ret = median + scale * Math.tan(Math.PI * (p - .5));
++if  ( p == 1 )  {     ret = POSITIVE_INFINITY; }else {     ret =  ( median )  +  (  ( scale )  *  ( tan (  (  ( PI )  *  ( p - 0.5 )  )  )  )  ) ; }
+         }
+         return ret;
+     }

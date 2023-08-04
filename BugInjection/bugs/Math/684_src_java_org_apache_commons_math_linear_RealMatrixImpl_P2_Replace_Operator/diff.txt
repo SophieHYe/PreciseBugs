@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:36:25.275824332 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:36:25.279824277 +0000
+@@ -681,7 +681,7 @@
+      */
+     public double[] solve(double[] b) throws IllegalArgumentException, InvalidMatrixException {
+         int nRows = this.getRowDimension();
+-        if (b.length != nRows) {
++if  ( b.length == nRows )  {
+             throw new IllegalArgumentException("constant vector has wrong length");
+         }
+         RealMatrix bMatrix = new RealMatrixImpl(b);

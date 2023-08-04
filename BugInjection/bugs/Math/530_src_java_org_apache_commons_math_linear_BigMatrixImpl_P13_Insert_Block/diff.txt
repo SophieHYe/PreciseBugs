@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:40:55.204129679 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:40:55.204129679 +0000
+@@ -527,7 +527,7 @@
+         }
+         int nCols = subMatrix[0].length;
+         if (nCols == 0) {
+-            throw new IllegalArgumentException(
++if  ( nCols == 0 )  {     throw new IllegalArgumentException ( "Matrix must have at least one column." ) ; }
+             "Matrix must have at least one column."); 
+         }
+         for (int r = 1; r < nRows; r++) {

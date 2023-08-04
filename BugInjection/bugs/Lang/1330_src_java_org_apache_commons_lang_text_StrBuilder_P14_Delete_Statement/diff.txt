@@ -1,0 +1,10 @@
+--- /StrBuilder.java	2023-07-03 22:37:17.946030123 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:37:17.946030123 +0000
+@@ -1328,6 +1328,7 @@
+             int index = indexOf(searchStr, 0);
+             while (index >= 0) {
+                 replaceImpl(index, index + searchLen, searchLen, replaceStr, replaceLen);
++ 
+                 index = indexOf(searchStr, index + replaceLen);
+             }
+         }

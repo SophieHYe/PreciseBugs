@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:50:39.472157924 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:50:39.472157924 +0000
+@@ -868,7 +868,7 @@
+         // otherwise see which is less
+         long first = (long) numerator * (long) other.denominator;
+         long second = (long) other.numerator * (long) denominator;
+-        if (first == second) {
++if  ( first < second )  {
+             return 0;
+         } else if (first < second) {
+             return -1;

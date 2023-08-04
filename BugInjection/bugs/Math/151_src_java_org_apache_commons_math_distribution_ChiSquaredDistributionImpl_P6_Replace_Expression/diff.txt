@@ -1,0 +1,11 @@
+--- /ChiSquaredDistributionImpl.java	2023-07-03 21:28:19.278456696 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/ChiSquaredDistributionImpl.java	2023-07-03 21:28:19.278456696 +0000
+@@ -148,7 +148,7 @@
+         
+         double ret;
+ 
+-        if (p < .5) {
++if  ( getDegreesOfFreedom() * 0.5 )  {
+             // use 1/2 mean
+             ret = getDegreesOfFreedom() * .5;
+         } else {

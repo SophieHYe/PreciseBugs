@@ -1,0 +1,10 @@
+--- /EqualsBuilder.java	2023-07-03 21:27:39.223000831 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-03 21:27:39.223000831 +0000
+@@ -287,6 +287,7 @@
+             while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+                 testClass = testClass.getSuperclass();
+                 reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
++ 
+             }
+         } catch (IllegalArgumentException e) {
+             // In this case, we tried to test a subclass vs. a superclass and

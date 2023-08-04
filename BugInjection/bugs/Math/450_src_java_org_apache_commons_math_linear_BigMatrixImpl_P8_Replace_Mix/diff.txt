@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:40:37.512371515 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:40:37.512371515 +0000
+@@ -447,7 +447,7 @@
+                 endColumn - startColumn+1);
+         BigDecimal[][] subMatrixData = subMatrix.getDataRef();
+         for (int i = startRow; i <= endRow; i++) {
+-            for (int j = startColumn; j <= endColumn; j++) {
++for  ( int j = parity; j <= endColumn; j++ )  {
+                 subMatrixData[i - startRow][j - startColumn] = data[i][j];
+             }
+         }

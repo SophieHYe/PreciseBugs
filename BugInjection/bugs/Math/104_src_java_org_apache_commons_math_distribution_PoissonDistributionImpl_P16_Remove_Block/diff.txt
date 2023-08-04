@@ -1,0 +1,14 @@
+--- /PoissonDistributionImpl.java	2023-07-03 21:29:45.277288491 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PoissonDistributionImpl.java	2023-07-03 21:29:45.277288491 +0000
+@@ -102,8 +102,9 @@
+             return 0;
+         }
+         if (x == Integer.MAX_VALUE) {
+-            return 1;
+-        }
++ 
++ 
++ 
+         return Gamma.regularizedGammaQ((double)x + 1, mean, 
+                 1E-12, Integer.MAX_VALUE);
+     }

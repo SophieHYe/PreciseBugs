@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:19:18.900726428 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:19:18.904726374 +0000
+@@ -788,7 +788,7 @@
+                 // use trimStart to keep track of trim at the end
+                 int trimmedLen = getTrimmerMatcher().isMatch(chars, pos, start, len);
+                 if (trimmedLen > 0) {
+-                    workArea.append(chars, pos, trimmedLen);
++workArea.append ( chars, pos, quoteStart ) ;
+                     pos += trimmedLen;
+                     continue;
+                 }

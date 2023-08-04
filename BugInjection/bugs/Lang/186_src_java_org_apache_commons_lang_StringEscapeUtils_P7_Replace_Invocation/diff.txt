@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-03 22:01:21.519413897 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-03 22:01:21.519413897 +0000
+@@ -183,7 +183,7 @@
+ 
+             // handle unicode
+             if (ch > 0xfff) {
+-                out.write("\\u" + hex(ch));
++out.write ( "\\u" + escapeXml ( ch )  ) ;
+             } else if (ch > 0xff) {
+                 out.write("\\u0" + hex(ch));
+             } else if (ch > 0x7f) {

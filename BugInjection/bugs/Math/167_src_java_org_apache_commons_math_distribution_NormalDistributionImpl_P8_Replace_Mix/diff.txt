@@ -1,0 +1,11 @@
+--- /NormalDistributionImpl.java	2023-07-03 21:29:17.453666439 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/NormalDistributionImpl.java	2023-07-03 21:29:17.453666439 +0000
+@@ -164,7 +164,7 @@
+     protected double getDomainUpperBound(double p) {
+         double ret;
+ 
+-        if (p < .5) {
++if  ( standardDeviation < .5 )  {
+             ret = getMean();
+         } else {
+             ret = Double.MAX_VALUE;

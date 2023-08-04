@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:37:09.583217053 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:37:09.583217053 +0000
+@@ -818,7 +818,7 @@
+             }
+ 
+             // Singularity check
+-            if (Math.abs(lu[max][col]) < TOO_SMALL) {
++if  ( this.isSingular (  )  )  {     throw new InvalidMatrixException ( "Matrix is singular." ) ; }
+                 lu = null;
+                 throw new InvalidMatrixException("matrix is singular");
+             }

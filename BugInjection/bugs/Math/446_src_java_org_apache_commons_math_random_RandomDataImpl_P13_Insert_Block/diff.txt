@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:26.491173791 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:26.491173791 +0000
+@@ -443,7 +443,7 @@
+      * Will create and initialize if null.
+      */
+     public void reSeedSecure() {
+-        if (secRand == null) {
++if  (  ( secRand )  == null )  {     secRand = new SecureRandom (  ) ;     secRand.setSeed ( currentTimeMillis (  )  ) ; }
+             secRand = new SecureRandom();
+         }
+         secRand.setSeed(System.currentTimeMillis());

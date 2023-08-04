@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:44:17.597365419 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:44:17.597365419 +0000
+@@ -1055,7 +1055,7 @@
+                 for (int i = 0; i < col; i++) {
+                     sum = sum.subtract(lu[row][i].multiply(lu[i][col]));
+                 }
+-                lu[row][col] = sum;
++outData[row][col] = sum;lu[row][col] = sum;
+                 
+                 // maintain best permutation choice
+                 if (sum.abs().compareTo(largest) == 1) {

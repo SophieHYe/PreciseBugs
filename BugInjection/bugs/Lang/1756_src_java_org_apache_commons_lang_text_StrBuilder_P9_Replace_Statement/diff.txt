@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:42:42.361618125 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:42:42.365618071 +0000
+@@ -1753,7 +1753,7 @@
+      */
+     public int indexOf(String str, int startIndex) {
+         startIndex = (startIndex < 0 ? 0 : startIndex);
+-        if (str == null || startIndex >= size) {
++if  ( str == null || startIndex < 0 )  {
+             return -1;
+         }
+         int strLen = str.length();

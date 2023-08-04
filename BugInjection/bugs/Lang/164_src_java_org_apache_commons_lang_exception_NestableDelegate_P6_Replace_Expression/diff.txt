@@ -1,0 +1,17 @@
+--- /NestableDelegate.java	2023-07-03 21:25:28.196780891 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-03 21:25:28.196780891 +0000
+@@ -161,10 +161,10 @@
+         Throwable[] throwables = this.getThrowables();
+         String[] msgs = new String[throwables.length];
+         for (int i = 0; i < throwables.length; i++) {
+-            msgs[i] =
+-                (Nestable.class.isInstance(throwables[i])
+-                    ? ((Nestable) throwables[i]).getMessage(0)
+-                    : throwables[i].getMessage());
++msgs[i]  =   (  ( Nestable )  throwables[i] ) .getMessage ( 0 ) ;
++ 
++ 
++ 
+         }
+         return msgs;
+     }

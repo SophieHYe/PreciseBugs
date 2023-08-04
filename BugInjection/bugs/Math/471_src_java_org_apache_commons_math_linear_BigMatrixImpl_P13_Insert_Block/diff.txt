@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:40:39.440345160 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:40:39.444345105 +0000
+@@ -468,7 +468,7 @@
+     public BigMatrix getSubMatrix(int[] selectedRows, int[] selectedColumns)
+     throws MatrixIndexException {
+         if (selectedRows.length * selectedColumns.length == 0) {
+-            throw new MatrixIndexException(
++if  (  ( row < 0 )  ||  ( column < 0 )  )  {     throw new MatrixIndexException ( "invalid row or column index selection" ) ; }
+             "selected row and column index arrays must be non-empty");
+         }
+         BigMatrixImpl subMatrix = new BigMatrixImpl(selectedRows.length,

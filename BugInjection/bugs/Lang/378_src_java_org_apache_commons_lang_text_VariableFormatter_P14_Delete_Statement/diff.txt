@@ -1,0 +1,10 @@
+--- /VariableFormatter.java	2023-07-03 22:14:26.496712300 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-03 22:14:26.500712246 +0000
+@@ -376,6 +376,7 @@
+                     } else if ((tokenLen = getVarStartMatcher().isMatch(data, getPos(), 0, getLength())) > 0) {
+                         checkTextToken(startPos);
+                         setPos(getPos() + tokenLen);
++ 
+                         int varStart = getPos(), endLen = 0;
+                         while ( hasNext() && 
+                                 (endLen = getVarEndMatcher().isMatch(data, getPos(), 0, getLength())) <= 0

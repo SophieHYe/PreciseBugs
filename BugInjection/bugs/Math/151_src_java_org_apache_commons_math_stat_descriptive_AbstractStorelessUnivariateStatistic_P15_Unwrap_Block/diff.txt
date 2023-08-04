@@ -1,0 +1,14 @@
+--- /AbstractStorelessUnivariateStatistic.java	2023-07-03 21:26:42.979764900 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/AbstractStorelessUnivariateStatistic.java	2023-07-03 21:26:42.983764845 +0000
+@@ -149,8 +149,9 @@
+             return true;
+         }
+        if (object instanceof AbstractStorelessUnivariateStatistic == false) {
+-            return false;
+-        }
++ 
++return false; 
++ 
+         AbstractStorelessUnivariateStatistic stat = (AbstractStorelessUnivariateStatistic) object;
+         return (MathUtils.equals(stat.getResult(), this.getResult()) && 
+                 MathUtils.equals(stat.getN(), this.getN()));

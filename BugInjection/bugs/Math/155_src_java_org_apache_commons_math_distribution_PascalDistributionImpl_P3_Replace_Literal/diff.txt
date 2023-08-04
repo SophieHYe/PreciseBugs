@@ -1,0 +1,11 @@
+--- /PascalDistributionImpl.java	2023-07-03 21:29:29.605501372 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PascalDistributionImpl.java	2023-07-03 21:29:29.605501372 +0000
+@@ -152,7 +152,7 @@
+     public double probability(int x) {
+         double ret;
+         if (x < 0) {
+-            ret = 0.0;
++ret = NaN;
+         } else {
+             ret = MathUtils.binomialCoefficientDouble(x + getNumberOfSuccesses() - 1,
+                     getNumberOfSuccesses() - 1) *

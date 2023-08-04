@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-03 21:34:44.557206303 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-03 21:34:44.561206249 +0000
+@@ -336,7 +336,7 @@
+         if (object == null) {
+             throw new IllegalArgumentException("The object to build a hash code for must not be null");
+         }
+-        HashCodeBuilder builder = new HashCodeBuilder(initialNonZeroOddNumber, multiplierNonZeroOddNumber);
++HashCodeBuilder builder = new HashCodeBuilder ( initialNonZeroOddNumber ) ;
+         Class clazz = object.getClass();
+         reflectionAppend(object, clazz, builder, testTransients, excludeFields);
+         while (clazz.getSuperclass() != null && clazz != reflectUpToClass) {

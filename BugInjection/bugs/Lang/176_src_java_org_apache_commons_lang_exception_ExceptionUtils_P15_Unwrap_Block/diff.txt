@@ -1,0 +1,14 @@
+--- /ExceptionUtils.java	2023-07-03 21:22:26.947243661 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:22:26.947243661 +0000
+@@ -174,8 +174,9 @@
+      */
+     public static boolean setCause(Throwable target, Throwable cause) {
+         if (target == null) {
+-            throw new NullArgumentException("target");
+-        }
++ 
++throw new org.apache.commons.lang.NullArgumentException("target"); 
++ 
+         Object[] causeArgs = new Object[]{cause};
+         boolean modifiedTarget = false;
+         if (THROWABLE_INITCAUSE_METHOD != null) {

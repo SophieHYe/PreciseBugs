@@ -1,0 +1,14 @@
+--- /Frequency.java	2023-07-03 21:24:07.125882394 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/Frequency.java	2023-07-03 21:24:07.125882394 +0000
+@@ -298,8 +298,9 @@
+             return 0;
+         }
+         if (v instanceof Integer) {
+-            return getCumFreq(((Integer) v).longValue());
+-        }
++ 
++return getCumFreq(((java.lang.Integer) (v)).longValue()); 
++ 
+         Comparator c = freqTable.comparator();
+         if (c == null) {
+             c = new NaturalComparator();

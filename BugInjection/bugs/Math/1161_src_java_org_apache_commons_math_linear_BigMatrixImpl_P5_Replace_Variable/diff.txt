@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:45:15.400576605 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:45:15.404576550 +0000
+@@ -1158,7 +1158,7 @@
+         int ret = 7;
+         int nRows = getRowDimension();
+         int nCols = getColumnDimension();
+-        ret = ret * 31 + nRows;
++ret = nRows * 31 + ret;
+         ret = ret * 31 + nCols;
+         for (int row = 0; row < nRows; row++) {
+             for (int col = 0; col < nCols; col++) {

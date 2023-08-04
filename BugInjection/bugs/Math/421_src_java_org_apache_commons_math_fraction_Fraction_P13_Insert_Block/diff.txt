@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-03 21:32:06.599368907 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/Fraction.java	2023-07-03 21:32:06.599368907 +0000
+@@ -418,7 +418,7 @@
+      *  <code>Integer.MAX_VALUE</code>
+      */
+     public Fraction divide(Fraction fraction) {
+-        if (fraction == null) {
++if  ( den == 0 )  {     throw new ArithmeticException ( "The denominator must not be zero" ) ; }
+             throw new IllegalArgumentException("The fraction must not be null");
+         }
+         if (fraction.numerator == 0) {

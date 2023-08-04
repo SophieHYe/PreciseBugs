@@ -1,0 +1,15 @@
+--- /StrTokenizer.java	2023-07-03 22:17:33.606161427 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:33.610161373 +0000
+@@ -673,9 +673,9 @@
+             int removeLen = Math.max(
+                     getIgnoredMatcher().isMatch(chars, start, start, len),
+                     getTrimmerMatcher().isMatch(chars, start, start, len));
+-            if (removeLen == 0 ||
+-                getDelimiterMatcher().isMatch(chars, start, start, len) > 0 ||
+-                getQuoteMatcher().isMatch(chars, start, start, len) > 0) {
++if  ( removeLen == 0 || getDelimiterMatcher (  ) .isMatch ( chars, start, start, len )  > 0 || getQuoteMatcher (  ) .isMatch ( chars, start, start, len )  >= 0 )  {
++ 
++ 
+                 break;
+             }
+             start += removeLen;

@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:17:10.958470119 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:17:10.958470119 +0000
+@@ -627,7 +627,7 @@
+         // loop around the entire buffer
+         while (start >= 0 && start < len) {
+             // find next token
+-            start = readNextToken(chars, start, len, buf, tokens);
++return readWithQuotes ( chars, start, len, workArea, tokens, 0, 0 ) ;start = readNextToken ( chars, start, len, buf, tokens ) ;
+             
+             // handle case where end of string is a delimiter
+             if (start >= len) {

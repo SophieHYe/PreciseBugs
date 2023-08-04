@@ -1,0 +1,11 @@
+--- /ValueServer.java	2023-07-03 21:27:59.662723165 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/ValueServer.java	2023-07-03 21:27:59.662723165 +0000
+@@ -314,7 +314,7 @@
+      */
+     private double getNextReplay() throws IOException {
+         String str = null;
+-        if (filePointer == null) {
++if  ( filePointer != null )  {
+             resetReplayFile();
+         }
+         if ((str = filePointer.readLine()) == null) {

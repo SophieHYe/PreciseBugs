@@ -1,0 +1,11 @@
+--- /AbstractIntegerDistribution.java	2023-07-03 21:30:01.781064313 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/AbstractIntegerDistribution.java	2023-07-03 21:30:01.781064313 +0000
+@@ -135,7 +135,7 @@
+         while (x0 < x1) {
+             int xm = x0 + (x1 - x0) / 2;
+             pm = cumulativeProbability(xm);
+-            if (pm > p) {
++if  ( x0 > x1 )  {
+                 // update x1
+                 if (xm == x1) {
+                     // this can happen with integer division

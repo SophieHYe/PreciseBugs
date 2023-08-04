@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:32:56.797586050 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:32:56.801585996 +0000
+@@ -1009,7 +1009,7 @@
+      */
+     public StrBuilder insert(int index, boolean value) {
+         validateIndex(index);
+-        if (value) {
++if  ( n < 0 )  {
+             ensureCapacity(size + 4);
+             System.arraycopy(buffer, index, buffer, index + 4, size - index);
+             buffer[index++] = 't';

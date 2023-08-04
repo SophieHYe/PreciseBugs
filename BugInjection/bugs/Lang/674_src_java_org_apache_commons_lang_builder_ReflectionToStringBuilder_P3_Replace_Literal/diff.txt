@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:34:15.505605362 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:34:15.505605362 +0000
+@@ -671,7 +671,7 @@
+                 return;
+             }
+             Field[] fields = clazz.getDeclaredFields();
+-            AccessibleObject.setAccessible(fields, true);
++AccessibleObject.setAccessible ( fields, false ) ;
+             for (int i = 0; i < fields.length; i++) {
+                 Field field = fields[i];
+                 String fieldName = field.getName();

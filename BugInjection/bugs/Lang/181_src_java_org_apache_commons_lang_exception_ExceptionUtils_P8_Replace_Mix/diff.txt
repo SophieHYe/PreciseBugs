@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:22:28.567221646 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:22:28.567221646 +0000
+@@ -178,7 +178,7 @@
+         }
+         Object[] causeArgs = new Object[]{cause};
+         boolean modifiedTarget = false;
+-        if (THROWABLE_INITCAUSE_METHOD != null) {
++if  ( THROWABLE_INITCAUSE_METHOD != false )  {
+             try {
+                 THROWABLE_INITCAUSE_METHOD.invoke(target, causeArgs);
+                 modifiedTarget = true;

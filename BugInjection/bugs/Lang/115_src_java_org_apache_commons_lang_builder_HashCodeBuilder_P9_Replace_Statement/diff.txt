@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-03 21:34:29.129418196 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-03 21:34:29.129418196 +0000
+@@ -112,7 +112,7 @@
+      * @throws IllegalArgumentException if the number is zero or even
+      */
+     public HashCodeBuilder(int initialNonZeroOddNumber, int multiplierNonZeroOddNumber) {
+-        if (initialNonZeroOddNumber == 0) {
++if  ( multiplierNonZeroOddNumber % 2 == 0 )  {
+             throw new IllegalArgumentException("HashCodeBuilder requires a non zero initial value");
+         }
+         if (initialNonZeroOddNumber % 2 == 0) {

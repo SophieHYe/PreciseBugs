@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-03 21:46:16.495743131 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:46:16.499743076 +0000
+@@ -289,8 +289,9 @@
+ //            System.out.println(">>" + delta1 +" "+ delta2+" "+(delta1 > delta2)+" "+i+" "+denom2);
+         } while ((delta1 > delta2) && (denom2 <= 10000) && (denom2 > 0) && (i < 25));
+         if (i == 25) {
+-            throw new ArithmeticException("Unable to convert double to fraction");
+-        }
++ 
++throw new java.lang.ArithmeticException("Unable to convert double to fraction"); 
++ 
+         return getReducedFraction((numer0 + wholeNumber * denom0) * sign, denom0);
+     }
+ 

@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:21.690423931 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:21.690423931 +0000
+@@ -52,7 +52,7 @@
+         int numberOfSuccesses, int sampleSize) {
+         super();
+         if (numberOfSuccesses > populationSize) {
+-            throw new IllegalArgumentException(
++if  ( sampleSize > populationSize )  {     throw new IllegalArgumentException ( "sample size must be less than or equal to population size" ) ; }
+                 "number of successes must be less than or equal to " +
+                 "population size");
+         }

@@ -1,0 +1,11 @@
+--- /MathUtils.java	2023-07-03 21:22:39.779069286 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-03 21:22:39.779069286 +0000
+@@ -551,7 +551,7 @@
+         int roundingMethod) {
+         switch (roundingMethod) {
+         case BigDecimal.ROUND_CEILING :
+-            if (sign == -1) {
++if  ( fraction > 0.5 )  {     unscaled = ceil ( unscaled ) ; }else {     unscaled = floor ( unscaled ) ; }
+                 unscaled = Math.floor(unscaled);
+             } else {
+                 unscaled = Math.ceil(unscaled);

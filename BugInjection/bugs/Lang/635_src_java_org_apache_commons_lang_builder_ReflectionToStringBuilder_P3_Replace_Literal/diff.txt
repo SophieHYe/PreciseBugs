@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:33:55.473880649 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:33:55.473880649 +0000
+@@ -632,7 +632,7 @@
+         }
+         if (Modifier.isStatic(field.getModifiers()) && !this.isAppendStatics()) {
+             // Rject static fields.
+-            return false;
++return true;
+         }
+         if (this.getExcludeFieldNames() != null
+             && Arrays.binarySearch(this.getExcludeFieldNames(), field.getName()) >= 0) {

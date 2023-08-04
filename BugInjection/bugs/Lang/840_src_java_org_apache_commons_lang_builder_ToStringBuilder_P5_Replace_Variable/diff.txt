@@ -1,0 +1,11 @@
+--- /ToStringBuilder.java	2023-07-03 21:42:25.090901522 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringBuilder.java	2023-07-03 21:42:25.094901468 +0000
+@@ -837,7 +837,7 @@
+      * @return this
+      */
+     public ToStringBuilder append(String fieldName, Object object, boolean fullDetail) {
+-        style.append(buffer, fieldName, object, BooleanUtils.toBooleanObject(fullDetail));
++style.append ( fullDetail, fieldName, object, BooleanUtils.toBooleanObject ( buffer )  ) ;
+         return this;
+     }
+ 

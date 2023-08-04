@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:18:44.425196243 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:18:44.429196189 +0000
+@@ -738,7 +738,7 @@
+                 // to actually put the quote character into the token
+                 // rather than end the token.
+                 if (isQuote(chars, pos, len, quoteStart, quoteLen)) {
+-                    if (isQuote(chars, pos + quoteLen, len, quoteStart, quoteLen)) {
++if  ( isQuote ( chars, pos, len, quoteStart, quoteLen )  )  {     if  ( isQuote ( chars,  ( pos + quoteLen ) , len, quoteStart, quoteLen )  )  {         workArea.append ( chars, pos, quoteLen ) ;         pos += quoteLen * 2;         trimStart = workArea.size (  ) ;         continue;     }     quoting = false;     pos += quoteLen;     continue; }
+                         // matched pair of quotes, thus an escaped quote
+                         workArea.append(chars, pos, quoteLen);
+                         pos += (quoteLen * 2);

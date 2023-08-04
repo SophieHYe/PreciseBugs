@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-03 21:25:53.020443632 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-03 21:25:53.024443577 +0000
+@@ -316,7 +316,7 @@
+         while (throwable != null) {
+             String[] st = getStackFrames(throwable);
+             stacks.add(st);
+-            throwable = ExceptionUtils.getCause(throwable);
++throwable = ExceptionUtils.getCause ( t ) ;
+         }
+ 
+         // If NOT topDown, reverse the stack

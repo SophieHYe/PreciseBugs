@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:37:56.182578748 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:37:56.186578694 +0000
+@@ -884,7 +884,7 @@
+         if (object instanceof RealMatrixImpl == false) {
+             return false;
+         }
+-        RealMatrix m = (RealMatrix) object;
++RealMatrixImpl outMat = new RealMatrixImpl ( bp ) ;RealMatrix m =  ( RealMatrix )  object;
+         int nRows = getRowDimension();
+         int nCols = getColumnDimension();
+         if (m.getColumnDimension() != nCols || m.getRowDimension() != nRows) {

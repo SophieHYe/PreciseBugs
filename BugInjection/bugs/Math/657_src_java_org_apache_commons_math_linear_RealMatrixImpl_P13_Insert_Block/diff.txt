@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:36:17.315933472 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:36:17.315933472 +0000
+@@ -654,7 +654,7 @@
+     public double[] preMultiply(double[] v) throws IllegalArgumentException {
+         int nRows = this.getRowDimension();
+         if (v.length != nRows) {
+-            throw new IllegalArgumentException("vector has wrong length");
++if  ( nRows == 0 )  {     throw new IllegalArgumentException ( "Matrix must have at least one row." ) ; }
+         }
+         int nCols = this.getColumnDimension();
+         double[] out = new double[nCols];

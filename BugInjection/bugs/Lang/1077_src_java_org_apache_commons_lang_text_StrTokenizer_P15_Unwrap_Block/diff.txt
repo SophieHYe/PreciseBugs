@@ -1,0 +1,14 @@
+--- /StrTokenizer.java	2023-07-03 22:20:12.567995137 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:20:12.571995083 +0000
+@@ -1075,8 +1075,9 @@
+     Object cloneReset() throws CloneNotSupportedException {
+         StrTokenizer cloned = (StrTokenizer) super.clone();
+         if (cloned.chars != null) {
+-            cloned.chars = (char[]) cloned.chars.clone();
+-        }
++ 
++cloned.chars = ((char[]) (cloned.chars.clone())); 
++ 
+         cloned.reset();
+         return cloned;
+     }

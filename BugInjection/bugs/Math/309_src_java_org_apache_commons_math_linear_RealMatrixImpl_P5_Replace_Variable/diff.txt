@@ -1,0 +1,15 @@
+--- /RealMatrixImpl.java	2023-07-03 21:34:42.937228551 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:34:42.937228551 +0000
+@@ -306,9 +306,9 @@
+      */
+     public RealMatrix getSubMatrix(int startRow, int endRow, int startColumn,
+             int endColumn) throws MatrixIndexException {
+-        if (startRow < 0 || startRow > endRow || endRow > data.length ||
+-             startColumn < 0 || startColumn > endColumn ||
+-             endColumn > data[0].length ) {
++if  ( data[0].length < 0 || startRow > endRow || endRow > data.length || startColumn < 0 || startColumn > endColumn || endColumn > data[0].length  )  {
++ 
++ 
+             throw new MatrixIndexException(
+                     "invalid row or column index selection");
+         }

@@ -1,0 +1,18 @@
+--- /ProperFractionFormat.java	2023-07-03 21:33:00.734633465 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/ProperFractionFormat.java	2023-07-03 21:33:00.738633410 +0000
+@@ -95,10 +95,11 @@
+         num = num % den;
+         
+         if (whole != 0) {
+-            getWholeFormat().format(whole, toAppendTo, pos);
+-            toAppendTo.append(' ');
+-            num = Math.abs(num);
+-        }
++ 
++getWholeFormat().format(whole, toAppendTo, pos); toAppendTo.append(' '); num = java.lang.Math.abs(num); 
++ 
++ 
++ 
+         getNumeratorFormat().format(num, toAppendTo, pos);
+         toAppendTo.append(" / ");
+         getDenominatorFormat().format(den, toAppendTo,

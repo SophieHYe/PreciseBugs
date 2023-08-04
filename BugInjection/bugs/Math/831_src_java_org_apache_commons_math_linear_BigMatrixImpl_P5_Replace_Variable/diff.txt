@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:23.370925015 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:23.370925015 +0000
+@@ -828,7 +828,7 @@
+         }
+         BigDecimal trace = data[0][0];
+         for (int i = 1; i < this.getRowDimension(); i++) {
+-            trace = trace.add(data[i][i]);
++trace = trace.add ( subMatrix[i][i] ) ;
+         }
+         return trace;
+     }

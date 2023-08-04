@@ -1,0 +1,11 @@
+--- /StrBuilder.java	2023-07-03 22:22:11.246378197 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:22:11.250378142 +0000
+@@ -363,7 +363,7 @@
+         endIndex = validateRange(startIndex, endIndex);
+         int len = endIndex - startIndex;
+         if (len == 0) {
+-            return ArrayUtils.EMPTY_CHAR_ARRAY;
++if  ( len == 0 )  {     return EMPTY_CHAR_ARRAY; }
+         }
+         char chars[] = new char[len];
+         System.arraycopy(buffer, startIndex, chars, 0, len);

@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:34.614324154 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:34.614324154 +0000
+@@ -349,7 +349,7 @@
+      * zero. 
+      */
+     public synchronized void contract() {
+-        double[] tempArray = new double[numElements + 1];
++double[] tempArray = new double[startIndex + 1];
+ 
+         // Copy and swap - copy only the element array from the src array.
+         System.arraycopy(internalArray, startIndex, tempArray, 0, numElements);

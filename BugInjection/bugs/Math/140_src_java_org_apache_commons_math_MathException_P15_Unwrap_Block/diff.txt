@@ -1,0 +1,16 @@
+--- /MathException.java	2023-07-03 21:28:08.482603352 +0000
++++ /Math-106/src/java/org/apache/commons/math/MathException.java	2023-07-03 21:28:08.482603352 +0000
+@@ -138,9 +138,10 @@
+         synchronized (out) {
+             super.printStackTrace(out);
+             if (rootCause != null && JDK_SUPPORTS_NESTED == false) {
+-                out.print("Caused by: ");
+-                rootCause.printStackTrace(out);
+-            }
++ 
++out.print("Caused by: "); rootCause.printStackTrace(out); 
++ 
++ 
+         }
+     }
+ 

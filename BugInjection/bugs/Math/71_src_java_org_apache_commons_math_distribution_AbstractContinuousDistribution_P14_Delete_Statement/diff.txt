@@ -1,0 +1,10 @@
+--- /AbstractContinuousDistribution.java	2023-07-03 21:30:50.312405099 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/AbstractContinuousDistribution.java	2023-07-03 21:30:50.312405099 +0000
+@@ -69,6 +69,7 @@
+             public double value(double x) throws FunctionEvaluationException {
+                 try {
+                     return cumulativeProbability(x) - p;
++ 
+                 } catch (MathException ex) {
+                     throw new FunctionEvaluationException
+                         (x, "Error computing cdf", ex);

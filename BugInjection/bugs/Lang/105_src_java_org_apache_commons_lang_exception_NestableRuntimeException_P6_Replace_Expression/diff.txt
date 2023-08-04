@@ -1,0 +1,11 @@
+--- /NestableRuntimeException.java	2023-07-03 21:22:07.327510283 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableRuntimeException.java	2023-07-03 21:22:07.327510283 +0000
+@@ -102,7 +102,7 @@
+      * @return String message string of the throwable
+      */
+     public String getMessage() {
+-        if (super.getMessage() != null) {
++if  ( cause != null )  {
+             return super.getMessage();
+         } else if (cause != null) {
+             return cause.toString();

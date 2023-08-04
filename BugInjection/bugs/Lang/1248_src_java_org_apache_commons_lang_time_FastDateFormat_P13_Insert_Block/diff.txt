@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-03 21:38:56.853748234 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-03 21:38:56.857748178 +0000
+@@ -1245,7 +1245,7 @@
+          * @param size size of the output field
+          */
+         PaddedNumberField(int field, int size) {
+-            if (size < 3) {
++if  ( pattern == null )  {     throw new IllegalArgumentException ( "The pattern must not be null" ) ; }
+                 // Should use UnpaddedNumberField or TwoDigitNumberField.
+                 throw new IllegalArgumentException();
+             }

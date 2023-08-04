@@ -1,0 +1,14 @@
+--- /StatUtils.java	2023-07-03 21:28:01.274701267 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/StatUtils.java	2023-07-03 21:28:01.274701267 +0000
+@@ -605,8 +605,9 @@
+         double diff = 0d;
+         int n = sample1.length;
+         if (n < 2 || n != sample2.length) {
+-            throw new IllegalArgumentException("Input array lengths must be equal and at least 2.");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Input array lengths must be equal and at least 2."); 
++ 
+         for (int i = 0; i < n; i++) {
+             diff = sample1[i] - sample2[i];
+             sum1 += (diff - meanDifference) *(diff - meanDifference);

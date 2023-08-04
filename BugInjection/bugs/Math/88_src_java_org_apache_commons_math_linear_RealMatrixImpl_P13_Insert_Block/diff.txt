@@ -1,0 +1,11 @@
+--- /RealMatrixImpl.java	2023-07-03 21:33:44.790027516 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/RealMatrixImpl.java	2023-07-03 21:33:44.790027516 +0000
+@@ -85,7 +85,7 @@
+      */
+     public RealMatrixImpl(int rowDimension, int columnDimension) {
+         if (rowDimension <= 0 || columnDimension <= 0) {
+-            throw new IllegalArgumentException(
++if  (  ( rowDimension <= 0 )  ||  ( columnDimension <= 0 )  )  {     throw new IllegalArgumentException ( "row and column dimensions must be postive" ) ; }
+                     "row and column dimensions must be postive");
+         }
+         data = new double[rowDimension][columnDimension];

@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:01.634402451 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:01.638402397 +0000
+@@ -913,7 +913,7 @@
+             throw new IllegalArgumentException("constant vector has wrong length");
+         }
+         BigMatrix bMatrix = new BigMatrixImpl(b);
+-        BigDecimal[][] solution = ((BigMatrixImpl) (solve(bMatrix))).getDataRef();
++BigDecimal[][] solution =  (  ( BigMatrixImpl )   ( operate ( bMatrix )  )  ) .getDataRef (  ) ;
+         BigDecimal[] out = new BigDecimal[nRows];
+         for (int row = 0; row < nRows; row++) {
+             out[row] = solution[row][0];

@@ -1,0 +1,14 @@
+--- /Erf.java	2023-07-03 21:29:24.305573364 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Erf.java	2023-07-03 21:29:24.305573364 +0000
+@@ -51,8 +51,9 @@
+     public static double erf(double x) throws MathException {
+         double ret = Gamma.regularizedGammaP(0.5, x * x, 1.0e-15, 10000);
+         if (x < 0) {
+-            ret = -ret;
+-        }
++ 
++ret = -ret; 
++ 
+         return ret;
+     }
+ }

@@ -1,0 +1,11 @@
+--- /StrTokenizer.java	2023-07-03 22:18:13.889612392 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrTokenizer.java	2023-07-03 22:18:13.893612338 +0000
+@@ -771,7 +771,7 @@
+                 if (quoteLen > 0) {
+                     if (isQuote(chars, pos, len, quoteStart, quoteLen)) {
+                         quoting = true;
+-                        pos += quoteLen;
++pos += trimmedLen;pos += quoteLen;
+                         continue;
+                     }
+                 }

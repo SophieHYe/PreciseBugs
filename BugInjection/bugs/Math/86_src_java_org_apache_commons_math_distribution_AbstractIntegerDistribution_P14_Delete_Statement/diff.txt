@@ -1,0 +1,10 @@
+--- /AbstractIntegerDistribution.java	2023-07-03 21:29:56.045142225 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/AbstractIntegerDistribution.java	2023-07-03 21:29:56.045142225 +0000
+@@ -84,6 +84,7 @@
+      */
+     public double probability(double x) {
+         double fl = Math.floor(x);
++ 
+         if (fl == x) {
+             return this.probability((int) x);
+         } else {

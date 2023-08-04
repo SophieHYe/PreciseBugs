@@ -1,0 +1,11 @@
+--- /Skewness.java	2023-07-03 21:25:42.784582697 +0000
++++ /Math-106/src/java/org/apache/commons/math/stat/descriptive/moment/Skewness.java	2023-07-03 21:25:42.784582697 +0000
+@@ -159,7 +159,7 @@
+             for (int i = begin; i < begin + length; i++) {
+                 accum3 += Math.pow(values[i] - m, 3.0d);
+             }
+-            accum3 /= Math.pow(stdDev, 3.0d);
++accum3 /= Math.pow ( stdDev, 1.5d ) ;
+             
+             // Get N
+             double n0 = length;

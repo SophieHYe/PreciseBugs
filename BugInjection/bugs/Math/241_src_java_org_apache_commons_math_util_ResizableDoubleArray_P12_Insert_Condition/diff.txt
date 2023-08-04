@@ -1,0 +1,11 @@
+--- /ResizableDoubleArray.java	2023-07-03 21:23:28.034413563 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/ResizableDoubleArray.java	2023-07-03 21:23:28.034413563 +0000
+@@ -238,7 +238,7 @@
+         this.expansionFactor = expansionFactor;
+         setContractionCriteria(contractionCriteria);
+         setInitialCapacity(initialCapacity);
+-        setExpansionMode(expansionMode);
++if  ( expansionMode == MULTIPLICATIVE_MODE )  { setExpansionMode ( expansionMode ) ; }
+         internalArray = new double[initialCapacity];
+     }
+ 

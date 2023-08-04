@@ -1,0 +1,16 @@
+--- /AbstractIntegerDistribution.java	2023-07-03 21:29:59.789091369 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/AbstractIntegerDistribution.java	2023-07-03 21:29:59.789091369 +0000
+@@ -123,9 +123,10 @@
+      */
+     public int inverseCumulativeProbability(final double p) throws MathException{
+         if (p < 0.0 || p > 1.0) {
+-            throw new IllegalArgumentException(
+-                "p must be between 0 and 1.0 (inclusive)");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("p must be between 0 and 1.0 (inclusive)"); 
++ 
++ 
+         
+         // by default, do simple bisection.
+         // subclasses can override if there is a better method.

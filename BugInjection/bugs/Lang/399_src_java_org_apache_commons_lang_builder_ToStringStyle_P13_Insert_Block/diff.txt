@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-03 21:32:22.415154089 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-03 21:32:22.419154035 +0000
+@@ -396,7 +396,7 @@
+             }
+ 
+         } else if (value instanceof double[]) {
+-            if (detail) {
++if  ( detail )  {     appendDetail ( buffer, fieldName,  (  ( short[] )   ( value )  )  ) ; }else {     appendSummary ( buffer, fieldName,  (  ( short[] )   ( value )  )  ) ; }
+                 appendDetail(buffer, fieldName, (double[]) value);
+             } else {
+                 appendSummary(buffer, fieldName, (double[]) value);

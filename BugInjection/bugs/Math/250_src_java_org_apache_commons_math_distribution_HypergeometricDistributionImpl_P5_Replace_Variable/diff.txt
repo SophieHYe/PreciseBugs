@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:43.866122692 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:43.866122692 +0000
+@@ -247,7 +247,7 @@
+      * @throws IllegalArgumentException if <code>size</code> is negative.
+      */
+     public void setSampleSize(int size) {
+-        if (size < 0) {
++if  ( numberOfSuccesses < 0 )  {
+             throw new IllegalArgumentException(
+                 "sample size must be non-negative.");
+         }    

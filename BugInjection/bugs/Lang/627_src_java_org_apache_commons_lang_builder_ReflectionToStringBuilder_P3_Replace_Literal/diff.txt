@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-03 21:33:52.345923645 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-03 21:33:52.345923645 +0000
+@@ -624,7 +624,7 @@
+     protected boolean accept(Field field) {
+         if (field.getName().indexOf(ClassUtils.INNER_CLASS_SEPARATOR_CHAR) != -1) {
+             // Reject field from inner class.
+-            return false;
++return true;
+         }
+         if (Modifier.isTransient(field.getModifiers()) && !this.isAppendTransients()) {
+             // Reject transient fields.

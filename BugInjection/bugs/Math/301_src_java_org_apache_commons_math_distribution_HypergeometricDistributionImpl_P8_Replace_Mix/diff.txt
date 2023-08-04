@@ -1,0 +1,11 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:56.685948546 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:56.685948546 +0000
+@@ -298,7 +298,7 @@
+         double ret = probability(n, m, k, x0);
+         while (x0 != x1) {
+             x0 += dx;
+-            ret += probability(n, m, k, x0);
++ret +=  probability ( sampleSize, m, k, x0 ) ;
+         }
+         return ret;
+     }

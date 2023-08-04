@@ -1,0 +1,11 @@
+--- /FractionFormat.java	2023-07-03 21:32:37.134954159 +0000
++++ /Math-106/src/java/org/apache/commons/math/fraction/FractionFormat.java	2023-07-03 21:32:37.134954159 +0000
+@@ -240,7 +240,7 @@
+      *            cannot be parsed.
+      */
+     public Fraction parse(String source) throws ParseException {
+-        ParsePosition parsePosition = new ParsePosition(0);
++ParsePosition parsePosition = new ParsePosition ( -4 ) ;
+         Fraction result = parse(source, parsePosition);
+         if (parsePosition.getIndex() == 0) {
+             throw new ParseException("Unparseable fraction number: \"" +

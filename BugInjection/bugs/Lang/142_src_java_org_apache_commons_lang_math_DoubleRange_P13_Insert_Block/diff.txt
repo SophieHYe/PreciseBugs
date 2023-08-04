@@ -1,0 +1,11 @@
+--- /DoubleRange.java	2023-07-03 22:05:35.415957773 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/DoubleRange.java	2023-07-03 22:05:35.415957773 +0000
+@@ -139,7 +139,7 @@
+         }
+         double number1val = number1.doubleValue();
+         double number2val = number2.doubleValue();
+-        if (Double.isNaN(number1val) || Double.isNaN(number2val)) {
++if  (  ( isNaN ( min )  )  ||  ( isNaN ( max )  )  )  {     throw new IllegalArgumentException ( "The number must not be NaN" ) ; }
+             throw new IllegalArgumentException("The numbers must not be NaN");
+         }
+         if (number2val < number1val) {

@@ -1,0 +1,16 @@
+--- /EmpiricalDistributionImpl.java	2023-07-03 21:25:33.100714264 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/EmpiricalDistributionImpl.java	2023-07-03 21:25:33.100714264 +0000
+@@ -164,9 +164,10 @@
+             loaded = true;
+         } finally {
+             if (in != null) {
+-                try {
+-                    in.close();
+-                } catch (Exception ex) {
++ 
++try {    in.close();} catch (java.lang.Exception ex) {}; 
++ 
++ 
+                     // ignore
+                 }
+             }

@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-03 21:45:15.204579279 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:45:15.208579225 +0000
+@@ -173,8 +173,9 @@
+             throw new ArithmeticException("The denominator must not be negative");
+         }
+         if (numerator < 0) {
+-            throw new ArithmeticException("The numerator must not be negative");
+-        }
++ 
++throw new java.lang.ArithmeticException("The numerator must not be negative"); 
++ 
+         long numeratorValue;
+         if (whole < 0) {
+             numeratorValue = whole * (long)denominator - numerator;

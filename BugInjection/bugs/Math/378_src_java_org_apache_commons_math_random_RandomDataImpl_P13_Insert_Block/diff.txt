@@ -1,0 +1,11 @@
+--- /RandomDataImpl.java	2023-07-03 21:27:18.495282415 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:27:18.495282415 +0000
+@@ -375,7 +375,7 @@
+      * @return a uniformly distributed random value from the interval (lower, upper)
+      */
+     public double nextUniform(double lower, double upper) {
+-        if (lower >= upper) {
++if  ( lower >= upper )  {     throw new IllegalArgumentException ( "upper bound must be > lower bound" ) ; }
+             throw new IllegalArgumentException
+             ("lower bound must be <= upper bound");
+         }

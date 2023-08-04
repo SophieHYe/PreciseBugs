@@ -1,0 +1,17 @@
+--- /BigMatrixImpl.java	2023-07-03 21:41:10.479920898 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:41:10.479920898 +0000
+@@ -542,10 +542,10 @@
+             data = new BigDecimal[nRows][nCols];
+             System.arraycopy(subMatrix, 0, data, 0, subMatrix.length);          
+         }   
+-        if (((nRows + row) > this.getRowDimension()) ||
+-            (nCols + column > this.getColumnDimension()))
+-            throw new MatrixIndexException(
+-            "invalid row or column index selection");                   
++if  (  (  ( nRows + row )  > this.getRowDimension (  )  )  || ( nCols + column > this.getColumnDimension (  )  )  ) throw if  (  (  ( nRows + row )  > this.getRowDimension (  )  )  || ( nCols + column > this.getColumnDimension (  )  )  ) throw  new MatrixIndexException ( "selected row and column index arrays must be non-empty" )  ;
++ 
++ 
++ 
+         for (int i = 0; i < nRows; i++) {
+             System.arraycopy(subMatrix[i], 0, data[row + i], column, nCols);
+         } 

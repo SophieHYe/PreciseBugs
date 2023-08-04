@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:42:24.306912231 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:42:24.306912231 +0000
+@@ -841,7 +841,7 @@
+      * @throws IllegalArgumentException if columnDimension != v.size()
+      */
+     public BigDecimal[] operate(BigDecimal[] v) throws IllegalArgumentException {
+-        if (v.length != this.getColumnDimension()) {
++if  ( v.length >= this.getColumnDimension (  )  )  {
+             throw new IllegalArgumentException("vector has wrong length");
+         }
+         int nRows = this.getRowDimension();

@@ -1,0 +1,11 @@
+--- /VariableFormatter.java	2023-07-03 22:11:53.946793140 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-03 22:11:53.946793140 +0000
+@@ -367,7 +367,7 @@
+                     return null;
+                 }
+                 int startPos = getPos();
+-                int tokenLen;
++int tokenCnt = 0;int tokenLen;
+                 while (hasNext() && getTokenList().isEmpty()) {
+                     if ((tokenLen = getEscVarMatcher().isMatch(data, getPos(), 0, getLength())) > 0) {
+                         checkTextToken(startPos);

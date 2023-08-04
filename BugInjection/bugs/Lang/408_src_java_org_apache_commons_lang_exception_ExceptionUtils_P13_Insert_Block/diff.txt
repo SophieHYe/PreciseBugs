@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:05.518719515 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:05.522719461 +0000
+@@ -405,7 +405,7 @@
+             // exception ignored
+         }
+ 
+-        if (field != null && Throwable.class.isAssignableFrom(field.getType())) {
++if  (  ( method != null )  &&  ( isAssignableFrom ( method.getReturnType (  )  )  )  )  {     try {         return  (  ( Throwable )   ( method.invoke ( throwable, ArrayUtils.EMPTY_OBJECT_ARRAY )  )  ) ;     } catch  ( IllegalAccessException ignored )  {     } catch  ( IllegalArgumentException ignored )  {     } catch  ( InvocationTargetException ignored )  {     } }
+             try {
+                 return (Throwable) field.get(throwable);
+             } catch (IllegalAccessException ignored) {

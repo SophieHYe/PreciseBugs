@@ -1,0 +1,14 @@
+--- /StrBuilder.java	2023-07-03 22:23:45.157098878 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/StrBuilder.java	2023-07-03 22:23:45.161098822 +0000
+@@ -490,8 +490,9 @@
+             throw new StringIndexOutOfBoundsException("startIndex must be valid");
+         }
+         if (length < 0 || (startIndex + length) > str.length()) {
+-            throw new StringIndexOutOfBoundsException("length must be valid");
+-        }
++ 
++throw new java.lang.StringIndexOutOfBoundsException("length must be valid"); 
++ 
+         if (length > 0) {
+             int len = length();
+             ensureCapacity(len + length);

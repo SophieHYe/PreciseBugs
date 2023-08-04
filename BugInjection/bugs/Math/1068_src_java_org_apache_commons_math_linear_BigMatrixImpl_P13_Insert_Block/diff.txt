@@ -1,0 +1,11 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:57.869634691 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:57.873634638 +0000
+@@ -1065,7 +1065,7 @@
+             }
+             
+             // Singularity check
+-            if (lu[max][col].abs().compareTo(TOO_SMALL) <= 0) {
++if  ( this.isSingular (  )  )  {     throw new InvalidMatrixException ( "Matrix is singular." ) ; }
+                 lu = null;
+                 throw new InvalidMatrixException("matrix is singular");
+             }

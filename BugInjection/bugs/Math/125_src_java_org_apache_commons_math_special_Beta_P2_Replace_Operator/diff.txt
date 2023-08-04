@@ -1,0 +1,11 @@
+--- /Beta.java	2023-07-03 21:28:51.786015107 +0000
++++ /Math-106/src/java/org/apache/commons/math/special/Beta.java	2023-07-03 21:28:51.786015107 +0000
+@@ -122,7 +122,7 @@
+             (x > 1) || (a <= 0.0) || (b <= 0.0))
+         {
+             ret = Double.NaN;
+-        } else if (x > (a + 1.0) / (a + b + 2.0)) {
++} else if  ( x >  ( a + 1.0 )  /  ( a  <<  b + 2.0 )  )  {
+             ret = 1.0 - regularizedBeta(1.0 - x, b, a, epsilon, maxIterations);
+         } else {
+             ContinuedFraction fraction = new ContinuedFraction() {

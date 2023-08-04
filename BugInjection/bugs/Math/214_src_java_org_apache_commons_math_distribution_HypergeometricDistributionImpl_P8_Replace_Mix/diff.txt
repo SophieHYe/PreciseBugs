@@ -1,0 +1,13 @@
+--- /HypergeometricDistributionImpl.java	2023-07-03 21:28:40.614166866 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/HypergeometricDistributionImpl.java	2023-07-03 21:28:40.618166812 +0000
+@@ -211,8 +211,8 @@
+      */
+     private double probability(int n, int m, int k, int x) {
+         return Math.exp(MathUtils.binomialCoefficientLog(m, x) +
+-            MathUtils.binomialCoefficientLog(n - m, k - x) -
+-            MathUtils.binomialCoefficientLog(n, k));
++MathUtils.binomialCoefficientLog ( sampleSize - m, k - x )  - MathUtils.binomialCoefficientLog ( n, k )  ) ;
++ 
+     }
+ 
+     /**

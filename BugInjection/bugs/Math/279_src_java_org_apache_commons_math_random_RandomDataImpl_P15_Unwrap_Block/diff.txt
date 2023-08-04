@@ -1,0 +1,16 @@
+--- /RandomDataImpl.java	2023-07-03 21:26:58.579552972 +0000
++++ /Math-106/src/java/org/apache/commons/math/random/RandomDataImpl.java	2023-07-03 21:26:58.579552972 +0000
+@@ -277,9 +277,10 @@
+      */
+     public long nextSecureLong(long lower, long upper) {
+         if (lower >= upper) {
+-            throw new IllegalArgumentException
+-            ("lower bound must be < upper bound");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("lower bound must be < upper bound"); 
++ 
++ 
+         SecureRandom sec = getSecRan();
+         return lower + (long) (sec.nextDouble() * (upper - lower + 1));
+     }

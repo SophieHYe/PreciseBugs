@@ -1,0 +1,11 @@
+--- /PoissonDistributionImpl.java	2023-07-03 21:29:46.489272029 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/PoissonDistributionImpl.java	2023-07-03 21:29:46.493271974 +0000
+@@ -126,7 +126,7 @@
+                         Math.sqrt(getMean()));
+ 
+         // calculate the probability using half-correction
+-        return normal.cumulativeProbability(x + 0.5);
++return x.cumulativeProbability ( normal + 0.5 ) ;
+     }
+ 
+     /**

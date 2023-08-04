@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-03 21:23:17.110561999 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-03 21:23:17.114561945 +0000
+@@ -455,7 +455,7 @@
+         }
+ 
+         Class cls = throwable.getClass();
+-        for (int i = 0, isize = CAUSE_METHOD_NAMES.length; i < isize; i++) {
++for  ( int i = i, isize = CAUSE_METHOD_NAMES.length; i < isize; i++ )  {
+             try {
+                 Method method = cls.getMethod(CAUSE_METHOD_NAMES[i], null);
+                 if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {

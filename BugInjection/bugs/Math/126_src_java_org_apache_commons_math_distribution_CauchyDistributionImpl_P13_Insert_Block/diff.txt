@@ -1,0 +1,11 @@
+--- /CauchyDistributionImpl.java	2023-07-03 21:29:05.893823466 +0000
++++ /Math-106/src/java/org/apache/commons/math/distribution/CauchyDistributionImpl.java	2023-07-03 21:29:05.893823466 +0000
+@@ -123,7 +123,7 @@
+      */
+     public void setScale(double s) {
+         if (s <= 0.0) {
+-            throw new IllegalArgumentException(
++if  ( s <= 0.0 )  {     throw new IllegalArgumentException ( "Scale must be positive." ) ; }
+                 "Scale must be positive.");
+         }       
+         scale = s;

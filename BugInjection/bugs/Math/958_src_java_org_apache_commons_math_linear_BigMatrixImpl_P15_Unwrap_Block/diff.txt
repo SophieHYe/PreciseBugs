@@ -1,0 +1,14 @@
+--- /BigMatrixImpl.java	2023-07-03 21:43:10.022287917 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/BigMatrixImpl.java	2023-07-03 21:43:10.022287917 +0000
+@@ -956,8 +956,9 @@
+             throw new IllegalArgumentException("Incorrect row dimension");
+         }
+         if (!this.isSquare()) {
+-            throw new InvalidMatrixException("coefficient matrix is not square");
+-        }
++ 
++throw new org.apache.commons.math.linear.InvalidMatrixException("coefficient matrix is not square"); 
++ 
+         if (this.isSingular()) { // side effect: compute LU decomp
+             throw new InvalidMatrixException("Matrix is singular.");
+         }

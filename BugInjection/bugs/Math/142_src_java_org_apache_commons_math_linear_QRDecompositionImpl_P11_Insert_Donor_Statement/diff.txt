@@ -1,0 +1,11 @@
+--- /QRDecompositionImpl.java	2023-07-03 21:46:28.495579455 +0000
++++ /Math-106/src/java/org/apache/commons/math/linear/QRDecompositionImpl.java	2023-07-03 21:46:28.495579455 +0000
+@@ -139,7 +139,7 @@
+         for (int row = Math.min(m,n)-1; row >= 0; row--) {
+             r[row][row] = rDiag[row];
+             for (int col = row+1; col < n; col++) {
+-                r[row][col] = qr[row][col];
++r[row][row] = rDiag[row];r[row][col] = qr[row][col];
+             }
+         }
+         return ret;

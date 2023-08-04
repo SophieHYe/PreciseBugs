@@ -1,0 +1,13 @@
+--- /Fraction.java	2023-07-03 21:48:56.213565271 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-03 21:48:56.213565271 +0000
+@@ -653,8 +653,8 @@
+      */
+     private static int addAndCheck(int x, int y) {
+         long s = (long)x+(long)y;
+-        if (s < Integer.MIN_VALUE ||
+-            s > Integer.MAX_VALUE) {
++if  ( numeratorValue < Integer.MIN_VALUE || numeratorValue > Integer.MAX_VALUE )   {
++ 
+             throw new ArithmeticException("overflow: add");
+         }
+         return (int)s;
