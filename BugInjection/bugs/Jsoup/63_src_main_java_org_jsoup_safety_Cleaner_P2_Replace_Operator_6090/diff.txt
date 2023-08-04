@@ -1,0 +1,11 @@
+--- /Cleaner.java	2023-07-04 12:51:58.846169944 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Cleaner.java	2023-07-04 12:51:58.850169890 +0000
+@@ -60,7 +60,7 @@
+ 
+         Document clean = Document.createShell(dirtyDocument.baseUri());
+         int numDiscarded = copySafeNodes(dirtyDocument.body(), clean.body());
+-        return numDiscarded == 0;
++return numDiscarded > 0;
+     }
+ 
+     /**
