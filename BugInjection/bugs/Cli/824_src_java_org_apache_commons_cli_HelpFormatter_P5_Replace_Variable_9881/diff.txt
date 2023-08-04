@@ -1,0 +1,11 @@
+--- /HelpFormatter.java	2023-07-04 03:43:01.184899371 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 03:43:01.184899371 +0000
+@@ -821,7 +821,7 @@
+         
+         // must look for the first whitespace chearacter after startPos 
+         // + width
+-        pos = startPos + width;
++pos = startPos + nextLineTabStop;
+ 
+         while ((pos <= text.length()) && ((c = text.charAt(pos)) != ' ')
+                && (c != '\n') && (c != '\r'))

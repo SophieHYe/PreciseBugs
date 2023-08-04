@@ -1,0 +1,11 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:45:33.098839897 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:45:33.102839844 +0000
+@@ -116,7 +116,7 @@
+     map.register(Timestamp.class, DATE_TYPE_ADAPTER);
+     map.register(Time.class, TIME_TYPE_ADAPTER);
+     map.register(Calendar.class, GREGORIAN_CALENDAR_TYPE_ADAPTER);
+-    map.register(GregorianCalendar.class, GREGORIAN_CALENDAR_TYPE_ADAPTER);
++map.register ( char.class, wrapDeserializer ( CHARACTER_TYPE_ADAPTER )  ) ;map.register ( GregorianCalendar.class, GREGORIAN_CALENDAR_TYPE_ADAPTER ) ;
+     map.register(BigDecimal.class, BIG_DECIMAL_TYPE_ADAPTER);
+     map.register(BigInteger.class, BIG_INTEGER_TYPE_ADAPTER);
+     

@@ -1,0 +1,13 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:44:43.075518069 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:44:43.075518069 +0000
+@@ -97,8 +97,8 @@
+       createDefaultSerializers();
+   private static final ParameterizedTypeHandlerMap<JsonDeserializer<?>> DEFAULT_DESERIALIZERS =
+       createDefaultDeserializers();
+-  private static final ParameterizedTypeHandlerMap<InstanceCreator<?>> DEFAULT_INSTANCE_CREATORS =
+-      createDefaultInstanceCreators();
++private static  ParameterizedTypeHandlerMap<InstanceCreator<?>> DEFAULT_INSTANCE_CREATORS = createDefaultInstanceCreators (  ) ;
++ 
+ 
+   private static ParameterizedTypeHandlerMap<JsonSerializer<?>> createDefaultSerializers() {
+     ParameterizedTypeHandlerMap<JsonSerializer<?>> map =

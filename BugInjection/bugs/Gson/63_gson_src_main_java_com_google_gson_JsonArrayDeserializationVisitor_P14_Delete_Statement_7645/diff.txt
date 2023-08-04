@@ -1,0 +1,12 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:27.939723264 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:27.943723210 +0000
+@@ -61,7 +61,8 @@
+       throw new JsonParseException("Expecting array found: " + json); 
+     }
+     JsonArray jsonArray = json.getAsJsonArray();
+-    TypeInfoArray arrayTypeInfo = TypeInfoFactory.getTypeInfoForArray(arrayType);
++ 
++ 
+     for (int i = 0; i < jsonArray.size(); i++) {
+       JsonElement jsonChild = jsonArray.get(i);
+       Object child;

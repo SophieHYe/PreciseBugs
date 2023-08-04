@@ -1,0 +1,11 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:28.419716757 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:28.419716757 +0000
+@@ -66,7 +66,7 @@
+       JsonElement jsonChild = jsonArray.get(i);
+       Object child;
+ 
+-      if (jsonChild == null || jsonChild.isJsonNull()) {
++if  ( jsonChild instanceof JsonObject )  {
+         child = null;
+       } else if (jsonChild instanceof JsonObject) {
+         child = visitChildAsObject(arrayTypeInfo.getComponentRawType(), jsonChild);

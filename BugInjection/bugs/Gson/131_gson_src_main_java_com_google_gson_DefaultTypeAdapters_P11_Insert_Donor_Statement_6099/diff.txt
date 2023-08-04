@@ -1,0 +1,11 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:46:23.022163072 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:46:23.022163072 +0000
+@@ -128,7 +128,7 @@
+     map.register(Character.class, CHARACTER_TYPE_ADAPTER);
+     map.register(char.class, CHARACTER_TYPE_ADAPTER);
+     map.register(Integer.class, INTEGER_TYPE_ADAPTER);
+-    map.register(int.class, INTEGER_TYPE_ADAPTER);
++map.register ( Locale.class, wrapDeserializer ( LOCALE_TYPE_ADAPTER )  ) ;map.register ( int.class, INTEGER_TYPE_ADAPTER ) ;
+     map.register(Number.class, NUMBER_TYPE_ADAPTER);
+     map.register(Short.class, SHORT_TYPE_ADAPTER);
+     map.register(short.class, SHORT_TYPE_ADAPTER);

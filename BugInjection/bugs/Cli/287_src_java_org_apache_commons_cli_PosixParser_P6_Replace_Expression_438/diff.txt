@@ -1,0 +1,13 @@
+--- /PosixParser.java	2023-07-04 03:43:29.880510358 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/PosixParser.java	2023-07-04 03:43:29.884510305 +0000
+@@ -284,8 +284,8 @@
+             String ch = String.valueOf(token.charAt(i));
+             boolean hasOption = options.hasOption(ch);
+ 
+-            if (hasOption)
+-            {
++if  ( "-" + ch ) {
++ 
+                 tokens.add("-" + ch);
+                 currentOption = options.getOption(ch);
+ 

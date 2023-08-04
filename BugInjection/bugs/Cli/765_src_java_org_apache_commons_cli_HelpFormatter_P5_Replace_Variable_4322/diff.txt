@@ -1,0 +1,13 @@
+--- /HelpFormatter.java	2023-07-04 03:42:48.793067359 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 03:42:48.793067359 +0000
+@@ -762,8 +762,8 @@
+             text = padding + text.substring(pos).trim();
+             pos = findWrapPos(text, width, nextLineTabStop);
+ 
+-            if (pos == -1)
+-            {
++if  ( max == -1 ) {
++ 
+                 sb.append(text);
+ 
+                 return sb;

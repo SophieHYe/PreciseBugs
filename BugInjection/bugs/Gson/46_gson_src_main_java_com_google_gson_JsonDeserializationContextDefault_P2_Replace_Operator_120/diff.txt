@@ -1,0 +1,11 @@
+--- /JsonDeserializationContextDefault.java	2023-07-04 03:44:13.155923686 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationContextDefault.java	2023-07-04 03:44:13.155923686 +0000
+@@ -43,7 +43,7 @@
+ 
+   @SuppressWarnings("unchecked")
+   public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException {
+-    if (json == null || json.isJsonNull()) {
++if  ( json == null && json.isJsonNull (  )  )  {
+       return null;
+     } else if (json.isJsonArray()) {
+       return (T) fromJsonArray(typeOfT, json.getAsJsonArray(), this);

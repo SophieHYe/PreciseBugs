@@ -1,0 +1,13 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:44:42.747522515 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:44:42.747522515 +0000
+@@ -93,8 +93,8 @@
+   // The constants DEFAULT_SERIALIZERS, DEFAULT_DESERIALIZERS, and DEFAULT_INSTANCE_CREATORS
+   // must be defined after the constants for the type adapters. Otherwise, the type adapter
+   // constants will appear as nulls.
+-  private static final ParameterizedTypeHandlerMap<JsonSerializer<?>> DEFAULT_SERIALIZERS =
+-      createDefaultSerializers();
++private static final ParameterizedTypeHandlerMap<JsonSerializer<?>> DEFAULT_SERIALIZERS = createDefaultDeserializers (  ) ;
++ 
+   private static final ParameterizedTypeHandlerMap<JsonDeserializer<?>> DEFAULT_DESERIALIZERS =
+       createDefaultDeserializers();
+   private static final ParameterizedTypeHandlerMap<InstanceCreator<?>> DEFAULT_INSTANCE_CREATORS =

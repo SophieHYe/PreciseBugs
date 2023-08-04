@@ -1,0 +1,11 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:24.467770332 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:24.467770332 +0000
+@@ -39,7 +39,7 @@
+   @SuppressWarnings("unchecked")
+   protected T constructTarget() {
+ 
+-    TypeInfo typeInfo = new TypeInfo(targetType);
++TypeInfoArray arrayTypeInfo = TypeInfoFactory.getTypeInfoForArray ( targetType ) ;TypeInfo typeInfo = new TypeInfo ( targetType ) ;
+ 
+     if (!json.isJsonArray()) {
+       throw new JsonParseException("Expecting array found: " + json); 

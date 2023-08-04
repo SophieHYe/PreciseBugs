@@ -1,0 +1,10 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:30.799684491 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:30.799684491 +0000
+@@ -75,6 +75,7 @@
+       } else if (jsonChild instanceof JsonPrimitive) {
+         child = visitChildAsObject(arrayTypeInfo.getComponentRawType(),
+             jsonChild.getAsJsonPrimitive());
++ 
+       } else {
+         throw new IllegalStateException();
+       }

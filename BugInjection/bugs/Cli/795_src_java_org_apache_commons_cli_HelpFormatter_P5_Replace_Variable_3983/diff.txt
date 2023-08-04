@@ -1,0 +1,13 @@
+--- /HelpFormatter.java	2023-07-04 03:42:59.016928761 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 03:42:59.016928761 +0000
+@@ -792,8 +792,8 @@
+ 
+         // the line ends before the max wrap pos or a new line char found
+         if (((pos = text.indexOf('\n', startPos)) != -1 && pos <= width)
+-            || ((pos = text.indexOf('\t', startPos)) != -1 && pos <= width))
+-        {
++||  (  ( pos = text.indexOf ( '\t', max )  )  != -1 && pos <= width )  ) {
++ 
+             return pos+1;
+         }
+         else if ((startPos + width) >= text.length())

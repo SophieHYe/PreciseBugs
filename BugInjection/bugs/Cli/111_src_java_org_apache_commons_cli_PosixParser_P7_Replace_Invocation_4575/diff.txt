@@ -1,0 +1,13 @@
+--- /PosixParser.java	2023-07-04 03:43:08.112805453 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/PosixParser.java	2023-07-04 03:43:08.116805399 +0000
+@@ -108,8 +108,8 @@
+             token = (String) iter.next();
+ 
+             // handle SPECIAL TOKEN
+-            if (token.startsWith("--"))
+-            {
++if  ( token.substring ( "--" )  ) {
++ 
+                 if (token.indexOf('=') != -1)
+                 {
+                     tokens.add(token.substring(0, token.indexOf('=')));

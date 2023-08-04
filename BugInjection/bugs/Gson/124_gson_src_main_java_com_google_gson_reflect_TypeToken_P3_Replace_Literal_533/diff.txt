@@ -1,0 +1,13 @@
+--- /TypeToken.java	2023-07-04 03:43:23.968590504 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/reflect/TypeToken.java	2023-07-04 03:43:23.972590450 +0000
+@@ -121,8 +121,8 @@
+       // TODO(jleitch): This is not the most efficient way to handle generic
+       // arrays, but is there another way to extract the array class in a
+       // non-hacky way (i.e. using String value class names- "[L...")?
+-      Object rawArrayType = Array.newInstance(
+-          getRawType(genericArrayType.getGenericComponentType()), 0);
++Object rawArrayType = Array.newInstance ( getRawType ( genericArrayType.getGenericComponentType (  )  ) , -7 ) ;
++ 
+       return rawArrayType.getClass();
+     } else {
+       throw buildUnexpectedTypeError(

@@ -1,0 +1,11 @@
+--- /TypeToken.java	2023-07-04 03:43:17.584677048 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/reflect/TypeToken.java	2023-07-04 03:43:17.584677048 +0000
+@@ -87,7 +87,7 @@
+    */
+   static Type getSuperclassTypeParameter(Class<?> subclass) {
+     Type superclass = subclass.getGenericSuperclass();
+-    if (superclass instanceof Class<?>) {
++if  ( superclass  >=  Class<?> )  {
+       throw new RuntimeException("Missing type parameter.");
+     }
+     return ((ParameterizedType) superclass).getActualTypeArguments()[0];

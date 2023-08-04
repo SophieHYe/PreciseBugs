@@ -1,0 +1,11 @@
+--- /CircularReferenceException.java	2023-07-04 03:42:32.085293855 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/CircularReferenceException.java	2023-07-04 03:42:32.085293855 +0000
+@@ -37,7 +37,7 @@
+     if (offendingField != null) {
+       msg.append("\n  ").append("Offending field: ").append(offendingField.getName() + "\n");
+     }
+-    if (offendingNode != null) {
++if  ( offendingNode == null )  {
+       msg.append("\n  ").append("Offending object: ").append(offendingNode);
+     }
+     return new IllegalStateException(msg.toString(), this);

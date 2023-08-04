@@ -1,0 +1,11 @@
+--- /TypeToken.java	2023-07-04 03:43:25.136574670 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/reflect/TypeToken.java	2023-07-04 03:43:25.136574670 +0000
+@@ -111,7 +111,7 @@
+       // Neal isn't either but suspects some pathological case related
+       // to nested classes exists.
+       Type rawType = parameterizedType.getRawType();
+-      if (rawType instanceof Class<?>) {
++if  ( rawType  !=  Class<?> )  {
+         return (Class<?>) rawType;
+       }
+       throw buildUnexpectedTypeError(rawType, Class.class);

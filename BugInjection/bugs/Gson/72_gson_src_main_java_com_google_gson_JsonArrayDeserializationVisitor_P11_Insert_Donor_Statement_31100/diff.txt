@@ -1,0 +1,11 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:32.123666542 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:32.123666542 +0000
+@@ -69,7 +69,7 @@
+       if (jsonChild == null || jsonChild.isJsonNull()) {
+         child = null;
+       } else if (jsonChild instanceof JsonObject) {
+-        child = visitChildAsObject(arrayTypeInfo.getComponentRawType(), jsonChild);
++child = visitChildAsObject ( arrayTypeInfo.getComponentRawType (  ) , jsonChild.getAsJsonPrimitive (  )  ) ;child = visitChildAsObject ( arrayTypeInfo.getComponentRawType (  ) , jsonChild ) ;
+       } else if (jsonChild instanceof JsonArray) {
+         child = visitChildAsArray(arrayTypeInfo.getSecondLevelType(), jsonChild.getAsJsonArray());
+       } else if (jsonChild instanceof JsonPrimitive) {

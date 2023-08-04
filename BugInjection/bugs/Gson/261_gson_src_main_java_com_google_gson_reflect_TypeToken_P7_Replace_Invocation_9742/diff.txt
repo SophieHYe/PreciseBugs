@@ -1,0 +1,11 @@
+--- /TypeToken.java	2023-07-04 03:43:46.448285755 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/reflect/TypeToken.java	2023-07-04 03:43:46.448285755 +0000
+@@ -258,7 +258,7 @@
+     }
+ 
+     // Interfaces didn't work, try the superclass.
+-    Type sType = clazz.getGenericSuperclass();
++Type sType = clazz.isAssignableFrom (  ) ;
+     if (isAssignableFrom(sType, to, new HashMap<String, Type>(typeVarMap))) {
+       return true;
+     }

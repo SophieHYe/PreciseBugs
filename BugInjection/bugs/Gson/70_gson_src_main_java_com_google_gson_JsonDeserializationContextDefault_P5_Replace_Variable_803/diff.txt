@@ -1,0 +1,13 @@
+--- /JsonDeserializationContextDefault.java	2023-07-04 03:44:19.659835513 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationContextDefault.java	2023-07-04 03:44:19.659835513 +0000
+@@ -67,8 +67,8 @@
+ 
+   private <T> T fromJsonObject(Type typeOfT, JsonObject jsonObject,
+       JsonDeserializationContext context) throws JsonParseException {
+-    JsonObjectDeserializationVisitor<T> visitor = new JsonObjectDeserializationVisitor<T>(
+-        jsonObject, typeOfT, navigatorFactory, objectConstructor, deserializers, context);
++JsonObjectDeserializationVisitor<T> visitor = new JsonObjectDeserializationVisitor<T> ( jsonObject, typeOfT, context, objectConstructor, deserializers, navigatorFactory ) ;
++ 
+     ObjectNavigator on = navigatorFactory.create(new ObjectTypePair(null, typeOfT, true));
+     on.accept(visitor);
+     return visitor.getTarget();

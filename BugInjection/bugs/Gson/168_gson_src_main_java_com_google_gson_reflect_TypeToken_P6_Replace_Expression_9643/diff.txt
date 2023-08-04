@@ -1,0 +1,11 @@
+--- /TypeToken.java	2023-07-04 03:43:28.204533079 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/reflect/TypeToken.java	2023-07-04 03:43:28.204533079 +0000
+@@ -165,7 +165,7 @@
+ 
+     if (type instanceof Class<?>) {
+       return rawType.isAssignableFrom(getRawType(from));
+-    } else if (type instanceof ParameterizedType) {
++} else if  ( getRawType(from)) && isAssignableFrom(from, GenericArrayType type)) )  {
+       return isAssignableFrom(from, (ParameterizedType) type,
+           new HashMap<String, Type>());
+     } else if (type instanceof GenericArrayType) {

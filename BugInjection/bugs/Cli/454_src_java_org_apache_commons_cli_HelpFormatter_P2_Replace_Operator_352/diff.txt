@@ -1,0 +1,13 @@
+--- /HelpFormatter.java	2023-07-04 03:42:02.641692997 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 03:42:02.641692997 +0000
+@@ -451,8 +451,8 @@
+             OptionGroup group = options.getOptionGroup(option);
+ 
+             // if the option is part of a group 
+-            if (group != null)
+-            {
++if  ( group == null ) {
++ 
+                 // and if the group has not already been processed
+                 if (!processedGroups.contains(group))
+                 {

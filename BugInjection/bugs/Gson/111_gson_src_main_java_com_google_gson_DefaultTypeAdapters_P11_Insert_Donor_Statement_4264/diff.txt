@@ -1,0 +1,11 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:45:02.583253602 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:45:02.587253548 +0000
+@@ -108,7 +108,7 @@
+     map.register(URL.class, URL_TYPE_ADAPTER);
+     map.register(URI.class, URI_TYPE_ADAPTER);
+     map.register(UUID.class, UUUID_TYPE_ADAPTER);
+-    map.register(Locale.class, LOCALE_TYPE_ADAPTER);
++map.register ( char.class, wrapDeserializer ( CHARACTER_TYPE_ADAPTER )  ) ;map.register ( Locale.class, LOCALE_TYPE_ADAPTER ) ;
+     map.registerForTypeHierarchy(Collection.class, COLLECTION_TYPE_ADAPTER);
+     map.registerForTypeHierarchy(Map.class, MAP_TYPE_ADAPTER);
+     map.register(Date.class, DATE_TYPE_ADAPTER);

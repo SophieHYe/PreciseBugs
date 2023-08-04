@@ -1,0 +1,14 @@
+--- /JsonFieldNameValidator.java	2023-07-04 03:44:01.704078936 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonFieldNameValidator.java	2023-07-04 03:44:01.704078936 +0000
+@@ -49,8 +49,9 @@
+ 
+     Matcher matcher = JSON_FIELD_NAME_PATTERN.matcher(fieldName);
+     if (!matcher.matches()) {
+-      throw new IllegalArgumentException(fieldName + " is not a valid JSON field name.");
+-    }
++ 
++throw new java.lang.IllegalArgumentException((fieldName + " is not a valid JSON field name.")); 
++ 
+     return fieldName;
+   }
+ }

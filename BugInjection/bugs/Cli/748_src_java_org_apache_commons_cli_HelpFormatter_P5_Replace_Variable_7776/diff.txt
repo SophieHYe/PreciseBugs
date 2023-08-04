@@ -1,0 +1,13 @@
+--- /HelpFormatter.java	2023-07-04 03:42:46.473098807 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 03:42:46.481098698 +0000
+@@ -745,8 +745,8 @@
+     {
+         int pos = findWrapPos(text, width, 0);
+ 
+-        if (pos == -1)
+-        {
++if  ( nextLineTabStop == -1 ) {
++ 
+             sb.append(rtrim(text));
+ 
+             return sb;

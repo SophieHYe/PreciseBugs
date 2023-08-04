@@ -1,0 +1,10 @@
+--- /JsonDeserializationContextDefault.java	2023-07-04 03:44:15.439892722 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationContextDefault.java	2023-07-04 03:44:15.439892722 +0000
+@@ -51,6 +51,7 @@
+       return (T) fromJsonObject(typeOfT, json.getAsJsonObject(), this);
+     } else if (json.isJsonPrimitive()) {
+       return (T) fromJsonPrimitive(typeOfT, json.getAsJsonPrimitive(), this);
++ 
+     } else {
+       throw new JsonParseException("Failed parsing JSON source: " + json + " to Json");
+     }

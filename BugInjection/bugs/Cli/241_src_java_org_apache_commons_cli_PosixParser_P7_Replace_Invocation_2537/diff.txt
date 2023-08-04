@@ -1,0 +1,13 @@
+--- /PosixParser.java	2023-07-04 03:43:28.176533458 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/PosixParser.java	2023-07-04 03:43:28.176533458 +0000
+@@ -238,8 +238,8 @@
+      */
+     private void processOptionToken(String token, boolean stopAtNonOption)
+     {
+-        if (this.options.hasOption(token))
+-        {
++if  ( this.options.getOption ( token )  ) {
++ 
+             currentOption = this.options.getOption(token);
+             tokens.add(token);
+         }

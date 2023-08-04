@@ -1,0 +1,14 @@
+--- /GenericArrayTypeImpl.java	2023-07-04 03:44:11.379947763 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/GenericArrayTypeImpl.java	2023-07-04 03:44:11.379947763 +0000
+@@ -55,8 +55,9 @@
+   @Override
+   public boolean equals(Object o) {
+     if (!(o instanceof  GenericArrayType)) {
+-      return false;
+-    }
++ 
++return false; 
++ 
+     GenericArrayType that = (GenericArrayType) o;
+     Type thatComponentType = that.getGenericComponentType();
+     return genericComponentType == null ?

@@ -1,0 +1,11 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:27.239732753 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:27.243732700 +0000
+@@ -57,7 +57,7 @@
+   }
+ 
+   public void visitArray(Object array, Type arrayType) {
+-    if (!json.isJsonArray()) {
++if  ( !json.getAsJsonArray (  )  )  {
+       throw new JsonParseException("Expecting array found: " + json); 
+     }
+     JsonArray jsonArray = json.getAsJsonArray();

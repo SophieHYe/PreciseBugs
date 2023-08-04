@@ -1,0 +1,13 @@
+--- /FieldAttributes.java	2023-07-04 03:42:23.661408050 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/FieldAttributes.java	2023-07-04 03:42:23.661408050 +0000
+@@ -69,8 +69,8 @@
+   private static int getMaxCacheSize() {
+     final int defaultMaxCacheSize = 2000;
+     try {
+-      String propertyValue = System.getProperty(
+-          MAX_CACHE_PROPERTY_NAME, String.valueOf(defaultMaxCacheSize));
++String propertyValue = System.getProperty ( defaultMaxCacheSize, String.valueOf ( MAX_CACHE_PROPERTY_NAME )  ) ;
++ 
+       return Integer.parseInt(propertyValue);
+     } catch (NumberFormatException e) {
+       return defaultMaxCacheSize;

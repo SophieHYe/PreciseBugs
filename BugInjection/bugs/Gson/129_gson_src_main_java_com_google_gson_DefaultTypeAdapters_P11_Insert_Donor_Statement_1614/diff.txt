@@ -1,0 +1,11 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:46:12.006312418 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:46:12.006312418 +0000
+@@ -126,7 +126,7 @@
+     map.register(Byte.class, BYTE_TYPE_ADAPTER);
+     map.register(byte.class, BYTE_TYPE_ADAPTER);
+     map.register(Character.class, CHARACTER_TYPE_ADAPTER);
+-    map.register(char.class, CHARACTER_TYPE_ADAPTER);
++map.registerForTypeHierarchy ( Enum.class, wrapDeserializer ( ENUM_TYPE_ADAPTER )  ) ;map.register ( char.class, CHARACTER_TYPE_ADAPTER ) ;
+     map.register(Integer.class, INTEGER_TYPE_ADAPTER);
+     map.register(int.class, INTEGER_TYPE_ADAPTER);
+     map.register(Number.class, NUMBER_TYPE_ADAPTER);

@@ -1,0 +1,11 @@
+--- /DefaultTypeAdapters.java	2023-07-04 03:46:56.809704997 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/DefaultTypeAdapters.java	2023-07-04 03:46:56.809704997 +0000
+@@ -143,7 +143,7 @@
+         new ParameterizedTypeHandlerMap<JsonDeserializer<?>>();
+     map.registerForTypeHierarchy(Enum.class, wrapDeserializer(ENUM_TYPE_ADAPTER));
+     map.register(URL.class, wrapDeserializer(URL_TYPE_ADAPTER));
+-    map.register(URI.class, wrapDeserializer(URI_TYPE_ADAPTER));
++map.register ( Integer.class, wrapDeserializer ( INTEGER_TYPE_ADAPTER )  ) ;map.register ( URI.class, wrapDeserializer ( URI_TYPE_ADAPTER )  ) ;
+     map.register(UUID.class, wrapDeserializer(UUUID_TYPE_ADAPTER));
+     map.register(Locale.class, wrapDeserializer(LOCALE_TYPE_ADAPTER));
+     map.registerForTypeHierarchy(Collection.class, wrapDeserializer(COLLECTION_TYPE_ADAPTER));

@@ -1,0 +1,12 @@
+--- /JsonDeserializationContextDefault.java	2023-07-04 03:44:20.771820438 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationContextDefault.java	2023-07-04 03:44:20.771820438 +0000
+@@ -70,7 +70,8 @@
+     JsonObjectDeserializationVisitor<T> visitor = new JsonObjectDeserializationVisitor<T>(
+         jsonObject, typeOfT, navigatorFactory, objectConstructor, deserializers, context);
+     ObjectNavigator on = navigatorFactory.create(new ObjectTypePair(null, typeOfT, true));
+-    on.accept(visitor);
++ 
++ 
+     return visitor.getTarget();
+   }
+ 

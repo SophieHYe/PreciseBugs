@@ -1,0 +1,14 @@
+--- /JsonDeserializationVisitor.java	2023-07-04 03:44:05.276030512 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationVisitor.java	2023-07-04 03:44:05.276030512 +0000
+@@ -82,8 +82,9 @@
+   protected Object invokeCustomDeserializer(JsonElement element, 
+       Pair<JsonDeserializer<?>, ObjectTypePair> pair) {
+     if (element == null || element.isJsonNull()) {
+-      return null;
+-    }
++ 
++return null; 
++ 
+     Type objType = pair.second.type;
+     return (pair.first).deserialize(element, objType, context);
+   }

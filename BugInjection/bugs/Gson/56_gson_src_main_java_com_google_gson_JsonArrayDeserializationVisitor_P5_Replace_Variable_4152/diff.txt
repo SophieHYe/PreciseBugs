@@ -1,0 +1,11 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:26.983736224 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:26.987736170 +0000
+@@ -53,7 +53,7 @@
+           jsonArray.size());
+     }
+     // is a collection
+-    return (T) objectConstructor.construct(typeInfo.getRawClass());
++return  ( T )  typeInfo.construct ( objectConstructor.getRawClass (  )  ) ;
+   }
+ 
+   public void visitArray(Object array, Type arrayType) {

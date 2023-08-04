@@ -1,0 +1,10 @@
+--- /JsonDeserializationVisitor.java	2023-07-04 03:44:03.720051606 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationVisitor.java	2023-07-04 03:44:03.720051606 +0000
+@@ -70,6 +70,7 @@
+   @SuppressWarnings("unchecked")
+   public final boolean visitUsingCustomHandler(ObjectTypePair objTypePair) {
+     Pair<JsonDeserializer<?>, ObjectTypePair> pair = objTypePair.getMatchingHandler(deserializers);
++ 
+     if (pair == null) {
+       return false;
+     }    

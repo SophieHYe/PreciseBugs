@@ -1,0 +1,15 @@
+--- /JsonDeserializationVisitor.java	2023-07-04 03:44:06.924008171 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationVisitor.java	2023-07-04 03:44:06.924008171 +0000
+@@ -89,9 +89,9 @@
+   }
+ 
+   final Object visitChildAsObject(Type childType, JsonElement jsonChild) {
+-    JsonDeserializationVisitor<?> childVisitor =
+-        new JsonObjectDeserializationVisitor<Object>(jsonChild, childType,
+-            factory, objectConstructor, deserializers, context);
++JsonDeserializationVisitor<?> childVisitor = new JsonObjectDeserializationVisitor<Object> (  childType, factory, objectConstructor, deserializers, context ) ;
++ 
++ 
+     return visitChild(childType, childVisitor);
+   }
+ 

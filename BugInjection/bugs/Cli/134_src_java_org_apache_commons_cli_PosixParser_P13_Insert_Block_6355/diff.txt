@@ -1,0 +1,11 @@
+--- /PosixParser.java	2023-07-04 03:43:10.536772593 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/PosixParser.java	2023-07-04 03:43:10.536772593 +0000
+@@ -131,7 +131,7 @@
+             {
+                 int tokenLength = token.length();
+ 
+-                if (tokenLength == 2)
++if  ( options.hasOption ( token )  )  {     tokens.add ( token ) ; }else {     burstToken ( token, stopAtNonOption ) ; }
+                 {
+                     processOptionToken(token, stopAtNonOption);
+                 }

@@ -1,0 +1,13 @@
+--- /JsonArrayDeserializationVisitor.java	2023-07-04 03:44:25.751752926 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonArrayDeserializationVisitor.java	2023-07-04 03:44:25.751752926 +0000
+@@ -49,8 +49,8 @@
+       TypeInfoArray arrayTypeInfo = TypeInfoFactory.getTypeInfoForArray(targetType);
+       // We know that we are getting back an array of the required type, so
+       // this typecasting is safe.
+-      return (T) objectConstructor.constructArray(arrayTypeInfo.getSecondLevelType(),
+-          jsonArray.size());
++return  ( T )  objectConstructor.constructArray ( arrayTypeInfo.getSecondLevelType (  ) , jsonArray.get (  )  ) ;
++ 
+     }
+     // is a collection
+     return (T) objectConstructor.construct(typeInfo.getRawClass());

@@ -1,0 +1,11 @@
+--- /FieldAttributes.java	2023-07-04 03:42:27.173360442 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/FieldAttributes.java	2023-07-04 03:42:27.173360442 +0000
+@@ -153,7 +153,7 @@
+    */
+   public Collection<Annotation> getAnnotations() {
+     if (annotations == null) {
+-      Pair<Class<?>, String> key = new Pair<Class<?>, String>(declaringClazz, name);
++Pair<Class<?>, String> key = new Pair<Class<?>, String> ( declaringClazz ) ;
+       annotations = ANNOTATION_CACHE.getElement(key);
+       if (annotations == null) {
+         annotations = Collections.unmodifiableCollection(

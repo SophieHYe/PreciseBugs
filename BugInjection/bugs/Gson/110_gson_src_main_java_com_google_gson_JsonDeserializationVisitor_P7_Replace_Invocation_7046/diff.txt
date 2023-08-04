@@ -1,0 +1,10 @@
+--- /JsonDeserializationVisitor.java	2023-07-04 03:44:10.951953564 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/JsonDeserializationVisitor.java	2023-07-04 03:44:10.951953564 +0000
+@@ -107,6 +107,6 @@
+     on.accept(childVisitor);
+     // the underlying object may have changed during the construction phase
+     // This happens primarily because of custom deserializers
+-    return childVisitor.getTarget();
++return childVisitor.visitUsingCustomHandler (  ) ;
+   }
+ }
