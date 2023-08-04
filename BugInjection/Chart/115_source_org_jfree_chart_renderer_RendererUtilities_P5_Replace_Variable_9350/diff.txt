@@ -1,0 +1,11 @@
+--- /RendererUtilities.java	2023-07-04 12:21:18.951078482 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/RendererUtilities.java	2023-07-04 12:21:18.955078427 +0000
+@@ -112,7 +112,7 @@
+                 return low;
+             }
+             double highValue = dataset.getXValue(series, high);
+-            if (highValue > xHigh) {
++if  ( xHigh > highValue )  {
+                 return high;
+             }
+             while (high - low > 1) {

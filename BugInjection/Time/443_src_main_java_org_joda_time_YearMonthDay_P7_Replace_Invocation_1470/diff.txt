@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 12:25:50.971396123 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 12:25:50.975396070 +0000
+@@ -440,7 +440,7 @@
+             return this;
+         }
+         int[] newValues = getValues();
+-        newValues = getField(index).add(this, index, newValues, amount);
++newValues = getField ( index ) .set ( this, index, newValues, amount ) ;
+         return new YearMonthDay(this, newValues);
+     }
+ 

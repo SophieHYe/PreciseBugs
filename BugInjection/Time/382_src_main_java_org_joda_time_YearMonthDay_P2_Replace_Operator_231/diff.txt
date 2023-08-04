@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 12:24:49.856223465 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 12:24:49.860223411 +0000
+@@ -379,7 +379,7 @@
+     public YearMonthDay withChronologyRetainFields(Chronology newChronology) {
+         newChronology = DateTimeUtils.getChronology(newChronology);
+         newChronology = newChronology.withUTC();
+-        if (newChronology == getChronology()) {
++if  ( newChronology != getChronology (  )  )  {
+             return this;
+         } else {
+             YearMonthDay newYearMonthDay = new YearMonthDay(this, newChronology);
