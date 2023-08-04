@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 12:43:14.433269663 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 12:43:14.433269663 +0000
+@@ -368,7 +368,7 @@
+             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
+             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 | (k << 4)];
+             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[l << 2];
+-            encodedData[encodedIndex + 3] = PAD;
++encodedData[encodedIndex + 3] = val2;
+         }
+ 
+         if (isChunked) {

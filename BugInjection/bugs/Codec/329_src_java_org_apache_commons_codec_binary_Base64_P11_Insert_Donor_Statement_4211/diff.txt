@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 12:42:31.805846766 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 12:42:31.805846766 +0000
+@@ -326,7 +326,7 @@
+             // log.debug( "vak = " + (val2 | (k<<4)) );
+             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 | (k << 4)];
+             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[(l << 2) | val3];
+-            encodedData[encodedIndex + 3] = lookUpBase64Alphabet[b3 & 0x3f];
++encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 |  ( k << 4 ) ];encodedData[encodedIndex + 3] = lookUpBase64Alphabet[b3 & 0x3f];
+ 
+             encodedIndex += 4;
+ 

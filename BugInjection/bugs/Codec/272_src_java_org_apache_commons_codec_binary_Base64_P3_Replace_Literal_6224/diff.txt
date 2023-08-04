@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 12:41:57.442311990 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 12:41:57.442311990 +0000
+@@ -269,7 +269,7 @@
+         long fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
+         long tripletCount = lengthDataBits / TWENTYFOURBITGROUP;
+         long encodedDataLengthLong = 0;
+-        int chunckCount = 0;
++int chunckCount = FOURBYTE;
+ 
+         if (fewerThan24bits != 0) {
+             // data not divisible by 24 bit

@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 12:42:07.326178179 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 12:42:07.330178126 +0000
+@@ -296,7 +296,7 @@
+         int encodedDataLength = (int) encodedDataLengthLong;
+         byte encodedData[] = new byte[encodedDataLength];
+ 
+-        byte k = 0, l = 0, b1 = 0, b2 = 0, b3 = 0;
++byte k = CHUNK_SIZE, l = CHUNK_SIZE, b1 = CHUNK_SIZE, b2 = CHUNK_SIZE, b3 = CHUNK_SIZE;
+ 
+         int encodedIndex = 0;
+         int dataIndex = 0;

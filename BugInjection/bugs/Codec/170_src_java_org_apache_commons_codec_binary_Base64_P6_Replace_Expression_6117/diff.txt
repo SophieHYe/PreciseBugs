@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 12:41:38.170572897 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 12:41:38.170572897 +0000
+@@ -167,7 +167,7 @@
+      * @return <code>true</code> if the value is defined in the the base 64 alphabet, <code>false</code> otherwise.
+      */
+     private static boolean isBase64(byte octect) {
+-        if (octect == PAD) {
++if  ( base64Alphabet[octect] == -1 )  {
+             return true;
+         } else if (octect < 0 || base64Alphabet[octect] == -1) {
+             return false;
