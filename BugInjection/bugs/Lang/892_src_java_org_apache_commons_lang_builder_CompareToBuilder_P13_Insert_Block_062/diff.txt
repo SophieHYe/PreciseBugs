@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-04 01:38:21.406296617 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-04 01:38:21.406296617 +0000
+@@ -889,7 +889,7 @@
+         if (comparison != 0) {
+             return this;
+         }
+-        if (lhs == rhs) {
++if  ( rhs == null )  {     comparison = +1;     return this; }
+             return this;
+         }
+         if (lhs == null) {

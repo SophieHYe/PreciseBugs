@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-04 01:24:09.693818632 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:24:09.693818632 +0000
+@@ -376,7 +376,7 @@
+      */
+     protected void trimStackFrames(List stacks) {
+          for (int size=stacks.size(), i=size-1; i > 0; i--) {
+-             String[] curr = (String[]) stacks.get(i);
++String[] curr =  ( String[] )  nextList.get ( i ) ;
+              String[] next = (String[]) stacks.get(i-1); 
+              
+              List currList = new ArrayList(Arrays.asList(curr));

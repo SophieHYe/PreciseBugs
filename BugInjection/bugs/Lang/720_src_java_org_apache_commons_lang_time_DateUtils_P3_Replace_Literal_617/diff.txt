@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:29:47.269229307 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:29:47.269229307 +0000
+@@ -717,7 +717,7 @@
+                         //If we're going to drop the HOUR field's value,
+                         //  we want to do this our own way.
+                         offset = val.get(Calendar.HOUR_OF_DAY);
+-                        if (offset >= 12) {
++if  ( offset >= max )  {
+                             offset -= 12;
+                         }
+                         roundUp = offset > 6;

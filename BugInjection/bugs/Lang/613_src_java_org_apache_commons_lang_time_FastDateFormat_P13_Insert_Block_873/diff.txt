@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:35:42.640435810 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:35:42.644435757 +0000
+@@ -610,7 +610,7 @@
+                     rule = new TextField(Calendar.MONTH, months);
+                 } else if (tokenLen == 3) {
+                     rule = new TextField(Calendar.MONTH, shortMonths);
+-                } else if (tokenLen == 2) {
++if  ( tokenLen == 1 )  {     rule = INSTANCE_NO_COLON; }else {     rule = INSTANCE_COLON; }
+                     rule = TwoDigitMonthField.INSTANCE;
+                 } else {
+                     rule = UnpaddedMonthField.INSTANCE;

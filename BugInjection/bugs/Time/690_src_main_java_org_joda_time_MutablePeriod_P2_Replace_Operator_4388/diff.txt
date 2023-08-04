@@ -1,0 +1,11 @@
+--- /MutablePeriod.java	2023-07-04 03:22:33.489530694 +0000
++++ /Time-26/src/main/java/org/joda/time/MutablePeriod.java	2023-07-04 03:22:33.489530694 +0000
+@@ -687,7 +687,7 @@
+      * @throws ArithmeticException if the addition exceeds the capacity of the period
+      */
+     public void add(ReadableDuration duration) {
+-        if (duration != null) {
++if  ( duration == null )  {
+             add(new Period(duration.getMillis(), getPeriodType()));
+         }
+     }

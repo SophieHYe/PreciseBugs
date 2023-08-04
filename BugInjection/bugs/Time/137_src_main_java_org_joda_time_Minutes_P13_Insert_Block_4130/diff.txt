@@ -1,0 +1,11 @@
+--- /Minutes.java	2023-07-04 03:19:32.939971663 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:32.939971663 +0000
+@@ -134,7 +134,7 @@
+      * @throws IllegalArgumentException if the partials are null or invalid
+      */
+     public static Minutes minutesIn(ReadableInterval interval) {
+-        if (interval == null)   {
++if  ( periodStr == null )  {     return ZERO; }
+             return Minutes.ZERO;
+         }
+         int amount = BaseSingleFieldPeriod.between(interval.getStart(), interval.getEnd(), DurationFieldType.minutes());

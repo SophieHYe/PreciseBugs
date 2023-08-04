@@ -1,0 +1,14 @@
+--- /Instant.java	2023-07-04 03:25:20.967264527 +0000
++++ /Time-26/src/main/java/org/joda/time/Instant.java	2023-07-04 03:25:20.967264527 +0000
+@@ -156,8 +156,9 @@
+      */
+     public Instant withDurationAdded(long durationToAdd, int scalar) {
+         if (durationToAdd == 0 || scalar == 0) {
+-            return this;
+-        }
++ 
++return this; 
++ 
+         long instant = getChronology().add(getMillis(), durationToAdd, scalar);
+         return withMillis(instant);
+     }

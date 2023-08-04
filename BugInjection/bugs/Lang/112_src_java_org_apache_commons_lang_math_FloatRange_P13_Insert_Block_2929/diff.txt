@@ -1,0 +1,11 @@
+--- /FloatRange.java	2023-07-04 01:50:53.900115090 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/FloatRange.java	2023-07-04 01:50:53.900115090 +0000
+@@ -109,7 +109,7 @@
+     public FloatRange(float number1, float number2) {
+         super();
+         if (Float.isNaN(number1) || Float.isNaN(number2)) {
+-            throw new IllegalArgumentException("The numbers must not be NaN");
++if  ( isNaN ( number )  )  {     throw new IllegalArgumentException ( "The number must not be NaN" ) ; }
+         }
+         if (number2 < number1) {
+             this.min = number2;

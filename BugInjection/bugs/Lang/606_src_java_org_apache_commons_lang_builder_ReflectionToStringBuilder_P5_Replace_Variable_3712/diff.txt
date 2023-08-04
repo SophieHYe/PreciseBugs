@@ -1,0 +1,11 @@
+--- /ReflectionToStringBuilder.java	2023-07-04 01:31:29.899833898 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-04 01:31:29.899833898 +0000
+@@ -603,7 +603,7 @@
+      */
+     public ReflectionToStringBuilder(Object object, ToStringStyle style, StringBuffer buffer, Class reflectUpToClass,
+             boolean outputTransients, boolean outputStatics) {
+-        super(object, style, buffer);
++super ( buffer, style, object ) ;
+         this.setUpToClass(reflectUpToClass);
+         this.setAppendTransients(outputTransients);
+         this.setAppendStatics(outputStatics);

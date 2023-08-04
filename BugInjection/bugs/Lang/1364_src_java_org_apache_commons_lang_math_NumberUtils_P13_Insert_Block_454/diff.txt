@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:59:25.709173249 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:59:25.713173195 +0000
+@@ -1361,7 +1361,7 @@
+                     // two E's
+                     return false;
+                 }
+-                if (!foundDigit) {
++if  ( hasDecPoint || hasExp )  {     return false; }
+                     return false;
+                 }
+                 hasExp = true;

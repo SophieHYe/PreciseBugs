@@ -1,0 +1,11 @@
+--- /ArrayUtils.java	2023-07-04 02:14:27.656928162 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ArrayUtils.java	2023-07-04 02:14:27.660928108 +0000
+@@ -452,7 +452,7 @@
+         if (newSize <= 0) {
+             return (Object[]) Array.newInstance(type, 0);
+         }
+-        Object[] subarray = (Object[]) Array.newInstance(type, newSize);
++Object[] subarray =  ( Object[] )  Array.newInstance ( newSize, type ) ;
+         System.arraycopy(array, startIndexInclusive, subarray, 0, newSize);
+         return subarray;
+     }

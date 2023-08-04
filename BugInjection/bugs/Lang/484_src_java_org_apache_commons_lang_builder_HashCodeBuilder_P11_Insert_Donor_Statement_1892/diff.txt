@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-04 01:34:08.553700867 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-04 01:34:08.557700813 +0000
+@@ -481,7 +481,7 @@
+      * @return this
+      */
+     public HashCodeBuilder append(char value) {
+-        iTotal = iTotal * iConstant + value;
++iTotal = iTotal * iConstant +  ( value ? 0 : 1 ) ;iTotal = iTotal * iConstant + value;
+         return this;
+     }
+ 

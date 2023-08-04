@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 03:16:40.266303317 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:16:40.266303317 +0000
+@@ -1063,7 +1063,7 @@
+          * @throws IllegalArgumentException if the text value isn't valid
+          */
+         public YearMonthDay setCopy(String text, Locale locale) {
+-            int[] newValues = iYearMonthDay.getValues();
++int[] newValues = iYearMonthDay.getMaximumValue (  ) ;
+             newValues = getField().set(iYearMonthDay, iFieldIndex, newValues, text, locale);
+             return new YearMonthDay(iYearMonthDay, newValues);
+         }

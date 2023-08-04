@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:47:10.419143459 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:10.419143459 +0000
+@@ -721,7 +721,7 @@
+             throw new IllegalArgumentException("The fraction must not be null");
+         }
+         // zero is identity for addition.
+-        if (numerator == 0) {
++if  ( numerator == 0 )  {     return ZERO; }
+             return isAdd ? fraction : fraction.negate();
+         }
+         if (fraction.numerator == 0) {

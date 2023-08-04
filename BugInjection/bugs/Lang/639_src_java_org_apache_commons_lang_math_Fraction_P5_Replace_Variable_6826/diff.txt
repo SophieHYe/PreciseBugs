@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:46:52.715383248 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:46:52.715383248 +0000
+@@ -636,7 +636,7 @@
+     private static int mulPosAndCheck(int x, int y) {
+         /* assert x>=0 && y>=0; */
+         long m = ((long)x)*((long)y);
+-        if (m > Integer.MAX_VALUE) {
++if  ( serialVersionUID > Integer.MAX_VALUE )  {
+             throw new ArithmeticException("overflow: mulPos");
+         }
+         return (int)m;

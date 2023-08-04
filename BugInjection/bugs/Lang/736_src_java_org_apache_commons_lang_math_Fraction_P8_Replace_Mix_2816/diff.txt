@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:47:24.318955179 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:24.318955179 +0000
+@@ -733,7 +733,7 @@
+         if (d1==1) {
+             // result is ( (u*v' +/- u'v) / u'v')
+             int uvp = mulAndCheck(numerator, fraction.denominator);
+-            int upv = mulAndCheck(fraction.numerator, denominator);
++int upv = mulAndCheck ( fraction.numerator, power ) ;
+             return new Fraction
+                 (isAdd ? addAndCheck(uvp, upv) : subAndCheck(uvp, upv),
+                  mulPosAndCheck(denominator, fraction.denominator));

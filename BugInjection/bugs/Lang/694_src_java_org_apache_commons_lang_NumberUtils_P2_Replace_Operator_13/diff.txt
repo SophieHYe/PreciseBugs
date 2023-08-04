@@ -1,0 +1,17 @@
+--- /NumberUtils.java	2023-07-04 02:08:56.125430347 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/NumberUtils.java	2023-07-04 02:08:56.125430347 +0000
+@@ -691,10 +691,10 @@
+                 // can't have an E at the last byte
+                 return false;
+             }
+-            if (!allowSigns
+-                && (chars[i] == 'd'
+-                    || chars[i] == 'D'
+-                    || chars[i] == 'f'
++if  ( !allowSigns &&  ( chars[i] >= 'd' || chars[i] == 'D' || chars[i] == 'f'
++ 
++ 
++ 
+                     || chars[i] == 'F')) {
+                 return foundDigit;
+             }

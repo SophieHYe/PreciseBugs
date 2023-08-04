@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:29:43.753277111 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:29:43.757277056 +0000
+@@ -701,7 +701,7 @@
+                         //If we're going to drop the DATE field's value,
+                         //  we want to do this our own way.
+                         //We need to subtrace 1 since the date has a minimum of 1
+-                        offset = val.get(Calendar.DATE) - 1;
++int minutes = val.get ( Calendar.MINUTE ) ;offset = val.get ( Calendar.DATE )  - 1;
+                         //If we're above 15 days adjustment, that means we're in the
+                         //  bottom half of the month and should stay accordingly.
+                         if (offset >= 15) {

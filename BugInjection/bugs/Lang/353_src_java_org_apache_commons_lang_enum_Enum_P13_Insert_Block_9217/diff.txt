@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 02:06:00.343817723 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enum/Enum.java	2023-07-04 02:06:00.343817723 +0000
+@@ -350,7 +350,7 @@
+             entry = createEntry(enumClass);
+             cEnumClasses.put(enumClass, entry);
+         }
+-        if (entry.map.containsKey(name)) {
++if  ( enumClass == null )  {     throw new IllegalArgumentException ( "getEnumClass (  )  must not be null" ) ; }
+             throw new IllegalArgumentException("The Enum name must be unique, '" + name + "' has already been added");
+         }
+         entry.map.put(name, this);

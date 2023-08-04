@@ -1,0 +1,11 @@
+--- /DurationFormatUtils.java	2023-07-04 01:20:04.941145287 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:20:04.941145287 +0000
+@@ -175,7 +175,7 @@
+         // there are a series of tweaks and special cases that require 
+         // trickery to replicate.
+         String duration = formatDuration(durationMillis, "d' days 'H' hours 'm' minutes 's' seconds'");
+-        if (suppressLeadingZeroElements) {
++if  (  ( tmp.length (  )  )  !=  ( duration.length (  )  )  )  {     duration = tmp;     tmp = replaceOnce ( duration, " 0 hours", "" ) ;     if  (  ( tmp.length (  )  )  !=  ( duration.length (  )  )  )  {         duration = tmp;         tmp = replaceOnce ( duration, " 0 minutes", "" ) ;         duration = tmp;         if  (  ( tmp.length (  )  )  !=  ( duration.length (  )  )  )  {             duration = replaceOnce ( tmp, " 0 seconds", "" ) ;         }     } }
+             // this is a temporary marker on the front. Like ^ in regexp.
+             duration = " " + duration;
+             String tmp = StringUtils.replaceOnce(duration, " 0 days", "");

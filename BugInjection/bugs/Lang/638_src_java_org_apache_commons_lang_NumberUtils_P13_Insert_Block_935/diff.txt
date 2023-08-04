@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 02:08:07.418091853 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/NumberUtils.java	2023-07-04 02:08:07.418091853 +0000
+@@ -635,7 +635,7 @@
+                 }
+                 // checking hex (it can't be anything else)
+                 for (; i < chars.length; i++) {
+-                    if ((chars[i] < '0' || chars[i] > '9')
++if  (  ( !allowSigns )  &&  (  (  (  (  ( chars[i] )  == 'd' )  ||  (  ( chars[i] )  == 'D' )  )  ||  (  ( chars[i] )  == 'f' )  )  ||  (  ( chars[i] )  == 'F' )  )  )  {     return foundDigit; }
+                         && (chars[i] < 'a' || chars[i] > 'f')
+                         && (chars[i] < 'A' || chars[i] > 'F')) {
+                         return false;

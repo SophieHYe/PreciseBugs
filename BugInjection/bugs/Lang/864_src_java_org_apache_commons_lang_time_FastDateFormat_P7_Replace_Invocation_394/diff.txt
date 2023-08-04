@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:39:07.761671155 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:39:07.765671102 +0000
+@@ -861,7 +861,7 @@
+      */
+     public StringBuffer format(Calendar calendar, StringBuffer buf) {
+         if (mTimeZoneForced) {
+-            calendar = (Calendar) calendar.clone();
++calendar =  ( Calendar )  calendar.get (  ) ;
+             calendar.setTimeZone(mTimeZone);
+         }
+         return applyRules(calendar, buf);

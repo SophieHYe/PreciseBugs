@@ -1,0 +1,13 @@
+--- /Months.java	2023-07-04 03:24:30.555946810 +0000
++++ /Time-26/src/main/java/org/joda/time/Months.java	2023-07-04 03:24:30.555946810 +0000
+@@ -154,8 +154,8 @@
+     public static Months monthsBetween(ReadablePartial start, ReadablePartial end) {
+         if (start instanceof LocalDate && end instanceof LocalDate)   {
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+-            int months = chrono.months().getDifference(
+-                    ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());
++int months = chrono.months (  ) .getDifference ( (  ( LocalDate )  end )  .getValue (  )  ,  (  ( LocalDate )  start )
++ 
+             return Months.months(months);
+         }
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);

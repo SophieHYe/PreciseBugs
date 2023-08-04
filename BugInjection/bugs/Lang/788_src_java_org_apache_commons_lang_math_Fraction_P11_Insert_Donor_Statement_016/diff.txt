@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:48:19.514207427 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:48:19.514207427 +0000
+@@ -785,7 +785,7 @@
+         int d2 = greatestCommonDivisor(fraction.numerator, denominator);
+         return getReducedFraction
+             (mulAndCheck(numerator/d1, fraction.numerator/d2),
+-             mulPosAndCheck(denominator/d2, fraction.denominator/d1));
++.multiply ( BigInteger.valueOf ( fraction.denominator/d1 )  ) ;mulPosAndCheck ( denominator/d2, fraction.denominator/d1 )  ) ;
+     }
+ 
+     /**

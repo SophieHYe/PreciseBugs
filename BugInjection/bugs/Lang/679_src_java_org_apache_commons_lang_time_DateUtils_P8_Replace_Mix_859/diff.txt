@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:30:45.160442200 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:30:45.160442200 +0000
+@@ -676,7 +676,7 @@
+                             //This is a special case that's hard to generalize
+                             //If the date is 1, we round up to 16, otherwise
+                             //  we subtract 15 days and add 1 month
+-                            if (val.get(Calendar.DATE) == 1) {
++if  ( val.getActualMinimum ( Calendar.field )  == 1 )  {
+                                 val.add(Calendar.DATE, 15);
+                             } else {
+                                 val.add(Calendar.DATE, -15);

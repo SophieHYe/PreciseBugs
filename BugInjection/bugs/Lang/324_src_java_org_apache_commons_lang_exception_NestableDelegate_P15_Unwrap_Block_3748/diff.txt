@@ -1,0 +1,16 @@
+--- /NestableDelegate.java	2023-07-04 01:23:52.446053088 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:23:52.446053088 +0000
+@@ -322,9 +322,10 @@
+         // If NOT topDown, reverse the stack
+         String separatorLine = "Caused by: ";
+         if (!topDown) {
+-            separatorLine = "Rethrown as: ";
+-            Collections.reverse(stacks);
+-        }
++ 
++separatorLine = "Rethrown as: "; java.util.Collections.reverse(stacks); 
++ 
++ 
+ 
+         // Remove the repeated lines in the stack
+         if (trimStackFrames) {

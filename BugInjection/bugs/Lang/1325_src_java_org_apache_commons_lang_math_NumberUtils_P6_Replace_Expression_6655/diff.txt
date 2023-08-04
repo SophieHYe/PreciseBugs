@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:20:46.932574606 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:20:46.936574551 +0000
+@@ -1322,7 +1322,7 @@
+         boolean foundDigit = false;
+         // deal with any possible sign up front
+         int start = (chars[0] == '-') ? 1 : 0;
+-        if (sz > start + 1) {
++if  ( ((chars[i] < '0') || (chars[i] > '9')) && ((chars[i] < 'a') || (chars[i] > 'f')) && (chars[i] < 'A') || (chars[i] > 'F') )  {
+             if (chars[start] == '0' && chars[start + 1] == 'x') {
+                 int i = start + 2;
+                 if (i == sz) {

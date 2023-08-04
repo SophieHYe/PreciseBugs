@@ -1,0 +1,11 @@
+--- /WordUtils.java	2023-07-04 02:03:28.617876953 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/WordUtils.java	2023-07-04 02:03:28.621876898 +0000
+@@ -549,7 +549,7 @@
+         for (int i = 0; i < strLen; i++) {
+             char ch = str.charAt(i);
+ 
+-            if (isDelimiter(ch, delimiters)) {
++if  ( isDelimiter ( delimiters, ch )  )  {
+                 lastWasGap = true;
+             } else if (lastWasGap) {
+                 buf[count++] = ch;

@@ -1,0 +1,11 @@
+--- /ArrayUtils.java	2023-07-04 02:13:07.898011231 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ArrayUtils.java	2023-07-04 02:13:07.906011122 +0000
+@@ -244,7 +244,7 @@
+                 map.put(entry.getKey(), entry.getValue());
+             } else if (object instanceof Object[]) {
+                 Object[] entry = (Object[]) object;
+-                if (entry.length < 2) {
++if  ( entry < 2 )  {
+                     throw new IllegalArgumentException("Array element " + i + ", '"
+                         + object
+                         + "', has a length less than 2");

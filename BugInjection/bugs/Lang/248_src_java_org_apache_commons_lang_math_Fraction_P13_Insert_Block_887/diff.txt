@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:43:51.241839939 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:51.241839939 +0000
+@@ -245,7 +245,7 @@
+     public static Fraction getFraction(double value) {
+         int sign = (value < 0 ? -1 : 1);
+         value = Math.abs(value);
+-        if (value  > Integer.MAX_VALUE || Double.isNaN(value)) {
++if  (  ( numerator ==  ( MIN_VALUE )  )  ||  ( denominator ==  ( MIN_VALUE )  )  )  {     throw new ArithmeticException ( "overflow: can't negate" ) ; }
+             throw new ArithmeticException
+                 ("The value must not be greater than Integer.MAX_VALUE or NaN");
+         }

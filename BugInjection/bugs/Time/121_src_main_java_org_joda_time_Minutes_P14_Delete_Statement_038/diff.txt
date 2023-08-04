@@ -1,0 +1,12 @@
+--- /Minutes.java	2023-07-04 03:19:27.960038952 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:27.964038898 +0000
+@@ -119,7 +119,8 @@
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int minutes = chrono.minutes().getDifference(
+                     ((LocalTime) end).getLocalMillis(), ((LocalTime) start).getLocalMillis());
+-            return Minutes.minutes(minutes);
++ 
++ 
+         }
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);
+         return Minutes.minutes(amount);

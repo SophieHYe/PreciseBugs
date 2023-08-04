@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:35:33.632557022 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:35:33.636556968 +0000
+@@ -599,7 +599,7 @@
+                 rule = new TextField(Calendar.ERA, ERAs);
+                 break;
+             case 'y': // year (number)
+-                if (tokenLen >= 4) {
++if  ( tokenLen == 1 )  {     rule = INSTANCE_NO_COLON; }else {     rule = INSTANCE_COLON; }
+                     rule = selectNumberRule(Calendar.YEAR, tokenLen);
+                 } else {
+                     rule = TwoDigitYearField.INSTANCE;

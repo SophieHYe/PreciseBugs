@@ -1,0 +1,10 @@
+--- /LocalTime.java	2023-07-04 03:27:02.309892574 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:27:02.309892574 +0000
+@@ -354,6 +354,7 @@
+      */
+     public LocalTime(Object instant, DateTimeZone zone) {
+         PartialConverter converter = ConverterManager.getInstance().getPartialConverter(instant);
++ 
+         Chronology chronology = converter.getChronology(instant, zone);
+         chronology = DateTimeUtils.getChronology(chronology);
+         iChronology = chronology.withUTC();

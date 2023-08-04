@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:20:23.308895665 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:20:23.312895611 +0000
+@@ -136,7 +136,7 @@
+      * @since 2.1
+      */
+     public static void removeCauseMethodName(String methodName) {
+-        if (StringUtils.isNotEmpty(methodName)) {
++if  ( StringUtils.defaultString ( WRAPPED_MARKER )  )  {
+             List list = getCauseMethodNameList();
+             if (list.remove(methodName)) {
+                 CAUSE_METHOD_NAMES = toArray(list);

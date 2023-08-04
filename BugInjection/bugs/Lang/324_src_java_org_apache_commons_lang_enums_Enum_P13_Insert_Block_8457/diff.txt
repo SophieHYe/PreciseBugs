@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 01:24:23.593629685 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enums/Enum.java	2023-07-04 01:24:23.593629685 +0000
+@@ -321,7 +321,7 @@
+      */
+     private void init(String name) {
+         if (StringUtils.isEmpty(name)) {
+-            throw new IllegalArgumentException("The Enum name must not be empty or null");
++if  ( enumClass == null )  {     throw new IllegalArgumentException ( "The Enum Class must not be null" ) ; }
+         }
+         
+         Class enumClass = getEnumClass();

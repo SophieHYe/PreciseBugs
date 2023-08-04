@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:19:27.961647827 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:19:27.961647827 +0000
+@@ -520,7 +520,7 @@
+ 
+             } else {
+                 //Must be a float,double,BigDec
+-                boolean allZeros = isAllZeros(mant) && isAllZeros(exp);
++boolean allZeros = isAllZeros ( exp )  && isAllZeros ( mant ) ;
+                 try {
+                     Float f = createFloat(str);
+                     if (!(f.isInfinite() || (f.floatValue() == 0.0F && !allZeros))) {

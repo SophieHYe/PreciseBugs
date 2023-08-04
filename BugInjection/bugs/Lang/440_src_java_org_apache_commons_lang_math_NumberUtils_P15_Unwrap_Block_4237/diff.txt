@@ -1,0 +1,18 @@
+--- /NumberUtils.java	2023-07-04 01:53:31.297980968 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:53:31.301980914 +0000
+@@ -438,10 +438,11 @@
+             dec = null;
+         }
+         if (!Character.isDigit(lastChar)) {
+-            if (expPos > -1 && expPos < str.length() - 1) {
+-                exp = str.substring(expPos + 1, str.length() - 1);
+-            } else {
+-                exp = null;
++ 
++if ((expPos > (-1)) && (expPos < ((str.length()) - 1))) {    exp = str.substring((expPos + 1), ((str.length()) - 1));}else {    exp = null;}; java.lang.String numeric = str.substring(0, ((str.length()) - 1)); boolean allZeros = (org.apache.commons.lang.math.NumberUtils.isAllZeros(mant)) && (org.apache.commons.lang.math.NumberUtils.isAllZeros(exp)); switch (lastChar) {    case 'l' :    case 'L' :        if ((((dec == null) && (exp == null)) && (org.apache.commons.lang.math.NumberUtils.isDigits(numeric.substring(1)))) && (((numeric.charAt(0)) == '-') || (java.lang.Character.isDigit(numeric.charAt(0))))) {            try {                return org.apache.commons.lang.math.NumberUtils.createLong(numeric);            } catch (java.lang.NumberFormatException nfe) {            }            return org.apache.commons.lang.math.NumberUtils.createBigInteger(numeric);        }        throw new java.lang.NumberFormatException((str + " is not a valid number."));    case 'f' :    case 'F' :        try {            java.lang.Float f = org.apache.commons.lang.math.NumberUtils.createFloat(numeric);            if (!((f.isInfinite()) || (((f.floatValue()) == 0.0F) && (!allZeros)))) {                return f;            }        } catch (java.lang.NumberFormatException nfe) {        }    case 'd' :    case 'D' :        try {            java.lang.Double d = org.apache.commons.lang.math.NumberUtils.createDouble(numeric);            if (!((d.isInfinite()) || (((d.floatValue()) == 0.0) && (!allZeros)))) {                return d;            }        } catch (java.lang.NumberFormatException nfe) {        }        try {            return org.apache.commons.lang.math.NumberUtils.createBigDecimal(numeric);        } catch (java.lang.NumberFormatException e) {        }    default :        throw new java.lang.NumberFormatException((str + " is not a valid number."));}; 
++ 
++ 
++ 
+             }
+             //Requesting a specific type..
+             String numeric = str.substring(0, str.length() - 1);

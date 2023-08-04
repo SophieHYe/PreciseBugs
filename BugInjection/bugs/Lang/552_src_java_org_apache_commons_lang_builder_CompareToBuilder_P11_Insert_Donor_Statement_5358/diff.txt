@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-04 01:36:46.019582455 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-04 01:36:46.023582401 +0000
+@@ -549,7 +549,7 @@
+         if (comparison != 0) {
+             return this;
+         }
+-        comparison = NumberUtils.compare(lhs, rhs);
++comparison =  (  ( Comparable )  lhs ) .compareTo ( rhs ) ;comparison = NumberUtils.compare ( lhs, rhs ) ;
+         return this;
+     }
+ 

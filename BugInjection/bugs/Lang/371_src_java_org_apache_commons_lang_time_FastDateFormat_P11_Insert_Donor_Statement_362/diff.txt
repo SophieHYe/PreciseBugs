@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:34:22.669511218 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:34:22.673511164 +0000
+@@ -368,7 +368,7 @@
+             }
+ 
+             try {
+-                SimpleDateFormat formatter = (SimpleDateFormat) DateFormat.getTimeInstance(style, locale);
++SimpleDateFormat formatter =  ( SimpleDateFormat )  DateFormat.getDateTimeInstance ( dateStyle, timeStyle, locale ) ;SimpleDateFormat formatter =  ( SimpleDateFormat )  DateFormat.getTimeInstance ( style, locale ) ;
+                 String pattern = formatter.toPattern();
+                 format = getInstance(pattern, timeZone, locale);
+                 cTimeInstanceCache.put(key, format);

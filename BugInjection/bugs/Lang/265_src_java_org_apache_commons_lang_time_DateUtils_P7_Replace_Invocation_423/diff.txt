@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:27:15.847287992 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:27:15.851287938 +0000
+@@ -262,7 +262,7 @@
+                 parser.applyPattern(parsePatterns[i]);
+             }
+             pos.setIndex(0);
+-            Date date = parser.parse(str, pos);
++Date date = parser .applyPattern ( str )  ;
+             if (date != null && pos.getIndex() == str.length()) {
+                 return date;
+             }

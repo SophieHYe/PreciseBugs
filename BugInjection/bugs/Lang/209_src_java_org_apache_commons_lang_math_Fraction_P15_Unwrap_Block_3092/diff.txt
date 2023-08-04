@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-04 01:43:31.310109603 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:31.314109550 +0000
+@@ -207,8 +207,9 @@
+             throw new ArithmeticException("The denominator must not be zero");
+         }
+         if (numerator==0) {
+-            return ZERO; // normalize zero.
+-        }
++ 
++return org.apache.commons.lang.math.Fraction.ZERO; 
++ 
+         // allow 2^k/-2^31 as a valid fraction (where k>0)
+         if (denominator==Integer.MIN_VALUE && (numerator&1)==0) {
+             numerator/=2; denominator/=2;

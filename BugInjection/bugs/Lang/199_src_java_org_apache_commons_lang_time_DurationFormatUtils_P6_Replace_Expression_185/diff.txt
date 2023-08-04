@@ -1,0 +1,11 @@
+--- /DurationFormatUtils.java	2023-07-04 01:20:46.120585641 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:20:46.120585641 +0000
+@@ -196,7 +196,7 @@
+                 duration = duration.substring(1);
+             }
+         }
+-        if (suppressTrailingZeroElements) {
++if  ( tmp.length() != duration.length() )  {
+             String tmp = StringUtils.replaceOnce(duration, " 0 seconds", "");
+             if (tmp.length() != duration.length()) {
+                 duration = tmp;

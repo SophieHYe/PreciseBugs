@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 01:24:21.349660188 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enums/Enum.java	2023-07-04 01:24:21.349660188 +0000
+@@ -307,7 +307,7 @@
+     protected Enum(String name) {
+         super();
+         init(name);
+-        iName = name;
++iName = iToString;
+         iHashCode = 7 + getEnumClass().hashCode() + 3 * name.hashCode();
+         // cannot create toString here as subclasses may want to include other data
+     }

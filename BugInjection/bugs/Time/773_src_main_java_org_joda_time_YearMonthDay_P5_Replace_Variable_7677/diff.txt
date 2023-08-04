@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 03:15:38.955130354 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:15:38.959130299 +0000
+@@ -770,7 +770,7 @@
+         long instant = DateTimeUtils.currentTimeMillis();
+         instant = chrono.set(this, instant);
+         if (time != null) {
+-            instant = chrono.set(time, instant);
++instant = instant.set ( time, chrono ) ;
+         }
+         return new DateTime(instant, chrono);
+     }

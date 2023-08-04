@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:49:13.689473336 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:49:13.689473336 +0000
+@@ -221,7 +221,7 @@
+             } else {
+                 switch (ch) {
+                     case '\'':
+-                        if (escapeSingleQuote) {
++if  ( hadSlash )  {     out.write ( '\\' ) ; }
+                           out.write('\\');
+                         }
+                         out.write('\'');

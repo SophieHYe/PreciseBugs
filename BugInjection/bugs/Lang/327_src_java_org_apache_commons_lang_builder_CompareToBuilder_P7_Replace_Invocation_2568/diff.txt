@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-04 01:35:38.928485762 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-04 01:35:38.928485762 +0000
+@@ -324,7 +324,7 @@
+                 && (useTransients || !Modifier.isTransient(f.getModifiers()))
+                 && (!Modifier.isStatic(f.getModifiers()))) {
+                 try {
+-                    builder.append(f.get(lhs), f.get(rhs));
++builder .append ( lhs , rhs )   ) ;
+                 } catch (IllegalAccessException e) {
+                     // This can't happen. Would get a Security exception instead.
+                     // Throw a runtime exception in case the impossible happens.

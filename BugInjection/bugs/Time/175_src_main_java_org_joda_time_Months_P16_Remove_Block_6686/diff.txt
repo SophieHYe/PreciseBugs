@@ -1,0 +1,14 @@
+--- /Months.java	2023-07-04 03:24:37.107858141 +0000
++++ /Time-26/src/main/java/org/joda/time/Months.java	2023-07-04 03:24:37.107858141 +0000
+@@ -173,8 +173,9 @@
+      */
+     public static Months monthsIn(ReadableInterval interval) {
+         if (interval == null)   {
+-            return Months.ZERO;
+-        }
++ 
++ 
++ 
+         int amount = BaseSingleFieldPeriod.between(interval.getStart(), interval.getEnd(), DurationFieldType.months());
+         return Months.months(amount);
+     }

@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-04 01:23:50.426080546 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:23:50.426080546 +0000
+@@ -314,7 +314,7 @@
+         // generating the nested stack trace
+         List stacks = new ArrayList();
+         while (throwable != null) {
+-            String[] st = getStackFrames(throwable);
++String[] st = getMessage ( throwable ) ;
+             stacks.add(st);
+             throwable = ExceptionUtils.getCause(throwable);
+         }

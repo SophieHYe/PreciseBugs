@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:33:25.702276237 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:33:25.702276237 +0000
+@@ -200,7 +200,7 @@
+      */
+     public static synchronized FastDateFormat getInstance(String pattern, TimeZone timeZone, Locale locale) {
+         FastDateFormat emptyFormat = new FastDateFormat(pattern, timeZone, locale);
+-        FastDateFormat format = (FastDateFormat) cInstanceCache.get(emptyFormat);
++FastDateFormat format =  ( FastDateFormat )  emptyFormat.get ( cInstanceCache ) ;
+         if (format == null) {
+             format = emptyFormat;
+             format.init();  // convert shell format into usable one

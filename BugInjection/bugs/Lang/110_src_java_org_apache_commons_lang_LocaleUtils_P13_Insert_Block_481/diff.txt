@@ -1,0 +1,11 @@
+--- /LocaleUtils.java	2023-07-04 01:53:24.230076817 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/LocaleUtils.java	2023-07-04 01:53:24.230076817 +0000
+@@ -107,7 +107,7 @@
+             return new Locale(str, "");
+         } else {
+             if (str.charAt(2) != '_') {
+-                throw new IllegalArgumentException("Invalid locale format: " + str);
++if  (  (  ( len != 2 )  &&  ( len != 5 )  )  &&  ( len < 7 )  )  {     throw new IllegalArgumentException (  ( "Invalid locale format: " + str )  ) ; }
+             }
+             char ch3 = str.charAt(3);
+             char ch4 = str.charAt(4);

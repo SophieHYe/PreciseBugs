@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:52:14.211026277 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:52:14.215026222 +0000
+@@ -444,7 +444,7 @@
+             return null;
+         }
+         try {
+-            StringWriter writer = new StringWriter ((int)(str.length() * 1.5));
++StringWriter writer = new StringWriter  (  ( int )  ( str.length() - 7  * 1.5 )  ) ;
+             escapeHtml(writer, str);
+             return writer.toString();
+         } catch (IOException e) {

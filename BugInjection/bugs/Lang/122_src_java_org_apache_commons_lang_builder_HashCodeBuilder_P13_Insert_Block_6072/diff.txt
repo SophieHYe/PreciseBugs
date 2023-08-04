@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-04 01:32:30.571015664 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-04 01:32:30.575015610 +0000
+@@ -119,7 +119,7 @@
+             throw new IllegalArgumentException("HashCodeBuilder requires an odd initial value");
+         }
+         if (multiplierNonZeroOddNumber == 0) {
+-            throw new IllegalArgumentException("HashCodeBuilder requires a non zero multiplier");
++if  (  ( multiplierNonZeroOddNumber % 2 )  == 0 )  {     throw new IllegalArgumentException ( "HashCodeBuilder requires an odd multiplier" ) ; }
+         }
+         if (multiplierNonZeroOddNumber % 2 == 0) {
+             throw new IllegalArgumentException("HashCodeBuilder requires an odd multiplier");

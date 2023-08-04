@@ -1,0 +1,13 @@
+--- /ReflectionToStringBuilder.java	2023-07-04 01:31:54.999492624 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-04 01:31:54.999492624 +0000
+@@ -661,8 +661,8 @@
+             // object cycle.
+             // Append a simple Object.toString style string. The field name is
+             // already appended at this point.
+-            this.appendAsObjectToString(this.getObject());
+-            return;
++if  ( isRegistered ( this.getObject (  )  )  )  { this.appendAsObjectToString ( this.getObject (  )  ) ; return; }
++ 
+         }
+         try {
+             this.registerObject();

@@ -1,0 +1,16 @@
+--- /EqualsBuilder.java	2023-07-04 01:27:21.071216972 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-04 01:27:21.071216972 +0000
+@@ -781,9 +781,10 @@
+             return this;
+         }
+         if (lhs.length != rhs.length) {
+-            this.setEquals(false);
+-            return this;
+-        }
++ 
++this.setEquals(false); return this; 
++ 
++ 
+         for (int i = 0; i < lhs.length && isEquals; ++i) {
+             append(lhs[i], rhs[i]);
+         }

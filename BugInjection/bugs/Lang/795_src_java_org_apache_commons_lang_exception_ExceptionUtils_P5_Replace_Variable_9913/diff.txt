@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:21:57.247618932 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:21:57.247618932 +0000
+@@ -792,7 +792,7 @@
+         List nextTrace = getStackFrameList(throwables[count - 1]);
+         for (int i = count; --i >= 0;) {
+             List trace = nextTrace;
+-            if (i != 0) {
++if  ( j != 0 )  {
+                 nextTrace = getStackFrameList(throwables[i - 1]);
+                 removeCommonFrames(trace, nextTrace);
+             }

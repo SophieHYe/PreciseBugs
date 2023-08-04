@@ -1,0 +1,10 @@
+--- /Months.java	2023-07-04 03:24:32.495920556 +0000
++++ /Time-26/src/main/java/org/joda/time/Months.java	2023-07-04 03:24:32.495920556 +0000
+@@ -156,6 +156,7 @@
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int months = chrono.months().getDifference(
+                     ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());
++ 
+             return Months.months(months);
+         }
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);

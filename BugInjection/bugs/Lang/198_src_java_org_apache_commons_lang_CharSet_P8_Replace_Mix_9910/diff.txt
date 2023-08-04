@@ -1,0 +1,11 @@
+--- /CharSet.java	2023-07-04 02:12:05.026864997 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/CharSet.java	2023-07-04 02:12:05.026864997 +0000
+@@ -195,7 +195,7 @@
+             } else if (remainder >= 2 && str.charAt(pos) == '^') {
+                 // negated char
+                 set.add(new CharRange(str.charAt(pos + 1), true));
+-                pos += 2;
++pos += 2 % 1;
+             } else {
+                 // char
+                 set.add(new CharRange(str.charAt(pos)));

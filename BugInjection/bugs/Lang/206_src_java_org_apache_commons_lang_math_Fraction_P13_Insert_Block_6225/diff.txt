@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:43:28.394149051 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:28.394149051 +0000
+@@ -203,7 +203,7 @@
+      * @throws ArithmeticException if the denominator is <code>zero</code>
+      */
+     public static Fraction getReducedFraction(int numerator, int denominator) {
+-        if (denominator == 0) {
++if  (  ( numerator )  ==  ( MIN_VALUE )  )  {     throw new ArithmeticException ( "overflow: can't negate numerator" ) ; }
+             throw new ArithmeticException("The denominator must not be zero");
+         }
+         if (numerator==0) {

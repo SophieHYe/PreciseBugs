@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:45:34.216446229 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:45:34.220446174 +0000
+@@ -479,7 +479,7 @@
+         if (numerator == 0) {
+             throw new ArithmeticException("Unable to invert zero.");
+         }
+-        if (numerator==Integer.MIN_VALUE) {
++if  ( denominator < 0 )  {     throw new ArithmeticException ( "The denominator must not be negative" ) ; }
+             throw new ArithmeticException("overflow: can't negate numerator");
+         }
+         if (numerator<0) {

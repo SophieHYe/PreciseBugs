@@ -1,0 +1,15 @@
+--- /NumberUtils.java	2023-07-04 01:59:00.789511371 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:59:00.789511371 +0000
+@@ -1330,9 +1330,9 @@
+                 }
+                 // checking hex (it can't be anything else)
+                 for (; i < chars.length; i++) {
+-                    if ((chars[i] < '0' || chars[i] > '9')
+-                        && (chars[i] < 'a' || chars[i] > 'f')
+-                        && (chars[i] < 'A' || chars[i] > 'F')) {
++if  (  ( chars[i] < '0' || chars[i] > '9' ) &&  ( chars[i] < 'a' || chars[i] > 'f' ) &&  ( chars[i] == 'A' || chars[i] > 'F' )  )  {
++ 
++ 
+                         return false;
+                     }
+                 }

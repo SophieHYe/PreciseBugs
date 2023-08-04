@@ -1,0 +1,12 @@
+--- /Weeks.java	2023-07-04 03:25:46.030925262 +0000
++++ /Time-26/src/main/java/org/joda/time/Weeks.java	2023-07-04 03:25:46.030925262 +0000
+@@ -119,7 +119,8 @@
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int weeks = chrono.weeks().getDifference(
+                     ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());
+-            return Weeks.weeks(weeks);
++ 
++ 
+         }
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);
+         return Weeks.weeks(amount);

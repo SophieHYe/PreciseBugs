@@ -1,0 +1,15 @@
+--- /DurationFormatUtils.java	2023-07-04 01:24:25.893598419 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:24:25.893598419 +0000
+@@ -410,9 +410,9 @@
+                 } else if (value == S) {
+                     if (lastOutputSeconds) {
+                         milliseconds += 1000;
+-                        String str = padWithZeros
+-                                ? StringUtils.leftPad(Integer.toString(milliseconds), count, '0')
+-                                : Integer.toString(milliseconds);
++String str = padWithZeros ? StringUtils.leftPad ( Integer.toString ( milliseconds ) , sz, '0' ) : Integer.toString ( milliseconds ) ;
++ 
++ 
+                         buffer.append(str.substring(1));
+                     } else {
+                         buffer.append(padWithZeros

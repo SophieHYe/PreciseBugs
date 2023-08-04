@@ -1,0 +1,14 @@
+--- /YearMonthDay.java	2023-07-04 03:14:30.792049167 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:14:30.792049167 +0000
+@@ -462,8 +462,9 @@
+      */
+     public YearMonthDay withPeriodAdded(ReadablePeriod period, int scalar) {
+         if (period == null || scalar == 0) {
+-            return this;
+-        }
++ 
++return this; 
++ 
+         int[] newValues = getValues();
+         for (int i = 0; i < period.size(); i++) {
+             DurationFieldType fieldType = period.getFieldType(i);

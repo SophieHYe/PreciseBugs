@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-04 01:30:32.876609216 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-04 01:30:32.880609162 +0000
+@@ -389,7 +389,7 @@
+             }
+ 
+         } else if (value instanceof char[]) {
+-            if (detail) {
++if  ( isFullDetail ( fullDetail )  )  {     appendDetail ( buffer, fieldName, array ) ; }else {     appendSummary ( buffer, fieldName, array ) ; }
+                 appendDetail(buffer, fieldName, (char[]) value);
+             } else {
+                 appendSummary(buffer, fieldName, (char[]) value);

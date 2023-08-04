@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:32:01.247408544 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:32:01.247408544 +0000
+@@ -860,7 +860,7 @@
+         if (endCutoff < Calendar.SUNDAY) {
+             endCutoff += 7;
+         }
+-        if (endCutoff > Calendar.SATURDAY) {
++if  ( endCutoff < Calendar.SUNDAY )  {
+             endCutoff -= 7;
+         }
+         while (start.get(Calendar.DAY_OF_WEEK) != startCutoff) {

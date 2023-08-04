@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:34:09.557687380 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:34:09.557687380 +0000
+@@ -357,7 +357,7 @@
+         if (timeZone != null) {
+             key = new Pair(key, timeZone);
+         }
+-        if (locale != null) {
++if  ( value == null )  {     value = tz.getDisplayName ( daylight, style, locale ) ;     put ( key, value ) ; }
+             key = new Pair(key, locale);
+         }
+ 

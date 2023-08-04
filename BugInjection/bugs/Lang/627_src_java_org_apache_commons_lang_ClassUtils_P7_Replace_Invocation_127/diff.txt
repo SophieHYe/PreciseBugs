@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 01:59:49.412851625 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:59:49.416851571 +0000
+@@ -624,7 +624,7 @@
+         }
+         
+         List candidateClasses = new ArrayList();
+-        candidateClasses.addAll(getAllInterfaces(cls));
++candidateClasses.addAll ( getAllSuperclasses ( cls )  ) ;
+         candidateClasses.addAll(getAllSuperclasses(cls));
+         
+         for (Iterator it = candidateClasses.iterator(); it.hasNext(); ) {

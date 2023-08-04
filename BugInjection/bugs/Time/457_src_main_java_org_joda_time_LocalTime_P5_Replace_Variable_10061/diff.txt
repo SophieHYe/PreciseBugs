@@ -1,0 +1,13 @@
+--- /LocalTime.java	2023-07-04 03:27:42.201352422 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:27:42.201352422 +0000
+@@ -454,8 +454,8 @@
+             Chronology chronology) {
+         super();
+         chronology = DateTimeUtils.getChronology(chronology).withUTC();
+-        long instant = chronology.getDateTimeMillis(
+-            0L, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
++long instant = chronology.getDateTimeMillis ( 0L, minuteOfHour, hourOfDay, secondOfMinute, millisOfSecond ) ;
++ 
+         iChronology = chronology;
+         iLocalMillis = instant;
+     }

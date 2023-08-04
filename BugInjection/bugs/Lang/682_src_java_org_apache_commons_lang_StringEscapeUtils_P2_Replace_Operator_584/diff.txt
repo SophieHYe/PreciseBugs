@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:52:56.486453039 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:52:56.486453039 +0000
+@@ -679,7 +679,7 @@
+      * @return a new String, escaped for SQL, <code>null</code> if null string input
+      */
+     public static String escapeSql(String str) {
+-        if (str == null) {
++if  ( str != null )  {
+             return null;
+         }
+         return StringUtils.replace(str, "'", "''");

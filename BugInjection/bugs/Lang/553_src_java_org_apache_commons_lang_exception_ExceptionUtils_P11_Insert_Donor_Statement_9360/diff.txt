@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:21:21.184109092 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:21:21.188109037 +0000
+@@ -550,7 +550,7 @@
+         List list = new ArrayList();
+         while (throwable != null && list.contains(throwable) == false) {
+             list.add(throwable);
+-            throwable = ExceptionUtils.getCause(throwable);
++Throwable throwables[] = getThrowables ( throwable ) ;throwable = ExceptionUtils.getCause ( throwable ) ;
+         }
+         return list;
+     }

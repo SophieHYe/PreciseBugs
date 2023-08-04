@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:39:20.413500388 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:39:20.413500388 +0000
+@@ -969,7 +969,7 @@
+         if (obj instanceof FastDateFormat == false) {
+             return false;
+         }
+-        FastDateFormat other = (FastDateFormat) obj;
++FastDateFormat format =  ( FastDateFormat )  cDateInstanceCache.get ( key ) ;FastDateFormat other =  ( FastDateFormat )  obj;
+         if (
+             (mPattern == other.mPattern || mPattern.equals(other.mPattern)) &&
+             (mTimeZone == other.mTimeZone || mTimeZone.equals(other.mTimeZone)) &&

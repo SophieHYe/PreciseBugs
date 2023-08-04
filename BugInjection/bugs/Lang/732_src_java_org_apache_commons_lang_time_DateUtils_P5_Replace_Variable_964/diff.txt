@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:29:56.517103571 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:29:56.517103571 +0000
+@@ -729,7 +729,7 @@
+                 int min = val.getActualMinimum(fields[i][0]);
+                 int max = val.getActualMaximum(fields[i][0]);
+                 //Calculate the offset from the minimum allowed value
+-                offset = val.get(fields[i][0]) - min;
++offset = rounded.get ( fields[i][0] )  - min;
+                 //Set roundUp if this is more than half way between the minimum and maximum
+                 roundUp = offset > ((max - min) / 2);
+             }

@@ -1,0 +1,14 @@
+--- /YearMonthDay.java	2023-07-04 03:14:21.712171531 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:14:21.712171531 +0000
+@@ -437,8 +437,9 @@
+     public YearMonthDay withFieldAdded(DurationFieldType fieldType, int amount) {
+         int index = indexOfSupported(fieldType);
+         if (amount == 0) {
+-            return this;
+-        }
++ 
++return this; 
++ 
+         int[] newValues = getValues();
+         newValues = getField(index).add(this, index, newValues, amount);
+         return new YearMonthDay(this, newValues);

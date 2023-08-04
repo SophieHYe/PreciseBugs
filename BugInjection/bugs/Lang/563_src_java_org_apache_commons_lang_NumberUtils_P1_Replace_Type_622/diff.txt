@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 02:07:22.426702909 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/NumberUtils.java	2023-07-04 02:07:22.426702909 +0000
+@@ -560,7 +560,7 @@
+         // compare should put -0.0 < +0.0
+         // Two NaNs are also == for compare purposes
+         // where NaN == NaN is false
+-        int lhsBits = Float.floatToIntBits(lhs);
++short  lhsBits = Float.floatToIntBits ( lhs ) ;
+         int rhsBits = Float.floatToIntBits(rhs);
+         if (lhsBits == rhsBits) {
+             return 0;

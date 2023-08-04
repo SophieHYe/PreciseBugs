@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:49:05.209588251 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:49:05.209588251 +0000
+@@ -917,7 +917,7 @@
+                 // have a larger range.  otherwise numerator==Integer.MIN_VALUE
+                 // is handled incorrectly.
+                 int properNumerator = getProperNumerator();
+-                if (properNumerator == 0) {
++if  ( properNumerator != 0 )  {
+                     toProperString = Integer.toString(getProperWhole());
+                 } else {
+                     toProperString = new StringBuffer(32)

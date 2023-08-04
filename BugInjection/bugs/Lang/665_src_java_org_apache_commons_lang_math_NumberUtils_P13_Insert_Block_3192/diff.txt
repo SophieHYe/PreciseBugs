@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:19:49.753351687 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:19:49.757351633 +0000
+@@ -662,7 +662,7 @@
+         }
+         // handle JDK1.3.1 bug where "" throws IndexOutOfBoundsException
+         if (StringUtils.isBlank(str)) {
+-            throw new NumberFormatException("A blank string is not a valid number");
++if  ( expPos < decPos )  {     throw new NumberFormatException (  ( str + " is not a valid number." )  ) ; }
+         }  
+         return new BigDecimal(str);
+     }

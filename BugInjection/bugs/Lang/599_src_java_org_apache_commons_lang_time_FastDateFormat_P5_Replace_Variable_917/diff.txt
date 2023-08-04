@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:36:20.055932143 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:36:20.059932089 +0000
+@@ -596,7 +596,7 @@
+ 
+             switch (c) {
+             case 'G': // era designator (text)
+-                rule = new TextField(Calendar.ERA, ERAs);
++rule = new TextField ( Calendar.ERA, mFields ) ;
+                 break;
+             case 'y': // year (number)
+                 if (tokenLen >= 4) {

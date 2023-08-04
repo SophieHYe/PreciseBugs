@@ -1,0 +1,14 @@
+--- /StopWatch.java	2023-07-04 01:18:21.454551575 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/StopWatch.java	2023-07-04 01:18:21.454551575 +0000
+@@ -94,8 +94,9 @@
+      */
+     public void start() {
+         if(this.runningState == STATE_STOPPED) {
+-            throw new IllegalStateException("Stopwatch must be reset before being restarted. ");
+-        }
++ 
++ 
++ 
+         if(this.runningState != STATE_UNSTARTED) {
+             throw new IllegalStateException("Stopwatch already started. ");
+         }

@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:53:13.794218336 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:53:13.798218281 +0000
+@@ -424,7 +424,7 @@
+                 if (expPos < decPos) {
+                     throw new NumberFormatException(str + " is not a valid number.");
+                 }
+-                dec = str.substring(decPos + 1, expPos);
++mant = str.substring ( 0, expPos ) ;dec = str.substring ( decPos + 1, expPos ) ;
+             } else {
+                 dec = str.substring(decPos + 1);
+             }

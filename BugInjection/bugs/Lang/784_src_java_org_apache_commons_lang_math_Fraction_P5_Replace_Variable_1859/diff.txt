@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:48:05.966390981 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:48:05.966390981 +0000
+@@ -781,7 +781,7 @@
+         }
+         // knuth 4.5.1
+         // make sure we don't overflow unless the result *must* overflow.
+-        int d1 = greatestCommonDivisor(numerator, fraction.denominator);
++int d1 = greatestCommonDivisor ( numerator ) ;
+         int d2 = greatestCommonDivisor(fraction.numerator, denominator);
+         return getReducedFraction
+             (mulAndCheck(numerator/d1, fraction.numerator/d2),

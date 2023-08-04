@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:43:39.394000237 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:39.394000237 +0000
+@@ -214,7 +214,7 @@
+             numerator/=2; denominator/=2;
+         }
+         if (denominator < 0) {
+-            if (numerator==Integer.MIN_VALUE ||
++if  (  ( value >  ( MAX_VALUE )  )  ||  ( isNaN ( value )  )  )  {     throw new ArithmeticException ( "The value must not be greater than Integer.MAX_VALUE or NaN" ) ; }
+                     denominator==Integer.MIN_VALUE) {
+                 throw new ArithmeticException("overflow: can't negate");
+             }

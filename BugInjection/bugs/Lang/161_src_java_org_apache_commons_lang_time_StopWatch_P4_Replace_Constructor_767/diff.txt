@@ -1,0 +1,11 @@
+--- /StopWatch.java	2023-07-04 01:18:47.410198881 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/StopWatch.java	2023-07-04 01:18:47.414198827 +0000
+@@ -158,7 +158,7 @@
+      */
+     public void unsplit() {
+         if(this.splitState != STATE_SPLIT) {
+-            throw new IllegalStateException("Stopwatch has not been split. ");
++throw throw  new IllegalStateException ( "Stopwatch must be running to suspend. " )   ;
+         }
+         stopTime = -1;
+         this.splitState = STATE_UNSPLIT;

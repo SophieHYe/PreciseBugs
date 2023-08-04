@@ -1,0 +1,16 @@
+--- /DurationFormatUtils.java	2023-07-04 01:19:45.301412188 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:19:45.301412188 +0000
+@@ -141,9 +141,10 @@
+             durationMillis = durationMillis - (hours * DateUtils.MILLIS_PER_HOUR);
+         }
+         if (Token.containsTokenWithValue(tokens, m) ) {
+-            minutes = (int) (durationMillis / DateUtils.MILLIS_PER_MINUTE);
+-            durationMillis = durationMillis - (minutes * DateUtils.MILLIS_PER_MINUTE);
+-        }
++ 
++minutes = ((int) (durationMillis / (DateUtils.MILLIS_PER_MINUTE))); durationMillis = durationMillis - (minutes * (DateUtils.MILLIS_PER_MINUTE)); 
++ 
++ 
+         if (Token.containsTokenWithValue(tokens, s) ) {
+             seconds = (int) (durationMillis / DateUtils.MILLIS_PER_SECOND);
+             durationMillis = durationMillis - (seconds * DateUtils.MILLIS_PER_SECOND);

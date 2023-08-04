@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-04 01:45:24.784573920 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:45:24.784573920 +0000
+@@ -461,8 +461,9 @@
+     public Fraction reduce() {
+         int gcd = greatestCommonDivisor(Math.abs(numerator), denominator);
+         if (gcd == 1) {
+-            return this;
+-        }
++ 
++return this; 
++ 
+         return Fraction.getFraction(numerator / gcd, denominator / gcd);
+     }
+ 

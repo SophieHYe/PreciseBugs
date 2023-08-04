@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-04 01:23:36.030276230 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:23:36.030276230 +0000
+@@ -245,7 +245,7 @@
+         }
+         Throwable[] throwables = ExceptionUtils.getThrowables(this.nestable);
+         if (fromIndex >= throwables.length) {
+-            throw new IndexOutOfBoundsException("The start index was out of bounds: "
++if  ( fromIndex < 0 )  {     throw new IndexOutOfBoundsException (  ( "The start index was out of bounds: " + fromIndex )  ) ; }
+                 + fromIndex + " >= " + throwables.length);
+         }
+         if (matchSubclasses) {

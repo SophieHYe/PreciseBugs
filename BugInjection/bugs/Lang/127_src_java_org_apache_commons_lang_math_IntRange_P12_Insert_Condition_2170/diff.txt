@@ -1,0 +1,11 @@
+--- /IntRange.java	2023-07-04 01:41:05.188085322 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/IntRange.java	2023-07-04 01:41:05.188085322 +0000
+@@ -124,7 +124,7 @@
+             throw new IllegalArgumentException("The numbers must not be null");
+         }
+         int number1val = number1.intValue();
+-        int number2val = number2.intValue();
++if  ( number2val < number1val )  { int number2val = number2.intValue (  ) ; }
+         if (number2val < number1val) {
+             this.min = number2val;
+             this.max = number1val;

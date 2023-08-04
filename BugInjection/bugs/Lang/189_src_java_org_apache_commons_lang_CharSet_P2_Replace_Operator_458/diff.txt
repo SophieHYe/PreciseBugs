@@ -1,0 +1,11 @@
+--- /CharSet.java	2023-07-04 02:12:22.738624476 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/CharSet.java	2023-07-04 02:12:22.738624476 +0000
+@@ -186,7 +186,7 @@
+             int remainder = (len - pos);
+             if (remainder >= 4 && str.charAt(pos) == '^' && str.charAt(pos + 2) == '-') {
+                 // negated range
+-                set.add(new CharRange(str.charAt(pos + 1), str.charAt(pos + 3), true));
++set.add ( new CharRange ( str.charAt ( pos  >=  1 ) , str.charAt ( pos + 3 ) , true )  ) ;
+                 pos += 4;
+             } else if (remainder >= 3 && str.charAt(pos + 1) == '-') {
+                 // range

@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:28:21.950389294 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:28:21.950389294 +0000
+@@ -618,7 +618,7 @@
+      */
+     private static void modify(Calendar val, int field, boolean round) {
+         if (val.get(Calendar.YEAR) > 280000000) {
+-            throw new ArithmeticException("Calendar value too large for accurate calculations");
++if  (  ( val.get ( YEAR )  )  > 280000000 )  {     throw new ArithmeticException ( "Calendar value too large for accurate calculations" ) ; }
+         }
+         
+         if (field == Calendar.MILLISECOND) {

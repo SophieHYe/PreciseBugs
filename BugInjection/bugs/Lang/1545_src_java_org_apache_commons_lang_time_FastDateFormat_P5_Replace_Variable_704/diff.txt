@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:42:17.111113135 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:42:17.111113135 +0000
+@@ -1542,7 +1542,7 @@
+          * {@inheritDoc}
+          */
+         public void appendTo(StringBuffer buffer, Calendar calendar) {
+-            if (mTimeZoneForced) {
++if  ( timeZoneForced )  {
+                 if (mTimeZone.useDaylightTime() && calendar.get(Calendar.DST_OFFSET) != 0) {
+                     buffer.append(mDaylight);
+                 } else {

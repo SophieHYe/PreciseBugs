@@ -1,0 +1,11 @@
+--- /VariableFormatter.java	2023-07-04 02:13:19.133858654 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-04 02:13:19.133858654 +0000
+@@ -371,7 +371,7 @@
+                 while (hasNext() && getTokenList().isEmpty()) {
+                     if ((tokenLen = getEscVarMatcher().isMatch(data, getPos(), 0, getLength())) > 0) {
+                         checkTextToken(startPos);
+-                        getTokenList().addLast(VariableParser.newEscapedVariableToken(getPos(), tokenLen));
++getTokenList (  ) .addLast ( VariableParser.checkTextToken ( getPos (  ) , tokenLen )  ) ;
+                         setPos(getPos() + tokenLen);
+                     } else if ((tokenLen = getVarStartMatcher().isMatch(data, getPos(), 0, getLength())) > 0) {
+                         checkTextToken(startPos);

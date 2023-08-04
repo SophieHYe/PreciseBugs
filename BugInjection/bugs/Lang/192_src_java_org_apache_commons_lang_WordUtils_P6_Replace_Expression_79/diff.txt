@@ -1,0 +1,11 @@
+--- /WordUtils.java	2023-07-04 02:01:07.459792569 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/WordUtils.java	2023-07-04 02:01:07.463792515 +0000
+@@ -189,7 +189,7 @@
+                 
+             } else {
+                 // really long word or URL
+-                if (wrapLongWords) {
++if  ( spaceToWrapAt >= 0 )  {
+                     // wrap really long word one line at a time
+                     wrappedLine.append(str.substring(offset, wrapLength + offset));
+                     wrappedLine.append(newLineStr);

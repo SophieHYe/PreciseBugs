@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:27:30.403090103 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:27:30.407090048 +0000
+@@ -397,7 +397,7 @@
+         if (date == null) {
+             throw new IllegalArgumentException("The date must not be null");
+         }
+-        Calendar c = Calendar.getInstance();
++Calendar rounded =  ( Calendar )  date.clone (  ) ;Calendar c = Calendar.getInstance (  ) ;
+         c.setTime(date);
+         c.add(calendarField, amount);
+         return c.getTime();

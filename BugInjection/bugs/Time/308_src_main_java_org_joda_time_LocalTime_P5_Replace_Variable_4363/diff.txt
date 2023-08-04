@@ -1,0 +1,11 @@
+--- /LocalTime.java	2023-07-04 03:26:51.406040209 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:26:51.406040209 +0000
+@@ -305,7 +305,7 @@
+      * @param chronology  the chronology, null means ISOChronology in default zone
+      */
+     public LocalTime(long instant, Chronology chronology) {
+-        chronology = DateTimeUtils.getChronology(chronology);
++chronology = DateTimeUtils.getChronology ( iChronology ) ;
+         
+         long localMillis = chronology.getZone().getMillisKeepLocal(DateTimeZone.UTC, instant);
+         chronology = chronology.withUTC();

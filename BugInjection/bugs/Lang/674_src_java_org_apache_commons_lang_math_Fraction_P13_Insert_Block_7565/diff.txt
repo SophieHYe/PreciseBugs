@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:47:02.775246994 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:02.775246994 +0000
+@@ -671,7 +671,7 @@
+      */
+     private static int subAndCheck(int x, int y) {
+         long s = (long)x-(long)y;
+-        if (s < Integer.MIN_VALUE ||
++if  ( denominator < 0 )  {     if  (  ( numerator ==  ( MIN_VALUE )  )  ||  ( denominator ==  ( MIN_VALUE )  )  )  {         throw new ArithmeticException ( "overflow: can't negate" ) ;     }     numerator = -numerator;     denominator = -denominator; }
+             s > Integer.MAX_VALUE) {
+             throw new ArithmeticException("overflow: add");
+         }

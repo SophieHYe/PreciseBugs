@@ -1,0 +1,17 @@
+--- /NumberUtils.java	2023-07-04 01:59:46.512890974 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:59:46.516890920 +0000
+@@ -1394,10 +1394,11 @@
+                 return foundDigit;
+             }
+             if (chars[i] == 'l'
+-                || chars[i] == 'L') {
++ 
++return foundDigit && (!hasExp); 
+                 // not allowing L with an exponent
+-                return foundDigit && !hasExp;
+-            }
++ 
++ 
+             // last character is illegal
+             return false;
+         }

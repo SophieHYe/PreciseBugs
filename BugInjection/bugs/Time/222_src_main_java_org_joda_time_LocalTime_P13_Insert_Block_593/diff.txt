@@ -1,0 +1,11 @@
+--- /LocalTime.java	2023-07-04 03:28:01.385092646 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:28:01.393092539 +0000
+@@ -219,7 +219,7 @@
+      */
+     @SuppressWarnings("deprecation")
+     public static LocalTime fromDateFields(Date date) {
+-        if (date == null) {
++if  ( fieldType == null )  {     throw new IllegalArgumentException ( "Field must not be null" ) ; }
+             throw new IllegalArgumentException("The date must not be null");
+         }
+         return new LocalTime(

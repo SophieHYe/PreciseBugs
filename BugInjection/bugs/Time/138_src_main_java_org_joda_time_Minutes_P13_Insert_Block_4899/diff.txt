@@ -1,0 +1,11 @@
+--- /Minutes.java	2023-07-04 03:19:33.847959394 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:33.847959394 +0000
+@@ -135,7 +135,7 @@
+      */
+     public static Minutes minutesIn(ReadableInterval interval) {
+         if (interval == null)   {
+-            return Minutes.ZERO;
++if  ( interval == null )  {     return ZERO; }
+         }
+         int amount = BaseSingleFieldPeriod.between(interval.getStart(), interval.getEnd(), DurationFieldType.minutes());
+         return Minutes.minutes(amount);

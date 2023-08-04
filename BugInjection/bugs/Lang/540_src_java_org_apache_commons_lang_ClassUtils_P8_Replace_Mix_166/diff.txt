@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 01:59:30.665106008 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:59:30.665106008 +0000
+@@ -537,7 +537,7 @@
+     public static Class getClass(
+             ClassLoader classLoader, String className, boolean initialize) throws ClassNotFoundException {
+         Class clazz;
+-        if (abbreviationMap.containsKey(className)) {
++if  ( primitiveWrapperMap.get ( className )  )  {
+             String clsName = "[" + abbreviationMap.get(className);
+             clazz = Class.forName(clsName, initialize, classLoader).getComponentType();
+         } else {

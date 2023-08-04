@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 01:59:45.132909700 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:59:45.132909700 +0000
+@@ -618,7 +618,7 @@
+     public static Method getPublicMethod(Class cls, String methodName, Class parameterTypes[]) 
+             throws SecurityException, NoSuchMethodException {
+         
+-        Method declaredMethod = cls.getMethod(methodName, parameterTypes);
++Method declaredMethod = cls.getMethod ( methodName ) ;
+         if (Modifier.isPublic(declaredMethod.getDeclaringClass().getModifiers())) {
+             return declaredMethod;
+         }

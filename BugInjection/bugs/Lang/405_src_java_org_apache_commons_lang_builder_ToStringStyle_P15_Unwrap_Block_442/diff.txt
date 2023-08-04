@@ -1,0 +1,18 @@
+--- /ToStringStyle.java	2023-07-04 01:29:01.485851779 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-04 01:29:01.485851779 +0000
+@@ -403,10 +403,11 @@
+             }
+ 
+         } else if (value instanceof float[]) {
+-            if (detail) {
+-                appendDetail(buffer, fieldName, (float[]) value);
+-            } else {
+-                appendSummary(buffer, fieldName, (float[]) value);
++ 
++if (detail) {    appendDetail(buffer, fieldName, ((float[]) (value)));}else {    appendSummary(buffer, fieldName, ((float[]) (value)));}; 
++ 
++ 
++ 
+             }
+ 
+         } else if (value instanceof boolean[]) {

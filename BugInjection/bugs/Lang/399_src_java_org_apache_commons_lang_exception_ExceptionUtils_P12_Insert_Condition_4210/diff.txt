@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:21:00.884384989 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:21:00.884384989 +0000
+@@ -396,7 +396,7 @@
+      * @return the wrapped exception, or <code>null</code> if not found
+      */
+     private static Throwable getCauseUsingFieldName(Throwable throwable, String fieldName) {
+-        Field field = null;
++if  ( field != null )  { Field field = null; }
+         try {
+             field = throwable.getClass().getField(fieldName);
+         } catch (NoSuchFieldException ignored) {

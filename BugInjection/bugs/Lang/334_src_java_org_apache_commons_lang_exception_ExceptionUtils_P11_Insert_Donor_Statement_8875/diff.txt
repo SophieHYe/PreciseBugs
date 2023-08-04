@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:20:50.640524212 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:20:50.644524158 +0000
+@@ -331,7 +331,7 @@
+      *  <code>null</code> if none found or null throwable input
+      */
+     public static Throwable getRootCause(Throwable throwable) {
+-        List list = getThrowableList(throwable);
++List nextTrace = getStackFrameList ( throwables[count - 1] ) ;List list = getThrowableList ( throwable ) ;
+         return (list.size() < 2 ? null : (Throwable)list.get(list.size() - 1));
+     }
+ 

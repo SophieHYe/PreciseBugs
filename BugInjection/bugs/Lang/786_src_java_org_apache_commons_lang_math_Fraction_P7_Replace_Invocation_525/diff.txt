@@ -1,0 +1,15 @@
+--- /Fraction.java	2023-07-04 01:48:14.250278747 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:48:14.254278693 +0000
+@@ -783,9 +783,9 @@
+         // make sure we don't overflow unless the result *must* overflow.
+         int d1 = greatestCommonDivisor(numerator, fraction.denominator);
+         int d2 = greatestCommonDivisor(fraction.numerator, denominator);
+-        return getReducedFraction
+-            (mulAndCheck(numerator/d1, fraction.numerator/d2),
+-             mulPosAndCheck(denominator/d2, fraction.denominator/d1));
++return getReducedFraction ( getFraction ( numerator/d1, fraction.numerator/d2 ) , mulPosAndCheck ( denominator/d2, fraction.denominator/d1 )  ) ;
++ 
++ 
+     }
+ 
+     /**

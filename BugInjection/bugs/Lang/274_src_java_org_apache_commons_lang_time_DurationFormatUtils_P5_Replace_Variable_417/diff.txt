@@ -1,0 +1,11 @@
+--- /DurationFormatUtils.java	2023-07-04 01:21:38.963867439 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:21:38.967867385 +0000
+@@ -271,7 +271,7 @@
+         // timezones get funky around 0, so normalizing everything to GMT 
+         // stops the hours being off
+         Calendar start = Calendar.getInstance(timezone);
+-        start.setTime(new Date(startMillis));
++start.setTime ( new Date ( start )  ) ;
+         Calendar end = Calendar.getInstance(timezone);
+         end.setTime(new Date(endMillis));
+ 

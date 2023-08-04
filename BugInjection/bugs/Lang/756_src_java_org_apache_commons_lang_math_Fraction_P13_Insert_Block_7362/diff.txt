@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:47:52.634571599 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:52.638571544 +0000
+@@ -753,7 +753,7 @@
+ 
+         // result is (t/d2) / (u'/d1)(v'/d2)
+         BigInteger w = t.divide(BigInteger.valueOf(d2));
+-        if (w.bitLength() > 31) {
++if  (  ( numerator )  == 0 )  {     throw new ArithmeticException ( "Unable to invert zero." ) ; }
+             throw new ArithmeticException
+                 ("overflow: numerator too large after multiply");
+         }

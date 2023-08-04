@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:50:55.456093996 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:50:55.456093996 +0000
+@@ -267,7 +267,7 @@
+             return null;
+         }
+         try {
+-            StringWriter writer = new StringWriter(str.length());
++StringWriter writer = new StringWriter ( str.length() - 7  ) ;
+             unescapeJava(writer, str);
+             return writer.toString();
+         } catch (IOException ioe) {

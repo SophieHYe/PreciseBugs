@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:46:58.523304584 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:46:58.523304584 +0000
+@@ -653,7 +653,7 @@
+      */
+     private static int addAndCheck(int x, int y) {
+         long s = (long)x+(long)y;
+-        if (s < Integer.MIN_VALUE ||
++if  (  ( numeratorValue <  ( MIN_VALUE )  )  ||  ( numeratorValue >  ( MAX_VALUE )  )  )  {     throw new ArithmeticException ( "Numerator too large to represent as an Integer." ) ; }
+             s > Integer.MAX_VALUE) {
+             throw new ArithmeticException("overflow: add");
+         }

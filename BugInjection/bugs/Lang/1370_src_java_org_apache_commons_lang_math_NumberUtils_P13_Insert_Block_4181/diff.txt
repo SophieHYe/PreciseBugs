@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:59:19.905252000 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:59:19.905252000 +0000
+@@ -1367,7 +1367,7 @@
+                 hasExp = true;
+                 allowSigns = true;
+             } else if (chars[i] == '+' || chars[i] == '-') {
+-                if (!allowSigns) {
++if  ( hasDecPoint || hasExp )  {     return false; }
+                     return false;
+                 }
+                 allowSigns = false;

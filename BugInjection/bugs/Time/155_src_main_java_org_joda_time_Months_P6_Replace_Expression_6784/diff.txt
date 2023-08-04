@@ -1,0 +1,11 @@
+--- /Months.java	2023-07-04 03:24:28.839970031 +0000
++++ /Time-26/src/main/java/org/joda/time/Months.java	2023-07-04 03:24:28.839970031 +0000
+@@ -152,7 +152,7 @@
+      * @throws IllegalArgumentException if the partials are null or invalid
+      */
+     public static Months monthsBetween(ReadablePartial start, ReadablePartial end) {
+-        if (start instanceof LocalDate && end instanceof LocalDate)   {
++if  ( start instanceof LocalDate ) {
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int months = chrono.months().getDifference(
+                     ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());

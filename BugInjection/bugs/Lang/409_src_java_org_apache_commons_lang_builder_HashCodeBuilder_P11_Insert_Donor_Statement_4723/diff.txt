@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-04 01:33:59.409823687 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-04 01:33:59.409823687 +0000
+@@ -406,7 +406,7 @@
+      */
+     public HashCodeBuilder append(Object object) {
+         if (object == null) {
+-            iTotal = iTotal * iConstant;
++iTotal = iTotal * iConstant +  ( value ? 0 : 1 ) ;iTotal = iTotal * iConstant;
+ 
+         } else {
+             if (object.getClass().isArray() == false) {

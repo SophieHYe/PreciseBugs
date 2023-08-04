@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:22:39.931038773 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:22:39.931038773 +0000
+@@ -943,7 +943,7 @@
+         while (frames.hasMoreTokens()) {
+             String token = frames.nextToken();
+             // Determine if the line starts with <whitespace>at
+-            int at = token.indexOf("at");
++int at = wrapperFrame.indexOf ( "at" ) ;
+             if (at != -1 && token.substring(0, at).trim().length() == 0) {
+                 traceStarted = true;
+                 list.add(token);

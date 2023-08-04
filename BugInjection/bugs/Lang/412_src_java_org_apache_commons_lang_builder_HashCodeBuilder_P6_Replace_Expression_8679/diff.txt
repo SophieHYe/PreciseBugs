@@ -1,0 +1,11 @@
+--- /HashCodeBuilder.java	2023-07-04 01:32:57.742651357 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-04 01:32:57.746651303 +0000
+@@ -409,7 +409,7 @@
+             iTotal = iTotal * iConstant;
+ 
+         } else {
+-            if (object.getClass().isArray() == false) {
++if  ( object instanceof byte[] )  {
+                 //the simple case, not an array, just the element
+                 iTotal = iTotal * iConstant + object.hashCode();
+ 

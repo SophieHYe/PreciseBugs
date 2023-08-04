@@ -1,0 +1,14 @@
+--- /Fraction.java	2023-07-04 01:46:04.684033706 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:46:04.684033706 +0000
+@@ -539,8 +539,9 @@
+             return ONE;
+         } else if (power < 0) {
+             if (power==Integer.MIN_VALUE) { // MIN_VALUE can't be negated.
+-                return this.invert().pow(2).pow(-(power/2));
+-            }
++ 
++return this.invert().pow(2).pow((-(power / 2))); 
++ 
+             return this.invert().pow(-power);
+         } else {
+             Fraction f = this.multiplyBy(this);

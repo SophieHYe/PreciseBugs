@@ -1,0 +1,11 @@
+--- /WordUtils.java	2023-07-04 02:02:51.830376204 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/WordUtils.java	2023-07-04 02:02:51.830376204 +0000
+@@ -466,7 +466,7 @@
+                 tmp = Character.toLowerCase(ch);
+             } else if (Character.isTitleCase(ch)) {
+                 tmp = Character.toLowerCase(ch);
+-            } else if (Character.isLowerCase(ch)) {
++if  ( whitespace )  {     tmp = toTitleCase ( ch ) ; }else {     tmp = toUpperCase ( ch ) ; }
+                 if (whitespace) {
+                     tmp = Character.toTitleCase(ch);
+                 } else {

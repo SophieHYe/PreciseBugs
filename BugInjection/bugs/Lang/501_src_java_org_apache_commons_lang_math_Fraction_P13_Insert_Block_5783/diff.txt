@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:45:42.516333857 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:45:42.516333857 +0000
+@@ -498,7 +498,7 @@
+      */
+     public Fraction negate() {
+         // the positive range is one smaller than the negative range of an int.
+-        if (numerator==Integer.MIN_VALUE) {
++if  (  ( value >  ( MAX_VALUE )  )  ||  ( isNaN ( value )  )  )  {     throw new ArithmeticException ( "The value must not be greater than Integer.MAX_VALUE or NaN" ) ; }
+             throw new ArithmeticException("overflow: too large to negate");
+         }
+         return new Fraction(-numerator, denominator);

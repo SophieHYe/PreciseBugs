@@ -1,0 +1,11 @@
+--- /JVMRandom.java	2023-07-04 02:05:33.656179941 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/JVMRandom.java	2023-07-04 02:05:33.660179887 +0000
+@@ -121,7 +121,7 @@
+      */
+     public static long nextLong(long n) {
+         if (n <= 0) {
+-            throw new IllegalArgumentException(
++if  ( n <= 0 )  {     throw new IllegalArgumentException ( "Upper bound for nextInt must be positive" ) ; }
+                 "Upper bound for nextInt must be positive"
+             );
+         }

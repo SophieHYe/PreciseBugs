@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:43:47.605889134 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:47.605889134 +0000
+@@ -243,7 +243,7 @@
+      * @throws ArithmeticException if the the algorithm does not converge
+      */
+     public static Fraction getFraction(double value) {
+-        int sign = (value < 0 ? -1 : 1);
++int sign =  ( value <= 0 ? -1 : 1 ) ;
+         value = Math.abs(value);
+         if (value  > Integer.MAX_VALUE || Double.isNaN(value)) {
+             throw new ArithmeticException

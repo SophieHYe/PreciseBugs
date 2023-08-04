@@ -1,0 +1,11 @@
+--- /LocaleUtils.java	2023-07-04 01:55:04.256720216 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/LocaleUtils.java	2023-07-04 01:55:04.256720216 +0000
+@@ -236,7 +236,7 @@
+         List langs = (List) cLanguagesByCountry.get(countryCode);  //syncd
+         if (langs == null) {
+             if (countryCode != null) {
+-                langs = new ArrayList();
++langs = new  LinkedHashSet  (  ) ;
+                 List locales = availableLocaleList();
+                 for (int i = 0; i < locales.size(); i++) {
+                     Locale locale = (Locale) locales.get(i);

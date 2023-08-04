@@ -1,0 +1,18 @@
+--- /Weeks.java	2023-07-04 03:25:43.454960132 +0000
++++ /Time-26/src/main/java/org/joda/time/Weeks.java	2023-07-04 03:25:43.454960132 +0000
+@@ -116,10 +116,11 @@
+      */
+     public static Weeks weeksBetween(ReadablePartial start, ReadablePartial end) {
+         if (start instanceof LocalDate && end instanceof LocalDate)   {
+-            Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+-            int weeks = chrono.weeks().getDifference(
+-                    ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());
+-            return Weeks.weeks(weeks);
++ 
++ 
++ 
++ 
++ 
+         }
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);
+         return Weeks.weeks(amount);

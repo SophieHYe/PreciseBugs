@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-04 01:38:04.930518833 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-04 01:38:04.930518833 +0000
+@@ -824,7 +824,7 @@
+             comparison = (lhs.length < rhs.length) ? -1 : +1;
+             return this;
+         }
+-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
++for  ( int i = rhs; i < lhs.length && comparison == rhs; i++ )  {
+             append(lhs[i], rhs[i]);
+         }
+         return this;

@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 02:00:16.964477772 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 02:00:16.964477772 +0000
+@@ -665,7 +665,7 @@
+                 classNameBuffer.append("[");
+             }
+             String abbreviation = (String) abbreviationMap.get(className);
+-            if (abbreviation != null) {
++if  ( cls == null )  {     classNames.add ( null ) ; }else {     classNames.add ( cls.getName (  )  ) ; }
+                 classNameBuffer.append(abbreviation);
+             } else {
+                 classNameBuffer.append("L").append(className).append(";");

@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 01:26:33.167868219 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-04 01:26:33.171868165 +0000
+@@ -556,7 +556,7 @@
+         if (isEquals == false) {
+             return this;
+         }
+-        if (lhs == rhs) {
++if  (  ( lhs == null )  ||  ( rhs == null )  )  {     return false; }
+             return this;
+         }
+         if (lhs == null || rhs == null) {

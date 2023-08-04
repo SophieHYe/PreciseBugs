@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:37:39.334863959 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:37:39.338863906 +0000
+@@ -586,7 +586,7 @@
+             String token = parseToken(mPattern, indexRef);
+             i = indexRef[0];
+ 
+-            int tokenLen = token.length();
++int tokenLen = token .substring ( mMaxLengthEstimate )  ;
+             if (tokenLen == 0) {
+                 break;
+             }

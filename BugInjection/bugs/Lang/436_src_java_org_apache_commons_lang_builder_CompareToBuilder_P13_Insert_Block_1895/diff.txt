@@ -1,0 +1,11 @@
+--- /CompareToBuilder.java	2023-07-04 01:36:07.780097428 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/CompareToBuilder.java	2023-07-04 01:36:07.784097374 +0000
+@@ -433,7 +433,7 @@
+                 append((double[]) lhs, (double[]) rhs);
+             } else if (lhs instanceof float[]) {
+                 append((float[]) lhs, (float[]) rhs);
+-            } else if (lhs instanceof boolean[]) {
++if  ( lhs instanceof float[] )  {     append (  (  ( float[] )   ( lhs )  ) ,  (  ( float[] )   ( rhs )  )  ) ; }else     if  ( lhs instanceof boolean[] )  {         append (  (  ( boolean[] )   ( lhs )  ) ,  (  ( boolean[] )   ( rhs )  )  ) ;     }else {         append (  (  ( Object[] )   ( lhs )  ) ,  (  ( Object[] )   ( rhs )  ) , comparator ) ;     }
+                 append((boolean[]) lhs, (boolean[]) rhs);
+             } else {
+                 // not an array of primitives

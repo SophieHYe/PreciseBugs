@@ -1,0 +1,11 @@
+--- /Minutes.java	2023-07-04 03:19:25.240075703 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:25.240075703 +0000
+@@ -115,7 +115,7 @@
+      * @throws IllegalArgumentException if the partials are null or invalid
+      */
+     public static Minutes minutesBetween(ReadablePartial start, ReadablePartial end) {
+-        if (start instanceof LocalTime && end instanceof LocalTime)   {
++if  (  end instanceof LocalTime )    {
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int minutes = chrono.minutes().getDifference(
+                     ((LocalTime) end).getLocalMillis(), ((LocalTime) start).getLocalMillis());

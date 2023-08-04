@@ -1,0 +1,12 @@
+--- /YearMonthDay.java	2023-07-04 03:15:58.438867589 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:15:58.438867589 +0000
+@@ -858,7 +858,8 @@
+      */
+     public YearMonthDay withMonthOfYear(int monthOfYear) {
+         int[] newValues = getValues();
+-        newValues = getChronology().monthOfYear().set(this, MONTH_OF_YEAR, newValues, monthOfYear);
++ 
++ 
+         return new YearMonthDay(this, newValues);
+     }
+ 

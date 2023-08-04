@@ -1,0 +1,14 @@
+--- /DateUtils.java	2023-07-04 01:26:52.059611387 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:26:52.059611387 +0000
+@@ -222,8 +222,9 @@
+      */
+     public static boolean isSameLocalTime(Calendar cal1, Calendar cal2) {
+         if (cal1 == null || cal2 == null) {
+-            throw new IllegalArgumentException("The date must not be null");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("The date must not be null"); 
++ 
+         return (cal1.get(Calendar.MILLISECOND) == cal2.get(Calendar.MILLISECOND) &&
+                 cal1.get(Calendar.SECOND) == cal2.get(Calendar.SECOND) &&
+                 cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE) &&

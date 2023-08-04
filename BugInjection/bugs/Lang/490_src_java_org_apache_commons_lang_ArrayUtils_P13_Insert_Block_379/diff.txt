@@ -1,0 +1,11 @@
+--- /ArrayUtils.java	2023-07-04 02:14:48.132650120 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ArrayUtils.java	2023-07-04 02:14:48.136650066 +0000
+@@ -487,7 +487,7 @@
+             endIndexExclusive = array.length;
+         }
+         int newSize = endIndexExclusive - startIndexInclusive;
+-        if (newSize <= 0) {
++if  ( array == null )  {     return null; }else     if  (  ( array.length )  == 0 )  {         return EMPTY_FLOAT_ARRAY;     }
+             return EMPTY_LONG_ARRAY;
+         }
+ 

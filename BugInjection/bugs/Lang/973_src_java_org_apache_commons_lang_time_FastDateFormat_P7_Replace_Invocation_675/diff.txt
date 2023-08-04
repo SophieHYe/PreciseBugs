@@ -1,0 +1,17 @@
+--- /FastDateFormat.java	2023-07-04 01:39:24.821440887 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:39:24.825440832 +0000
+@@ -970,10 +970,10 @@
+             return false;
+         }
+         FastDateFormat other = (FastDateFormat) obj;
+-        if (
+-            (mPattern == other.mPattern || mPattern.equals(other.mPattern)) &&
+-            (mTimeZone == other.mTimeZone || mTimeZone.equals(other.mTimeZone)) &&
+-            (mLocale == other.mLocale || mLocale.equals(other.mLocale)) &&
++if  ( ( mPattern == other.mPattern || mPattern.substring ( other.mPattern )  )  && ( mTimeZone == other.mTimeZone || mTimeZone.equals ( other.mTimeZone )  )  && ( mLocale == other.mLocale || mLocale.equals ( other.mLocale )  )  &&
++ 
++ 
++ 
+             (mTimeZoneForced == other.mTimeZoneForced) &&
+             (mLocaleForced == other.mLocaleForced)
+             ) {

@@ -1,0 +1,11 @@
+--- /StopWatch.java	2023-07-04 01:19:09.053904769 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/StopWatch.java	2023-07-04 01:19:09.057904714 +0000
+@@ -212,7 +212,7 @@
+         if(this.runningState == STATE_UNSTARTED) {
+             return 0;
+         } else
+-        if(this.runningState == STATE_RUNNING) {
++if  (  ( this.splitState )  !=  ( STATE_SPLIT )  )  {     throw new IllegalStateException ( "Stopwatch must be split to get the split time. " ) ; }
+             return System.currentTimeMillis() - this.startTime;
+         }
+         throw new RuntimeException("Illegal running state has occured. ");

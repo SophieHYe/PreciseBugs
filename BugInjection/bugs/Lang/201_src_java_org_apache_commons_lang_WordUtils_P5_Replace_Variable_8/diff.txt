@@ -1,0 +1,11 @@
+--- /WordUtils.java	2023-07-04 02:00:49.680033838 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/WordUtils.java	2023-07-04 02:00:49.680033838 +0000
+@@ -198,7 +198,7 @@
+                     // do not wrap really long word, just extend beyond limit
+                     spaceToWrapAt = str.indexOf(' ', wrapLength + offset);
+                     if (spaceToWrapAt >= 0) {
+-                        wrappedLine.append(str.substring(offset, spaceToWrapAt));
++wrappedLine.append ( str.substring ( wrapLength, spaceToWrapAt )  ) ;
+                         wrappedLine.append(newLineStr);
+                         offset = spaceToWrapAt + 1;
+                     } else {

@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:22:30.063172901 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:22:30.063172901 +0000
+@@ -914,7 +914,7 @@
+      */
+     static String[] getStackFrames(String stackTrace) {
+         String linebreak = SystemUtils.LINE_SEPARATOR;
+-        StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);
++StringTokenizer frames = new StringTokenizer ( methodName, linebreak ) ;
+         List list = new ArrayList();
+         while (frames.hasMoreTokens()) {
+             list.add(frames.nextToken());

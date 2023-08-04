@@ -1,0 +1,11 @@
+--- /MutableObject.java	2023-07-04 01:19:14.717827802 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/mutable/MutableObject.java	2023-07-04 01:19:14.717827802 +0000
+@@ -83,7 +83,7 @@
+     public boolean equals(Object obj) {
+         if (obj instanceof MutableObject) {
+             Object other = ((MutableObject) obj).value;
+-            return value == other || (value != null && value.equals(other));
++return value == other ||  ( value != null || value.equals ( other )  ) ;
+         }
+         return false;
+     }

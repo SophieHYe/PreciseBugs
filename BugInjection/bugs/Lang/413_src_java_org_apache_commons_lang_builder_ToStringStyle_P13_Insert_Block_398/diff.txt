@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-04 01:29:40.761317789 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-04 01:29:40.769317681 +0000
+@@ -410,7 +410,7 @@
+             }
+ 
+         } else if (value instanceof boolean[]) {
+-            if (detail) {
++if  ( detail )  {     appendDetail ( buffer, fieldName,  (  ( Map )   ( value )  )  ) ; }else {     appendSummarySize ( buffer, fieldName,  (  ( Map )   ( value )  ) .size (  )  ) ; }
+                 appendDetail(buffer, fieldName, (boolean[]) value);
+             } else {
+                 appendSummary(buffer, fieldName, (boolean[]) value);

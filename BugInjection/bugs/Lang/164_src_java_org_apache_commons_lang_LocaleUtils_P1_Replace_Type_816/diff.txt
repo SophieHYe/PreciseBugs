@@ -1,0 +1,11 @@
+--- /LocaleUtils.java	2023-07-04 01:54:18.609339335 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/LocaleUtils.java	2023-07-04 01:54:18.609339335 +0000
+@@ -161,7 +161,7 @@
+      * @return the unmodifiable list of Locale objects, 0 being locale, never null
+      */
+     public static List localeLookupList(Locale locale, Locale defaultLocale) {
+-        List list = new ArrayList(4);
++List list = new  LinkedHashSet  ( 4 ) ;
+         if (locale != null) {
+             list.add(locale);
+             if (locale.getVariant().length() > 0) {

@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-04 01:24:01.585928846 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:24:01.585928846 +0000
+@@ -359,7 +359,7 @@
+ 
+         // Avoid infinite loop between decompose() and printStackTrace().
+         if (t instanceof Nestable) {
+-            ((Nestable) t).printPartialStackTrace(pw);
++(  ( Nestable ) throwable ) .printPartialStackTrace ( out ) ;(  ( Nestable )  t ) .printPartialStackTrace ( pw ) ;
+         } else {
+             t.printStackTrace(pw);
+         }

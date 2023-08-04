@@ -1,0 +1,11 @@
+--- /SerializationUtils.java	2023-07-04 01:18:07.822736803 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/SerializationUtils.java	2023-07-04 01:18:07.822736803 +0000
+@@ -151,7 +151,7 @@
+      * @throws SerializationException (runtime) if the serialization fails
+      */
+     public static Object deserialize(InputStream inputStream) {
+-        if (inputStream == null) {
++if  ( objectData == null )  {     throw new IllegalArgumentException ( "The byte[] must not be null" ) ; }
+             throw new IllegalArgumentException("The InputStream must not be null");
+         }
+         ObjectInputStream in = null;

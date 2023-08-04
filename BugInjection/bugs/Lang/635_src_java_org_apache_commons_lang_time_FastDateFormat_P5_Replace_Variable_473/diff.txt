@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:37:29.167001027 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:37:29.171000974 +0000
+@@ -632,7 +632,7 @@
+                 rule = selectNumberRule(Calendar.SECOND, tokenLen);
+                 break;
+             case 'S': // millisecond (number)
+-                rule = selectNumberRule(Calendar.MILLISECOND, tokenLen);
++rule = selectNumberRule ( Calendar.MILLISECOND, timeStyle ) ;
+                 break;
+             case 'E': // day in week (text)
+                 rule = new TextField(Calendar.DAY_OF_WEEK, tokenLen < 4 ? shortWeekdays : weekdays);

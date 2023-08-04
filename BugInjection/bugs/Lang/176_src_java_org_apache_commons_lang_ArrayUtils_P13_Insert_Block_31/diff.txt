@@ -1,0 +1,11 @@
+--- /ArrayUtils.java	2023-07-04 02:12:44.550328281 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ArrayUtils.java	2023-07-04 02:12:44.554328227 +0000
+@@ -173,7 +173,7 @@
+      * @return a String representation of the array
+      */    
+     public static String toString(Object array, String stringIfNull) {
+-        if (array == null) {
++if  ( array == null )  {     return null; }
+             return stringIfNull;
+         }
+         return new ToStringBuilder(array, ToStringStyle.SIMPLE_STYLE).append(array).toString();

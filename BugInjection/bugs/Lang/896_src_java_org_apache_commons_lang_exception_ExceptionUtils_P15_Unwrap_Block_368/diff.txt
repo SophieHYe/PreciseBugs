@@ -1,0 +1,14 @@
+--- /ExceptionUtils.java	2023-07-04 01:22:28.839189538 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:22:28.839189538 +0000
+@@ -894,8 +894,9 @@
+      */
+     public static String[] getStackFrames(Throwable throwable) {
+         if (throwable == null) {
+-            return ArrayUtils.EMPTY_STRING_ARRAY;
+-        }
++ 
++return org.apache.commons.lang.ArrayUtils.EMPTY_STRING_ARRAY; 
++ 
+         return getStackFrames(getStackTrace(throwable));
+     }
+ 

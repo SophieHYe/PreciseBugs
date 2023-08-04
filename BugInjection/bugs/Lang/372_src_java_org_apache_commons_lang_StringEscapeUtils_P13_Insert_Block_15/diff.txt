@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:51:59.763222169 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:51:59.763222169 +0000
+@@ -369,7 +369,7 @@
+             }
+             out.write(ch);
+         }
+-        if (hadSlash) {
++if  ( escapeSingleQuote )  {     out.write ( '\\' ) ; }
+             // then we're in the weird case of a \ at the end of the
+             // string, let's output it anyway.
+             out.write('\\');

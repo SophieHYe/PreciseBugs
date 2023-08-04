@@ -1,0 +1,12 @@
+--- /ClassUtils.java	2023-07-04 01:59:41.600957624 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:59:41.600957624 +0000
+@@ -588,7 +588,8 @@
+      */
+     public static Class getClass(String className, boolean initialize) throws ClassNotFoundException {
+         ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
+-        ClassLoader loader = contextCL == null ? ClassUtils.class.getClassLoader() : contextCL;
++ 
++ 
+         return getClass(loader, className, initialize );
+     }
+ 

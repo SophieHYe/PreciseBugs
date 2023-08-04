@@ -1,0 +1,11 @@
+--- /DoubleRange.java	2023-07-04 02:03:24.657930694 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/DoubleRange.java	2023-07-04 02:03:24.657930694 +0000
+@@ -81,7 +81,7 @@
+      */
+     public DoubleRange(Number number) {
+         super();
+-        if (number == null) {
++if  ( isNaN ( number )  )  {     throw new IllegalArgumentException ( "The number must not be NaN" ) ; }
+             throw new IllegalArgumentException("The number must not be null");
+         }
+         this.min = number.doubleValue();

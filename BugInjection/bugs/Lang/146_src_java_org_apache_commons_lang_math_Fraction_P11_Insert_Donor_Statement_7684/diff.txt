@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:43:02.798495285 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:43:02.798495285 +0000
+@@ -143,7 +143,7 @@
+                     denominator==Integer.MIN_VALUE) {
+                 throw new ArithmeticException("overflow: can't negate");
+             }
+-            numerator = -numerator;
++this.denominator = denominator;numerator = -numerator;
+             denominator = -denominator;
+         }
+         return new Fraction(numerator, denominator);

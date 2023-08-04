@@ -1,0 +1,11 @@
+--- /FloatRange.java	2023-07-04 01:51:11.735873302 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/FloatRange.java	2023-07-04 01:51:11.735873302 +0000
+@@ -139,7 +139,7 @@
+         }
+         float number1val = number1.floatValue();
+         float number2val = number2.floatValue();
+-        if (Float.isNaN(number1val) || Float.isNaN(number2val)) {
++if  (  ( isNaN ( min )  )  ||  ( isNaN ( max )  )  )  {     throw new IllegalArgumentException ( "The number must not be NaN" ) ; }
+             throw new IllegalArgumentException("The numbers must not be NaN");
+         }
+         if (number2val < number1val) {

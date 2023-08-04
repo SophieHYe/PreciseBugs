@@ -1,0 +1,13 @@
+--- /HashCodeBuilder.java	2023-07-04 01:32:52.742718412 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/HashCodeBuilder.java	2023-07-04 01:32:52.742718412 +0000
+@@ -369,8 +369,8 @@
+             Field f = fields[i];
+             if (!excludedFieldList.contains(f.getName())
+                 && (f.getName().indexOf('$') == -1)
+-                && (useTransients || !Modifier.isTransient(f.getModifiers()))
+-                && (!Modifier.isStatic(f.getModifiers()))) {
++&&  ( useTransients || !Modifier.isStatic ( f.getModifiers (  )  )  ) &&  ( !Modifier.isStatic ( f.getModifiers (  )  )  )  )  {
++ 
+                 try {
+                     builder.append(f.get(object));
+                 } catch (IllegalAccessException e) {

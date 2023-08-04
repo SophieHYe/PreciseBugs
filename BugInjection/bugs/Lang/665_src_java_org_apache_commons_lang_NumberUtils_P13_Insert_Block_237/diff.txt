@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 02:08:32.257754497 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/NumberUtils.java	2023-07-04 02:08:32.257754497 +0000
+@@ -662,7 +662,7 @@
+                 hasDecPoint = true;
+             } else if (chars[i] == 'e' || chars[i] == 'E') {
+                 // we've already taken care of hex.
+-                if (hasExp) {
++if  ( hasDecPoint || hasExp )  {     return false; }
+                     // two E's
+                     return false;
+                 }

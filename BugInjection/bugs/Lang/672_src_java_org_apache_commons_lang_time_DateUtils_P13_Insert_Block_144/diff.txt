@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:28:56.393921008 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:28:56.393921008 +0000
+@@ -669,7 +669,7 @@
+         boolean roundUp = false;
+         for (int i = 0; i < fields.length; i++) {
+             for (int j = 0; j < fields[i].length; j++) {
+-                if (fields[i][j] == field) {
++if  ( round && roundUp )  {     if  ( field ==  ( SEMI_MONTH )  )  {         if  (  ( val.get ( DATE )  )  == 1 )  {             val.add ( DATE, 15 ) ;         }else {             val.add ( DATE,  ( -15 )  ) ;             val.add ( MONTH, 1 ) ;         }     }else {         val.add ( fields[i][0], 1 ) ;     } }
+                     //This is our field... we stop looping
+                     if (round && roundUp) {
+                         if (field == DateUtils.SEMI_MONTH) {

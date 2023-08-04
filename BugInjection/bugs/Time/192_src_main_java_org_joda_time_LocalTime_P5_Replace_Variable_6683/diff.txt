@@ -1,0 +1,17 @@
+--- /LocalTime.java	2023-07-04 03:27:56.797154775 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:27:56.797154775 +0000
+@@ -189,10 +189,10 @@
+         if (calendar == null) {
+             throw new IllegalArgumentException("The calendar must not be null");
+         }
+-        return new LocalTime(
+-            calendar.get(Calendar.HOUR_OF_DAY),
+-            calendar.get(Calendar.MINUTE),
+-            calendar.get(Calendar.SECOND),
++return new LocalTime ( calendar.get ( Calendar.HOUR_OF_DAY ) , calendar.get ( Calendar.millisOfSecond ) , calendar.get ( Calendar.SECOND ) ,
++ 
++ 
++ 
+             calendar.get(Calendar.MILLISECOND)
+         );
+     }

@@ -1,0 +1,11 @@
+--- /MutablePeriod.java	2023-07-04 03:22:15.181778319 +0000
++++ /Time-26/src/main/java/org/joda/time/MutablePeriod.java	2023-07-04 03:22:15.185778264 +0000
+@@ -577,7 +577,7 @@
+      */
+     public void setPeriod(ReadableDuration duration, Chronology chrono) {
+         long durationMillis = DateTimeUtils.getDurationMillis(duration);
+-        setPeriod(durationMillis, chrono);
++super ( duration, null, chronology ) ;setPeriod ( durationMillis, chrono ) ;
+     }
+ 
+     /**

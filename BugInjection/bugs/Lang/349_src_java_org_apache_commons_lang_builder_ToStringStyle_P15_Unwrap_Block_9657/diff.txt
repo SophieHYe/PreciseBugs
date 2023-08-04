@@ -1,0 +1,18 @@
+--- /ToStringStyle.java	2023-07-04 01:28:47.154046632 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-04 01:28:47.154046632 +0000
+@@ -347,10 +347,11 @@
+             ObjectUtils.appendIdentityToString(buffer, value);
+ 
+         } else if (value instanceof Collection) {
+-            if (detail) {
+-                appendDetail(buffer, fieldName, (Collection) value);
+-            } else {
+-                appendSummarySize(buffer, fieldName, ((Collection) value).size());
++ 
++if (detail) {    appendDetail(buffer, fieldName, ((java.util.Collection) (value)));}else {    appendSummarySize(buffer, fieldName, ((java.util.Collection) (value)).size());}; 
++ 
++ 
++ 
+             }
+ 
+         } else if (value instanceof Map) {

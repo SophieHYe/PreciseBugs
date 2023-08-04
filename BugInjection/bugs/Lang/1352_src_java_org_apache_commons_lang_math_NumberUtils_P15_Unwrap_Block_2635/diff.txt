@@ -1,0 +1,17 @@
+--- /NumberUtils.java	2023-07-04 01:59:13.681336450 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:59:13.681336450 +0000
+@@ -1350,10 +1350,11 @@
+                 allowSigns = false;
+ 
+             } else if (chars[i] == '.') {
+-                if (hasDecPoint || hasExp) {
++ 
++if (hasDecPoint || hasExp) {    return false;}; hasDecPoint = true; 
+                     // two decimal points or dec in exponent   
+-                    return false;
+-                }
++ 
++ 
+                 hasDecPoint = true;
+             } else if (chars[i] == 'e' || chars[i] == 'E') {
+                 // we've already taken care of hex.

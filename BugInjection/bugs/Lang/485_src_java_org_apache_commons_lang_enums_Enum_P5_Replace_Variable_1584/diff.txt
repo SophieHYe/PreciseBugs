@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 01:24:51.649248303 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enums/Enum.java	2023-07-04 01:24:51.649248303 +0000
+@@ -482,7 +482,7 @@
+         while (cls != null && cls != Enum.class && cls != ValuedEnum.class) {
+             Entry loopEntry = (Entry) cEnumClasses.get(cls);
+             if (loopEntry != null) {
+-                entry.list.addAll(loopEntry.list);
++entry.list.addAll ( entry.list ) ;
+                 entry.map.putAll(loopEntry.map);
+                 break;  // stop here, as this will already have had superclasses added
+             }

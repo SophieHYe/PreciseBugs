@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 02:06:23.783499409 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enum/Enum.java	2023-07-04 02:06:23.783499409 +0000
+@@ -464,7 +464,7 @@
+         if (enumClass == null) {
+             throw new IllegalArgumentException("The Enum Class must not be null");
+         }
+-        if (Enum.class.isAssignableFrom(enumClass) == false) {
++if  ( enumClass == null )  {     throw new IllegalArgumentException ( "getEnumClass (  )  must not be null" ) ; }
+             throw new IllegalArgumentException("The Class must be a subclass of Enum");
+         }
+         Entry entry = (Entry) cEnumClasses.get(enumClass);

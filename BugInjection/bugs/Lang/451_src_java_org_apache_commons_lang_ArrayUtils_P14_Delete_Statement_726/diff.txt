@@ -1,0 +1,10 @@
+--- /ArrayUtils.java	2023-07-04 02:14:23.748981228 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ArrayUtils.java	2023-07-04 02:14:23.752981174 +0000
+@@ -449,6 +449,7 @@
+         }
+         int newSize = endIndexExclusive - startIndexInclusive;
+         Class type = array.getClass().getComponentType();
++ 
+         if (newSize <= 0) {
+             return (Object[]) Array.newInstance(type, 0);
+         }

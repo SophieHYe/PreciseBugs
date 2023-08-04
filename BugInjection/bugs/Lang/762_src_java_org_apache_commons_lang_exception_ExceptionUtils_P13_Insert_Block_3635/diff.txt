@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:21:49.751720814 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:21:49.755720760 +0000
+@@ -759,7 +759,7 @@
+             return;
+         }
+         if (writer == null) {
+-            throw new IllegalArgumentException("The PrintWriter must not be null");
++if  ( stream == null )  {     throw new IllegalArgumentException ( "The PrintStream must not be null" ) ; }
+         }
+         String trace[] = getRootCauseStackTrace(throwable);
+         for (int i = 0; i < trace.length; i++) {

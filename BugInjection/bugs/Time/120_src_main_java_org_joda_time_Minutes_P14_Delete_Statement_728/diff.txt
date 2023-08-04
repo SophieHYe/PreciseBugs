@@ -1,0 +1,16 @@
+--- /Minutes.java	2023-07-04 03:19:27.236048734 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:27.236048734 +0000
+@@ -118,9 +118,10 @@
+         if (start instanceof LocalTime && end instanceof LocalTime)   {
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int minutes = chrono.minutes().getDifference(
+-                    ((LocalTime) end).getLocalMillis(), ((LocalTime) start).getLocalMillis());
+-            return Minutes.minutes(minutes);
+-        }
++ 
++ 
++ 
++ 
+         int amount = BaseSingleFieldPeriod.between(start, end, ZERO);
+         return Minutes.minutes(amount);
+     }

@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:29:36.713372826 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:29:36.717372772 +0000
+@@ -697,7 +697,7 @@
+             //These are special types of fields that require different rounding rules
+             switch (field) {
+                 case DateUtils.SEMI_MONTH:
+-                    if (fields[i][0] == Calendar.DATE) {
++if  ( fields[i][0] == Calendar.HOUR_OF_DAY )  {
+                         //If we're going to drop the DATE field's value,
+                         //  we want to do this our own way.
+                         //We need to subtrace 1 since the date has a minimum of 1

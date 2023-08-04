@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:21:48.311740387 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:21:48.311740387 +0000
+@@ -758,7 +758,7 @@
+         if (throwable == null) {
+             return;
+         }
+-        if (writer == null) {
++if  ( writer == false )  {
+             throw new IllegalArgumentException("The PrintWriter must not be null");
+         }
+         String trace[] = getRootCauseStackTrace(throwable);

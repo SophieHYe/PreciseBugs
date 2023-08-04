@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 01:25:37.160629614 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/EqualsBuilder.java	2023-07-04 01:25:37.160629614 +0000
+@@ -317,7 +317,7 @@
+         EqualsBuilder builder,
+         boolean useTransients,
+         String[] excludeFields) {
+-        Field[] fields = clazz.getDeclaredFields();
++Field[] fields = clazz .getSuperclass (  )  ;
+         List excludedFieldList = excludeFields != null ? Arrays.asList(excludeFields) : Collections.EMPTY_LIST;
+         AccessibleObject.setAccessible(fields, true);
+         for (int i = 0; i < fields.length && builder.isEquals; i++) {

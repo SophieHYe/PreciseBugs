@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 02:06:18.299573894 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enum/Enum.java	2023-07-04 02:06:18.303573840 +0000
+@@ -429,7 +429,7 @@
+      */
+     protected static List getEnumList(Class enumClass) {
+         Entry entry = getEntry(enumClass);
+-        if (entry == null) {
++if  ( entry == null )  {     return null; }
+             return Collections.EMPTY_LIST;
+         }
+         return entry.unmodifiableList;

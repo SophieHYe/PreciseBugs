@@ -1,0 +1,16 @@
+--- /NumberUtils.java	2023-07-04 01:20:55.452458813 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:20:55.452458813 +0000
+@@ -1367,9 +1367,10 @@
+                 hasExp = true;
+                 allowSigns = true;
+             } else if (chars[i] == '+' || chars[i] == '-') {
+-                if (!allowSigns) {
+-                    return false;
+-                }
++ 
++if (!allowSigns) {    return false;}; allowSigns = false; foundDigit = false; 
++ 
++ 
+                 allowSigns = false;
+                 foundDigit = false; // we need a digit after the E
+             } else {

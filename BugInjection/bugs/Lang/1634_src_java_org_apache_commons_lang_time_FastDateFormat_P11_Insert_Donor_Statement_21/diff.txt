@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:33:16.050405759 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:33:16.050405759 +0000
+@@ -1631,7 +1631,7 @@
+          */
+         TimeZoneDisplayKey(TimeZone timeZone,
+                            boolean daylight, int style, Locale locale) {
+-            mTimeZone = timeZone;
++mTimeZoneForced =  ( timeZone != null ) ;mTimeZone = timeZone;
+             if (daylight) {
+                 style |= 0x80000000;
+             }

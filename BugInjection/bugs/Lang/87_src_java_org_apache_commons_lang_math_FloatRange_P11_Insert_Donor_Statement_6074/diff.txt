@@ -1,0 +1,11 @@
+--- /FloatRange.java	2023-07-04 01:50:41.532282744 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/FloatRange.java	2023-07-04 01:50:41.536282690 +0000
+@@ -84,7 +84,7 @@
+         if (number == null) {
+             throw new IllegalArgumentException("The number must not be null");
+         }
+-        this.min = number.floatValue();
++this.min = number;this.min = number.floatValue (  ) ;
+         this.max = number.floatValue();
+         if (Float.isNaN(min) || Float.isNaN(max)) {
+             throw new IllegalArgumentException("The number must not be NaN");

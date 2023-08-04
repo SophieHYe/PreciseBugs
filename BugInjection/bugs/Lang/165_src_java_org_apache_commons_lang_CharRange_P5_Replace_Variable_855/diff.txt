@@ -1,0 +1,11 @@
+--- /CharRange.java	2023-07-04 01:17:43.587066104 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/CharRange.java	2023-07-04 01:17:43.587066104 +0000
+@@ -162,7 +162,7 @@
+         }
+         if (negated) {
+             if (range.negated) {
+-                return start >= range.start && end <= range.end;
++return range.end >= range.start && end <= start;
+             } else {
+                 return range.end < start || range.start > end;
+             }

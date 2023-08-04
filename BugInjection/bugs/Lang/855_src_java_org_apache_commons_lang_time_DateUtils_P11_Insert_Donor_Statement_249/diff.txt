@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:31:53.743509701 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:31:53.743509701 +0000
+@@ -852,7 +852,7 @@
+                 throw new IllegalArgumentException("The range style " + rangeStyle + " is not valid.");
+         }
+         if (startCutoff < Calendar.SUNDAY) {
+-            startCutoff += 7;
++startCutoff -= 7;startCutoff += 7;
+         }
+         if (startCutoff > Calendar.SATURDAY) {
+             startCutoff -= 7;

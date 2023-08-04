@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:35:12.592840061 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:35:12.592840061 +0000
+@@ -492,7 +492,7 @@
+         if (value == null) {
+             // This is a very slow call, so cache the results.
+             value = tz.getDisplayName(daylight, style, locale);
+-            cTimeZoneDisplayCache.put(key, value);
++cTimeInstanceCache.put ( key, format ) ;cTimeZoneDisplayCache.put ( key, value ) ;
+         }
+         return value;
+     }

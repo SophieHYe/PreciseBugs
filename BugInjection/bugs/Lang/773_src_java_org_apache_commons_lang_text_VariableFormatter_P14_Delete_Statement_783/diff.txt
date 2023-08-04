@@ -1,0 +1,12 @@
+--- /VariableFormatter.java	2023-07-04 02:11:24.995408621 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-04 02:11:24.999408567 +0000
+@@ -771,7 +771,8 @@
+                     resultObj = resolveVariable(variable);
+                     if (resultObj != null) {
+                         resultObj = doReplace(resultObj, priorVariables);
+-                        buf.append(resultObj);
++ 
++ 
+                     } else {
+                         // variable not defined - so put it back in the value
+                         buf.append(getVariablePrefix()).append(variable).append(getVariableSuffix());

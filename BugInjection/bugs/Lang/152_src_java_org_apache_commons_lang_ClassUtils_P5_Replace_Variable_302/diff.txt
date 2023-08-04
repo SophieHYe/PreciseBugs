@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 01:56:17.551726000 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:56:17.551726000 +0000
+@@ -149,7 +149,7 @@
+         char[] chars = className.toCharArray();
+         int lastDot = 0;
+         for (int i = 0; i < chars.length; i++) {
+-            if (chars[i] == PACKAGE_SEPARATOR_CHAR) {
++if  ( PACKAGE_SEPARATOR_CHAR[i] == chars )  {
+                 lastDot = i + 1;
+             } else if (chars[i] == INNER_CLASS_SEPARATOR_CHAR) {  // handle inner classes
+                 chars[i] = PACKAGE_SEPARATOR_CHAR;

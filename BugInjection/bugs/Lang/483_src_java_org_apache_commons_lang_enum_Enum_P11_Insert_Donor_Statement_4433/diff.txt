@@ -1,0 +1,11 @@
+--- /Enum.java	2023-07-04 02:06:26.251465888 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enum/Enum.java	2023-07-04 02:06:26.251465888 +0000
+@@ -480,7 +480,7 @@
+      * @return the enum entry
+      */
+     private static Entry createEntry(Class enumClass) {
+-        Entry entry = new Entry();
++Entry entry = getEntry ( enumClass ) ;Entry entry = new Entry (  ) ;
+         Class cls = enumClass.getSuperclass();
+         while (cls != null && cls != Enum.class && cls != ValuedEnum.class) {
+             Entry loopEntry = (Entry) cEnumClasses.get(cls);

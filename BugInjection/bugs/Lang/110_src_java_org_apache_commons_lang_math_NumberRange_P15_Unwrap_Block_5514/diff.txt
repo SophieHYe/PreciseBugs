@@ -1,0 +1,16 @@
+--- /NumberRange.java	2023-07-04 02:00:28.212325146 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberRange.java	2023-07-04 02:00:28.212325146 +0000
+@@ -108,9 +108,10 @@
+                 throw new IllegalArgumentException("The number must not be NaN");
+             }
+         } else if (num1 instanceof Float) {
+-            if (((Float) num1).isNaN() || ((Float) num2).isNaN()) {
+-                throw new IllegalArgumentException("The number must not be NaN");
+-            }
++ 
++if ((((java.lang.Float) (num1)).isNaN()) || (((java.lang.Float) (num2)).isNaN())) {    throw new java.lang.IllegalArgumentException("The number must not be NaN");}; 
++ 
++ 
+         }
+         
+         int compare = ((Comparable) num1).compareTo(num2);

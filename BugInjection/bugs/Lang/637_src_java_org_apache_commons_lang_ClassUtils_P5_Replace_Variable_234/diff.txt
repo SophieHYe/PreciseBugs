@@ -1,0 +1,11 @@
+--- /ClassUtils.java	2023-07-04 01:59:57.088747471 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:59:57.092747417 +0000
+@@ -634,7 +634,7 @@
+             }
+             Method candidateMethod;
+             try {
+-                candidateMethod = candidateClass.getMethod(methodName, parameterTypes);
++candidateMethod = methodName.getMethod ( candidateClass, parameterTypes ) ;
+             } catch (NoSuchMethodException ex) {
+                 continue;
+             }

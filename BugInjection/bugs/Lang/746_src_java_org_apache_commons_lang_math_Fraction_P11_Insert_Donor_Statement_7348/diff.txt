@@ -1,0 +1,13 @@
+--- /Fraction.java	2023-07-04 01:47:42.138713788 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:42.142713733 +0000
+@@ -743,8 +743,8 @@
+         // t = u(v'/d1) +/- v(u'/d1)
+         BigInteger uvp = BigInteger.valueOf(numerator)
+             .multiply(BigInteger.valueOf(fraction.denominator/d1));
+-        BigInteger upv = BigInteger.valueOf(fraction.numerator)
+-            .multiply(BigInteger.valueOf(denominator/d1));
++BigInteger uvp = BigInteger.valueOf ( numerator ) .multiply ( BigInteger.valueOf ( fraction.denominator/d1 )  ) ;BigInteger upv = BigInteger.valueOf ( fraction.numerator ) .multiply ( BigInteger.valueOf ( denominator/d1 )  ) ;
++ 
+         BigInteger t = isAdd ? uvp.add(upv) : uvp.subtract(upv);
+         // but d2 doesn't need extra precision because
+         // d2 = gcd(t,d1) = gcd(t mod d1, d1)

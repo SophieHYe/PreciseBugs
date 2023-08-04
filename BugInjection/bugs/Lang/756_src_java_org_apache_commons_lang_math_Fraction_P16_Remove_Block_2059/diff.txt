@@ -1,0 +1,16 @@
+--- /Fraction.java	2023-07-04 01:47:51.778583195 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:47:51.778583195 +0000
+@@ -754,9 +754,10 @@
+         // result is (t/d2) / (u'/d1)(v'/d2)
+         BigInteger w = t.divide(BigInteger.valueOf(d2));
+         if (w.bitLength() > 31) {
+-            throw new ArithmeticException
+-                ("overflow: numerator too large after multiply");
+-        }
++ 
++ 
++ 
++ 
+         return new Fraction
+             (w.intValue(),
+              mulPosAndCheck(denominator/d1, fraction.denominator/d2));

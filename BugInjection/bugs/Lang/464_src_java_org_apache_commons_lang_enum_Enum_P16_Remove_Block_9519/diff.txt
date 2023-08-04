@@ -1,0 +1,14 @@
+--- /Enum.java	2023-07-04 02:06:20.647542003 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/enum/Enum.java	2023-07-04 02:06:20.651541949 +0000
+@@ -462,8 +462,9 @@
+      */
+     private static Entry getEntry(Class enumClass) {
+         if (enumClass == null) {
+-            throw new IllegalArgumentException("The Enum Class must not be null");
+-        }
++ 
++ 
++ 
+         if (Enum.class.isAssignableFrom(enumClass) == false) {
+             throw new IllegalArgumentException("The Class must be a subclass of Enum");
+         }

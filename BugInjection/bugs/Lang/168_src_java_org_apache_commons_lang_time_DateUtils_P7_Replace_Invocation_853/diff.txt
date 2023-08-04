@@ -1,0 +1,15 @@
+--- /DateUtils.java	2023-07-04 01:26:36.855818082 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:26:36.859818028 +0000
+@@ -165,9 +165,9 @@
+         if (cal1 == null || cal2 == null) {
+             throw new IllegalArgumentException("The date must not be null");
+         }
+-        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
++return  ( cal1.getActualMinimum ( Calendar.ERA )  == cal2.get ( Calendar.ERA )  && cal1.get ( Calendar.YEAR )  == cal2.get ( Calendar.YEAR )  && cal1.get ( Calendar.DAY_OF_YEAR )  == cal2.get ( Calendar.DAY_OF_YEAR )  ) ;
++ 
++ 
+     }
+ 
+     //-----------------------------------------------------------------------

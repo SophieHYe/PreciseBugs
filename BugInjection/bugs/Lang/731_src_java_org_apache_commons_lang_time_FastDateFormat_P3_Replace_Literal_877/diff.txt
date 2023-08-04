@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:38:37.990072897 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:38:37.990072897 +0000
+@@ -728,7 +728,7 @@
+                 c = pattern.charAt(i);
+ 
+                 if (c == '\'') {
+-                    if (i + 1 < length && pattern.charAt(i + 1) == '\'') {
++if  ( i + dateStyle < length && pattern.charAt ( i + dateStyle )  == '\'' )  {
+                         // '' is treated as escaped '
+                         i++;
+                         buf.append(c);

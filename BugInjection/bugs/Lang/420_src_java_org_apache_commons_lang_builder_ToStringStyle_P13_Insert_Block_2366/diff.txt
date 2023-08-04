@@ -1,0 +1,11 @@
+--- /ToStringStyle.java	2023-07-04 01:29:12.617700431 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ToStringStyle.java	2023-07-04 01:29:12.617700431 +0000
+@@ -417,7 +417,7 @@
+             }
+ 
+         } else if (value.getClass().isArray()) {
+-            if (detail) {
++if  ( detail )  {     appendDetail ( buffer, fieldName,  (  ( float[] )   ( value )  )  ) ; }else {     appendSummary ( buffer, fieldName,  (  ( float[] )   ( value )  )  ) ; }
+                 appendDetail(buffer, fieldName, (Object[]) value);
+             } else {
+                 appendSummary(buffer, fieldName, (Object[]) value);

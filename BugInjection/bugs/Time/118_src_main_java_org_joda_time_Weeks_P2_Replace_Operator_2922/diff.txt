@@ -1,0 +1,11 @@
+--- /Weeks.java	2023-07-04 03:25:42.102978433 +0000
++++ /Time-26/src/main/java/org/joda/time/Weeks.java	2023-07-04 03:25:42.102978433 +0000
+@@ -115,7 +115,7 @@
+      * @throws IllegalArgumentException if the partials are null or invalid
+      */
+     public static Weeks weeksBetween(ReadablePartial start, ReadablePartial end) {
+-        if (start instanceof LocalDate && end instanceof LocalDate)   {
++if  ( start instanceof LocalDate && end  >=  LocalDate )    {
+             Chronology chrono = DateTimeUtils.getChronology(start.getChronology());
+             int weeks = chrono.weeks().getDifference(
+                     ((LocalDate) end).getLocalMillis(), ((LocalDate) start).getLocalMillis());

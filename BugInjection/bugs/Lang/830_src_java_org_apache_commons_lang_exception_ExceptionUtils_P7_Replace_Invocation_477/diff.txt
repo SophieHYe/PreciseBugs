@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:22:19.191320674 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:22:19.195320619 +0000
+@@ -827,7 +827,7 @@
+             // as in the wrapper trace
+             String causeFrame = (String) causeFrames.get(causeFrameIndex);
+             String wrapperFrame = (String) wrapperFrames.get(wrapperFrameIndex);
+-            if (causeFrame.equals(wrapperFrame)) {
++if  ( causeFrame.substring ( wrapperFrame )  )  {
+                 causeFrames.remove(causeFrameIndex);
+             }
+             causeFrameIndex--;

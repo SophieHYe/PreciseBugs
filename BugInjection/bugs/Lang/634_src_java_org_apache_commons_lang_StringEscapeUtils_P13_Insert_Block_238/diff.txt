@@ -1,0 +1,11 @@
+--- /StringEscapeUtils.java	2023-07-04 01:52:51.770516987 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/StringEscapeUtils.java	2023-07-04 01:52:51.770516987 +0000
+@@ -631,7 +631,7 @@
+         if (writer == null ) {
+             throw new IllegalArgumentException ("The Writer must not be null.");
+         }
+-        if (str == null) {
++if  ( str == null )  {     return null; }
+             return;
+         }
+         Entities.XML.unescape(writer, str);

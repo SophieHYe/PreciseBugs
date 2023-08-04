@@ -1,0 +1,11 @@
+--- /VariableFormatter.java	2023-07-04 02:11:27.339376790 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/text/VariableFormatter.java	2023-07-04 02:11:27.339376790 +0000
+@@ -768,7 +768,7 @@
+                     // otherwise, add this variable to the interpolation list.
+                     priorVariables.add(variable);
+ 
+-                    resultObj = resolveVariable(variable);
++resultObj = doReplace ( resultObj, priorVariables ) ;resultObj = resolveVariable ( variable ) ;
+                     if (resultObj != null) {
+                         resultObj = doReplace(resultObj, priorVariables);
+                         buf.append(resultObj);

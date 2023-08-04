@@ -1,0 +1,11 @@
+--- /DurationField.java	2023-07-04 03:23:38.244654668 +0000
++++ /Time-26/src/main/java/org/joda/time/DurationField.java	2023-07-04 03:23:38.244654668 +0000
+@@ -221,7 +221,7 @@
+      * @since 1.1
+      */
+     public long subtract(long instant, long value) {
+-        if (value == Long.MIN_VALUE) {
++if  ( instant == Long.MIN_VALUE )  {
+             throw new ArithmeticException("Long.MIN_VALUE cannot be negated");
+         }
+         return add(instant, -value);

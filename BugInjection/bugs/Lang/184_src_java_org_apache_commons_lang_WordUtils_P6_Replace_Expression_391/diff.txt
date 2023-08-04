@@ -1,0 +1,11 @@
+--- /WordUtils.java	2023-07-04 02:00:43.112122962 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/WordUtils.java	2023-07-04 02:00:43.116122907 +0000
+@@ -181,7 +181,7 @@
+             }
+             int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
+ 
+-            if (spaceToWrapAt >= offset) {
++if  ( spaceToWrapAt >= 0 )  {
+                 // normal case
+                 wrappedLine.append(str.substring(offset, spaceToWrapAt));
+                 wrappedLine.append(newLineStr);

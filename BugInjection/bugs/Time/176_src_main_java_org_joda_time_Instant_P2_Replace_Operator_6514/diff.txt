@@ -1,0 +1,11 @@
+--- /Instant.java	2023-07-04 03:25:25.003209897 +0000
++++ /Time-26/src/main/java/org/joda/time/Instant.java	2023-07-04 03:25:25.003209897 +0000
+@@ -173,7 +173,7 @@
+      * @throws ArithmeticException if the new instant exceeds the capacity of a long
+      */
+     public Instant withDurationAdded(ReadableDuration durationToAdd, int scalar) {
+-        if (durationToAdd == null || scalar == 0) {
++if  ( durationToAdd == null || scalar != 0 )  {
+             return this;
+         }
+         return withDurationAdded(durationToAdd.getMillis(), scalar);

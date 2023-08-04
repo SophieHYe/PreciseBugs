@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 03:15:32.063223286 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 03:15:32.063223286 +0000
+@@ -766,7 +766,7 @@
+      * @return the DateTime instance
+      */
+     public DateTime toDateTime(TimeOfDay time, DateTimeZone zone) {
+-        Chronology chrono = getChronology().withZone(zone);
++newChronology = newChronology.withUTC (  ) ;Chronology chrono = getChronology (  ) .withZone ( zone ) ;
+         long instant = DateTimeUtils.currentTimeMillis();
+         instant = chrono.set(this, instant);
+         if (time != null) {

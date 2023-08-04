@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:36:39.771666617 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:36:39.771666617 +0000
+@@ -629,7 +629,7 @@
+                 rule = selectNumberRule(Calendar.MINUTE, tokenLen);
+                 break;
+             case 's': // second in minute (number)
+-                rule = selectNumberRule(Calendar.SECOND, tokenLen);
++rule = selectNumberRule ( Calendar.SECOND, mMaxLengthEstimate ) ;
+                 break;
+             case 'S': // millisecond (number)
+                 rule = selectNumberRule(Calendar.MILLISECOND, tokenLen);

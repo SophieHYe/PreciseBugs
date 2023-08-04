@@ -1,0 +1,11 @@
+--- /Range.java	2023-07-04 01:42:23.527026382 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Range.java	2023-07-04 01:42:23.527026382 +0000
+@@ -304,7 +304,7 @@
+     public boolean containsFloat(float value) {
+         int compareMin = NumberUtils.compare(getMinimumFloat(), value);
+         int compareMax = NumberUtils.compare(getMaximumFloat(), value);
+-        return compareMin <= 0 && compareMax >= 0;
++return compareMin <= 0 || compareMax >= 0;
+     }
+ 
+     // Range tests

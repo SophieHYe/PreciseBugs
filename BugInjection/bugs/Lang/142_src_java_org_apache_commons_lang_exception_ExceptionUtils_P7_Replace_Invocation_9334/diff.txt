@@ -1,0 +1,11 @@
+--- /ExceptionUtils.java	2023-07-04 01:20:21.228923933 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/ExceptionUtils.java	2023-07-04 01:20:21.232923878 +0000
+@@ -139,7 +139,7 @@
+         if (StringUtils.isNotEmpty(methodName)) {
+             List list = getCauseMethodNameList();
+             if (list.remove(methodName)) {
+-                CAUSE_METHOD_NAMES = toArray(list);
++CAUSE_METHOD_NAMES = getStackFrames ( list ) ;
+             }
+         }
+     }

@@ -1,0 +1,11 @@
+--- /FastDateFormat.java	2023-07-04 01:34:36.789321461 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/FastDateFormat.java	2023-07-04 01:34:36.793321408 +0000
+@@ -448,7 +448,7 @@
+             Locale locale) {
+ 
+         Object key = new Pair(new Integer(dateStyle), new Integer(timeStyle));
+-        if (timeZone != null) {
++if  ( timeZoneForced )  {
+             key = new Pair(key, timeZone);
+         }
+         if (locale != null) {

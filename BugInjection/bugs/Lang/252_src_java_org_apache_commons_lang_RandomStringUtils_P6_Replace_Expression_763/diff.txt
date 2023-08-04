@@ -1,0 +1,17 @@
+--- /RandomStringUtils.java	2023-07-04 01:47:04.475223968 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/RandomStringUtils.java	2023-07-04 01:47:04.475223968 +0000
+@@ -249,10 +249,10 @@
+             } else {
+                 ch = chars[random.nextInt(gap) + start];
+             }
+-            if ((letters && Character.isLetter(ch))
+-                || (numbers && Character.isDigit(ch))
+-                || (!letters && !numbers)) 
+-            {
++if  (   ( numbers && Character.isDigit ( ch )  ) ||  ( !letters && !numbers )  ) {
++ 
++ 
++ 
+                 if(ch >= 56320 && ch <= 57343) {
+                     if(count == 0) {
+                         count++;

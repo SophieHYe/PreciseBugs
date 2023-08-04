@@ -1,0 +1,16 @@
+--- /ClassUtils.java	2023-07-04 01:58:24.490003883 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/ClassUtils.java	2023-07-04 01:58:24.490003883 +0000
+@@ -422,9 +422,10 @@
+                     || Double.TYPE.equals(toClass);
+             }
+             if (Long.TYPE.equals(cls)) {
+-                return Float.TYPE.equals(toClass)
+-                    || Double.TYPE.equals(toClass);
+-            }
++ 
++return (java.lang.Float.TYPE.equals(toClass)) || (java.lang.Double.TYPE.equals(toClass)); 
++ 
++ 
+             if (Boolean.TYPE.equals(cls)) {
+                 return false;
+             }

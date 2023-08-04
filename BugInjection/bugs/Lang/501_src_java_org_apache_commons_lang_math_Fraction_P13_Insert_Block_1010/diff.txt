@@ -1,0 +1,11 @@
+--- /Fraction.java	2023-07-04 01:45:42.276337106 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/Fraction.java	2023-07-04 01:45:42.276337106 +0000
+@@ -498,7 +498,7 @@
+      */
+     public Fraction negate() {
+         // the positive range is one smaller than the negative range of an int.
+-        if (numerator==Integer.MIN_VALUE) {
++if  (  ( numerator )  == 0 )  {     throw new ArithmeticException ( "Unable to invert zero." ) ; }
+             throw new ArithmeticException("overflow: too large to negate");
+         }
+         return new Fraction(-numerator, denominator);

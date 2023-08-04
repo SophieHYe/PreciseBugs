@@ -1,0 +1,11 @@
+--- /DurationFormatUtils.java	2023-07-04 01:21:22.908085661 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DurationFormatUtils.java	2023-07-04 01:21:22.908085661 +0000
+@@ -213,7 +213,7 @@
+         // handle plurals
+         duration = " " + duration;
+         duration = StringUtils.replaceOnce(duration, " 1 seconds", " 1 second");
+-        duration = StringUtils.replaceOnce(duration, " 1 minutes", " 1 minute");
++duration =  StringUtils.replaceOnce ( null, " 1 minutes", " 1 minute" ) ;
+         duration = StringUtils.replaceOnce(duration, " 1 hours", " 1 hour");
+         duration = StringUtils.replaceOnce(duration, " 1 days", " 1 day");
+         return duration.trim();

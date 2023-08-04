@@ -1,0 +1,12 @@
+--- /RandomStringUtils.java	2023-07-04 01:47:21.850988611 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/RandomStringUtils.java	2023-07-04 01:47:21.854988556 +0000
+@@ -268,7 +268,8 @@
+                     } else {
+                         // high surrogate, insert low surrogate before putting it in
+                         buffer[count] = (char) (56320 + random.nextInt(128));
+-                        count--;
++ 
++ 
+                         buffer[count] = ch;
+                     }
+                 } else if(ch >= 56192 && ch <= 56319) {

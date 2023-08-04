@@ -1,0 +1,11 @@
+--- /DateUtils.java	2023-07-04 01:27:54.918756803 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:27:54.918756803 +0000
+@@ -515,7 +515,7 @@
+         }
+         if (date instanceof Date) {
+             return round((Date) date, field);
+-        } else if (date instanceof Calendar) {
++if  ( date instanceof Calendar )  {     return truncate (  (  ( Calendar )   ( date )  ) , field ) .getTime (  ) ; }else {     throw new ClassCastException (  ( "Could not truncate " + date )  ) ; }
+             return round((Calendar) date, field).getTime();
+         } else {
+             throw new ClassCastException("Could not round " + date);

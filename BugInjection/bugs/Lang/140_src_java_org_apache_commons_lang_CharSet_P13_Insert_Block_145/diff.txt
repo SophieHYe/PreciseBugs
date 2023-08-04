@@ -1,0 +1,11 @@
+--- /CharSet.java	2023-07-04 02:11:16.071529808 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/CharSet.java	2023-07-04 02:11:16.075529753 +0000
+@@ -137,7 +137,7 @@
+     public static CharSet getInstance(String setStr) {
+         Object set = COMMON.get(setStr);
+         if (set != null) {
+-            return (CharSet) set;
++if  ( set != null )  {     return  (  ( CharSet )   ( set )  ) ; }
+         }
+         return new CharSet(setStr);
+     }

@@ -1,0 +1,11 @@
+--- /NestableDelegate.java	2023-07-04 01:23:49.382094736 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/exception/NestableDelegate.java	2023-07-04 01:23:49.382094736 +0000
+@@ -306,7 +306,7 @@
+             if (throwable instanceof Nestable) {
+                 ((Nestable)throwable).printPartialStackTrace(out);
+             } else {
+-                throwable.printStackTrace(out);
++Throwable t = this.getThrowable ( index ) ;throwable.printStackTrace ( out ) ;
+             }
+             return;
+         }

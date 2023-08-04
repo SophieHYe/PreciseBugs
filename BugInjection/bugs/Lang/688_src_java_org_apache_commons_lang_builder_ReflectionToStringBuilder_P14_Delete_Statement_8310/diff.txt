@@ -1,0 +1,12 @@
+--- /ReflectionToStringBuilder.java	2023-07-04 01:32:01.543404580 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/builder/ReflectionToStringBuilder.java	2023-07-04 01:32:01.547404526 +0000
+@@ -686,7 +686,8 @@
+                             // append a simple Object.toString style string.
+                             this.getStyle().appendFieldStart(this.getStringBuffer(), fieldName);
+                             this.appendAsObjectToString(fieldValue);
+-                            this.getStyle().appendFieldEnd(this.getStringBuffer(), fieldName);
++ 
++ 
+                             // The recursion out of
+                             // builder.append(fieldName, fieldValue);
+                             // below will append the field

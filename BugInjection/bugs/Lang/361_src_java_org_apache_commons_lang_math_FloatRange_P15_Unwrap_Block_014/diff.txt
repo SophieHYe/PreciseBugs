@@ -1,0 +1,14 @@
+--- /FloatRange.java	2023-07-04 01:52:05.895139029 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/FloatRange.java	2023-07-04 01:52:05.895139029 +0000
+@@ -359,8 +359,9 @@
+             return true;
+         }
+         if (obj instanceof FloatRange == false) {
+-            return false;
+-        }
++ 
++return false; 
++ 
+         FloatRange range = (FloatRange) obj;
+         return (Float.floatToIntBits(min) == Float.floatToIntBits(range.min) &&
+                 Float.floatToIntBits(max) == Float.floatToIntBits(range.max));

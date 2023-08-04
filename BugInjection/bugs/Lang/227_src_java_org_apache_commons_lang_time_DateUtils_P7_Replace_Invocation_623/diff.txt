@@ -1,0 +1,17 @@
+--- /DateUtils.java	2023-07-04 01:26:56.739547764 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/DateUtils.java	2023-07-04 01:26:56.739547764 +0000
+@@ -224,10 +224,10 @@
+         if (cal1 == null || cal2 == null) {
+             throw new IllegalArgumentException("The date must not be null");
+         }
+-        return (cal1.get(Calendar.MILLISECOND) == cal2.get(Calendar.MILLISECOND) &&
+-                cal1.get(Calendar.SECOND) == cal2.get(Calendar.SECOND) &&
+-                cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE) &&
+-                cal1.get(Calendar.HOUR) == cal2.get(Calendar.HOUR) &&
++return  ( cal1 .set ( RANGE_WEEK_CENTER , RANGE_MONTH_MONDAY )   == cal2
++ 
++ 
++ 
+                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                 cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&

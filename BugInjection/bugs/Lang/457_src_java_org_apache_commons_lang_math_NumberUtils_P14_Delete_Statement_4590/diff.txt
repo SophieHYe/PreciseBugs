@@ -1,0 +1,10 @@
+--- /NumberUtils.java	2023-07-04 01:54:08.989469803 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:54:08.993469749 +0000
+@@ -455,6 +455,7 @@
+                         && (numeric.charAt(0) == '-' || Character.isDigit(numeric.charAt(0)))) {
+                         try {
+                             return createLong(numeric);
++ 
+                         } catch (NumberFormatException nfe) {
+                             //Too big for a long
+                         }

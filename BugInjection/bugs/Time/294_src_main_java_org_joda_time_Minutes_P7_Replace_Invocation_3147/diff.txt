@@ -1,0 +1,11 @@
+--- /Minutes.java	2023-07-04 03:19:45.655799836 +0000
++++ /Time-26/src/main/java/org/joda/time/Minutes.java	2023-07-04 03:19:45.655799836 +0000
+@@ -291,7 +291,7 @@
+      * @throws ArithmeticException if the number of seconds is too large to be represented
+      */
+     public Seconds toStandardSeconds() {
+-        return Seconds.seconds(FieldUtils.safeMultiply(getValue(), DateTimeConstants.SECONDS_PER_MINUTE));
++return Seconds.seconds ( FieldUtils.safeMultiply ( getLocalMillis (  ) , DateTimeConstants.SECONDS_PER_MINUTE )  ) ;
+     }
+ 
+     //-----------------------------------------------------------------------

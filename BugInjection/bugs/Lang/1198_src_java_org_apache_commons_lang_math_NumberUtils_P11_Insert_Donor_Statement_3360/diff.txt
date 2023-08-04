@@ -1,0 +1,11 @@
+--- /NumberUtils.java	2023-07-04 01:20:36.724713338 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/math/NumberUtils.java	2023-07-04 01:20:36.728713283 +0000
+@@ -1195,7 +1195,7 @@
+         // compare should put -0.0 < +0.0
+         // Two NaNs are also == for compare purposes
+         // where NaN == NaN is false
+-        long lhsBits = Double.doubleToLongBits(lhs);
++long rhsBits = Double.doubleToLongBits ( rhs ) ;long lhsBits = Double.doubleToLongBits ( lhs ) ;
+         long rhsBits = Double.doubleToLongBits(rhs);
+         if (lhsBits == rhsBits) {
+             return 0;

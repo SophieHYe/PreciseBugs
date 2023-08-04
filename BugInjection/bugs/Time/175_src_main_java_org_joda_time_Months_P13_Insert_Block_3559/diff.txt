@@ -1,0 +1,11 @@
+--- /Months.java	2023-07-04 03:24:37.307855435 +0000
++++ /Time-26/src/main/java/org/joda/time/Months.java	2023-07-04 03:24:37.307855435 +0000
+@@ -172,7 +172,7 @@
+      * @throws IllegalArgumentException if the partials are null or invalid
+      */
+     public static Months monthsIn(ReadableInterval interval) {
+-        if (interval == null)   {
++if  ( periodStr == null )  {     return ZERO; }
+             return Months.ZERO;
+         }
+         int amount = BaseSingleFieldPeriod.between(interval.getStart(), interval.getEnd(), DurationFieldType.months());

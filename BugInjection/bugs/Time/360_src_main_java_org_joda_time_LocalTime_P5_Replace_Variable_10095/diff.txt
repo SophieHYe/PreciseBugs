@@ -1,0 +1,11 @@
+--- /LocalTime.java	2023-07-04 03:27:08.965802454 +0000
++++ /Time-26/src/main/java/org/joda/time/LocalTime.java	2023-07-04 03:27:08.969802400 +0000
+@@ -357,7 +357,7 @@
+         Chronology chronology = converter.getChronology(instant, zone);
+         chronology = DateTimeUtils.getChronology(chronology);
+         iChronology = chronology.withUTC();
+-        int[] values = converter.getPartialValues(this, instant, chronology, ISODateTimeFormat.localTimeParser());
++int[] values = converter.getPartialValues ( this, instant, iChronology, ISODateTimeFormat.localTimeParser (  )  ) ;
+         iLocalMillis = iChronology.getDateTimeMillis(0L, values[0], values[1], values[2], values[3]);
+     }
+ 
