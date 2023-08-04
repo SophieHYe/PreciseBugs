@@ -1,0 +1,17 @@
+--- /CSVFormat.java	2023-07-04 12:45:37.443333519 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVFormat.java	2023-07-04 12:45:37.443333519 +0000
+@@ -97,10 +97,10 @@
+      * 
+      * <pre>CSVFormat fmt = CSVFormat.EXCEL.withDelimiter(';');</pre>
+      */
+-    public static final CSVFormat EXCEL =
+-            PRISTINE
+-            .withDelimiter(',')
+-            .withEncapsulator('"')
++public static final CSVFormat EXCEL = PRISTINE .withEscape ( ',' ) .withEncapsulator ( '"' )
++ 
++ 
++ 
+             .withLineSeparator(CRLF);
+ 
+     /** Tab-delimited format, with quote; leading and trailing spaces ignored. */

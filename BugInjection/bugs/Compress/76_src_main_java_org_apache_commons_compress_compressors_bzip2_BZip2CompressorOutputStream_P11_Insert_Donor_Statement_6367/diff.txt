@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 12:45:55.599087720 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 12:45:55.603087666 +0000
+@@ -73,7 +73,7 @@
+ 
+         int[] heap = new int[MAX_ALPHA_SIZE + 2];
+         int[] weight = new int[MAX_ALPHA_SIZE * 2];
+-        int[] parent = new int[MAX_ALPHA_SIZE * 2];
++int[][] code = new int[N_GROUPS][MAX_ALPHA_SIZE];int[] parent = new int[MAX_ALPHA_SIZE * 2];
+ 
+         for (i = 0; i < alphaSize; i++) {
+             weight[i + 1] = (freq[i] == 0 ? 1 : freq[i]) << 8;

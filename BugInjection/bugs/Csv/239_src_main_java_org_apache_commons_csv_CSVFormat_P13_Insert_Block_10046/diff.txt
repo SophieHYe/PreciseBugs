@@ -1,0 +1,11 @@
+--- /CSVFormat.java	2023-07-04 12:45:42.107270377 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVFormat.java	2023-07-04 12:45:42.107270377 +0000
+@@ -236,7 +236,7 @@
+      */
+     public CSVFormat withEncapsulator(char encapsulator) {
+         if (isLineBreak(encapsulator)) {
+-            throw new IllegalArgumentException("The encapsulator cannot be a line break");
++if  ( isLineBreak ( escape )  )  {     throw new IllegalArgumentException ( "The escape character cannot be a line break" ) ; }
+         }
+         
+         return new CSVFormat(delimiter, encapsulator, commentStart, escape, surroundingSpacesIgnored, emptyLinesIgnored, lineSeparator, header);

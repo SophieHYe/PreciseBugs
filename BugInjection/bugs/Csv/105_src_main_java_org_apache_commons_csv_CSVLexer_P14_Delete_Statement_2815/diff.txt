@@ -1,0 +1,10 @@
+--- /CSVLexer.java	2023-07-04 12:46:23.406711249 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:23.406711249 +0000
+@@ -103,6 +103,7 @@
+             } else if (isEncapsulator(c)) {
+                 // consume encapsulated token
+                 encapsulatedTokenLexer(tkn, c);
++ 
+             } else if (isEndOfFile(c)) {
+                 // end of file return EOF()
+                 //noop: tkn.content.append("");

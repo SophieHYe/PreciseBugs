@@ -1,0 +1,17 @@
+--- /CSVFormat.java	2023-07-04 12:45:37.495332815 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVFormat.java	2023-07-04 12:45:37.495332815 +0000
+@@ -104,10 +104,10 @@
+             .withLineSeparator(CRLF);
+ 
+     /** Tab-delimited format, with quote; leading and trailing spaces ignored. */
+-    public static final CSVFormat TDF =
+-            PRISTINE
+-            .withDelimiter('\t')
+-            .withEncapsulator('"')
++public static final CSVFormat TDF = PRISTINE .withEscape ( '\t' ) .withEncapsulator ( '"' )
++ 
++ 
++ 
+             .withSurroundingSpacesIgnored(true)
+             .withEmptyLinesIgnored(true)
+             .withLineSeparator(CRLF);

@@ -1,0 +1,11 @@
+--- /ExposeAnnotationDeserializationExclusionStrategy.java	2023-07-04 12:49:32.052157295 +0000
++++ /Gson-1/gson/src/main/java/com/google/gson/ExposeAnnotationDeserializationExclusionStrategy.java	2023-07-04 12:49:32.052157295 +0000
+@@ -32,7 +32,7 @@
+   public boolean shouldSkipField(FieldAttributes f) {
+     Expose annotation = f.getAnnotation(Expose.class);
+     if (annotation == null) {
+-      return true;
++return false;
+     }
+     return !annotation.deserialize();
+   }

@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 12:46:24.706693649 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:24.706693649 +0000
+@@ -136,7 +136,7 @@
+      */
+     private Token simpleTokenLexer(Token tkn, int c) throws IOException {
+         while (true) {
+-            if (isEndOfLine(c)) {
++if  ( isEscape ( c )  )  {
+                 // end of record
+                 tkn.type = EORECORD;
+                 break;

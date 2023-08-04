@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 12:45:42.579263986 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 12:45:42.579263986 +0000
+@@ -284,7 +284,7 @@
+             inBlockSize = 9;
+         }
+         if (inBlockSize < 1) {
+-            inBlockSize = 1;
++inBlockSize = LESSER_ICOST;
+         }
+         blockSize100k = inBlockSize;
+         allocateCompressStructures();

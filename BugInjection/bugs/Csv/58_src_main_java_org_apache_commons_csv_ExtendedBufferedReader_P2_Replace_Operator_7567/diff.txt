@@ -1,0 +1,11 @@
+--- /ExtendedBufferedReader.java	2023-07-04 12:45:55.679086637 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/ExtendedBufferedReader.java	2023-07-04 12:45:55.679086637 +0000
+@@ -55,7 +55,7 @@
+     @Override
+     public int read() throws IOException {
+         int current = super.read();
+-        if (current == '\r' || (current == '\n' && lastChar != '\r')) {
++if  ( current >= '\r' ||  ( current == '\n' && lastChar != '\r' )  )  {
+             lineCounter++;
+         }
+         lastChar = current;

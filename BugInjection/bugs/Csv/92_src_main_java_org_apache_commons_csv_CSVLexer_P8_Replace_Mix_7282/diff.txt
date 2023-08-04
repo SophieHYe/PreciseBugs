@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 12:46:24.418697549 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:24.418697549 +0000
+@@ -89,7 +89,7 @@
+             }
+             
+             // ok, start of token reached: comment, encapsulated, or token
+-            if (isCommentStart(c)) {
++if  ( isWhitespace ( lastChar )  )  {
+                 // ignore everything till end of line and continue (incr linecount)
+                 in.readLine();
+                 tkn = nextToken(tkn.reset());

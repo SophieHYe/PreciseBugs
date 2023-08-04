@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 12:46:05.182957969 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 12:46:05.186957916 +0000
+@@ -116,7 +116,7 @@
+                     tmp = heap[zz];
+                     while (true) {
+                         yy = zz << 1;
+-                        if (yy > nHeap) {
++if  ( maxLen > nHeap )  {
+                             break;
+                         }
+                         if (yy < nHeap

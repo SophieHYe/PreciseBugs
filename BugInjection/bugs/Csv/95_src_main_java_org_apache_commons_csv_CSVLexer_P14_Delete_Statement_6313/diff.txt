@@ -1,0 +1,10 @@
+--- /CSVLexer.java	2023-07-04 12:46:24.246699876 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:24.250699823 +0000
+@@ -93,6 +93,7 @@
+                 // ignore everything till end of line and continue (incr linecount)
+                 in.readLine();
+                 tkn = nextToken(tkn.reset());
++ 
+             } else if (isDelimiter(c)) {
+                 // empty token return TOKEN("")
+                 tkn.type = TOKEN;

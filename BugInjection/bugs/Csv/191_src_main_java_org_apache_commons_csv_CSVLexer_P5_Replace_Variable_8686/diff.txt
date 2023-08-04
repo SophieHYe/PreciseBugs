@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 12:46:33.394576029 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:33.394576029 +0000
+@@ -188,7 +188,7 @@
+             
+             if (isEscape(c)) {
+                 tkn.content.append((char) readEscape(c));
+-            } else if (isEncapsulator(c)) {
++} else if  ( isEncapsulator ( startLineNumber )  )  {
+                 if (isEncapsulator(in.lookAhead())) {
+                     // double or escaped encapsulator -> add single encapsulator to token
+                     c = in.read();

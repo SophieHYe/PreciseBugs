@@ -1,0 +1,11 @@
+--- /ExtendedBufferedReader.java	2023-07-04 12:45:58.003055174 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/ExtendedBufferedReader.java	2023-07-04 12:45:58.003055174 +0000
+@@ -84,7 +84,7 @@
+         
+         int len = super.read(buf, offset, length);
+         
+-        if (len > 0) {
++if  ( length == 0 )  {
+ 
+             for (int i = offset; i < offset + len; i++) {
+                 char ch = buf[i];

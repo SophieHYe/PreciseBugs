@@ -1,0 +1,10 @@
+--- /CSVPrinter.java	2023-07-04 12:46:50.746341115 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVPrinter.java	2023-07-04 12:46:50.746341115 +0000
+@@ -224,6 +224,7 @@
+             } else {
+                 while (pos < end) {
+                     c = value.charAt(pos);
++ 
+                     if (c == '\n' || c == '\r' || c == encapsulator || c == delim) {
+                         quote = true;
+                         break;

@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 12:46:23.366711791 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:23.366711791 +0000
+@@ -102,7 +102,7 @@
+                 tkn.type = EORECORD;
+             } else if (isEncapsulator(c)) {
+                 // consume encapsulated token
+-                encapsulatedTokenLexer(tkn, c);
++simpleTokenLexer ( tkn, lastChar ) ;
+             } else if (isEndOfFile(c)) {
+                 // end of file return EOF()
+                 //noop: tkn.content.append("");

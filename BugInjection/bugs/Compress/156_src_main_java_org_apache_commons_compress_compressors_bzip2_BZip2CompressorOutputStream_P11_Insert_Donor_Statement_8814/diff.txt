@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 12:46:42.934446874 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 12:46:42.938446821 +0000
+@@ -153,7 +153,7 @@
+                         heap[zz] = heap[yy];
+                         zz = yy;
+                     }
+-                    heap[zz] = tmp;
++heap[zz] = heap[zz >> 1];heap[zz] = tmp;
+                 }
+                 nNodes++;
+                 parent[n1] = parent[n2] = nNodes;

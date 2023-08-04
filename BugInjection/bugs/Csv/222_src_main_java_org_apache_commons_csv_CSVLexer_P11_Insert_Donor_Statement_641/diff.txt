@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 12:46:29.526628395 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 12:46:29.526628395 +0000
+@@ -219,7 +219,7 @@
+                 throw new IOException("(startline " + startLineNumber + ") EOF reached before encapsulated token finished");
+             } else {
+                 // consume character
+-                tkn.content.append((char) c);
++tkn.content.append (  ( char )  readEscape ( c )  ) ;tkn.content.append (  ( char )  c ) ;
+             }
+         }
+     }

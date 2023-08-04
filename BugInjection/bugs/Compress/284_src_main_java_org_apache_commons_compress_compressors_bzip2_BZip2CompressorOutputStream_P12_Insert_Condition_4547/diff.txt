@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 12:45:41.039284836 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 12:45:41.043284782 +0000
+@@ -281,7 +281,7 @@
+ 
+         workFactor = 50;
+         if (inBlockSize > 9) {
+-            inBlockSize = 9;
++if  ( inBlockSize > 9 )  { inBlockSize = 9; }
+         }
+         if (inBlockSize < 1) {
+             inBlockSize = 1;

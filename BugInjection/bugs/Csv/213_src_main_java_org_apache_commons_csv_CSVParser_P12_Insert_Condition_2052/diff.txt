@@ -1,0 +1,11 @@
+--- /CSVParser.java	2023-07-04 12:46:14.814827570 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 12:46:14.818827516 +0000
+@@ -210,7 +210,7 @@
+ 
+             public CSVRecord next() {
+                 CSVRecord next = current;
+-                current = null;
++if  ( current == null )  { current = null; }
+ 
+                 if (next == null) {
+                     // hasNext() wasn't called before
