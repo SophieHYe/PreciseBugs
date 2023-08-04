@@ -1,0 +1,11 @@
+--- /HelpFormatter.java	2023-07-04 04:17:27.324863853 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 04:17:27.324863853 +0000
+@@ -706,7 +706,7 @@
+ 
+             if (optBuf.length() < max)
+             {
+-                optBuf.append(createPadding(max - optBuf.length()));
++optBuf.append ( createPadding ( max - optBuf .substring ( DEFAULT_LEFT_PAD , width )   )  ) ;
+             }
+ 
+             optBuf.append(dpad);

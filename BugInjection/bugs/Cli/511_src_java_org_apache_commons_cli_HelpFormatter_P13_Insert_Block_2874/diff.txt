@@ -1,0 +1,11 @@
+--- /HelpFormatter.java	2023-07-04 04:16:51.789345855 +0000
++++ /Cli-1/src/java/org/apache/commons/cli/HelpFormatter.java	2023-07-04 04:16:51.789345855 +0000
+@@ -508,7 +508,7 @@
+             // whether the option is required or not is handled at group level
+             appendOption(buff, (Option) i.next(), true);
+ 
+-            if (i.hasNext())
++if  ( !required )  {     buff.append ( "]" ) ; }
+             {
+                 buff.append(" | ");
+             }
