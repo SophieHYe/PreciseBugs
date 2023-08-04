@@ -1,0 +1,11 @@
+--- /MathUtils.java	2023-07-04 12:06:17.207294956 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-04 12:06:17.211294901 +0000
+@@ -531,7 +531,7 @@
+      */
+     public static float round(float x, int scale, int roundingMethod) {
+         float sign = indicator(x);
+-        float factor = (float)Math.pow(10.0f, scale) * sign;
++float factor =  ( float ) Math.pow ( 10.0f, roundingMethod )  * sign;
+         return (float)roundUnscaled(x * factor, sign, roundingMethod) / factor;
+     }
+ 

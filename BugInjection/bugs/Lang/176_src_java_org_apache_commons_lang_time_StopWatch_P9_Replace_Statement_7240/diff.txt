@@ -1,0 +1,11 @@
+--- /StopWatch.java	2023-07-04 12:01:57.894812338 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/time/StopWatch.java	2023-07-04 12:01:57.894812338 +0000
+@@ -173,7 +173,7 @@
+      * @throws IllegalStateException if the StopWatch is not currently running.
+      */
+     public void suspend() {
+-        if(this.runningState != STATE_RUNNING) {
++if ( this.runningState == STATE_RUNNING )  {
+             throw new IllegalStateException("Stopwatch must be running to suspend. ");
+         }
+         stopTime = System.currentTimeMillis();

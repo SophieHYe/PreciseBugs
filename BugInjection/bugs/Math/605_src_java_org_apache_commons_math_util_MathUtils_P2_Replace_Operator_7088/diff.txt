@@ -1,0 +1,11 @@
+--- /MathUtils.java	2023-07-04 12:06:33.683071577 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-04 12:06:33.683071577 +0000
+@@ -602,7 +602,7 @@
+             break;
+         }
+         case BigDecimal.ROUND_UNNECESSARY :
+-            if (unscaled != Math.floor(unscaled)) {
++if  ( unscaled <= Math.floor ( unscaled )  )  {
+                 throw new ArithmeticException("Inexact result from rounding");
+             }
+             break;

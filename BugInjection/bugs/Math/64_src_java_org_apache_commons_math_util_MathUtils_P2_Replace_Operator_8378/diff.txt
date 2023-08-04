@@ -1,0 +1,11 @@
+--- /MathUtils.java	2023-07-04 12:05:16.712115244 +0000
++++ /Math-106/src/java/org/apache/commons/math/util/MathUtils.java	2023-07-04 12:05:16.716115190 +0000
+@@ -61,7 +61,7 @@
+      */
+     public static int addAndCheck(int x, int y) {
+         long s = (long)x + (long)y;
+-        if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
++if  ( s < Integer.MIN_VALUE || s >= Integer.MAX_VALUE )  {
+             throw new ArithmeticException("overflow: add");
+         }
+         return (int)s;

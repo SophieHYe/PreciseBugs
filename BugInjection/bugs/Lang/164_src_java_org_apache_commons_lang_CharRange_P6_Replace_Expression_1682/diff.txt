@@ -1,0 +1,11 @@
+--- /CharRange.java	2023-07-04 11:58:43.665449649 +0000
++++ /Lang-65/src/java/org/apache/commons/lang/CharRange.java	2023-07-04 11:58:43.665449649 +0000
+@@ -161,7 +161,7 @@
+             throw new IllegalArgumentException("The Range must not be null");
+         }
+         if (negated) {
+-            if (range.negated) {
++if  ( range.end < start )  {
+                 return start >= range.start && end <= range.end;
+             } else {
+                 return range.end < start || range.start > end;
