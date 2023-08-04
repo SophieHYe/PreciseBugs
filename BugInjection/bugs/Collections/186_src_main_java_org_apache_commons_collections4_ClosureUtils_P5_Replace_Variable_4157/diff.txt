@@ -1,0 +1,11 @@
+--- /ClosureUtils.java	2023-07-04 03:54:12.791785031 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/ClosureUtils.java	2023-07-04 03:54:12.791785031 +0000
+@@ -183,7 +183,7 @@
+     public static <E> Closure<E> invokerClosure(final String methodName, final Class<?>[] paramTypes,
+                                                 final Object[] args) {
+         // reuse transformer as it has caching - this is lazy really, should have inner class here
+-        return asClosure(InvokerTransformer.<E, Object>invokerTransformer(methodName, paramTypes, args));
++return asClosure ( InvokerTransformer.<E, Object>invokerTransformer ( methodName, args, paramTypes )  ) ;
+     }
+ 
+     /**

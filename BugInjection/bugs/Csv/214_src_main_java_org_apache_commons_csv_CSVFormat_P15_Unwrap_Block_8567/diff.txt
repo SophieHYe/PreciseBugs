@@ -1,0 +1,14 @@
+--- /CSVFormat.java	2023-07-04 03:52:45.624968684 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVFormat.java	2023-07-04 03:52:45.624968684 +0000
+@@ -212,8 +212,9 @@
+      */
+     public CSVFormat withDelimiter(char delimiter) {
+         if (isLineBreak(delimiter)) {
+-            throw new IllegalArgumentException("The delimiter cannot be a line break");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("The delimiter cannot be a line break"); 
++ 
+ 
+         return new CSVFormat(delimiter, encapsulator, commentStart, escape, surroundingSpacesIgnored, emptyLinesIgnored, lineSeparator, header);
+     }

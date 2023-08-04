@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:47.596127142 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:47.596127142 +0000
+@@ -747,7 +747,7 @@
+              * <![CDATA[ ]]> can NOT come outside of root
+              */
+             if (!acc.hasMoreBytes()) {
+-                return MatchStrength.INCONCLUSIVE;
++if  ( ch < 0 )  {     return INCONCLUSIVE; }
+             }
+             b = acc.nextByte();
+             if (b == BYTE_HYPHEN) {

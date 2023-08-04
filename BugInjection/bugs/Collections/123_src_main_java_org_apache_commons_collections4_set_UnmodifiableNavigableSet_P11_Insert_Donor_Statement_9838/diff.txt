@@ -1,0 +1,11 @@
+--- /UnmodifiableNavigableSet.java	2023-07-04 03:56:58.997528675 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/UnmodifiableNavigableSet.java	2023-07-04 03:56:58.997528675 +0000
+@@ -120,7 +120,7 @@
+ 
+     @Override
+     public SortedSet<E> tailSet(final E fromElement) {
+-        final SortedSet<E> tail = decorated().tailSet(fromElement);
++final NavigableSet<E> tail = decorated (  ) .tailSet ( fromElement, inclusive ) ;final SortedSet<E> tail = decorated (  ) .tailSet ( fromElement ) ;
+         return UnmodifiableSortedSet.unmodifiableSortedSet(tail);
+     }
+ 

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:37.605892504 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:37.605892504 +0000
+@@ -120,7 +120,7 @@
+         _charBufferLength = _charBuffer.length;
+ 
+         // By default we use this feature to determine additional quoting
+-        if (isEnabled(Feature.ESCAPE_NON_ASCII)) {
++if  ( isEnabled ( Feature.QUOTE_FIELD_NAMES )  )  {
+             setHighestNonEscapedChar(127);
+         }
+     }

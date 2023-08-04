@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:56:57.605547570 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:56:57.609547515 +0000
+@@ -1091,7 +1091,7 @@
+      * @param typer Type information inclusion handler
+      */
+     public ObjectMapper setDefaultTyping(TypeResolverBuilder<?> typer) {
+-        _deserializationConfig = _deserializationConfig.with(typer);
++mapper._serializationConfig = mapper._serializationConfig.withInsertedAnnotationIntrospector ( ai ) ;_deserializationConfig = _deserializationConfig.with ( typer ) ;
+         _serializationConfig = _serializationConfig.with(typer);
+         return this;
+     }

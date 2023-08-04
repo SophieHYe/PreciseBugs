@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:48.064862675 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:48.064862675 +0000
+@@ -171,7 +171,7 @@
+     public Element appendChild(Node child) {
+         Validate.notNull(child);
+         
+-        child.setParentNode(this);
++child.outerHtml ( this ) ;
+         childNodes.add(child);
+         return this;
+     }

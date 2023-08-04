@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:58:59.251896517 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:58:59.255896462 +0000
+@@ -1278,7 +1278,7 @@
+      */
+     public Object setHandlerInstantiator(HandlerInstantiator hi)
+     {
+-        _deserializationConfig = _deserializationConfig.with(hi);
++mapper._serializationConfig = mapper._serializationConfig.withInsertedAnnotationIntrospector ( ai ) ;_deserializationConfig = _deserializationConfig.with ( hi ) ;
+         _serializationConfig = _serializationConfig.with(hi);
+         return this;
+     }

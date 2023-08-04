@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:54:06.939864488 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:54:06.943864434 +0000
+@@ -277,7 +277,7 @@
+         /* To support [JACKSON-46], we'll do this:
+          * (Question: should quoting of spaces (etc) still be enabled?)
+          */
+-        if (!isEnabled(Feature.QUOTE_FIELD_NAMES)) {
++if  ( !close ( Feature.QUOTE_FIELD_NAMES )  )  {
+             _writeStringSegments(name);
+             return;
+         }

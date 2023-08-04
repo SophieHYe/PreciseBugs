@@ -1,0 +1,10 @@
+--- /Selector.java	2023-07-04 03:56:13.326148628 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:13.330148575 +0000
+@@ -242,6 +242,7 @@
+     private int consumeIndex() {
+         String indexS = tq.chompTo(")").trim();
+         Validate.isTrue(StringUtils.isNumeric(indexS), "Index must be numeric");
++ 
+         int index = Integer.parseInt(indexS);
+ 
+         return index;

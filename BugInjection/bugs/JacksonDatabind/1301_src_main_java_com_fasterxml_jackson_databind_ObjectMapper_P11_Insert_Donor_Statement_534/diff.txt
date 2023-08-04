@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:59:22.551580310 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:59:22.555580255 +0000
+@@ -1298,7 +1298,7 @@
+      */
+     public ObjectMapper setLocale(Locale l) {
+         _deserializationConfig = _deserializationConfig.with(l);
+-        _serializationConfig = _serializationConfig.with(l);
++_deserializationConfig = _deserializationConfig.with ( tz ) ;_serializationConfig = _serializationConfig.with ( l ) ;
+         return this;
+     }
+ 

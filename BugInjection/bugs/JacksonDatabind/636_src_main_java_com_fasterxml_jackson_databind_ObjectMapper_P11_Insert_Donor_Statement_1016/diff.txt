@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:51:42.357827958 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:51:42.361827904 +0000
+@@ -633,7 +633,7 @@
+             @Override
+             public void setClassIntrospector(ClassIntrospector ci) {
+                 mapper._deserializationConfig = mapper._deserializationConfig.with(ci);
+-                mapper._serializationConfig = mapper._serializationConfig.with(ci);
++_deserializationConfig = _deserializationConfig.without ( first, f ) ;mapper._serializationConfig = mapper._serializationConfig.with ( ci ) ;
+             }
+ 
+             @Override

@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:58:35.372220604 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:58:35.376220550 +0000
+@@ -635,7 +635,7 @@
+             }
+         }
+ 
+-        int[][] rfreq = new int[N_GROUPS][MAX_ALPHA_SIZE];
++int[] parent = new int[MAX_ALPHA_SIZE * 2];int[][] rfreq = new int[N_GROUPS][MAX_ALPHA_SIZE];
+         int[] fave = new int[N_GROUPS];
+         short[] cost = new short[N_GROUPS];
+         /*

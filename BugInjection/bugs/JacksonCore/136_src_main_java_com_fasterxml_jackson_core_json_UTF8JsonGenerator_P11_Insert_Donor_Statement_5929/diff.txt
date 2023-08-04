@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:44.461799380 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:44.465799326 +0000
+@@ -133,7 +133,7 @@
+         super(ctxt, features, codec);
+         _outputStream = out;
+         _bufferRecyclable = bufferRecyclable;
+-        _outputTail = outputOffset;
++_outputEnd = _outputBuffer.length;_outputTail = outputOffset;
+         _outputBuffer = outputBuffer;
+         _outputEnd = _outputBuffer.length;
+         // up to 6 bytes per char (see above), rounded up to 1/8

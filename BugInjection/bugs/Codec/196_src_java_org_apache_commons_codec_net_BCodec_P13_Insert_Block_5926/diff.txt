@@ -1,0 +1,11 @@
+--- /BCodec.java	2023-07-04 03:56:14.742129407 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/BCodec.java	2023-07-04 03:56:14.746129353 +0000
+@@ -193,7 +193,7 @@
+         } else if (value instanceof String) {
+             return decode((String) value);
+         } else {
+-            throw new DecoderException("Objects of type " +
++if  ( value instanceof String )  {     return encode (  (  ( String )   ( value )  )  ) ; }else {     throw new EncoderException (  (  ( "Objects of type " +  ( value.getClass (  ) .getName (  )  )  )  + " cannot be encoded using BCodec" )  ) ; }
+                   value.getClass().getName() +
+                   " cannot be decoded using BCodec");
+         }

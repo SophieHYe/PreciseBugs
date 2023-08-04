@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:57.109627590 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:57.109627590 +0000
+@@ -197,7 +197,7 @@
+ 
+     protected PropertyName _findXmlName(Annotated a)
+     {
+-        JacksonXmlProperty pann = a.getAnnotation(JacksonXmlProperty.class);
++JacksonXmlRootElement root = ac.getAnnotation ( JacksonXmlRootElement.class ) ;JacksonXmlProperty pann = a.getAnnotation ( JacksonXmlProperty.class ) ;
+         if (pann != null) {
+             return PropertyName.construct(pann.localName(), pann.namespace());
+         }

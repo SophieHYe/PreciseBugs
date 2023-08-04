@@ -1,0 +1,18 @@
+--- /Node.java	2023-07-04 03:57:09.761382571 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:57:09.761382571 +0000
+@@ -280,10 +280,11 @@
+         Integer index = indexInList(this, siblings);
+         Validate.notNull(index);
+         if (index > 0)
+-            return siblings.get(index-1);
+-        else
+-            return null;
+-    }
++ 
++return siblings.get((index - 1)); 
++ 
++ 
++ 
+ 
+     /**
+      * Get the list index of this node in its node sibling list. I.e. if this is the first node

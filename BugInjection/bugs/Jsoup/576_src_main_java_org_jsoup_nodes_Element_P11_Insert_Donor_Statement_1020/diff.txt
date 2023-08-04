@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:21.236412456 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:21.236412456 +0000
+@@ -573,7 +573,7 @@
+                 accum.append(text);
+ 
+             } else if (child instanceof Element) {
+-                Element element = (Element) child;
++Element element =  ( Element )  childNode;Element element =  ( Element )  child;
+                 if (accum.length() > 0 && element.isBlock() && !TextNode.lastCharIsWhitespace(accum))
+                     accum.append(" ");
+                 element.text(accum);

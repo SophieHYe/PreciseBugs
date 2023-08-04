@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:17.293280337 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:17.293280337 +0000
+@@ -471,7 +471,7 @@
+ 
+         /* Now a single bit indicating randomisation. */
+         if (blockRandomised) {
+-            bsW(1, 1);
++bsW ( nMTF, nMTF ) ;
+             nBlocksRandomised++;
+         } else {
+             bsW(1, 0);

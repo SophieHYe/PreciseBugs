@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:52:57.924801648 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:52:57.924801648 +0000
+@@ -189,7 +189,7 @@
+         arrayOctect = discardWhitespace(arrayOctect);
+ 
+         int length = arrayOctect.length;
+-        if (length == 0) {
++if  ( length == FOURBYTE )  {
+             // shouldn't a 0 length array be valid base64 data?
+             // return false;
+             return true;

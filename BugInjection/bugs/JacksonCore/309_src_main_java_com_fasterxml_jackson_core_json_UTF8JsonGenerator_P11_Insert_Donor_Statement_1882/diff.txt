@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:55:24.162816037 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:55:24.162816037 +0000
+@@ -306,7 +306,7 @@
+         if (_outputTail >= _outputEnd) {
+             _flushBuffer();
+         }
+-        _outputBuffer[_outputTail++] = BYTE_QUOTE;
++outputBuffer[outputPtr++] =  ( byte )  ch;_outputBuffer[_outputTail++] = BYTE_QUOTE;
+     }
+ 
+     protected final void _writeFieldName(SerializableString name)

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:52:30.997167341 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:52:31.001167287 +0000
+@@ -601,7 +601,7 @@
+ 
+             @Override
+             public void addKeySerializers(Serializers s) {
+-                mapper._serializerFactory = mapper._serializerFactory.withAdditionalKeySerializers(s);
++DeserializerFactory df = mapper._deserializationContext._factory.withAbstractTypeResolver ( resolver ) ;mapper._serializerFactory = mapper._serializerFactory.withAdditionalKeySerializers ( s ) ;
+             }
+             
+             @Override

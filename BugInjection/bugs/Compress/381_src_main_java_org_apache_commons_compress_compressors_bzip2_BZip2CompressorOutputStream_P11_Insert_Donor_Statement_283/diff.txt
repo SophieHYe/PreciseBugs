@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:48.121676302 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:48.121676302 +0000
+@@ -378,7 +378,7 @@
+         finish();
+         super.close();
+         bsStream.close();
+-        closed = true;
++inUse16[i] = true;closed = true;
+     }
+ 
+     protected void finish() throws IOException {

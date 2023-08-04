@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:23.556453577 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:23.560453522 +0000
+@@ -488,7 +488,7 @@
+         // note: should NOT move parser if already pointing to START_ELEMENT
+         if (sr.getEventType() != XMLStreamConstants.START_ELEMENT) {
+             try {
+-                sr = _initializeXmlReader(sr);
++sr = _initializeXmlWriter ( sr ) ;
+             } catch (XMLStreamException e) {
+                 return StaxUtil.throwXmlAsIOException(e);
+             }

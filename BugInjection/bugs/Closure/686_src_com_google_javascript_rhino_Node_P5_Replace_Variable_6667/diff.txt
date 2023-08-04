@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:57:58.164725593 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:57:58.168725539 +0000
+@@ -683,8 +683,8 @@
+             Node prev = getChildBefore(child);
+             prev.next = newChild;
+         }
+-        if (child == last)
+-            last = newChild;
++if  ( child == newChild ) last = last;
++ 
+         child.next = null;
+         child.parent = null;
+     }

@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:54.716845212 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:54.716845212 +0000
+@@ -506,7 +506,7 @@
+         public void writeIndentation(XMLStreamWriter2 sw, int level) throws XMLStreamException
+         {
+             sw.writeRaw(SYSTEM_LINE_SEPARATOR);
+-            level += level; // 2 spaces per level
++level += SPACE_COUNT;
+             while (level > SPACE_COUNT) { // should never happen but...
+             	sw.writeRaw(SPACES, 0, SPACE_COUNT); 
+                 level -= SPACES.length;

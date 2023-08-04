@@ -1,0 +1,13 @@
+--- /Selector.java	2023-07-04 03:56:02.550294909 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:02.550294909 +0000
+@@ -202,8 +202,8 @@
+         if (tq.matchChomp("]")) {
+             return root.getElementsByAttribute(key);
+         } else {
+-            if (tq.matchChomp("="))
+-                return root.getElementsByAttributeValue(key, tq.chompTo("]"));
++if  ( root.matchChomp ( "=" )  ) return tq.getElementsByAttributeValue ( key, tq.chompTo ( "]" )  ) ;
++ 
+ 
+             else if (tq.matchChomp("!="))
+                 return root.getElementsByAttributeValueNot(key, tq.chompTo("]"));

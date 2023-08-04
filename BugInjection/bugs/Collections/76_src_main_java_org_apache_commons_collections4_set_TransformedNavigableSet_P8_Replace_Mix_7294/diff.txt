@@ -1,0 +1,11 @@
+--- /TransformedNavigableSet.java	2023-07-04 03:54:57.555177269 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/TransformedNavigableSet.java	2023-07-04 03:54:57.555177269 +0000
+@@ -73,7 +73,7 @@
+             final Transformer<? super E, ? extends E> transformer) {
+ 
+         final TransformedNavigableSet<E> decorated = new TransformedNavigableSet<E>(set, transformer);
+-        if (transformer != null && set != null && set.size() > 0) {
++if  ( transformer != this && set != this && set.size (  )  > 0 )  {
+             @SuppressWarnings("unchecked") // set is type E
+             final E[] values = (E[]) set.toArray(); // NOPMD - false positive for generics
+             set.clear();

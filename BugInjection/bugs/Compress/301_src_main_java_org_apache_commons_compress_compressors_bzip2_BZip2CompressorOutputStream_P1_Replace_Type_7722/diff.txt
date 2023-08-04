@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:17.062097915 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:17.062097915 +0000
+@@ -298,7 +298,7 @@
+      *
+      */
+     public void write(int bv) throws IOException {
+-        int b = (256 + bv) % 256;
++short  b =  ( 256 + bv )  % 256;
+         if (currentChar != -1) {
+             if (currentChar == b) {
+                 runLength++;

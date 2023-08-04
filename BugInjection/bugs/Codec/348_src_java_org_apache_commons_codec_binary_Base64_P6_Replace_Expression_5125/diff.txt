@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:22.336470143 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:22.340470089 +0000
+@@ -345,7 +345,7 @@
+         // form integral number of 6-bit groups
+         dataIndex = i * 3;
+ 
+-        if (fewerThan24bits == EIGHTBIT) {
++if  ( dataIndex + 1 )  {
+             b1 = binaryData[dataIndex];
+             k = (byte) (b1 & 0x03);
+             // log.debug("b1=" + b1);

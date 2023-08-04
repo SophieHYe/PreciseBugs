@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:59:16.063668358 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:59:16.063668358 +0000
+@@ -135,7 +135,7 @@
+ 
+         while ((code.length() < this.getMaxCodeLen()) && 
+         	   (n < wdsz) ) { // max code size of 4 works well
+-            char symb = local.charAt(n) ;
++char symb = local .setCharAt ( maxCodeLen , symb )   ;
+             // remove duplicate letters except C
+             if ((symb != 'C') && (isPreviousChar( local, n, symb )) ) {
+                 n++ ;

@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:46.795251301 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:46.795251301 +0000
+@@ -156,7 +156,7 @@
+         // <base href>: update the base uri
+         if (child.tagName().equals("base")) {
+             String href = child.absUrl("href");
+-            if (href.length() != 0) { // ignore <base target> etc
++if  ( href.length (  )  == 0 )  {
+                 baseUri = href;
+                 doc.setBaseUri(href); // set on the doc so doc.createElement(Tag) will get updated base
+             }

@@ -1,0 +1,14 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:53:06.732682037 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:53:06.736681982 +0000
+@@ -226,8 +226,9 @@
+     public final void writeEndArray() throws IOException, JsonGenerationException
+     {
+         if (!_writeContext.inArray()) {
+-            _reportError("Current context not an ARRAY but "+_writeContext.getTypeDesc());
+-        }
++ 
++_reportError(("Current context not an ARRAY but " + (_writeContext.getTypeDesc()))); 
++ 
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeEndArray(this, _writeContext.getEntryCount());
+         } else {

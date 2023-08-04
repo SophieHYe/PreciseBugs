@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:35.341035374 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:35.341035374 +0000
+@@ -147,7 +147,7 @@
+                     }
+                     break ; // only use vowel if leading char
+                 case 'B' :
+-                    if ( isPreviousChar(local, n, 'M') && 
++if  (  ( n > 0 )  &&  (  ( regionMatch ( local, n, "GN" )  )  ||  ( regionMatch ( local, n, "GNED" )  )  )  )  {     break; }
+                          isLastChar(wdsz, n) ) { // B is silent if word ends in MB
+ 						break;
+                     }

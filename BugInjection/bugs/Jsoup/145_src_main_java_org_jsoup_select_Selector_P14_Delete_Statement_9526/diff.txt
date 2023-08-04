@@ -1,0 +1,10 @@
+--- /Selector.java	2023-07-04 03:55:57.442364250 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:57.442364250 +0000
+@@ -143,6 +143,7 @@
+     private Elements findElements() {
+         if (tq.matchChomp("#")) {
+             return byId();
++ 
+         } else if (tq.matchChomp(".")) {
+             return byClass();
+         } else if (tq.matchesWord()) {

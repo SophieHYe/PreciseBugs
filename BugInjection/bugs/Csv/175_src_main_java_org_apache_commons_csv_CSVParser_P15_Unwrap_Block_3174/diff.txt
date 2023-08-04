@@ -1,0 +1,18 @@
+--- /CSVParser.java	2023-07-04 03:53:07.056677637 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 03:53:07.056677637 +0000
+@@ -173,10 +173,11 @@
+ 
+             String[] header = null;
+             if (format.getHeader().length == 0) {
+-                // read the header from the first line of the file
+-                CSVRecord rec = getRecord();
+-                if (rec != null) {
+-                    header = rec.values();
++ 
++org.apache.commons.csv.CSVRecord rec = getRecord(); if (rec != null) {    header = rec.values();}; 
++ 
++ 
++ 
+                 }
+             } else {
+                 header = format.getHeader();

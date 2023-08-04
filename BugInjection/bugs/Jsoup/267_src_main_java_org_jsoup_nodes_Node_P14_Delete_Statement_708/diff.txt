@@ -1,0 +1,10 @@
+--- /Node.java	2023-07-04 03:57:07.313415797 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:57:07.317415744 +0000
+@@ -265,6 +265,7 @@
+         List<Node> siblings = parentNode.childNodes;
+         Integer index = indexInList(this, siblings);
+         Validate.notNull(index);
++ 
+         if (siblings.size() > index+1)
+             return siblings.get(index+1);
+         else

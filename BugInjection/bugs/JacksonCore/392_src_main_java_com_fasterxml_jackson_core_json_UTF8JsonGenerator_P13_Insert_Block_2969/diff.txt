@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:58:01.400681673 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:58:01.400681673 +0000
+@@ -389,7 +389,7 @@
+         }
+ 
+         boolean addQuotes = isEnabled(Feature.QUOTE_FIELD_NAMES); // standard
+-        if (addQuotes) {
++if  (  ( _cfgPrettyPrinter )  != null )  {     _cfgPrettyPrinter.writeStartObject ( this ) ; }else {     if  (  ( _outputTail )  >=  ( _outputEnd )  )  {         _flushBuffer (  ) ;     }     _outputBuffer[ (  ( _outputTail ) ++ ) ] = BYTE_LCURLY; }
+             if (_outputTail >= _outputEnd) {
+                 _flushBuffer();
+             }

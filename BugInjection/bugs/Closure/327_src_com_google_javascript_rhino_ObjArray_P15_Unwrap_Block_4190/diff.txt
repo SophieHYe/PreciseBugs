@@ -1,0 +1,18 @@
+--- /ObjArray.java	2023-07-04 03:45:41.482726235 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:45:41.482726235 +0000
+@@ -325,10 +325,11 @@
+             int alloc = data.length;
+             if (alloc < required) {
+                    if (alloc <= FIELDS_STORE_SIZE) {
+-                    alloc = FIELDS_STORE_SIZE * 2;
+-                } else {
+-                    alloc *= 2;
+-                }
++ 
++alloc = (com.google.javascript.rhino.ObjArray.FIELDS_STORE_SIZE) * 2; 
++ 
++ 
++ 
+                 if (alloc < required) {
+                     alloc = required;
+                 }

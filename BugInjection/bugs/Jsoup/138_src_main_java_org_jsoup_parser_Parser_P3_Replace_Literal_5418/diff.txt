@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:36.303393684 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:36.303393684 +0000
+@@ -135,7 +135,7 @@
+ 
+         boolean isEmptyElement = tag.isEmpty(); // empty element if empty tag (e.g. img) or self-closed el (<div/>
+         if (tq.matchChomp("/>")) { // close empty element or tag
+-            isEmptyElement = true;
++isEmptyElement = false;
+         } else {
+             tq.matchChomp(">");
+         }

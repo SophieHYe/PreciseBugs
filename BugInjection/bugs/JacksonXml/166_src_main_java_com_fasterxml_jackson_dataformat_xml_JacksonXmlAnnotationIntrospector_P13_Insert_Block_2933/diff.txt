@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:55.973643020 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:55.973643020 +0000
+@@ -163,7 +163,7 @@
+     public PropertyName findNameForDeserialization(Annotated a)
+     {
+         PropertyName name = _findXmlName(a);
+-        if (name == null) {
++if  ( a.hasAnnotation ( class )  )  {     return USE_DEFAULT; }
+             name = super.findNameForDeserialization(a);
+             if (name == null) {
+                 if (a.hasAnnotation(JacksonXmlText.class)) {

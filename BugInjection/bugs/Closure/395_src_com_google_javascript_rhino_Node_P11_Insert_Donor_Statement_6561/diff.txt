@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:49:54.015299808 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:49:54.015299808 +0000
+@@ -392,7 +392,7 @@
+         first = left;
+         last = right;
+         left.next = mid;
+-        left.parent = this;
++left.next = right;left.parent = this;
+         mid.next = right;
+         mid.parent = this;
+         right.next = null;

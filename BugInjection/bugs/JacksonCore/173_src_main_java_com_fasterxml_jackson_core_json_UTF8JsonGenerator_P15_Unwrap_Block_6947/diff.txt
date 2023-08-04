@@ -1,0 +1,16 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:52:04.121532353 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:52:04.121532353 +0000
+@@ -171,9 +171,10 @@
+             return;
+         }
+         if (status == JsonWriteContext.STATUS_OK_AFTER_COMMA) { // need comma
+-            if (_outputTail >= _outputEnd) {
+-                _flushBuffer();
+-            }
++ 
++if ((_outputTail) >= (_outputEnd)) {    _flushBuffer();}; _outputBuffer[((_outputTail)++)] = com.fasterxml.jackson.core.json.UTF8JsonGenerator.BYTE_COMMA; 
++ 
++ 
+             _outputBuffer[_outputTail++] = BYTE_COMMA;
+         }
+         _writeFieldName(name);

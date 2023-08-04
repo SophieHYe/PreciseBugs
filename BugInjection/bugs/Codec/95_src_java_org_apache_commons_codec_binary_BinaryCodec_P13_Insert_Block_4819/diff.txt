@@ -1,0 +1,11 @@
+--- /BinaryCodec.java	2023-07-04 03:54:29.283561112 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/BinaryCodec.java	2023-07-04 03:54:29.287561058 +0000
+@@ -92,7 +92,7 @@
+      * @see org.apache.commons.codec.Encoder#encode(java.lang.Object)
+      */
+     public Object encode(Object raw) throws EncoderException {
+-        if (!(raw instanceof byte[])) {
++if  ( ascii instanceof byte[] )  {     return fromAscii (  (  ( byte[] )   ( ascii )  )  ) ; }
+             throw new EncoderException("argument not a byte array");
+         }
+         return toAsciiChars((byte[]) raw);

@@ -1,0 +1,11 @@
+--- /Attribute.java	2023-07-04 03:57:24.121187659 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Attribute.java	2023-07-04 03:57:24.121187659 +0000
+@@ -63,7 +63,7 @@
+      @return HTML
+      */
+     public String html() {
+-        return String.format("%s=\"%s\"", key, StringEscapeUtils.escapeHtml(value));
++return String.format ( "%s=\"%s\"", key, StringEscapeUtils .unescapeHtml ( value )   ) ;
+     }
+ 
+     /**

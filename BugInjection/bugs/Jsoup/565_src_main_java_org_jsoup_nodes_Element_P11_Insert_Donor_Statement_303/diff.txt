@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:25.152359308 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:25.156359254 +0000
+@@ -562,7 +562,7 @@
+     private void text(StringBuilder accum) {
+         for (Node child : childNodes) {
+             if (child instanceof TextNode) {
+-                TextNode textNode = (TextNode) child;
++Element el =  ( Element )  child;TextNode textNode =  ( TextNode )  child;
+                 String text = textNode.getWholeText();
+ 
+                 if (!preserveWhitespace()) {

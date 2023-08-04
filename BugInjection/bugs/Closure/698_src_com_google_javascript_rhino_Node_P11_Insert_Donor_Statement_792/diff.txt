@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:58:28.448314575 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:58:28.448314575 +0000
+@@ -695,8 +695,8 @@
+ 
+         Preconditions.checkArgument(newChild.next == null,
+             "The new child node has siblings.");
+-        Preconditions.checkArgument(newChild.parent == null,
+-            "The new child node already has a parent.");
++Preconditions.checkArgument ( prev.next != null, "no next sibling." ) ;Preconditions.checkArgument ( newChild.parent == null, "The new child node already has a parent." ) ;
++ 
+ 
+         // Copy over important information.
+         newChild.copyInformationFrom(prevChild);

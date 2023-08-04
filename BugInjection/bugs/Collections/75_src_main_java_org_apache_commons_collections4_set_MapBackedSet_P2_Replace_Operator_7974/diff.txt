@@ -1,0 +1,11 @@
+--- /MapBackedSet.java	2023-07-04 03:54:40.143413665 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/MapBackedSet.java	2023-07-04 03:54:40.143413665 +0000
+@@ -72,7 +72,7 @@
+      * @since 4.0
+      */
+     public static <E, V> MapBackedSet<E, V> mapBackedSet(final Map<E, ? super V> map, final V dummyValue) {
+-        if (map == null) {
++if  ( map != null )  {
+             throw new IllegalArgumentException("The map must not be null");
+         }
+         return new MapBackedSet<E, V>(map, dummyValue);

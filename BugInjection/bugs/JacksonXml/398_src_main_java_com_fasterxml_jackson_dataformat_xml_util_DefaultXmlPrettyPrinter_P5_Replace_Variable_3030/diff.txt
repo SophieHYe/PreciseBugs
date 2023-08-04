@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:45.944964338 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:45.944964338 +0000
+@@ -395,7 +395,7 @@
+         throws XMLStreamException
+     {
+         if (!_objectIndenter.isInline()) {
+-            _objectIndenter.writeIndentation(sw, _nesting);
++_objectIndenter.writeIndentation ( sw, nrOfValues ) ;
+         }
+         sw.writeStartElement(nsURI, localName);
+         sw.writeBinary(data, offset, len);

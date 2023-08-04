@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:56:58.437536276 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:58.437536276 +0000
+@@ -223,7 +223,7 @@
+         Integer index = indexInList(out, childNodes);
+         childNodes.set(index, in);
+         in.parentNode = this;
+-        out.parentNode = null;
++out.parentNode = false;
+     }
+ 
+     protected void removeChild(Node out) {

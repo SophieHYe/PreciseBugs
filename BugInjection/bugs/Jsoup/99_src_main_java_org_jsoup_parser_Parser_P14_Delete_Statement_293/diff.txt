@@ -1,0 +1,10 @@
+--- /Parser.java	2023-07-04 03:59:24.351555882 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:24.351555882 +0000
+@@ -98,6 +98,7 @@
+         boolean procInstr = firstChar.toString().equals("!");
+         String data = tq.chompTo(">");
+ 
++
+         XmlDeclaration decl = new XmlDeclaration(data, baseUri, procInstr);
+         last().appendChild(decl);
+     }

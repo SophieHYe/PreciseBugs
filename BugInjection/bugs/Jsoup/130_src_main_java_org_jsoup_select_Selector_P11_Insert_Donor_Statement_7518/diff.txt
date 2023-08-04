@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:55:53.570416812 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:53.570416812 +0000
+@@ -127,7 +127,7 @@
+         
+         Elements output;
+         if (combinator.equals(">"))
+-            output = filterForChildren(elements, select(subQuery, elements));
++output = filterForAdjacentSiblings ( elements, select ( subQuery, root )  ) ;output = filterForChildren ( elements, select ( subQuery, elements )  ) ;
+         else if (combinator.equals(" "))
+             output = filterForDescendants(elements, select(subQuery, elements));
+         else if (combinator.equals("+"))

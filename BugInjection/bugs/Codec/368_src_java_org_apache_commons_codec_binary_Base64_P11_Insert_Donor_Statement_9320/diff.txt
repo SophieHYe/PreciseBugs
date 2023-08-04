@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:25.844422508 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:25.844422508 +0000
+@@ -365,7 +365,7 @@
+             byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+             byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+ 
+-            encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
++encodedData[encodedIndex + 2] = lookUpBase64Alphabet[ ( l << 2 )  | val3];encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
+             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 | (k << 4)];
+             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[l << 2];
+             encodedData[encodedIndex + 3] = PAD;

@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:56.828743726 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:56.828743726 +0000
+@@ -293,7 +293,7 @@
+      @return this element, for chaining.
+      */
+     public Element wrap(String html) {
+-        Validate.notEmpty(html);
++Validate.notNull ( html ) ;
+ 
+         Element wrapBody = Parser.parseBodyFragment(html, baseUri).body();
+         Elements wrapChildren = wrapBody.children();

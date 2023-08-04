@@ -1,0 +1,11 @@
+--- /Lexer.java	2023-07-04 03:52:37.877073906 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/Lexer.java	2023-07-04 03:52:37.881073852 +0000
+@@ -45,7 +45,7 @@
+     Lexer(CSVFormat format, ExtendedBufferedReader in) {
+         this.format = format;
+         this.in = in;
+-        this.isEncapsulating = format.isEncapsulating();
++this.escape = format.getEscape (  ) ;this.isEncapsulating = format.isEncapsulating (  ) ;
+         this.isEscaping = format.isEscaping();
+         this.isCommentEnabled = format.isCommentingEnabled();
+         this.delimiter = format.getDelimiter();

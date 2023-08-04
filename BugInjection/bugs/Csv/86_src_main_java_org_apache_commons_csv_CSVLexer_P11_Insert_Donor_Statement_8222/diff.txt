@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:19.468509088 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:19.468509088 +0000
+@@ -83,7 +83,7 @@
+             // ignore whitespaces at beginning of a token
+             if (surroundingSpacesIgnored) {
+                 while (isWhitespace(c) && !eol) {
+-                    c = in.read();
++int lastChar = in.readAgain (  ) ;c = in.read (  ) ;
+                     eol = isEndOfLine(c);
+                 }
+             }

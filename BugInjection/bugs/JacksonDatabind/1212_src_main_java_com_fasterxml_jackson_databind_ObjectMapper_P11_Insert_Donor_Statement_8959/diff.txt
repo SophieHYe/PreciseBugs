@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:58:09.652569675 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:58:09.652569675 +0000
+@@ -1209,7 +1209,7 @@
+      * of ObjectMapper instances and not ObjectWriters.
+      */
+     public void setFilters(FilterProvider filterProvider) {
+-        _serializationConfig = _serializationConfig.withFilters(filterProvider);
++_deserializationConfig = _deserializationConfig.with ( typer ) ;_serializationConfig = _serializationConfig.withFilters ( filterProvider ) ;
+     }
+ 
+     /**

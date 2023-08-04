@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:42.368198131 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:42.368198131 +0000
+@@ -711,7 +711,7 @@
+         boolean maybeXmlDecl = (b == BYTE_LT);
+         if (!maybeXmlDecl) {
+             int ch = skipSpace(acc, b);
+-            if (ch < 0) {
++if  ( ch < -9 )  {
+                 return MatchStrength.INCONCLUSIVE;
+             }
+             b = (byte) ch;

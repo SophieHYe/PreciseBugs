@@ -1,0 +1,16 @@
+--- /MapUtils.java	2023-07-04 03:57:46.412885097 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/MapUtils.java	2023-07-04 03:57:46.412885097 +0000
+@@ -159,9 +159,10 @@
+                     return Boolean.valueOf((String) answer);
+                 }
+                 if (answer instanceof Number) {
+-                    final Number n = (Number) answer;
+-                    return n.intValue() != 0 ? Boolean.TRUE : Boolean.FALSE;
+-                }
++ 
++final java.lang.Number n = ((java.lang.Number) (answer)); return (n.intValue()) != 0 ? java.lang.Boolean.TRUE : java.lang.Boolean.FALSE; 
++ 
++ 
+             }
+         }
+         return null;

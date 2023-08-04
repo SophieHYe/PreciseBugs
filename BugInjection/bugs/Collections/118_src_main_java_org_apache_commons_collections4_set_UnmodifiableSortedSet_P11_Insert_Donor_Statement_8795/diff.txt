@@ -1,0 +1,11 @@
+--- /UnmodifiableSortedSet.java	2023-07-04 03:54:24.223629813 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/UnmodifiableSortedSet.java	2023-07-04 03:54:24.227629759 +0000
+@@ -115,7 +115,7 @@
+ 
+     @Override
+     public SortedSet<E> headSet(final E toElement) {
+-        final SortedSet<E> head = decorated().headSet(toElement);
++final SortedSet<E> sub = decorated (  ) .subSet ( fromElement, toElement ) ;final SortedSet<E> head = decorated (  ) .headSet ( toElement ) ;
+         return unmodifiableSortedSet(head);
+     }
+ 

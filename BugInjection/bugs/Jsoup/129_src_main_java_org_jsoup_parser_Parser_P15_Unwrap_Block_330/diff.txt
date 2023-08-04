@@ -1,0 +1,14 @@
+--- /Parser.java	2023-07-04 03:59:31.687456327 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:31.687456327 +0000
+@@ -127,8 +127,9 @@
+         while (!tq.matchesAny("<", "/>", ">") && !tq.isEmpty()) {
+             Attribute attribute = parseAttribute();
+             if (attribute != null)
+-                attributes.put(attribute);
+-        }
++ 
++attributes.put(attribute); 
++ 
+ 
+         Tag tag = Tag.valueOf(tagName);
+         Element child = new Element(tag, baseUri, attributes);

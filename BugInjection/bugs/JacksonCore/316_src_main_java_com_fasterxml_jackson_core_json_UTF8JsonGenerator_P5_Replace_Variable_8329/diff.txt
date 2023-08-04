@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:55:35.994655411 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:55:35.998655356 +0000
+@@ -313,7 +313,7 @@
+         throws IOException, JsonGenerationException
+     {
+         if (!isEnabled(Feature.QUOTE_FIELD_NAMES)) {
+-            int len = name.appendQuotedUTF8(_outputBuffer, _outputTail); // different quoting (escaping)
++int len = name.appendQuotedUTF8 (  _outputTail ) ;
+             if (len < 0) {
+                 _writeBytes(name.asQuotedUTF8());
+             } else {

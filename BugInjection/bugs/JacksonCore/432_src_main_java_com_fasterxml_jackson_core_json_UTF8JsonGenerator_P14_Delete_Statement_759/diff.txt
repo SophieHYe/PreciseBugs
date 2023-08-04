@@ -1,0 +1,12 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:58:55.795943419 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:58:55.795943419 +0000
+@@ -430,7 +430,8 @@
+         // Output: if we can't guarantee it fits in output buffer, off-line as well:
+         if (len > _outputMaxContiguous) {
+             _writeLongString(_charBuffer, 0, len);
+-            return;
++ 
++ 
+         }
+         if ((_outputTail + len) >= _outputEnd) {
+             _flushBuffer();

@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:06.160689804 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:06.160689804 +0000
+@@ -331,7 +331,7 @@
+             encodedIndex += 4;
+ 
+             // If we are chunking, let's put a chunk separator down.
+-            if (isChunked) {
++if  ( CHUNK_SIZE )  *  ( chunksSoFar + 1 )  + chunksSoFar *  ( length )  {
+                 // this assumes that CHUNK_SIZE % 4 == 0
+                 if (encodedIndex == nextSeparatorIndex) {
+                     System.arraycopy(CHUNK_SEPARATOR, 0, encodedData, encodedIndex, CHUNK_SEPARATOR.length);

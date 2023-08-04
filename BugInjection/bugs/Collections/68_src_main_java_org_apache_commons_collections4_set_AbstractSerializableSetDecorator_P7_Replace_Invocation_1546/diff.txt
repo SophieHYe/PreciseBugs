@@ -1,0 +1,11 @@
+--- /AbstractSerializableSetDecorator.java	2023-07-04 03:54:21.267669948 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/AbstractSerializableSetDecorator.java	2023-07-04 03:54:21.267669948 +0000
+@@ -65,7 +65,7 @@
+      */
+     @SuppressWarnings("unchecked")
+     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+-        in.defaultReadObject();
++in .readObject ( in )  ;
+         setCollection((Collection<E>) in.readObject());
+     }
+ 

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:53:37.228267926 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:53:37.232267872 +0000
+@@ -247,7 +247,7 @@
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeStartObject(this);
+         } else {
+-            if (_outputTail >= _outputEnd) {
++if  (  (  ( _outputTail )  + 4 )  >  ( _outputEnd )  )  {     _flushBuffer (  ) ; }
+                 _flushBuffer();
+             }
+             _outputBuffer[_outputTail++] = BYTE_LCURLY;

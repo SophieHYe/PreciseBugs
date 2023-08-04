@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:06.797422802 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:06.797422802 +0000
+@@ -439,7 +439,7 @@
+ 
+         // If the stream was empty we must skip the rest of this method.
+         // See bug#32200.
+-        if (last == -1) {
++if  ( last == -workFactor )  {
+             return;
+         }
+ 

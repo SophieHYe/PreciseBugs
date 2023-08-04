@@ -1,0 +1,11 @@
+--- /DataUtil.java	2023-07-04 03:54:54.491218867 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/DataUtil.java	2023-07-04 03:54:54.491218867 +0000
+@@ -52,7 +52,7 @@
+             throw new IOException(String.format("Unhandled content type \"%s\" on URL %s. Must be text/*", 
+                     contentType, url.toString()));
+         
+-        InputStream inStream = new BufferedInputStream(conn.getInputStream());
++InputStream inStream = new FileInputStream ( in ) ;InputStream inStream = new BufferedInputStream ( conn.getInputStream (  )  ) ;
+         String charSet = "UTF-8"; // todo[must]: get from content-encoding, or http-equiv (two-pass?)
+ 
+         String data = readInputStream(inStream, charSet);

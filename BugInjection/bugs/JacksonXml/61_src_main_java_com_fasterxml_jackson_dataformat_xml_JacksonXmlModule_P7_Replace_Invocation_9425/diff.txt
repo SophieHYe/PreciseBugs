@@ -1,0 +1,11 @@
+--- /JacksonXmlModule.java	2023-07-04 03:51:57.993615584 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlModule.java	2023-07-04 03:51:57.993615584 +0000
+@@ -58,7 +58,7 @@
+         context.addBeanDeserializerModifier(new XmlBeanDeserializerModifier(_cfgNameForTextElement));
+ 
+         // as well as AnnotationIntrospector
+-        context.insertAnnotationIntrospector(_constructIntrospector());
++context.addBeanDeserializerModifier ( _constructIntrospector (  )  ) ;
+ 
+         // and finally inform XmlFactory about overrides, if need be:
+         if (_cfgNameForTextElement != FromXmlParser.DEFAULT_UNNAMED_TEXT_PROPERTY) {

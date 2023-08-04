@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:51.829699305 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:51.833699250 +0000
+@@ -92,7 +92,7 @@
+     public String findNamespace(Annotated ann)
+     {
+         JacksonXmlProperty prop = ann.getAnnotation(JacksonXmlProperty.class);
+-        if (prop != null) {
++if  ( prop != this )  {
+             return prop.namespace();
+         }
+         return null;

@@ -1,0 +1,18 @@
+--- /Selector.java	2023-07-04 03:55:43.182557831 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:43.182557831 +0000
+@@ -105,10 +105,11 @@
+             boolean seenWhite = tq.consumeWhitespace();
+             
+             if (tq.matchChomp(",")) { // group or
+-                while (!tq.isEmpty()) {
+-                    String subQuery = tq.chompTo(",");
+-                    elements.addAll(select(subQuery, root));
+-                }
++ 
++while (!(tq.isEmpty())) {    java.lang.String subQuery = tq.chompTo(",");    elements.addAll(org.jsoup.select.Selector.select(subQuery, root));} ; 
++ 
++ 
++ 
+             } else if (tq.matchesAny(combinators)) {
+                 combinator(tq.consume().toString());
+             } else if (seenWhite) {

@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 04:00:01.027058166 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 04:00:01.027058166 +0000
+@@ -202,7 +202,7 @@
+     }
+ 
+     private void parseCdata() {
+-        tq.consume("<![CDATA[");
++tq.consume ( "<" ) ;tq.consume ( "<![CDATA[" ) ;
+         String rawText = tq.chompTo("]]>");
+         TextNode textNode = new TextNode(rawText, baseUri); // constructor does not escape
+         last().appendChild(textNode);

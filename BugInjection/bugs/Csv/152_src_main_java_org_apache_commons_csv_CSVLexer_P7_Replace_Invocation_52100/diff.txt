@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:23.152459063 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:23.156459008 +0000
+@@ -149,7 +149,7 @@
+                 // end of token
+                 tkn.type = TOKEN;
+                 break;
+-            } else if (isEscape(c)) {
++} else if  ( readEscape ( c )  )  {
+                 tkn.content.append((char) readEscape(c));
+             } else {
+                 tkn.content.append((char) c);

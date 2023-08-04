@@ -1,0 +1,14 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:55:45.934520472 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:55:45.934520472 +0000
+@@ -322,8 +322,9 @@
+             return;
+         }
+         if (_outputTail >= _outputEnd) {
+-            _flushBuffer();
+-        }
++ 
++ 
++ 
+         _outputBuffer[_outputTail++] = BYTE_QUOTE;
+         int len = name.appendQuotedUTF8(_outputBuffer, _outputTail);
+         if (len < 0) { // couldn't append, bit longer processing

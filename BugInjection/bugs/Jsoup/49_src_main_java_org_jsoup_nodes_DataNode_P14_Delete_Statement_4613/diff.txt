@@ -1,0 +1,10 @@
+--- /DataNode.java	2023-07-04 03:57:22.077215403 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/DataNode.java	2023-07-04 03:57:22.081215348 +0000
+@@ -47,6 +47,7 @@
+      */
+     public static DataNode createFromEncoded(String encodedData, String baseUri) {
+         String data = StringEscapeUtils.unescapeHtml(encodedData);
++ 
+         return new DataNode(data, baseUri);
+     }
+ }

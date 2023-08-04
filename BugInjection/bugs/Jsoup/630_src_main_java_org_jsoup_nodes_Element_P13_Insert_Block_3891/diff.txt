@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:29.528299918 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:29.532299863 +0000
+@@ -627,7 +627,7 @@
+         StringBuilder sb = new StringBuilder();
+ 
+         for (Node childNode : childNodes) {
+-            if (childNode instanceof DataNode) {
++if  ( childNode instanceof Element )  {     Element element =  (  ( Element )   ( childNode )  ) ;     String elementData = element.data (  ) ;     sb.append ( elementData ) ; }
+                 DataNode data = (DataNode) childNode;
+                 sb.append(data.getWholeData());
+             } else if (childNode instanceof Element) {

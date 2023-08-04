@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:50:32.162781510 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:50:32.166781456 +0000
+@@ -390,7 +390,7 @@
+         HashMap<ClassKey,Class<?>> mixins = new HashMap<ClassKey,Class<?>>(src._mixInAnnotations);
+         _serializationConfig = new SerializationConfig(src._serializationConfig, mixins);
+         _deserializationConfig = new DeserializationConfig(src._deserializationConfig, mixins);
+-        _serializerProvider = src._serializerProvider;
++_serializerProvider = src;
+         _deserializationContext = src._deserializationContext;
+ 
+         // Default serializer factory is stateless, can just assign

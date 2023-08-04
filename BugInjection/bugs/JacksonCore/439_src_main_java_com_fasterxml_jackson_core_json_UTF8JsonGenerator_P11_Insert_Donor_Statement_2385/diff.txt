@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:59:14.431690506 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:59:14.435690452 +0000
+@@ -436,7 +436,7 @@
+             _flushBuffer();
+         }
+         _outputBuffer[_outputTail++] = BYTE_QUOTE;
+-        _writeStringSegment(_charBuffer, 0, len); // we checked space already above
++_writeStringSegments ( name ) ;_writeStringSegment ( _charBuffer, 0, len ) ;
+         /* [JACKSON-462] But that method may have had to expand multi-byte Unicode
+          *   chars, so we must check again
+          */

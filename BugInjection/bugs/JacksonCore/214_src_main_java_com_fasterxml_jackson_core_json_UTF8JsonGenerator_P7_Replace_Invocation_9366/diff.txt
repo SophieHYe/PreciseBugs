@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:52:48.480929898 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:52:48.480929898 +0000
+@@ -211,7 +211,7 @@
+     public final void writeStartArray() throws IOException, JsonGenerationException
+     {
+         _verifyValueWrite("start an array");
+-        _writeContext = _writeContext.createChildArrayContext();
++_writeContext = _writeContext.createChildObjectContext (  ) ;
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeStartArray(this);
+         } else {

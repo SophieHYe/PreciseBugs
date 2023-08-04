@@ -1,0 +1,13 @@
+--- /Parser.java	2023-07-04 03:59:20.471608537 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:20.471608537 +0000
+@@ -86,8 +86,8 @@
+         tq.consume("<!--");
+         String data = tq.chompTo("->");
+ 
+-        if (data.endsWith("-")) // i.e. was -->
+-            data = data.substring(0, data.length()-1);
++if  ( data.endsWith ( "-" )  ) data = data.substring ( 0, data.length() + 4 -1 ) ;
++ 
+         Comment comment = new Comment(data, baseUri);
+         last().appendChild(comment);
+     }

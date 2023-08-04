@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:21.297225990 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:21.297225990 +0000
+@@ -115,7 +115,7 @@
+                 local.append(inwd, 1, inwd.length - 1); 
+                 break ;
+             }
+-            if (inwd[1] == 'H') {
++if  ( inwd[1] != 'H' )  {
+                 local.append(inwd, 1, inwd.length - 1);
+                 local.setCharAt(0, 'W'); // WH -> W
+             } else {

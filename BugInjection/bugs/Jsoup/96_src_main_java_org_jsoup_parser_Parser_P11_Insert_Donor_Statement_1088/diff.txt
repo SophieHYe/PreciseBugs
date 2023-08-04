@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:23.299570159 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:23.299570159 +0000
+@@ -93,7 +93,7 @@
+     }
+ 
+     private void parseXmlDecl() {
+-        tq.consume("<");
++tq.consume ( "</" ) ;tq.consume ( "<" ) ;
+         Character firstChar = tq.consume(); // <? or <!, from initial match.
+         boolean procInstr = firstChar.toString().equals("!");
+         String data = tq.chompTo(">");

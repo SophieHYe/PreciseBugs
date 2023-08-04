@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:50.139205921 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:50.139205921 +0000
+@@ -175,7 +175,7 @@
+ 
+             if (tq.matchChomp(SQ)) {
+                 value = tq.chompTo(SQ);
+-            } else if (tq.matchChomp(DQ)) {
++} else if  ( (!(tq.matchesAny("<", "/>", ">")) && !(tq.matchesWhitespace())) )  {
+                 value = tq.chompTo(DQ);
+             } else {
+                 StringBuilder valueAccum = new StringBuilder();

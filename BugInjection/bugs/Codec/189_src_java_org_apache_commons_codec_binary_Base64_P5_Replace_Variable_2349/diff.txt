@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:52:57.432808329 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:52:57.432808329 +0000
+@@ -186,7 +186,7 @@
+      */
+     public static boolean isArrayByteBase64(byte[] arrayOctect) {
+ 
+-        arrayOctect = discardWhitespace(arrayOctect);
++arrayOctect = discardWhitespace ( lookUpBase64Alphabet ) ;
+ 
+         int length = arrayOctect.length;
+         if (length == 0) {

@@ -1,0 +1,11 @@
+--- /ExtendedBufferedReader.java	2023-07-04 03:52:57.688804853 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/ExtendedBufferedReader.java	2023-07-04 03:52:57.688804853 +0000
+@@ -78,7 +78,7 @@
+ 
+     @Override
+     public int read(char[] buf, int offset, int length) throws IOException {
+-        if (length == 0) {
++if  ( length <= 0 )  {
+             return 0;
+         }
+         

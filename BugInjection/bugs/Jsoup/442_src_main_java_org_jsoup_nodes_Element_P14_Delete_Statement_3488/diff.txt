@@ -1,0 +1,10 @@
+--- /Element.java	2023-07-04 03:58:12.080536721 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:12.080536721 +0000
+@@ -441,6 +441,7 @@
+     public Elements getElementsByClass(String className) {
+         Validate.notEmpty(className);
+ 
++
+         return Collector.collect(new Evaluator.Class(className), this);
+     }
+ 

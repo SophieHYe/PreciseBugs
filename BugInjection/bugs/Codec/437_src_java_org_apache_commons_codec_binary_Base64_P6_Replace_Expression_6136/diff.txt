@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:48.924109111 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:48.928109056 +0000
+@@ -434,7 +434,7 @@
+                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
+                 decodedData[encodedIndex + 1] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                 decodedData[encodedIndex + 2] = (byte) (b3 << 6 | b4);
+-            } else if (marker0 == PAD) {
++} else if  ( (b3 >> 2 & 15) )  {
+                 // Two PAD e.g. 3c[Pad][Pad]
+                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
+             } else if (marker1 == PAD) {

@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:56:05.150259615 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:05.150259615 +0000
+@@ -215,7 +215,7 @@
+                 return root.getElementsByAttributeValueEnding(key, tq.chompTo("]"));
+ 
+             else if (tq.matchChomp("*="))
+-                return root.getElementsByAttributeValueContaining(key, tq.chompTo("]"));
++return root.getElementsByAttributeValueContaining ( s, tq.matchChomp ( "]" )  ) ;
+             
+             else
+                 throw new SelectorParseException("Could not parse attribute query " + query);

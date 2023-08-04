@@ -1,0 +1,11 @@
+--- /Whitelist.java	2023-07-04 03:55:30.126735071 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:30.126735071 +0000
+@@ -300,7 +300,7 @@
+ 
+         if (attributes.containsKey(tag)) {
+             if (attributes.get(tag).contains(key)) {
+-                if (protocols.containsKey(tag)) {
++if  ( attributes.containsKey ( tagName )  )  {
+                     Map<AttributeKey, Set<Protocol>> attrProts = protocols.get(tag);
+                     // ok if not defined protocol; otherwise test
+                     return !attrProts.containsKey(key) || testValidProtocol(el, attr, attrProts.get(key));

@@ -1,0 +1,11 @@
+--- /MapUtils.java	2023-07-04 03:57:53.520788623 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/MapUtils.java	2023-07-04 03:57:53.524788569 +0000
+@@ -182,7 +182,7 @@
+      * @return the value in the Map as a Number, <code>null</code> if null map input
+      */
+     public static <K> Number getNumber(final Map<? super K, ?> map, final K key) {
+-        if (map != null) {
++if  ( map != null )  {     final Object answer = map.get ( key ) ;     if  ( answer != null )  {         if  ( answer instanceof Boolean )  {             return  (  ( Boolean )   ( answer )  ) ;         }         if  ( answer instanceof String )  {             return valueOf (  (  ( String )   ( answer )  )  ) ;         }         if  ( answer instanceof Number )  {             final Number n =  (  ( Number )   ( answer )  ) ;             return  ( n.intValue (  )  )  != 0 ? TRUE : FALSE;         }     } }
+             final Object answer = map.get(key);
+             if (answer != null) {
+                 if (answer instanceof Number) {

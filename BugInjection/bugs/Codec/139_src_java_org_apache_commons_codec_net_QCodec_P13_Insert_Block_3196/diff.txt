@@ -1,0 +1,11 @@
+--- /QCodec.java	2023-07-04 03:55:11.558987147 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QCodec.java	2023-07-04 03:55:11.562987093 +0000
+@@ -136,7 +136,7 @@
+         }
+         byte[] data = QuotedPrintableCodec.encodeQuotedPrintable(PRINTABLE_CHARS, bytes);
+         if (this.encodeBlanks) {
+-            for (int i = 0; i < data.length; i++) {
++if  (  ( data[i] )  ==  ( BLANK )  )  {     data[i] = UNDERSCORE; }
+                 if (data[i] == BLANK) {
+                     data[i] = UNDERSCORE;
+                 }

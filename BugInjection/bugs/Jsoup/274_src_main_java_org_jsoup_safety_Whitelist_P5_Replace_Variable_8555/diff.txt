@@ -1,0 +1,11 @@
+--- /Whitelist.java	2023-07-04 03:55:25.706795076 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:25.706795076 +0000
+@@ -271,7 +271,7 @@
+         Set<Protocol> protSet;
+ 
+         if (this.protocols.containsKey(tagName)) {
+-            attrMap = this.protocols.get(tagName);
++attrMap = tagName.get ( this.protocols ) ;
+         } else {
+             attrMap = new HashMap<AttributeKey, Set<Protocol>>();
+             this.protocols.put(tagName, attrMap);

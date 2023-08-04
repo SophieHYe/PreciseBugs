@@ -1,0 +1,11 @@
+--- /Lexer.java	2023-07-04 03:52:41.277027732 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/Lexer.java	2023-07-04 03:52:41.277027732 +0000
+@@ -129,7 +129,7 @@
+     }
+ 
+     boolean isEncapsulator(int c) {
+-        return isEncapsulating && c == encapsulator;
++return surroundingSpacesIgnored && c == encapsulator;
+     }
+ 
+     boolean isCommentStart(int c) {

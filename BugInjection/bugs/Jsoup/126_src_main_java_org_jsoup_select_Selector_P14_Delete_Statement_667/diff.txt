@@ -1,0 +1,10 @@
+--- /Selector.java	2023-07-04 03:55:46.346514879 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:46.346514879 +0000
+@@ -125,6 +125,7 @@
+         tq.consumeWhitespace();
+         String subQuery = tq.consumeToAny(combinators); // support multi > childs
+         
++        
+         Elements output;
+         if (combinator.equals(">"))
+             output = filterForChildren(elements, select(subQuery, elements));

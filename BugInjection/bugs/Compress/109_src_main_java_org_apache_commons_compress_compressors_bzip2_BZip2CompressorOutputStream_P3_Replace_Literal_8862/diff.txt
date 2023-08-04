@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:55:59.090341878 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:55:59.094341824 +0000
+@@ -106,7 +106,7 @@
+                 panic();
+             }
+ 
+-            while (nHeap > 1) {
++while  ( nHeap > origPtr )  {
+                 n1 = heap[1];
+                 heap[1] = heap[nHeap];
+                 nHeap--;

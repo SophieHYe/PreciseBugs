@@ -1,0 +1,18 @@
+--- /Base64.java	2023-07-04 03:53:06.648683178 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:06.648683178 +0000
+@@ -334,10 +334,11 @@
+             if (isChunked) {
+                 // this assumes that CHUNK_SIZE % 4 == 0
+                 if (encodedIndex == nextSeparatorIndex) {
+-                    System.arraycopy(CHUNK_SEPARATOR, 0, encodedData, encodedIndex, CHUNK_SEPARATOR.length);
+-                    chunksSoFar++;
+-                    nextSeparatorIndex = (CHUNK_SIZE * (chunksSoFar + 1)) + (chunksSoFar * CHUNK_SEPARATOR.length);
+-                    encodedIndex += CHUNK_SEPARATOR.length;
++ 
++java.lang.System.arraycopy(org.apache.commons.codec.binary.Base64.CHUNK_SEPARATOR, 0, encodedData, encodedIndex, org.apache.commons.codec.binary.Base64.CHUNK_SEPARATOR.length); chunksSoFar++; nextSeparatorIndex = ((org.apache.commons.codec.binary.Base64.CHUNK_SIZE) * (chunksSoFar + 1)) + (chunksSoFar * (org.apache.commons.codec.binary.Base64.CHUNK_SEPARATOR.length)); encodedIndex += org.apache.commons.codec.binary.Base64.CHUNK_SEPARATOR.length; 
++ 
++ 
++ 
+                 }
+             }
+         }

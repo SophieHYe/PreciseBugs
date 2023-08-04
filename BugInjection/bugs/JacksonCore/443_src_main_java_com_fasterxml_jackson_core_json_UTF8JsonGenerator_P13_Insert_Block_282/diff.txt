@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:59:24.419554959 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:59:24.419554959 +0000
+@@ -440,7 +440,7 @@
+         /* [JACKSON-462] But that method may have had to expand multi-byte Unicode
+          *   chars, so we must check again
+          */
+-        if (_outputTail >= _outputEnd) {
++if  (  (  ( _outputTail )  + len )  >=  ( _outputEnd )  )  {     _flushBuffer (  ) ; }
+             _flushBuffer();
+         }
+         _outputBuffer[_outputTail++] = BYTE_QUOTE;

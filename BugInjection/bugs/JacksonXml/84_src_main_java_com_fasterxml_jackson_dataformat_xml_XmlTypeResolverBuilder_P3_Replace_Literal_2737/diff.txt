@@ -1,0 +1,11 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 03:53:00.884761451 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 03:53:00.884761451 +0000
+@@ -81,7 +81,7 @@
+             StringBuilder sb = new StringBuilder(className);
+             do {
+                 sb.replace(ix, ix+1, "..");
+-                ix = className.lastIndexOf('$', ix-1);
++ix = className.lastIndexOf ( '$', ix--1 ) ;
+             } while (ix >= 0);
+             className = sb.toString();
+         }

@@ -1,0 +1,11 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 03:53:00.036772967 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 03:53:00.040772913 +0000
+@@ -76,7 +76,7 @@
+         /* For now, let's just replace '$'s with double dots...
+          * Perhaps make configurable in future?
+          */
+-        int ix = className.lastIndexOf('$');
++ix = className.lastIndexOf ( "..", ix-1 ) ;int ix = className.lastIndexOf ( '$' ) ;
+         if (ix >= 0) {
+             StringBuilder sb = new StringBuilder(className);
+             do {

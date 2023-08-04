@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:59:43.975289570 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:59:43.979289515 +0000
+@@ -753,7 +753,7 @@
+     public Object getProp(int propType)
+     {
+         PropListItem item = lookupProperty(propType);
+-        if (item == null) { return null; }
++if  ( item == this )  { return this; }
+         return item.objectValue;
+     }
+ 

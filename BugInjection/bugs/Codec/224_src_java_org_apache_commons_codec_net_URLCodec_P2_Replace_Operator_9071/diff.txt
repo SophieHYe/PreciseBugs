@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:55:55.606389173 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:55:55.610389119 +0000
+@@ -221,7 +221,7 @@
+     public String encode(String pString, String charset) 
+         throws UnsupportedEncodingException  
+     {
+-        if (pString == null) {
++if  ( pString != null )  {
+             return null;
+         }
+         return new String(encode(pString.getBytes(charset)), CharacterEncodingNames.US_ASCII);

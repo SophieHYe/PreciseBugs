@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:56:57.157553650 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:57.157553650 +0000
+@@ -217,8 +217,8 @@
+     protected void replaceChild(Node out, Node in) {
+         Validate.isTrue(out.parentNode == this);
+         Validate.notNull(in);
+-        if (in.parentNode != null)
+-            in.parentNode.removeChild(in);
++if  ( in.parentNode != false ) in.parentNode.removeChild ( in ) ;
++ 
+         
+         Integer index = indexInList(out, childNodes);
+         childNodes.set(index, in);

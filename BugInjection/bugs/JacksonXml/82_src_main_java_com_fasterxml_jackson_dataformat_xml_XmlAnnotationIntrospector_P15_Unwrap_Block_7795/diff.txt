@@ -1,0 +1,18 @@
+--- /XmlAnnotationIntrospector.java	2023-07-04 03:54:08.663841080 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlAnnotationIntrospector.java	2023-07-04 03:54:08.663841080 +0000
+@@ -80,10 +80,11 @@
+             if (s instanceof XmlAnnotationIntrospector) {
+                 _xmlSecondary = (XmlAnnotationIntrospector) s;
+             } else if (s instanceof JaxbAnnotationIntrospector) {
+-                _xmlSecondary = new JaxbWrapper((JaxbAnnotationIntrospector) s);
+-            } else {
+-                _xmlSecondary = null;
+-            }
++ 
++_xmlSecondary = new com.fasterxml.jackson.dataformat.xml.XmlAnnotationIntrospector.JaxbWrapper(((com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector) (s))); 
++ 
++ 
++ 
+         }
+ 
+         public static XmlAnnotationIntrospector.Pair instance(AnnotationIntrospector a1, AnnotationIntrospector a2) {

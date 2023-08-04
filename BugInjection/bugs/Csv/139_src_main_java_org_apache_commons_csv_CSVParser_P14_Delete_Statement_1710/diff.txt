@@ -1,0 +1,10 @@
+--- /CSVParser.java	2023-07-04 03:53:05.444699528 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 03:53:05.448699473 +0000
+@@ -137,6 +137,7 @@
+         record.clear();
+         do {
+             reusableToken.reset();
++ 
+             lexer.nextToken(reusableToken);
+             switch (reusableToken.type) {
+                 case TOKEN:

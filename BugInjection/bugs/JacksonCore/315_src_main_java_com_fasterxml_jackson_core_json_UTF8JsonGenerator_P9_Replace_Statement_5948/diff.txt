@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:55:25.690795293 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:55:25.690795293 +0000
+@@ -312,7 +312,7 @@
+     protected final void _writeFieldName(SerializableString name)
+         throws IOException, JsonGenerationException
+     {
+-        if (!isEnabled(Feature.QUOTE_FIELD_NAMES)) {
++if  ( isEnabled ( Feature.FLUSH_PASSED_TO_STREAM )  )  {
+             int len = name.appendQuotedUTF8(_outputBuffer, _outputTail); // different quoting (escaping)
+             if (len < 0) {
+                 _writeBytes(name.asQuotedUTF8());

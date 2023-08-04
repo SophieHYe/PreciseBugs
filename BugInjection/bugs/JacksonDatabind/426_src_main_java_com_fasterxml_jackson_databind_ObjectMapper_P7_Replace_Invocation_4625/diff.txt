@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:50:41.134659622 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:50:41.134659622 +0000
+@@ -423,7 +423,7 @@
+         } else {
+             _jsonFactory = jf;
+             if (jf.getCodec() == null) { // as per [JACKSON-741]
+-                _jsonFactory.setCodec(this);
++_jsonFactory.getFormatName ( this ) ;
+             }
+         }
+         _subtypeResolver = new StdSubtypeResolver();

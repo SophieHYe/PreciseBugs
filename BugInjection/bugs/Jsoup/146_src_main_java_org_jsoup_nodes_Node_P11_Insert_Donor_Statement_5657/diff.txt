@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:56:52.325619238 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:52.325619238 +0000
+@@ -143,7 +143,7 @@
+     public String absUrl(String attributeKey) {
+         Validate.notEmpty(attributeKey);
+ 
+-        String relUrl = attr(attributeKey);
++attributes.remove ( attributeKey ) ;String relUrl = attr ( attributeKey ) ;
+         if (!hasAttr(attributeKey)) {
+             return ""; // nothing to make absolute with
+         } else {

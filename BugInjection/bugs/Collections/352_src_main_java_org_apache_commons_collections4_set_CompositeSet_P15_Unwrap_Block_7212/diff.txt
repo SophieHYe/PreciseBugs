@@ -1,0 +1,16 @@
+--- /CompositeSet.java	2023-07-04 03:56:28.953936488 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/CompositeSet.java	2023-07-04 03:56:28.953936488 +0000
+@@ -350,9 +350,10 @@
+                 }
+                 getMutator().resolveCollision(this, existingSet, set, intersects);
+                 if (CollectionUtils.intersection(existingSet, set).size() > 0) {
+-                    throw new IllegalArgumentException(
+-                        "Attempt to add illegal entry unresolved by SetMutator.resolveCollision()");
+-                }
++ 
++throw new java.lang.IllegalArgumentException("Attempt to add illegal entry unresolved by SetMutator.resolveCollision()"); 
++ 
++ 
+             }
+         }
+         all.add(set);

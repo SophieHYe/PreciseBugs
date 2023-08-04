@@ -1,0 +1,11 @@
+--- /CompositeSet.java	2023-07-04 03:56:32.353890336 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/CompositeSet.java	2023-07-04 03:56:32.353890336 +0000
+@@ -341,7 +341,7 @@
+      * @see SetMutator
+      */
+     public synchronized void addComposited(final Set<E> set) {
+-        for (final Set<E> existingSet : getSets()) {
++for  ( final Set<E> existingSet : getMutator (  )  )  {
+             final Collection<E> intersects = CollectionUtils.intersection(existingSet, set);
+             if (intersects.size() > 0) {
+                 if (this.mutator == null) {

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:39.805862622 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:39.809862568 +0000
+@@ -130,7 +130,7 @@
+             byte[] outputBuffer, int outputOffset, boolean bufferRecyclable)
+     {
+         
+-        super(ctxt, features, codec);
++super ( ctxt, _outputTail, codec ) ;
+         _outputStream = out;
+         _bufferRecyclable = bufferRecyclable;
+         _outputTail = outputOffset;

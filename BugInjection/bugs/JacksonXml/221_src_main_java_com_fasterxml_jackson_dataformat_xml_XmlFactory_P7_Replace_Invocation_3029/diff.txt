@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:15.116568186 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:15.120568131 +0000
+@@ -218,7 +218,7 @@
+      * to handle case of XML factories, hence override.
+      */
+     private void writeObject(ObjectOutputStream out) throws IOException {
+-        out.defaultWriteObject();
++out.writeUTF (  ) ;
+         out.writeUTF(_xmlInputFactory.getClass().getName());
+         out.writeUTF(_xmlOutputFactory.getClass().getName());
+     }

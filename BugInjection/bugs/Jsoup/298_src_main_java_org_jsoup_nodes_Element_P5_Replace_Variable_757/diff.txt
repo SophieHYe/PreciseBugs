@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:57.496734659 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:57.500734605 +0000
+@@ -295,7 +295,7 @@
+     public Element wrap(String html) {
+         Validate.notEmpty(html);
+ 
+-        Element wrapBody = Parser.parseBodyFragment(html, baseUri).body();
++Element wrapBody = Parser.parseBodyFragment ( html ) .body (  ) ;
+         Elements wrapChildren = wrapBody.children();
+         Element wrap = wrapChildren.first();
+         if (wrap == null) // nothing to wrap with; noop

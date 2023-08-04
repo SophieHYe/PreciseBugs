@@ -1,0 +1,11 @@
+--- /PredicatedNavigableSet.java	2023-07-04 03:57:18.685261443 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/PredicatedNavigableSet.java	2023-07-04 03:57:18.685261443 +0000
+@@ -133,7 +133,7 @@
+ 
+     @Override
+     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
+-        final NavigableSet<E> sub = decorated().subSet(fromElement, fromInclusive, toElement, toInclusive);
++final NavigableSet<E> sub = decorated (  ) .subSet ( toElement, fromInclusive, toElement, toInclusive ) ;
+         return predicatedNavigableSet(sub, predicate);
+     }
+ 

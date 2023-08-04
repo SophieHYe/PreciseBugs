@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:48.300117584 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:48.304117530 +0000
+@@ -426,7 +426,7 @@
+             b1 = base64Alphabet[base64Data[dataIndex]];
+             b2 = base64Alphabet[base64Data[dataIndex + 1]];
+ 
+-            if (marker0 != PAD && marker1 != PAD) {
++if  ( encodedIndex + 2 )  {
+                 // No PAD e.g 3cQl
+                 b3 = base64Alphabet[marker0];
+                 b4 = base64Alphabet[marker1];

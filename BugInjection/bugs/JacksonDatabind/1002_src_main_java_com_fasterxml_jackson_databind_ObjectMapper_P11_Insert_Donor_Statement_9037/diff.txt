@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:56:21.506037589 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:56:21.510037536 +0000
+@@ -999,7 +999,7 @@
+      * Method for setting custom property naming strategy to use.
+      */
+     public ObjectMapper setPropertyNamingStrategy(PropertyNamingStrategy s) {
+-        _serializationConfig = _serializationConfig.with(s);
++_serializationConfig = new SerializationConfig ( src._serializationConfig, mixins ) ;_serializationConfig = _serializationConfig.with ( s ) ;
+         _deserializationConfig = _deserializationConfig.with(s);
+         return this;
+     }

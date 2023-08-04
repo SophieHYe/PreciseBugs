@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:55:21.414853343 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:55:21.418853289 +0000
+@@ -959,7 +959,7 @@
+      * Method for setting custom subtype resolver to use.
+      */
+     public ObjectMapper setSubtypeResolver(SubtypeResolver str) {
+-        _subtypeResolver = str;
++_subtypeResolver = src._subtypeResolver;_subtypeResolver = str;
+         _deserializationConfig = _deserializationConfig.with(str);
+         _serializationConfig = _serializationConfig.with(str);
+         return this;

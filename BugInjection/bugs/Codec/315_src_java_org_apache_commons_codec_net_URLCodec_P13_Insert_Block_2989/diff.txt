@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:56:01.334311416 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:56:01.334311416 +0000
+@@ -312,7 +312,7 @@
+         } else if (pObject instanceof String) {
+             return encode((String)pObject);
+         } else {
+-            throw new EncoderException("Objects of type " +
++if  ( pObject instanceof String )  {     return decode (  (  ( String )   ( pObject )  )  ) ; }else {     throw new DecoderException (  (  ( "Objects of type " +  ( pObject.getClass (  ) .getName (  )  )  )  + " cannot be URL decoded" )  ) ; }
+                 pObject.getClass().getName() + " cannot be URL encoded"); 
+               
+         }

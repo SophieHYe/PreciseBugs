@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:07.175788978 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:07.175788978 +0000
+@@ -29,7 +29,7 @@
+         Validate.notNull(baseUri);
+ 
+         stack = new LinkedList<Element>();
+-        tq = new TokenQueue(html);
++tq = new TokenQueue ( baseUri ) ;
+         this.baseUri = baseUri;
+ 
+         if (isBodyFragment) {

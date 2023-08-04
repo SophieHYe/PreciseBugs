@@ -1,0 +1,11 @@
+--- /ClosureUtils.java	2023-07-04 03:54:14.659759668 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/ClosureUtils.java	2023-07-04 03:54:14.663759614 +0000
+@@ -256,7 +256,7 @@
+     public static <E> Closure<E> ifClosure(final Predicate<? super E> predicate,
+                                            final Closure<? super E> trueClosure,
+                                            final Closure<? super E> falseClosure) {
+-        return IfClosure.<E>ifClosure(predicate, trueClosure, falseClosure);
++return IfClosure.<E>ifClosure ( falseClosure, trueClosure, predicate ) ;
+     }
+ 
+     /**

@@ -1,0 +1,18 @@
+--- /ObjArray.java	2023-07-04 03:43:41.956346651 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:43:41.956346651 +0000
+@@ -227,10 +227,11 @@
+             default:
+                 ensureCapacity(N + 1);
+                 if (index != N) {
+-                    System.arraycopy(data, index - FIELDS_STORE_SIZE,
+-                                     data, index - FIELDS_STORE_SIZE + 1,
+-                                     N - index);
+-                }
++ 
++java.lang.System.arraycopy(data, (index - (com.google.javascript.rhino.ObjArray.FIELDS_STORE_SIZE)), data, ((index - (com.google.javascript.rhino.ObjArray.FIELDS_STORE_SIZE)) + 1), (N - index)); 
++ 
++ 
++ 
+                 data[index - FIELDS_STORE_SIZE] = value;
+         }
+         size = N + 1;

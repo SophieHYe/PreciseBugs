@@ -1,0 +1,13 @@
+--- /Selector.java	2023-07-04 03:56:09.698197877 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:09.698197877 +0000
+@@ -211,8 +211,8 @@
+             else if (tq.matchChomp("^="))
+                 return root.getElementsByAttributeValueStarting(key, tq.chompTo("]"));
+ 
+-            else if (tq.matchChomp("$="))
+-                return root.getElementsByAttributeValueEnding(key, tq.chompTo("]"));
++else if  ( tq.matchChomp ( "$" )  ) return root.getElementsByAttributeValueEnding ( key, tq.chompTo ( "]" )  ) ;
++ 
+ 
+             else if (tq.matchChomp("*="))
+                 return root.getElementsByAttributeValueContaining(key, tq.chompTo("]"));

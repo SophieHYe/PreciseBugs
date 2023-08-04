@@ -1,0 +1,16 @@
+--- /Selector.java	2023-07-04 03:55:59.426337317 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:59.426337317 +0000
+@@ -177,9 +177,10 @@
+         Element found = root.getElementById(id);
+         Elements byId = new Elements();
+         if(found != null)
+-            byId.add(found);
+-        return byId;
+-    }
++ 
++byId.add(found); 
++ 
++ 
+ 
+     private Elements byClass() {
+         String className = tq.consumeCssIdentifier();

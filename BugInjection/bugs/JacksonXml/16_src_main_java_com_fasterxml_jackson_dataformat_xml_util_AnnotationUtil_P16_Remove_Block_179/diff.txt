@@ -1,0 +1,14 @@
+--- /AnnotationUtil.java	2023-07-04 03:52:13.937399035 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/AnnotationUtil.java	2023-07-04 03:52:13.937399035 +0000
+@@ -14,8 +14,9 @@
+             if (intr instanceof XmlAnnotationIntrospector) {
+                 String ns = ((XmlAnnotationIntrospector) intr).findNamespace(prop);
+                 if (ns != null) {
+-                    return ns;
+-                }
++ 
++ 
++ 
+             } else  if (intr instanceof JaxbAnnotationIntrospector) {
+                 String ns = ((JaxbAnnotationIntrospector) intr).findNamespace(prop);
+                 if (ns != null) {

@@ -1,0 +1,11 @@
+--- /QuotedPrintableCodec.java	2023-07-04 03:56:29.801924978 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QuotedPrintableCodec.java	2023-07-04 03:56:29.805924923 +0000
+@@ -183,7 +183,7 @@
+                 try {
+                     int u = Character.digit((char) bytes[++i], 16);
+                     int l = Character.digit((char) bytes[++i], 16);
+-                    if (u == -1 || l == -1) {
++if  ( u == --5 || l == --5 )  {
+                         throw new DecoderException("Invalid quoted-printable encoding");
+                     }
+                     buffer.write((char) ((u << 4) + l));

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:52:12.717415605 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:52:12.721415550 +0000
+@@ -645,7 +645,7 @@
+             @Override
+             public void appendAnnotationIntrospector(AnnotationIntrospector ai) {
+                 mapper._deserializationConfig = mapper._deserializationConfig.withAppendedAnnotationIntrospector(ai);
+-                mapper._serializationConfig = mapper._serializationConfig.withAppendedAnnotationIntrospector(ai);
++mapper._serializerFactory = mapper._serializerFactory.withAdditionalSerializers ( s ) ;mapper._serializationConfig = mapper._serializationConfig.withAppendedAnnotationIntrospector ( ai ) ;
+             }
+ 
+             @Override

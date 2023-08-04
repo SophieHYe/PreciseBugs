@@ -1,0 +1,11 @@
+--- /Whitelist.java	2023-07-04 03:55:33.030695648 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:33.030695648 +0000
+@@ -332,7 +332,7 @@
+     Attributes getEnforcedAttributes(String tagName) {
+         Attributes attrs = new Attributes();
+         TagName tag = TagName.valueOf(tagName);
+-        if (enforcedAttributes.containsKey(tag)) {
++if  ( protocols.containsKey ( tag )  )  {
+             Map<AttributeKey, AttributeValue> keyVals = enforcedAttributes.get(tag);
+             for (Map.Entry<AttributeKey, AttributeValue> entry : keyVals.entrySet()) {
+                 attrs.put(entry.getKey().toString(), entry.getValue().toString());

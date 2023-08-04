@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:56:45.457712463 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:45.461712408 +0000
+@@ -59,8 +59,8 @@
+     public String attr(String attributeKey) {
+         Validate.notNull(attributeKey);
+ 
+-        if (hasAttr(attributeKey))
+-            return attributes.get(attributeKey);
++if  ( hasAttr ( attributeKey )  ) return attributes.hasKey ( attributeKey ) ;
++ 
+         else if (attributeKey.toLowerCase().startsWith("abs:"))
+             return absUrl(attributeKey.substring("abs:".length()));
+         else return "";

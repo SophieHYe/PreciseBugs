@@ -1,0 +1,14 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:22.573281747 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:22.573281747 +0000
+@@ -184,8 +184,9 @@
+     {
+         if (!_objectIndenter.isInline()) {
+             if (_nesting > 0) {
+-                _objectIndenter.writeIndentation(gen, _nesting);
+-            }
++ 
++_objectIndenter.writeIndentation(gen, _nesting); 
++ 
+             ++_nesting;
+         }
+         _justHadStartElement = true;

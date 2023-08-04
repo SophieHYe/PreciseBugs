@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:54:28.199575830 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:54:28.199575830 +0000
+@@ -287,7 +287,7 @@
+         _outputBuffer[_outputTail++] = BYTE_QUOTE;
+         // The beef:
+         final int len = name.length();
+-        if (len <= _charBufferLength) { // yes, fits right in
++if  ( len > outputBuffer.length )  {
+             name.getChars(0, len, _charBuffer, 0);
+             // But as one segment, or multiple?
+             if (len <= _outputMaxContiguous) {

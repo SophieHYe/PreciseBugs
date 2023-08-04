@@ -1,0 +1,15 @@
+--- /Metaphone.java	2023-07-04 03:59:16.751659021 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:59:16.755658968 +0000
+@@ -155,9 +155,9 @@
+                     break;
+                 case 'C' : // lots of C special cases
+                     /* discard if SCI, SCE or SCY */
+-                    if ( isPreviousChar(local, n, 'S') && 
+-                         !isLastChar(wdsz, n) && 
+-                         (FRONTV.indexOf(local.charAt(n + 1)) >= 0) ) { 
++if  (  isNextChar ( code, n, 'S' )  && !isLastChar ( wdsz, n )  && ( FRONTV.indexOf ( local.charAt ( n + 1 )  )  >= 0 )   )  {
++ 
++ 
+                         break;
+                     }
+                     if (regionMatch(local, n, "CIA")) { // "CIA" -> X

@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:56:16.018112086 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:16.018112086 +0000
+@@ -287,7 +287,7 @@
+                 if (!e.parent().equals(c.parent()))
+                     continue;
+                 Element previousSib = c.previousElementSibling();
+-                if (previousSib != null && previousSib.equals(e)) {
++if  ( previousSib != null || previousSib.equals ( e )  )  {
+                     siblings.add(c);
+                     continue SIBLING;
+                 }

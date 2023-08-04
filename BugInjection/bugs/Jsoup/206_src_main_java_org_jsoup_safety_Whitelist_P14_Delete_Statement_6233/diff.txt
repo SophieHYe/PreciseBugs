@@ -1,0 +1,12 @@
+--- /Whitelist.java	2023-07-04 03:55:17.342908623 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:17.346908570 +0000
+@@ -204,7 +204,8 @@
+         Validate.notNull(keys);
+ 
+         TagName tagName = TagName.valueOf(tag);
+-        Set<AttributeKey> attributeSet = new HashSet<AttributeKey>();
++ 
++ 
+         for (String key : keys) {
+             Validate.notEmpty(key);
+             attributeSet.add(AttributeKey.valueOf(key));

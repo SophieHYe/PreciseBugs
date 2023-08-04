@@ -1,0 +1,16 @@
+--- /Metaphone.java	2023-07-04 03:59:42.195313725 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:59:42.195313725 +0000
+@@ -319,9 +319,10 @@
+ 	private boolean isPreviousChar(StringBuffer string, int index, char c) {
+ 		boolean matches = false;
+ 		if( index > 0 &&
+-		    index < string.length() ) {
+-			matches = string.charAt(index - 1) == c;
+-		}
++ 
++matches = (string.charAt((index - 1))) == c; 
++ 
++ 
+ 		return matches;
+ 	}
+ 

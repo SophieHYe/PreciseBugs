@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:35.597919779 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:35.601919724 +0000
+@@ -115,7 +115,7 @@
+          * escape with backslash, 'u' and 4 hex digits); but to avoid fluctuation,
+          * we will actually round down to only do up to 1/8 number of chars
+          */
+-        _outputMaxContiguous = _outputEnd >> 3;
++_outputMaxContiguous = features >> 3;
+         _charBuffer = ctxt.allocConcatBuffer();
+         _charBufferLength = _charBuffer.length;
+ 

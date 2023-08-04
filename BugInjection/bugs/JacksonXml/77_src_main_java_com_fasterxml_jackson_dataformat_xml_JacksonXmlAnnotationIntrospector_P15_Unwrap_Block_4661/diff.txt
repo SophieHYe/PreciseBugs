@@ -1,0 +1,14 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:50.721714354 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:50.721714354 +0000
+@@ -75,8 +75,9 @@
+             String ns = root.namespace();
+             
+             if (local.length() == 0 && ns.length() == 0) {
+-                return PropertyName.USE_DEFAULT;
+-            }
++ 
++return com.fasterxml.jackson.databind.PropertyName.USE_DEFAULT; 
++ 
+             return new PropertyName(local, ns);
+         }
+         return super.findRootName(ac);

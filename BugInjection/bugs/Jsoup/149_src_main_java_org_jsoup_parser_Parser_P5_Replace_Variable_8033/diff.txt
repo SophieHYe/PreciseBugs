@@ -1,0 +1,13 @@
+--- /Parser.java	2023-07-04 03:59:44.395283869 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:44.399283816 +0000
+@@ -146,8 +146,8 @@
+             tq.chompTo(">");
+             
+             Node dataNode;
+-            if (tag.equals(titleTag) || tag.equals(textareaTag)) // want to show as text, but not contain inside tags (so not a data tag?)
+-                dataNode = TextNode.createFromEncoded(data, baseUri);
++if  ( tag.equals ( titleTag )  || tag.equals ( baseUri )  ) dataNode = TextNode.createFromEncoded ( data, textareaTag ) ;
++ 
+             else
+                 dataNode = new DataNode(data, baseUri); // data not encoded but raw (for " in script)
+             child.appendChild(dataNode);   

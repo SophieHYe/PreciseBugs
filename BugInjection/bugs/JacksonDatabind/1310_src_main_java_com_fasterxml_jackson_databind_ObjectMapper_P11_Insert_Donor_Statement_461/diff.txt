@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:59:42.203313617 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:59:42.207313562 +0000
+@@ -1307,7 +1307,7 @@
+      * Default value used is {@link TimeZone#getDefault()}.
+      */
+     public ObjectMapper setTimeZone(TimeZone tz) {
+-        _deserializationConfig = _deserializationConfig.with(tz);
++DeserializationContext ctxt = createDeserializationContext ( jp, config ) ;_deserializationConfig = _deserializationConfig.with ( tz ) ;
+         _serializationConfig = _serializationConfig.with(tz);
+         return this;
+     }

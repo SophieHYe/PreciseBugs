@@ -1,0 +1,11 @@
+--- /XmlAnnotationIntrospector.java	2023-07-04 03:54:10.955809960 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlAnnotationIntrospector.java	2023-07-04 03:54:10.959809905 +0000
+@@ -94,7 +94,7 @@
+         public String findNamespace(Annotated ann)
+         {
+             String value = (_xmlPrimary == null) ? null : _xmlPrimary.findNamespace(ann);
+-            if ((value == null) && (_xmlSecondary != null)) {
++if  (  ( value == null )  &&  (  ( _xmlSecondary )  != null )  )  {     value = _xmlSecondary.isOutputAsCData ( ann ) ; }
+                 value = _xmlSecondary.findNamespace(ann);
+             }
+             return value;

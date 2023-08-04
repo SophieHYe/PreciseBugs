@@ -1,0 +1,14 @@
+--- /ObjArray.java	2023-07-04 03:46:26.442116706 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:46:26.442116706 +0000
+@@ -330,8 +330,9 @@
+                     alloc *= 2;
+                 }
+                 if (alloc < required) {
+-                    alloc = required;
+-                }
++ 
++alloc = required; 
++ 
+                 Object[] tmp = new Object[alloc];
+                 if (size > FIELDS_STORE_SIZE) {
+                     System.arraycopy(data, 0, tmp, 0,

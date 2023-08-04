@@ -1,0 +1,11 @@
+--- /CSVRecord.java	2023-07-04 03:54:08.319845751 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVRecord.java	2023-07-04 03:54:08.319845751 +0000
+@@ -61,7 +61,7 @@
+             throw new IllegalStateException("No header was specified, the record values can't be accessed by name");
+         }
+ 
+-        Integer index = mapping.get(name);
++Integer index = name.get ( mapping ) ;
+ 
+         return index != null ? values[index.intValue()] : null;
+     }

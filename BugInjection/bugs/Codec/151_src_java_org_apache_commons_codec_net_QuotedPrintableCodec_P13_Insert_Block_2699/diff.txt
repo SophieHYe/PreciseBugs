@@ -1,0 +1,11 @@
+--- /QuotedPrintableCodec.java	2023-07-04 03:56:22.454024721 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QuotedPrintableCodec.java	2023-07-04 03:56:22.454024721 +0000
+@@ -148,7 +148,7 @@
+             if (b < 0) {
+                 b = 256 + b;
+             }
+-            if (printable.get(b)) {
++if  ( printable == null )  {     printable = PRINTABLE_CHARS; }
+                 buffer.write(b);
+             } else {
+                 encodeQuotedPrintable(b, buffer);

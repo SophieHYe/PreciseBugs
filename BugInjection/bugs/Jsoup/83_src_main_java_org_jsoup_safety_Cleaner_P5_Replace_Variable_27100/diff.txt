@@ -1,0 +1,11 @@
+--- /Cleaner.java	2023-07-04 03:54:59.415152017 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Cleaner.java	2023-07-04 03:54:59.419151962 +0000
+@@ -80,7 +80,7 @@
+                 if (whitelist.isSafeTag(sourceEl.tagName())) { // safe, clone and copy safe attrs
+                     ElementMeta meta = createSafeElement(sourceEl);
+                     Element destChild = meta.el;
+-                    dest.appendChild(destChild);
++dest.appendChild ( sourceEl ) ;
+ 
+                     numDiscarded += meta.numAttribsDiscarded;
+                     numDiscarded += copySafeNodes(sourceEl, destChild); // recurs

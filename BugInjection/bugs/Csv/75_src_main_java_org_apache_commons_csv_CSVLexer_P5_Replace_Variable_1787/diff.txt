@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:18.648520224 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:18.648520224 +0000
+@@ -72,7 +72,7 @@
+         }
+ 
+         // did we reach eof during the last iteration already ? EOF
+-        if (isEndOfFile(lastChar) || (!isDelimiter(lastChar) && isEndOfFile(c))) {
++if  ( isEndOfFile ( c )  ||  ( !isDelimiter ( lastChar )  && isEndOfFile ( c )  )  )  {
+             tkn.type = EOF;
+             // don't set tkn.isReady here because no content
+             return tkn;

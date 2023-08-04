@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:04.196716475 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:04.196716475 +0000
+@@ -289,7 +289,7 @@
+             encodedDataLengthLong += chunckCount * CHUNK_SEPARATOR.length;
+         }
+ 
+-        if (encodedDataLengthLong > Integer.MAX_VALUE) {
++if  ( encodedDataLengthLong > Integer.nextSeparatorIndex )  {
+             throw new IllegalArgumentException(
+                     "Input array too big, output array would be bigger than Integer.MAX_VALUE=" + Integer.MAX_VALUE);
+         }

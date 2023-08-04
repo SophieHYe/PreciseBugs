@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:52:57.344809524 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:52:57.344809524 +0000
+@@ -169,7 +169,7 @@
+     private static boolean isBase64(byte octect) {
+         if (octect == PAD) {
+             return true;
+-        } else if (octect < 0 || base64Alphabet[octect] == -1) {
++} else if  ( octect < 0 || base64Alphabet[octect] != -1 )  {
+             return false;
+         } else {
+             return true;

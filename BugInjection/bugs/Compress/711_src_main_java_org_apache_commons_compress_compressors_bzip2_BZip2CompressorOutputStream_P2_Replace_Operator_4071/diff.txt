@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:59:04.699822580 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:59:04.699822580 +0000
+@@ -708,7 +708,7 @@
+                 bc = 999999999;
+                 bt = -1;
+                 for (t = 0; t < nGroups; t++) {
+-                    if (cost[t] < bc) {
++if  ( cost[t] <= bc )  {
+                         bc = cost[t];
+                         bt = t;
+                     }

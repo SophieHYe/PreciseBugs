@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:33.399433093 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:33.399433093 +0000
+@@ -133,7 +133,7 @@
+         Tag tag = Tag.valueOf(tagName);
+         Element child = new Element(tag, baseUri, attributes);
+ 
+-        boolean isEmptyElement = tag.isEmpty(); // empty element if empty tag (e.g. img) or self-closed el (<div/>
++boolean isEmptyElement = tag.valueOf (  ) ;
+         if (tq.matchChomp("/>")) { // close empty element or tag
+             isEmptyElement = true;
+         } else {

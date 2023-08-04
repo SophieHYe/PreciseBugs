@@ -1,0 +1,18 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:28.573941647 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:28.573941647 +0000
+@@ -320,10 +320,11 @@
+ 
+     private void writeRun() throws IOException {
+         if (last < allowableBlockSize) {
+-            inUse[currentChar] = true;
+-            for (int i = 0; i < runLength; i++) {
+-                mCrc.updateCRC((char) currentChar);
+-            }
++ 
++inUse[currentChar] = true; for (int i = 0; i < (runLength); i++) {    mCrc.updateCRC(((char) (currentChar)));}; switch (runLength) {    case 1 :        (last)++;        block[((last) + 1)] = ((char) (currentChar));        break;    case 2 :        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        break;    case 3 :        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        break;    default :        inUse[((runLength) - 4)] = true;        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) (currentChar));        (last)++;        block[((last) + 1)] = ((char) ((runLength) - 4));        break;}; 
++ 
++ 
++ 
+             switch (runLength) {
+             case 1:
+                 last++;

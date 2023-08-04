@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:53.103165697 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:53.103165697 +0000
+@@ -174,7 +174,7 @@
+             tq.consumeWhitespace();
+ 
+             if (tq.matchChomp(SQ)) {
+-                value = tq.chompTo(SQ);
++value = tq.chompTo ( DQ ) ;value = tq.chompTo ( SQ ) ;
+             } else if (tq.matchChomp(DQ)) {
+                 value = tq.chompTo(DQ);
+             } else {

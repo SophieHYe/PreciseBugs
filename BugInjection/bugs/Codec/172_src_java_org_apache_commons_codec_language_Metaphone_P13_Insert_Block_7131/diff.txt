@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:46.220887703 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:46.224887648 +0000
+@@ -169,7 +169,7 @@
+                         code.append('S');
+                         break; // CI,CE,CY -> S
+                     }
+-                    if (isPreviousChar(local, n, 'S') &&
++if  (  (  ( ! ( isLastChar ( wdsz,  ( n + 1 )  )  )  )  &&  ( isNextChar ( local, n, 'H' )  )  )  &&  ( ! ( isVowel ( local,  ( n + 2 )  )  )  )  )  {     break; }
+ 						isNextChar(local, n, 'H') ) { // SCH->sk
+                         code.append('K') ; 
+                         break ;

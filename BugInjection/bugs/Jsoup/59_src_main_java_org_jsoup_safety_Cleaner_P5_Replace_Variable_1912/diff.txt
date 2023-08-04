@@ -1,0 +1,11 @@
+--- /Cleaner.java	2023-07-04 03:54:56.747188239 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Cleaner.java	2023-07-04 03:54:56.747188239 +0000
+@@ -56,7 +56,7 @@
+      @return true if no tags or attributes need to be removed; false if they do
+      */
+     public boolean isValid(Document dirtyDocument) {
+-        Validate.notNull(dirtyDocument);
++Validate.notNull ( clean ) ;
+ 
+         Document clean = Document.createShell(dirtyDocument.baseUri());
+         int numDiscarded = copySafeNodes(dirtyDocument.body(), clean.body());

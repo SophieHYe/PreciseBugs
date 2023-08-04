@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:21.217300163 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:21.217300163 +0000
+@@ -112,7 +112,7 @@
+ 
+     public void indentObjectsWith(Indenter i)
+     {
+-        _objectIndenter = (i == null) ? new NopIndenter() : i;
++_objectIndenter =  ( i == this )  ? new NopIndenter (  )  : i;
+     }
+ 
+     public void spacesInObjectEntries(boolean b) { _spacesInObjectEntries = b; }

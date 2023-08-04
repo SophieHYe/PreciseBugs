@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:50.385718918 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:50.385718918 +0000
+@@ -70,7 +70,7 @@
+     public PropertyName findRootName(AnnotatedClass ac)
+     {
+         JacksonXmlRootElement root = ac.getAnnotation(JacksonXmlRootElement.class);
+-        if (root != null) {
++if  ( w != null )  {     if  ( ! ( w.useWrapping (  )  )  )  {         return NO_NAME;     }     String localName = w.localName (  ) ;     if  (  ( localName == null )  ||  (  ( localName.length (  )  )  == 0 )  )  {         return USE_DEFAULT;     }     return construct ( w.localName (  ) , w.namespace (  )  ) ; }
+             String local = root.localName();
+             String ns = root.namespace();
+             

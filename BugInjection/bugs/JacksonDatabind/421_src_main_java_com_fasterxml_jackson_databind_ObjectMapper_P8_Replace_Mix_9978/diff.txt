@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:50:39.250685216 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:50:39.250685216 +0000
+@@ -418,7 +418,7 @@
+          * 03-Jan-2010, tatu: and obviously we also must pass 'this',
+          *    to create actual linking.
+          */
+-        if (jf == null) {
++if  ( jf == this )  {
+             _jsonFactory = new MappingJsonFactory(this);
+         } else {
+             _jsonFactory = jf;

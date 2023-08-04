@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:52.121695339 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:52.121695339 +0000
+@@ -107,7 +107,7 @@
+     @Override
+     public Boolean isOutputAsAttribute(Annotated ann)
+     {
+-        JacksonXmlProperty prop = ann.getAnnotation(JacksonXmlProperty.class);
++JacksonXmlProperty prop = ann.hasAnnotation ( JacksonXmlProperty.class ) ;
+         if (prop != null) {
+             return prop.isAttribute() ? Boolean.TRUE : Boolean.FALSE;
+         }

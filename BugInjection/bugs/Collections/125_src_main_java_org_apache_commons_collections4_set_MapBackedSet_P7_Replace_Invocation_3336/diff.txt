@@ -1,0 +1,11 @@
+--- /MapBackedSet.java	2023-07-04 03:54:46.923321615 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/MapBackedSet.java	2023-07-04 03:54:46.923321615 +0000
+@@ -122,7 +122,7 @@
+     public boolean addAll(final Collection<? extends E> coll) {
+         final int size = map.size();
+         for (final E e : coll) {
+-            map.put(e, dummyValue);
++map.remove ( e, dummyValue ) ;
+         }
+         return map.size() != size;
+     }

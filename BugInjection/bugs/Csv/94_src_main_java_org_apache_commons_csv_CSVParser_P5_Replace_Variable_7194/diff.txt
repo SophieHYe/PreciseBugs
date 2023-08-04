@@ -1,0 +1,11 @@
+--- /CSVParser.java	2023-07-04 03:53:04.200716421 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 03:53:04.200716421 +0000
+@@ -91,7 +91,7 @@
+     public CSVParser(Reader input, CSVFormat format) throws IOException {
+         format.validate();
+         
+-        this.lexer = new CSVLexer(format, new ExtendedBufferedReader(input));
++this.lexer = new CSVLexer ( input, new ExtendedBufferedReader ( format )  ) ;
+         
+         this.headerMapping = initializeHeader(format);
+     }

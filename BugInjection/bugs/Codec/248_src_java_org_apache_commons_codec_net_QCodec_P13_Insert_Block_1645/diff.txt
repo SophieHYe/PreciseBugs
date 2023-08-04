@@ -1,0 +1,11 @@
+--- /QCodec.java	2023-07-04 03:55:21.946846120 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QCodec.java	2023-07-04 03:55:21.950846067 +0000
+@@ -245,7 +245,7 @@
+      *                  thrown if a failure condition is encountered during the encoding process.
+      */
+     public Object encode(Object pObject) throws EncoderException {
+-        if (pObject == null) {
++if  ( pObject == null )  {     return null; }else     if  ( pObject instanceof String )  {         return decode (  (  ( String )   ( pObject )  )  ) ;     }else {         throw new DecoderException (  (  ( "Objects of type " +  ( pObject.getClass (  ) .getName (  )  )  )  + " cannot be decoded using Q codec" )  ) ;     }
+             return null;
+         } else if (pObject instanceof String) {
+             return encode((String) pObject);

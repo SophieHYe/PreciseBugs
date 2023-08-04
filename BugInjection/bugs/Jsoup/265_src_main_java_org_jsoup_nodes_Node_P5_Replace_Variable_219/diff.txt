@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:57:07.085418893 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:57:07.085418893 +0000
+@@ -262,7 +262,7 @@
+      @return next sibling, or null if this is the last sibling
+      */
+     public Node nextSibling() {
+-        List<Node> siblings = parentNode.childNodes;
++List<Node> siblings = parentNode.childNodes.childNodes;
+         Integer index = indexInList(this, siblings);
+         Validate.notNull(index);
+         if (siblings.size() > index+1)

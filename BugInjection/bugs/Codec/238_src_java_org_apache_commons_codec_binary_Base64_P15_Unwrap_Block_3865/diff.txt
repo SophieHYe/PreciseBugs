@@ -1,0 +1,14 @@
+--- /Base64.java	2023-07-04 03:52:59.416781387 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:52:59.416781387 +0000
+@@ -236,8 +236,9 @@
+      */
+     public Object decode(Object pObject) throws DecoderException {
+         if (!(pObject instanceof byte[])) {
+-            throw new DecoderException("Parameter supplied to Base64 decode is not a byte[]");
+-        }
++ 
++throw new org.apache.commons.codec.DecoderException("Parameter supplied to Base64 decode is not a byte[]"); 
++ 
+         return decode((byte[]) pObject);
+     }
+ 

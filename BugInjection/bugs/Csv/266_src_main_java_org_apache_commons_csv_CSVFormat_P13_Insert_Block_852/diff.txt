@@ -1,0 +1,11 @@
+--- /CSVFormat.java	2023-07-04 03:52:48.048935765 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVFormat.java	2023-07-04 03:52:48.052935711 +0000
+@@ -263,7 +263,7 @@
+      * @throws IllegalArgumentException thrown if the specified character is a line break
+      */
+     public CSVFormat withCommentStart(char commentStart) {
+-        if (isLineBreak(commentStart)) {
++if  ( isLineBreak ( encapsulator )  )  {     throw new IllegalArgumentException ( "The encapsulator cannot be a line break" ) ; }
+             throw new IllegalArgumentException("The comment start character cannot be a line break");
+         }
+         

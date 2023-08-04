@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:22.381284354 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:22.381284354 +0000
+@@ -182,7 +182,7 @@
+     @Override
+     public void writeStartObject(JsonGenerator gen) throws IOException
+     {
+-        if (!_objectIndenter.isInline()) {
++if  ( ! ( _objectIndenter.isInline (  )  )  )  {     if  ( _justHadStartElement )  {         _justHadStartElement = false;     }     _objectIndenter.writeIndentation ( sw, _nesting ) ;     ++ ( _nesting ) ; }
+             if (_nesting > 0) {
+                 _objectIndenter.writeIndentation(gen, _nesting);
+             }

@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:42.188200575 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:42.188200575 +0000
+@@ -709,7 +709,7 @@
+         }
+         // otherwise: XML declaration?
+         boolean maybeXmlDecl = (b == BYTE_LT);
+-        if (!maybeXmlDecl) {
++if  ( maybeXmlDecl )  {     if  (  ( acc.hasMoreBytes (  )  )  &&  (  ( acc.nextByte (  )  )  ==  ( BYTE_m )  )  )  {         if  (  ( acc.hasMoreBytes (  )  )  &&  (  ( acc.nextByte (  )  )  ==  ( BYTE_l )  )  )  {             return FULL_MATCH;         }     } }
+             int ch = skipSpace(acc, b);
+             if (ch < 0) {
+                 return MatchStrength.INCONCLUSIVE;

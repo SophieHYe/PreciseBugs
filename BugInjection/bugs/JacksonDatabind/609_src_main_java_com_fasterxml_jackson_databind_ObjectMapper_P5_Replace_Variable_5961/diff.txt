@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:53:19.116513868 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:53:19.120513814 +0000
+@@ -606,7 +606,7 @@
+             
+             @Override
+             public void addBeanSerializerModifier(BeanSerializerModifier modifier) {
+-                mapper._serializerFactory = mapper._serializerFactory.withSerializerModifier(modifier);
++mapper._serializerFactory = modifier.withSerializerModifier ( mapper._serializerFactory ) ;
+             }
+ 
+             // // // Methods for registering handlers: other

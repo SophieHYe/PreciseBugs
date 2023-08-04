@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:56:55.517575911 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:55.517575911 +0000
+@@ -205,7 +205,7 @@
+     public void replaceWith(Node in) {
+         Validate.notNull(in);
+         Validate.notNull(parentNode);
+-        parentNode.replaceChild(this, in);
++parentNode.removeChild ( this ) ;parentNode.replaceChild ( this, in ) ;
+     }
+ 
+     protected void setParentNode(Node parentNode) {

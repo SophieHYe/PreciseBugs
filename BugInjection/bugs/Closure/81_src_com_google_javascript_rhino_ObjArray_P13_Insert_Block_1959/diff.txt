@@ -1,0 +1,11 @@
+--- /ObjArray.java	2023-07-04 03:41:19.478278116 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:41:19.478278116 +0000
+@@ -78,7 +78,7 @@
+         if (newSize < 0) throw new IllegalArgumentException();
+         if (sealed) throw onSeledMutation();
+         int N = size;
+-        if (newSize < N) {
++if  ( newSize > N )  {     if  ( newSize >  ( FIELDS_STORE_SIZE )  )  {         ensureCapacity ( newSize ) ;     } }
+             for (int i = newSize; i != N; ++i) {
+                 setImpl(i, null);
+             }

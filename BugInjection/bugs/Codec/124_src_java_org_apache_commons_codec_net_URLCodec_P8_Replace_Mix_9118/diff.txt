@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:55:29.546742946 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:55:29.550742891 +0000
+@@ -121,7 +121,7 @@
+         ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
+         for (int i = 0; i < bytes.length; i++) {
+             int b = bytes[i];
+-            if (b < 0) {
++if  ( b < 0 << 2 )  {
+                 b = 256 + b;
+             }
+             if (urlsafe.get(b)) {

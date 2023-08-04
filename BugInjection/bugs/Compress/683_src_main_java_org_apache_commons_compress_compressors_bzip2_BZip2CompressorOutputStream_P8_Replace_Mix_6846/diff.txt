@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:59:39.363352157 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:59:39.363352157 +0000
+@@ -680,7 +680,7 @@
+                     for (i = gs; i <= ge; i++) {
+                         short icv = szptr[i];
+                         cost0 += len[0][icv];
+-                        cost1 += len[1][icv];
++cost1 * 2 += len[1 * 2][icv];
+                         cost2 += len[2][icv];
+                         cost3 += len[3][icv];
+                         cost4 += len[4][icv];

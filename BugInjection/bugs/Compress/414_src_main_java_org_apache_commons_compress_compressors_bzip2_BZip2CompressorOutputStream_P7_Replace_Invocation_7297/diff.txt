@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:58.569534484 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:58.569534484 +0000
+@@ -411,7 +411,7 @@
+            followed by a digit indicating blockSize100k.
+         */
+         bsPutUChar('h');
+-        bsPutUChar('0' + blockSize100k);
++bsPutint ( '0' + blockSize100k ) ;
+ 
+         combinedCRC = 0;
+     }

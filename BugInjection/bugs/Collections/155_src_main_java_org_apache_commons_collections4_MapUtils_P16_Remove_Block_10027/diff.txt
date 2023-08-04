@@ -1,0 +1,14 @@
+--- /MapUtils.java	2023-07-04 03:57:38.484992701 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/MapUtils.java	2023-07-04 03:57:38.484992701 +0000
+@@ -153,8 +153,9 @@
+             final Object answer = map.get(key);
+             if (answer != null) {
+                 if (answer instanceof Boolean) {
+-                    return (Boolean) answer;
+-                }
++ 
++ 
++ 
+                 if (answer instanceof String) {
+                     return Boolean.valueOf((String) answer);
+                 }

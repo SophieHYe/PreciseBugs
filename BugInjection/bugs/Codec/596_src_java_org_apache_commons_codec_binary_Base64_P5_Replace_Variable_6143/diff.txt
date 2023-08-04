@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:54:26.395600324 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:54:26.395600324 +0000
+@@ -593,7 +593,7 @@
+         int startDst = bitlen / 8 - len; // to pad w/ nulls as per spec
+         byte[] resizedBytes = new byte[bitlen / 8];
+ 
+-        System.arraycopy(bigBytes, startSrc, resizedBytes, startDst, len);
++System.arraycopy ( bigBytes, startSrc, resizedBytes, startDst, chunksSoFar ) ;
+ 
+         return resizedBytes;
+     }

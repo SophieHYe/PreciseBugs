@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:55:42.570566139 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:42.570566139 +0000
+@@ -106,7 +106,7 @@
+             
+             if (tq.matchChomp(",")) { // group or
+                 while (!tq.isEmpty()) {
+-                    String subQuery = tq.chompTo(",");
++String subQuery = tq.consumeToAny ( combinators ) ;String subQuery = tq.chompTo ( "," ) ;
+                     elements.addAll(select(subQuery, root));
+                 }
+             } else if (tq.matchesAny(combinators)) {

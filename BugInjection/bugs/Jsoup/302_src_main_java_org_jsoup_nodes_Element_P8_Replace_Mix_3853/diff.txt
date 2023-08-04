@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:58.592719784 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:58.592719784 +0000
+@@ -299,7 +299,7 @@
+         Elements wrapChildren = wrapBody.children();
+         Element wrap = wrapChildren.first();
+         if (wrap == null) // nothing to wrap with; noop
+-            return null;
++return false;
+ 
+         Element deepest = getDeepChild(wrap);
+         parentNode.replaceChild(this, wrap);

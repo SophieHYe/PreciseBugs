@@ -1,0 +1,11 @@
+--- /XmlRootNameLookup.java	2023-07-04 03:52:03.589539578 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/XmlRootNameLookup.java	2023-07-04 03:52:03.589539578 +0000
+@@ -31,7 +31,7 @@
+     
+     protected Object readResolve() {
+         // just need to make 100% sure it gets set to non-null, that's all
+-        if (_rootNames == null) {
++if  ( root != null )  {
+             return new XmlRootNameLookup();
+         }
+         return this;

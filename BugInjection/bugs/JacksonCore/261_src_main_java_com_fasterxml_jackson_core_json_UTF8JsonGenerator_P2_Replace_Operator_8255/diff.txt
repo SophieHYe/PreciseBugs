@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:53:45.684153105 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:53:45.688153050 +0000
+@@ -258,7 +258,7 @@
+     public final void writeEndObject() throws IOException, JsonGenerationException
+     {
+         if (!_writeContext.inObject()) {
+-            _reportError("Current context not an object but "+_writeContext.getTypeDesc());
++_reportError ( "Current context not an object but "+_writeContext.getTypeDesc (  <  )  ) ;
+         }
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeEndObject(this, _writeContext.getEntryCount());

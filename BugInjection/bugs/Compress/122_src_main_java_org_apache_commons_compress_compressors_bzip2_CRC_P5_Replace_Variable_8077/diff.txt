@@ -1,0 +1,11 @@
+--- /CRC.java	2023-07-04 03:54:33.691501264 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/CRC.java	2023-07-04 03:54:33.691501264 +0000
+@@ -119,7 +119,7 @@
+ 	    }
+ 
+ 	    void updateCRC(int inCh, int repeat) {
+-	        int globalCrcShadow = this.globalCrc;
++int globalCrcShadow = temp;
+ 	        while (repeat-- > 0) {
+ 	            int temp = (globalCrcShadow >> 24) ^ inCh;
+ 	            globalCrcShadow = (globalCrcShadow << 8) ^ crc32Table[(temp >= 0)

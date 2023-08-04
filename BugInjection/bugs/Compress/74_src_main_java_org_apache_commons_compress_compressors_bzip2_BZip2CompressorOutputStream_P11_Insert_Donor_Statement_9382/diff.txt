@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:54:53.287235214 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:54:53.287235214 +0000
+@@ -71,7 +71,7 @@
+         int nNodes, nHeap, n1, n2, i, j, k;
+         boolean  tooLong;
+ 
+-        int[] heap = new int[MAX_ALPHA_SIZE + 2];
++int[][] rfreq = new int[N_GROUPS][MAX_ALPHA_SIZE];int[] heap = new int[MAX_ALPHA_SIZE + 2];
+         int[] weight = new int[MAX_ALPHA_SIZE * 2];
+         int[] parent = new int[MAX_ALPHA_SIZE * 2];
+ 

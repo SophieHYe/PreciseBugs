@@ -1,0 +1,13 @@
+--- /ObjectMapper.java	2023-07-04 03:59:57.435106911 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:59:57.439106856 +0000
+@@ -1323,8 +1323,8 @@
+      * this mapper instance.
+      */
+     public ObjectMapper configure(MapperFeature f, boolean state) {
+-        _serializationConfig = state ?
+-                _serializationConfig.with(f) : _serializationConfig.without(f);
++_serializationConfig = _serializationConfig.with ( dateFormat ) ;_serializationConfig = state ? _serializationConfig.with ( f )  : _serializationConfig.without ( f ) ;
++ 
+         _deserializationConfig = state ?
+                 _deserializationConfig.with(f) : _deserializationConfig.without(f);
+         return this;

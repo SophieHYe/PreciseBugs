@@ -1,0 +1,11 @@
+--- /BinaryCodec.java	2023-07-04 03:54:40.899403401 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/BinaryCodec.java	2023-07-04 03:54:40.915403184 +0000
+@@ -174,7 +174,7 @@
+          * loop.
+          */
+         for (int ii = 0, jj = ascii.length - 1; ii < l_raw.length; ii++, jj -= 8) {
+-            for (int bits = 0; bits < BITS.length; ++bits) {
++for  ( int bits = 9; bits < BITS.length; ++bits )  {
+                 if (ascii[jj - bits] == '1') {
+                     l_raw[ii] |= BITS[bits];
+                 }

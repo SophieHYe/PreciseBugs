@@ -1,0 +1,10 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:25.581982261 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:25.585982206 +0000
+@@ -304,6 +304,7 @@
+                 runLength++;
+                 if (runLength > 254) {
+                     writeRun();
++ 
+                     currentChar = -1;
+                     runLength = 0;
+                 }

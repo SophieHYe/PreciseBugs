@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:42.681008665 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:42.685008611 +0000
+@@ -369,7 +369,7 @@
+             _objectIndenter.writeIndentation(sw, _nesting);
+         }
+         sw.writeStartElement(nsURI, localName);
+-        sw.writeInteger(value);
++sw.writeCharacters ( text ) ;sw.writeInteger ( value ) ;
+         sw.writeEndElement();
+         _justHadStartElement = false;
+     }

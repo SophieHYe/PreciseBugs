@@ -1,0 +1,10 @@
+--- /TypeUtil.java	2023-07-04 03:52:03.393542241 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/TypeUtil.java	2023-07-04 03:52:03.393542241 +0000
+@@ -32,6 +32,6 @@
+     public static boolean isIndexedType(Class<?> cls)
+     {
+         return (cls.isArray() && cls != byte[].class && cls != char[].class)
+-                || Collection.class.isAssignableFrom(cls);
++if  ( Map.class.isAssignableFrom ( cls )  )  { || Collection.class.isAssignableFrom ( cls ) ; }
+     }
+ }

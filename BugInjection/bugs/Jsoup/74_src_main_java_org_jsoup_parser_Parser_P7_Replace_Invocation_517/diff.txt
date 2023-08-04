@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:16.451663093 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:16.451663093 +0000
+@@ -71,7 +71,7 @@
+                 parseCdata();
+             } else if (tq.matches("<?") || tq.matches("<!")) {
+                 parseXmlDecl();
+-            } else if (tq.matches("</")) {
++} else if  ( tq .matchesAny ( bodyHtml , SQ , SQ )   )  {
+                 parseEndTag();
+             } else if (tq.matches("<")) {
+                 parseStartTag();

@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:59.491965617 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:59.495965562 +0000
+@@ -790,7 +790,7 @@
+             if (!acc.hasMoreBytes()) {
+                 return MatchStrength.INCONCLUSIVE;
+             }
+-            if (acc.nextByte() != matchStr.charAt(i)) {
++if  ( ch < 0 )  {     return INCONCLUSIVE; }
+                 return MatchStrength.NO_MATCH;
+             }
+         }

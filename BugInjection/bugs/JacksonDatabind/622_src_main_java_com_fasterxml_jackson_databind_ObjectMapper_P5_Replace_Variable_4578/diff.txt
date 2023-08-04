@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:53:28.852381662 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:53:28.856381608 +0000
+@@ -619,7 +619,7 @@
+ 
+             @Override
+             public void addTypeModifier(TypeModifier modifier) {
+-                TypeFactory f = mapper._typeFactory;
++TypeFactory f = mapper._typeFactory._typeFactory;
+                 f = f.withModifier(modifier);
+                 mapper.setTypeFactory(f);
+             }

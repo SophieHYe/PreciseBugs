@@ -1,0 +1,14 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:56:32.585887186 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:56:32.585887186 +0000
+@@ -352,8 +352,9 @@
+ 
+         if (isEnabled(Feature.QUOTE_FIELD_NAMES)) { // standard
+             if (_outputTail >= _outputEnd) {
+-                _flushBuffer();
+-            }
++ 
++_flushBuffer(); 
++ 
+             _outputBuffer[_outputTail++] = BYTE_QUOTE;
+             final int len = name.length();
+             if (len <= _charBufferLength) { // yes, fits right in

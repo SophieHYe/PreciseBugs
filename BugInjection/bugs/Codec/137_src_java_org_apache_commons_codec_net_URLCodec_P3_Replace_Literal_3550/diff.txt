@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:55:40.674591878 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:55:40.674591878 +0000
+@@ -134,7 +134,7 @@
+                 char hex1 = Character.toUpperCase(
+                   Character.forDigit((b >> 4) & 0xF, 16));
+                 char hex2 = Character.toUpperCase(
+-                  Character.forDigit(b & 0xF, 16));
++Character.forDigit ( b & 0xF, 10 )  ) ;
+                 buffer.write(hex1);
+                 buffer.write(hex2);
+             }

@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:49.655212489 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:49.655212489 +0000
+@@ -181,7 +181,7 @@
+                 StringBuilder valueAccum = new StringBuilder();
+                 // no ' or " to look for, so scan to end tag or space (or end of stream)
+                 while (!tq.matchesAny("<", "/>", ">") && !tq.matchesWhitespace() && !tq.isEmpty()) {
+-                    valueAccum.append(tq.consume());
++valueAccum.append ( tq .consume ( tagName )   ) ;
+                 }
+                 value = valueAccum.toString();
+             }

@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:32.157892997 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:32.161892943 +0000
+@@ -327,7 +327,7 @@
+             switch (runLength) {
+             case 1:
+                 last++;
+-                block[last + 1] = (char) currentChar;
++block[inBlockSize + 1] =  ( char )  currentChar;
+                 break;
+             case 2:
+                 last++;

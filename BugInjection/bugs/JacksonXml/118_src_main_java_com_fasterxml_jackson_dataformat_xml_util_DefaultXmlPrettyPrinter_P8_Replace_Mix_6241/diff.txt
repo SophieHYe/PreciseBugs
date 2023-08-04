@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:21.449297011 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:21.449297011 +0000
+@@ -115,7 +115,7 @@
+         _objectIndenter = (i == null) ? new NopIndenter() : i;
+     }
+ 
+-    public void spacesInObjectEntries(boolean b) { _spacesInObjectEntries = b; }
++public void spacesInObjectEntries ( boolean b )  { _spacesInObjectEntries =  _justHadStartElement; }
+ 
+     /*
+     /**********************************************************

@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:31.207462840 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:31.211462786 +0000
+@@ -118,7 +118,7 @@
+         String tagName = tq.consumeWord();
+ 
+         if (tagName.length() == 0) { // doesn't look like a start tag after all; put < back on stack and handle as text
+-            tq.addFirst("&lt;");
++tq.addFirst ( "&lt;t" ) ;
+             parseTextNode();
+             return;
+         }

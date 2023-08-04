@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:24.280443745 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:24.280443745 +0000
+@@ -357,7 +357,7 @@
+             encodedData[encodedIndex + 3] = PAD;
+         } else if (fewerThan24bits == SIXTEENBIT) {
+ 
+-            b1 = binaryData[dataIndex];
++b1 = encodedData[dataIndex];
+             b2 = binaryData[dataIndex + 1];
+             l = (byte) (b2 & 0x0f);
+             k = (byte) (b1 & 0x03);

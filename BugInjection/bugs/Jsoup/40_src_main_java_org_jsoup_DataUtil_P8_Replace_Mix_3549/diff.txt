@@ -1,0 +1,11 @@
+--- /DataUtil.java	2023-07-04 03:54:52.735242707 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/DataUtil.java	2023-07-04 03:54:52.739242653 +0000
+@@ -37,7 +37,7 @@
+         String protocol = url.getProtocol();
+         Validate.isTrue(protocol.equals("http") || protocol.equals("https"), "Only http & https protocols supported");
+ 
+-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
++HttpURLConnection conn =  ( HttpURLConnection )  url .getProtocol (  )  ;
+         conn.setInstanceFollowRedirects(true);
+         conn.setConnectTimeout(timeoutMillis);
+         conn.setReadTimeout(timeoutMillis);

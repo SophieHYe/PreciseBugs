@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:50.336831838 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:50.340831784 +0000
+@@ -199,7 +199,7 @@
+      */
+     public Element appendElement(String tagName) {
+         Element child = new Element(Tag.valueOf(tagName), baseUri());
+-        appendChild(child);
++deepest.addChild ( this ) ;appendChild ( child ) ;
+         return child;
+     }
+     

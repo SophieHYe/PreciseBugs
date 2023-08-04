@@ -1,0 +1,11 @@
+--- /ObjArray.java	2023-07-04 03:47:03.093619803 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:47:03.093619803 +0000
+@@ -375,7 +375,7 @@
+         is.defaultReadObject(); // It reads size
+         int N = size;
+         if (N > FIELDS_STORE_SIZE) {
+-            data = new Object[N - FIELDS_STORE_SIZE];
++if  ( newSize > FIELDS_STORE_SIZE )  { data = new Object[N - FIELDS_STORE_SIZE]; }
+         }
+         for (int i = 0; i != N; ++i) {
+             Object obj = is.readObject();

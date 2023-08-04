@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:59:30.791468486 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:59:30.795468432 +0000
+@@ -663,7 +663,7 @@
+                 }
+                 ge = gs + G_SIZE - 1;
+                 if (ge >= nMTF) {
+-                    ge = nMTF - 1;
++ge = nMTF  &  1;
+                 }
+ 
+                 /*

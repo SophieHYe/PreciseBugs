@@ -1,0 +1,14 @@
+--- /XmlFactory.java	2023-07-04 03:54:04.359899519 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:54:04.363899465 +0000
+@@ -802,8 +802,9 @@
+         while (true) {
+             int ch = (int) b & 0xFF;
+             if (!(ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t')) {
+-                return ch;
+-            }
++ 
++ 
++ 
+             if (!acc.hasMoreBytes()) {
+                 return -1;
+             }

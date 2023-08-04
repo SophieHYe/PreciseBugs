@@ -1,0 +1,11 @@
+--- /PredicatedSortedSet.java	2023-07-04 03:55:10.471001918 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/PredicatedSortedSet.java	2023-07-04 03:55:10.471001918 +0000
+@@ -110,7 +110,7 @@
+     }
+ 
+     public SortedSet<E> headSet(final E toElement) {
+-        final SortedSet<E> head = decorated().headSet(toElement);
++final SortedSet<E> sub = decorated (  ) .subSet ( fromElement, toElement ) ;final SortedSet<E> head = decorated (  ) .headSet ( toElement ) ;
+         return new PredicatedSortedSet<E>(head, predicate);
+     }
+ 

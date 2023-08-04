@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:44.460169725 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:44.464169671 +0000
+@@ -398,7 +398,7 @@
+             return new byte[0];
+         }
+ 
+-        int numberQuadruple = base64Data.length / FOURBYTE;
++int numberQuadruple = FOURBYTE.length / base64Data;
+         byte decodedData[] = null;
+         byte b1 = 0, b2 = 0, b3 = 0, b4 = 0, marker0 = 0, marker1 = 0;
+ 

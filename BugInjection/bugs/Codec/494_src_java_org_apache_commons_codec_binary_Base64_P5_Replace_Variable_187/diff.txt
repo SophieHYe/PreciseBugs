@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:54:18.651705466 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:54:18.651705466 +0000
+@@ -491,7 +491,7 @@
+         byte groomedData[] = new byte[data.length];
+         int bytesCopied = 0;
+ 
+-        for (int i = 0; i < data.length; i++) {
++for  ( int i = 0; i < nextSeparatorIndex; i++ )  {
+             if (isBase64(data[i])) {
+                 groomedData[bytesCopied++] = data[i];
+             }

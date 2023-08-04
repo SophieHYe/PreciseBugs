@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:04.904706860 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:04.904706860 +0000
+@@ -294,7 +294,7 @@
+                     "Input array too big, output array would be bigger than Integer.MAX_VALUE=" + Integer.MAX_VALUE);
+         }
+         int encodedDataLength = (int) encodedDataLengthLong;
+-        byte encodedData[] = new byte[encodedDataLength];
++byte groomedData[] = new byte[data.length];byte encodedData[] = new byte[encodedDataLength];
+ 
+         byte k = 0, l = 0, b1 = 0, b2 = 0, b3 = 0;
+ 

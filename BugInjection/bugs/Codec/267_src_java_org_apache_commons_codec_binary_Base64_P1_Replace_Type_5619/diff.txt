@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:52:59.968773890 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:52:59.968773890 +0000
+@@ -264,7 +264,7 @@
+      *             Thrown when the input array needs an output array bigger than {@link Integer#MAX_VALUE}
+      */
+     public static byte[] encodeBase64(byte[] binaryData, boolean isChunked) {
+-        long binaryDataLength = binaryData.length;
++int  binaryDataLength = binaryData.length;
+         long lengthDataBits = binaryDataLength * EIGHTBIT;
+         long fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
+         long tripletCount = lengthDataBits / TWENTYFOURBITGROUP;

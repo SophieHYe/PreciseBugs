@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:15.765301077 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:15.769301023 +0000
+@@ -91,7 +91,7 @@
+         char[] inwd = txt.toUpperCase(java.util.Locale.ENGLISH).toCharArray() ;
+       
+         StringBuffer local = new StringBuffer(40); // manipulate
+-        StringBuffer code = new StringBuffer(10) ; //   output
++StringBuffer code = new StringBuffer ( maxCodeLen )  ;
+         // handle initial 2 characters exceptions
+         switch(inwd[0]) {
+         case 'K' : 

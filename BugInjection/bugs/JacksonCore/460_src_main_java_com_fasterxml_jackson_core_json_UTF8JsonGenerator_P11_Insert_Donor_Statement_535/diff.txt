@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:59:59.871073853 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:59:59.871073853 +0000
+@@ -457,7 +457,7 @@
+         if (_outputTail >= _outputEnd) {
+             _flushBuffer();
+         }
+-        _outputBuffer[_outputTail++] = BYTE_QUOTE;
++outputBuffer[outputPtr++] =  ( byte )  escape;_outputBuffer[_outputTail++] = BYTE_QUOTE;
+     }
+ 
+     private void _writeLongString(char[] text, int offset, int len)

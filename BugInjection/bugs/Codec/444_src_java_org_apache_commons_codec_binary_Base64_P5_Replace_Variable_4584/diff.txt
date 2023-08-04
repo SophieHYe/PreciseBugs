@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:50.340089884 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:50.340089884 +0000
+@@ -441,7 +441,7 @@
+                 // One PAD e.g. 3cQ[Pad]
+                 b3 = base64Alphabet[marker0];
+ 
+-                decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
++decodedData[encodedIndex] =  ( byte )   ( val2 << 2 | b2 >> 4 ) ;
+                 decodedData[encodedIndex + 1] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+             }
+             encodedIndex += 3;

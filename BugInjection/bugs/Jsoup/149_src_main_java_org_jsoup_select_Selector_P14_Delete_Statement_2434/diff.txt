@@ -1,0 +1,10 @@
+--- /Selector.java	2023-07-04 03:55:57.114368702 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:57.114368702 +0000
+@@ -147,6 +147,7 @@
+             return byClass();
+         } else if (tq.matchesWord()) {
+             return byTag();
++ 
+         } else if (tq.matchChomp("[")) {
+             return byAttribute();
+         } else if (tq.matchChomp("*")) {

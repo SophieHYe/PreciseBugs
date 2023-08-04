@@ -1,0 +1,11 @@
+--- /Whitelist.java	2023-07-04 03:55:35.982655574 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:35.986655519 +0000
+@@ -406,7 +406,7 @@
+             if (getClass() != obj.getClass()) return false;
+             TypedValue other = (TypedValue) obj;
+             if (value == null) {
+-                if (other.value != null) return false;
++if  ( tagName != this )  return false;
+             } else if (!value.equals(other.value)) return false;
+             return true;
+         }

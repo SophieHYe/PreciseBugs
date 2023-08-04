@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:52:45.564969499 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:52:45.564969499 +0000
+@@ -473,8 +473,8 @@
+                 Preconditions.checkArgument(children[i - 1].parent == null);
+                 children[i - 1].parent = this;
+             }
+-            Preconditions.checkArgument(
+-                children[children.length - 1].parent == null);
++Preconditions.checkArgument ( child.parent == null ) ;Preconditions.checkArgument ( children[children.length - 1].parent == null ) ;
++ 
+             children[children.length - 1].parent = this;
+ 
+             if (null != this.last.next) {

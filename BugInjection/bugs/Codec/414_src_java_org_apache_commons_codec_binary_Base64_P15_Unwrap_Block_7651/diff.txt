@@ -1,0 +1,14 @@
+--- /Base64.java	2023-07-04 03:53:46.216145881 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:46.216145881 +0000
+@@ -412,8 +412,9 @@
+             // ignore the '=' padding
+             while (base64Data[lastData - 1] == PAD) {
+                 if (--lastData == 0) {
+-                    return new byte[0];
+-                }
++ 
++return new byte[0]; 
++ 
+             }
+             decodedData = new byte[lastData - numberQuadruple];
+         }

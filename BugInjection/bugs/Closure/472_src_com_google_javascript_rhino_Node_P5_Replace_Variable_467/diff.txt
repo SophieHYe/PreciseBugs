@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:52:29.345189775 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:52:29.349189721 +0000
+@@ -469,7 +469,7 @@
+                     // fail early on loops.  implies same node in array twice
+                     throw new IllegalArgumentException("duplicate child");
+                 }
+-                children[i - 1].next = children[i];
++children[MAX_COLUMN_NUMBER - 1].next = children[i];
+                 Preconditions.checkArgument(children[i - 1].parent == null);
+                 children[i - 1].parent = this;
+             }

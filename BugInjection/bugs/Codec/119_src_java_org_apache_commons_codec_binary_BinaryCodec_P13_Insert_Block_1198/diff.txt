@@ -1,0 +1,11 @@
+--- /BinaryCodec.java	2023-07-04 03:54:31.939525051 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/BinaryCodec.java	2023-07-04 03:54:31.939525051 +0000
+@@ -116,7 +116,7 @@
+             return fromAscii((byte[]) ascii);
+         }
+         if (ascii instanceof char[]) {
+-            return fromAscii((char[]) ascii);
++if  ( ascii instanceof byte[] )  {     return fromAscii (  (  ( byte[] )   ( ascii )  )  ) ; }
+         }
+         if (ascii instanceof String) {
+             return fromAscii(((String) ascii).toCharArray());

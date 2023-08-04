@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:50.472829993 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:50.472829993 +0000
+@@ -577,7 +577,7 @@
+         int nGroups; //, nBytes;
+ 
+         alphaSize = nInUse + 2;
+-        for (t = 0; t < N_GROUPS; t++) {
++for  ( t = last; t < N_GROUPS; t++ )  {
+             for (v = 0; v < alphaSize; v++) {
+                 len[t][v] = (char) GREATER_ICOST;
+             }

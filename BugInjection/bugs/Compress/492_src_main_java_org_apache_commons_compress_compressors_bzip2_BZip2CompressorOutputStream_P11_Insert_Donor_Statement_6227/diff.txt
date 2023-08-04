@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:20.325239183 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:20.325239183 +0000
+@@ -489,7 +489,7 @@
+           too much repetition -- 27 18 28 18 28 46 -- for me
+           to feel statistically comfortable.  Call me paranoid.)
+         */
+-        bsPutUChar(0x17);
++bsPutUChar ( 'Z' ) ;bsPutUChar ( 0x17 ) ;
+         bsPutUChar(0x72);
+         bsPutUChar(0x45);
+         bsPutUChar(0x38);

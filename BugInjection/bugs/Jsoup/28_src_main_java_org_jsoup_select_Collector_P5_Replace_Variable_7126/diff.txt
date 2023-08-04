@@ -1,0 +1,13 @@
+--- /Collector.java	2023-07-04 03:56:35.577846573 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Collector.java	2023-07-04 03:56:35.577846573 +0000
+@@ -25,8 +25,8 @@
+     }
+ 
+     private static void accumulateMatches(Evaluator eval, List<Element> elements, Element element) {
+-        if (eval.matches(element))
+-            elements.add(element);
++if  ( element.matches ( eval )  ) elements.add ( element ) ;
++ 
+         for (Element child: element.children())
+             accumulateMatches(eval, elements, child);
+     }

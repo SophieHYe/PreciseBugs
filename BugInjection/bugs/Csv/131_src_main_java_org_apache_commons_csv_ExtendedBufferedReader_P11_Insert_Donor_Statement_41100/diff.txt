@@ -1,0 +1,11 @@
+--- /ExtendedBufferedReader.java	2023-07-04 03:53:02.208743472 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/ExtendedBufferedReader.java	2023-07-04 03:53:02.212743417 +0000
+@@ -128,7 +128,7 @@
+             }
+             lineCounter++;
+         } else {
+-            lastChar = END_OF_STREAM;
++lastChar = buf[offset + len - 1];lastChar = END_OF_STREAM;
+         }
+ 
+         return line;

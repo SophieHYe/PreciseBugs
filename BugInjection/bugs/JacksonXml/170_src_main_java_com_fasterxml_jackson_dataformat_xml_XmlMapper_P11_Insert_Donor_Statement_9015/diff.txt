@@ -1,0 +1,11 @@
+--- /XmlMapper.java	2023-07-04 03:52:01.381569568 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlMapper.java	2023-07-04 03:52:01.381569568 +0000
+@@ -167,7 +167,7 @@
+     }
+ 
+     public ObjectMapper disable(FromXmlParser.Feature f) {
+-        ((XmlFactory)_jsonFactory).disable(f);
++(  ( XmlFactory ) _jsonFactory ) .configure ( f, state ) ;(  ( XmlFactory ) _jsonFactory ) .disable ( f ) ;
+         return this;
+     }
+ 

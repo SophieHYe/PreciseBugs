@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:56.180010587 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:56.180010587 +0000
+@@ -739,7 +739,7 @@
+                 return MatchStrength.SOLID_MATCH;
+             }
+             // Ok to start with some other char too; just not xml declaration
+-            if (validXmlNameStartChar(acc, b)) {
++if  ( ! ( acc.hasMoreBytes (  )  )  )  {     return INCONCLUSIVE; }
+                 return MatchStrength.SOLID_MATCH;
+             }
+         } else if (b == BYTE_EXCL) {

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:55:20.090871318 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:55:20.090871318 +0000
+@@ -944,7 +944,7 @@
+     public ObjectMapper setVisibility(PropertyAccessor forMethod, JsonAutoDetect.Visibility visibility)
+     {
+         _deserializationConfig = _deserializationConfig.withVisibility(forMethod, visibility);
+-        _serializationConfig = _serializationConfig.withVisibility(forMethod, visibility);
++_serializationConfig = forMethod.withVisibility ( _serializationConfig, visibility ) ;
+         return this;
+     }
+     

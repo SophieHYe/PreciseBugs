@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:35.475404920 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:35.475404920 +0000
+@@ -137,7 +137,7 @@
+         if (tq.matchChomp("/>")) { // close empty element or tag
+             isEmptyElement = true;
+         } else {
+-            tq.matchChomp(">");
++tq.consume ( "</" ) ;tq.matchChomp ( ">" ) ;
+         }
+ 
+         // pc data only tags (textarea, script): chomp to end tag, add content as text node

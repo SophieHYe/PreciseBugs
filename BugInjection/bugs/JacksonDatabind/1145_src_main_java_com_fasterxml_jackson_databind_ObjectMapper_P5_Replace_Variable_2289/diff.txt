@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:57:14.765314650 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:57:14.769314596 +0000
+@@ -1142,7 +1142,7 @@
+     public ObjectMapper setTypeFactory(TypeFactory f)
+     {
+         _typeFactory = f;
+-        _deserializationConfig = _deserializationConfig.with(f);
++_deserializationConfig = config.with ( f ) ;
+         _serializationConfig = _serializationConfig.with(f);
+         return this;
+     }

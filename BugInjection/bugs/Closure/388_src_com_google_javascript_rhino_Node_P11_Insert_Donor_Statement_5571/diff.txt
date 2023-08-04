@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:49:33.271581676 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:49:33.275581621 +0000
+@@ -385,7 +385,7 @@
+         Preconditions.checkArgument(left.next == null);
+         Preconditions.checkArgument(mid.parent == null);
+         Preconditions.checkArgument(mid.next == null);
+-        Preconditions.checkArgument(right.parent == null);
++Preconditions.checkArgument ( prevChild.parent == this, "prev is not a child of this node." ) ;Preconditions.checkArgument ( right.parent == null ) ;
+         Preconditions.checkArgument(right.next == null);
+         type = nodeType;
+         parent = null;

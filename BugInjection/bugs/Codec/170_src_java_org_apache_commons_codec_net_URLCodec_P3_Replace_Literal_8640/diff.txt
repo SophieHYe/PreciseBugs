@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:55:47.414500381 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:55:47.414500381 +0000
+@@ -167,7 +167,7 @@
+                 try {
+                     int u = Character.digit((char)bytes[++i], 16);
+                     int l = Character.digit((char)bytes[++i], 16);
+-                    if (u == -1 || l == -1) {
++if  ( u == -8 || l == -8 )  {
+                         throw new DecoderException("Invalid URL encoding");
+                     }
+                     buffer.write((char)((u << 4) + l));

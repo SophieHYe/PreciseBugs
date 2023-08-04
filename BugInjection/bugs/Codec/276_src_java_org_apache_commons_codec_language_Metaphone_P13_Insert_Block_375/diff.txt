@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:58:25.344356702 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:58:25.344356702 +0000
+@@ -273,7 +273,7 @@
+                     }
+                     break;
+                 case 'T' :
+-                    if (regionMatch(local,n,"TIA") || 
++if  (  (  ( regionMatch ( local, n, "SH" )  )  ||  ( regionMatch ( local, n, "SIO" )  )  )  ||  ( regionMatch ( local, n, "SIA" )  )  )  {     code.append ( 'X' ) ; }else {     code.append ( 'S' ) ; }
+ 						regionMatch(local,n,"TIO")) {
+                         code.append('X'); 
+                         break;

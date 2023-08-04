@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:56:15.638117244 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:56:15.638117244 +0000
+@@ -281,7 +281,7 @@
+     
+     // adjacent siblings
+     private static Elements filterForAdjacentSiblings(Collection<Element> elements, Collection<Element> candidates) {
+-        Elements siblings = new Elements();
++Elements siblings = new Elements ( elements )  ;
+         SIBLING: for (Element c: candidates) {
+             for (Element e: elements) {
+                 if (!e.parent().equals(c.parent()))

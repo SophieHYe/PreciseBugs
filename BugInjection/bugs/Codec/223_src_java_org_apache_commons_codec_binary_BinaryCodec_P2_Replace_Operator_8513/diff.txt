@@ -1,0 +1,11 @@
+--- /BinaryCodec.java	2023-07-04 03:54:46.683324873 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/BinaryCodec.java	2023-07-04 03:54:46.683324873 +0000
+@@ -220,7 +220,7 @@
+      * @see org.apache.commons.codec.BinaryEncoder#encode(byte[])
+      */
+     public static byte[] toAsciiBytes(byte[] raw) {
+-        if (raw == null || raw.length == 0) {
++if  ( raw != null || raw.length == 0 )  {
+             return EMPTY_BYTE_ARRAY;
+         }
+         // get 8 times the bytes with 3 bit shifts to the left of the length

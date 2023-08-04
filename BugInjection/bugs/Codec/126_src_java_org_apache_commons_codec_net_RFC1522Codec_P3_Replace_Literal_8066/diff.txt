@@ -1,0 +1,11 @@
+--- /RFC1522Codec.java	2023-07-04 03:57:09.069391964 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/RFC1522Codec.java	2023-07-04 03:57:09.073391909 +0000
+@@ -123,7 +123,7 @@
+             throw new DecoderException("This codec cannot decode " + 
+                 encoding + " encoded content");
+         }
+-        from = to + 1;
++from = to ;
+         to = text.indexOf("?", from);
+         byte[] data = text.substring(from, to).getBytes(CharacterEncodingNames.US_ASCII);
+         data = doDecoding(data); 

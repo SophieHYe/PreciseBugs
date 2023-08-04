@@ -1,0 +1,14 @@
+--- /XmlFactory.java	2023-07-04 03:53:54.328035734 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:54.332035679 +0000
+@@ -731,8 +731,9 @@
+                 if (maybeXmlDecl) {
+                     if (acc.hasMoreBytes() && acc.nextByte() == BYTE_m) {
+                         if (acc.hasMoreBytes() && acc.nextByte() == BYTE_l) {
+-                            return MatchStrength.FULL_MATCH;
+-                        }
++ 
++return com.fasterxml.jackson.core.format.MatchStrength.FULL_MATCH; 
++ 
+                     }
+                 }
+                 // but even with just partial match, we ought to be fine

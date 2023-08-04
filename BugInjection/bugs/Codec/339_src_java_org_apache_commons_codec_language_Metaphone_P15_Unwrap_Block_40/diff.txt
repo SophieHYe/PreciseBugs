@@ -1,0 +1,18 @@
+--- /Metaphone.java	2023-07-04 03:59:49.167219111 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:59:49.167219111 +0000
+@@ -337,10 +337,11 @@
+ 	private boolean regionMatch(StringBuffer string, int index, String test) {
+ 		boolean matches = false;
+ 		if( index >= 0 &&
+-		    (index + test.length() - 1) < string.length() ) {
+-			String substring = string.substring( index, index + test.length());
+-			matches = substring.equals( test );
+-		}
++ 
++java.lang.String substring = string.substring(index, (index + (test.length()))); matches = substring.equals(test); 
++ 
++ 
++ 
+ 		return matches;
+ 	}
+ 

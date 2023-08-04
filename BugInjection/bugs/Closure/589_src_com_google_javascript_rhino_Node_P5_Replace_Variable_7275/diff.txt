@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:55:19.278882341 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:55:19.278882341 +0000
+@@ -586,7 +586,7 @@
+     }
+ 
+     public void addChildrenToFront(Node children) {
+-        for (Node child = children; child != null; child = child.next) {
++for  ( Node child = child.next; child != null; child = children )  {
+           Preconditions.checkArgument(child.parent == null);
+           child.parent = this;
+         }

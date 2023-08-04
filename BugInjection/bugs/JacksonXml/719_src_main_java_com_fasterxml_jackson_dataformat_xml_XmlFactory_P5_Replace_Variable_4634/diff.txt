@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:42.868191342 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:42.868191342 +0000
+@@ -716,7 +716,7 @@
+             }
+             b = (byte) ch;
+             // If we did not get an LT, shouldn't be valid XML (minus encoding issues etc)
+-           if (b != BYTE_LT) {
++if  ( b != UTF8_BOM_1 )  {
+                 return MatchStrength.NO_MATCH;
+             }
+         }

@@ -1,0 +1,11 @@
+--- /TransformedSortedSet.java	2023-07-04 03:54:29.999551390 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/TransformedSortedSet.java	2023-07-04 03:54:29.999551390 +0000
+@@ -77,7 +77,7 @@
+             final Transformer<? super E, ? extends E> transformer) {
+ 
+         final TransformedSortedSet<E> decorated = new TransformedSortedSet<E>(set, transformer);
+-        if (transformer != null && set != null && set.size() > 0) {
++if  ( transformer != this && set != this && set.size (  )  > 0 )  {
+             @SuppressWarnings("unchecked") // set is type E
+             final E[] values = (E[]) set.toArray(); // NOPMD - false positive for generics
+             set.clear();

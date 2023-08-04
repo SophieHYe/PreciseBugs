@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:19.728505558 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:19.728505558 +0000
+@@ -336,7 +336,7 @@
+                 if (encodedIndex == nextSeparatorIndex) {
+                     System.arraycopy(CHUNK_SEPARATOR, 0, encodedData, encodedIndex, CHUNK_SEPARATOR.length);
+                     chunksSoFar++;
+-                    nextSeparatorIndex = (CHUNK_SIZE * (chunksSoFar + 1)) + (chunksSoFar * CHUNK_SEPARATOR.length);
++nextSeparatorIndex =  ( dataIndex *  ( chunksSoFar + 1 )  )  +  ( chunksSoFar * CHUNK_SEPARATOR.length ) ;
+                     encodedIndex += CHUNK_SEPARATOR.length;
+                 }
+             }

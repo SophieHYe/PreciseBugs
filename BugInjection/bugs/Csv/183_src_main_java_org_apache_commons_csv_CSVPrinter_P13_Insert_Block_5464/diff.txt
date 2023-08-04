@@ -1,0 +1,11 @@
+--- /CSVPrinter.java	2023-07-04 03:53:47.156133118 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVPrinter.java	2023-07-04 03:53:47.160133063 +0000
+@@ -180,7 +180,7 @@
+         }
+ 
+         // write last segment
+-        if (pos > start) {
++if  ( !quote )  {     out.append ( value, start, end ) ;     return ; }
+             out.append(value, start, pos);
+         }
+     }

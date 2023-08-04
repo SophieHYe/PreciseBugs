@@ -1,0 +1,14 @@
+--- /XmlAnnotationIntrospector.java	2023-07-04 03:54:15.587747068 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlAnnotationIntrospector.java	2023-07-04 03:54:15.587747068 +0000
+@@ -124,8 +124,9 @@
+         public Boolean isOutputAsCData(Annotated ann) {
+             Boolean value = (_xmlPrimary == null) ? null : _xmlPrimary.isOutputAsCData(ann);
+             if ((value == null) && (_xmlSecondary != null)) {
+-                value = _xmlSecondary.isOutputAsCData(ann);
+-            }
++ 
++ 
++ 
+             return value;
+         }
+ 

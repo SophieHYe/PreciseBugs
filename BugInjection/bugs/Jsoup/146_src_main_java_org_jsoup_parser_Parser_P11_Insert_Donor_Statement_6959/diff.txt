@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:43.727292935 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:43.727292935 +0000
+@@ -143,7 +143,7 @@
+         // pc data only tags (textarea, script): chomp to end tag, add content as text node
+         if (tag.isData()) {
+             String data = tq.chompTo("</" + tagName);
+-            tq.chompTo(">");
++tq.consume ( "<" ) ;tq.chompTo ( ">" ) ;
+             
+             Node dataNode;
+             if (tag.equals(titleTag) || tag.equals(textareaTag)) // want to show as text, but not contain inside tags (so not a data tag?)

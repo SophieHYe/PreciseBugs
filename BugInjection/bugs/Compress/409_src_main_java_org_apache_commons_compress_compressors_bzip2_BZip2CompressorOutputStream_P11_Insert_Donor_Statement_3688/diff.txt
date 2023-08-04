@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:56.513562392 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:56.517562337 +0000
+@@ -406,7 +406,7 @@
+         nBlocksRandomised = 0;
+ 
+         bsPutUChar('B');
+-        bsPutUChar('Z');
++bsPutUChar ( 0x26 ) ;bsPutUChar ( 'Z' ) ;
+         /* Write `magic' bytes h indicating file-format == huffmanised,
+            followed by a digit indicating blockSize100k.
+         */

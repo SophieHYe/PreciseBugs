@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:54:54.123223863 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:54:54.127223809 +0000
+@@ -574,7 +574,7 @@
+ 
+     public void addChildToBack(Node child) {
+         Preconditions.checkArgument(child.parent == null);
+-        Preconditions.checkArgument(child.next == null);
++Preconditions.checkArgument ( children[i - 1].parent == null ) ;Preconditions.checkArgument ( child.next == null ) ;
+         child.parent = this;
+         child.next = null;
+         if (last == null) {

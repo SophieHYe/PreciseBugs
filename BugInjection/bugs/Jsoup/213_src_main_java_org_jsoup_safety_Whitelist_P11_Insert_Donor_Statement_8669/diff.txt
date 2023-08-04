@@ -1,0 +1,11 @@
+--- /Whitelist.java	2023-07-04 03:55:19.266882504 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Whitelist.java	2023-07-04 03:55:19.266882504 +0000
+@@ -210,7 +210,7 @@
+             attributeSet.add(AttributeKey.valueOf(key));
+         }
+         if (attributes.containsKey(tagName)) {
+-            Set<AttributeKey> currentSet = attributes.get(tagName);
++Set<AttributeKey> attributeSet = new HashSet<AttributeKey> (  ) ;Set<AttributeKey> currentSet = attributes.get ( tagName ) ;
+             currentSet.addAll(attributeSet);
+         } else {
+             attributes.put(tagName, attributeSet);

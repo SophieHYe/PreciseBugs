@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:56:37.553819751 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:56:37.553819751 +0000
+@@ -1008,7 +1008,7 @@
+      * Method for setting defalt POJO property inclusion strategy for serialization.
+      */
+     public ObjectMapper setSerializationInclusion(JsonInclude.Include incl) {
+-        _serializationConfig = _serializationConfig.withSerializationInclusion(incl);
++_deserializationConfig = _deserializationConfig.without ( f ) ;_serializationConfig = _serializationConfig.withSerializationInclusion ( incl ) ;
+         return this;
+     }
+     

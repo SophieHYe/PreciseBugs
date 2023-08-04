@@ -1,0 +1,11 @@
+--- /XmlMapper.java	2023-07-04 03:52:01.997561202 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlMapper.java	2023-07-04 03:52:01.997561202 +0000
+@@ -209,7 +209,7 @@
+     @SuppressWarnings("resource")
+     public <T> T readValue(XMLStreamReader r, JavaType valueType) throws IOException
+     {
+-        FromXmlParser p = getFactory().createParser(r);
++FromXmlParser p = getFactory (  ) .createGenerator ( r ) ;
+         return super.readValue(p,  valueType);
+     } 
+ 

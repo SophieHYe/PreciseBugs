@@ -1,0 +1,13 @@
+--- /Metaphone.java	2023-07-04 03:58:45.712080274 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:58:45.712080274 +0000
+@@ -206,8 +206,8 @@
+                         break;
+                     }
+                     if ((n > 0) && 
+-                    	( regionMatch(local, n, "GN") ||
+-					      regionMatch(local, n, "GNED") ) ) {
++(  regionMatch ( local, n, "G" )  || regionMatch ( local, n, "GNED" )   )   )  {
++ 
+                         break; // silent G
+                     }
+                     if (isPreviousChar(local, n, 'G')) {

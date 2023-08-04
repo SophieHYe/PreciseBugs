@@ -1,0 +1,13 @@
+--- /XmlFactory.java	2023-07-04 03:53:22.800463843 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:22.804463788 +0000
+@@ -467,8 +467,8 @@
+         // true -> yes, we have to manage the stream since we created it
+         IOContext ctxt = _createContext(out, true);
+         ctxt.setEncoding(enc);
+-        return new ToXmlGenerator(ctxt, _generatorFeatures, _xmlGeneratorFeatures,
+-                _objectCodec, _createXmlWriter(out));
++return new ToXmlGenerator ( ctxt, _generatorFeatures, _xmlGeneratorFeatures, out, _createXmlWriter ( _objectCodec )  ) ;
++ 
+     }
+ 
+     /*

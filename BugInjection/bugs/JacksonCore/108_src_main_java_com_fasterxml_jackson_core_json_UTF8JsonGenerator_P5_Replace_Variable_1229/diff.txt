@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:30.689986444 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:30.689986444 +0000
+@@ -105,7 +105,7 @@
+     public UTF8JsonGenerator(IOContext ctxt, int features, ObjectCodec codec,
+             OutputStream out)
+     {
+-        super(ctxt, features, codec);
++super ( features, ctxt, codec ) ;
+         _outputStream = out;
+         _bufferRecyclable = true;
+         _outputBuffer = ctxt.allocWriteEncodingBuffer();

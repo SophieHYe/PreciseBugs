@@ -1,0 +1,10 @@
+--- /Document.java	2023-07-04 03:56:39.709790486 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Document.java	2023-07-04 03:56:39.709790486 +0000
+@@ -95,6 +95,7 @@
+     public Document normalise() {
+         if (select("html").isEmpty())
+             appendElement("html");
++ 
+         if (head() == null)
+             select("html").first().prependElement("head");
+         if (body() == null)

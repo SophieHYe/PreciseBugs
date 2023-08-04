@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:30.305103726 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:30.305103726 +0000
+@@ -506,7 +506,7 @@
+         int n, vec, i;
+ 
+         vec = 0;
+-        for (n = minLen; n <= maxLen; n++) {
++for  ( n = minLen; n <= k; n++ )  {
+             for (i = 0; i < alphaSize; i++) {
+                 if (length[i] == n) {
+                     code[i] = vec;

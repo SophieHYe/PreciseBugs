@@ -1,0 +1,10 @@
+--- /Element.java	2023-07-04 03:58:32.408260831 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:32.412260776 +0000
+@@ -669,6 +669,7 @@
+      */
+     public Element classNames(Set<String> classNames) {
+         Validate.notNull(classNames);
++ 
+         attributes.put("class", StringUtils.join(classNames, " "));
+         return this;
+     }

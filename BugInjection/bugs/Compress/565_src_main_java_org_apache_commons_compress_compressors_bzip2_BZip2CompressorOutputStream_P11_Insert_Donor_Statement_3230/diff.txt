@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:48.216860612 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:48.220860558 +0000
+@@ -562,7 +562,7 @@
+         bsW(8, (u >> 24) & 0xff);
+         bsW(8, (u >> 16) & 0xff);
+         bsW(8, (u >>  8) & 0xff);
+-        bsW(8,  u        & 0xff);
++bsW ( 8,  ( u >> 16 )  & 0xff ) ;bsW ( 8,  u        & 0xff ) ;
+     }
+ 
+     private void bsPutIntVS(int numBits, int c) throws IOException {

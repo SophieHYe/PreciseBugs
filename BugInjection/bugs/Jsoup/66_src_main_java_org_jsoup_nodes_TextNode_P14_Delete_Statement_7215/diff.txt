@@ -1,0 +1,10 @@
+--- /TextNode.java	2023-07-04 03:57:16.069296950 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/TextNode.java	2023-07-04 03:57:16.073296895 +0000
+@@ -64,6 +64,7 @@
+ 
+     void outerHtml(StringBuilder accum) {
+         String html = StringEscapeUtils.escapeHtml(getWholeText());
++ 
+         if (parent() instanceof Element && !((Element) parent()).preserveWhitespace()) {
+             html = normaliseWhitespace(html);
+         }

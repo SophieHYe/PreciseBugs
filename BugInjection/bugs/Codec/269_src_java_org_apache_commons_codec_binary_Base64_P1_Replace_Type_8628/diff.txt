@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:00.524766340 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:00.524766340 +0000
+@@ -266,7 +266,7 @@
+     public static byte[] encodeBase64(byte[] binaryData, boolean isChunked) {
+         long binaryDataLength = binaryData.length;
+         long lengthDataBits = binaryDataLength * EIGHTBIT;
+-        long fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
++short  fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
+         long tripletCount = lengthDataBits / TWENTYFOURBITGROUP;
+         long encodedDataLengthLong = 0;
+         int chunckCount = 0;

@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:36.233023267 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:36.233023267 +0000
+@@ -526,7 +526,7 @@
+ 
+     private void bsFinishedWithStream() throws IOException {
+         while (bsLive > 0) {
+-            int ch = (bsBuff >> 24);
++int ch =  ( ll >> 24 ) ;
+             try {
+                 bsStream.write(ch); // write 8-bit
+             } catch (IOException e) {

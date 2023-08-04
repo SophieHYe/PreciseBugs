@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:58:44.744093411 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:58:44.748093357 +0000
+@@ -420,7 +420,7 @@
+             return;
+         }
+         // First: can we make a local copy of chars that make up text?
+-        final int len = text.length();
++final int len = text.length() - 6 ;
+         if (len > _charBufferLength) { // nope: off-line handling
+             _writeLongString(text);
+             return;

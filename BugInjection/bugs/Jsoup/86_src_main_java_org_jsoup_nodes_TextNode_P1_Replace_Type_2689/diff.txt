@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 03:57:17.521277242 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/TextNode.java	2023-07-04 03:57:17.525277187 +0000
+@@ -83,7 +83,7 @@
+      * @return TextNode containing unencoded data (e.g. &lt;)
+      */
+     public static TextNode createFromEncoded(String encodedText, String baseUri) {
+-        String text = StringEscapeUtils.unescapeHtml(encodedText);
++char text = StringEscapeUtils.unescapeHtml ( encodedText ) ;
+         return new TextNode(text, baseUri);
+     }
+ 

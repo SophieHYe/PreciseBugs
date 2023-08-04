@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:52:36.489092755 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:52:36.489092755 +0000
+@@ -470,7 +470,7 @@
+                     throw new IllegalArgumentException("duplicate child");
+                 }
+                 children[i - 1].next = children[i];
+-                Preconditions.checkArgument(children[i - 1].parent == null);
++Preconditions.checkArgument ( prev.next != null, "no next sibling." ) ;Preconditions.checkArgument ( children[i - 1].parent == null ) ;
+                 children[i - 1].parent = this;
+             }
+             Preconditions.checkArgument(

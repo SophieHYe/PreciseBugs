@@ -1,0 +1,10 @@
+--- /CSVParser.java	2023-07-04 03:53:14.304579213 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 03:53:14.304579213 +0000
+@@ -226,6 +226,7 @@
+             private CSVRecord getNextRecord() {
+                 try {
+                     return getRecord();
++ 
+                 } catch (IOException e) {
+                     throw new RuntimeException(e);
+                 }

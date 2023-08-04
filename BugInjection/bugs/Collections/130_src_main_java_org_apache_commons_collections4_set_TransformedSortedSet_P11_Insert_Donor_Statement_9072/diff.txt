@@ -1,0 +1,11 @@
+--- /TransformedSortedSet.java	2023-07-04 03:54:33.679501427 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/TransformedSortedSet.java	2023-07-04 03:54:33.679501427 +0000
+@@ -127,7 +127,7 @@
+ 
+     //-----------------------------------------------------------------------
+     public SortedSet<E> subSet(final E fromElement, final E toElement) {
+-        final SortedSet<E> set = getSortedSet().subSet(fromElement, toElement);
++final SortedSet<E> set = getSortedSet (  ) .headSet ( toElement ) ;final SortedSet<E> set = getSortedSet (  ) .subSet ( fromElement, toElement ) ;
+         return new TransformedSortedSet<E>(set, transformer);
+     }
+ 

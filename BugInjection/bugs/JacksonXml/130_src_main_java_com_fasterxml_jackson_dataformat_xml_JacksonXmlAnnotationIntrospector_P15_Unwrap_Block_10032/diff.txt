@@ -1,0 +1,14 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:53.985670021 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:53.985670021 +0000
+@@ -128,8 +128,9 @@
+     public Boolean isOutputAsCData(Annotated ann) {
+         JacksonXmlCData prop = ann.getAnnotation(JacksonXmlCData.class);
+         if (prop != null) {
+-            return prop.value() ? Boolean.TRUE : Boolean.FALSE;
+-        }
++ 
++return prop.value() ? java.lang.Boolean.TRUE : java.lang.Boolean.FALSE; 
++ 
+         return null;
+     }
+ 

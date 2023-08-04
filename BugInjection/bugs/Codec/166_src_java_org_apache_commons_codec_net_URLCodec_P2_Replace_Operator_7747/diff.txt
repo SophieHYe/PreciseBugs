@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:55:42.142571949 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:55:42.142571949 +0000
+@@ -163,7 +163,7 @@
+             int b = bytes[i];
+             if (b == '+') {
+                 buffer.write(' ');
+-            } else if (b == '%') {
++} else if  ( b != '%' )  {
+                 try {
+                     int u = Character.digit((char)bytes[++i], 16);
+                     int l = Character.digit((char)bytes[++i], 16);

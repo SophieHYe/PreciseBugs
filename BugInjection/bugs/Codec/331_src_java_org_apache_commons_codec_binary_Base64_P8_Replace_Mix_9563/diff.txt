@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:14.904571065 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:14.904571065 +0000
+@@ -328,7 +328,7 @@
+             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[(l << 2) | val3];
+             encodedData[encodedIndex + 3] = lookUpBase64Alphabet[b3 & 0x3f];
+ 
+-            encodedIndex += 4;
++encodedIndex += 3;
+ 
+             // If we are chunking, let's put a chunk separator down.
+             if (isChunked) {

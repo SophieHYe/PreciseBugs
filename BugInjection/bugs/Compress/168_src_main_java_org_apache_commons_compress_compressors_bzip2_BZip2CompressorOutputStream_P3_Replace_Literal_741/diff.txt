@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:15.118124303 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:15.122124249 +0000
+@@ -165,7 +165,7 @@
+                             ? (weight[n1] & 0x000000ff)
+                             : (weight[n2] & 0x000000ff)));
+ 
+-                parent[nNodes] = -1;
++parent[nNodes] = -SMALL_THRESH;
+                 nHeap++;
+                 heap[nHeap] = nNodes;
+                 {

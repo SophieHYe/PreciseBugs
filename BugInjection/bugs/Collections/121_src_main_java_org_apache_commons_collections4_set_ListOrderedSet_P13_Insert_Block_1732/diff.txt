@@ -1,0 +1,11 @@
+--- /ListOrderedSet.java	2023-07-04 03:55:24.714808543 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/ListOrderedSet.java	2023-07-04 03:55:24.714808543 +0000
+@@ -118,7 +118,7 @@
+      */
+     public static <E> ListOrderedSet<E> listOrderedSet(final List<E> list) {
+         if (list == null) {
+-            throw new IllegalArgumentException("List must not be null");
++if  ( set == null )  {     throw new IllegalArgumentException ( "Set must not be null" ) ; }
+         }
+         CollectionUtils.filter(list, UniquePredicate.uniquePredicate());
+         final Set<E> set = new HashSet<E>(list);

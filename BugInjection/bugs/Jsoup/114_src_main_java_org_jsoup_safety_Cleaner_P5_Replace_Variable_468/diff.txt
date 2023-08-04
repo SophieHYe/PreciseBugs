@@ -1,0 +1,11 @@
+--- /Cleaner.java	2023-07-04 03:55:01.999116935 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Cleaner.java	2023-07-04 03:55:01.999116935 +0000
+@@ -111,7 +111,7 @@
+                 numDiscarded++;
+         }
+         Attributes enforcedAttrs = whitelist.getEnforcedAttributes(sourceTag);
+-        destAttrs.addAll(enforcedAttrs);
++destAttrs.addAll ( sourceAttrs ) ;
+ 
+         return new ElementMeta(dest, numDiscarded);
+     }

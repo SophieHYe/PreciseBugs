@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:58.884715820 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:58.884715820 +0000
+@@ -302,7 +302,7 @@
+             return null;
+ 
+         Element deepest = getDeepChild(wrap);
+-        parentNode.replaceChild(this, wrap);
++parentNode.replaceChild ( this, wrapBody ) ;
+         deepest.addChild(this);
+ 
+         // remainder (unbalananced wrap, like <div></div><p></p> -- The <p> is remainder

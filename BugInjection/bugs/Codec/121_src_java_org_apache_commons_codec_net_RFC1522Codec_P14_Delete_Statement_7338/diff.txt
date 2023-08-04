@@ -1,0 +1,10 @@
+--- /RFC1522Codec.java	2023-07-04 03:57:07.337415472 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/RFC1522Codec.java	2023-07-04 03:57:07.341415418 +0000
+@@ -119,6 +119,7 @@
+             throw new DecoderException("RFC 1522 violation: encoding token not found");
+         }
+         String encoding = text.substring(from, to);
++ 
+         if (!getEncoding().equalsIgnoreCase(encoding)) {
+             throw new DecoderException("This codec cannot decode " + 
+                 encoding + " encoded content");

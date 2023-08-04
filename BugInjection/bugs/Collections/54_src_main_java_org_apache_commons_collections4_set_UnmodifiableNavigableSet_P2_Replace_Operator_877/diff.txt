@@ -1,0 +1,11 @@
+--- /UnmodifiableNavigableSet.java	2023-07-04 03:56:56.317565052 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/UnmodifiableNavigableSet.java	2023-07-04 03:56:56.317565052 +0000
+@@ -51,7 +51,7 @@
+      * @throws IllegalArgumentException if set is null
+      */
+     public static <E> NavigableSet<E> unmodifiableNavigableSet(final NavigableSet<E> set) {
+-        if (set instanceof Unmodifiable) {
++if  ( set  !=  Unmodifiable )  {
+             return set;
+         }
+         return new UnmodifiableNavigableSet<E>(set);

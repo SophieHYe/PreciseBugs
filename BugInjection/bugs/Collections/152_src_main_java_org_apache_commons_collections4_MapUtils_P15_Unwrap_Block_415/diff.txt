@@ -1,0 +1,18 @@
+--- /MapUtils.java	2023-07-04 03:57:33.721057362 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/MapUtils.java	2023-07-04 03:57:33.721057362 +0000
+@@ -150,10 +150,11 @@
+      */
+     public static <K> Boolean getBoolean(final Map<? super K, ?> map, final K key) {
+         if (map != null) {
+-            final Object answer = map.get(key);
+-            if (answer != null) {
+-                if (answer instanceof Boolean) {
+-                    return (Boolean) answer;
++ 
++final java.lang.Object answer = map.get(key); if (answer != null) {    if (answer instanceof java.lang.Boolean) {        return ((java.lang.Boolean) (answer));    }    if (answer instanceof java.lang.String) {        return java.lang.Boolean.valueOf(((java.lang.String) (answer)));    }    if (answer instanceof java.lang.Number) {        final java.lang.Number n = ((java.lang.Number) (answer));        return (n.intValue()) != 0 ? java.lang.Boolean.TRUE : java.lang.Boolean.FALSE;    }}; 
++ 
++ 
++ 
+                 }
+                 if (answer instanceof String) {
+                     return Boolean.valueOf((String) answer);

@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:45.768151964 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:45.772151910 +0000
+@@ -725,7 +725,7 @@
+         }
+         b = acc.nextByte();
+         // Couple of choices here
+-        if (b == BYTE_QMARK) { // <?
++if  ( b == BYTE_HYPHEN )  {
+             b = acc.nextByte();
+             if (b == BYTE_x) {
+                 if (maybeXmlDecl) {

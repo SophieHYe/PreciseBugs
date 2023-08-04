@@ -1,0 +1,11 @@
+--- /CSVParser.java	2023-07-04 03:53:09.916638800 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVParser.java	2023-07-04 03:53:09.916638800 +0000
+@@ -216,7 +216,7 @@
+                     // hasNext() wasn't called before
+                     next = getNextRecord();
+                     if (next == null) {
+-                        throw new NoSuchElementException("No more CSV records available");
++if  ( next == null )  {     throw new NoSuchElementException ( "No more CSV records available" ) ; }
+                     }
+                 }
+                 

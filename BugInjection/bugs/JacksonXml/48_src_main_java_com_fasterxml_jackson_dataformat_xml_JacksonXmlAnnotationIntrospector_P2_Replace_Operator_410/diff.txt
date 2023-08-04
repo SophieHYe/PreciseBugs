@@ -1,0 +1,11 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:47.869753091 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:47.869753091 +0000
+@@ -45,7 +45,7 @@
+     public PropertyName findWrapperName(Annotated ann)
+     {
+         JacksonXmlElementWrapper w = ann.getAnnotation(JacksonXmlElementWrapper.class);
+-        if (w != null) {
++if  ( w == null )  {
+             // Special case: wrapping explicitly blocked?
+             if (!w.useWrapping()) {
+                 return PropertyName.NO_NAME;

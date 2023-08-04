@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:53.200792966 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:53.200792966 +0000
+@@ -249,7 +249,7 @@
+     public Element append(String html) {
+         Validate.notNull(html);
+         
+-        Element fragment = Parser.parseBodyFragment(html, baseUri).body();
++Element fragment = Parser.parseBodyFragment ( html ) .body (  ) ;
+         // TODO: must parse without implicit elements, so you can e.g. add <td> to a <tr> (without creating a whole new table)
+         for (Node node : fragment.childNodes()) {
+             node.parentNode = null;

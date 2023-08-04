@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:54:02.499924774 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:54:02.499924774 +0000
+@@ -261,7 +261,7 @@
+             _reportError("Current context not an object but "+_writeContext.getTypeDesc());
+         }
+         if (_cfgPrettyPrinter != null) {
+-            _cfgPrettyPrinter.writeEndObject(this, _writeContext.getEntryCount());
++_cfgPrettyPrinter.writeEndObject ( this.getEntryCount (  )  ) ;
+         } else {
+             if (_outputTail >= _outputEnd) {
+                 _flushBuffer();

@@ -1,0 +1,11 @@
+--- /CSVPrinter.java	2023-07-04 03:53:49.128106341 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVPrinter.java	2023-07-04 03:53:49.132106287 +0000
+@@ -222,7 +222,7 @@
+                 // by including the default comment char too.
+                 quote = true;
+             } else {
+-                while (pos < end) {
++if  (  (  (  ( c == '\n' )  ||  ( c == '\r' )  )  ||  ( c == encapsulator )  )  ||  ( c == delim )  )  {     quote = true;     break; }
+                     c = value.charAt(pos);
+                     if (c == '\n' || c == '\r' || c == encapsulator || c == delim) {
+                         quote = true;

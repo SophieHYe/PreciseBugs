@@ -1,0 +1,14 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:57.377623951 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:57.381623896 +0000
+@@ -199,8 +199,9 @@
+     {
+         JacksonXmlProperty pann = a.getAnnotation(JacksonXmlProperty.class);
+         if (pann != null) {
+-            return PropertyName.construct(pann.localName(), pann.namespace());
+-        }
++ 
++return com.fasterxml.jackson.databind.PropertyName.construct(pann.localName(), pann.namespace()); 
++ 
+         return null;
+     }
+ }

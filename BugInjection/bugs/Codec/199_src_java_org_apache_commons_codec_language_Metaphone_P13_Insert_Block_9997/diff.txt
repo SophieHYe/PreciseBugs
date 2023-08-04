@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:59.856702629 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:59.856702629 +0000
+@@ -196,7 +196,7 @@
+                     }
+                     break ;
+                 case 'G' : // GH silent at end or before consonant
+-                    if (isLastChar(wdsz, n + 1) && 
++if  (  ( isPreviousChar ( local, n, 'M' )  )  &&  ( isLastChar ( wdsz, n )  )  )  {     break; }
+                         isNextChar(local, n, 'H')) {
+                         break;
+                     }

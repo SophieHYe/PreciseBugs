@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:58:00.592692639 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:58:00.596692585 +0000
+@@ -1186,7 +1186,7 @@
+      * instances from this mapper.
+      */
+     public ObjectMapper clearProblemHandlers() {
+-        _deserializationConfig = _deserializationConfig.withNoProblemHandlers();
++_deserializationConfig = new DeserializationConfig ( src._deserializationConfig, mixins ) ;_deserializationConfig = _deserializationConfig.withNoProblemHandlers (  ) ;
+         return this;
+     }
+     

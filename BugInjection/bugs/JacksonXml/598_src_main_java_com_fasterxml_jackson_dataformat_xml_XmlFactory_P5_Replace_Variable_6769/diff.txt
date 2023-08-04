@@ -1,0 +1,13 @@
+--- /XmlFactory.java	2023-07-04 03:53:35.288294269 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:35.292294214 +0000
+@@ -595,8 +595,8 @@
+         } catch (XMLStreamException e) {
+             return StaxUtil.throwXmlAsIOException(e);
+         }
+-        FromXmlParser xp = new FromXmlParser(ctxt, _generatorFeatures, _xmlGeneratorFeatures,
+-                _objectCodec, sr);
++FromXmlParser xp = new FromXmlParser ( ctxt, _generatorFeatures, sr, _objectCodec, _xmlGeneratorFeatures ) ;
++ 
+         if (_cfgNameForTextElement != null) {
+             xp.setXMLTextElementName(_cfgNameForTextElement);
+         }

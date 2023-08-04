@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:57:38.140997370 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:38.144997316 +0000
+@@ -160,7 +160,7 @@
+                          (FRONTV.indexOf(local.charAt(n + 1)) >= 0) ) { 
+                         break;
+                     }
+-                    if (regionMatch(local, n, "CIA")) { // "CIA" -> X
++if  ( ! ( isPreviousChar ( local, n, 'C' )  )  )  {     code.append ( symb ) ; }
+                         code.append('X'); 
+                         break;
+                     }

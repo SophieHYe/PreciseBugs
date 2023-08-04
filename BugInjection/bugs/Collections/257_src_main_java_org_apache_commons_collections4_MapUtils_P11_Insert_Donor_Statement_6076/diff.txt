@@ -1,0 +1,11 @@
+--- /MapUtils.java	2023-07-04 03:58:28.436314738 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/MapUtils.java	2023-07-04 03:58:28.436314738 +0000
+@@ -254,7 +254,7 @@
+      * @return the value in the Map as a Integer, <code>null</code> if null map input
+      */
+     public static <K> Integer getInteger(final Map<? super K, ?> map, final K key) {
+-        final Number answer = getNumber(map, key);
++Map<?, ?> answer = getMap ( map, key ) ;final Number answer = getNumber ( map, key ) ;
+         if (answer == null) {
+             return null;
+         }

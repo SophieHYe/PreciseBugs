@@ -1,0 +1,13 @@
+--- /Base64.java	2023-07-04 03:53:03.732722776 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:03.732722776 +0000
+@@ -284,8 +284,8 @@
+         // allow for extra length to account for the separator(s)
+         if (isChunked) {
+ 
+-            chunckCount = (CHUNK_SEPARATOR.length == 0 ? 0 : (int) Math
+-                    .ceil((float) encodedDataLengthLong / CHUNK_SIZE));
++chunckCount =  ( CHUNK_SEPARATOR.length < 0 ? 0 :  ( int )  Math .ceil (  ( float )  encodedDataLengthLong / CHUNK_SIZE )  ) ;
++ 
+             encodedDataLengthLong += chunckCount * CHUNK_SEPARATOR.length;
+         }
+ 

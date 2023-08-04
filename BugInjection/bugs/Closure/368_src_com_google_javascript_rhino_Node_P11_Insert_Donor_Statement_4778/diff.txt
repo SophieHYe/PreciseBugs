@@ -1,0 +1,13 @@
+--- /Node.java	2023-07-04 03:48:38.408327268 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:48:38.412327214 +0000
+@@ -365,8 +365,8 @@
+             "first new child has existing parent");
+         Preconditions.checkArgument(left.next == null,
+             "first new child has existing sibling");
+-        Preconditions.checkArgument(right.parent == null,
+-            "second new child has existing parent");
++Preconditions.checkArgument ( newChild.next == null, "The new child node has siblings." ) ;Preconditions.checkArgument ( right.parent == null, "second new child has existing parent" ) ;
++ 
+         Preconditions.checkArgument(right.next == null,
+             "second new child has existing sibling");
+         type = nodeType;

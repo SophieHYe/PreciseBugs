@@ -1,0 +1,11 @@
+--- /URLCodec.java	2023-07-04 03:56:04.798264393 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/URLCodec.java	2023-07-04 03:56:04.802264338 +0000
+@@ -330,7 +330,7 @@
+      *                  encountered during the decode process.
+      */
+     public Object decode(Object pObject) throws DecoderException {
+-        if (pObject == null) {
++if  ( pObject instanceof String )  {
+             return null;
+         } else if (pObject instanceof byte[]) {
+             return decode((byte[]) pObject);

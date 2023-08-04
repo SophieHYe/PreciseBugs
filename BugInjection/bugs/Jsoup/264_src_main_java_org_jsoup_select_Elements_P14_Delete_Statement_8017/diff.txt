@@ -1,0 +1,10 @@
+--- /Elements.java	2023-07-04 03:56:30.173919928 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Elements.java	2023-07-04 03:56:30.177919874 +0000
+@@ -262,6 +262,7 @@
+      */
+     public Elements wrap(String html) {
+         Validate.notEmpty(html);
++ 
+         for (Element element : contents) {
+             element.wrap(html);
+         }

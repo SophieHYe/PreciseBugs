@@ -1,0 +1,14 @@
+--- /XmlFactory.java	2023-07-04 03:53:44.640167281 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:44.640167281 +0000
+@@ -721,8 +721,9 @@
+             }
+         }
+         if (!acc.hasMoreBytes()) {
+-            return MatchStrength.INCONCLUSIVE;
+-        }
++ 
++return com.fasterxml.jackson.core.format.MatchStrength.INCONCLUSIVE; 
++ 
+         b = acc.nextByte();
+         // Couple of choices here
+         if (b == BYTE_QMARK) { // <?

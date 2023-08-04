@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:27.248330861 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:27.248330861 +0000
+@@ -594,7 +594,7 @@
+         Validate.notNull(text);
+ 
+         empty();
+-        TextNode textNode = new TextNode(text, baseUri);
++TextNode baseUriNode = new TextNode ( text, text ) ;
+         appendChild(textNode);
+ 
+         return this;

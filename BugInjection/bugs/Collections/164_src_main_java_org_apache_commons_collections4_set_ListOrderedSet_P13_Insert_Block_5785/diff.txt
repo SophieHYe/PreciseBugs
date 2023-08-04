@@ -1,0 +1,11 @@
+--- /ListOrderedSet.java	2023-07-04 03:55:16.950913946 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/ListOrderedSet.java	2023-07-04 03:55:16.954913892 +0000
+@@ -161,7 +161,7 @@
+      */
+     protected ListOrderedSet(final Set<E> set, final List<E> list) {
+         super(set);
+-        if (list == null) {
++if  ( set == null )  {     throw new IllegalArgumentException ( "Set must not be null" ) ; }
+             throw new IllegalArgumentException("List must not be null");
+         }
+         setOrder = list;

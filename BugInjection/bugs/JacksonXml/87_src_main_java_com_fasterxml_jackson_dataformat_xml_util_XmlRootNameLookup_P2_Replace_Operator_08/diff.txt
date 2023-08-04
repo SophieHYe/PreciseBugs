@@ -1,0 +1,11 @@
+--- /XmlRootNameLookup.java	2023-07-04 03:52:07.169490956 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/XmlRootNameLookup.java	2023-07-04 03:52:07.169490956 +0000
+@@ -84,7 +84,7 @@
+         if (ns == null || ns.length() == 0) {
+             ns = findNamespace(intr, ac);
+         }
+-        if (ns == null) { // some QName impls barf on nulls...
++if  ( ns != null )  {
+             ns = "";
+         }
+         return new QName(ns, localName);

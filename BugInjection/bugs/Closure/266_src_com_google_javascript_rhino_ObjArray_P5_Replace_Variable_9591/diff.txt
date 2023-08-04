@@ -1,0 +1,15 @@
+--- /ObjArray.java	2023-07-04 03:44:47.687455545 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:44:47.687455545 +0000
+@@ -263,9 +263,9 @@
+                 index = FIELDS_STORE_SIZE;
+             default:
+                 if (index != N) {
+-                    System.arraycopy(data, index - FIELDS_STORE_SIZE + 1,
+-                                     data, index - FIELDS_STORE_SIZE,
+-                                     N - index);
++System.arraycopy ( data, index - FIELDS_STORE_SIZE + 1, data, index - FIELDS_STORE_SIZE - index ) ;
++ 
++ 
+                 }
+                 data[N - FIELDS_STORE_SIZE] = null;
+         }

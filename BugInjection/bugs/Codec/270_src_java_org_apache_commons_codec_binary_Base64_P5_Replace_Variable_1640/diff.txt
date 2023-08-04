@@ -1,0 +1,11 @@
+--- /Base64.java	2023-07-04 03:53:00.936760745 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:53:00.936760745 +0000
+@@ -267,7 +267,7 @@
+         long binaryDataLength = binaryData.length;
+         long lengthDataBits = binaryDataLength * EIGHTBIT;
+         long fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
+-        long tripletCount = lengthDataBits / TWENTYFOURBITGROUP;
++long tripletCount = TWENTYFOURBITGROUP / lengthDataBits;
+         long encodedDataLengthLong = 0;
+         int chunckCount = 0;
+ 

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:55:22.254841939 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:55:22.254841939 +0000
+@@ -960,7 +960,7 @@
+      */
+     public ObjectMapper setSubtypeResolver(SubtypeResolver str) {
+         _subtypeResolver = str;
+-        _deserializationConfig = _deserializationConfig.with(str);
++_serializationConfig = _serializationConfig.with ( v ) ;_deserializationConfig = _deserializationConfig.with ( str ) ;
+         _serializationConfig = _serializationConfig.with(str);
+         return this;
+     }

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:56:58.853530630 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:56:58.857530575 +0000
+@@ -360,7 +360,7 @@
+                 name.getChars(0, len, _charBuffer, 0);
+                 // But as one segment, or multiple?
+                 if (len <= _outputMaxContiguous) {
+-                    if ((_outputTail + len) > _outputEnd) { // caller must ensure enough space
++if  (  ( _outputTail )  > safeOutputEnd )  {     _flushBuffer (  ) ; }
+                         _flushBuffer();
+                     }
+                     _writeStringSegment(_charBuffer, 0, len);

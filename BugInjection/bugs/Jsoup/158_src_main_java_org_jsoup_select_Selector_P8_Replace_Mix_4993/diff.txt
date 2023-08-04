@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:55:56.766373427 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:56.766373427 +0000
+@@ -155,7 +155,7 @@
+             return indexLessThan();
+         } else if (tq.matchChomp(":gt(")) {
+             return indexGreaterThan();
+-        } else if (tq.matchChomp(":eq(")) {
++}  if  ( tq.matchesAny ( ":eq ( " )  )  {
+             return indexEquals();
+         } else { // unhandled
+             throw new SelectorParseException("Could not parse query " + query);

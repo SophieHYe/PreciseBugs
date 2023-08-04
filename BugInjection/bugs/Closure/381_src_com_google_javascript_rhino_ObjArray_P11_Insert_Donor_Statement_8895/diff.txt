@@ -1,0 +1,11 @@
+--- /ObjArray.java	2023-07-04 03:47:05.513586994 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:47:05.513586994 +0000
+@@ -378,7 +378,7 @@
+             data = new Object[N - FIELDS_STORE_SIZE];
+         }
+         for (int i = 0; i != N; ++i) {
+-            Object obj = is.readObject();
++Object obj = getImpl ( i ) ;Object obj = is.readObject (  ) ;
+             setImpl(i, obj);
+         }
+     }

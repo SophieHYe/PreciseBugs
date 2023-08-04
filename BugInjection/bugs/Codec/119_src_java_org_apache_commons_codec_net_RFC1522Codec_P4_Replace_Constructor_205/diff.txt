@@ -1,0 +1,11 @@
+--- /RFC1522Codec.java	2023-07-04 03:57:05.205444411 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/RFC1522Codec.java	2023-07-04 03:57:05.205444411 +0000
+@@ -116,7 +116,7 @@
+         from = to + 1;
+         to = text.indexOf("?", from);
+         if ((to == -1) || (to == termnator)) {
+-            throw new DecoderException("RFC 1522 violation: encoding token not found");
++throw throw  new DecoderException ( "RFC 1522 violation: charset token not found" )   ;
+         }
+         String encoding = text.substring(from, to);
+         if (!getEncoding().equalsIgnoreCase(encoding)) {

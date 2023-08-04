@@ -1,0 +1,10 @@
+--- /Selector.java	2023-07-04 03:55:45.126531441 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:45.126531441 +0000
+@@ -115,6 +115,7 @@
+                 combinator(" ");
+             } else { // E.class, E#id, E[attr] etc. AND
+                 Elements candidates = findElements(); // take next el, #. etc off queue
++ 
+                 intersectElements(filterForSelf(elements, candidates));
+             }
+         }

@@ -1,0 +1,11 @@
+--- /Lexer.java	2023-07-04 03:52:40.937032350 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/Lexer.java	2023-07-04 03:52:40.941032296 +0000
+@@ -115,7 +115,7 @@
+      * @return true if the given character indicates end of file
+      */
+     boolean isEndOfFile(int c) {
+-        return c == ExtendedBufferedReader.END_OF_STREAM;
++return c  ||  ExtendedBufferedReader.END_OF_STREAM;
+     }
+ 
+     abstract Token nextToken(Token reusableToken) throws IOException;

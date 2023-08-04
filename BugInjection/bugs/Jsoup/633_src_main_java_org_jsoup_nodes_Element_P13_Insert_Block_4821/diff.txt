@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:29.980293783 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:29.980293783 +0000
+@@ -630,7 +630,7 @@
+             if (childNode instanceof DataNode) {
+                 DataNode data = (DataNode) childNode;
+                 sb.append(data.getWholeData());
+-            } else if (childNode instanceof Element) {
++if  ( child instanceof Element )  {     Element el =  (  ( Element )   ( child )  ) ;     if  ( el.hasText (  )  )          return true;      }
+                 Element element = (Element) childNode;
+                 String elementData = element.data();
+                 sb.append(elementData);

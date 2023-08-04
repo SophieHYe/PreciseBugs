@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:54:56.627189868 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:54:56.631189814 +0000
+@@ -95,7 +95,7 @@
+                     int zz, tmp;
+                     zz = nHeap;
+                     tmp = heap[zz];
+-                    while (weight[tmp] < weight[heap[zz >> 1]]) {
++while  ( weight[tmp] < weight[heap[k >> 1]] )  {
+                         heap[zz] = heap[zz >> 1];
+                         zz >>= 1;
+                     }

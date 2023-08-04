@@ -1,0 +1,14 @@
+--- /CSVPrinter.java	2023-07-04 03:53:43.460183303 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVPrinter.java	2023-07-04 03:53:43.460183303 +0000
+@@ -162,8 +162,9 @@
+             if (c == '\r' || c == '\n' || c == delim || c == escape) {
+                 // write out segment up until this char
+                 if (pos > start) {
+-                    out.append(value, start, pos);
+-                }
++ 
++out.append(value, start, pos); 
++ 
+                 if (c == '\n') {
+                     c = 'n';
+                 } else if (c == '\r') {

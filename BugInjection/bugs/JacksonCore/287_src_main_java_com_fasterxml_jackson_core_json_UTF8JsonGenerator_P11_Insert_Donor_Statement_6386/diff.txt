@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:54:23.339641816 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:54:23.343641761 +0000
+@@ -284,7 +284,7 @@
+         if (_outputTail >= _outputEnd) {
+             _flushBuffer();
+         }
+-        _outputBuffer[_outputTail++] = BYTE_QUOTE;
++outputBuffer[outputPtr++] =  ( byte )  escape;_outputBuffer[_outputTail++] = BYTE_QUOTE;
+         // The beef:
+         final int len = name.length();
+         if (len <= _charBufferLength) { // yes, fits right in

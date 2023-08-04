@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:50:11.619060623 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:50:11.623060569 +0000
+@@ -381,7 +381,7 @@
+      */
+     protected ObjectMapper(ObjectMapper src)
+     {
+-        _jsonFactory = src._jsonFactory.copy();
++_jsonFactory = new MappingJsonFactory ( this ) ;_jsonFactory = src._jsonFactory.copy (  ) ;
+         _jsonFactory.setCodec(this);
+         _subtypeResolver = src._subtypeResolver;
+         _rootNames = new RootNameLookup();

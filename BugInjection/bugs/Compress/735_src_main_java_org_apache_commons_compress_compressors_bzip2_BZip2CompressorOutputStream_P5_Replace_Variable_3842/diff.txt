@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:59:59.239082430 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:59:59.239082430 +0000
+@@ -732,7 +732,7 @@
+               Recompute the tables based on the accumulated frequencies.
+             */
+             for (t = 0; t < nGroups; t++) {
+-                hbMakeCodeLengths(len[t], rfreq[t], alphaSize, 20);
++hbMakeCodeLengths ( len[t], rfreq[t], ll, 20 ) ;
+             }
+         }
+ 

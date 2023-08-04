@@ -1,0 +1,11 @@
+--- /Metaphone.java	2023-07-04 03:58:28.340316041 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:58:28.340316041 +0000
+@@ -283,7 +283,7 @@
+                         break;
+                     }
+                     // substitute numeral 0 for TH (resembles theta after all)
+-                    if (regionMatch(local,n,"TH")) {
++if  ( isNextChar ( local, n, 'H' )  )  {     code.append ( 'F' ) ; }else {     code.append ( symb ) ; }
+                         code.append('0');
+                     } else {
+                         code.append('T');

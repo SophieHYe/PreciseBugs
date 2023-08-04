@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:54:50.515272848 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:54:50.519272793 +0000
+@@ -913,7 +913,7 @@
+      * are defined.
+      */    
+     public void setVisibilityChecker(VisibilityChecker<?> vc) {
+-        _deserializationConfig = _deserializationConfig.with(vc);
++_serializationConfig = _serializationConfig.withSerializationInclusion ( incl ) ;_deserializationConfig = _deserializationConfig.with ( vc ) ;
+         _serializationConfig = _serializationConfig.with(vc);
+     }
+ 

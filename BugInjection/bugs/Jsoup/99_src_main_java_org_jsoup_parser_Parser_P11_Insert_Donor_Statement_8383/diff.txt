@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:23.979560931 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:23.979560931 +0000
+@@ -96,7 +96,7 @@
+         tq.consume("<");
+         Character firstChar = tq.consume(); // <? or <!, from initial match.
+         boolean procInstr = firstChar.toString().equals("!");
+-        String data = tq.chompTo(">");
++String text = tq.consumeTo ( "<" ) ;String data = tq.chompTo ( ">" ) ;
+ 
+         XmlDeclaration decl = new XmlDeclaration(data, baseUri, procInstr);
+         last().appendChild(decl);

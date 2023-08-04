@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:13.952583993 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:13.956583938 +0000
+@@ -188,7 +188,7 @@
+             throw new IllegalStateException("No XMLOutputFactory class name read during JDK deserialization");
+         }
+         try {
+-            XMLInputFactory inf = (XMLInputFactory) Class.forName(_jdkXmlInFactory).newInstance();
++XMLInputFactory inf =  ( XMLInputFactory )  Class.getName ( _jdkXmlInFactory ) .newInstance (  ) ;
+             XMLOutputFactory outf = (XMLOutputFactory) Class.forName(_jdkXmlOutFactory).newInstance();
+             return new XmlFactory(_objectCodec, _xmlParserFeatures, _xmlGeneratorFeatures,
+                     inf, outf, _cfgNameForTextElement);

@@ -1,0 +1,11 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 03:53:01.560752271 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 03:53:01.560752271 +0000
+@@ -95,7 +95,7 @@
+     protected static String decodeXmlClassName(String className)
+     {
+         int ix = className.lastIndexOf("..");
+-        if (ix >= 0) {
++if  ( ix >= 2 )  {
+             StringBuilder sb = new StringBuilder(className);
+             do {
+                 sb.replace(ix, ix+2, "$");

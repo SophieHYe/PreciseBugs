@@ -1,0 +1,11 @@
+--- /QCodec.java	2023-07-04 03:55:22.638836726 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QCodec.java	2023-07-04 03:55:22.638836726 +0000
+@@ -250,7 +250,7 @@
+         } else if (pObject instanceof String) {
+             return encode((String) pObject);
+         } else {
+-            throw new EncoderException("Objects of type " + 
++if  ( pObject instanceof String )  {     return encode (  (  ( String )   ( pObject )  )  ) ; }else {     throw new EncoderException (  (  ( "Objects of type " +  ( pObject.getClass (  ) .getName (  )  )  )  + " cannot be encoded using Q codec" )  ) ; }
+                   pObject.getClass().getName() + 
+                   " cannot be encoded using Q codec");
+         }

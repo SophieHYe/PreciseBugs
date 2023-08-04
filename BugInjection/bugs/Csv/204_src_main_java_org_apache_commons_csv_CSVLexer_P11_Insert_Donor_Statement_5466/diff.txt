@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:25.852422399 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:25.856422345 +0000
+@@ -201,7 +201,7 @@
+                             tkn.type = TOKEN;
+                             return tkn;
+                         } else if (isEndOfFile(c)) {
+-                            tkn.type = EOF;
++tkn.type = TOKEN;tkn.type = EOF;
+                             tkn.isReady = true; // There is data at EOF
+                             return tkn;
+                         } else if (isEndOfLine(c)) {

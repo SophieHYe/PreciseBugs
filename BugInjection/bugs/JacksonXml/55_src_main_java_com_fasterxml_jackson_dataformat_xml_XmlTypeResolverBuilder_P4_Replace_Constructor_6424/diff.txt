@@ -1,0 +1,11 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 03:52:59.240783777 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 03:52:59.244783722 +0000
+@@ -52,7 +52,7 @@
+         // Only override handlings of class, minimal class; name is good as is
+         switch (_idType) {
+         case CLASS:
+-            return new XmlClassNameIdResolver(baseType, config.getTypeFactory());
++return new XmlClassNameIdResolver ( baseType.getTypeFactory (  )  ) ;
+         case MINIMAL_CLASS:
+             return new XmlMinimalClassNameIdResolver(baseType, config.getTypeFactory());
+         default:

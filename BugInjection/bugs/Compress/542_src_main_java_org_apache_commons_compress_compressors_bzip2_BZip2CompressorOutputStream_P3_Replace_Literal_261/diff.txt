@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:37.521005785 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:37.521005785 +0000
+@@ -539,7 +539,7 @@
+     }
+ 
+     private void bsW(int n, int v) throws IOException {
+-        while (bsLive >= 8) {
++while  ( bsLive >= 15 )  {
+             int ch = (bsBuff >> 24);
+             try {
+                 bsStream.write(ch); // write 8-bit

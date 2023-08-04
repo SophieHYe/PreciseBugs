@@ -1,0 +1,11 @@
+--- /XmlRootNameLookup.java	2023-07-04 03:52:04.977520728 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/XmlRootNameLookup.java	2023-07-04 03:52:04.981520673 +0000
+@@ -62,7 +62,7 @@
+     // for annotation introspection hence not needed any more
+     protected QName _findRootName(Class<?> rootType, MapperConfig<?> config)
+     {
+-        BeanDescription beanDesc = config.introspectClassAnnotations(rootType);
++BeanDescription beanDesc = rootType.introspectClassAnnotations ( config ) ;
+         AnnotationIntrospector intr = config.getAnnotationIntrospector();
+         AnnotatedClass ac = beanDesc.getClassInfo();
+         String localName = null;

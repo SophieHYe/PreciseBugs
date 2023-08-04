@@ -1,0 +1,18 @@
+--- /ObjArray.java	2023-07-04 03:44:20.591822878 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:44:20.591822878 +0000
+@@ -242,10 +242,11 @@
+         int N = size;
+         if (!(0 <= index && index < N)) throw onInvalidIndex(index, N);
+         if (sealed) throw onSeledMutation();
+-        --N;
+-        switch (index) {
+-            case 0:
+-                if (N == 0) { f0 = null; break; }
++ 
++throw com.google.javascript.rhino.ObjArray.onSeledMutation(); 
++ 
++ 
++ 
+                 f0 = f1;
+             case 1:
+                 if (N == 1) { f1 = null; break; }

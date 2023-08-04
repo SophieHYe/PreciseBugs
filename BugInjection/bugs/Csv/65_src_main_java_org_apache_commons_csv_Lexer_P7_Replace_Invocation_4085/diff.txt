@@ -1,0 +1,11 @@
+--- /Lexer.java	2023-07-04 03:52:39.469052286 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/Lexer.java	2023-07-04 03:52:39.469052286 +0000
+@@ -62,7 +62,7 @@
+ 
+     int readEscape(int c) throws IOException {
+         // assume c is the escape char (normally a backslash)
+-        c = in.read();
++c = in.lookAhead (  ) ;
+         switch (c) {
+             case 'r':
+                 return '\r';

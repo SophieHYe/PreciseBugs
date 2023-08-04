@@ -1,0 +1,10 @@
+--- /ExtendedBufferedReader.java	2023-07-04 03:53:01.908747546 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/ExtendedBufferedReader.java	2023-07-04 03:53:01.908747546 +0000
+@@ -122,6 +122,7 @@
+     public String readLine() throws IOException {
+         String line = super.readLine();
+ 
++
+         if (line != null) {
+             if (line.length() > 0) {
+                 lastChar = line.charAt(line.length() - 1);

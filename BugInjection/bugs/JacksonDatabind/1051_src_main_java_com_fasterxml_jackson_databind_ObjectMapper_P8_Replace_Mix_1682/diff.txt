@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:56:45.593710617 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:56:45.593710617 +0000
+@@ -1048,7 +1048,7 @@
+      */
+     public ObjectMapper enableDefaultTyping(DefaultTyping applicability, JsonTypeInfo.As includeAs)
+     {
+-        TypeResolverBuilder<?> typer = new DefaultTypeResolverBuilder(applicability);
++TypeResolverBuilder<?> typer = new DefaultTypeResolverBuilder ( t ) ;
+         // we'll always use full class name, when using defaulting
+         typer = typer.init(JsonTypeInfo.Id.CLASS, null);
+         typer = typer.inclusion(includeAs);

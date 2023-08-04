@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:36.600276453 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:36.600276453 +0000
+@@ -628,7 +628,7 @@
+     protected XMLStreamWriter _createXmlWriter(Writer w) throws IOException
+     {
+         try {
+-            return _initializeXmlWriter(_xmlOutputFactory.createXMLStreamWriter(w));
++return _initializeXmlReader ( _xmlOutputFactory.createXMLStreamWriter ( w )  ) ;
+         } catch (XMLStreamException e) {
+             return StaxUtil.throwXmlAsIOException(e);
+         }

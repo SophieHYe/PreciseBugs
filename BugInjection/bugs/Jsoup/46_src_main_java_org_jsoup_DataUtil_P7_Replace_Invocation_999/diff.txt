@@ -1,0 +1,11 @@
+--- /DataUtil.java	2023-07-04 03:54:53.271235430 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/DataUtil.java	2023-07-04 03:54:53.271235430 +0000
+@@ -43,7 +43,7 @@
+         conn.setReadTimeout(timeoutMillis);
+         conn.connect();
+ 
+-        int res = conn.getResponseCode();
++int res = conn.setInstanceFollowRedirects (  ) ;
+         if (res != HttpURLConnection.HTTP_OK)
+             throw new IOException(res + " error loading URL " + url.toString());
+         

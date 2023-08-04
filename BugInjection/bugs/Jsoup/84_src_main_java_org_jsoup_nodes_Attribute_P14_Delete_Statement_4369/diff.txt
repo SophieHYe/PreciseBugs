@@ -1,0 +1,10 @@
+--- /Attribute.java	2023-07-04 03:57:24.633180710 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Attribute.java	2023-07-04 03:57:24.633180710 +0000
+@@ -82,6 +82,7 @@
+      */
+     public static Attribute createFromEncoded(String unencodedKey, String encodedValue) {
+         String value = StringEscapeUtils.unescapeHtml(encodedValue);
++ 
+         return new Attribute(unencodedKey, value);
+     }
+ 

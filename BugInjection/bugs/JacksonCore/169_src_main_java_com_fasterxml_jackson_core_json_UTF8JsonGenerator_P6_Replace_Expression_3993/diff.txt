@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:51:59.137600046 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:51:59.141599992 +0000
+@@ -166,7 +166,7 @@
+         if (status == JsonWriteContext.STATUS_EXPECT_VALUE) {
+             _reportError("Can not write a field name, expecting a value");
+         }
+-        if (_cfgPrettyPrinter != null) {
++if  ( status == JsonWriteContext.STATUS_OK_AFTER_COMMA )  {
+             _writePPFieldName(name, (status == JsonWriteContext.STATUS_OK_AFTER_COMMA));
+             return;
+         }

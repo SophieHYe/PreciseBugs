@@ -1,0 +1,18 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:57:55.076767504 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:57:55.080767450 +0000
+@@ -383,10 +383,11 @@
+         throws IOException, JsonGenerationException
+     {
+         if (commaBefore) {
+-            _cfgPrettyPrinter.writeObjectEntrySeparator(this);
+-        } else {
+-            _cfgPrettyPrinter.beforeObjectEntries(this);
+-        }
++ 
++_cfgPrettyPrinter.writeObjectEntrySeparator(this); 
++ 
++ 
++ 
+ 
+         boolean addQuotes = isEnabled(Feature.QUOTE_FIELD_NAMES); // standard
+         if (addQuotes) {

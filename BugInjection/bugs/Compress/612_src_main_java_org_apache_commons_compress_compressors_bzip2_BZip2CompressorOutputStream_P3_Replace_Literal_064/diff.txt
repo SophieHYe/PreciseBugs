@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:58:24.480368428 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:58:24.484368374 +0000
+@@ -609,7 +609,7 @@
+             while (nPart > 0) {
+                 tFreq = remF / nPart;
+                 ge = gs - 1;
+-                aFreq = 0;
++aFreq = nNodes;
+                 while (aFreq < tFreq && ge < alphaSize - 1) {
+                     ge++;
+                     aFreq += mtfFreq[ge];

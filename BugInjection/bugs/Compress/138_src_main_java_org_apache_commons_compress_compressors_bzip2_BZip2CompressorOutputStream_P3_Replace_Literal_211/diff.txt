@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:55:57.954357299 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:55:57.958357245 +0000
+@@ -135,7 +135,7 @@
+                 heap[1] = heap[nHeap];
+                 nHeap--;
+                 {
+-                    int zz = 0, yy = 0, tmp = 0;
++int zz = QSORT_STACK_SIZE, yy = QSORT_STACK_SIZE, tmp = QSORT_STACK_SIZE;
+                     zz = 1;
+                     tmp = heap[zz];
+                     while (true) {

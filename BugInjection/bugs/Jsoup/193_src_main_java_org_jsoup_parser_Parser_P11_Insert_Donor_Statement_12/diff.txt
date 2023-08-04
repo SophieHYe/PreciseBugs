@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:58.651090409 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:58.651090409 +0000
+@@ -190,7 +190,7 @@
+         if (key.length() != 0)
+             return Attribute.createFromEncoded(key, value);
+         else {
+-            tq.consume(); // unknown char, keep popping so not get stuck
++tq.matchChomp ( ">" ) ;tq.consume (  ) ;
+             return null;
+         }
+     }

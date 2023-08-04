@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:37.256267545 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:37.256267545 +0000
+@@ -684,7 +684,7 @@
+         /* Basically we just need to find "<!", "<?" or "<NAME"... but ideally
+          * we would actually see the XML declaration
+          */
+-        if (!acc.hasMoreBytes()) {
++if  ( validXmlNameStartChar ( acc, b )  )  {     return SOLID_MATCH; }
+             return MatchStrength.INCONCLUSIVE;
+         }
+         byte b = acc.nextByte();

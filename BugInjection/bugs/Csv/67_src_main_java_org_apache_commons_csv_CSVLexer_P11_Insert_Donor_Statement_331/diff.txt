@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:15.916557322 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:15.916557322 +0000
+@@ -64,7 +64,7 @@
+                 c = in.readAgain();
+                 // reached end of file without any content (empty line at the end)
+                 if (isEndOfFile(c)) {
+-                    tkn.type = EOF;
++tkn.type = TOKEN;tkn.type = EOF;
+                     // don't set tkn.isReady here because no content
+                     return tkn;
+                 }

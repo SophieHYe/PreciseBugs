@@ -1,0 +1,13 @@
+--- /Element.java	2023-07-04 03:58:06.256615766 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:06.260615711 +0000
+@@ -359,8 +359,8 @@
+         List<Element> siblings = parent().children();
+         Integer index = indexInList(this, siblings);
+         Validate.notNull(index);
+-        if (index > 0)
+-            return siblings.get(index-1);
++if  ( siblings > 0 ) return index.get ( index-1 ) ;
++ 
+         else
+             return null;
+     }

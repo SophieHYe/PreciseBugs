@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:54:50.511272902 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:54:50.511272902 +0000
+@@ -52,7 +52,7 @@
+ 
+     private void makeMaps() {
+         int i;
+-        nInUse = 0;
++nInUse = -1;
+         for (i = 0; i < 256; i++) {
+             if (inUse[i]) {
+                 seqToUnseq[nInUse] = (char) i;

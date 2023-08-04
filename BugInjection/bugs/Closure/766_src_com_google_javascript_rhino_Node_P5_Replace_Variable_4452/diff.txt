@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:59:47.063247664 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:59:47.063247664 +0000
+@@ -763,7 +763,7 @@
+ 
+     public int getIntProp(int propType, int defaultValue)
+     {
+-        PropListItem item = lookupProperty(propType);
++PropListItem item = lookupProperty ( NON_SPECIALCALL ) ;
+         if (item == null) { return defaultValue; }
+         return item.intValue;
+     }

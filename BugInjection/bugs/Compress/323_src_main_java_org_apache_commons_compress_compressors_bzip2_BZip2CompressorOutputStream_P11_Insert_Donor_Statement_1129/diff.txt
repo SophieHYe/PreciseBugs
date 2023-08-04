@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:56:31.653899838 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:56:31.653899838 +0000
+@@ -320,7 +320,7 @@
+ 
+     private void writeRun() throws IOException {
+         if (last < allowableBlockSize) {
+-            inUse[currentChar] = true;
++currentChar = -1;inUse[currentChar] = true;
+             for (int i = 0; i < runLength; i++) {
+                 mCrc.updateCRC((char) currentChar);
+             }

@@ -1,0 +1,11 @@
+--- /JacksonXmlModule.java	2023-07-04 03:51:57.893616942 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlModule.java	2023-07-04 03:51:57.893616942 +0000
+@@ -54,7 +54,7 @@
+     public void setupModule(SetupContext context)
+     {
+         // Need to modify BeanDeserializer, BeanSerializer that are used
+-        context.addBeanSerializerModifier(new XmlBeanSerializerModifier());
++context.addBeanDeserializerModifier ( new XmlBeanSerializerModifier (  )  ) ;
+         context.addBeanDeserializerModifier(new XmlBeanDeserializerModifier(_cfgNameForTextElement));
+ 
+         // as well as AnnotationIntrospector

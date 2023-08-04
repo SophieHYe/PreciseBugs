@@ -1,0 +1,14 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 03:52:57.868802408 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 03:52:57.872802354 +0000
+@@ -25,8 +25,9 @@
+     {
+         super.init(idType, idRes);
+         if (_typeProperty != null) {
+-            _typeProperty = StaxUtil.sanitizeXmlTypeName(_typeProperty);
+-        }
++ 
++_typeProperty = com.fasterxml.jackson.dataformat.xml.util.StaxUtil.sanitizeXmlTypeName(_typeProperty); 
++ 
+         return this;
+     }
+ 

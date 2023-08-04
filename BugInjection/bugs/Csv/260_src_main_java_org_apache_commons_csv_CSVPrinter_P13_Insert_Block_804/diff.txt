@@ -1,0 +1,11 @@
+--- /CSVPrinter.java	2023-07-04 03:54:01.311940904 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVPrinter.java	2023-07-04 03:54:01.339940524 +0000
+@@ -257,7 +257,7 @@
+         // the need for encapsulation.
+         while (pos < end) {
+             char c = value.charAt(pos);
+-            if (c == encapsulator) {
++if  ( !quote )  {     out.append ( value, start, end ) ;     return ; }
+                 // write out the chunk up until this point
+ 
+                 // add 1 to the length to write out the encapsulator also

@@ -1,0 +1,15 @@
+--- /XmlFactory.java	2023-07-04 03:53:22.068473783 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:22.072473728 +0000
+@@ -454,9 +454,9 @@
+     @Override
+     public ToXmlGenerator createGenerator(Writer out) throws IOException
+     {
+-        return new ToXmlGenerator(_createContext(out, false),
+-                _generatorFeatures, _xmlGeneratorFeatures,
+-                _objectCodec, _createXmlWriter(out));
++return new ToXmlGenerator ( _createContext ( out, false ) , _generatorFeatures, _xmlGeneratorFeatures, _objectCodec, createGenerator ( out )  ) ;
++ 
++ 
+     }
+ 
+     @SuppressWarnings("resource")

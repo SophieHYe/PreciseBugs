@@ -1,0 +1,11 @@
+--- /CompositeSet.java	2023-07-04 03:56:14.110137986 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/CompositeSet.java	2023-07-04 03:56:14.110137986 +0000
+@@ -210,7 +210,7 @@
+      * @throws IllegalArgumentException if the object cannot be added
+      */
+     public boolean add(final E obj) {
+-        if (mutator == null) {
++if  ( mutator != null )  {
+            throw new UnsupportedOperationException(
+                "add() is not supported on CompositeSet without a SetMutator strategy");
+         }

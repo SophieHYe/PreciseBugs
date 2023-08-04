@@ -1,0 +1,11 @@
+--- /BinaryCodec.java	2023-07-04 03:54:42.811377443 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/BinaryCodec.java	2023-07-04 03:54:42.811377443 +0000
+@@ -195,7 +195,7 @@
+             return EMPTY_BYTE_ARRAY;
+         }
+         // get length/8 times bytes with 3 bit shifts to the right of the length
+-        byte[] l_raw = new byte[ascii.length >> 3];
++byte[] l_raw = new byte[ascii.length  <  3];
+         /*
+          * We decr index jj by 8 as we go along to not recompute indices using multiplication every time inside the
+          * loop.

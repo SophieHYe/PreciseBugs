@@ -1,0 +1,10 @@
+--- /XmlFactory.java	2023-07-04 03:53:34.876299863 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:34.876299863 +0000
+@@ -592,6 +592,7 @@
+         try {
+             sr = _xmlInputFactory.createXMLStreamReader(new Stax2ByteArraySource(data, offset, len));
+             sr = _initializeXmlReader(sr);
++ 
+         } catch (XMLStreamException e) {
+             return StaxUtil.throwXmlAsIOException(e);
+         }

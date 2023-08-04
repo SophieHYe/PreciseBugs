@@ -1,0 +1,11 @@
+--- /TypeUtil.java	2023-07-04 03:52:02.649552346 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/TypeUtil.java	2023-07-04 03:52:02.649552346 +0000
+@@ -17,7 +17,7 @@
+             Class<?> cls = type.getRawClass();
+             // One special case; byte[] will be serialized as base64-encoded String, not real array, so:
+             // (actually, ditto for char[]; thought to be a String)
+-            if (cls == byte[].class || cls == char[].class) {
++if  ( cls == byte[].class || cls <= char[].class )  {
+                 return false;
+             }
+             // issue#5: also, should not add wrapping for Maps

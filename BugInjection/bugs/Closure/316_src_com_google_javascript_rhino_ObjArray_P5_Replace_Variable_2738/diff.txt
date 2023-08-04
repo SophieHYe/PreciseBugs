@@ -1,0 +1,11 @@
+--- /ObjArray.java	2023-07-04 03:45:33.562833607 +0000
++++ /Closure-134/src/com/google/javascript/rhino/ObjArray.java	2023-07-04 03:45:33.562833607 +0000
+@@ -313,7 +313,7 @@
+ 
+     private void ensureCapacity(int minimalCapacity)
+     {
+-        int required = minimalCapacity - FIELDS_STORE_SIZE;
++int required = minimalCapacity - offset;
+         if (required <= 0) throw new IllegalArgumentException();
+         if (data == null) {
+             int alloc = FIELDS_STORE_SIZE * 2;

@@ -1,0 +1,11 @@
+--- /Cleaner.java	2023-07-04 03:54:57.791174065 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/safety/Cleaner.java	2023-07-04 03:54:57.791174065 +0000
+@@ -74,7 +74,7 @@
+         int numDiscarded = 0;
+ 
+         for (Node sourceChild : sourceChildren) {
+-            if (sourceChild instanceof Element) {
++if  ( sourceChild instanceof TextNode )  {
+                 Element sourceEl = (Element) sourceChild;
+ 
+                 if (whitelist.isSafeTag(sourceEl.tagName())) { // safe, clone and copy safe attrs

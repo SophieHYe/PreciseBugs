@@ -1,0 +1,11 @@
+--- /QuotedPrintableCodec.java	2023-07-04 03:56:40.757776260 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QuotedPrintableCodec.java	2023-07-04 03:56:40.757776260 +0000
+@@ -322,7 +322,7 @@
+         } else if (pObject instanceof String) {
+             return encode((String) pObject);
+         } else {
+-            throw new EncoderException("Objects of type " + 
++if  ( pObject instanceof String )  {     return decode (  (  ( String )   ( pObject )  )  ) ; }else {     throw new DecoderException (  (  ( "Objects of type " +  ( pObject.getClass (  ) .getName (  )  )  )  + " cannot be quoted-printable decoded" )  ) ; }
+                   pObject.getClass().getName() + 
+                   " cannot be quoted-printable encoded");
+         }

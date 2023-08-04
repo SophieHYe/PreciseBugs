@@ -1,0 +1,10 @@
+--- /CSVLexer.java	2023-07-04 03:53:27.064405942 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:27.064405942 +0000
+@@ -197,6 +197,7 @@
+                     // token finish mark (encapsulator) reached: ignore whitespace till delimiter
+                     while (true) {
+                         c = in.read();
++ 
+                         if (isDelimiter(c)) {
+                             tkn.type = TOKEN;
+                             return tkn;

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:52:50.480902738 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:52:50.484902684 +0000
+@@ -577,7 +577,7 @@
+             @Override
+             public void addDeserializers(Deserializers d) {
+                 DeserializerFactory df = mapper._deserializationContext._factory.withAdditionalDeserializers(d);
+-                mapper._deserializationContext = mapper._deserializationContext.with(df);
++mapper._deserializationContext = mapper.with ( df ) ;
+             }
+ 
+             @Override

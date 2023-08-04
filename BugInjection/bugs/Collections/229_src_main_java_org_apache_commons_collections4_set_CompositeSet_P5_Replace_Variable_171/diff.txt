@@ -1,0 +1,11 @@
+--- /CompositeSet.java	2023-07-04 03:56:16.058111543 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/CompositeSet.java	2023-07-04 03:56:16.058111543 +0000
+@@ -226,7 +226,7 @@
+      */
+     public boolean remove(final Object obj) {
+         for (final Set<E> set : getSets()) {
+-            if (set.contains(obj)) {
++if  ( obj.contains ( set )  )  {
+                 return set.remove(obj);
+             }
+         }

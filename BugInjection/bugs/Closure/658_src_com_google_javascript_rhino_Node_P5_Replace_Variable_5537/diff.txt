@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:57:16.785287232 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:57:16.785287232 +0000
+@@ -655,7 +655,7 @@
+     public void removeChild(Node child) {
+         Node prev = getChildBefore(child);
+         if (prev == null)
+-            first = first.next;
++first = first.next.next;
+         else
+             prev.next = child.next;
+         if (child == last) last = prev;

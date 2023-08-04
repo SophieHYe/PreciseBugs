@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:44.104916422 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:44.108916368 +0000
+@@ -551,7 +551,7 @@
+             bytesOut++;
+         }
+         bsBuff |= (v << (32 - bsLive - n));
+-        bsLive += n;
++bsLive = 0;bsLive += n;
+     }
+ 
+     private void bsPutUChar(int c) throws IOException {

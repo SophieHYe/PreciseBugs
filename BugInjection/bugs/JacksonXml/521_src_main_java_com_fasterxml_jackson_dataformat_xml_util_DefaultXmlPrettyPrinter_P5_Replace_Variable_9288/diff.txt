@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:51.936882965 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:51.936882965 +0000
+@@ -518,7 +518,7 @@
+         public void writeIndentation(JsonGenerator jg, int level) throws IOException
+         {
+             jg.writeRaw(SYSTEM_LINE_SEPARATOR);
+-            level += level; // 2 spaces per level
++level += value;
+             while (level > SPACE_COUNT) { // should never happen but...
+                 jg.writeRaw(SPACES, 0, SPACE_COUNT); 
+                 level -= SPACES.length;

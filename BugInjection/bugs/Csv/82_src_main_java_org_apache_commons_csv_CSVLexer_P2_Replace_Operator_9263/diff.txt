@@ -1,0 +1,11 @@
+--- /CSVLexer.java	2023-07-04 03:53:19.084514303 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:19.084514303 +0000
+@@ -79,7 +79,7 @@
+         }
+ 
+         //  important: make sure a new char gets consumed in each iteration
+-        while (tkn.type == INVALID) {
++while  ( tkn.type >= INVALID )  {
+             // ignore whitespaces at beginning of a token
+             if (surroundingSpacesIgnored) {
+                 while (isWhitespace(c) && !eol) {

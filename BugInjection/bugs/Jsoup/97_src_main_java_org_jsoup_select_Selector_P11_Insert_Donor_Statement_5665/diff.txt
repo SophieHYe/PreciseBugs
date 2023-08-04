@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:55:41.934574773 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:41.934574773 +0000
+@@ -94,7 +94,7 @@
+         tq.consumeWhitespace();
+         
+         if (tq.matchesAny(combinators)) { // if starts with a combinator, use root as elements
+-            elements.add(root);
++elements.retainAll ( intersect ) ;elements.add ( root ) ;
+             combinator(tq.consume().toString());
+         } else {
+             addElements(findElements()); // chomp first element matcher off queue 

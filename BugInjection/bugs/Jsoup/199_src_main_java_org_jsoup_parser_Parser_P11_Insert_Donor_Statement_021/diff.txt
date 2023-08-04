@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:59.279081887 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:59.279081887 +0000
+@@ -196,7 +196,7 @@
+     }
+ 
+     private void parseTextNode() {
+-        String text = tq.consumeTo("<");
++String data = tq.chompTo ( "</" + tagName ) ;String text = tq.consumeTo ( "<" ) ;
+         TextNode textNode = TextNode.createFromEncoded(text, baseUri);
+         last().appendChild(textNode);
+     }

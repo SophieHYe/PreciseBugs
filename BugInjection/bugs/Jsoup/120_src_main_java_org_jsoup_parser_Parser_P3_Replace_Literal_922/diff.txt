@@ -1,0 +1,11 @@
+--- /Parser.java	2023-07-04 03:59:29.991479342 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:29.991479342 +0000
+@@ -117,7 +117,7 @@
+         tq.consume("<");
+         String tagName = tq.consumeWord();
+ 
+-        if (tagName.length() == 0) { // doesn't look like a start tag after all; put < back on stack and handle as text
++if  ( tagName.length() - 7  == 0 )  {
+             tq.addFirst("&lt;");
+             parseTextNode();
+             return;

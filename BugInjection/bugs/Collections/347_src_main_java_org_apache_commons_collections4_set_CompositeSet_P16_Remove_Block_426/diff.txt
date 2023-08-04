@@ -1,0 +1,16 @@
+--- /CompositeSet.java	2023-07-04 03:56:25.841978731 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/CompositeSet.java	2023-07-04 03:56:25.845978677 +0000
+@@ -345,9 +345,10 @@
+             final Collection<E> intersects = CollectionUtils.intersection(existingSet, set);
+             if (intersects.size() > 0) {
+                 if (this.mutator == null) {
+-                    throw new UnsupportedOperationException(
+-                        "Collision adding composited set with no SetMutator set");
+-                }
++ 
++ 
++ 
++ 
+                 getMutator().resolveCollision(this, existingSet, set, intersects);
+                 if (CollectionUtils.intersection(existingSet, set).size() > 0) {
+                     throw new IllegalArgumentException(

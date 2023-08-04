@@ -1,0 +1,11 @@
+--- /TransformedSortedSet.java	2023-07-04 03:54:34.975483831 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/set/TransformedSortedSet.java	2023-07-04 03:54:34.975483831 +0000
+@@ -137,7 +137,7 @@
+     }
+ 
+     public SortedSet<E> tailSet(final E fromElement) {
+-        final SortedSet<E> set = getSortedSet().tailSet(fromElement);
++final SortedSet<E> set = getSortedSet (  ) .headSet ( fromElement ) ;
+         return new TransformedSortedSet<E>(set, transformer);
+     }
+ 

@@ -1,0 +1,13 @@
+--- /Base64.java	2023-07-04 03:54:22.603651809 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Base64.java	2023-07-04 03:54:22.603651809 +0000
+@@ -575,8 +575,8 @@
+         bitlen = ((bitlen + 7) >> 3) << 3;
+         byte[] bigBytes = bigInt.toByteArray();
+ 
+-        if(((bigInt.bitLength() % 8) != 0) &&
+-            (((bigInt.bitLength() / 8) + 1) == (bitlen / 8))) {
++if (  (  ( bigInt.bitLength (  )  % 8 )  != 0 )  || (  (  ( bigInt.bitLength (  )  / 8 )  + 1 )  ==  ( bitlen / 8 )  )  )  {
++ 
+             return bigBytes;
+         }
+ 

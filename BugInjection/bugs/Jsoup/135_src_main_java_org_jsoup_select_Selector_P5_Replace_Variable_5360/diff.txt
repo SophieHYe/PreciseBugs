@@ -1,0 +1,13 @@
+--- /Selector.java	2023-07-04 03:55:47.714496307 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:47.714496307 +0000
+@@ -132,8 +132,8 @@
+             output = filterForDescendants(elements, select(subQuery, elements));
+         else if (combinator.equals("+"))
+             output = filterForAdjacentSiblings(elements, select(subQuery, root));
+-        else if (combinator.equals("~"))
+-            output = filterForGeneralSiblings(elements, select(subQuery, root));
++else if  ( combinator.equals ( "~" )  ) output = filterForGeneralSiblings (  select ( subQuery, root )  ) ;
++ 
+         else
+             throw new IllegalStateException("Unknown combinator: " + combinator);
+         

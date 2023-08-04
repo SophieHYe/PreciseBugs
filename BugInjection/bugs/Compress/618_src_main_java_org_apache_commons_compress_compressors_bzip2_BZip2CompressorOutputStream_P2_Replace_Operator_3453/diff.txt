@@ -1,0 +1,13 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:58:28.220317670 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:58:28.224317615 +0000
+@@ -615,8 +615,8 @@
+                     aFreq += mtfFreq[ge];
+                 }
+ 
+-                if (ge > gs && nPart != nGroups && nPart != 1
+-                    && ((nGroups - nPart) % 2 != 0)) {
++if  ( ge > gs && nPart != nGroups && nPart != 1 &&  (  ( nGroups  |  nPart )  % 2 != 0 )  )  {
++ 
+                     aFreq -= mtfFreq[ge];
+                     ge--;
+                 }

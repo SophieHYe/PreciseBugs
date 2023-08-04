@@ -1,0 +1,14 @@
+--- /ObjectMapper.java	2023-07-04 03:51:03.502355758 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:51:03.506355704 +0000
+@@ -511,8 +511,9 @@
+          */
+         String name = module.getModuleName();
+         if (name == null) {
+-            throw new IllegalArgumentException("Module without defined name");
+-        }
++ 
++throw new java.lang.IllegalArgumentException("Module without defined name"); 
++ 
+         Version version = module.version();
+         if (version == null) {
+             throw new IllegalArgumentException("Module without defined version");

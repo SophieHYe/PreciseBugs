@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:12.128608761 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:12.128608761 +0000
+@@ -181,7 +181,7 @@
+      */
+     @Override // since JsonFactory already implemented it
+     protected Object readResolve() {
+-        if (_jdkXmlInFactory == null) {
++if  ( xmlIn == null )  {
+             throw new IllegalStateException("No XMLInputFactory class name read during JDK deserialization");
+         }
+         if (_jdkXmlOutFactory == null) {

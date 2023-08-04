@@ -1,0 +1,13 @@
+--- /ObjectMapper.java	2023-07-04 03:54:35.011483342 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:54:35.015483288 +0000
+@@ -734,8 +734,8 @@
+     public static List<Module> findModules(ClassLoader classLoader)
+     {
+         ArrayList<Module> modules = new ArrayList<Module>();
+-        ServiceLoader<Module> loader = (classLoader == null) ?
+-                ServiceLoader.load(Module.class) : ServiceLoader.load(Module.class, classLoader);
++ServiceLoader<Module> loader =  ( ServiceLoader.load ( Module.class, classLoader ) ;
++ 
+         for (Module module : loader) {
+             modules.add(module);
+         }

@@ -1,0 +1,18 @@
+--- /Parser.java	2023-07-04 03:59:40.191340921 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:40.195340867 +0000
+@@ -147,10 +147,11 @@
+             
+             Node dataNode;
+             if (tag.equals(titleTag) || tag.equals(textareaTag)) // want to show as text, but not contain inside tags (so not a data tag?)
+-                dataNode = TextNode.createFromEncoded(data, baseUri);
+-            else
+-                dataNode = new DataNode(data, baseUri); // data not encoded but raw (for " in script)
+-            child.appendChild(dataNode);   
++ 
++dataNode = org.jsoup.parser.TextNode.createFromEncoded(data, baseUri); 
++ 
++ 
++ 
+         }
+ 
+         // <base href>: update the base uri

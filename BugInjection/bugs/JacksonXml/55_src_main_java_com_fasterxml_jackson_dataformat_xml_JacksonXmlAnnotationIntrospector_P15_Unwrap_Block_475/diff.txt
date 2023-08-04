@@ -1,0 +1,14 @@
+--- /JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:48.749741139 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/JacksonXmlAnnotationIntrospector.java	2023-07-04 03:51:48.749741139 +0000
+@@ -53,8 +53,9 @@
+             // also: need to ensure we use marker:
+             String localName = w.localName();
+             if (localName == null || localName.length() == 0) {
+-                return PropertyName.USE_DEFAULT;
+-            }
++ 
++return com.fasterxml.jackson.databind.PropertyName.USE_DEFAULT; 
++ 
+             return PropertyName.construct(w.localName(), w.namespace());
+         }
+         /* 09-Sep-2012, tatu: In absence of configurating we need to use our

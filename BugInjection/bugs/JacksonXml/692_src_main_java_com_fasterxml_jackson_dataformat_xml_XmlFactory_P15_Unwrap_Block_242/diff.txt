@@ -1,0 +1,16 @@
+--- /XmlFactory.java	2023-07-04 03:53:38.108255976 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:38.112255922 +0000
+@@ -690,9 +690,10 @@
+         byte b = acc.nextByte();
+         // Very first thing, a UTF-8 BOM? (later improvements: other BOM's, heuristics)
+         if (b == UTF8_BOM_1) { // yes, looks like UTF-8 BOM
+-            if (!acc.hasMoreBytes()) {
+-                return MatchStrength.INCONCLUSIVE;
+-            }
++ 
++if (!(acc.hasMoreBytes())) {    return com.fasterxml.jackson.core.format.MatchStrength.INCONCLUSIVE;}; if ((acc.nextByte()) != (com.fasterxml.jackson.dataformat.xml.XmlFactory.UTF8_BOM_2)) {    return com.fasterxml.jackson.core.format.MatchStrength.NO_MATCH;}; if (!(acc.hasMoreBytes())) {    return com.fasterxml.jackson.core.format.MatchStrength.INCONCLUSIVE;}; if ((acc.nextByte()) != (com.fasterxml.jackson.dataformat.xml.XmlFactory.UTF8_BOM_3)) {    return com.fasterxml.jackson.core.format.MatchStrength.NO_MATCH;}; if (!(acc.hasMoreBytes())) {    return com.fasterxml.jackson.core.format.MatchStrength.INCONCLUSIVE;}; b = acc.nextByte(); 
++ 
++ 
+             if (acc.nextByte() != UTF8_BOM_2) {
+                 return MatchStrength.NO_MATCH;
+             }

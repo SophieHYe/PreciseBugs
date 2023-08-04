@@ -1,0 +1,11 @@
+--- /Elements.java	2023-07-04 03:56:32.949882246 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Elements.java	2023-07-04 03:56:32.953882192 +0000
+@@ -337,7 +337,7 @@
+ 
+     public boolean containsAll(Collection<?> c) {return contents.containsAll(c);}
+ 
+-    public boolean addAll(Collection<? extends Element> c) {return contents.addAll(c);}
++public boolean addAll ( Collection<? extends Element> c )  {return contents.retainAll ( c ) ;}
+ 
+     public boolean addAll(int index, Collection<? extends Element> c) {return contents.addAll(index, c);}
+ 

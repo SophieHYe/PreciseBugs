@@ -1,0 +1,10 @@
+--- /Hex.java	2023-07-04 03:55:07.295045036 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/binary/Hex.java	2023-07-04 03:55:07.299044981 +0000
+@@ -149,6 +149,7 @@
+ 	public Object decode(Object object) throws DecoderException {
+ 		try {
+             char[] charArray = object instanceof String ? ((String) object).toCharArray() : (char[]) object;
++ 
+ 		    return decodeHex(charArray);
+ 		} catch (ClassCastException e) {
+ 		    throw new DecoderException(e.getMessage());

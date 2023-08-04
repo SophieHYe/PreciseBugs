@@ -1,0 +1,10 @@
+--- /CSVLexer.java	2023-07-04 03:53:16.656547273 +0000
++++ /Csv-1/src/main/java/org/apache/commons/csv/CSVLexer.java	2023-07-04 03:53:16.656547273 +0000
+@@ -61,6 +61,7 @@
+                 lastChar = c;
+                 c = in.read();
+                 eol = isEndOfLine(c);
++ 
+                 c = in.readAgain();
+                 // reached end of file without any content (empty line at the end)
+                 if (isEndOfFile(c)) {

@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:57:43.412925815 +0000
++++ /Closure-134/src/com/google/javascript/rhino/Node.java	2023-07-04 03:57:43.416925761 +0000
+@@ -675,7 +675,7 @@
+         // Copy over important information.
+         newChild.copyInformationFrom(child);
+ 
+-        newChild.next = child.next;
++last.next = child;newChild.next = child.next;
+         newChild.parent = this;
+         if (child == first) {
+             first = newChild;

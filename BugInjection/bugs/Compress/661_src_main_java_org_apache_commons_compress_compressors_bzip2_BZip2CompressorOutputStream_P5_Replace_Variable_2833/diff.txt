@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:59:47.111247013 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:59:47.115246958 +0000
+@@ -658,7 +658,7 @@
+             while (true) {
+ 
+                 /* Set group start & end marks. */
+-                if (gs >= nMTF) {
++if  ( gs >= maxLen )  {
+                     break;
+                 }
+                 ge = gs + G_SIZE - 1;

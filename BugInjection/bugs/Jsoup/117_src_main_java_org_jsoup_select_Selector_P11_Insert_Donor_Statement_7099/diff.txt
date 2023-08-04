@@ -1,0 +1,11 @@
+--- /Selector.java	2023-07-04 03:55:44.558539151 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/select/Selector.java	2023-07-04 03:55:44.558539151 +0000
+@@ -114,7 +114,7 @@
+             } else if (seenWhite) {
+                 combinator(" ");
+             } else { // E.class, E#id, E[attr] etc. AND
+-                Elements candidates = findElements(); // take next el, #. etc off queue
++Elements siblings = new Elements (  ) ;Elements candidates = findElements (  ) ;
+                 intersectElements(filterForSelf(elements, candidates));
+             }
+         }

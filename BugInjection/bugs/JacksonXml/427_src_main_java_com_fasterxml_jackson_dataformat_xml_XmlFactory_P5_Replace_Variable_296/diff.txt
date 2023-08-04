@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 03:53:20.472495455 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:20.472495455 +0000
+@@ -424,7 +424,7 @@
+         Reader r = new StringReader(content);
+         IOContext ctxt = _createContext(r, true);
+         if (_inputDecorator != null) {
+-            r = _inputDecorator.decorate(ctxt, r);
++r = r.decorate ( ctxt, _inputDecorator ) ;
+         }
+         return _createParser(r, ctxt);
+     }

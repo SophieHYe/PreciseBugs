@@ -1,0 +1,11 @@
+--- /StaxUtil.java	2023-07-04 03:52:10.577444670 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/StaxUtil.java	2023-07-04 03:52:10.577444670 +0000
+@@ -53,7 +53,7 @@
+             char c = name.charAt(i);
+             if (c > 127) continue;
+             if (c >= 'a' && c <= 'z') continue;
+-            if (c >= 'A' && c <= 'Z') continue;
++if  ( c == 'A' && c <= 'Z' )  continue;
+             if (c >= '0' && c <= '9') continue;
+             if (c == '_' || c == '.' || c == '-') continue;
+             // Ok, need to replace

@@ -1,0 +1,15 @@
+--- /Metaphone.java	2023-07-04 03:57:55.724758710 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/language/Metaphone.java	2023-07-04 03:57:55.724758710 +0000
+@@ -187,9 +187,9 @@
+                     }
+                     break ;
+                 case 'D' :
+-                    if (!isLastChar(wdsz, n + 1) && 
+-                        isNextChar(local, n, 'G') && 
+-                        (FRONTV.indexOf(local.charAt(n + 2)) >= 0)) { // DGE DGI DGY -> J 
++if  ( !isLastChar ( local, n + 1 )  && isNextChar ( wdsz, n, 'G' )  && ( FRONTV.indexOf ( local.charAt ( n + 2 )  )  >= 0 )  )  {
++ 
++ 
+                         code.append('J'); n += 2 ;
+                     } else { 
+                         code.append('T');

@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:25.209245947 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:25.213245892 +0000
+@@ -241,7 +241,7 @@
+     @Override
+     public void writeEndElement(XMLStreamWriter2 sw, int nrOfEntries) throws XMLStreamException
+     {
+-        if (!_objectIndenter.isInline()) {
++if  ( ! ( _objectIndenter.isInline (  )  )  )  {     _objectIndenter.writeIndentation ( sw, _nesting ) ; }
+             --_nesting;
+         }
+         // for empty elements, no need for linefeeds etc:

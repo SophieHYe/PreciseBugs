@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:35.781029402 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:35.785029347 +0000
+@@ -533,7 +533,7 @@
+                 throw  e;
+             }
+             bsBuff <<= 8;
+-            bsLive -= 8;
++bsLive = 0;bsLive -= 8;
+             bytesOut++;
+         }
+     }

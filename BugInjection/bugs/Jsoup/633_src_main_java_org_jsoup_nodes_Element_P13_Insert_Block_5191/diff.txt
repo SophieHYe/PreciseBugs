@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:58:29.916294652 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:29.916294652 +0000
+@@ -630,7 +630,7 @@
+             if (childNode instanceof DataNode) {
+                 DataNode data = (DataNode) childNode;
+                 sb.append(data.getWholeData());
+-            } else if (childNode instanceof Element) {
++if  ( child instanceof Element )  {     Element element =  (  ( Element )   ( child )  ) ;     if  (  (  (  ( accum.length (  )  )  > 0 )  &&  ( element.isBlock (  )  )  )  &&  ( ! ( lastCharIsWhitespace ( accum )  )  )  )          accum.append ( " " ) ;          element.text ( accum ) ; }
+                 Element element = (Element) childNode;
+                 String elementData = element.data();
+                 sb.append(elementData);

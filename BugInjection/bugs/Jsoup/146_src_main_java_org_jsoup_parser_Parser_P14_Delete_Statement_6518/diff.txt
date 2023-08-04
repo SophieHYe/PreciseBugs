@@ -1,0 +1,10 @@
+--- /Parser.java	2023-07-04 03:59:43.331298309 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/parser/Parser.java	2023-07-04 03:59:43.331298309 +0000
+@@ -145,6 +145,7 @@
+             String data = tq.chompTo("</" + tagName);
+             tq.chompTo(">");
+             
++            
+             Node dataNode;
+             if (tag.equals(titleTag) || tag.equals(textareaTag)) // want to show as text, but not contain inside tags (so not a data tag?)
+                 dataNode = TextNode.createFromEncoded(data, baseUri);

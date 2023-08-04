@@ -1,0 +1,14 @@
+--- /XmlFactory.java	2023-07-04 03:53:49.048107427 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 03:53:49.048107427 +0000
+@@ -752,8 +752,9 @@
+             b = acc.nextByte();
+             if (b == BYTE_HYPHEN) {
+                 if (!acc.hasMoreBytes()) {
+-                    return MatchStrength.INCONCLUSIVE;
+-                }
++ 
++ 
++ 
+                 if (acc.nextByte() == BYTE_HYPHEN) {
+                     return MatchStrength.SOLID_MATCH;
+                 }

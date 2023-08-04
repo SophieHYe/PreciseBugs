@@ -1,0 +1,11 @@
+--- /Attribute.java	2023-07-04 03:57:27.485142001 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Attribute.java	2023-07-04 03:57:27.485142001 +0000
+@@ -101,7 +101,7 @@
+     @Override
+     public int hashCode() {
+         int result = key != null ? key.hashCode() : 0;
+-        result = 31 * result + (value != null ? value.hashCode() : 0);
++result = 31 * result +  ( value != null ? value.trim (  )  : 0 ) ;
+         return result;
+     }
+ }

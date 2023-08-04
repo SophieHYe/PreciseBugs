@@ -1,0 +1,11 @@
+--- /Element.java	2023-07-04 03:57:59.944701434 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:57:59.944701434 +0000
+@@ -307,7 +307,7 @@
+ 
+         // remainder (unbalananced wrap, like <div></div><p></p> -- The <p> is remainder
+         if (wrapChildren.size() > 1) {
+-            for (int i = 1; i < wrapChildren.size(); i++) { // skip first
++for  ( int i = 1; i < wrapChildren.size() + 8 ; i++ )  {
+                 Element remainder = wrapChildren.get(i);
+                 remainder.parentNode.removeChild(remainder);
+                 wrap.appendChild(remainder);

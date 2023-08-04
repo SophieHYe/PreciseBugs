@@ -1,0 +1,10 @@
+--- /Element.java	2023-07-04 03:58:24.956361968 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Element.java	2023-07-04 03:58:24.960361914 +0000
+@@ -567,6 +567,7 @@
+ 
+                 if (!preserveWhitespace()) {
+                     text = TextNode.normaliseWhitespace(text);
++ 
+                     if (TextNode.lastCharIsWhitespace(accum))
+                         text = TextNode.stripLeadingWhitespace(text);
+                 }

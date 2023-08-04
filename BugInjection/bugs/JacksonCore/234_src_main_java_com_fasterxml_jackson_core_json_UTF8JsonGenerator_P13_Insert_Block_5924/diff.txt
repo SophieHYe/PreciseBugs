@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:53:18.116527448 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:53:18.116527448 +0000
+@@ -231,7 +231,7 @@
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeEndArray(this, _writeContext.getEntryCount());
+         } else {
+-            if (_outputTail >= _outputEnd) {
++if  (  (  ( _outputTail )  + 4 )  >=  ( _outputEnd )  )  {     _flushBuffer (  ) ; }
+                 _flushBuffer();
+             }
+             _outputBuffer[_outputTail++] = BYTE_RBRACKET;

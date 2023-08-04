@@ -1,0 +1,14 @@
+--- /StaxUtil.java	2023-07-04 03:52:08.661470692 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/StaxUtil.java	2023-07-04 03:52:08.661470692 +0000
+@@ -21,8 +21,9 @@
+         }
+         if (t instanceof Error) throw (Error) t;
+         if (t instanceof RuntimeException) throw (RuntimeException) t;
+-        throw new IOException(t);
+-    }
++ 
++throw ((java.lang.RuntimeException) (t)); 
++ 
+ 
+     /**
+      * Since XML names can not contain all characters JSON names can, we may

@@ -1,0 +1,11 @@
+--- /RFC1522Codec.java	2023-07-04 03:56:56.901557125 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/RFC1522Codec.java	2023-07-04 03:56:56.901557125 +0000
+@@ -105,7 +105,7 @@
+         }
+         int termnator = text.length() - 2;
+         int from = 2;
+-        int to = text.indexOf("?", from);
++int to = from.indexOf ( "?", text ) ;
+         if ((to == -1) || (to == termnator)) {
+             throw new DecoderException("RFC 1522 violation: charset token not found");
+         }

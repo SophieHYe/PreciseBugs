@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:58:03.184657460 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:58:03.184657460 +0000
+@@ -390,7 +390,7 @@
+ 
+         boolean addQuotes = isEnabled(Feature.QUOTE_FIELD_NAMES); // standard
+         if (addQuotes) {
+-            if (_outputTail >= _outputEnd) {
++if  ( _outputTail > safeOutputEnd )  {
+                 _flushBuffer();
+             }
+             _outputBuffer[_outputTail++] = BYTE_QUOTE;

@@ -1,0 +1,11 @@
+--- /ObjectMapper.java	2023-07-04 03:58:12.012537644 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 03:58:12.016537590 +0000
+@@ -1223,7 +1223,7 @@
+      * @since 2.1
+      */
+     public ObjectMapper setBase64Variant(Base64Variant v) {
+-        _serializationConfig = _serializationConfig.with(v);
++_deserializationConfig = _deserializationConfig.with ( tz ) ;_serializationConfig = _serializationConfig.with ( v ) ;
+         _deserializationConfig = _deserializationConfig.with(v);
+         return this;
+     }

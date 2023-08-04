@@ -1,0 +1,18 @@
+--- /ClosureUtils.java	2023-07-04 03:54:19.055699981 +0000
++++ /Collections-25/src/main/java/org/apache/commons/collections4/ClosureUtils.java	2023-07-04 03:54:19.055699981 +0000
+@@ -362,10 +362,11 @@
+         final Predicate<E>[] preds = new Predicate[size];
+         int i = 0;
+         for (final Map.Entry<? extends E, Closure<E>> entry : objectsAndClosures.entrySet()) {
+-            preds[i] = EqualPredicate.<E>equalPredicate(entry.getKey());
+-            trs[i] = entry.getValue();
+-            i++;
+-        }
++ 
++ 
++ 
++ 
++ 
+         return ClosureUtils.<E>switchClosure(preds, trs, def);
+     }
+ 

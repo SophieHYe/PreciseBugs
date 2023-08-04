@@ -1,0 +1,10 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 03:52:30.573173098 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 03:52:30.577173045 +0000
+@@ -283,6 +283,7 @@
+         sw.writeStartElement(nsURI, localName);
+         if(isCData) {
+             sw.writeCData(buffer, offset, len);
++ 
+         } else {
+             sw.writeCharacters(buffer, offset, len);
+         }

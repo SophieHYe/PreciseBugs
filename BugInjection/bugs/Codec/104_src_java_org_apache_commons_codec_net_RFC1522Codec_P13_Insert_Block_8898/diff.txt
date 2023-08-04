@@ -1,0 +1,11 @@
+--- /RFC1522Codec.java	2023-07-04 03:56:55.661573957 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/RFC1522Codec.java	2023-07-04 03:56:55.661573957 +0000
+@@ -101,7 +101,7 @@
+             return null;
+         }
+         if ((!text.startsWith("=?")) || (!text.endsWith("?="))) {
+-            throw new DecoderException("RFC 1522 violation: malformed encoded content");
++if  ( charset.equals ( "" )  )  {     throw new DecoderException ( "RFC 1522 violation: charset not specified" ) ; }
+         }
+         int termnator = text.length() - 2;
+         int from = 2;

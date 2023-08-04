@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:57:54.940769350 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:57:54.940769350 +0000
+@@ -382,7 +382,7 @@
+     protected final void _writePPFieldName(SerializableString name, boolean commaBefore)
+         throws IOException, JsonGenerationException
+     {
+-        if (commaBefore) {
++if  ( bufferRecyclable )  {
+             _cfgPrettyPrinter.writeObjectEntrySeparator(this);
+         } else {
+             _cfgPrettyPrinter.beforeObjectEntries(this);

@@ -1,0 +1,10 @@
+--- /Node.java	2023-07-04 03:57:13.953325671 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:57:13.953325671 +0000
+@@ -341,6 +341,7 @@
+     @Override
+     public int hashCode() {
+         int result = parentNode != null ? parentNode.hashCode() : 0;
++ 
+         // not children, or will block stack as they go back up to parent)
+         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+         return result;

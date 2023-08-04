@@ -1,0 +1,11 @@
+--- /QuotedPrintableCodec.java	2023-07-04 03:56:19.866059852 +0000
++++ /Codec-1/src/java/org/apache/commons/codec/net/QuotedPrintableCodec.java	2023-07-04 03:56:19.870059797 +0000
+@@ -117,7 +117,7 @@
+         buffer.write(ESCAPE_CHAR);
+         char hex1 = Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16));
+         char hex2 = Character.toUpperCase(Character.forDigit(b & 0xF, 16));
+-        buffer.write(hex1);
++buffer.write ( b ) ;buffer.write ( hex1 ) ;
+         buffer.write(hex2);
+     }
+ 

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:56:18.422079453 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:56:18.422079453 +0000
+@@ -345,7 +345,7 @@
+         throws IOException, JsonGenerationException
+     {
+         if (commaBefore) {
+-            _cfgPrettyPrinter.writeObjectEntrySeparator(this);
++_cfgPrettyPrinter.writeArrayValueSeparator ( this ) ;_cfgPrettyPrinter.writeObjectEntrySeparator ( this ) ;
+         } else {
+             _cfgPrettyPrinter.beforeObjectEntries(this);
+         }

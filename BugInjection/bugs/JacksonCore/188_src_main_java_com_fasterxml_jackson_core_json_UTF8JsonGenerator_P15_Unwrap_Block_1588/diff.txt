@@ -1,0 +1,14 @@
+--- /UTF8JsonGenerator.java	2023-07-04 03:52:22.497282779 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 03:52:22.497282779 +0000
+@@ -186,8 +186,9 @@
+         // Object is a value, need to verify it's allowed
+         int status = _writeContext.writeFieldName(name.getValue());
+         if (status == JsonWriteContext.STATUS_EXPECT_VALUE) {
+-            _reportError("Can not write a field name, expecting a value");
+-        }
++ 
++_reportError("Can not write a field name, expecting a value"); 
++ 
+         if (_cfgPrettyPrinter != null) {
+             _writePPFieldName(name, (status == JsonWriteContext.STATUS_OK_AFTER_COMMA));
+             return;

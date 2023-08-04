@@ -1,0 +1,11 @@
+--- /Node.java	2023-07-04 03:56:52.589615655 +0000
++++ /Jsoup-1/src/main/java/org/jsoup/nodes/Node.java	2023-07-04 03:56:52.589615655 +0000
+@@ -150,7 +150,7 @@
+             URL base;
+             try {
+                 try {
+-                    base = new URL(baseUri);
++base =  new URL ( base, relUrl )  ;
+                 } catch (MalformedURLException e) {
+                     // the base is unsuitable, but the attribute may be abs on its own, so try that
+                     URL abs = new URL(relUrl);

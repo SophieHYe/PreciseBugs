@@ -1,0 +1,11 @@
+--- /BZip2CompressorOutputStream.java	2023-07-04 03:57:03.845462870 +0000
++++ /Compress-1/src/main/java/org/apache/commons/compress/compressors/bzip2/BZip2CompressorOutputStream.java	2023-07-04 03:57:03.849462816 +0000
+@@ -429,7 +429,7 @@
+         }
+ 
+         /* 20 is just a paranoia constant */
+-        allowableBlockSize = baseBlockSize * blockSize100k - 20;
++allowableBlockSize = baseBlockSize / blockSize100k - 20;
+     }
+ 
+     private void endBlock() throws IOException {
