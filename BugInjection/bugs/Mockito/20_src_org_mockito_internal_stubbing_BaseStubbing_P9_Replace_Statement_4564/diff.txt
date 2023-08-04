@@ -1,0 +1,11 @@
+--- /BaseStubbing.java	2023-07-04 12:15:58.475418559 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/BaseStubbing.java	2023-07-04 12:15:58.475418559 +0000
+@@ -17,7 +17,7 @@
+ 
+     public OngoingStubbing<T> thenReturn(T value, T... values) {
+         OngoingStubbing<T> stubbing = thenReturn(value);            
+-        if (values == null) {
++if  ( stubbing == null )  {
+             return stubbing.thenReturn(null);
+         }
+         for (T v: values) {

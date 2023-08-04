@@ -1,0 +1,13 @@
+--- /RendererUtilities.java	2023-07-04 12:20:38.135630988 +0000
++++ /Chart-26/source/org/jfree/chart/renderer/RendererUtilities.java	2023-07-04 12:20:38.135630988 +0000
+@@ -133,8 +133,8 @@
+             // range...
+             int index = 0;
+             // skip any items that don't need including...
+-            while (index < itemCount && dataset.getXValue(series, index) 
+-                    < xLow) {
++while  ( index < series && dataset.getXValue ( itemCount, index ) < xLow )  {
++ 
+                 index++;
+             }
+             return Math.max(0, index - 1);

@@ -1,0 +1,17 @@
+--- /Reporter.java	2023-07-04 12:15:03.460163761 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 12:15:03.460163761 +0000
+@@ -383,10 +383,10 @@
+     }
+ 
+     public void wrongTypeOfReturnValue(String expectedType, String actualType, String methodName) {
+-        throw new WrongTypeOfReturnValue(join(
+-                actualType + " cannot be returned by " + methodName + "()",
+-                methodName + "() should return " + expectedType
+-                ));
++throw new WrongTypeOfReturnValue ( join ( methodName + " cannot be returned by " + methodName + " (  ) ", methodName + " (  )  should return " + expectedType )  ) ;
++ 
++ 
++ 
+     }
+ 
+     public void wantedAtMostX(int maxNumberOfInvocations, int foundSize) {

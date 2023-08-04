@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 12:16:15.487188136 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 12:16:15.491188082 +0000
+@@ -57,7 +57,7 @@
+             Object mock = invocation.getMock();
+             MockName name = new MockUtil().getMockName(mock);
+             if (name.isSurrogate()) {
+-                return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
++return "Mock for M" + ClassNameFinder.classNameForMock ( mock )  + ", hashCode: " + mock.hashCode (  ) ;
+             } else {
+                 return name.toString();
+             }

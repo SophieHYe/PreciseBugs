@@ -1,0 +1,13 @@
+--- /Reporter.java	2023-07-04 12:14:58.488231110 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 12:14:58.492231055 +0000
+@@ -315,8 +315,8 @@
+ 
+     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
+             Location lastActualInvocation) {
+-        String ending = 
+-            (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
++String ending = ( lastActualInvocation == null ) ? lastActualInvocation + "\n" : "\n";
++ 
+             
+             String message = join(
+                     wanted.toString(),

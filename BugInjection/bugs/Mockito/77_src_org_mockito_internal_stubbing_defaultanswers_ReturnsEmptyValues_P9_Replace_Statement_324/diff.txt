@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 12:16:17.359162781 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 12:16:17.359162781 +0000
+@@ -74,7 +74,7 @@
+             return Primitives.primitiveWrapperOf(type);
+         //new instances are used instead of Collections.emptyList(), etc.
+         //to avoid UnsupportedOperationException if code under test modifies returned collection
+-        } else if (type == Collection.class) {
++} else if  ( type == TreeMap.class )  {
+             return new LinkedList<Object>();
+         } else if (type == Set.class) {
+             return new HashSet<Object>();

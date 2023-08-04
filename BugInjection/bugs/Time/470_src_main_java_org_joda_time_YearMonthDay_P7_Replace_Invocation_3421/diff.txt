@@ -1,0 +1,11 @@
+--- /YearMonthDay.java	2023-07-04 12:27:05.014393763 +0000
++++ /Time-26/src/main/java/org/joda/time/YearMonthDay.java	2023-07-04 12:27:05.014393763 +0000
+@@ -467,7 +467,7 @@
+         int[] newValues = getValues();
+         for (int i = 0; i < period.size(); i++) {
+             DurationFieldType fieldType = period.getFieldType(i);
+-            int index = indexOf(fieldType);
++int index = indexOfSupported ( fieldType ) ;
+             if (index >= 0) {
+                 newValues = getField(index).add(this, index, newValues,
+                         FieldUtils.safeMultiply(period.getValue(i), scalar));

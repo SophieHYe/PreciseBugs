@@ -1,0 +1,11 @@
+--- /ReturnsSmartNulls.java	2023-07-04 12:16:10.063261603 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java	2023-07-04 12:16:10.063261603 +0000
+@@ -46,7 +46,7 @@
+ 
+         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+             if (Invocation.isToString(method)) {
+-                return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
++return "SmartNull returned by unstubbed " + invocation.getMethod (  ) .getReturnType (  )  + " (  )  method on mock";
+             }
+             
+             new Reporter().smartNullPointerException(location);
