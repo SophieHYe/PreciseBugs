@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:28:07.292358603 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:28:07.292358603 +0000
+@@ -579,7 +579,7 @@
+         _hasSegments = true;
+         _segments.add(_currentSegment);
+         int oldLen = _currentSegment.length;
+-        _segmentSize += oldLen;
++_segmentSize = 0;_segmentSize += oldLen;
+         // Let's grow segments by 50%
+         int newLen = Math.min(oldLen + (oldLen >> 1), MAX_SEGMENT_LEN);
+         char[] curr = _charArray(newLen);

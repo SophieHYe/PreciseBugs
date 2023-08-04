@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:23.341767579 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:23.341767579 +0000
+@@ -191,7 +191,7 @@
+                 if (i == textIndex) {
+                     xgen.setNextIsUnwrapped(true);
+                 }
+-                xgen.setNextName(xmlNames[i]);
++xgen.setNextIsUnwrapped ( false ) ;xgen.setNextName ( xmlNames[i] ) ;
+                 BeanPropertyWriter prop = props[i];
+                 if (prop != null) { // can have nulls in filtered list
+                     if ((cdata != null) && cdata.get(i)) {

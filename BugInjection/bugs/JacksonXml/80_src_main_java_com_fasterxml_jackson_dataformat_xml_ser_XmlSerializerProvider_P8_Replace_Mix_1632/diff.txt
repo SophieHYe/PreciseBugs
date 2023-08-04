@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:13.947521487 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:13.947521487 +0000
+@@ -77,7 +77,7 @@
+         } else {
+             QName rootName = _rootNameFromConfig();
+             if (rootName == null) {
+-                rootName = _rootNameLookup.findRootName(cls, _config);
++rootName = _rootNameLookup.findRootName ( cls, null ) ;
+             }
+             _initWithRootName(xgen, rootName);
+             asArray = TypeUtil.isIndexedType(cls);

@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:26:57.233308199 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:26:57.233308199 +0000
+@@ -369,7 +369,7 @@
+     public char[] contentsAsArray()
+     {
+         char[] result = _resultArray;
+-        if (result == null) {
++if  ( _segments != null )  {
+             _resultArray = result = buildResultArray();
+         }
+         return result;

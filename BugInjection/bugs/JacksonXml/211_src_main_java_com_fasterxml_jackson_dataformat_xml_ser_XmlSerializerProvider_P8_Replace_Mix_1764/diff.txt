@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:49.447040292 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:49.447040292 +0000
+@@ -208,7 +208,7 @@
+     {
+         xgen.writeStartObject();
+         // Could repeat root name, but what's the point? How to customize?
+-        xgen.writeFieldName("item");
++xgen .setNextName ( rootName )  ;
+     }    
+ 
+     protected void _initWithRootName(ToXmlGenerator xgen, QName rootName) throws IOException

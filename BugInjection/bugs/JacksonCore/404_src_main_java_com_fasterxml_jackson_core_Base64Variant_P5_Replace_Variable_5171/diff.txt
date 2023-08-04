@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:59.831712827 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:59.831712827 +0000
+@@ -401,7 +401,7 @@
+         }
+ 
+         // And then we may have 1 or 2 leftover bytes to encode
+-        int inputLeft = inputEnd - inputPtr; // 0, 1 or 2
++int inputLeft = inputPtr - inputEnd;
+         if (inputLeft > 0) { // yes, but do we have room for output?
+             int b24 = ((int) input[inputPtr++]) << 16;
+             if (inputLeft == 2) {

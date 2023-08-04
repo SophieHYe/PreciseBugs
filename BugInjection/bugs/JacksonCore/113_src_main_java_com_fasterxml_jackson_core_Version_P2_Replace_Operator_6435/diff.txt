@@ -1,0 +1,17 @@
+--- /Version.java	2023-07-04 18:22:06.213252977 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Version.java	2023-07-04 18:22:06.213252977 +0000
+@@ -110,10 +110,10 @@
+         if (o == null) return false;
+         if (o.getClass() != getClass()) return false;
+         Version other = (Version) o;
+-        return (other._majorVersion == _majorVersion)
+-            && (other._minorVersion == _minorVersion)
+-            && (other._patchLevel == _patchLevel)
+-            && other._artifactId.equals(_artifactId)
++return  ( other._majorVersion != _majorVersion ) &&  ( other._minorVersion == _minorVersion ) &&  ( other._patchLevel == _patchLevel ) && other._artifactId.equals ( _artifactId )
++ 
++ 
++ 
+             && other._groupId.equals(_groupId)
+             ;
+     }

@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerModifier.java	2023-07-04 18:25:37.918383274 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerModifier.java	2023-07-04 18:25:37.918383274 +0000
+@@ -42,6 +42,7 @@
+             BeanPropertyWriter bpw = beanProperties.get(i);
+             final AnnotatedMember member = bpw.getMember();
+             String ns = AnnotationUtil.findNamespaceAnnotation(intr, member);
++ 
+             Boolean isAttribute = AnnotationUtil.findIsAttributeAnnotation(intr, member);
+             Boolean isText = AnnotationUtil.findIsTextAnnotation(intr, member);
+             Boolean isCData = AnnotationUtil.findIsCDataAnnotation(intr, member);

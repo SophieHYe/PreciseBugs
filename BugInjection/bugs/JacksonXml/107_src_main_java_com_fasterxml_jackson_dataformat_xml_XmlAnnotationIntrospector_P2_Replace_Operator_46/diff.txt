@@ -1,0 +1,11 @@
+--- /XmlAnnotationIntrospector.java	2023-07-04 18:25:45.030286874 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlAnnotationIntrospector.java	2023-07-04 18:25:45.030286874 +0000
+@@ -104,7 +104,7 @@
+         public Boolean isOutputAsAttribute(Annotated ann)
+         {
+             Boolean value = (_xmlPrimary == null) ? null : _xmlPrimary.isOutputAsAttribute(ann);
+-            if ((value == null) && (_xmlSecondary != null)) {
++if  (  ( value != null )  &&  ( _xmlSecondary != null )  )  {
+                 value = _xmlSecondary.isOutputAsAttribute(ann);
+             }
+             return value;

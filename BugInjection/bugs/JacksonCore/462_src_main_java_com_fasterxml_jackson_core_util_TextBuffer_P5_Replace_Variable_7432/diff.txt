@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:21.168983768 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:21.168983768 +0000
+@@ -459,7 +459,7 @@
+             return;
+         }
+         // No room for all, need to copy part(s):
+-        if (max > 0) {
++if  ( start > 0 )  {
+             System.arraycopy(c, start, curr, _currentSize, max);
+             start += max;
+             len -= max;

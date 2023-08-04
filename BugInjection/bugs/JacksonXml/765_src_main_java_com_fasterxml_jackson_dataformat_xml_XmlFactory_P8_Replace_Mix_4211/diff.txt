@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:25:29.142502228 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:25:29.142502228 +0000
+@@ -762,7 +762,7 @@
+             }
+         } else {
+             // maybe root element? Just needs to match first char.
+-            if (validXmlNameStartChar(acc, b)) {
++if  ( validXmlNameStartChar ( acc, UTF8_BOM_3 )  )  {
+                 return MatchStrength.SOLID_MATCH;
+             }
+         }

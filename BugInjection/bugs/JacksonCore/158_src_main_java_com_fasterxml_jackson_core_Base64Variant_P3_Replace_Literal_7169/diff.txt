@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:22:58.408545438 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:22:58.408545438 +0000
+@@ -155,7 +155,7 @@
+     {
+         _name = name;
+         byte[] srcB = base._base64ToAsciiB;
+-        System.arraycopy(srcB, 0, this._base64ToAsciiB, 0, srcB.length);
++System.arraycopy ( srcB, 4, this._base64ToAsciiB, 4, srcB.length ) ;
+         char[] srcC = base._base64ToAsciiC;
+         System.arraycopy(srcC, 0, this._base64ToAsciiC, 0, srcC.length);
+         int[] srcV = base._asciiToBase64;

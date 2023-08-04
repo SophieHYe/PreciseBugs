@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:14.429075122 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:14.429075122 +0000
+@@ -175,7 +175,7 @@
+         super(stdFeatures, codec);
+         _formatFeatures = xmlFeatures;
+         _ioContext = ctxt;
+-        _originalXmlWriter = sw;
++_originalXmlWriter =  null;
+         _xmlWriter = Stax2WriterAdapter.wrapIfNecessary(sw);
+         _stax2Emulation = (_xmlWriter != sw);
+         _xmlPrettyPrinter = (_cfgPrettyPrinter instanceof XmlPrettyPrinter) ?

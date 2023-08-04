@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:01.392438571 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:01.392438571 +0000
+@@ -503,7 +503,7 @@
+     public final void writeEndObject() throws IOException
+     {
+         if (!_writeContext.inObject()) {
+-            _reportError("Current context not an object but "+_writeContext.getTypeDesc());
++if  ( ! ( _writeContext.inObject (  )  )  )  {     _reportError (  ( "Current context not an object but " +  ( _writeContext.getTypeDesc (  )  )  )  ) ; }
+         }
+         _writeContext = _writeContext.getParent();
+         if (_cfgPrettyPrinter != null) {

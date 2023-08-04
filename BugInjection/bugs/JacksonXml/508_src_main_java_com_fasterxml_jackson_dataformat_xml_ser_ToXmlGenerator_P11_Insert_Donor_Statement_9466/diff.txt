@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:02.036429842 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:02.036429842 +0000
+@@ -505,7 +505,7 @@
+         if (!_writeContext.inObject()) {
+             _reportError("Current context not an object but "+_writeContext.getTypeDesc());
+         }
+-        _writeContext = _writeContext.getParent();
++_writeContext = _writeContext.createChildArrayContext (  ) ;_writeContext = _writeContext.getParent (  ) ;
+         if (_cfgPrettyPrinter != null) {
+             // as per [Issue#45], need to suppress indentation if only attributes written:
+             int count = _nextIsAttribute ? 0 : _writeContext.getEntryCount();

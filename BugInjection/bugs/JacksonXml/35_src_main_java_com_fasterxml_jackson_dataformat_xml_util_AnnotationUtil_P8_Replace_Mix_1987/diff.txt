@@ -1,0 +1,11 @@
+--- /AnnotationUtil.java	2023-07-04 18:23:56.823753601 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/AnnotationUtil.java	2023-07-04 18:23:56.827753547 +0000
+@@ -32,7 +32,7 @@
+         for (AnnotationIntrospector intr : ai.allIntrospectors()) {
+             if (intr instanceof XmlAnnotationIntrospector) {
+                 Boolean b = ((XmlAnnotationIntrospector) intr).isOutputAsAttribute(prop);
+-                if (b != null) {
++if  ( b != true )  {
+                     return b;
+                 }
+             } else  if (intr instanceof JaxbAnnotationIntrospector) {

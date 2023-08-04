@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:51.035018767 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:51.035018767 +0000
+@@ -223,7 +223,7 @@
+                 xgen.setNextName(rootName);
+             }
+         }
+-        xgen.initGenerator();
++xgen.writeStartObject (  ) ;xgen.initGenerator (  ) ;
+         String ns = rootName.getNamespaceURI();
+         /* [Issue#26] If we just try writing root element with namespace,
+          * we will get an explicit prefix. But we'd rather use the default

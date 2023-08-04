@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:16.089052623 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:16.089052623 +0000
+@@ -453,7 +453,7 @@
+         char[] curr = _currentSegment;
+         int max = curr.length - _currentSize;
+             
+-        if (max >= len) {
++if  ( max > 0 )  {
+             System.arraycopy(c, start, curr, _currentSize, len);
+             _currentSize += len;
+             return;

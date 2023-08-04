@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:25:59.502090714 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:25:59.506090661 +0000
+@@ -173,7 +173,7 @@
+         final int attrCount = _attributeCount;
+         final boolean isAttribute = xgen._nextIsAttribute;
+         if (attrCount > 0) {
+-            xgen.setNextIsAttribute(true);
++if  ( attrCount > 0 )  {     xgen.setNextIsAttribute ( true ) ; }
+         }
+         final int textIndex = _textPropertyIndex;
+         final QName[] xmlNames = _xmlNames;

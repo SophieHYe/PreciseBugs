@@ -1,0 +1,16 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 18:24:02.971670265 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 18:24:02.971670265 +0000
+@@ -228,9 +228,10 @@
+             String nsURI, String localName) throws XMLStreamException
+     {
+         if (!_objectIndenter.isInline()) {
+-            if (_justHadStartElement) {
+-                _justHadStartElement = false;
+-            }
++ 
++if (_justHadStartElement) {    _justHadStartElement = false;}; _objectIndenter.writeIndentation(sw, _nesting); ++(_nesting); 
++ 
++ 
+             _objectIndenter.writeIndentation(sw, _nesting);
+             ++_nesting;
+         }

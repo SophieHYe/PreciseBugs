@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:06.088374922 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:06.088374922 +0000
+@@ -518,7 +518,7 @@
+     // note: public just because pretty printer needs to make a callback
+     public final void _handleStartObject() throws IOException
+     {
+-        if (_nextName == null) {
++if  ( _nextName != null )  {
+             handleMissingName();
+         }
+         // Need to keep track of names to make Lists work correctly

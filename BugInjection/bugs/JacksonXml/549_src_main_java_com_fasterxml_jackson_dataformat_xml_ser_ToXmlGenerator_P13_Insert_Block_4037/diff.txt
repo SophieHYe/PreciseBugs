@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:10.056321140 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:10.056321140 +0000
+@@ -546,7 +546,7 @@
+             if (_elementNameStack.isEmpty() && (_xmlPrettyPrinter != null)) {
+                 // ... but only if it is likely to succeed:
+                 if (!_stax2Emulation) {
+-                    _xmlPrettyPrinter.writePrologLinefeed(_xmlWriter);
++if  ( ! ( _stax2Emulation )  )  {     _xmlPrettyPrinter.writePrologLinefeed ( _xmlWriter ) ; }
+                 }
+             }
+         } catch (XMLStreamException e) {

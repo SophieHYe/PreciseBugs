@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:24:52.291001743 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:24:52.291001743 +0000
+@@ -189,7 +189,7 @@
+         }
+         try {
+             XMLInputFactory inf = (XMLInputFactory) Class.forName(_jdkXmlInFactory).newInstance();
+-            XMLOutputFactory outf = (XMLOutputFactory) Class.forName(_jdkXmlOutFactory).newInstance();
++XMLOutputFactory outf =  ( XMLOutputFactory )  Class.forName ( _jdkXmlInFactory ) .newInstance (  ) ;
+             return new XmlFactory(_objectCodec, _xmlParserFeatures, _xmlGeneratorFeatures,
+                     inf, outf, _cfgNameForTextElement);
+         } catch (ClassNotFoundException e) {

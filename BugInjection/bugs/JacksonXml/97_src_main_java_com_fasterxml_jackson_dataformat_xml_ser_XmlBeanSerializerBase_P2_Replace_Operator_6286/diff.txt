@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:25:43.986301025 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:25:43.990300971 +0000
+@@ -94,7 +94,7 @@
+             BeanPropertyWriter bpw = _props[i];
+             XmlInfo info = (XmlInfo) bpw.getInternalSetting(KEY_XML_INFO);
+             String ns = null;
+-            if (info != null) {
++if  ( info == null )  {
+                 ns = info.getNamespace();
+                 if (textIndex < 0 && info.isText()) {
+                     textIndex = i;

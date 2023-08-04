@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:19.521006105 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:19.525006051 +0000
+@@ -193,7 +193,7 @@
+         }
+         _initialized = true;
+         try {
+-            if (Feature.WRITE_XML_1_1.enabledIn(_formatFeatures)) {
++if  ( Feature.WRITE_XML_1_1 .enabledByDefault (  )   )  {
+                 _xmlWriter.writeStartDocument("UTF-8", "1.1");
+             } else if (Feature.WRITE_XML_DECLARATION.enabledIn(_formatFeatures)) {
+                 _xmlWriter.writeStartDocument("UTF-8", "1.0");

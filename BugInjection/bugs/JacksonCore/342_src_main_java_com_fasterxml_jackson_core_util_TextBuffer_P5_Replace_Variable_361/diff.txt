@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:52.702182884 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:52.702182884 +0000
+@@ -339,7 +339,7 @@
+                     if (_inputLen < 1) {
+                         return (_resultString = "");
+                     }
+-                    _resultString = new String(_inputBuffer, _inputStart, _inputLen);
++_resultString = new String ( _inputBuffer, _inputLen, _inputStart ) ;
+                 } else { // nope... need to copy
+                     // But first, let's see if we have just one buffer
+                     int segLen = _segmentSize;

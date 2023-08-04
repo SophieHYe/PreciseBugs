@@ -1,0 +1,11 @@
+--- /DefaultXmlPrettyPrinter.java	2023-07-04 18:24:38.047194816 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/DefaultXmlPrettyPrinter.java	2023-07-04 18:24:38.047194816 +0000
+@@ -520,7 +520,7 @@
+             jg.writeRaw(SYSTEM_LINE_SEPARATOR);
+             level += level; // 2 spaces per level
+             while (level > SPACE_COUNT) { // should never happen but...
+-                jg.writeRaw(SPACES, 0, SPACE_COUNT); 
++jg.writeRaw ( SPACES, -1, SPACE_COUNT ) ;
+                 level -= SPACES.length;
+             }
+             jg.writeRaw(SPACES, 0, level);

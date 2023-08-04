@@ -1,0 +1,12 @@
+--- /StaxUtil.java	2023-07-04 18:23:51.359827666 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/StaxUtil.java	2023-07-04 18:23:51.359827666 +0000
+@@ -37,7 +37,8 @@
+         if (name.endsWith("[]")) {
+             do {
+                 name = name.substring(0, name.length() - 2);
+-                ++changes;
++ 
++ 
+             } while (name.endsWith("[]"));
+             sb = new StringBuilder(name);
+             // do trivial pluralization attempt

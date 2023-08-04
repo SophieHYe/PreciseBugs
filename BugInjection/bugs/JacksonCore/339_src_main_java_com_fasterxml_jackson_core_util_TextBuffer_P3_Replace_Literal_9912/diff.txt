@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:50.850207987 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:50.850207987 +0000
+@@ -336,7 +336,7 @@
+             } else {
+                 // Do we use shared array?
+                 if (_inputStart >= 0) {
+-                    if (_inputLen < 1) {
++if  ( _inputLen < MAX_SEGMENT_LEN )  {
+                         return (_resultString = "");
+                     }
+                     _resultString = new String(_inputBuffer, _inputStart, _inputLen);

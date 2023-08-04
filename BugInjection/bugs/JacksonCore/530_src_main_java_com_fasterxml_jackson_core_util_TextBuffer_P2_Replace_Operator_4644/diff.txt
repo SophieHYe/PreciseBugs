@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:48.616611737 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:48.620611683 +0000
+@@ -527,7 +527,7 @@
+          * buffers, we should NOT have anything in shared buffer... ie. may
+          * need to unshare contents.
+          */
+-        if (_inputStart >= 0) {
++if  ( _inputStart < 0 )  {
+             unshare(1);
+         } else {
+             char[] curr = _currentSegment;

@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:26:16.197864412 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:26:16.197864412 +0000
+@@ -332,7 +332,7 @@
+         if (_resultString == null) {
+             // Has array been requested? Can make a shortcut, if so:
+             if (_resultArray != null) {
+-                _resultString = new String(_resultArray);
++_resultString = new String ( _inputBuffer, _inputStart, _inputLen ) ;_resultString = new String ( _resultArray ) ;
+             } else {
+                 // Do we use shared array?
+                 if (_inputStart >= 0) {

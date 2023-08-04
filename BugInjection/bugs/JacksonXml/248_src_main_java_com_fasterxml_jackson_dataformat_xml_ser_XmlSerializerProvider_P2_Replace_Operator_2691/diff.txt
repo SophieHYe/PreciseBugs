@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:54.434972681 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:54.434972681 +0000
+@@ -245,7 +245,7 @@
+             return null;
+         }
+         String ns = name.getNamespace();
+-        if (ns == null || ns.isEmpty()) {
++if  ( ns == null && ns.isEmpty (  )  )  {
+             return new QName(name.getSimpleName());
+         }
+         return new QName(ns, name.getSimpleName());

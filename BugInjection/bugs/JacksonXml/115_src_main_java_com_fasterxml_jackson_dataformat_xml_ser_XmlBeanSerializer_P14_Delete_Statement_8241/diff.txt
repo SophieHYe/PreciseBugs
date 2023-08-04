@@ -1,0 +1,10 @@
+--- /XmlBeanSerializer.java	2023-07-04 18:25:24.586563983 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializer.java	2023-07-04 18:25:24.586563983 +0000
+@@ -113,6 +113,7 @@
+             return;
+         }
+         jgen.writeStartObject();
++ 
+         if (_propertyFilterId != null) {
+             serializeFieldsFiltered(bean, jgen, provider);
+         } else {

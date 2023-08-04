@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:46.351895549 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:46.355895495 +0000
+@@ -334,7 +334,7 @@
+             buffer[outPtr++] = pb;
+         } else {
+             if (outputBytes == 2) {
+-                buffer[outPtr++] = _base64ToAsciiB[(bits >> 6) & 0x3F];
++buffer[outPtr++] = _base64ToAsciiB[ ( bits >> 18 )  & 0x3F];buffer[outPtr++] = _base64ToAsciiB[ ( bits >> 6 )  & 0x3F];
+             }
+         }
+         return outPtr;

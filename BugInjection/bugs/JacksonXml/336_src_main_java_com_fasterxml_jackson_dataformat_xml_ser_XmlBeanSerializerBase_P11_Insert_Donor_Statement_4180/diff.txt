@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:58.201295079 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:58.201295079 +0000
+@@ -333,7 +333,7 @@
+         // Ok: let's serialize type id as attribute, but if (and only if!) we are using AS_PROPERTY
+         if (typeSer.getTypeInclusion() == JsonTypeInfo.As.PROPERTY) {
+             ToXmlGenerator xgen = (ToXmlGenerator)gen;
+-            xgen.setNextIsAttribute(true);
++xgen.setNextIsCData ( false ) ;xgen.setNextIsAttribute ( true ) ;
+             super._serializeObjectId(bean, gen, provider, typeSer, objectId);
+             if (_attributeCount == 0) { // if no attributes, need to reset
+                 xgen.setNextIsAttribute(false);

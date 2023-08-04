@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:08.597154170 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:08.597154170 +0000
+@@ -429,7 +429,7 @@
+         if (_inputStart >= 0) {
+             unshare(16);
+         }
+-        _resultString = null;
++_currentSegment = null;_resultString = null;
+         _resultArray = null;
+         // Room in current segment?
+         char[] curr = _currentSegment;

@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:05.922816965 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:05.926816911 +0000
+@@ -117,7 +117,7 @@
+             }
+         }
+         // and then see if we must suppress certain values (default, empty)
+-        if (_suppressableValue != null) {
++if  ( _suppressableValue == null )  {
+             if (MARKER_FOR_EMPTY == _suppressableValue) {
+                 if (ser.isEmpty(prov, value)) {
+                     return;

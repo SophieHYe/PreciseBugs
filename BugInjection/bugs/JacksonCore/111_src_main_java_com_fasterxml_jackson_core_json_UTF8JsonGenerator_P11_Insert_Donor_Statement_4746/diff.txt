@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 18:21:36.289658618 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 18:21:36.293658564 +0000
+@@ -108,7 +108,7 @@
+         super(ctxt, features, codec);
+         _outputStream = out;
+         _bufferRecyclable = true;
+-        _outputBuffer = ctxt.allocWriteEncodingBuffer();
++_charBuffer = ctxt.allocConcatBuffer (  ) ;_outputBuffer = ctxt.allocWriteEncodingBuffer (  ) ;
+         _outputEnd = _outputBuffer.length;
+ 
+         /* To be exact, each char can take up to 6 bytes when escaped (Unicode

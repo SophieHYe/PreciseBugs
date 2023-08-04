@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:17.945027466 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:17.945027466 +0000
+@@ -84,7 +84,7 @@
+ 
+         @Override public boolean enabledByDefault() { return _defaultState; }
+         @Override public int getMask() { return _mask; }
+-        @Override public boolean enabledIn(int flags) { return (flags & getMask()) != 0; }
++@Override public boolean enabledIn ( int flags )  { return  ( flags & getMask (  )  )  == 0; }
+     }
+ 
+     /*

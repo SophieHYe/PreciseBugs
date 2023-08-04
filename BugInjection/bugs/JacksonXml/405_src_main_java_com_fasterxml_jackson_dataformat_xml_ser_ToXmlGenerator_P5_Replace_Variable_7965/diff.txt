@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:44.852662754 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:44.856662700 +0000
+@@ -402,7 +402,7 @@
+     public void finishWrappedValue(QName wrapperName, QName wrappedName) throws IOException
+     {
+         // First: wrapper to close?
+-        if (wrapperName != null) {
++if  ( wrappedName != null )  {
+             try {
+                 if (_xmlPrettyPrinter != null) {
+                     _xmlPrettyPrinter.writeEndElement(_xmlWriter, _writeContext.getEntryCount());

@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:59.493277566 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:59.493277566 +0000
+@@ -334,7 +334,7 @@
+         if (typeSer.getTypeInclusion() == JsonTypeInfo.As.PROPERTY) {
+             ToXmlGenerator xgen = (ToXmlGenerator)gen;
+             xgen.setNextIsAttribute(true);
+-            super._serializeObjectId(bean, gen, provider, typeSer, objectId);
++super .serializeFields ( bean , gen , provider )  ;
+             if (_attributeCount == 0) { // if no attributes, need to reset
+                 xgen.setNextIsAttribute(false);
+             }

@@ -1,0 +1,11 @@
+--- /XmlBeanSerializer.java	2023-07-04 18:25:23.314581224 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializer.java	2023-07-04 18:25:23.318581169 +0000
+@@ -109,7 +109,7 @@
+     public void serialize(Object bean, JsonGenerator jgen, SerializerProvider provider) throws IOException
+     {
+         if (_objectIdWriter != null) {
+-            _serializeWithObjectId(bean, jgen, provider, true);
++_serializeWithObjectId ( bean, jgen, provider, false ) ;
+             return;
+         }
+         jgen.writeStartObject();

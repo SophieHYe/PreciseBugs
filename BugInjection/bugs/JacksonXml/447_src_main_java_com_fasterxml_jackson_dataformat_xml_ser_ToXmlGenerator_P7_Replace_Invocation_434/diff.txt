@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:49.724596719 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:49.728596665 +0000
+@@ -444,7 +444,7 @@
+             _reportError("Can not write a field name, expecting a value");
+         }
+         // Should this ever get called?
+-        String ns = (_nextName == null) ? "" : _nextName.getNamespaceURI();
++String ns =  ( _nextName == null )  ? "" : _nextName.getLocalPart (  ) ;
+         setNextName(new QName(ns, name));
+     }
+     

@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 18:24:46.735077052 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 18:24:46.739076998 +0000
+@@ -244,7 +244,7 @@
+     {
+         _verifyValueWrite("start an object");
+         _writeContext = _writeContext.createChildObjectContext();
+-        if (_cfgPrettyPrinter != null) {
++if  ( _cfgPrettyPrinter == null )  {
+             _cfgPrettyPrinter.writeStartObject(this);
+         } else {
+             if (_outputTail >= _outputEnd) {

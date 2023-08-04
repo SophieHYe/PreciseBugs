@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:18.913827598 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:18.913827598 +0000
+@@ -211,7 +211,7 @@
+             if (_anyGetterWriter != null) {
+                 // For [#117]: not a clean fix, but with @JsonTypeInfo, we'll end up
+                 // with accidental attributes otherwise
+-                xgen.setNextIsAttribute(false);
++xgen .setNextIsUnwrapped ( isAttribute )  ;
+                 _anyGetterWriter.getAndSerialize(bean, xgen, provider);
+             }
+         } catch (Exception e) {

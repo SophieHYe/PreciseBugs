@@ -1,0 +1,18 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:09.036334965 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:09.040334910 +0000
+@@ -544,10 +544,11 @@
+             _xmlWriter.writeEndElement();
+             // [databind-xml#172]: possibly also need indentation
+             if (_elementNameStack.isEmpty() && (_xmlPrettyPrinter != null)) {
+-                // ... but only if it is likely to succeed:
+-                if (!_stax2Emulation) {
+-                    _xmlPrettyPrinter.writePrologLinefeed(_xmlWriter);
+-                }
++ 
++if (!(_stax2Emulation)) {    _xmlPrettyPrinter.writePrologLinefeed(_xmlWriter);}; 
++ 
++ 
++ 
+             }
+         } catch (XMLStreamException e) {
+             StaxUtil.throwXmlAsIOException(e);

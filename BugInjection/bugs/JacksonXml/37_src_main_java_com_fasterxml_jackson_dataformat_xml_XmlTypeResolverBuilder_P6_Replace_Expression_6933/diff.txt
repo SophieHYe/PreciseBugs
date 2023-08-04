@@ -1,0 +1,11 @@
+--- /XmlTypeResolverBuilder.java	2023-07-04 18:24:39.671172803 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlTypeResolverBuilder.java	2023-07-04 18:24:39.671172803 +0000
+@@ -34,7 +34,7 @@
+     public StdTypeResolverBuilder typeProperty(String typeIdPropName)
+     {
+         // ok to have null/empty; will restore to use defaults
+-        if (typeIdPropName == null || typeIdPropName.length() == 0) {
++if  ( typeIdPropName == null ) {
+             typeIdPropName = _idType.getDefaultPropertyName();
+         }
+         _typeProperty = StaxUtil.sanitizeXmlTypeName(typeIdPropName);

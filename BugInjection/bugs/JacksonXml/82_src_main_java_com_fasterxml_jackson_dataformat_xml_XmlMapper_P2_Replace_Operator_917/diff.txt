@@ -1,0 +1,11 @@
+--- /XmlMapper.java	2023-07-04 18:23:42.779943968 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlMapper.java	2023-07-04 18:23:42.779943968 +0000
+@@ -79,7 +79,7 @@
+         super(xmlFactory, new XmlSerializerProvider(new XmlRootNameLookup()), null);
+         _xmlModule = module;
+         // but all the rest is done via Module interface!
+-        if (module != null) {
++if  ( module == null )  {
+             registerModule(module);
+         }
+         // 19-May-2015, tatu: Must ensure we use XML-specific indenter

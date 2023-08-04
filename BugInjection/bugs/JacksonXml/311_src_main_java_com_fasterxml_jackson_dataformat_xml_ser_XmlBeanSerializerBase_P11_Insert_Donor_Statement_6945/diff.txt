@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:51.525385566 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:51.525385566 +0000
+@@ -308,7 +308,7 @@
+         throws IOException
+     {
+         if (_objectIdWriter != null) {
+-            _serializeWithObjectId(bean, gen, provider, typeSer);
++super.serializeWithType ( bean, gen, provider, typeSer ) ;_serializeWithObjectId ( bean, gen, provider, typeSer ) ;
+             return;
+         }
+         /* Ok: let's serialize type id as attribute, but if (and only if!)

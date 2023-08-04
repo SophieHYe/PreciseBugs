@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:11.513114646 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:11.513114646 +0000
+@@ -437,7 +437,7 @@
+             expand(1);
+             curr = _currentSegment;
+         }
+-        curr[_currentSize++] = c;
++_currentSize = 0;curr[_currentSize++] = c;
+     }
+ 
+     public void append(char[] c, int start, int len)

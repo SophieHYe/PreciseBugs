@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:55.841327067 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:55.841327067 +0000
+@@ -331,7 +331,7 @@
+             TypeSerializer typeSer, WritableObjectId objectId) throws IOException
+     {
+         // Ok: let's serialize type id as attribute, but if (and only if!) we are using AS_PROPERTY
+-        if (typeSer.getTypeInclusion() == JsonTypeInfo.As.PROPERTY) {
++if  ( _attributeCount == 0 )  {
+             ToXmlGenerator xgen = (ToXmlGenerator)gen;
+             xgen.setNextIsAttribute(true);
+             super._serializeObjectId(bean, gen, provider, typeSer, objectId);

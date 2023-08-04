@@ -1,0 +1,11 @@
+--- /XmlRootNameLookup.java	2023-07-04 18:23:46.739890290 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/XmlRootNameLookup.java	2023-07-04 18:23:46.739890290 +0000
+@@ -48,7 +48,7 @@
+         synchronized (_rootNames) {
+             name = _rootNames.get(key);
+         }
+-        if (name != null) {
++if  ( name == null )  {
+             return name;
+         }
+         name = _findRootName(rootType, config);

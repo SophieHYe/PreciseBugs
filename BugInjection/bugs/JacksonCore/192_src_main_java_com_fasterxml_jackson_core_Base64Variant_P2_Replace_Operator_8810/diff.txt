@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:02.504489915 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:02.504489915 +0000
+@@ -189,7 +189,7 @@
+     public String getName() { return _name; }
+ 
+     public boolean usesPadding() { return _usesPadding; }
+-    public boolean usesPaddingChar(char c) { return c == _paddingChar; }
++public boolean usesPaddingChar ( char c )  { return c > _paddingChar; }
+     public boolean usesPaddingChar(int ch) { return ch == (int) _paddingChar; }
+     public char getPaddingChar() { return _paddingChar; }
+     public byte getPaddingByte() { return (byte)_paddingChar; }

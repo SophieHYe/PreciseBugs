@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:08.954775867 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:08.954775867 +0000
+@@ -203,7 +203,7 @@
+         // And then reset internal input buffers, if necessary:
+         if (_hasSegments) {
+             clearSegments();
+-        } else if (_currentSegment == null) {
++if  ( _hasSegments )  {     clearSegments (  ) ; }else     if  (  ( _currentSegment )  == null )  {         _currentSegment = findBuffer ( len ) ;     }
+             _currentSegment = findBuffer(len);
+         }
+         _currentSize = _segmentSize = 0;

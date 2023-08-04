@@ -1,0 +1,13 @@
+--- /XmlFactory.java	2023-07-04 18:25:05.038828947 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:25:05.038828947 +0000
+@@ -518,8 +518,8 @@
+             return StaxUtil.throwXmlAsIOException(e);
+         }
+         IOContext ctxt = _createContext(sw, false);
+-        return new ToXmlGenerator(ctxt, _generatorFeatures, _xmlGeneratorFeatures,
+-                _objectCodec, sw);
++return new ToXmlGenerator ( ctxt, _xmlGeneratorFeatures, _generatorFeatures, _objectCodec, sw ) ;
++ 
+     }
+     
+     /*

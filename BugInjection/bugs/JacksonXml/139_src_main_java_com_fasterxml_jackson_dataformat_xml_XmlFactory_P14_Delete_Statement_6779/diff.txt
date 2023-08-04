@@ -1,0 +1,10 @@
+--- /XmlFactory.java	2023-07-04 18:24:50.055032051 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:24:50.055032051 +0000
+@@ -137,6 +137,7 @@
+     {
+         // Better ensure namespaces get built properly, so:
+         xmlOut.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
++ 
+         // and for parser, force coalescing as well (much simpler to use)
+         xmlIn.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
+     }

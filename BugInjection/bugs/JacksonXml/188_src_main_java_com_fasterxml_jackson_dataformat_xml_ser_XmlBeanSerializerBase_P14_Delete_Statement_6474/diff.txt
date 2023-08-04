@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:01.846058944 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:01.846058944 +0000
+@@ -186,6 +186,7 @@
+                 // that started with nextIsAttribute to true because all properties should be unwrapped as attributes too.
+                 if (i == attrCount && !(isAttribute && isUnwrappingSerializer())) {
+                     xgen.setNextIsAttribute(false);
++ 
+                 }
+                 // also: if this is property to write as text ("unwrap"), need to:
+                 if (i == textIndex) {

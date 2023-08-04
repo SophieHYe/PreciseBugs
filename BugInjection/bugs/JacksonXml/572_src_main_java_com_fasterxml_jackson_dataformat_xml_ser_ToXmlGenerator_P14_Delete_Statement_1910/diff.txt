@@ -1,0 +1,16 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:12.956281834 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:12.956281834 +0000
+@@ -570,9 +570,10 @@
+     public void writeString(String text) throws IOException
+     {
+         _verifyValueWrite("write String value");
+-        if (_nextName == null) {
+-            handleMissingName();
+-        }
++ 
++ 
++ 
++ 
+         try {
+             if (_nextIsAttribute) { // must write attribute name and value with one call
+                 _xmlWriter.writeAttribute(_nextName.getNamespaceURI(), _nextName.getLocalPart(), text);

@@ -1,0 +1,11 @@
+--- /UnwrappingXmlBeanSerializer.java	2023-07-04 18:24:05.463636487 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/UnwrappingXmlBeanSerializer.java	2023-07-04 18:24:05.463636487 +0000
+@@ -129,7 +129,7 @@
+         if (_propertyFilterId != null) {
+             serializeFieldsFiltered(bean, jgen, provider);
+         } else {
+-            serializeFields(bean, jgen, provider);
++_serializeWithObjectId ( bean, jgen, provider, false ) ;serializeFields ( bean, jgen, provider ) ;
+         }
+     }
+ 

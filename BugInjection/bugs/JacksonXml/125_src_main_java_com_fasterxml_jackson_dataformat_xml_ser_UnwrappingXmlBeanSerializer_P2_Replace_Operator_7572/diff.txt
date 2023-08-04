@@ -1,0 +1,11 @@
+--- /UnwrappingXmlBeanSerializer.java	2023-07-04 18:24:02.795672651 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/UnwrappingXmlBeanSerializer.java	2023-07-04 18:24:02.795672651 +0000
+@@ -122,7 +122,7 @@
+     public final void serialize(Object bean, JsonGenerator jgen, SerializerProvider provider)
+         throws IOException, JsonGenerationException
+     {
+-        if (_objectIdWriter != null) {
++if  ( _objectIdWriter == null )  {
+             _serializeWithObjectId(bean, jgen, provider, false);
+             return;
+         }

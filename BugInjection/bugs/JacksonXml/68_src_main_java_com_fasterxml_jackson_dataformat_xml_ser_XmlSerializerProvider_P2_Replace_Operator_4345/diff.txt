@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:08.623593653 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:08.623593653 +0000
+@@ -65,7 +65,7 @@
+     @Override
+     public void serializeValue(JsonGenerator gen, Object value) throws IOException
+     {
+-        if (value == null) {
++if  ( value != null )  {
+             _serializeXmlNull(gen);
+             return;
+         }

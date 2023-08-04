@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:14.341889568 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:14.345889513 +0000
+@@ -199,7 +199,7 @@
+                         prop.serializeAsField(bean, xgen, provider);
+                         xgen.setNextIsCData(false);
+                     } else {
+-                        prop.serializeAsField(bean, xgen, provider);
++super.serializeFieldsFiltered ( bean, gen0, provider ) ;prop.serializeAsField ( bean, xgen, provider ) ;
+                     }
+                 }
+                 // Reset to avoid next value being written as unwrapped, 

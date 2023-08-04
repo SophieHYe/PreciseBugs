@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:57.308493926 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:57.308493926 +0000
+@@ -480,7 +480,7 @@
+             _reportError("Current context not an ARRAY but "+_writeContext.getTypeDesc());
+         }
+         if (_cfgPrettyPrinter != null) {
+-            _cfgPrettyPrinter.writeEndArray(this, _writeContext.getEntryCount());
++int count = _nextIsAttribute ? 0 : _writeContext.getEntryCount (  ) ;_cfgPrettyPrinter.writeEndArray ( this, _writeContext.getEntryCount (  )  ) ;
+         } else {
+             // nothing to do here; no-operation
+         }

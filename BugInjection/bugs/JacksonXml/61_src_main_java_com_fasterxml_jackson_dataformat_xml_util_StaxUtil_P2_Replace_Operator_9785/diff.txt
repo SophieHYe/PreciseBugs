@@ -1,0 +1,11 @@
+--- /StaxUtil.java	2023-07-04 18:23:53.431799579 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/util/StaxUtil.java	2023-07-04 18:23:53.431799579 +0000
+@@ -58,7 +58,7 @@
+             if (c == '_' || c == '.' || c == '-') continue;
+             // Ok, need to replace
+             ++changes;
+-            if (c == '$') {
++if  ( c != '$' )  {
+                 sb.setCharAt(i, '.');
+             } else {
+                 sb.setCharAt(i, '_');

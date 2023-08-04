@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerModifier.java	2023-07-04 18:25:29.578496319 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerModifier.java	2023-07-04 18:25:29.578496319 +0000
+@@ -58,7 +58,7 @@
+             PropertyName wrapperName = bpw.getWrapperName();
+ 
+             // first things first: no wrapping?
+-            if (wrapperName == null || wrapperName == PropertyName.NO_NAME) {
++if  ( PropertyName.NO_NAME == null || wrapperName == wrapperName )  {
+                 continue;
+             }
+             // no local name? Just double the wrapped name for wrapper

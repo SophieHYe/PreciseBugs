@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:31.284846655 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:31.288846601 +0000
+@@ -471,7 +471,7 @@
+         do {
+             expand(len);
+             int amount = Math.min(_currentSegment.length, len);
+-            System.arraycopy(c, start, _currentSegment, 0, amount);
++System.arraycopy ( c, start, _currentSegment, 0, len ) ;
+             _currentSize += amount;
+             start += amount;
+             len -= amount;

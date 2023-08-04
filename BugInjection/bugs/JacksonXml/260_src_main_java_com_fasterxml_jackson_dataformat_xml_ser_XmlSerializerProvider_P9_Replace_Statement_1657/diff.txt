@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:56.670942373 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:56.670942373 +0000
+@@ -257,7 +257,7 @@
+         // [Issue#71]: When converting, we actually get TokenBuffer, which is fine
+         if (!(gen instanceof ToXmlGenerator)) {
+             // but verify
+-            if (!(gen instanceof TokenBuffer)) {
++if  ( ! ( gen instanceof ToXmlGenerator )  )  {
+                 throw JsonMappingException.from(gen,
+                         "XmlMapper does not with generators of type other than ToXmlGenerator; got: "+gen.getClass().getName());
+             }

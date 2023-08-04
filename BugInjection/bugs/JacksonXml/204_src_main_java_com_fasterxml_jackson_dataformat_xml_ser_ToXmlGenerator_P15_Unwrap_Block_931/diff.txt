@@ -1,0 +1,18 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:24.600937250 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:24.600937250 +0000
+@@ -202,10 +202,11 @@
+             }
+             // as per [dataformat-xml#172], try adding indentation
+             if (_xmlPrettyPrinter != null) {
+-                // ... but only if it is likely to succeed:
+-                if (!_stax2Emulation) {
+-                    _xmlPrettyPrinter.writePrologLinefeed(_xmlWriter);
+-                }
++ 
++if (!(_stax2Emulation)) {    _xmlPrettyPrinter.writePrologLinefeed(_xmlWriter);}; 
++ 
++ 
++ 
+             }
+         } catch (XMLStreamException e) {
+             StaxUtil.throwXmlAsIOException(e);

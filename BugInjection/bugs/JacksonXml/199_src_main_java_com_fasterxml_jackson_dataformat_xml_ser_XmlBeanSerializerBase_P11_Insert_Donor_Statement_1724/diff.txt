@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:11.681925623 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:11.681925623 +0000
+@@ -196,7 +196,7 @@
+                 if (prop != null) { // can have nulls in filtered list
+                     if ((cdata != null) && cdata.get(i)) {
+                         xgen.setNextIsCData(true);
+-                        prop.serializeAsField(bean, xgen, provider);
++super.serializeFields ( bean, gen0, provider ) ;prop.serializeAsField ( bean, xgen, provider ) ;
+                         xgen.setNextIsCData(false);
+                     } else {
+                         prop.serializeAsField(bean, xgen, provider);

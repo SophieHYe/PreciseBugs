@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:04.314838761 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:04.314838761 +0000
+@@ -112,7 +112,7 @@
+             Class<?> cls = value.getClass();
+             PropertySerializerMap map = _dynamicSerializers;
+             ser = map.serializerFor(cls);
+-            if (ser == null) {
++if  ( value == null )  {
+                 ser = _findAndAddDynamic(map, cls, prov);
+             }
+         }

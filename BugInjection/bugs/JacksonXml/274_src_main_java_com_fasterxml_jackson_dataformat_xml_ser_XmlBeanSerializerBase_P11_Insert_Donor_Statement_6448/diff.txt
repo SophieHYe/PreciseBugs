@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:38.489562260 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:38.489562260 +0000
+@@ -271,7 +271,7 @@
+                 }
+                 // also: if this is property to write as text ("unwrap"), need to:
+                 if (i == textIndex) {
+-                    xgen.setNextIsUnwrapped(true);
++xgen.setNextIsCData ( false ) ;xgen.setNextIsUnwrapped ( true ) ;
+                 }
+                 xgen.setNextName(xmlNames[i]);
+                 BeanPropertyWriter prop = props[i];

@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:49.952593629 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:49.952593629 +0000
+@@ -531,7 +531,7 @@
+             unshare(1);
+         } else {
+             char[] curr = _currentSegment;
+-            if (curr == null) {
++if  ( _segments == null )  {
+                 _currentSegment = findBuffer(0);
+             } else if (_currentSize >= curr.length) {
+                 // Plus, we better have room for at least one more char

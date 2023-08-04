@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:45.596652670 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:45.596652670 +0000
+@@ -407,7 +407,7 @@
+                 if (_xmlPrettyPrinter != null) {
+                     _xmlPrettyPrinter.writeEndElement(_xmlWriter, _writeContext.getEntryCount());
+                 } else {
+-                    _xmlWriter.writeEndElement();
++_xmlWriter.closeCompletely (  ) ;
+                 }
+             } catch (XMLStreamException e) {
+                 StaxUtil.throwXmlAsIOException(e);

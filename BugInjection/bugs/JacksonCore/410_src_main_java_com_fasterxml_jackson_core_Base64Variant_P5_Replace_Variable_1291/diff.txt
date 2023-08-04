@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:24:03.323665495 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:24:03.323665495 +0000
+@@ -407,7 +407,7 @@
+             if (inputLeft == 2) {
+                 b24 |= (((int) input[inputPtr++]) & 0xFF) << 8;
+             }
+-            encodeBase64Partial(sb, b24, inputLeft);
++encodeBase64Partial ( sb, inputLeft, b24 ) ;
+         }
+ 
+         if (addQuotes) {

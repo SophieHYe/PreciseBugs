@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:12.344290129 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:12.344290129 +0000
+@@ -540,7 +540,7 @@
+         _nextName = _elementNameStack.removeLast();
+         try {
+             // note: since attributes don't nest, can only have one attribute active, so:
+-            _nextIsAttribute = false;
++if  ( _nextIsAttribute )  { _nextIsAttribute = false; }
+             _xmlWriter.writeEndElement();
+             // [databind-xml#172]: possibly also need indentation
+             if (_elementNameStack.isEmpty() && (_xmlPrettyPrinter != null)) {

@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:28:04.236400024 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:28:04.240399969 +0000
+@@ -573,7 +573,7 @@
+ 
+     public char[] finishCurrentSegment()
+     {
+-        if (_segments == null) {
++if  ( _currentSegment != null )  {
+             _segments = new ArrayList<char[]>();
+         }
+         _hasSegments = true;

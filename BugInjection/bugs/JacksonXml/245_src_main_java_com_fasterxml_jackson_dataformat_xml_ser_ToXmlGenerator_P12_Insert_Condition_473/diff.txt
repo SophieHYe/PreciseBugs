@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:29.144875661 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:29.148875606 +0000
+@@ -242,7 +242,7 @@
+ 
+     @Override
+     public JsonGenerator setPrettyPrinter(PrettyPrinter pp) {
+-        _cfgPrettyPrinter = pp;
++if  ( _cfgPrettyPrinter != null )  { _cfgPrettyPrinter = pp; }
+         _xmlPrettyPrinter = (pp instanceof XmlPrettyPrinter) ?
+                (XmlPrettyPrinter) pp : null;
+         return this;

@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:48.860608429 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:48.864608376 +0000
+@@ -440,7 +440,7 @@
+     @Override
+     public final void writeFieldName(String name) throws IOException
+     {
+-        if (_writeContext.writeFieldName(name) == JsonWriteContext.STATUS_EXPECT_VALUE) {
++if  ( _writeContext.writeFieldName ( _nextName.getLocalPart (  )  )  == JsonWriteContext.STATUS_EXPECT_VALUE )  {
+             _reportError("Can not write a field name, expecting a value");
+         }
+         // Should this ever get called?

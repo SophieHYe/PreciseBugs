@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:05.698820002 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:05.698820002 +0000
+@@ -113,7 +113,7 @@
+             PropertySerializerMap map = _dynamicSerializers;
+             ser = map.serializerFor(cls);
+             if (ser == null) {
+-                ser = _findAndAddDynamic(map, cls, prov);
++ser = _findAndAddDynamic ( map, null, prov ) ;
+             }
+         }
+         // and then see if we must suppress certain values (default, empty)

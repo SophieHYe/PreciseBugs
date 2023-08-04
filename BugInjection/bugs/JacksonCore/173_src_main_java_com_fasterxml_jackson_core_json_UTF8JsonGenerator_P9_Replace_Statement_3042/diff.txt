@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 18:22:25.416992657 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 18:22:25.416992657 +0000
+@@ -170,7 +170,7 @@
+             _writePPFieldName(name, (status == JsonWriteContext.STATUS_OK_AFTER_COMMA));
+             return;
+         }
+-        if (status == JsonWriteContext.STATUS_OK_AFTER_COMMA) { // need comma
++if  ( status == JsonWriteContext.STATUS_EXPECT_VALUE )  {
+             if (_outputTail >= _outputEnd) {
+                 _flushBuffer();
+             }

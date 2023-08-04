@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:33.473630248 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:33.477630193 +0000
+@@ -246,6 +246,7 @@
+             props = _props;
+         }
+         final PropertyFilter filter = findPropertyFilter(provider, _propertyFilterId, bean);
++ 
+         // better also allow missing filter actually..
+         if (filter == null) {
+             serializeFields(bean, gen0, provider);

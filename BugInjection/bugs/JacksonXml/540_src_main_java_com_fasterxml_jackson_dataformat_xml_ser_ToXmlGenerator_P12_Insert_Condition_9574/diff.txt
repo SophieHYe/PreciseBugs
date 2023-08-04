@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:08.412343422 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:08.412343422 +0000
+@@ -537,7 +537,7 @@
+         if (_elementNameStack.isEmpty()) {
+             throw new JsonGenerationException("Can not write END_ELEMENT without open START_ELEMENT");
+         }
+-        _nextName = _elementNameStack.removeLast();
++if  ( _elementNameStack.isEmpty (  )  )  { _nextName = _elementNameStack.removeLast (  ) ; }
+         try {
+             // note: since attributes don't nest, can only have one attribute active, so:
+             _nextIsAttribute = false;

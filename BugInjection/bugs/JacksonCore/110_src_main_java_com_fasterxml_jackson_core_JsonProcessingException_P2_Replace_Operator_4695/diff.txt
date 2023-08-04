@@ -1,0 +1,11 @@
+--- /JsonProcessingException.java	2023-07-04 18:22:24.617003501 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/JsonProcessingException.java	2023-07-04 18:22:24.621003447 +0000
+@@ -107,7 +107,7 @@
+         JsonLocation loc = getLocation();
+         String suffix = getMessageSuffix();
+         // mild optimization, if nothing extra is needed:
+-        if (loc != null || suffix != null) {
++if  ( loc == null || suffix != null )  {
+             StringBuilder sb = new StringBuilder(100);
+             sb.append(msg);
+             if (suffix != null) {

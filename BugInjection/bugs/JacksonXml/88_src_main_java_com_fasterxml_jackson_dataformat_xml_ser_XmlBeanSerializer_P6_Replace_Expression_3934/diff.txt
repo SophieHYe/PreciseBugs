@@ -1,0 +1,17 @@
+--- /XmlBeanSerializer.java	2023-07-04 18:25:21.114611044 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializer.java	2023-07-04 18:25:21.178610177 +0000
+@@ -85,10 +85,10 @@
+          * - have any getter
+          * 
+          */
+-        if ((_objectIdWriter == null)
+-                && (_anyGetterWriter == null)
+-                && (_propertyFilterId == null)
+-                ) {
++if  (   ( _anyGetterWriter == null ) &&  ( _propertyFilterId == null ) )  {
++ 
++ 
++ 
+             return new BeanAsArraySerializer(this);
+         }
+         // already is one, so:

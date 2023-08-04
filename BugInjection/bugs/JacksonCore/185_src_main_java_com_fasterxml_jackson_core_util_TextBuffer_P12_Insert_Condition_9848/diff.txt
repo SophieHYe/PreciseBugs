@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:04.690833664 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:04.694833611 +0000
+@@ -182,7 +182,7 @@
+ 
+         // Then let's mark things we need about input buffer
+         _inputBuffer = buf;
+-        _inputStart = start;
++if  ( _inputStart >= 0 )  { _inputStart = start; }
+         _inputLen = len;
+ 
+         // And then reset internal input buffers, if necessary:

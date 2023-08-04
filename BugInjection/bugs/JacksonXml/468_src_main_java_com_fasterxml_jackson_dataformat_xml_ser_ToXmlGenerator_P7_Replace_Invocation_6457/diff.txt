@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:52.520558822 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:52.520558822 +0000
+@@ -465,7 +465,7 @@
+     public final void writeStartArray() throws IOException
+     {
+         _verifyValueWrite("start an array");
+-        _writeContext = _writeContext.createChildArrayContext();
++_writeContext = _writeContext.createChildObjectContext (  ) ;
+         if (_cfgPrettyPrinter != null) {
+             _cfgPrettyPrinter.writeStartArray(this);
+         } else {

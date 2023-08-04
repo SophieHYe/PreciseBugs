@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:46.580639333 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:46.580639333 +0000
+@@ -507,7 +507,7 @@
+         // Except, as per [Issue-24], not for HUGE appends... so:
+         do {
+             expand(len);
+-            int amount = Math.min(_currentSegment.length, len);
++int amount = Math.min ( len, len ) ;
+             str.getChars(offset, offset+amount, _currentSegment, 0);
+             _currentSize += amount;
+             offset += amount;

@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerModifier.java	2023-07-04 18:25:29.078503096 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerModifier.java	2023-07-04 18:25:29.078503096 +0000
+@@ -38,6 +38,7 @@
+             BeanDescription beanDesc, List<BeanPropertyWriter> beanProperties)
+     {
+         final AnnotationIntrospector intr = config.getAnnotationIntrospector();
++ 
+         for (int i = 0, len = beanProperties.size(); i < len; ++i) {
+             BeanPropertyWriter bpw = beanProperties.get(i);
+             final AnnotatedMember member = bpw.getMember();

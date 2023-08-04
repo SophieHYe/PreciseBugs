@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:15.501060593 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:15.501060593 +0000
+@@ -451,7 +451,7 @@
+ 
+         // Room in current segment?
+         char[] curr = _currentSegment;
+-        int max = curr.length - _currentSize;
++int max = _currentSize - curr.length;
+             
+         if (max >= len) {
+             System.arraycopy(c, start, curr, _currentSize, len);

@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:29.161688693 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:29.165688639 +0000
+@@ -217,6 +217,7 @@
+         } catch (Exception e) {
+             String name = (i == props.length) ? "[anySetter]" : props[i].getName();
+             wrapAndThrow(provider, e, bean, name);
++ 
+         } catch (StackOverflowError e) { // Bit tricky, can't do more calls as stack is full; so:
+             JsonMappingException mapE = JsonMappingException.from(gen0,
+                     "Infinite recursion (StackOverflowError)");

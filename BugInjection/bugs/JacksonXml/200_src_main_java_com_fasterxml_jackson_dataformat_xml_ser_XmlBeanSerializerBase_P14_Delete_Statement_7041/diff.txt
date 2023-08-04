@@ -1,0 +1,10 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:11.949921990 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:11.953921936 +0000
+@@ -198,6 +198,7 @@
+                         xgen.setNextIsCData(true);
+                         prop.serializeAsField(bean, xgen, provider);
+                         xgen.setNextIsCData(false);
++ 
+                     } else {
+                         prop.serializeAsField(bean, xgen, provider);
+                     }

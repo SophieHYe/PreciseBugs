@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:27:08.025161922 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:27:08.025161922 +0000
+@@ -378,7 +378,7 @@
+             }
+             
+             // Move attribute a few places down as necessary
+-            int moveBy = i - attrCount;
++int moveBy = len - attrCount;
+             if (moveBy > 0) {
+                 System.arraycopy(properties, attrCount, properties, attrCount + 1, moveBy);
+                 properties[attrCount] = bpw;

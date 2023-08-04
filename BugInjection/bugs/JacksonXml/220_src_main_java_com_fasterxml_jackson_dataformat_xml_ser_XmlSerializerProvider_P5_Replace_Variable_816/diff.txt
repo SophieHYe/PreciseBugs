@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:49.699036876 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:49.699036876 +0000
+@@ -217,7 +217,7 @@
+          *  name if no name has been set, as per [Issue#42],
+          *  to allow for custom serializers to work.
+          */
+-        if (!xgen.setNextNameIfMissing(rootName)) {
++if  ( !xgen.setNextNameIfMissing ( ROOT_NAME_FOR_NULL )  )  {
+             // however, if we are root, we... insist
+             if (xgen.getOutputContext().inRoot()) {
+                 xgen.setNextName(rootName);

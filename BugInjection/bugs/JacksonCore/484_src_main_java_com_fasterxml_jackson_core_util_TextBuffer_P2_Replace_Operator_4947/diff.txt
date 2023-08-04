@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:33.108821933 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:33.108821933 +0000
+@@ -481,7 +481,7 @@
+     public void append(String str, int offset, int len)
+     {
+         // Can't append to shared buf (sanity check)
+-        if (_inputStart >= 0) {
++if  ( _inputStart > 0 )  {
+             unshare(len);
+         }
+         _resultString = null;

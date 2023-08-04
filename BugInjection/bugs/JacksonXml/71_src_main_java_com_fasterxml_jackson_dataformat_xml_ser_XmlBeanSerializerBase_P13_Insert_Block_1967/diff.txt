@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:25:40.430349225 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:25:40.434349171 +0000
+@@ -68,7 +68,7 @@
+         int attrCount = 0;
+         for (BeanPropertyWriter bpw : _props) {
+             if (_isAttribute(bpw)) { // Yup: let's build re-ordered list then
+-                attrCount = _orderAttributesFirst(_props, _filteredProps);
++if  ( _isAttribute ( bpw )  )  {     attrCount = _orderAttributesFirst ( _props, _filteredProps ) ;     break; }
+                 break;
+             }
+         }

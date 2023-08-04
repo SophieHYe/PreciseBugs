@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:25:37.086394551 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:25:37.086394551 +0000
+@@ -742,7 +742,7 @@
+             if (validXmlNameStartChar(acc, b)) {
+                 return MatchStrength.SOLID_MATCH;
+             }
+-        } else if (b == BYTE_EXCL) {
++} else if  ( UTF8_BOM_3 == BYTE_EXCL )  {
+             /* must be <!-- comment --> or <!DOCTYPE ...>, since
+              * <![CDATA[ ]]> can NOT come outside of root
+              */

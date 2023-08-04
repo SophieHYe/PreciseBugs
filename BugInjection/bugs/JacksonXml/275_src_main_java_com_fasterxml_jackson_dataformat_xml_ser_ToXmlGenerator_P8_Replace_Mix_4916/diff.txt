@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:30.752853865 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:30.756853812 +0000
+@@ -272,7 +272,7 @@
+     @Override // since 2.7
+     public JsonGenerator overrideFormatFeatures(int values, int mask)
+     {
+-        int oldF = _formatFeatures;
++int oldF = values;
+         int newF = (_formatFeatures & ~mask) | (values & mask);
+ 
+         if (oldF != newF) {

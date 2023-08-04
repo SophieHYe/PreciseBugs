@@ -1,0 +1,13 @@
+--- /XmlBeanSerializerModifier.java	2023-07-04 18:25:36.338404690 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerModifier.java	2023-07-04 18:25:36.338404690 +0000
+@@ -45,8 +45,8 @@
+             Boolean isAttribute = AnnotationUtil.findIsAttributeAnnotation(intr, member);
+             Boolean isText = AnnotationUtil.findIsTextAnnotation(intr, member);
+             Boolean isCData = AnnotationUtil.findIsCDataAnnotation(intr, member);
+-            bpw.setInternalSetting(XmlBeanSerializerBase.KEY_XML_INFO,
+-            		new XmlInfo(isAttribute, ns, isText, isCData));
++bpw.setInternalSetting ( XmlBeanSerializerBase.KEY_XML_INFO, new XmlInfo ( isAttribute, ns, isText, isText )  ) ;
++ 
+ 
+             // Actually: if we have a Collection type, easiest place to add wrapping would be here...
+             //  or: let's also allow wrapping of "untyped" (Object): assuming it is a dynamically

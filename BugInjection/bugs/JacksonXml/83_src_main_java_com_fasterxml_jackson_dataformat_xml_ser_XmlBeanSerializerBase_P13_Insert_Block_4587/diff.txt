@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:25:41.942328730 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:25:41.946328676 +0000
+@@ -80,7 +80,7 @@
+             BeanPropertyWriter bpw = _props[i];
+             if (_isCData(bpw)) {
+                 if (cdata == null) {
+-                    cdata = new BitSet(len);
++if  ( cdata == null )  {     cdata = new BitSet ( len ) ; }
+                 }
+                 cdata.set(i);
+             }

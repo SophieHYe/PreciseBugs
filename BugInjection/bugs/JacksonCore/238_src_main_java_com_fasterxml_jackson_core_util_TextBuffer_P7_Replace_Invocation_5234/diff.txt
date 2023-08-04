@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:17.642658105 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:17.642658105 +0000
+@@ -235,7 +235,7 @@
+         if (_allocator != null) {
+             return _allocator.allocCharBuffer(BufferRecycler.CharBufferType.TEXT_BUFFER, needed);
+         }
+-        return new char[Math.max(needed, MIN_SEGMENT_LEN)];
++return new char[Math .min ( _currentSize , _currentSize )  ];
+     }
+ 
+     private void clearSegments()

@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:22.640963816 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:22.640963816 +0000
+@@ -462,7 +462,7 @@
+         if (max > 0) {
+             System.arraycopy(c, start, curr, _currentSize, max);
+             start += max;
+-            len -= max;
++len += max;
+         }
+         /* And then allocate new segment; we are guaranteed to now
+          * have enough room in segment.

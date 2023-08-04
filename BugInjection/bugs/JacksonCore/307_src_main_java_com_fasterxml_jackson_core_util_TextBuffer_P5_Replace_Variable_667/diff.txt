@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:29.766493770 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:29.770493716 +0000
+@@ -304,7 +304,7 @@
+     public char[] getTextBuffer()
+     {
+         // Are we just using shared input buffer?
+-        if (_inputStart >= 0) {
++if  ( _segmentSize >= 0 )  {
+             return _inputBuffer;
+         }
+         if (_resultArray != null) {

@@ -1,0 +1,10 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:07.588354591 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:07.592354537 +0000
+@@ -525,6 +525,7 @@
+         _elementNameStack.addLast(_nextName);
+         try {
+             _xmlWriter.writeStartElement(_nextName.getNamespaceURI(), _nextName.getLocalPart());
++ 
+         } catch (XMLStreamException e) {
+             StaxUtil.throwXmlAsIOException(e);
+         }

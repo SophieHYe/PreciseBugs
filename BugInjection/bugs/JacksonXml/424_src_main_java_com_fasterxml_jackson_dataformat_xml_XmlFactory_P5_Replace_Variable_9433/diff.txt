@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:25:00.222894226 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:25:00.222894226 +0000
+@@ -421,7 +421,7 @@
+     @SuppressWarnings("resource")
+     @Override
+     public JsonParser createParser(String content) throws IOException {
+-        Reader r = new StringReader(content);
++Reader r = new StringReader ( _jdkXmlOutFactory ) ;
+         IOContext ctxt = _createContext(r, true);
+         if (_inputDecorator != null) {
+             r = _inputDecorator.decorate(ctxt, r);

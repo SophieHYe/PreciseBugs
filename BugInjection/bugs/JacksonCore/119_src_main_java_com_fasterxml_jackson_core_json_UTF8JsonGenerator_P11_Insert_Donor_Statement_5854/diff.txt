@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 18:21:42.169578910 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 18:21:42.173578856 +0000
+@@ -116,7 +116,7 @@
+          * we will actually round down to only do up to 1/8 number of chars
+          */
+         _outputMaxContiguous = _outputEnd >> 3;
+-        _charBuffer = ctxt.allocConcatBuffer();
++byte[] encodingBuffer = _ioContext.allocBase64Buffer (  ) ;_charBuffer = ctxt.allocConcatBuffer (  ) ;
+         _charBufferLength = _charBuffer.length;
+ 
+         // By default we use this feature to determine additional quoting

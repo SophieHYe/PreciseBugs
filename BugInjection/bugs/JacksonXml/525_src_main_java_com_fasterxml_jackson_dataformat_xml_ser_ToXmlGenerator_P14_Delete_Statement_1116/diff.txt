@@ -1,0 +1,10 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:07.100361205 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:07.100361205 +0000
+@@ -523,6 +523,7 @@
+         }
+         // Need to keep track of names to make Lists work correctly
+         _elementNameStack.addLast(_nextName);
++ 
+         try {
+             _xmlWriter.writeStartElement(_nextName.getNamespaceURI(), _nextName.getLocalPart());
+         } catch (XMLStreamException e) {

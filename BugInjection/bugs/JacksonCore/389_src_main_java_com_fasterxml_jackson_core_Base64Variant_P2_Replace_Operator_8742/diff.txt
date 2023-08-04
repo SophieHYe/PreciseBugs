@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:54.243788574 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:54.247788519 +0000
+@@ -386,7 +386,7 @@
+         int inputPtr = 0;
+         int safeInputEnd = inputEnd-3; // to get only full triplets
+ 
+-        while (inputPtr <= safeInputEnd) {
++while  ( inputPtr == safeInputEnd )  {
+             // First, mash 3 bytes into lsb of 32-bit int
+             int b24 = ((int) input[inputPtr++]) << 8;
+             b24 |= ((int) input[inputPtr++]) & 0xFF;

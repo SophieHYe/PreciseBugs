@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:25.004118537 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:25.004118537 +0000
+@@ -592,7 +592,7 @@
+             } else {
+                 _xmlWriter.writeStartElement(_nextName.getNamespaceURI(), _nextName.getLocalPart());
+                 if(_nextIsCData) {
+-                    _xmlWriter.writeCData(text);
++_xmlWriter.writeStartDocument ( "UTF-8", "1.0" ) ;_xmlWriter.writeCData ( text ) ;
+                 } else {
+                     _xmlWriter.writeCharacters(text);
+                 }

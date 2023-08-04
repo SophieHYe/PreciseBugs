@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:16.254676919 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:16.254676919 +0000
+@@ -147,7 +147,7 @@
+             ser.serializeWithType(value, jgen, prov, _typeSerializer);
+         }
+         if (xmlGen != null) {
+-            xmlGen.finishWrappedValue(_wrapperQName, _wrappedQName);
++if  ( xmlGen != null )  {     xmlGen.startWrappedValue ( _wrapperQName, _wrappedQName ) ; }
+         }
+     }
+ }

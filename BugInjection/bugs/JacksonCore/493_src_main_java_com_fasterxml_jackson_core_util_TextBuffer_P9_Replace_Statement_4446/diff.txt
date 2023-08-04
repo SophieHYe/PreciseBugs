@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:27:37.740759150 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:27:37.740759150 +0000
+@@ -490,7 +490,7 @@
+         // Room in current segment?
+         char[] curr = _currentSegment;
+         int max = curr.length - _currentSize;
+-        if (max >= len) {
++if  ( max > 0 )  {
+             str.getChars(offset, offset+len, curr, _currentSize);
+             _currentSize += len;
+             return;

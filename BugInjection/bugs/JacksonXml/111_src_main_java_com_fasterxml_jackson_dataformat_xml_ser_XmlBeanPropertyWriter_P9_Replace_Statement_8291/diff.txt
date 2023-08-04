@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:03.866844833 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:03.866844833 +0000
+@@ -108,7 +108,7 @@
+ 
+         // then find serializer to use
+         JsonSerializer<Object> ser = _serializer;
+-        if (ser == null) {
++if  ( value == null )  {
+             Class<?> cls = value.getClass();
+             PropertySerializerMap map = _dynamicSerializers;
+             ser = map.serializerFor(cls);

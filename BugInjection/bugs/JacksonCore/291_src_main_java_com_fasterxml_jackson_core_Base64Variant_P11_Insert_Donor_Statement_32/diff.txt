@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:33.596068457 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:33.596068457 +0000
+@@ -288,7 +288,7 @@
+         if (_usesPadding) {
+             sb.append((outputBytes == 2) ?
+                       _base64ToAsciiC[(bits >> 6) & 0x3F] : _paddingChar);
+-            sb.append(_paddingChar);
++sb.append ( '"' ) ;sb.append ( _paddingChar ) ;
+         } else {
+             if (outputBytes == 2) {
+                 sb.append(_base64ToAsciiC[(bits >> 6) & 0x3F]);

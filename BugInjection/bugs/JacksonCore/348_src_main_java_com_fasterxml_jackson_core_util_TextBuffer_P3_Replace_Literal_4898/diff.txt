@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:26:27.653709132 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:26:27.653709132 +0000
+@@ -345,7 +345,7 @@
+                     int segLen = _segmentSize;
+                     int currLen = _currentSize;
+                     
+-                    if (segLen == 0) { // yup
++if  ( segLen == _segmentSize )  {
+                         _resultString = (currLen == 0) ? "" : new String(_currentSegment, 0, currLen);
+                     } else { // no, need to combine
+                         StringBuilder sb = new StringBuilder(segLen + currLen);

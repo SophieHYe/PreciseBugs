@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:25:12.078733523 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:25:12.078733523 +0000
+@@ -597,7 +597,7 @@
+         }
+         FromXmlParser xp = new FromXmlParser(ctxt, _generatorFeatures, _xmlGeneratorFeatures,
+                 _objectCodec, sr);
+-        if (_cfgNameForTextElement != null) {
++if  ( _cfgNameForTextElement == null )  {
+             xp.setXMLTextElementName(_cfgNameForTextElement);
+         }
+         return xp;

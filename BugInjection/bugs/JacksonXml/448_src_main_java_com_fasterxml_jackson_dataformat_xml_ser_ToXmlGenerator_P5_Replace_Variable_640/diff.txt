@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:50.100591622 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:50.100591622 +0000
+@@ -445,7 +445,7 @@
+         }
+         // Should this ever get called?
+         String ns = (_nextName == null) ? "" : _nextName.getNamespaceURI();
+-        setNextName(new QName(ns, name));
++setNextName ( new QName ( DEFAULT_UNKNOWN_ELEMENT, name )  ) ;
+     }
+     
+     @Override

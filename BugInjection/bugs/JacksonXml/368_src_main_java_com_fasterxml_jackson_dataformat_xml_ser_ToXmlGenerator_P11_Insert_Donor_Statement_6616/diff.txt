@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:27:40.636719898 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:27:40.640719843 +0000
+@@ -365,7 +365,7 @@
+     public final boolean setNextNameIfMissing(QName name)
+     {
+         if (_nextName == null) {
+-            _nextName = name;
++_nextIsUnwrapped = false;_nextName = name;
+             return true;
+         }
+         return false;

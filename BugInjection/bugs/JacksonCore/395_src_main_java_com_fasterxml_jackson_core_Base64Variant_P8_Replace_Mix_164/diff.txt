@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:23:54.947779031 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:23:54.951778976 +0000
+@@ -392,7 +392,7 @@
+             b24 |= ((int) input[inputPtr++]) & 0xFF;
+             b24 = (b24 << 8) | (((int) input[inputPtr++]) & 0xFF);
+             encodeBase64Chunk(sb, b24);
+-            if (--chunksBeforeLF <= 0) {
++if  ( --chunksBeforeLF <= 2 )  {
+                 // note: must quote in JSON value, so not really useful...
+                 sb.append('\\');
+                 sb.append('n');

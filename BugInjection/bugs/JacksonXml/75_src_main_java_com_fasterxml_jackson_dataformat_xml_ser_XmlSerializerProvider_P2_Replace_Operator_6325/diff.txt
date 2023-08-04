@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:09.759578255 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:09.759578255 +0000
+@@ -72,7 +72,7 @@
+         final Class<?> cls = value.getClass();
+         final boolean asArray;
+         final ToXmlGenerator xgen = _asXmlGenerator(gen);
+-        if (xgen == null) { // called by convertValue()
++if  ( xgen != null )  {
+             asArray = false;
+         } else {
+             QName rootName = _rootNameFromConfig();

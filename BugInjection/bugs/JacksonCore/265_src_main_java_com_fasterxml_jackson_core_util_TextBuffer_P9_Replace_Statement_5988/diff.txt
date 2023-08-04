@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:19.774629207 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:19.774629207 +0000
+@@ -262,7 +262,7 @@
+      * @return Number of characters currently stored by this collector
+      */
+     public int size() {
+-        if (_inputStart >= 0) { // shared copy from input buf
++if  ( _inputLen < 1 )  {
+             return _inputLen;
+         }
+         if (_resultArray != null) {

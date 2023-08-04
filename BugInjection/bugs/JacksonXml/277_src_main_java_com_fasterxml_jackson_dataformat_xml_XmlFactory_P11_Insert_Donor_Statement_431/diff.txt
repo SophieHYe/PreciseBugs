@@ -1,0 +1,11 @@
+--- /XmlFactory.java	2023-07-04 18:24:55.934952348 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java	2023-07-04 18:24:55.934952348 +0000
+@@ -274,7 +274,7 @@
+      * Method for disabling specified XML parser feature.
+      */
+     public XmlFactory disable(FromXmlParser.Feature f) {
+-        _xmlParserFeatures &= ~f.getMask();
++_xmlGeneratorFeatures |= f.getMask (  ) ;_xmlParserFeatures &= ~f.getMask (  ) ;
+         return this;
+     }
+ 

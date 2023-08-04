@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:13.906708745 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:13.906708745 +0000
+@@ -142,7 +142,7 @@
+         }
+         jgen.writeFieldName(_name);
+         if (_typeSerializer == null) {
+-            ser.serialize(value, jgen, prov);
++ser.serializeWithType ( value, jgen, prov, _typeSerializer ) ;ser.serialize ( value, jgen, prov ) ;
+         } else {
+             ser.serializeWithType(value, jgen, prov, _typeSerializer);
+         }

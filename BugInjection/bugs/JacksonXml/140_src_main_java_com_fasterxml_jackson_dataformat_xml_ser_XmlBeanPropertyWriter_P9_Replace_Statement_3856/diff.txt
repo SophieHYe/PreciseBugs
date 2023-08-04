@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:10.862750005 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:10.862750005 +0000
+@@ -137,7 +137,7 @@
+         final ToXmlGenerator xmlGen = (jgen instanceof ToXmlGenerator) ? (ToXmlGenerator) jgen : null;
+         // Ok then; addition we want to do is to add wrapper element, and that's what happens here
+         // 19-Aug-2013, tatu: ... except for those nasty 'convertValue()' calls...
+-        if (xmlGen != null) {
++if  ( value == null )  {
+             xmlGen.startWrappedValue(_wrapperQName, _wrappedQName);
+         }
+         jgen.writeFieldName(_name);

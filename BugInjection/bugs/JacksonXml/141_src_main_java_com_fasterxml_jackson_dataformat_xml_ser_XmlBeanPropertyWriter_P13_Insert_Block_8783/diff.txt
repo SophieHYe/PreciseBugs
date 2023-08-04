@@ -1,0 +1,11 @@
+--- /XmlBeanPropertyWriter.java	2023-07-04 18:25:11.850736613 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanPropertyWriter.java	2023-07-04 18:25:11.850736613 +0000
+@@ -138,7 +138,7 @@
+         // Ok then; addition we want to do is to add wrapper element, and that's what happens here
+         // 19-Aug-2013, tatu: ... except for those nasty 'convertValue()' calls...
+         if (xmlGen != null) {
+-            xmlGen.startWrappedValue(_wrapperQName, _wrappedQName);
++if  ( xmlGen != null )  {     xmlGen.finishWrappedValue ( _wrapperQName, _wrappedQName ) ; }
+         }
+         jgen.writeFieldName(_name);
+         if (_typeSerializer == null) {

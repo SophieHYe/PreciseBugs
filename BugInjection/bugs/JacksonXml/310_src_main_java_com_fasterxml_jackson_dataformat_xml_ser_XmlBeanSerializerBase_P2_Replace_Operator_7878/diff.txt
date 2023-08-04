@@ -1,0 +1,11 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:50.181403784 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:50.181403784 +0000
+@@ -307,7 +307,7 @@
+             TypeSerializer typeSer)
+         throws IOException
+     {
+-        if (_objectIdWriter != null) {
++if  ( _objectIdWriter == null )  {
+             _serializeWithObjectId(bean, gen, provider, typeSer);
+             return;
+         }

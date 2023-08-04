@@ -1,0 +1,11 @@
+--- /TextBuffer.java	2023-07-04 18:25:26.174542457 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/util/TextBuffer.java	2023-07-04 18:25:26.174542457 +0000
+@@ -281,7 +281,7 @@
+          * segments start at 0, and if we have to create a combo buffer,
+          * that too will start from beginning of the buffer
+          */
+-        return (_inputStart >= 0) ? _inputStart : 0;
++return  ( _inputStart >= _currentSize )  ? _inputStart : _currentSize;
+     }
+ 
+     /**

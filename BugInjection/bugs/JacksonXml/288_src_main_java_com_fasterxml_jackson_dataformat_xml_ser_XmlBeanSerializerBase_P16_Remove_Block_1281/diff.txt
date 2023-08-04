@@ -1,0 +1,17 @@
+--- /XmlBeanSerializerBase.java	2023-07-04 18:26:43.997487603 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlBeanSerializerBase.java	2023-07-04 18:26:43.997487603 +0000
+@@ -286,10 +286,11 @@
+                 }
+             }
+             if (_anyGetterWriter != null) {
+-                // For [#117]: not a clean fix, but with @JsonTypeInfo, we'll end up
++ 
++ 
+                 // with accidental attributes otherwise
+-                xgen.setNextIsAttribute(false);
+-                _anyGetterWriter.getAndSerialize(bean, xgen, provider);
++ 
++ 
+             }
+         } catch (Exception e) {
+             String name = (i == props.length) ? "[anySetter]" : props[i].getName();

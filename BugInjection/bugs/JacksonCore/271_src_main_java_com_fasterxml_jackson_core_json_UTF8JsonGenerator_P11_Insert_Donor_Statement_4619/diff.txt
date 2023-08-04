@@ -1,0 +1,11 @@
+--- /UTF8JsonGenerator.java	2023-07-04 18:25:50.978206252 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/json/UTF8JsonGenerator.java	2023-07-04 18:25:50.982206198 +0000
+@@ -268,7 +268,7 @@
+             }
+             _outputBuffer[_outputTail++] = BYTE_RCURLY;
+         }
+-        _writeContext = _writeContext.getParent();
++_writeContext = _writeContext.createChildObjectContext (  ) ;_writeContext = _writeContext.getParent (  ) ;
+     }
+ 
+     protected final void _writeFieldName(String name)

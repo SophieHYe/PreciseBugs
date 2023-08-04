@@ -1,0 +1,11 @@
+--- /Base64Variant.java	2023-07-04 18:22:53.892606653 +0000
++++ /JacksonCore-1/src/main/java/com/fasterxml/jackson/core/Base64Variant.java	2023-07-04 18:22:53.892606653 +0000
+@@ -117,7 +117,7 @@
+ 
+         // First the main encoding table:
+         int alphaLen = base64Alphabet.length();
+-        if (alphaLen != 64) {
++if  ( alphaLen != 64 << 1 )  {
+             throw new IllegalArgumentException("Base64Alphabet length must be exactly 64 (was "+alphaLen+")");
+         }
+ 

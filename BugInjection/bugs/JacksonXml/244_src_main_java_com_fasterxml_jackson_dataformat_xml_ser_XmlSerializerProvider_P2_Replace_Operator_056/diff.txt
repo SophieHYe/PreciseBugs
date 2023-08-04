@@ -1,0 +1,11 @@
+--- /XmlSerializerProvider.java	2023-07-04 18:24:53.270988458 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/XmlSerializerProvider.java	2023-07-04 18:24:53.270988458 +0000
+@@ -241,7 +241,7 @@
+     protected QName _rootNameFromConfig()
+     {
+         PropertyName name = _config.getFullRootName();
+-        if (name == null) {
++if  ( name != null )  {
+             return null;
+         }
+         String ns = name.getNamespace();

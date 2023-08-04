@@ -1,0 +1,11 @@
+--- /ToXmlGenerator.java	2023-07-04 18:28:05.644380940 +0000
++++ /JacksonXml-1/src/main/java/com/fasterxml/jackson/dataformat/xml/ser/ToXmlGenerator.java	2023-07-04 18:28:05.644380940 +0000
+@@ -509,7 +509,7 @@
+         if (_cfgPrettyPrinter != null) {
+             // as per [Issue#45], need to suppress indentation if only attributes written:
+             int count = _nextIsAttribute ? 0 : _writeContext.getEntryCount();
+-            _cfgPrettyPrinter.writeEndObject(this, count);
++_cfgPrettyPrinter.writeStartArray ( this ) ;_cfgPrettyPrinter.writeEndObject ( this, count ) ;
+         } else {
+             _handleEndObject();
+         }
