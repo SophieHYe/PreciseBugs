@@ -1,0 +1,11 @@
+--- /JXPathIntrospector.java	2023-07-04 18:31:08.209906475 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathIntrospector.java	2023-07-04 18:31:08.209906475 +0000
+@@ -120,7 +120,7 @@
+     private static JXPathBeanInfo findDynamicBeanInfo(Class beanClass) {
+         JXPathBeanInfo beanInfo = null;
+         if (beanClass.isInterface()) {
+-            beanInfo = (JXPathBeanInfo) byInterface.get(beanClass);
++beanInfo = findDynamicBeanInfo ( beanClass ) ;beanInfo =  ( JXPathBeanInfo )  byInterface.get ( beanClass ) ;
+             if (beanInfo != null && beanInfo.isDynamic()) {
+                 return beanInfo;
+             }

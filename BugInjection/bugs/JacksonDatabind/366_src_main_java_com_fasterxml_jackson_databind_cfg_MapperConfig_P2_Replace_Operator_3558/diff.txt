@@ -1,0 +1,11 @@
+--- /MapperConfig.java	2023-07-04 18:26:12.525914183 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/MapperConfig.java	2023-07-04 18:26:12.525914183 +0000
+@@ -363,7 +363,7 @@
+         HandlerInstantiator hi = getHandlerInstantiator();
+         if (hi != null) {
+             TypeIdResolver builder = hi.typeIdResolverInstance(this, annotated, resolverClass);
+-            if (builder != null) {
++if  ( builder == null )  {
+                 return builder;
+             }
+         }

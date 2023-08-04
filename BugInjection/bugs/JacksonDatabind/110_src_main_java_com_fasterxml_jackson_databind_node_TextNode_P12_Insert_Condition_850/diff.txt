@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:26:10.585940479 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:26:10.585940479 +0000
+@@ -107,7 +107,7 @@
+                 _reportBase64EOF();
+             }
+             ch = str.charAt(ptr++);
+-            bits = b64variant.decodeBase64Char(ch);
++if  ( !b64variant.usesPaddingChar ( ch )  )  { bits = b64variant.decodeBase64Char ( ch ) ; }
+ 
+             // First branch: can get padding (-> 1 byte)
+             if (bits < 0) {

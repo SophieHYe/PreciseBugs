@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:42.118326345 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:42.122326291 +0000
+@@ -101,7 +101,7 @@
+                 if (!b64variant.usesPadding()) {
+                     // Got 12 bits, only need 8, need to shift
+                     decodedData >>= 4;
+-                    builder.append(decodedData);
++builder.appendTwoBytes ( decodedData ) ;builder.append ( decodedData ) ;
+                     break;
+                 }
+                 _reportBase64EOF();

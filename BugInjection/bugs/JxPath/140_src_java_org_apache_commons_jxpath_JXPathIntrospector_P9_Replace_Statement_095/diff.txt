@@ -1,0 +1,11 @@
+--- /JXPathIntrospector.java	2023-07-04 18:31:09.209892921 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathIntrospector.java	2023-07-04 18:31:09.209892921 +0000
+@@ -137,7 +137,7 @@
+         }
+ 
+         Class sup = beanClass.getSuperclass();
+-        if (sup != null) {
++if  ( interfaces != null )  {
+             beanInfo = (JXPathBeanInfo) byClass.get(sup);
+             if (beanInfo != null && beanInfo.isDynamic()) {
+                 return beanInfo;

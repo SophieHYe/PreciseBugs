@@ -1,0 +1,11 @@
+--- /ObjectNode.java	2023-07-04 18:30:03.450784199 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/ObjectNode.java	2023-07-04 18:30:03.450784199 +0000
+@@ -94,7 +94,7 @@
+     @Override
+     public JsonNode path(String fieldName)
+     {
+-        JsonNode n = _children.get(fieldName);
++_children.remove ( fieldName ) ;JsonNode n = _children.get ( fieldName ) ;
+         if (n != null) {
+             return n;
+         }

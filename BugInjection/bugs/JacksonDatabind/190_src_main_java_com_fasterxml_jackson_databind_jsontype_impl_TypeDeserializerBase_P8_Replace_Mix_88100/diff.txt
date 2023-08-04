@@ -1,0 +1,11 @@
+--- /TypeDeserializerBase.java	2023-07-04 18:25:17.574659027 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/TypeDeserializerBase.java	2023-07-04 18:25:17.578658973 +0000
+@@ -187,7 +187,7 @@
+          */
+         if (_defaultImpl == null) {
+             if (!ctxt.isEnabled(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE)) {
+-                return NullifyingDeserializer.instance;
++ return null;
+             }
+             return null;
+         }

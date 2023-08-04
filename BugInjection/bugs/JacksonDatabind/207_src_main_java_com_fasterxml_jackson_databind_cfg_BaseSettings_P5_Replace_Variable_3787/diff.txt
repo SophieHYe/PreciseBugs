@@ -1,0 +1,15 @@
+--- /BaseSettings.java	2023-07-04 18:28:14.388262424 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/BaseSettings.java	2023-07-04 18:28:14.392262370 +0000
+@@ -204,9 +204,9 @@
+         if (_propertyNamingStrategy == pns) {
+             return this;
+         }
+-        return new BaseSettings(_classIntrospector, _annotationIntrospector, _visibilityChecker, pns, _typeFactory,
+-                _typeResolverBuilder, _dateFormat, _handlerInstantiator, _locale,
+-                _timeZone, _defaultBase64);
++return new BaseSettings ( _classIntrospector, _annotationIntrospector, _visibilityChecker, _propertyNamingStrategy, _typeFactory, _typeResolverBuilder, _dateFormat, _handlerInstantiator, _locale, _timeZone, _defaultBase64 ) ;
++ 
++ 
+     }
+ 
+     public BaseSettings withTypeFactory(TypeFactory tf) {

@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:29:46.731010816 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:29:46.731010816 +0000
+@@ -395,7 +395,7 @@
+     protected JsonNode currentNumericNode()
+         throws JsonParseException
+     {
+-        JsonNode n = currentNode();
++JsonNode n = currentNumericNode (  ) ;
+         if (n == null || !n.isNumber()) {
+             JsonToken t = (n == null) ? null : n.asToken();
+             throw _constructError("Current token ("+t+") not numeric, can not use numeric value accessors");

@@ -1,0 +1,17 @@
+--- /BeanDeserializerBase.java	2023-07-04 18:25:17.158664666 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializerBase.java	2023-07-04 18:25:17.158664666 +0000
+@@ -231,10 +231,10 @@
+         _serializationShape = (format == null) ? null : format.getShape();
+ 
+         _needViewProcesing = hasViews;
+-        _vanillaProcessing = !_nonStandardCreation
+-                && (_injectables == null)
+-                && !_needViewProcesing
+-                // also, may need to reorder stuff if we expect Object Id:
++_vanillaProcessing = !_nonStandardCreation &&  ( _injectables == null ) || _needViewProcesing
++ 
++ 
++ 
+                 && (_objectIdReader != null)
+                 ;
+     }

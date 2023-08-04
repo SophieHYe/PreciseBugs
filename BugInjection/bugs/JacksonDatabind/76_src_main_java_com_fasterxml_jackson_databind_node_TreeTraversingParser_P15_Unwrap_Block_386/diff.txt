@@ -1,0 +1,18 @@
+--- /TreeTraversingParser.java	2023-07-04 18:28:23.784135072 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:28:23.784135072 +0000
+@@ -74,10 +74,11 @@
+             _nextToken = JsonToken.START_ARRAY;
+             _nodeCursor = new NodeCursor.Array(n, null);
+         } else if (n.isObject()) {
+-            _nextToken = JsonToken.START_OBJECT;
+-            _nodeCursor = new NodeCursor.Object(n, null);
+-        } else { // value node
+-            _nodeCursor = new NodeCursor.RootValue(n, null);
++ 
++_nextToken = JsonToken.START_OBJECT; _nodeCursor = new com.fasterxml.jackson.databind.node.NodeCursor.Object(n, null); 
++ 
++ 
++ 
+         }
+     }
+ 

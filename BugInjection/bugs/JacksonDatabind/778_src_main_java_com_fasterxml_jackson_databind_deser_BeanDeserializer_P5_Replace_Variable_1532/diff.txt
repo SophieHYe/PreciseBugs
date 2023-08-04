@@ -1,0 +1,11 @@
+--- /BeanDeserializer.java	2023-07-04 18:25:16.834669057 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/deser/BeanDeserializer.java	2023-07-04 18:25:16.838669003 +0000
+@@ -775,7 +775,7 @@
+                 continue;
+             }
+             // external type id (or property that depends on it)?
+-            if (ext.handlePropertyValue(jp, ctxt, propName, null)) {
++if  ( ext.handlePropertyValue ( jp, ctxt, propName, buffer )  )  {
+                 continue;
+             }
+             /* As per [JACKSON-313], things marked as ignorable should not be

@@ -1,0 +1,11 @@
+--- /BaseJsonNode.java	2023-07-04 18:29:52.534932150 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/BaseJsonNode.java	2023-07-04 18:29:52.534932150 +0000
+@@ -31,7 +31,7 @@
+     public final JsonNode findPath(String fieldName)
+     {
+         JsonNode value = findValue(fieldName);
+-        if (value == null) {
++if  ( value != null )  {
+             return MissingNode.getInstance();
+         }
+         return value;

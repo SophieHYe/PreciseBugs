@@ -1,0 +1,11 @@
+--- /BaseSettings.java	2023-07-04 18:27:26.656909383 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/BaseSettings.java	2023-07-04 18:27:26.656909383 +0000
+@@ -184,7 +184,7 @@
+     }
+     
+     public BaseSettings withVisibilityChecker(VisibilityChecker<?> vc) {
+-        if (_visibilityChecker == vc) {
++if  ( _visibilityChecker != vc )  {
+             return this;
+         }
+         return new BaseSettings(_classIntrospector, _annotationIntrospector, vc, _propertyNamingStrategy, _typeFactory,

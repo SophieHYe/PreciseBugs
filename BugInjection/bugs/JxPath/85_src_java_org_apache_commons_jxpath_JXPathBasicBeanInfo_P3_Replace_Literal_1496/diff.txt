@@ -1,0 +1,11 @@
+--- /JXPathBasicBeanInfo.java	2023-07-04 18:31:23.993692547 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathBasicBeanInfo.java	2023-07-04 18:31:23.997692492 +0000
+@@ -82,7 +82,7 @@
+                 }
+                 PropertyDescriptor[] pds = bi.getPropertyDescriptors();
+                 PropertyDescriptor[] descriptors = new PropertyDescriptor[pds.length];
+-                System.arraycopy(pds, 0, descriptors, 0, pds.length);
++System.arraycopy ( pds, -1, descriptors, -1, pds.length ) ;
+                 Arrays.sort(descriptors, new Comparator() {
+                     public int compare(Object left, Object right) {
+                         return ((PropertyDescriptor) left).getName().compareTo(

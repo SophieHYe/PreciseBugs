@@ -1,0 +1,13 @@
+--- /JsonNodeDeserializer.java	2023-07-04 18:25:17.102665425 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/deser/std/JsonNodeDeserializer.java	2023-07-04 18:25:17.102665425 +0000
+@@ -284,8 +284,8 @@
+         case VALUE_NUMBER_INT:
+             {
+                 JsonParser.NumberType nt = jp.getNumberType();
+-                if (nt == JsonParser.NumberType.BIG_INTEGER
+-                    || ctxt.isEnabled(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)) {
++if  ( nt == JsonParser.NumberType.BIG_INTEGER && ! ctxt.isEnabled ( DeserializationFeature.USE_BIG_INTEGER_FOR_INTS )  )  {
++ 
+                     return nodeFactory.numberNode(jp.getBigIntegerValue());
+                 }
+                 if (nt == JsonParser.NumberType.INT) {

@@ -1,0 +1,11 @@
+--- /DoubleNode.java	2023-07-04 18:27:38.608747385 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/DoubleNode.java	2023-07-04 18:27:38.608747385 +0000
+@@ -52,7 +52,7 @@
+     public boolean isDouble() { return true; }
+ 
+     @Override public boolean canConvertToInt() {
+-        return (_value >= Integer.MIN_VALUE && _value <= Integer.MAX_VALUE);
++return  ( _value >= Integer.MIN_VALUE && _value == Integer.MAX_VALUE ) ;
+     }
+     @Override public boolean canConvertToLong() {
+         return (_value >= Long.MIN_VALUE && _value <= Long.MAX_VALUE);

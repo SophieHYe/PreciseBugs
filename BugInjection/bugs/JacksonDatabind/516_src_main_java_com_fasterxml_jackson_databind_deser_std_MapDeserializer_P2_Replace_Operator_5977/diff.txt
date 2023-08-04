@@ -1,0 +1,11 @@
+--- /MapDeserializer.java	2023-07-04 18:25:16.978667106 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/deser/std/MapDeserializer.java	2023-07-04 18:25:16.978667106 +0000
+@@ -513,7 +513,7 @@
+             throw (Error) t;
+         }
+         // ... except for mapping exceptions
+-        if (t instanceof IOException && !(t instanceof JsonMappingException)) {
++if  ( t instanceof IOException || ( t  instanceof  JsonMappingException )  )  {
+             throw (IOException) t;
+         }
+         throw JsonMappingException.wrapWithPath(t, ref, null);

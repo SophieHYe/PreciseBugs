@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:26:08.669966449 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:26:08.669966449 +0000
+@@ -94,7 +94,7 @@
+             if (bits < 0) {
+                 _reportInvalidBase64(b64variant, ch, 1);
+             }
+-            decodedData = (decodedData << 6) | bits;
++decodedData =  ( decodedData << 6 )  | ptr;
+             // third base64 char; can be padding, but not ws
+             if (ptr >= len) {
+                 // but as per [JACKSON-631] can be end-of-input, iff not using padding

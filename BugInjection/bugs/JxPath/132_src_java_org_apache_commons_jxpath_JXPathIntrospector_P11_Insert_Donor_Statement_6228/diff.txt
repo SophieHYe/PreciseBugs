@@ -1,0 +1,11 @@
+--- /JXPathIntrospector.java	2023-07-04 18:31:08.849897800 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathIntrospector.java	2023-07-04 18:31:08.849897800 +0000
+@@ -129,7 +129,7 @@
+         Class interfaces[] = beanClass.getInterfaces();
+         if (interfaces != null) {
+             for (int i = 0; i < interfaces.length; i++) {
+-                beanInfo = findDynamicBeanInfo(interfaces[i]);
++beanInfo = findDynamicBeanInfo ( beanClass ) ;beanInfo = findDynamicBeanInfo ( interfaces[i] ) ;
+                 if (beanInfo != null && beanInfo.isDynamic()) {
+                     return beanInfo;
+                 }

@@ -1,0 +1,11 @@
+--- /ObjectNode.java	2023-07-04 18:31:36.025529473 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/ObjectNode.java	2023-07-04 18:31:36.029529418 +0000
+@@ -354,7 +354,7 @@
+      */
+     public JsonNode replace(String fieldName, JsonNode value)
+     {
+-        if (value == null) { // let's not store 'raw' nulls but nodes
++if  ( value != null )  {
+             value = nullNode();
+         }
+         return _children.put(fieldName, value);

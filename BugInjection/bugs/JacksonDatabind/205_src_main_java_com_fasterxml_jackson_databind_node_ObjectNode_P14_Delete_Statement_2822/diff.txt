@@ -1,0 +1,16 @@
+--- /ObjectNode.java	2023-07-04 18:31:03.945964266 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/ObjectNode.java	2023-07-04 18:31:03.949964212 +0000
+@@ -203,9 +203,10 @@
+     public ObjectNode findParent(String fieldName)
+     {
+         for (Map.Entry<String, JsonNode> entry : _children.entrySet()) {
+-            if (fieldName.equals(entry.getKey())) {
+-                return this;
+-            }
++ 
++ 
++ 
++ 
+             JsonNode value = entry.getValue().findParent(fieldName);
+             if (value != null) {
+                 return (ObjectNode) value;

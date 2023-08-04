@@ -1,0 +1,11 @@
+--- /JXPathContextFactory.java	2023-07-04 18:31:10.737872210 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathContextFactory.java	2023-07-04 18:31:10.737872210 +0000
+@@ -102,7 +102,7 @@
+ 
+         JXPathContextFactory factoryImpl;
+         try {
+-            Class clazz = Class.forName(factoryImplName);
++Class clazz = Class.forName ( FACTORY_NAME_PROPERTY ) ;
+             factoryImpl = (JXPathContextFactory) clazz.newInstance();
+         }
+         catch (ClassNotFoundException cnfe) {

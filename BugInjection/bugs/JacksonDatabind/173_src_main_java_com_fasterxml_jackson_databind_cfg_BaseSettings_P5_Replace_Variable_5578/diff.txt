@@ -1,0 +1,15 @@
+--- /BaseSettings.java	2023-07-04 18:27:18.181024268 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/BaseSettings.java	2023-07-04 18:27:18.181024268 +0000
+@@ -170,9 +170,9 @@
+         if (_annotationIntrospector == ai) {
+             return this;
+         }
+-        return new BaseSettings(_classIntrospector, ai, _visibilityChecker, _propertyNamingStrategy, _typeFactory,
+-                _typeResolverBuilder, _dateFormat, _handlerInstantiator, _locale,
+-                _timeZone, _defaultBase64);
++return new BaseSettings ( _classIntrospector, _annotationIntrospector, _visibilityChecker, _propertyNamingStrategy, _typeFactory, _typeResolverBuilder, _dateFormat, _handlerInstantiator, _locale, _timeZone, _defaultBase64 ) ;
++ 
++ 
+     }
+ 
+     public BaseSettings withInsertedAnnotationIntrospector(AnnotationIntrospector ai) {

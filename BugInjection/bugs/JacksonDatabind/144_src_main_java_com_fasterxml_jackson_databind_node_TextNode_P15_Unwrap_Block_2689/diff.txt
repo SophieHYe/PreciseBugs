@@ -1,0 +1,16 @@
+--- /TextNode.java	2023-07-04 18:25:58.714101396 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:58.718101341 +0000
+@@ -142,9 +142,10 @@
+             ch = str.charAt(ptr++);
+             bits = b64variant.decodeBase64Char(ch);
+             if (bits < 0) {
+-                if (bits != Base64Variant.BASE64_VALUE_PADDING) {
+-                    _reportInvalidBase64(b64variant, ch, 3);
+-                }
++ 
++if (bits != (Base64Variant.BASE64_VALUE_PADDING)) {    _reportInvalidBase64(b64variant, ch, 3);}; decodedData >>= 2; builder.appendTwoBytes(decodedData); 
++ 
++ 
+                 decodedData >>= 2;
+                 builder.appendTwoBytes(decodedData);
+             } else {

@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:29:32.687201163 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:29:32.687201163 +0000
+@@ -348,7 +348,7 @@
+     {
+         // Multiple possibilities...
+         JsonNode n = currentNode();
+-        if (n != null) { // binary node?
++if  ( _nextToken != null )  {
+             byte[] data = n.binaryValue();
+             // (or TextNode, which can also convert automatically!)
+             if (data != null) {

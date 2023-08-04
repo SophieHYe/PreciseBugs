@@ -1,0 +1,11 @@
+--- /ObjectNode.java	2023-07-04 18:31:26.473658935 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/ObjectNode.java	2023-07-04 18:31:26.473658935 +0000
+@@ -316,7 +316,7 @@
+     {
+         for (Map.Entry<String, JsonNode> en : properties.entrySet()) {
+             JsonNode n = en.getValue();
+-            if (n == null) {
++if  ( n != null )  {
+                 n = nullNode();
+             }
+             _children.put(en.getKey(), n);

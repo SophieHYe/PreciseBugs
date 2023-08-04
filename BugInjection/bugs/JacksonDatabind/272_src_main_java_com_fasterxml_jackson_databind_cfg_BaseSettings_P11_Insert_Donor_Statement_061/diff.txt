@@ -1,0 +1,11 @@
+--- /BaseSettings.java	2023-07-04 18:30:38.046315301 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/BaseSettings.java	2023-07-04 18:30:38.046315301 +0000
+@@ -269,7 +269,7 @@
+             df = ((StdDateFormat) df).withTimeZone(tz);
+         } else {
+             // we don't know if original format might be shared; better create a clone:
+-            df = (DateFormat) df.clone();
++df =  (  ( StdDateFormat )  df ) .withTimeZone ( tz ) ;df =  ( DateFormat )  df.clone (  ) ;
+             df.setTimeZone(tz);
+         }
+         return new BaseSettings(_classIntrospector, _annotationIntrospector,

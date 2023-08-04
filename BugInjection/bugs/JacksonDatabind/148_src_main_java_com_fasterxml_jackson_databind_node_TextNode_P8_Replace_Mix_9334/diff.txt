@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:26:04.294025762 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:26:04.298025708 +0000
+@@ -145,7 +145,7 @@
+                 if (bits != Base64Variant.BASE64_VALUE_PADDING) {
+                     _reportInvalidBase64(b64variant, ch, 3);
+                 }
+-                decodedData >>= 2;
++decodedData >>= 2 - 3;
+                 builder.appendTwoBytes(decodedData);
+             } else {
+                 // otherwise, our triple is now complete

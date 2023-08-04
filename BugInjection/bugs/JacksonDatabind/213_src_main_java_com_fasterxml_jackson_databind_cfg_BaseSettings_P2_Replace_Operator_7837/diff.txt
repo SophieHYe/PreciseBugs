@@ -1,0 +1,11 @@
+--- /BaseSettings.java	2023-07-04 18:28:30.280047026 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/BaseSettings.java	2023-07-04 18:28:30.280047026 +0000
+@@ -210,7 +210,7 @@
+     }
+ 
+     public BaseSettings withTypeFactory(TypeFactory tf) {
+-        if (_typeFactory == tf) {
++if  ( _typeFactory != tf )  {
+             return this;
+         }
+         return new BaseSettings(_classIntrospector, _annotationIntrospector, _visibilityChecker, _propertyNamingStrategy, tf,

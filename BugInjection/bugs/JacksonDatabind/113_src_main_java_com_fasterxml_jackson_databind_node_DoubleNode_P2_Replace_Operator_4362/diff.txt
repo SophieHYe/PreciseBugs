@@ -1,0 +1,11 @@
+--- /DoubleNode.java	2023-07-04 18:27:44.772663838 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/DoubleNode.java	2023-07-04 18:27:44.772663838 +0000
+@@ -110,7 +110,7 @@
+         // We must account for NaNs: NaN does not equal NaN, therefore we have
+         // to use Double.compare().
+         final double otherValue = ((DoubleNode) o)._value;
+-        return Double.compare(_value, otherValue) == 0;
++return Double.compare ( _value, otherValue )  != 0;
+     }
+ 
+     @Override

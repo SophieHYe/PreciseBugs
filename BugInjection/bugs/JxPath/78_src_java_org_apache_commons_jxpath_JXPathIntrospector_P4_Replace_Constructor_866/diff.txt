@@ -1,0 +1,13 @@
+--- /JXPathIntrospector.java	2023-07-04 18:31:05.653941117 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathIntrospector.java	2023-07-04 18:31:05.653941117 +0000
+@@ -75,8 +75,8 @@
+         Class beanClass,
+         Class dynamicPropertyHandlerClass) 
+     {
+-        JXPathBasicBeanInfo bi =
+-            new JXPathBasicBeanInfo(beanClass, dynamicPropertyHandlerClass);
++JXPathBasicBeanInfo bi = new JXPathBasicBeanInfo ( beanClass, true )  ;
++ 
+         if (beanClass.isInterface()) {
+             byInterface.put(beanClass, bi);
+         }

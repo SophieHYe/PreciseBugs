@@ -1,0 +1,12 @@
+--- /ObjectMapper.java	2023-07-04 18:26:26.213728652 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java	2023-07-04 18:26:26.217728597 +0000
+@@ -163,7 +163,8 @@
+                 return (t.getRawClass() == Object.class) || !t.isConcrete();
+             case NON_FINAL:
+                 while (t.isArrayType()) {
+-                    t = t.getContentType();
++ 
++ 
+                 }
+                 return !t.isFinal(); // includes Object.class
+             default:

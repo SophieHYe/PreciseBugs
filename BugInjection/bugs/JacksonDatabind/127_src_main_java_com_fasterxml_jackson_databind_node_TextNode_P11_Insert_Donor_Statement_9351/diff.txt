@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:53.630170307 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:53.634170252 +0000
+@@ -124,7 +124,7 @@
+                 }
+                 // Got 12 bits, only need 8, need to shift
+                 decodedData >>= 4;
+-                builder.append(decodedData);
++builder.appendTwoBytes ( decodedData ) ;builder.append ( decodedData ) ;
+                 continue;
+             }
+             // Nope, 2 or 3 bytes

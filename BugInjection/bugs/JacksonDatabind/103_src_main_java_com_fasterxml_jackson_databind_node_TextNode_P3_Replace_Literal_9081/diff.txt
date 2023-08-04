@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:41.626333014 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:41.626333014 +0000
+@@ -100,7 +100,7 @@
+                 // but as per [JACKSON-631] can be end-of-input, iff not using padding
+                 if (!b64variant.usesPadding()) {
+                     // Got 12 bits, only need 8, need to shift
+-                    decodedData >>= 4;
++decodedData >>= INT_SPACE;
+                     builder.append(decodedData);
+                     break;
+                 }

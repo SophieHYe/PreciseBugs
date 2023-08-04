@@ -1,0 +1,11 @@
+--- /DynamicPropertyPointer.java	2023-07-04 18:31:35.261539828 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/ri/model/dynamic/DynamicPropertyPointer.java	2023-07-04 18:31:35.261539828 +0000
+@@ -76,7 +76,7 @@
+                 names[i] = allNames[i];
+             }
+             Arrays.sort(names);
+-            if (requiredPropertyName != null) {
++if  ( requiredPropertyName == null )  {
+                 int inx = Arrays.binarySearch(names, requiredPropertyName);
+                 if (inx < 0) {
+                     allNames = names;

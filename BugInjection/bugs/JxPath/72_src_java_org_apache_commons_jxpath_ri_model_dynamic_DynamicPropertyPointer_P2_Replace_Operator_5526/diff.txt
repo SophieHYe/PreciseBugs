@@ -1,0 +1,11 @@
+--- /DynamicPropertyPointer.java	2023-07-04 18:31:32.165581789 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/ri/model/dynamic/DynamicPropertyPointer.java	2023-07-04 18:31:32.165581789 +0000
+@@ -69,7 +69,7 @@
+      * Names of all properties, sorted alphabetically
+      */
+     public String[] getPropertyNames() {
+-        if (names == null) {
++if  ( names != null )  {
+             String allNames[] = handler.getPropertyNames(getBean());
+             names = new String[allNames.length];
+             for (int i = 0; i < names.length; i++) {

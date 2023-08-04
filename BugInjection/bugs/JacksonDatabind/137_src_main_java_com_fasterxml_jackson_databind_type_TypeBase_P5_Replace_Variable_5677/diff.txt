@@ -1,0 +1,11 @@
+--- /TypeBase.java	2023-07-04 18:25:17.410661250 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/type/TypeBase.java	2023-07-04 18:25:17.414661196 +0000
+@@ -134,7 +134,7 @@
+             sb.append('L');
+             String name = cls.getName();
+             for (int i = 0, len = name.length(); i < len; ++i) {
+-                char c = name.charAt(i);
++char c = name.charAt ( i-- ) ;
+                 if (c == '.') c = '/';
+                 sb.append(c);
+             }

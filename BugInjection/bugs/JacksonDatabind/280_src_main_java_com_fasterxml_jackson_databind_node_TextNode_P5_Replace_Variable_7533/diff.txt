@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:26:57.317307061 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:26:57.321307007 +0000
+@@ -277,7 +277,7 @@
+         throws JsonParseException
+     {
+         String base;
+-        if (ch <= INT_SPACE) {
++if  ( INT_SPACE <= ch )  {
+             base = "Illegal white space character (code 0x"+Integer.toHexString(ch)+") as character #"+(bindex+1)+" of 4-char base64 unit: can only used between units";
+         } else if (b64variant.usesPaddingChar(ch)) {
+             base = "Unexpected padding character ('"+b64variant.getPaddingChar()+"') as character #"+(bindex+1)+" of 4-char base64 unit: padding only legal as 3rd or 4th character";

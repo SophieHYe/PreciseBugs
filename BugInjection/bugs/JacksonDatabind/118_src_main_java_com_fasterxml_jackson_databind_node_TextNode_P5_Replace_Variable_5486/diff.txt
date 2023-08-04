@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:48.426240844 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:48.426240844 +0000
+@@ -115,7 +115,7 @@
+                     _reportInvalidBase64(b64variant, ch, 2);
+                 }
+                 // Ok, must get padding
+-                if (ptr >= len) {
++if  ( len >= ptr )  {
+                     _reportBase64EOF();
+                 }
+                 ch = str.charAt(ptr++);

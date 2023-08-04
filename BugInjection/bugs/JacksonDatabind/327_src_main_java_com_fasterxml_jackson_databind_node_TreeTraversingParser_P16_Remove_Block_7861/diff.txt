@@ -1,0 +1,16 @@
+--- /TreeTraversingParser.java	2023-07-04 18:29:25.559297774 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:29:25.563297720 +0000
+@@ -325,9 +325,10 @@
+         if (!_closed) {
+             JsonNode n = currentNode();
+             if (n != null) {
+-                if (n.isPojo()) {
+-                    return ((POJONode) n).getPojo();
+-                }
++ 
++ 
++ 
++ 
+                 if (n.isBinary()) {
+                     return ((BinaryNode) n).binaryValue();
+                 }

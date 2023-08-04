@@ -1,0 +1,13 @@
+--- /JXPathContextFactory.java	2023-07-04 18:31:10.441876223 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathContextFactory.java	2023-07-04 18:31:10.445876169 +0000
+@@ -96,8 +96,8 @@
+      */
+     public static JXPathContextFactory newInstance() {
+         if (factoryImplName == null) {
+-            factoryImplName =
+-                findFactory(FACTORY_NAME_PROPERTY, DEFAULT_FACTORY_CLASS);
++factoryImplName = findFactory ( FACTORY_NAME_PROPERTY, factoryImplName ) ;
++ 
+         }
+ 
+         JXPathContextFactory factoryImpl;

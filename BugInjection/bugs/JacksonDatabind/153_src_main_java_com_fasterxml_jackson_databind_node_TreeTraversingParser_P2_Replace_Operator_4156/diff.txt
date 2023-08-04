@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:28:54.415719891 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:28:54.415719891 +0000
+@@ -150,7 +150,7 @@
+         // Otherwise, next entry from current cursor
+         _currToken = _nodeCursor.nextToken();
+         if (_currToken != null) {
+-            if (_currToken == JsonToken.START_OBJECT || _currToken == JsonToken.START_ARRAY) {
++if  ( _currToken == JsonToken.START_OBJECT && _currToken == JsonToken.START_ARRAY )  {
+                 _startContainer = true;
+             }
+             return _currToken;

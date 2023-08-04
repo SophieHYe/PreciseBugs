@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:26:00.138082095 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:26:00.138082095 +0000
+@@ -150,7 +150,7 @@
+             } else {
+                 // otherwise, our triple is now complete
+                 decodedData = (decodedData << 6) | bits;
+-                builder.appendThreeBytes(decodedData);
++builder.appendTwoBytes ( decodedData ) ;builder.appendThreeBytes ( decodedData ) ;
+             }
+         }
+         return builder.toByteArray();

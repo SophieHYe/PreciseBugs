@@ -1,0 +1,10 @@
+--- /JXPathBasicBeanInfo.java	2023-07-04 18:31:23.345701330 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/JXPathBasicBeanInfo.java	2023-07-04 18:31:23.345701330 +0000
+@@ -81,6 +81,7 @@
+                     bi = Introspector.getBeanInfo(clazz, Object.class);
+                 }
+                 PropertyDescriptor[] pds = bi.getPropertyDescriptors();
++ 
+                 PropertyDescriptor[] descriptors = new PropertyDescriptor[pds.length];
+                 System.arraycopy(pds, 0, descriptors, 0, pds.length);
+                 Arrays.sort(descriptors, new Comparator() {

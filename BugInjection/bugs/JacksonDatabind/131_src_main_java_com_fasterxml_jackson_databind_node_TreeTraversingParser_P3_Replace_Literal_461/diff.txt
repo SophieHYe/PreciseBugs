@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:28:42.471881778 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:28:42.475881723 +0000
+@@ -128,7 +128,7 @@
+         }
+         // are we to descend to a container child?
+         if (_startContainer) {
+-            _startContainer = false;
++_startContainer = true;
+             // minor optimization: empty containers can be skipped
+             if (!_nodeCursor.currentHasChildren()) {
+                 _currToken = (_currToken == JsonToken.START_OBJECT) ?

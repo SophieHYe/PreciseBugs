@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:35.826411629 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:35.826411629 +0000
+@@ -86,7 +86,7 @@
+             }
+             int decodedData = bits;
+             // then second base64 char; can't get padding yet, nor ws
+-            if (ptr >= len) {
++if  ( len >= ptr )  {
+                 _reportBase64EOF();
+             }
+             ch = str.charAt(ptr++);

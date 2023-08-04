@@ -1,0 +1,13 @@
+--- /JsonNodeDeserializer.java	2023-07-04 18:25:17.074665804 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/deser/std/JsonNodeDeserializer.java	2023-07-04 18:25:17.078665749 +0000
+@@ -297,8 +297,8 @@
+         case VALUE_NUMBER_FLOAT:
+             {
+                 JsonParser.NumberType nt = jp.getNumberType();
+-                if (nt == JsonParser.NumberType.BIG_DECIMAL
+-                    || ctxt.isEnabled(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS)) {
++if  ( nt == JsonParser.NumberType.BIG_DECIMAL && ! ctxt.isEnabled ( DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS )  )  {
++ 
+                     return nodeFactory.numberNode(jp.getDecimalValue());
+                 }
+                 return nodeFactory.numberNode(jp.getDoubleValue());

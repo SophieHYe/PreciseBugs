@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:28:33.512003221 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:28:33.512003221 +0000
+@@ -121,7 +121,7 @@
+     @Override
+     public JsonToken nextToken() throws IOException, JsonParseException
+     {
+-        if (_nextToken != null) {
++if  ( _nodeCursor != null )  {
+             _currToken = _nextToken;
+             _nextToken = null;
+             return _currToken;

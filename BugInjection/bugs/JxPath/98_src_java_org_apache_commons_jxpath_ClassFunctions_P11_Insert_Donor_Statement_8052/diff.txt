@@ -1,0 +1,13 @@
+--- /ClassFunctions.java	2023-07-04 18:31:19.129758471 +0000
++++ /JxPath-1/src/java/org/apache/commons/jxpath/ClassFunctions.java	2023-07-04 18:31:19.129758471 +0000
+@@ -95,8 +95,8 @@
+         }
+ 
+         if (name.equals("new")) {
+-            Constructor constructor =
+-                MethodLookupUtils.lookupConstructor(functionClass, parameters);
++Method method = MethodLookupUtils. lookupStaticMethod ( functionClass, name, parameters ) ;Constructor constructor = MethodLookupUtils.lookupConstructor ( functionClass, parameters ) ;
++ 
+             if (constructor != null) {
+                 return new ConstructorFunction(constructor);
+             }

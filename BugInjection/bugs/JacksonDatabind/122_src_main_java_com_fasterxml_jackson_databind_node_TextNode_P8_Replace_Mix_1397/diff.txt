@@ -1,0 +1,11 @@
+--- /TextNode.java	2023-07-04 18:25:49.630224524 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TextNode.java	2023-07-04 18:25:49.634224470 +0000
+@@ -119,7 +119,7 @@
+                     _reportBase64EOF();
+                 }
+                 ch = str.charAt(ptr++);
+-                if (!b64variant.usesPaddingChar(ch)) {
++if  ( b64variant.usesPaddingChar ( ch )  )  {
+                     _reportInvalidBase64(b64variant, ch, 3, "expected padding character '"+b64variant.getPaddingChar()+"'");
+                 }
+                 // Got 12 bits, only need 8, need to shift

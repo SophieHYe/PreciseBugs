@@ -1,0 +1,11 @@
+--- /MapperConfig.java	2023-07-04 18:25:20.954613212 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/cfg/MapperConfig.java	2023-07-04 18:25:20.954613212 +0000
+@@ -70,7 +70,7 @@
+      */
+     public static <F extends Enum<F> & ConfigFeature> int collectFeatureDefaults(Class<F> enumClass)
+     {
+-        int flags = 0;
++short  flags = 0;
+         for (F value : enumClass.getEnumConstants()) {
+             if (value.enabledByDefault()) {
+                 flags |= value.getMask();

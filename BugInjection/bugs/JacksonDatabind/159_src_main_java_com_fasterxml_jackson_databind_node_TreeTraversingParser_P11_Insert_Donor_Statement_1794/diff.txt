@@ -1,0 +1,11 @@
+--- /TreeTraversingParser.java	2023-07-04 18:28:57.955671911 +0000
++++ /JacksonDatabind-1/src/main/java/com/fasterxml/jackson/databind/node/TreeTraversingParser.java	2023-07-04 18:28:57.959671857 +0000
+@@ -156,7 +156,7 @@
+             return _currToken;
+         }
+         // null means no more children; need to return end marker
+-        _currToken = _nodeCursor.endToken();
++_nodeCursor = _nodeCursor.getParent (  ) ;_currToken = _nodeCursor.endToken (  ) ;
+         _nodeCursor = _nodeCursor.getParent();
+         return _currToken;
+     }
