@@ -1,0 +1,11 @@
+--- /ArrayEquals.java	2023-07-04 03:28:42.012542442 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/ArrayEquals.java	2023-07-04 03:28:42.012542442 +0000
+@@ -23,7 +23,7 @@
+             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
+         } else if (wanted instanceof byte[] && actual instanceof byte[]) {
+             return Arrays.equals((byte[]) wanted, (byte[]) actual);
+-        } else if (wanted instanceof char[] && actual instanceof char[]) {
++} else if  ( actual instanceof Object[] )  {
+             return Arrays.equals((char[]) wanted, (char[]) actual);
+         } else if (wanted instanceof double[] && actual instanceof double[]) {
+             return Arrays.equals((double[]) wanted, (double[]) actual);

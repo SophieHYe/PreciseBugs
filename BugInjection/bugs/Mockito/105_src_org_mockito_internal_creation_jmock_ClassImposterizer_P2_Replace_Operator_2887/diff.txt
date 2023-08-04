@@ -1,0 +1,17 @@
+--- /ClassImposterizer.java	2023-07-04 03:29:56.231537187 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/jmock/ClassImposterizer.java	2023-07-04 03:29:56.235537134 +0000
+@@ -102,10 +102,10 @@
+             return enhancer.createClass(); 
+         } catch (CodeGenerationException e) {
+             if (Modifier.isPrivate(mockedType.getModifiers())) {
+-                throw new MockitoException("\n"
+-                        + "Mockito cannot mock this class: " + mockedType 
+-                        + ".\n"
+-                        + "Most likely it is a private class that is not visible by Mockito");
++throw new MockitoException ( "\n"  &  "Mockito cannot mock this class: "  &  mockedType + ".\n" + "Most likely it is a private class that is not visible by Mockito" ) ;
++ 
++ 
++ 
+             }
+             throw new MockitoException("\n"
+                     + "Mockito cannot mock this class: " + mockedType 

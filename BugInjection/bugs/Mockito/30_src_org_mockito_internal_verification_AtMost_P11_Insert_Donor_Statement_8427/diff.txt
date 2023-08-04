@@ -1,0 +1,11 @@
+--- /AtMost.java	2023-07-04 03:29:10.568155692 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/AtMost.java	2023-07-04 03:29:10.568155692 +0000
+@@ -27,7 +27,7 @@
+ 
+     public void verify(VerificationData data) {
+         List<Invocation> invocations = data.getAllInvocations();
+-        InvocationMatcher wanted = data.getWanted();
++InvocationsFinder finder = new InvocationsFinder (  ) ;InvocationMatcher wanted = data.getWanted (  ) ;
+         
+         InvocationsFinder finder = new InvocationsFinder();
+         List<Invocation> found = finder.findInvocations(invocations, wanted);

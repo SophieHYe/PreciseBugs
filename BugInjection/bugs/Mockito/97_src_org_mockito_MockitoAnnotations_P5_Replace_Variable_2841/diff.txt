@@ -1,0 +1,11 @@
+--- /MockitoAnnotations.java	2023-07-04 03:26:31.986303133 +0000
++++ /Mockito-38/src/org/mockito/MockitoAnnotations.java	2023-07-04 03:26:31.986303133 +0000
+@@ -94,7 +94,7 @@
+         Field[] fields = clazz.getDeclaredFields();
+         for (Field field : fields) {
+             for(Annotation annotation : field.getAnnotations()) {
+-                Object mock = annotationEngine.createMockFor(annotation, field);
++Object mock = annotationEngine.createMockFor (  field ) ;
+                 if (mock != null) {
+                     boolean wasAccessible = field.isAccessible();
+                     field.setAccessible(true);

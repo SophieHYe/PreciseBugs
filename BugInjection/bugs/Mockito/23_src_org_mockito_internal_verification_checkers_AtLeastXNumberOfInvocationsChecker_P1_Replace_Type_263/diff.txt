@@ -1,0 +1,11 @@
+--- /AtLeastXNumberOfInvocationsChecker.java	2023-07-04 03:29:17.660059636 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsChecker.java	2023-07-04 03:29:17.660059636 +0000
+@@ -20,7 +20,7 @@
+     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+         
+-        int actualCount = actualInvocations.size();
++short  actualCount = actualInvocations.size (  ) ;
+         if (wantedCount > actualCount) {
+             Location lastLocation = finder.getLastLocation(actualInvocations);
+             reporter.tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);        

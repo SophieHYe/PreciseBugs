@@ -1,0 +1,18 @@
+--- /Invocation.java	2023-07-04 03:31:13.522490167 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:13.526490113 +0000
+@@ -65,10 +65,11 @@
+         final int nonVarArgsCount = args.length - 1;
+         Object[] varArgs;
+         if (args[nonVarArgsCount] == null) {
+-            // in case someone deliberately passed null varArg array
+-            varArgs = new Object[] { null };
+-        } else {
+-            varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
++ 
++varArgs = new java.lang.Object[]{ null }; 
++ 
++ 
++ 
+         }
+         final int varArgsCount = varArgs.length;
+         Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];

@@ -1,0 +1,18 @@
+--- /ArrayEquals.java	2023-07-04 03:28:56.972339833 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/ArrayEquals.java	2023-07-04 03:28:56.972339833 +0000
+@@ -43,10 +43,11 @@
+ 
+     public void describeTo(Description description) {
+         if (getWanted() != null && getWanted().getClass().isArray()) {
+-            appendArray(createObjectArray(getWanted()), description);
+-        } else {
+-            super.describeTo(description);
+-        }
++ 
++appendArray(org.mockito.internal.matchers.ArrayEquals.createObjectArray(getWanted()), description); 
++ 
++ 
++ 
+     }
+ 
+     private void appendArray(Object[] array, Description description) {

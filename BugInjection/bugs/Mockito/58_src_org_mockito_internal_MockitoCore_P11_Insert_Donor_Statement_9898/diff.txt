@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:53.602760023 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:53.602760023 +0000
+@@ -55,7 +55,7 @@
+     }
+ 
+     public <T> OngoingStubbing<T> when(T methodCall) {
+-        mockingProgress.stubbingStarted();
++mockingProgress.verificationStarted ( mode ) ;mockingProgress.stubbingStarted (  ) ;
+         return (OngoingStubbing) stub();
+     }
+     

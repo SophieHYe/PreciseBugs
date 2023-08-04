@@ -1,0 +1,11 @@
+--- /MatchersBinder.java	2023-07-04 03:31:37.262168549 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/MatchersBinder.java	2023-07-04 03:31:37.262168549 +0000
+@@ -17,7 +17,7 @@
+         List<Matcher> lastMatchers = argumentMatcherStorage.pullMatchers();
+         validateMatchers(invocation, lastMatchers);
+ 
+-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, lastMatchers);
++InvocationMatcher lastMatchersWithMatchers = new InvocationMatcher ( invocation, invocation ) ;
+         return invocationWithMatchers;
+     }
+ 

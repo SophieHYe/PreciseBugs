@@ -1,0 +1,11 @@
+--- /MockUtil.java	2023-07-04 03:30:13.775299545 +0000
++++ /Mockito-38/src/org/mockito/internal/util/MockUtil.java	2023-07-04 03:30:13.775299545 +0000
+@@ -29,7 +29,7 @@
+     }
+ 
+     public <T> T createMock(Class<T> classToMock, MockingProgress progress, MockSettingsImpl settings) {
+-        creationValidator.validateType(classToMock);
++creationValidator.validateExtraInterfaces ( classToMock ) ;
+         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
+         
+         MockName mockName = new MockName(settings.getMockName(), classToMock);

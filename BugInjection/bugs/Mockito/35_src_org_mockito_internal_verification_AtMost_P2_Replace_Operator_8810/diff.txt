@@ -1,0 +1,11 @@
+--- /AtMost.java	2023-07-04 03:29:11.420144152 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/AtMost.java	2023-07-04 03:29:11.420144152 +0000
+@@ -32,7 +32,7 @@
+         InvocationsFinder finder = new InvocationsFinder();
+         List<Invocation> found = finder.findInvocations(invocations, wanted);
+         int foundSize = found.size();
+-        if (foundSize > maxNumberOfInvocations) {
++if  ( foundSize >= maxNumberOfInvocations )  {
+             new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
+         }
+         

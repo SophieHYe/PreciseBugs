@@ -1,0 +1,11 @@
+--- /MockHandler.java	2023-07-04 03:27:17.489687039 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:17.489687039 +0000
+@@ -64,7 +64,7 @@
+         }
+         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
+ 
+-        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), new FilteredCGLIBProxyRealMethod(methodProxy));
++Invocation invocation = new Invocation ( proxy,  args, SequenceNumber.next (  ) , new FilteredCGLIBProxyRealMethod ( methodProxy )  ) ;
+         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
+         
+         mockingProgress.validateState();

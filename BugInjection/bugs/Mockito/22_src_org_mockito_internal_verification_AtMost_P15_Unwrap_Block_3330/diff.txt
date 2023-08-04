@@ -1,0 +1,14 @@
+--- /AtMost.java	2023-07-04 03:29:10.236160188 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/AtMost.java	2023-07-04 03:29:10.236160188 +0000
+@@ -20,8 +20,9 @@
+ 
+     public AtMost(int maxNumberOfInvocations) {
+         if (maxNumberOfInvocations < 0) {
+-            throw new MockitoException("Negative value is not allowed here");
+-        }
++ 
++throw new org.mockito.exceptions.base.MockitoException("Negative value is not allowed here"); 
++ 
+         this.maxNumberOfInvocations = maxNumberOfInvocations;
+     }
+ 

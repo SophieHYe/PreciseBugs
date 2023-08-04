@@ -1,0 +1,11 @@
+--- /MissingInvocationInOrderChecker.java	2023-07-04 03:29:13.200120043 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/MissingInvocationInOrderChecker.java	2023-07-04 03:29:13.204119990 +0000
+@@ -27,7 +27,7 @@
+     }
+     
+     public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
++List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks ( 3, wanted ) ;
+         
+         if (!chunk.isEmpty()) {
+             return;

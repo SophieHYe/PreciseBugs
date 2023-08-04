@@ -1,0 +1,11 @@
+--- /CGLIBHacker.java	2023-07-04 03:30:01.863460900 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/cglib/CGLIBHacker.java	2023-07-04 03:30:01.863460900 +0000
+@@ -17,7 +17,7 @@
+             Object createInfo = createInfoField.get(methodProxy);
+             Field namingPolicyField = createInfo.getClass().getDeclaredField("namingPolicy");
+             namingPolicyField.setAccessible(true);
+-            if (namingPolicyField.get(createInfo) == null) {
++if  ( createInfo.get ( namingPolicyField )  == null )  {
+                 namingPolicyField.set(createInfo, MockitoNamingPolicy.INSTANCE);
+             }
+         } catch (Exception e) {

@@ -1,0 +1,14 @@
+--- /CGLIBHacker.java	2023-07-04 03:30:01.987459221 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/cglib/CGLIBHacker.java	2023-07-04 03:30:01.987459221 +0000
+@@ -18,8 +18,9 @@
+             Field namingPolicyField = createInfo.getClass().getDeclaredField("namingPolicy");
+             namingPolicyField.setAccessible(true);
+             if (namingPolicyField.get(createInfo) == null) {
+-                namingPolicyField.set(createInfo, MockitoNamingPolicy.INSTANCE);
+-            }
++ 
++namingPolicyField.set(createInfo, MockitoNamingPolicy.INSTANCE); 
++ 
+         } catch (Exception e) {
+             throw new RuntimeException("Unable to set MockitoNamingPolicy on cglib generator which creates FastClasses", e);
+         }

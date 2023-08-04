@@ -1,0 +1,15 @@
+--- /Mockito.java	2023-07-04 03:31:48.938010362 +0000
++++ /Mockito-38/src/org/mockito/Mockito.java	2023-07-04 03:31:48.938010362 +0000
+@@ -842,9 +842,9 @@
+      * @return a spy of the real object
+      */
+     public static <T> T spy(T object) {
+-        return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
+-                .spiedInstance(object)
+-                .defaultAnswer(CALLS_REAL_METHODS));
++return MOCKITO_CORE.mock (  ( Class<T> )  CALLS_REAL_METHODS.getClass (  ) , withSettings (  ) .spiedInstance ( object ) .defaultAnswer ( object )  ) ;
++ 
++ 
+     }
+ 
+     /**

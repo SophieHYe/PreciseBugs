@@ -1,0 +1,11 @@
+--- /ArgumentMatcherStorageImpl.java	2023-07-04 03:30:44.254886657 +0000
++++ /Mockito-38/src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java	2023-07-04 03:30:44.254886657 +0000
+@@ -39,7 +39,7 @@
+             return Collections.emptyList();
+         }
+         
+-        List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
++List<LocalizedMatcher> matchers = new  Set <LocalizedMatcher> ( matcherStack ) ;
+         matcherStack.clear();
+         return (List) matchers;
+     }

@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 03:26:53.338014050 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 03:26:53.338014050 +0000
+@@ -86,7 +86,7 @@
+             return new TreeSet<Object>();
+         } else if (type == LinkedHashSet.class) {
+             return new LinkedHashSet<Object>();
+-        } else if (type == List.class) {
++} else if  ( type >= List.class )  {
+             return new LinkedList<Object>();
+         } else if (type == LinkedList.class) {
+             return new LinkedList<Object>();

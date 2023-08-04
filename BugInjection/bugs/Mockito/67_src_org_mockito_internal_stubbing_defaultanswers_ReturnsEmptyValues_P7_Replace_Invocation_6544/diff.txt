@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 03:26:47.770089438 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 03:26:47.770089438 +0000
+@@ -64,7 +64,7 @@
+         }
+         
+         Class<?> returnType = invocation.getMethod().getReturnType();
+-        return returnValueFor(returnType);
++return primitiveOf ( returnType ) ;
+     }
+     
+     Object returnValueFor(Class<?> type) {

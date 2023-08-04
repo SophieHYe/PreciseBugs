@@ -1,0 +1,11 @@
+--- /InvocationsFinder.java	2023-07-04 03:31:27.970294433 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/InvocationsFinder.java	2023-07-04 03:31:27.970294433 +0000
+@@ -38,7 +38,7 @@
+      * 1,1,1
+      */
+     public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+-        List<Invocation> unverified = removeVerifiedInOrder(invocations);
++List<Invocation> unverified = findPreviousVerifiedInOrder ( invocations ) ;
+         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
+         
+         if (wantedCount != firstChunk.size()) {

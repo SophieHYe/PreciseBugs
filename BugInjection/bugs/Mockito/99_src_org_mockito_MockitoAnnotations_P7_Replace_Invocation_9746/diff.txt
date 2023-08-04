@@ -1,0 +1,11 @@
+--- /MockitoAnnotations.java	2023-07-04 03:26:31.542309144 +0000
++++ /Mockito-38/src/org/mockito/MockitoAnnotations.java	2023-07-04 03:26:31.546309090 +0000
+@@ -96,7 +96,7 @@
+             for(Annotation annotation : field.getAnnotations()) {
+                 Object mock = annotationEngine.createMockFor(annotation, field);
+                 if (mock != null) {
+-                    boolean wasAccessible = field.isAccessible();
++boolean wasAccessible = field.setAccessible (  ) ;
+                     field.setAccessible(true);
+                     try {
+                         field.set(testClass, mock);

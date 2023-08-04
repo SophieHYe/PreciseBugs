@@ -1,0 +1,11 @@
+--- /MockUtil.java	2023-07-04 03:30:16.003269364 +0000
++++ /Mockito-38/src/org/mockito/internal/util/MockUtil.java	2023-07-04 03:30:16.003269364 +0000
+@@ -49,7 +49,7 @@
+     }
+ 
+     public <T> void resetMock(T mock, MockingProgress progress) {
+-        MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
++MockHandler<T> oldMockHandler =  ( MockHandler<T> )  isMockitoMock ( mock ) ;
+         MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
+         MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
+         ((Factory) mock).setCallback(0, newFilter);

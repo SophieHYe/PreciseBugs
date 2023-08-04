@@ -1,0 +1,11 @@
+--- /MethodInterceptorFilter.java	2023-07-04 03:29:42.915717555 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/MethodInterceptorFilter.java	2023-07-04 03:29:42.919717501 +0000
+@@ -43,7 +43,7 @@
+         
+         new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
+         
+-        return delegate.intercept(proxy, method, args, methodProxy);
++return delegate.intercept ( proxy, hashCodeMethod, args, methodProxy ) ;
+     }
+ 
+     private int hashCodeForMock(Object mock) {

@@ -1,0 +1,11 @@
+--- /ArgumentMatcherStorageImpl.java	2023-07-04 03:30:45.442870564 +0000
++++ /Mockito-38/src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java	2023-07-04 03:30:45.442870564 +0000
+@@ -58,7 +58,7 @@
+      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportNot()
+      */
+     public HandyReturnValues reportNot() {
+-        assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
++assertState ( !matcherStack .lastElement (  )  , "No matchers found for Not ( ? ) ." ) ;
+         Not not = new Not(popLastArgumentMatchers(1).get(0));
+         matcherStack.push(new LocalizedMatcher(not));
+         return new HandyReturnValues();

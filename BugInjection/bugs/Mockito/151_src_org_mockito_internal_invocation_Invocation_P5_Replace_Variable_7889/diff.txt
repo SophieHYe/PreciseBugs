@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:21.882376910 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:21.882376910 +0000
+@@ -148,7 +148,7 @@
+     }
+ 
+     protected List<Matcher> argumentsToMatchers() {
+-        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
++List<Matcher> matchers = new ArrayList<Matcher> ( varArgsCount ) ;
+         for (Object arg : arguments) {
+             if (arg != null && arg.getClass().isArray()) {
+                 matchers.add(new ArrayEquals(arg));

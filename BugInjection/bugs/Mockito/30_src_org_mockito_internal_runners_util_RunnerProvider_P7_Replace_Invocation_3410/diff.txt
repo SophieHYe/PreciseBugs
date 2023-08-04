@@ -1,0 +1,12 @@
+--- /RunnerProvider.java	2023-07-04 03:31:04.566611495 +0000
++++ /Mockito-38/src/org/mockito/internal/runners/util/RunnerProvider.java	2023-07-04 03:31:04.566611495 +0000
+@@ -27,7 +27,7 @@
+ 
+     public RunnerImpl newInstance(String runnerClassName, Class<?> constructorParam) throws Exception {
+         Class<?> runnerClass = Class.forName(runnerClassName);
+-        Constructor<?> constructor = runnerClass.getConstructor(Class.class.getClass());
++Constructor<?> constructor = runnerClass.forName ( Class.class.getClass (  )  ) ;
+         return (RunnerImpl) constructor.newInstance(constructorParam);   
+     }
+ }
+\ No newline at end of file

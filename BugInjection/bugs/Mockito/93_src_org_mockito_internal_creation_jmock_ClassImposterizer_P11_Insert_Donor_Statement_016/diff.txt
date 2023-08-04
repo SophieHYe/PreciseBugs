@@ -1,0 +1,11 @@
+--- /ClassImposterizer.java	2023-07-04 03:29:53.515573977 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/jmock/ClassImposterizer.java	2023-07-04 03:29:53.515573977 +0000
+@@ -90,7 +90,7 @@
+             enhancer.setSuperclass(mockedType);
+             enhancer.setInterfaces(interfaces);
+         }
+-        enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
++proxy.setCallbacks ( new Callback[] {interceptor, NoOp.INSTANCE} ) ;enhancer.setCallbackTypes ( new Class[]{MethodInterceptor.class, NoOp.class} ) ;
+         enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
+         if (mockedType.getSigners() != null) {
+             enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);

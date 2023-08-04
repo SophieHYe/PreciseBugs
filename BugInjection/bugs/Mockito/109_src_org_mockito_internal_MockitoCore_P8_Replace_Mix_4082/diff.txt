@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:58.894688333 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:58.894688333 +0000
+@@ -106,7 +106,7 @@
+             reporter.mocksHaveToBePassedWhenCreatingInOrder();
+         }
+         for (Object mock : mocks) {
+-            if (mock == null) {
++if  ( mock == true )  {
+                 reporter.nullPassedWhenCreatingInOrder();
+             } else if (!mockUtil.isMock(mock)) {
+                 reporter.notAMockPassedWhenCreatingInOrder();

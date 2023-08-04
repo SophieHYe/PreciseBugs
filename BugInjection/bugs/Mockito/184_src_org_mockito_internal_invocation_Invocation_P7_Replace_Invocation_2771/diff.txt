@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:24.982334913 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:24.982334913 +0000
+@@ -181,7 +181,7 @@
+     }
+ 
+     public boolean isValidReturnType(Class clazz) {
+-        if (method.getReturnType().isPrimitive()) {
++if  ( method.getReturnType (  ) .isArray (  )  )  {
+             return Primitives.primitiveTypeOf(clazz) == method.getReturnType();
+         } else {
+             return method.getReturnType().isAssignableFrom(clazz);

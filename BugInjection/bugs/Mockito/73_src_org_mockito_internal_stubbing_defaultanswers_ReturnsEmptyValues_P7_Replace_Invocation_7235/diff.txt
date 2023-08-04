@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 03:26:48.086085159 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 03:26:48.086085159 +0000
+@@ -70,7 +70,7 @@
+     Object returnValueFor(Class<?> type) {
+         if (type.isPrimitive()) {
+             return primitiveOf(type);
+-        } else if (Primitives.isPrimitiveWrapper(type)) {
++} else if  ( Primitives.primitiveWrapperOf ( type )  )  {
+             return Primitives.primitiveWrapperOf(type);
+         //new instances are used instead of Collections.emptyList(), etc.
+         //to avoid UnsupportedOperationException if code under test modifies returned collection

@@ -1,0 +1,11 @@
+--- /AnswersValidator.java	2023-07-04 03:26:38.450215619 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/answers/AnswersValidator.java	2023-07-04 03:26:38.450215619 +0000
+@@ -21,7 +21,7 @@
+             validateReturnValue((Returns) answer, invocation);
+         }
+         
+-        if (answer instanceof DoesNothing) {
++if  ( answer instanceof ThrowsException )  {
+             validateDoNothing((DoesNothing) answer, invocation);
+         }
+     }

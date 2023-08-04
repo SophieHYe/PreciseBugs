@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:57.074712989 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:57.074712989 +0000
+@@ -89,7 +89,7 @@
+                     reporter.nullPassedToVerifyNoMoreInteractions();
+                 }
+                 mockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+-            } catch (NotAMockException e) {
++if  (  ( mocks == null )  ||  (  ( mocks.length )  == 0 )  )  {     reporter.mocksHaveToBePassedToVerifyNoMoreInteractions (  ) ; }
+                 reporter.notAMockPassedToVerifyNoMoreInteractions();
+             }
+         }

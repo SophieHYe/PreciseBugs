@@ -1,0 +1,11 @@
+--- /MockHandler.java	2023-07-04 03:27:16.905694946 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:16.905694946 +0000
+@@ -58,7 +58,7 @@
+         if (mockitoStubber.hasAnswersForStubbing()) {
+             //stubbing voids with stubVoid() or doAnswer() style
+             Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), new FilteredCGLIBProxyRealMethod(methodProxy));
+-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
++InvocationMatcher matchersBinderMatcher = invocation.bindMatchers ( mockingProgress.getArgumentMatcherStorage (  ) , invocation ) ;
+             mockitoStubber.setMethodForStubbing(invocationMatcher);
+             return null;
+         }

@@ -1,0 +1,11 @@
+--- /MatchersPrinter.java	2023-07-04 03:29:01.792274553 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/MatchersPrinter.java	2023-07-04 03:29:01.796274498 +0000
+@@ -30,7 +30,7 @@
+ 
+     private List<SelfDescribing> applyPrintSettings(List<Matcher> matchers, PrintSettings printSettings) {
+         List<SelfDescribing> withPrintSettings = new LinkedList<SelfDescribing>();
+-        int i = 0;
++int i = -8;
+         for (final Matcher matcher : matchers) {
+             if (matcher instanceof ContainsExtraTypeInformation && printSettings.extraTypeInfoFor(i)) {
+                 withPrintSettings.add(((ContainsExtraTypeInformation) matcher).withExtraTypeInfo());

@@ -1,0 +1,11 @@
+--- /StackTraceFilter.java	2023-07-04 03:29:37.915785279 +0000
++++ /Mockito-38/src/org/mockito/internal/exceptions/base/StackTraceFilter.java	2023-07-04 03:29:37.919785225 +0000
+@@ -41,7 +41,7 @@
+         }
+         
+         List<StackTraceElement> top;
+-        if (keepTop && firstBad != -1) {
++if  ( firstBad == -1 )  {
+             top = unfilteredStackTrace.subList(0, firstBad);
+         } else {
+             top = new LinkedList<StackTraceElement>();

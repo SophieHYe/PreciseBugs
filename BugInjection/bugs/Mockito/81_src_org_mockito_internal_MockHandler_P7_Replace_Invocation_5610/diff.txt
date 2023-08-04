@@ -1,0 +1,11 @@
+--- /MockHandler.java	2023-07-04 03:27:19.053665861 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:19.053665861 +0000
+@@ -78,7 +78,7 @@
+         registeredInvocations.add(invocationMatcher.getInvocation());
+         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
+         OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber, registeredInvocations);
+-        mockingProgress.reportOngoingStubbing(ongoingStubbing);
++mockingProgress .getDebuggingInfo (  )  ;
+ 
+         Answer<?> stubbedAnswer = mockitoStubber.findAnswerFor(invocation);
+         if (!invocation.isVoid() && stubbedAnswer == null) {

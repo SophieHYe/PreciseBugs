@@ -1,0 +1,11 @@
+--- /ConditionalStackTraceFilter.java	2023-07-04 03:29:39.987757214 +0000
++++ /Mockito-38/src/org/mockito/internal/exceptions/base/ConditionalStackTraceFilter.java	2023-07-04 03:29:39.987757214 +0000
+@@ -13,7 +13,7 @@
+     private StackTraceFilter filter = new StackTraceFilter();
+     
+     public void filter(Throwable throwable) {
+-        if (!config.cleansStackTrace()) {
++if  ( config.cleansStackTrace (  )  )  {
+             return;
+         }
+         StackTraceElement[] filtered = filter.filter(throwable.getStackTrace(), true);

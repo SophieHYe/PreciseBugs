@@ -1,0 +1,11 @@
+--- /Times.java	2023-07-04 03:29:30.163890277 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/Times.java	2023-07-04 03:29:30.163890277 +0000
+@@ -30,7 +30,7 @@
+     
+     public void verify(VerificationData data) {
+         if (wantedCount > 0) {
+-            MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
++if  (  ( wantedCount )  > 0 )  {     MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker (  ) ;     missingInvocation.check ( allInvocations, wanted, this ) ; }
+             missingInvocation.check(data.getAllInvocations(), data.getWanted());
+         }
+         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();

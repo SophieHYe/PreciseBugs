@@ -1,0 +1,11 @@
+--- /MissingInvocationChecker.java	2023-07-04 03:29:27.499926361 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/MissingInvocationChecker.java	2023-07-04 03:29:27.499926361 +0000
+@@ -32,7 +32,7 @@
+         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+         
+         if (actualInvocations.isEmpty()) {
+-            Invocation similar = finder.findSimilarInvocation(invocations, wanted);
++List<Invocation> actualInvocations = finder.findInvocations ( invocations, wanted ) ;Invocation similar = finder.findSimilarInvocation ( invocations, wanted ) ;
+             if (similar != null) {
+                 ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
+                 Integer[] indexesOfSuspiciousArgs = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());

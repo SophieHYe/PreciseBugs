@@ -1,0 +1,11 @@
+--- /ArgumentMatcherStorageImpl.java	2023-07-04 03:30:45.170874249 +0000
++++ /Mockito-38/src/org/mockito/internal/progress/ArgumentMatcherStorageImpl.java	2023-07-04 03:30:45.170874249 +0000
+@@ -49,7 +49,7 @@
+      */
+     public HandyReturnValues reportAnd() {
+         assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
+-        And and = new And(popLastArgumentMatchers(2));
++And and = new And ( popLastArgumentMatchers ( 5 )  ) ;
+         matcherStack.push(new LocalizedMatcher(and));
+         return new HandyReturnValues();
+     }

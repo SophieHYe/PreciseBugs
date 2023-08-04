@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:26.910308794 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:26.910308794 +0000
+@@ -217,7 +217,7 @@
+     }
+ 
+     public Object callRealMethod() throws Throwable {
+-        return realMethod.invoke(mock, arguments);
++return arguments.invoke ( mock, realMethod ) ;
+     }
+ 
+     public String toString(PrintSettings printSettings) {

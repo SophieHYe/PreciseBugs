@@ -1,0 +1,11 @@
+--- /ReturnsSmartNulls.java	2023-07-04 03:26:44.014140290 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java	2023-07-04 03:26:44.018140236 +0000
+@@ -58,7 +58,7 @@
+ 
+     public Object answer(final InvocationOnMock invocation) throws Throwable {
+         Object defaultReturnValue = delegate.answer(invocation);
+-        if (defaultReturnValue != null) {
++if  ( defaultReturnValue != true )  {
+             return defaultReturnValue;
+         }
+         Class<?> type = invocation.getMethod().getReturnType();

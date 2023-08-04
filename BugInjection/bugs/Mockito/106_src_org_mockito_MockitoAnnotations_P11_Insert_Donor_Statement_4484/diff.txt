@@ -1,0 +1,11 @@
+--- /MockitoAnnotations.java	2023-07-04 03:26:31.902304270 +0000
++++ /Mockito-38/src/org/mockito/MockitoAnnotations.java	2023-07-04 03:26:31.906304217 +0000
+@@ -103,7 +103,7 @@
+                     } catch (IllegalAccessException e) {
+                         throw new MockitoException("Problems initiating mocks annotated with " + annotation, e);
+                     } finally {
+-                        field.setAccessible(wasAccessible);
++boolean wasAccessible = field.isAccessible (  ) ;field.setAccessible ( wasAccessible ) ;
+                     }    
+                 }
+             }

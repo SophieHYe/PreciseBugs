@@ -1,0 +1,11 @@
+--- /NumberOfInvocationsChecker.java	2023-07-04 03:29:21.212011528 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/NumberOfInvocationsChecker.java	2023-07-04 03:29:21.216011473 +0000
+@@ -39,7 +39,7 @@
+             reporter.neverWantedButInvoked(wanted, firstUndesired); 
+         } else if (wantedCount < actualCount) {
+             Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
+-            reporter.tooManyActualInvocations(wantedCount, actualCount, wanted, firstUndesired);
++reporter.tooManyActualInvocations ( wantedCount, wantedCount, wanted, firstUndesired ) ;
+         }
+         
+         for (Invocation i : actualInvocations) {

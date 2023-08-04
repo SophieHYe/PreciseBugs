@@ -1,0 +1,15 @@
+--- /Reporter.java	2023-07-04 03:25:56.030789895 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:56.030789895 +0000
+@@ -337,9 +337,9 @@
+     public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
+         
+-        throw new VerificationInOrderFailure(join(
+-                "Verification in order failure:" + message
+-                ));
++throw new VerificationInOrderFailure ( join ( "Verification in order failure:"  &&  message )  ) ;
++ 
++ 
+     }
+     
+     public void noMoreInteractionsWanted(PrintableInvocation undesired) {

@@ -1,0 +1,14 @@
+--- /ThrowsException.java	2023-07-04 03:26:42.222164552 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/answers/ThrowsException.java	2023-07-04 03:26:42.222164552 +0000
+@@ -20,8 +20,9 @@
+ 
+     public Object answer(InvocationOnMock invocation) throws Throwable {
+         if (new MockUtil().isMock(throwable)) {
+-            throw throwable;
+-        }
++ 
++throw throwable; 
++ 
+         Throwable t = throwable.fillInStackTrace();
+         filter.filter(t);
+         throw t;

@@ -1,0 +1,11 @@
+--- /ReturnsSmartNulls.java	2023-07-04 03:26:44.150138449 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java	2023-07-04 03:26:44.150138449 +0000
+@@ -61,7 +61,7 @@
+         if (defaultReturnValue != null) {
+             return defaultReturnValue;
+         }
+-        Class<?> type = invocation.getMethod().getReturnType();
++Class<?> type = invocation.getMethod (  )  .getName (  )  ;
+         if (ClassImposterizer.INSTANCE.canImposterise(type)) {
+             return ClassImposterizer.INSTANCE.imposterise(new ThrowingInterceptor(invocation), type);
+         }

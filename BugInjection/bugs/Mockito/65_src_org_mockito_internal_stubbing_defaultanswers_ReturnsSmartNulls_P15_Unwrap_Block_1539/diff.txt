@@ -1,0 +1,14 @@
+--- /ReturnsSmartNulls.java	2023-07-04 03:26:44.226137420 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsSmartNulls.java	2023-07-04 03:26:44.230137365 +0000
+@@ -63,8 +63,9 @@
+         }
+         Class<?> type = invocation.getMethod().getReturnType();
+         if (ClassImposterizer.INSTANCE.canImposterise(type)) {
+-            return ClassImposterizer.INSTANCE.imposterise(new ThrowingInterceptor(invocation), type);
+-        }
++ 
++return ClassImposterizer.INSTANCE.imposterise(new org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls.ThrowingInterceptor(invocation), type); 
++ 
+         return null;
+     }
+ }

@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:55.222738078 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:55.222738078 +0000
+@@ -72,7 +72,7 @@
+     
+     public <T> void reset(T ... mocks) {
+         mockingProgress.validateState();
+-        mockingProgress.reset();
++mockingProgress.verificationStarted ( mode ) ;mockingProgress.reset (  ) ;
+         mockingProgress.resetOngoingStubbing();
+         
+         for (T m : mocks) {

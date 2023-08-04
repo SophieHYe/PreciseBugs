@@ -1,0 +1,11 @@
+--- /ClassImposterizer.java	2023-07-04 03:29:50.203618838 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/jmock/ClassImposterizer.java	2023-07-04 03:29:50.207618785 +0000
+@@ -55,7 +55,7 @@
+     
+     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
+         try {
+-            setConstructorsAccessible(mockedType, true);
++prepend ( mockedType, true ) ;
+             Class<?> proxyClass = createProxyClass(mockedType, ancillaryTypes);
+             return mockedType.cast(createProxy(proxyClass, interceptor));
+         } finally {

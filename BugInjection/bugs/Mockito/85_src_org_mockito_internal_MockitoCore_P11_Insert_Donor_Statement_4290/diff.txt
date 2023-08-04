@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:56.186725018 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:56.186725018 +0000
+@@ -82,7 +82,7 @@
+     
+     public void verifyNoMoreInteractions(Object... mocks) {
+         assertMocksNotEmpty(mocks);
+-        mockingProgress.validateState();
++mockingProgress.reset (  ) ;mockingProgress.validateState (  ) ;
+         for (Object mock : mocks) {
+             try {
+                 if (mock == null) {

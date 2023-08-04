@@ -1,0 +1,14 @@
+--- /MockSettingsImpl.java	2023-07-04 03:29:59.547492271 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/MockSettingsImpl.java	2023-07-04 03:29:59.547492271 +0000
+@@ -24,8 +24,9 @@
+             if (i == null) {
+                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();
+             } else if (!i.isInterface()) {
+-                new Reporter().extraInterfacesAcceptsOnlyInterfaces(i);
+-            }
++ 
++new org.mockito.exceptions.Reporter().extraInterfacesAcceptsOnlyInterfaces(i); 
++ 
+         }
+         this.extraInterfaces = extraInterfaces;
+         return this;

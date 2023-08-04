@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 03:27:41.901356484 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java	2023-07-04 03:27:41.901356484 +0000
+@@ -267,7 +267,7 @@
+         }
+         EqualsBuilder equalsBuilder = new EqualsBuilder();
+         try {
+-            reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
++reflectionAppend ( lhs,  testClass, equalsBuilder, testTransients, excludeFields ) ;
+             while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+                 testClass = testClass.getSuperclass();
+                 reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);

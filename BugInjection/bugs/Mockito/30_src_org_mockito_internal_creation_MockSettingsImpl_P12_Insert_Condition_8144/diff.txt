@@ -1,0 +1,13 @@
+--- /MockSettingsImpl.java	2023-07-04 03:30:00.171483819 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/MockSettingsImpl.java	2023-07-04 03:30:00.175483765 +0000
+@@ -27,8 +27,8 @@
+                 new Reporter().extraInterfacesAcceptsOnlyInterfaces(i);
+             }
+         }
+-        this.extraInterfaces = extraInterfaces;
+-        return this;
++if  ( extraInterfaces == null || extraInterfaces.length == 0 )  { this.extraInterfaces = extraInterfaces; return this; }
++ 
+     }
+ 
+     public String getMockName() {

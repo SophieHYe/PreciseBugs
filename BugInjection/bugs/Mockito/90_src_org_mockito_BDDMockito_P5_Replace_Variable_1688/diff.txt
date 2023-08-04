@@ -1,0 +1,11 @@
+--- /BDDMockito.java	2023-07-04 03:26:28.322352738 +0000
++++ /Mockito-38/src/org/mockito/BDDMockito.java	2023-07-04 03:26:28.326352684 +0000
+@@ -87,7 +87,7 @@
+          * @see org.mockitousage.customization.BDDMockito.BDDMyOngoingStubbing#willAnswer(org.mockito.stubbing.Answer)
+          */
+         public BDDMyOngoingStubbing<T> willAnswer(Answer<?> answer) {
+-            return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenAnswer(answer));
++return new BDDOngoingStubbingImpl<T> ( answer.thenAnswer ( mockitoOngoingStubbing )  ) ;
+         }
+ 
+         /* (non-Javadoc)

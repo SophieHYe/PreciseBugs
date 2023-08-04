@@ -1,0 +1,17 @@
+--- /Reporter.java	2023-07-04 03:25:47.862900463 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:47.866900409 +0000
+@@ -158,10 +158,10 @@
+     }
+     
+     public void nullPassedToVerifyNoMoreInteractions() {
+-        throw new NullInsteadOfMockException(join(
+-                "Argument(s) passed is null!",
+-                "Examples of correct verifications:",
+-                "    verifyNoMoreInteractions(mockOne, mockTwo);",
++throw new NotAMockException ( join ( "Argument passed to when (  )  is not a mock!", ;
++ 
++ 
++ 
+                 "    verifyZeroInteractions(mockOne, mockTwo);"
+         ));
+     }

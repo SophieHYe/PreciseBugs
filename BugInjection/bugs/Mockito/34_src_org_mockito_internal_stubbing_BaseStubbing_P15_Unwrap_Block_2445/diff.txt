@@ -1,0 +1,14 @@
+--- /BaseStubbing.java	2023-07-04 03:26:35.798251525 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/BaseStubbing.java	2023-07-04 03:26:35.798251525 +0000
+@@ -32,8 +32,9 @@
+ 
+     public OngoingStubbing<T> thenThrow(Throwable... throwables) {
+         if (throwables == null) {
+-            thenThrow((Throwable) null);
+-        }
++ 
++thenThrow(((java.lang.Throwable) (null))); 
++ 
+         OngoingStubbing<T> stubbing = null;
+         for (Throwable t: throwables) {
+             if (stubbing == null) {

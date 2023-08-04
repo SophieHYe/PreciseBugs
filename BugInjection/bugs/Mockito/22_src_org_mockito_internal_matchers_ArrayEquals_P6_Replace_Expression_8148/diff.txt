@@ -1,0 +1,11 @@
+--- /ArrayEquals.java	2023-07-04 03:28:38.808585833 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/ArrayEquals.java	2023-07-04 03:28:38.812585780 +0000
+@@ -19,7 +19,7 @@
+         Object wanted = getWanted();
+         if (wanted == null || actual == null) {
+             return super.matches(actual);
+-        } else if (wanted instanceof boolean[] && actual instanceof boolean[]) {
++} else if  ( wanted instanceof short[] )  {
+             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
+         } else if (wanted instanceof byte[] && actual instanceof byte[]) {
+             return Arrays.equals((byte[]) wanted, (byte[]) actual);

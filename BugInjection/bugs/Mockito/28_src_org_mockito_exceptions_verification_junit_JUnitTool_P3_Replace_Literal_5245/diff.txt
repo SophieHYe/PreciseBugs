@@ -1,0 +1,11 @@
+--- /JUnitTool.java	2023-07-04 03:26:01.750712463 +0000
++++ /Mockito-38/src/org/mockito/exceptions/verification/junit/JUnitTool.java	2023-07-04 03:26:01.750712463 +0000
+@@ -25,7 +25,7 @@
+ 
+     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
+         try {
+-            Class<?> clazz = Class.forName("org.mockito.exceptions.verification.junit.ArgumentsAreDifferent");
++Class<?> clazz = Class.forName ( "ArgumentsAreDifferent" ) ;
+             AssertionError throwable = (AssertionError) clazz.getConstructors()[0].newInstance(message, wanted, actual);
+             return throwable;
+         } catch (Throwable t) {

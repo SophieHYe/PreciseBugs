@@ -1,0 +1,11 @@
+--- /StubberImpl.java	2023-07-04 03:27:14.057733508 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/StubberImpl.java	2023-07-04 03:27:14.061733455 +0000
+@@ -24,7 +24,7 @@
+     public <T> T when(T mock) {
+         MockUtil mockUtil = new MockUtil();
+         
+-        if (mock == null) {
++if  ( mock != null )  {
+             reporter.nullPassedToWhenMethod();
+         } else {
+             if (!mockUtil.isMock(mock)) {

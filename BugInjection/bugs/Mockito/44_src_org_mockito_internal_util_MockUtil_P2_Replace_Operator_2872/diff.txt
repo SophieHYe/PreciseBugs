@@ -1,0 +1,11 @@
+--- /MockUtil.java	2023-07-04 03:30:15.603274783 +0000
++++ /Mockito-38/src/org/mockito/internal/util/MockUtil.java	2023-07-04 03:30:15.603274783 +0000
+@@ -41,7 +41,7 @@
+         
+         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
+         
+-        if (spiedInstance != null) {
++if  ( spiedInstance == null )  {
+             new LenientCopyTool().copyToMock(spiedInstance, mock);
+         }
+         

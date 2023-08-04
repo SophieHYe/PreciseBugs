@@ -1,0 +1,15 @@
+--- /CreationValidator.java	2023-07-04 03:30:22.843176711 +0000
++++ /Mockito-38/src/org/mockito/internal/util/CreationValidator.java	2023-07-04 03:30:22.843176711 +0000
+@@ -23,8 +23,9 @@
+         
+         for (Class i : extraInterfaces) {
+             if (classToMock == i) {
+-                new Reporter().extraInterfacesCannotContainMockedType(classToMock);
+-            }
++ 
++new org.mockito.exceptions.Reporter().extraInterfacesCannotContainMockedType(classToMock); 
++ 
+         }
+     }
+ }
+\ No newline at end of file

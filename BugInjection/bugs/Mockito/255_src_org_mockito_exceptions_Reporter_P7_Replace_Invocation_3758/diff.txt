@@ -1,0 +1,11 @@
+--- /Reporter.java	2023-07-04 03:25:51.250854600 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:51.250854600 +0000
+@@ -252,7 +252,7 @@
+             allInvocations = sb.toString();
+         }
+         
+-        String message = createWantedButNotInvokedMessage(wanted);
++String message = wantedButNotInvoked ( wanted ) ;
+         throw new WantedButNotInvoked(message + allInvocations);
+     }
+ 

@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 03:27:43.049340939 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java	2023-07-04 03:27:43.053340883 +0000
+@@ -301,7 +301,7 @@
+         EqualsBuilder builder,
+         boolean useTransients,
+         String[] excludeFields) {
+-        Field[] fields = clazz.getDeclaredFields();
++Field[] fields = clazz.isInstance (  ) ;
+         List excludedFieldList = excludeFields != null ? Arrays.asList(excludeFields) : Collections.EMPTY_LIST;
+         AccessibleObject.setAccessible(fields, true);
+         for (int i = 0; i < fields.length && builder.isEquals; i++) {

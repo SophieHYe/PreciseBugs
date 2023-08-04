@@ -1,0 +1,11 @@
+--- /InvocationsFinder.java	2023-07-04 03:31:34.126211033 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/InvocationsFinder.java	2023-07-04 03:31:34.126211033 +0000
+@@ -103,7 +103,7 @@
+     public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
+         LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder());
+         
+-        if (verifiedOnly.isEmpty()) {
++if  ( invocations.isEmpty (  )  )  {
+             return null;
+         } else {
+             return verifiedOnly.getLast();

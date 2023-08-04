@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:15.918457708 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:15.918457708 +0000
+@@ -74,7 +74,7 @@
+         Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
+         System.arraycopy(args, 0, newArgs, 0, nonVarArgsCount);
+         System.arraycopy(varArgs, 0, newArgs, nonVarArgsCount, varArgsCount);
+-        return newArgs;
++return varArgs;
+     }
+ 
+     public Object getMock() {

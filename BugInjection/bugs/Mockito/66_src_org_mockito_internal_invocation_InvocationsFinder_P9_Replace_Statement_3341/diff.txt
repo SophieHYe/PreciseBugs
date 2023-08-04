@@ -1,0 +1,11 @@
+--- /InvocationsFinder.java	2023-07-04 03:31:30.582259047 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/InvocationsFinder.java	2023-07-04 03:31:30.582259047 +0000
+@@ -63,7 +63,7 @@
+     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
+         Invocation firstSimilar = null;
+         for (Invocation invocation : invocations) {
+-            if (!wanted.hasSimilarMethod(invocation)) {
++if  ( wanted.matches ( invocation )  )  {
+                 continue;
+             }
+             if (firstSimilar == null) {

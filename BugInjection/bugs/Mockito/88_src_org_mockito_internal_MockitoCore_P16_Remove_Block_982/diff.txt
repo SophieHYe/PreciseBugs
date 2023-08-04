@@ -1,0 +1,14 @@
+--- /MockitoCore.java	2023-07-04 03:30:56.474721117 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:56.474721117 +0000
+@@ -86,8 +86,9 @@
+         for (Object mock : mocks) {
+             try {
+                 if (mock == null) {
+-                    reporter.nullPassedToVerifyNoMoreInteractions();
+-                }
++ 
++ 
++ 
+                 mockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+             } catch (NotAMockException e) {
+                 reporter.notAMockPassedToVerifyNoMoreInteractions();

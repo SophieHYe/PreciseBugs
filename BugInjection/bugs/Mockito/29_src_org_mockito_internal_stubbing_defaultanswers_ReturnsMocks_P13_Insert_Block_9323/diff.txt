@@ -1,0 +1,11 @@
+--- /ReturnsMocks.java	2023-07-04 03:26:45.994113483 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsMocks.java	2023-07-04 03:26:45.994113483 +0000
+@@ -26,7 +26,7 @@
+ 
+     @SuppressWarnings("unchecked")
+     Object returnValueFor(Class<?> clazz) {
+-        if (!ClassImposterizer.INSTANCE.canImposterise(clazz)) {
++if  ( ! ( canImposterise ( clazz )  )  )  {     return null; }
+             return null;
+         }
+         

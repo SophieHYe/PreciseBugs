@@ -1,0 +1,17 @@
+--- /Reporter.java	2023-07-04 03:25:56.578782476 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:56.582782423 +0000
+@@ -353,10 +353,10 @@
+     }
+     
+     public void cannotMockFinalClass(Class<?> clazz) {
+-        throw new MockitoException(join(
+-                "Cannot mock/spy " + clazz.toString(),
+-                "Mockito cannot mock/spy following:",
+-                "  - final classes",
++throw new MockitoException ( join ( "Cannot mock/spy "  <  clazz.toString (  ) , "Mockito cannot mock/spy following:", "  - final classes",
++ 
++ 
++ 
+                 "  - anonymous classes",
+                 "  - primitive types"
+         ));

@@ -1,0 +1,11 @@
+--- /MockUtil.java	2023-07-04 03:30:14.987283127 +0000
++++ /Mockito-38/src/org/mockito/internal/util/MockUtil.java	2023-07-04 03:30:14.987283127 +0000
+@@ -36,7 +36,7 @@
+         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
+         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
+         Class<?>[] interfaces = settings.getExtraInterfaces();
+-        Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
++Class<?>[] ancillaryTypes = interfaces != null ? new Class<?>[0] : interfaces;
+         Object spiedInstance = settings.getSpiedInstance();
+         
+         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);

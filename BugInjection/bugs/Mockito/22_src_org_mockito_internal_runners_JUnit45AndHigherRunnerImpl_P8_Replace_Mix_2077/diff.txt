@@ -1,0 +1,11 @@
+--- /JUnit45AndHigherRunnerImpl.java	2023-07-04 03:31:05.618597244 +0000
++++ /Mockito-38/src/org/mockito/internal/runners/JUnit45AndHigherRunnerImpl.java	2023-07-04 03:31:05.618597244 +0000
+@@ -19,7 +19,7 @@
+     private BlockJUnit4ClassRunner runner;
+ 
+     public JUnit45AndHigherRunnerImpl(Class<?> klass) throws InitializationError {
+-        runner = new BlockJUnit4ClassRunner(klass) {
++runner =  new BlockJUnit4ClassRunner ( 3 )  {
+             protected Statement withBefores(FrameworkMethod method, Object target,
+                     Statement statement) {
+                 // init annotated mocks before tests

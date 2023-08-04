@@ -1,0 +1,11 @@
+--- /AllInvocationsFinder.java	2023-07-04 03:31:09.106549991 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/AllInvocationsFinder.java	2023-07-04 03:31:09.106549991 +0000
+@@ -21,7 +21,7 @@
+      * @return invocations
+      */
+     public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
+-        Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
++Set<Invocation> invocationsInOrder = new  LinkedHashSet <Invocation> ( new SequenceNumberComparator (  )  ) ;
+         for (Object mock : mocks) {
+             List<Invocation> fromSingleMock = new MockUtil().getMockHandler(mock).getRegisteredInvocations();
+             invocationsInOrder.addAll(fromSingleMock);

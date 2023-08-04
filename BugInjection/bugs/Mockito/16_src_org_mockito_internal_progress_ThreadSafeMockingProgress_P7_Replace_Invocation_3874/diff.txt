@@ -1,0 +1,11 @@
+--- /ThreadSafeMockingProgress.java	2023-07-04 03:30:38.578963547 +0000
++++ /Mockito-38/src/org/mockito/internal/progress/ThreadSafeMockingProgress.java	2023-07-04 03:30:38.578963547 +0000
+@@ -13,7 +13,7 @@
+     private static ThreadLocal<MockingProgress> mockingProgress = new ThreadLocal<MockingProgress>();
+ 
+     static MockingProgress threadSafely() {
+-        if (mockingProgress.get() == null) {
++if  ( mockingProgress .set ( this )   == null )  {
+             mockingProgress.set(new MockingProgressImpl());
+         }
+         return mockingProgress.get();

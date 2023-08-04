@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:51.358790422 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:51.362790368 +0000
+@@ -34,7 +34,7 @@
+     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+     
+     public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
+-        mockingProgress.validateState();
++mockingProgress.stubbingStarted (  ) ;mockingProgress.validateState (  ) ;
+         mockingProgress.resetOngoingStubbing();
+         return mockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
+     }

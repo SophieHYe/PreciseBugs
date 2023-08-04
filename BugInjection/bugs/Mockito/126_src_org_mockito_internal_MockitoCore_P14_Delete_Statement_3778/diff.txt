@@ -1,0 +1,12 @@
+--- /MockitoCore.java	2023-07-04 03:31:00.778662811 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:31:00.778662811 +0000
+@@ -124,7 +124,8 @@
+     
+     public <T> VoidMethodStubbable<T> stubVoid(T mock) {
+         MockHandler<T> handler = mockUtil.getMockHandler(mock);
+-        mockingProgress.stubbingStarted();
++ 
++ 
+         return handler.voidMethodStubbable(mock);
+     }
+ 

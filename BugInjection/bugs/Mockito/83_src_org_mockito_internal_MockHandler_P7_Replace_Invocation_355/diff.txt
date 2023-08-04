@@ -1,0 +1,11 @@
+--- /MockHandler.java	2023-07-04 03:27:19.165664345 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:19.169664291 +0000
+@@ -80,7 +80,7 @@
+         OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber, registeredInvocations);
+         mockingProgress.reportOngoingStubbing(ongoingStubbing);
+ 
+-        Answer<?> stubbedAnswer = mockitoStubber.findAnswerFor(invocation);
++Answer<?> stubbedAnswer = mockitoStubber.setMethodForStubbing ( invocation ) ;
+         if (!invocation.isVoid() && stubbedAnswer == null) {
+             //it is a return-value interaction but not stubbed. This *might* be a problem
+             mockingProgress.getDebuggingInfo().addPotentiallyUnstubbed(invocationMatcher);

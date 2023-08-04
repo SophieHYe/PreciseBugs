@@ -1,0 +1,17 @@
+--- /Reporter.java	2023-07-04 03:25:53.194828286 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:53.194828286 +0000
+@@ -289,10 +289,10 @@
+                 wanted.toString(),
+                 "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
+                 new Location(),
+-                "But was " + pluralize(actualCount) + ". Undesired invocation:",
+-                firstUndesired,
+-                ""
+-        );
++"But was " + join ( actualCount )  + ". Undesired invocation:", firstUndesired, "" ) ;
++ 
++ 
++ 
+     }
+     
+     public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {

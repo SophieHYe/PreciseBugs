@@ -1,0 +1,11 @@
+--- /AnswersValidator.java	2023-07-04 03:26:41.214178198 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/answers/AnswersValidator.java	2023-07-04 03:26:41.214178198 +0000
+@@ -48,7 +48,7 @@
+ 
+     private void validateException(ThrowsException answer, Invocation invocation) {
+         Throwable throwable = answer.getThrowable();
+-        if (throwable == null) {
++if  ( throwable == this )  {
+             reporter.cannotStubWithNullThrowable();
+         }
+         

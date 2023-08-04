@@ -1,0 +1,11 @@
+--- /Times.java	2023-07-04 03:29:31.327874512 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/Times.java	2023-07-04 03:29:31.331874458 +0000
+@@ -38,7 +38,7 @@
+     }
+     
+     public void verifyInOrder(VerificationData data) {
+-        List<Invocation> allInvocations = data.getAllInvocations();
++InvocationMatcher wanted = data.getWanted (  ) ;List<Invocation> allInvocations = data.getAllInvocations (  ) ;
+         InvocationMatcher wanted = data.getWanted();
+         
+         if (wantedCount > 0) {

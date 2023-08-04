@@ -1,0 +1,11 @@
+--- /BaseStubbing.java	2023-07-04 03:26:34.430270045 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/BaseStubbing.java	2023-07-04 03:26:34.430270045 +0000
+@@ -12,7 +12,7 @@
+ 
+ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
+     public OngoingStubbing<T> thenReturn(T value) {
+-        return thenAnswer(new Returns(value));
++return toAnswer ( new Returns ( value )  ) ;
+     }
+ 
+     public OngoingStubbing<T> thenReturn(T value, T... values) {

@@ -1,0 +1,11 @@
+--- /MissingInvocationChecker.java	2023-07-04 03:29:26.471940284 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/MissingInvocationChecker.java	2023-07-04 03:29:26.471940284 +0000
+@@ -36,7 +36,7 @@
+             if (similar != null) {
+                 ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
+                 Integer[] indexesOfSuspiciousArgs = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
+-                SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indexesOfSuspiciousArgs);
++SmartPrinter smartPrinter = new SmartPrinter ( similar, wanted, indexesOfSuspiciousArgs ) ;
+                 reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
+             } else {
+                 reporter.wantedButNotInvoked(wanted, invocations);

@@ -1,0 +1,11 @@
+--- /AnswersValidator.java	2023-07-04 03:26:39.802197316 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/answers/AnswersValidator.java	2023-07-04 03:26:39.802197316 +0000
+@@ -37,7 +37,7 @@
+             reporter.cannotStubVoidMethodWithAReturnValue();
+         }
+         
+-        if (answer.returnsNull() && invocation.returnsPrimitive()) {
++if  ( answer.returnsNull (  )  && invocation.isValidException (  )  )  {
+             reporter.wrongTypeOfReturnValue(invocation.printMethodReturnType(), "null", invocation.getMethodName());
+         } 
+ 

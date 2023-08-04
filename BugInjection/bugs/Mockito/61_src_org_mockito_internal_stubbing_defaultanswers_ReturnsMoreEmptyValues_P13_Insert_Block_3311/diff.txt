@@ -1,0 +1,11 @@
+--- /ReturnsMoreEmptyValues.java	2023-07-04 03:27:07.641820381 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsMoreEmptyValues.java	2023-07-04 03:27:07.641820381 +0000
+@@ -58,7 +58,7 @@
+     }
+     
+     Object returnValueFor(Class<?> type) {
+-        if (type == String.class) {
++if  ( type.isArray (  )  )  {     Class<?> componenetType = type.getComponentType (  ) ;     return newInstance ( componenetType, 0 ) ; }
+             return "";
+         }  else if (type.isArray()) {
+             Class<?> componenetType = type.getComponentType();

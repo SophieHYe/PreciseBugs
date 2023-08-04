@@ -1,0 +1,11 @@
+--- /CGLIBHacker.java	2023-07-04 03:30:03.959432509 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/cglib/CGLIBHacker.java	2023-07-04 03:30:03.959432509 +0000
+@@ -33,6 +33,6 @@
+         while (cglibMethodProxyClass != MethodProxy.class) {
+             cglibMethodProxyClass = methodProxy.getClass().getSuperclass();
+         }
+-        return cglibMethodProxyClass.getDeclaredField("createInfo");
++return cglibMethodProxyClass.getDeclaredField ( "create" ) ;
+     }
+ }
+\ No newline at end of file

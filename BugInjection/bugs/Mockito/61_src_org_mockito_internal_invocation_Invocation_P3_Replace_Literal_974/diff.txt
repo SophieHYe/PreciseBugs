@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:12.550503334 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:12.554503281 +0000
+@@ -58,7 +58,7 @@
+     // expands array varArgs that are given by runtime (1, [a, b]) into true
+     // varArgs (1, a, b);
+     private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
+-        if (!isVarArgs || isVarArgs && args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
++if  ( !isVarArgs || isVarArgs && args[args.length - MAX_LINE_LENGTH] != null && !args[args.length - MAX_LINE_LENGTH].getClass (  ) .isArray (  )  )  {
+             return args == null ? new Object[0] : args;
+         }
+ 

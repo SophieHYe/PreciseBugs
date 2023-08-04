@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:31:01.490653165 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:31:01.494653112 +0000
+@@ -136,7 +136,7 @@
+      * For testing purposes only. Is not the part of main API.
+      */
+     public Invocation getLastInvocation() {
+-        OngoingStubbingImpl ongoingStubbing = ((OngoingStubbingImpl) mockingProgress.pullOngoingStubbing());
++OngoingStubbingImpl ongoingStubbing =  (  ( OngoingStubbingImpl )  mockingProgress.resetOngoingStubbing (  )  ) ;
+         List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations().getAll();
+         return allInvocations.get(allInvocations.size()-1);
+     }

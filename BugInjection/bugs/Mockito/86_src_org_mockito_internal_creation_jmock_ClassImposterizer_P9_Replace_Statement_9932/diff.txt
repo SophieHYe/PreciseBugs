@@ -1,0 +1,11 @@
+--- /ClassImposterizer.java	2023-07-04 03:29:51.963594999 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/jmock/ClassImposterizer.java	2023-07-04 03:29:51.963594999 +0000
+@@ -83,7 +83,7 @@
+         };
+         enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(mockedType));
+         enhancer.setUseFactory(true);
+-        if (mockedType.isInterface()) {
++if  ( mockedType.getSigners (  )  != null )  {
+             enhancer.setSuperclass(Object.class);
+             enhancer.setInterfaces(prepend(mockedType, interfaces));
+         } else {

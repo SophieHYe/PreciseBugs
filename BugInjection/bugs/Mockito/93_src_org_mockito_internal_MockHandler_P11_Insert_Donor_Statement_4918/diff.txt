@@ -1,0 +1,11 @@
+--- /MockHandler.java	2023-07-04 03:27:20.821641923 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:20.825641868 +0000
+@@ -90,7 +90,7 @@
+             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
+             return stubbedAnswer.answer(invocation);
+         } else {
+-            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
++return stubbedAnswer.answer ( invocation ) ;Object ret = mockSettings.getDefaultAnswer (  ) .answer ( invocation ) ;
+             
+             //redo setting invocation for potential stubbing in case of partial mocks / spies.
+             //Without it, the real method inside 'when' might have delegated 

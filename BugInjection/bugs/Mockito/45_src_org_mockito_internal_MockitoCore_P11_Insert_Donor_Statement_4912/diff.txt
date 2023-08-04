@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:52.750771565 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:52.750771565 +0000
+@@ -42,7 +42,7 @@
+     public IOngoingStubbing stub() {
+         IOngoingStubbing stubbing = mockingProgress.pullOngoingStubbing();
+         if (stubbing == null) {
+-            mockingProgress.reset();
++mockingProgress.verificationStarted ( mode ) ;mockingProgress.reset (  ) ;
+             reporter.missingMethodInvocation();
+         }
+         return stubbing;

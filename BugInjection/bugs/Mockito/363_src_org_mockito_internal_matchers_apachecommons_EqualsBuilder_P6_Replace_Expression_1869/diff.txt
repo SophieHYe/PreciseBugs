@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 03:27:48.913261532 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java	2023-07-04 03:27:48.917261479 +0000
+@@ -360,7 +360,7 @@
+             return this;
+         }
+         Class lhsClass = lhs.getClass();
+-        if (!lhsClass.isArray()) {
++if  ( lhs instanceof int[] )  {
+             if (lhs instanceof java.math.BigDecimal && rhs instanceof java.math.BigDecimal) {
+                 isEquals = (((java.math.BigDecimal) lhs).compareTo((java.math.BigDecimal) rhs) == 0);
+             } else {

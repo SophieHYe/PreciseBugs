@@ -1,0 +1,14 @@
+--- /MockHandler.java	2023-07-04 03:27:18.549672685 +0000
++++ /Mockito-38/src/org/mockito/internal/MockHandler.java	2023-07-04 03:27:18.549672685 +0000
+@@ -72,8 +72,9 @@
+         if (verificationMode != null) {
+             VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getAll(), invocationMatcher);
+             verificationMode.verify(data);
+-            return null;
+-        }
++ 
++ 
++ 
+ 
+         registeredInvocations.add(invocationMatcher.getInvocation());
+         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);

@@ -1,0 +1,11 @@
+--- /Reporter.java	2023-07-04 03:25:49.750874907 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:49.750874907 +0000
+@@ -231,7 +231,7 @@
+         if (JUnitTool.hasJUnit()) {
+             throw JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
+         } else {
+-            throw new ArgumentsAreDifferent(message);
++throw new TooManyActualInvocations ( message ) ;throw new ArgumentsAreDifferent ( message ) ;
+         }
+     }
+     

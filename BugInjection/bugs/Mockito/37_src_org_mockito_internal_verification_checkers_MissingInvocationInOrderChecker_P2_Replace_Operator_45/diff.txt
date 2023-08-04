@@ -1,0 +1,11 @@
+--- /MissingInvocationInOrderChecker.java	2023-07-04 03:29:13.540115439 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/MissingInvocationInOrderChecker.java	2023-07-04 03:29:13.540115439 +0000
+@@ -34,7 +34,7 @@
+         }
+         
+         Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations);
+-        if (previousInOrder == null) {
++if  ( previousInOrder != null )  {
+             reporter.wantedButNotInvoked(wanted);
+         } else {
+             reporter.wantedButNotInvokedInOrder(wanted, previousInOrder);

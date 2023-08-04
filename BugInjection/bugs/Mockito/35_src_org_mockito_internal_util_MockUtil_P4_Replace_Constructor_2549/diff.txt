@@ -1,0 +1,11 @@
+--- /MockUtil.java	2023-07-04 03:30:14.107295048 +0000
++++ /Mockito-38/src/org/mockito/internal/util/MockUtil.java	2023-07-04 03:30:14.107295048 +0000
+@@ -32,7 +32,7 @@
+         creationValidator.validateType(classToMock);
+         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
+         
+-        MockName mockName = new MockName(settings.getMockName(), classToMock);
++MockName mockName = new MockName ( settings.getMockName (  )  ) ;
+         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
+         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
+         Class<?>[] interfaces = settings.getExtraInterfaces();

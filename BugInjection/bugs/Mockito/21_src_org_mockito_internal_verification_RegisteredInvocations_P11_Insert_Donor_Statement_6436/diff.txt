@@ -1,0 +1,11 @@
+--- /RegisteredInvocations.java	2023-07-04 03:29:12.008136188 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/RegisteredInvocations.java	2023-07-04 03:29:12.008136188 +0000
+@@ -18,7 +18,7 @@
+     private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());
+     
+     public void add(Invocation invocation) {
+-        invocations.add(invocation);
++invocations.remove ( invocations.size (  ) -1 ) ;invocations.add ( invocation ) ;
+     }
+ 
+     public void removeLast() {

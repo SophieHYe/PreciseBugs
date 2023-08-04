@@ -1,0 +1,11 @@
+--- /StackTraceFilter.java	2023-07-04 03:29:35.551817299 +0000
++++ /Mockito-38/src/org/mockito/internal/exceptions/base/StackTraceFilter.java	2023-07-04 03:29:35.551817299 +0000
+@@ -26,7 +26,7 @@
+      */
+     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
+         //TODO: after 1.8 profile
+-        List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
++List<StackTraceElement> filtered = new ArrayList<StackTraceElement> ( top ) ;List<StackTraceElement> unfilteredStackTrace = Arrays.asList ( target ) ;
+         
+         int lastBad = -1;
+         int firstBad = -1;

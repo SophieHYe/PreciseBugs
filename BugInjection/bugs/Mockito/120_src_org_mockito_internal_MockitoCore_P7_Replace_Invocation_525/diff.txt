@@ -1,0 +1,11 @@
+--- /MockitoCore.java	2023-07-04 03:30:59.958673920 +0000
++++ /Mockito-38/src/org/mockito/internal/MockitoCore.java	2023-07-04 03:30:59.958673920 +0000
+@@ -117,7 +117,7 @@
+     }
+     
+     public Stubber doAnswer(Answer answer) {
+-        mockingProgress.stubbingStarted();
++mockingProgress.validateState (  ) ;
+         mockingProgress.resetOngoingStubbing();
+         return new StubberImpl().doAnswer(answer);
+     }

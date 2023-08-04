@@ -1,0 +1,11 @@
+--- /Reporter.java	2023-07-04 03:25:52.338839873 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:52.338839873 +0000
+@@ -279,7 +279,7 @@
+     }
+ 
+     public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+-        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
++String message = createTooManyInvocationsMessage ( wantedCount, firstUndesired, wanted, actualCount ) ;
+         throw new TooManyActualInvocations(message);
+     }
+ 

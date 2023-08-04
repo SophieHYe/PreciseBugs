@@ -1,0 +1,11 @@
+--- /StackTraceFilter.java	2023-07-04 03:29:34.039837779 +0000
++++ /Mockito-38/src/org/mockito/internal/exceptions/base/StackTraceFilter.java	2023-07-04 03:29:34.043837724 +0000
+@@ -12,7 +12,7 @@
+ public class StackTraceFilter {
+     
+     public boolean isBad(StackTraceElement e) {
+-        boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
++boolean fromOrgMockito = e.getClassName (  ) .startsWith ( "org.mockito." ) ;boolean fromMockObject = e.getClassName (  ) .contains ( "$$EnhancerByMockitoWithCGLIB$$" ) ;
+         boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
+         boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
+         boolean isInternalRunner = e.getClassName().startsWith("org.mockito.internal.runners.");

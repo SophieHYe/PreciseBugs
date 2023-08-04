@@ -1,0 +1,11 @@
+--- /SearchingClassLoader.java	2023-07-04 03:29:43.979703143 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/jmock/SearchingClassLoader.java	2023-07-04 03:29:43.979703143 +0000
+@@ -25,7 +25,7 @@
+     }
+     
+     private static ClassLoader combineLoadersOf(Class<?> first, Class<?>... others) {
+-        List<ClassLoader> loaders = new ArrayList<ClassLoader>();
++List<ClassLoader> loaders = new  LinkedList <ClassLoader> (  ) ;
+         
+         addIfNewElement(loaders, first.getClassLoader());
+         for (Class<?> c : others) {

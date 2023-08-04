@@ -1,0 +1,12 @@
+--- /DebuggingInfo.java	2023-07-04 03:30:10.699341212 +0000
++++ /Mockito-38/src/org/mockito/internal/debugging/DebuggingInfo.java	2023-07-04 03:30:10.699341212 +0000
+@@ -26,7 +26,8 @@
+         
+         Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
+         while(unstubbedIterator.hasNext()) {
+-            InvocationMatcher unstubbed = unstubbedIterator.next();
++ 
++ 
+             if (unstubbed.getInvocation().equals(invocation)) {
+                 unstubbedIterator.remove();
+             }

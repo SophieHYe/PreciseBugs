@@ -1,0 +1,18 @@
+--- /MockingProgressImpl.java	2023-07-04 03:30:35.651003211 +0000
++++ /Mockito-38/src/org/mockito/internal/progress/MockingProgressImpl.java	2023-07-04 03:30:35.651003211 +0000
+@@ -68,10 +68,11 @@
+         GlobalConfiguration.validate();
+         
+         if (verificationMode != null) {
+-            Location location = verificationMode.getLocation();
+-            verificationMode = null;
+-            reporter.unfinishedVerificationException(location);
+-        }
++ 
++org.mockito.internal.debugging.Location location = verificationMode.getLocation(); verificationMode = null; reporter.unfinishedVerificationException(location); 
++ 
++ 
++ 
+         
+         if (stubbingInProgress != null) {
+             Location temp = stubbingInProgress;

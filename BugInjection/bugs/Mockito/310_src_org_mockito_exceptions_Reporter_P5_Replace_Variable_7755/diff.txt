@@ -1,0 +1,11 @@
+--- /Reporter.java	2023-07-04 03:25:53.738820922 +0000
++++ /Mockito-38/src/org/mockito/exceptions/Reporter.java	2023-07-04 03:25:53.738820922 +0000
+@@ -307,7 +307,7 @@
+     }    
+     
+     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+-        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
++String message = createTooManyInvocationsMessage ( wantedCount, firstUndesired, wanted, actualCount ) ;
+         throw new VerificationInOrderFailure(join(
+                 "Verification in order failure:" + message
+                 ));

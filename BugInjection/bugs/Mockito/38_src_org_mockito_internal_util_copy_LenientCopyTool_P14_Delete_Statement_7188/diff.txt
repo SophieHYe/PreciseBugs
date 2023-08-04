@@ -1,0 +1,12 @@
+--- /LenientCopyTool.java	2023-07-04 03:30:27.715110715 +0000
++++ /Mockito-38/src/org/mockito/internal/util/copy/LenientCopyTool.java	2023-07-04 03:30:27.715110715 +0000
+@@ -36,7 +36,8 @@
+             AccessibilityChanger accessibilityChanger = new AccessibilityChanger();
+             try {
+                 accessibilityChanger.enableAccess(field);
+-                fieldCopier.copyValue(from, mock, field);
++ 
++ 
+             } catch (Throwable t) {
+                 //Ignore - be lenient - if some field cannot be copied then let's be it
+             } finally {

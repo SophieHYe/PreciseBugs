@@ -1,0 +1,11 @@
+--- /AdditionalMatchers.java	2023-07-04 03:26:09.998600806 +0000
++++ /Mockito-38/src/org/mockito/AdditionalMatchers.java	2023-07-04 03:26:09.998600806 +0000
+@@ -325,7 +325,7 @@
+      * @return <code>null</code>.
+      */
+     public static <T extends Comparable<T>> T lt(Comparable<T> value) {
+-        return reportMatcher(new LessThan<T>(value)).<T>returnNull();
++return reportMatcher (  new LessOrEqual<T> ( value )   ) .<T>reportMatcher (  ) ;
+     }
+ 
+     /**

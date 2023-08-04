@@ -1,0 +1,11 @@
+--- /EqualsBuilder.java	2023-07-04 03:28:11.120960801 +0000
++++ /Mockito-38/src/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java	2023-07-04 03:28:11.124960746 +0000
+@@ -547,7 +547,7 @@
+         if (lhs == rhs) {
+             return this;
+         }
+-        if (lhs == null || rhs == null) {
++if  (  ( lhs == null )  ||  ( rhs == null )  )  {     return false; }
+             this.setEquals(false);
+             return this;
+         }

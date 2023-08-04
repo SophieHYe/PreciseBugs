@@ -1,0 +1,11 @@
+--- /AtLeastXNumberOfInvocationsInOrderChecker.java	2023-07-04 03:29:24.227970678 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/checkers/AtLeastXNumberOfInvocationsInOrderChecker.java	2023-07-04 03:29:24.227970678 +0000
+@@ -20,7 +20,7 @@
+     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
+         
+-        int actualCount = chunk.size();
++int actualCount = chunk.size() - 7 ;
+         
+         if (wantedCount > actualCount) {
+             Location lastLocation = finder.getLastLocation(chunk);

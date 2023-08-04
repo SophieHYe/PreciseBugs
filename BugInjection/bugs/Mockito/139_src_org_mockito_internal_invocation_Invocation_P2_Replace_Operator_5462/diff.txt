@@ -1,0 +1,11 @@
+--- /Invocation.java	2023-07-04 03:31:19.710406335 +0000
++++ /Mockito-38/src/org/mockito/internal/invocation/Invocation.java	2023-07-04 03:31:19.710406335 +0000
+@@ -136,7 +136,7 @@
+         MatchersPrinter matchersPrinter = new MatchersPrinter();
+         String method = qualifiedMethodName();
+         String invocation = method + matchersPrinter.getArgumentsLine(matchers, printSettings);
+-        if (printSettings.isMultiline() || (!matchers.isEmpty() && invocation.length() > MAX_LINE_LENGTH)) {
++if  ( printSettings.isMultiline (  )  ||  ( !matchers.isEmpty (  )  || invocation.length (  )  > MAX_LINE_LENGTH )  )  {
+             return method + matchersPrinter.getArgumentsBlock(matchers, printSettings);
+         } else {
+             return invocation;

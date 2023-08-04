@@ -1,0 +1,11 @@
+--- /CGLIBHacker.java	2023-07-04 03:30:03.855433918 +0000
++++ /Mockito-38/src/org/mockito/internal/creation/cglib/CGLIBHacker.java	2023-07-04 03:30:03.855433918 +0000
+@@ -31,7 +31,7 @@
+         //in case methodProxy was extended by user, let's traverse the object graph to find the cglib methodProxy 
+         //with all the fields we would like to change 
+         while (cglibMethodProxyClass != MethodProxy.class) {
+-            cglibMethodProxyClass = methodProxy.getClass().getSuperclass();
++Class cglibMethodProxyClass = methodProxy.getClass (  ) ;cglibMethodProxyClass = methodProxy.getClass (  ) .getSuperclass (  ) ;
+         }
+         return cglibMethodProxyClass.getDeclaredField("createInfo");
+     }

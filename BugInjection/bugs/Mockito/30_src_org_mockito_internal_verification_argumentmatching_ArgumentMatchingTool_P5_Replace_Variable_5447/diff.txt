@@ -1,0 +1,13 @@
+--- /ArgumentMatchingTool.java	2023-07-04 03:29:05.124229425 +0000
++++ /Mockito-38/src/org/mockito/internal/verification/argumentmatching/ArgumentMatchingTool.java	2023-07-04 03:29:05.124229425 +0000
+@@ -27,8 +27,8 @@
+         for (Matcher m : matchers) {
+             if (m instanceof ContainsExtraTypeInformation 
+                     && !safelyMatches(m, arguments[i]) 
+-                    && toStringEquals(m, arguments[i])
+-                    && !((ContainsExtraTypeInformation) m).typeMatches(arguments[i])) {
++&& toStringEquals ( m[i] ) && ! (  ( ContainsExtraTypeInformation )  m ) .typeMatches ( arguments[i] )  )  {
++ 
+                 suspicious.add(i);
+             }
+             i++;

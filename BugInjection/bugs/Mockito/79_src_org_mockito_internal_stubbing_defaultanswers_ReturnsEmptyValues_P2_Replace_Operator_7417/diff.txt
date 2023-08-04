@@ -1,0 +1,11 @@
+--- /ReturnsEmptyValues.java	2023-07-04 03:26:48.962073299 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/defaultanswers/ReturnsEmptyValues.java	2023-07-04 03:26:48.962073299 +0000
+@@ -76,7 +76,7 @@
+         //to avoid UnsupportedOperationException if code under test modifies returned collection
+         } else if (type == Collection.class) {
+             return new LinkedList<Object>();
+-        } else if (type == Set.class) {
++} else if  ( type != Set.class )  {
+             return new HashSet<Object>();
+         } else if (type == HashSet.class) {
+             return new HashSet<Object>();

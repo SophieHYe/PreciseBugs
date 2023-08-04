@@ -1,0 +1,14 @@
+--- /StubberImpl.java	2023-07-04 03:27:14.269730637 +0000
++++ /Mockito-38/src/org/mockito/internal/stubbing/StubberImpl.java	2023-07-04 03:27:14.269730637 +0000
+@@ -28,8 +28,9 @@
+             reporter.nullPassedToWhenMethod();
+         } else {
+             if (!mockUtil.isMock(mock)) {
+-                reporter.notAMockPassedToWhenMethod();
+-            }
++ 
++reporter.notAMockPassedToWhenMethod(); 
++ 
+         }
+         
+         mockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
