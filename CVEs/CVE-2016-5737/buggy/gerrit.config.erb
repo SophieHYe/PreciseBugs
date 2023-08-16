@@ -1,0 +1,216 @@
+# This file is managed by puppet.
+# https://git.openstack.org/cgit/openstack-infra/system-config
+
+[gerrit]
+	basePath = git
+	canonicalWebUrl = <%= @canonicalweburl %>
+	changeScreen = OLD_UI
+	reportBugText = <%= @report_bug_text %>
+	reportBugUrl = <%= @report_bug_url %>
+<% if @git_http_url != "" -%>
+	gitHttpUrl = <%= @git_http_url %>
+<% end -%>
+[database]
+	type = MYSQL
+	hostname = <%= @mysql_host %>
+	database = reviewdb
+	username = gerrit2
+<% if @database_poollimit != "" -%>
+	poolLimit = <%= @database_poollimit %>
+<% end -%>
+	connectionpool = true
+[auth]
+<% if @gerrit_contributor_agreement -%>
+	contributorAgreements = true
+<% end -%>
+	type = <%= @gerrit_auth_type %>
+	cookieSecure = true
+	enableRunAs = true
+<% if @gerrit_auth_type == 'OPENID_SSO' -%>
+	openIdSsoUrl = <%= @openidssourl %>
+<% end -%>
+<% if @gerrit_auth_type == 'LDAP' -%>
+[ldap]
+	server = <%= @ldap_server %>
+	accountBase = <%= @ldap_account_base %>
+	<% if @ldap_group_base and @ldap_group_base != '' -%>groupBase = <%= @ldap_group_base %><%end%>
+	<% if @ldap_username and @ldap_username != '' -%>username = <%= @ldap_username %><%end%>
+	<% if @ldap_password and @ldap_password != '' -%>password = <%= @ldap_password %><%end%>
+	<% if @ldap_accountfullname and @ldap_accountfullname != '' -%>accountFullName = <%= @ldap_accountfullname %><%end%>
+	accountPattern = <%= @ldap_account_pattern %>
+	accountEmailAddress = <%= @ldap_account_email_address %>
+	sslVerify = <%= @ldap_sslverify %>
+	<% if @ldap_ssh_account_name and @ldap_ssh_account_name != '' -%>accountSshUserName = <%= @ldap_ssh_account_name %><%end%>
+<% end %>
+[sendemail]
+	smtpServer = <%= @smtpserver %>
+	from = <%= @sendemail_from %>
+	includeDiff = <%= @sendemail_include_diff %>
+[container]
+	user = gerrit2
+	javaHome = <%= @java_home %>
+<% if @container_javaoptions != "" -%>
+        javaOptions = <%= @container_javaoptions %>
+<% end -%>
+<% if @container_heaplimit != "" -%>
+	heapLimit = <%= @container_heaplimit %>
+<% end -%>
+[gc]
+<% if @gc_start_time != "" -%>
+	startTime = <%= @gc_start_time %>
+<% end -%>
+<% if @gc_interval != "" -%>
+	interval = <%= @gc_interval %>
+<% end -%>
+[core]
+<% if @core_loggingbuffersize != "" -%>
+	asyncLoggingBufferSize = <%= @core_loggingbuffersize %>
+<% end -%>
+<% if @core_packedgitopenfiles != "" -%>
+	packedGitOpenFiles = <%= @core_packedgitopenfiles %>
+<% end -%>
+<% if @core_packedgitlimit != "" -%>
+	packedGitLimit = <%= @core_packedgitlimit %>
+<% end -%>
+<% if @core_packedgitwindowsize != "" -%>
+	packedGitWindowSize = <%= @core_packedgitwindowsize %>
+<% end -%>
+[sshd]
+	listenAddress = <%= @sshd_listen_address %>
+<% if @sshd_threads != "" -%>
+	threads = <%= @sshd_threads %>
+<% end -%>
+<% if @sshd_idle_timeout != "" -%>
+	idleTimeout = <%= @sshd_idle_timeout %>
+<% end -%>
+<% if @sshd_max_connections_per_user != "" -%>
+	maxConnectionsPerUser = <%= @sshd_max_connections_per_user %>
+<% end -%>
+<% if @sshd_batch_threads != "" -%>
+	batchThreads = <%= @sshd_batch_threads %>
+<% end -%>
+[httpd]
+	listenUrl = proxy-https://*:8081/
+<% if @httpd_maxwait != "" -%>
+	maxWait = <%= @httpd_maxwait %>
+<% end -%>
+<% if @httpd_acceptorthreads != "" -%>
+	acceptorThreads = <%= @httpd_acceptorthreads %>
+<% end -%>
+<% if @httpd_minthreads != "" -%>
+	minThreads = <%= @httpd_minthreads %>
+<% end -%>
+<% if @httpd_maxthreads != "" -%>
+	maxThreads = <%= @httpd_maxthreads %>
+<% end -%>
+<% if @httpd_maxqueued != "" -%>
+	maxQueued = <%= @httpd_maxqueued %>
+<% end -%>
+[cache]
+	directory = cache
+[cache "web_sessions"]
+	maxAge = 7days
+<% if @cache_diff_timeout != "" -%>
+[cache "diff"]
+    timeout = <%= @cache_diff_timeout %>
+<% end -%>
+<% if @cache_diff_intraline_timeout != "" -%>
+[cache "diff_intraline"]
+    timeout = <%= @cache_diff_intraline_timeout %>
+<% end -%>
+[user]
+	email = <%= @email %>
+[change]
+	allowDrafts = <%= @allow_drafts %>
+[receive]
+<% if @receive_max_object_size_limit != "" -%>
+	maxObjectSizeLimit = <%= @receive_max_object_size_limit %>
+<% end -%>
+<% @commentlinks.each do |commentlink| -%>
+[commentlink "<%= commentlink['name'] %>"]
+	match = "<%= commentlink['match'] %>"
+<% if commentlink['link'] != "" -%>
+	link = "<%= commentlink['link'] %>"
+<% end -%>
+<% if commentlink['html'] != "" -%>
+	html = "<%= commentlink['html'] %>"
+<% end -%>
+<% end -%>
+<% @trackingids.each do |trackingid| -%>
+[trackingid "<%= trackingid['name'] %>"]
+	match = "<%= trackingid['match'] %>"
+	footer = "<%= trackingid['footer'] %>"
+	system = "<%= trackingid['system'] %>"
+<% end -%>
+[theme]
+	backgroundColor = ffffff
+	topMenuColor = ffffff
+	textColor = 264d69
+	trimColor = eef3f5
+	selectionColor = d1e6ea
+	changeTableOutdatedColor = f5cccc
+	tableOddRowColor = ffffff
+	tableEvenRowColor = f5f5ff
+[melody]
+	monitoring = <%= @enable_melody %>
+	session = <%= @melody_session %>
+[plugin "javamelody"]
+        allowTopMenu = <%= @enable_javamelody_top_menu %>
+<% if @gitweb or @cgit -%>
+[gitweb]
+<% if @gitweb -%>
+	revision = "?p=${project}.git;a=commitdiff;h=${commit}"
+<% else -%>
+	type = cgit
+<% end -%>
+<% if  scope.lookupvar("gerrit::web_repo_url") -%>
+	url = "<%= scope.lookupvar('gerrit::web_repo_url') %>"
+	urlEncode = <%= @web_repo_url_encode %>
+<% end -%>
+<% end -%>
+<% if @contactstore == true -%>
+[contactstore]
+	appsec = <%= @contactstore_appsec %>
+	url = <%= @contactstore_url %>
+<% end -%>
+<% if @secondary_index == true -%>
+[index]
+	type = <%= @secondary_index_type %>
+<% if @index_threads.to_i > 1 -%>
+	threads = <%= @index_threads %>
+<% end -%>
+<% end -%>
+<% unless @download.empty? -%>
+[download]
+  <% @download.each do |key, item| -%>
+    <% item.each do |value| -%>
+      <%= key %> = <%= value %>
+    <% end -%>
+  <% end -%>
+<% end -%>
+[groups]
+        newGroupsVisibleToAll = <%= @new_groups_visible_to_all %>
+[mimetype "image/*"]
+        safe = true
+[mimetype "text/x-yaml"]
+        safe = true
+[mimetype "text/xml"]
+        safe = true
+[mimetype "application/xml"]
+        safe = true
+[mimetype "text/x-rst"]
+        safe = true
+[mimetype "text/plain"]
+        safe = true
+[mimetype "text/html"]
+        safe = true
+[mimetype "text/x-puppet"]
+        safe = true
+[mimetype "text/x-ini"]
+        safe = true
+[mimetype "text/x-properties"]
+        safe = true
+[mimetype "text/x-markdown"]
+        safe = true
+[mimetype "text/css"]
+        safe = true

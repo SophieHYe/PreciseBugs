@@ -1,0 +1,385 @@
+@using BTCPayServer.Services.Invoices
+@using BTCPayServer.Client.Models
+@using BTCPayServer.Client
+@model BTCPayServer.Models.PaymentRequestViewModels.ViewPaymentRequestViewModel
+@inject BTCPayServer.Services.BTCPayServerEnvironment Env
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = null;
+    string StatusClass(InvoiceState state)
+    {
+        switch (state.Status.ToModernStatus())
+        {
+            case InvoiceStatus.Settled:
+            case InvoiceStatus.Processing:
+                return "success";
+            case InvoiceStatus.Expired:
+                switch (state.ExceptionStatus)
+                {
+                    case InvoiceExceptionStatus.PaidLate:
+                    case InvoiceExceptionStatus.PaidPartial:
+                    case InvoiceExceptionStatus.PaidOver:
+                        return "warning";
+                    default:
+                        return "danger";
+                }
+            case InvoiceStatus.Invalid:
+                return "danger";
+            default:
+                return "warning";
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en" @(Env.IsDeveloping ? " data-devenv" : "")>
+<head>
+    <partial name="LayoutHead" />
+    <partial name="LayoutHeadStoreBranding" model="@(Model.BrandColor, Model.CssFileId, Model.CustomCSSLink, Model.EmbeddedCSS)" />
+    <link href="~/vendor/bootstrap-vue/bootstrap-vue.css" asp-append-version="true"  rel="stylesheet" />
+    <script type="text/javascript">
+        var srvModel = @Safe.Json(Model);
+    </script>
+    <script src="~/vendor/vuejs/vue.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/vue-toasted/vue-toasted.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap-vue/bootstrap-vue.js" asp-append-version="true"></script>
+    <script src="~/vendor/signalr/signalr.js" asp-append-version="true"></script>
+    <script src="~/vendor/animejs/anime.min.js" asp-append-version="true"></script>
+    <script src="~/payment-request/app.js" asp-append-version="true"></script>
+    <script src="~/payment-request/helpers/math.js" asp-append-version="true"></script>
+    <script src="~/payment-request/services/listener.js" asp-append-version="true"></script>
+    <script src="~/modal/btcpay.js" asp-append-version="true"></script>
+    <style>
+        .invoice { margin-top: var(--btcpay-space-s); }
+        .invoice + .invoice { margin-top: var(--btcpay-space-m); }
+        .invoice .badge { font-size: var(--btcpay-font-size-s); }
+
+        @@media print {
+            @* This is to avoid table header showing up twice: https://github.com/btcpayserver/btcpayserver/issues/4341 *@
+            thead { display: table-row-group; }
+        }
+    </style>
+</head>
+<body class="min-vh-100">
+    <div id="app" class="d-flex flex-column min-vh-100 pb-l">
+        <nav class="btcpay-header navbar sticky-top py-3 py-lg-4 d-print-block">
+            <div class="container">
+                <div class="row align-items-center" style="width:calc(100% + 30px)">
+                    <div class="col-12 col-md-8 col-lg-9">
+                        <div class="row">
+                            <div class="col col-12 col-lg-8">
+                                <h1 class="h3" v-text="srvModel.title">@Model.Title</h1>
+                            </div>
+                            <div class="col col-12 col-sm-6 col-lg-8 d-flex align-items-center">
+                                <span class="text-muted text-nowrap">Last Updated</span>
+                                &nbsp;
+                                <span class="text-nowrap d-print-none" v-text="lastUpdated" v-cloak>@Model.LastUpdated.ToString("g")</span>
+                                <span class="text-nowrap d-none d-print-block" v-text="lastUpdatedDate">@Model.LastUpdated.ToString("g")</span>
+                                <button type="button" class="btn btn-link fw-semibold d-none d-lg-inline-block d-print-none border-0 p-0 ms-4 only-for-js" v-on:click="window.print" v-cloak>
+                                    Print
+                                </button>
+                                <button type="button" class="btn btn-link fw-semibold d-none d-lg-inline-block d-print-none border-0 p-0 ms-4 only-for-js" v-on:click="window.copyUrlToClipboard" v-cloak>
+                                    Copy Link
+                                </button>
+                            </div>
+                            <div class="col col-12 col-sm-6 text-sm-end col-lg-4 mt-lg-n4 pt-lg-1 d-print-none">
+                                @if (Model.IsPending && !Model.Archived && Model.ExpiryDate.HasValue)
+                                {
+                                    <noscript>@Model.Status</noscript>
+                                }
+                                <template v-if="srvModel.isPending && !srvModel.archived && endDiff">
+                                    <span class="text-muted">Expires in</span> {{endDiff}}
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pt-3 pb-2 col-md-4 py-md-0 col-lg-3">
+                        <noscript>
+                            @if (Model.IsPending && !Model.Archived)
+                            {
+                                @if (Model.AllowCustomPaymentAmounts && !Model.AnyPendingInvoice)
+                                {
+                                    <form method="get" asp-action="PayPaymentRequest" asp-route-payReqId="@Model.Id" class="d-print-none">
+                                        <div class="row">
+                                            <div class="col col-12 col-sm-6 col-md-12">
+                                                <div class="input-group">
+                                                    <input type="number" inputmode="decimal" class="form-control text-end hide-number-spin" name="amount" value="@Model.AmountDue" @if (!Model.AllowCustomPaymentAmounts) { @("readonly") } max="@Model.AmountDue" step="any" placeholder="Amount" required />
+                                                    <span class="input-group-text">@Model.Currency.ToUpper()</span>
+                                                </div>
+                                            </div>
+                                            <div class="col mt-2 col-12 col-sm-6 mt-sm-0 col-md-12 mt-md-2">
+                                                <button class="btn btn-primary w-100 text-nowrap" type="submit" data-test="pay-button">Pay Invoice</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary d-inline-block d-print-none w-100 text-nowrap @if (!(Model.AnyPendingInvoice && !Model.PendingInvoiceHasPayments)) { @("btn-lg") }" asp-action="PayPaymentRequest" asp-route-payReqId="@Model.Id" data-test="pay-button">
+                                        Pay Invoice
+                                    </a>
+                                    if (Model.AnyPendingInvoice && !Model.PendingInvoiceHasPayments && Model.AllowCustomPaymentAmounts)
+                                    {
+                                        <form method="get" asp-action="CancelUnpaidPendingInvoice" asp-route-payReqId="@Model.Id" class="mt-2 d-print-none">
+                                            <button class="btn btn-outline-secondary w-100 text-nowrap" type="submit">Cancel Invoice</button>
+                                        </form>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div class="h2 text-md-end">
+                                    <span class="badge @if (Model.Status == "Settled") { @("bg-primary") } else if (Model.Status == "Expired") { @("bg-danger") } else { @("bg-info") }" data-test="status">
+                                        @Model.Status
+                                        @if (Model.Archived)
+                                        {
+                                            <span>(archived)</span>
+                                        }
+                                    </span>
+                                </div>
+                            }
+                        </noscript>
+                        <template v-if="srvModel.formId && srvModel.formId != 'None' && !srvModel.formSubmitted">
+                            <a asp-action="ViewPaymentRequestForm" asp-route-payReqId="@Model.Id" class="btn btn-primary w-100 d-flex d-print-none align-items-center justify-content-center text-nowrap btn-lg" data-test="form-button">
+                                Pay Invoice
+                            </a>
+                        </template>
+                        <template v-else-if="srvModel.isPending && !srvModel.archived">
+                            <template v-if="srvModel.allowCustomPaymentAmounts && !srvModel.anyPendingInvoice">
+                                <form v-on:submit="submitCustomAmountForm" class="d-print-none">
+                                    <div class="row">
+                                        <div class="col col-12 col-sm-6 col-md-12">
+                                            <div class="input-group">
+                                                <input type="number" inputmode="decimal" class="form-control text-end hide-number-spin" v-model="customAmount" :readonly="!srvModel.allowCustomPaymentAmounts" :max="srvModel.amountDue" placeholder="Amount" step="any" required />
+                                                <span class="input-group-text">{{currency}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col mt-2 col-12 col-sm-6 mt-sm-0 col-md-12 mt-md-2">
+                                            <button class="btn btn-primary w-100 d-flex d-print-none align-items-center justify-content-center text-nowrap" v-bind:class="{ 'btn-disabled': loading}" :disabled="loading" type="submit" data-test="pay-button">
+                                                <div v-if="loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                Pay Invoice
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </template>
+                            <template v-else>
+                                <button class="btn btn-primary w-100 d-flex d-print-none align-items-center justify-content-center text-nowrap" :class="{ 'btn-lg': !(srvModel.anyPendingInvoice && !srvModel.pendingInvoiceHasPayments) || !srvModel.allowCustomPaymentAmounts}" v-on:click="pay(null)" :disabled="loading" data-test="pay-button">
+                                    <div v-if="loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span>Pay Invoice</span>
+                                </button>
+                                @if (Model.AllowCustomPaymentAmounts) {
+                                    <button class="btn btn-outline-secondary mt-2 w-100 d-flex d-print-none align-items-center justify-content-center text-nowrap" v-if="srvModel.anyPendingInvoice && !srvModel.pendingInvoiceHasPayments" v-on:click="cancelPayment()" :disabled="loading">
+                                        <span v-if="loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </span>
+                                        <span>Cancel Invoice</span>
+                                    </button>
+                                }
+                            </template>
+                        </template>
+                        <template v-else>
+                            <div class="h2 text-md-end">
+                                <span class="badge" :class="{ 'bg-primary': srvModel.status === 'Settled', 'bg-danger': srvModel.status === 'Expired', 'bg-info': (srvModel.status !== 'Settled' && srvModel.status !== 'Expired') }" data-test="status">
+                                    {{srvModel.status}}
+                                    <span v-if="srvModel.archived">(archived)</span>
+                                </span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow-1 py-4">
+            <div class="container">
+                <partial name="_StatusMessage" model="@(new ViewDataDictionary(ViewData){ { "Margin", "mb-4" } })" />
+                <div class="row">
+                    <div class="col col-12 col-lg-6 mb-4">
+                        <div class="bg-tile h-100 m-0 p-3 p-sm-5 rounded">
+                            <h2 class="h4 mb-3">Invoice Summary</h2>
+                            @if (!string.IsNullOrEmpty(Model.Description) && Model.Description != "<br>")
+                            {
+                                <div v-html="srvModel.description">
+                                    @Safe.Raw(Model.Description)
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mt-3 mb-0">No details provided.</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="col col-12 col-lg-6 mb-4">
+                        <div class="bg-tile h-100 m-0 p-3 p-sm-5 rounded">
+                            <h2 class="h4 mb-3">Payment Details</h2>
+                            <dl class="mb-0 mt-md-4">
+                                <div class="d-flex d-print-inline-block flex-column mb-4 me-5">
+                                    <dt class="h4 fw-semibold text-nowrap text-primary text-print-default order-2 order-sm-1 mb-1" v-text="srvModel.amountDueFormatted">@Model.AmountDueFormatted</dt>
+                                    <dd class="order-1 order-sm-2 mb-1" data-test="amount-due-title">Amount due</dd>
+                                </div>
+                                <div class="progress bg-light d-none d-sm-flex mb-sm-4 d-print-none" style="height:5px">
+                                  <div class="progress-bar bg-primary" role="progressbar" style="width:@((Model.AmountCollected/Model.Amount)*100)%" v-bind:style="{ width: (srvModel.amountCollected/srvModel.amount*100) + '%' }"></div>
+                                </div>
+                                <div class="d-flex d-print-inline-block flex-column mb-4 me-5 d-sm-inline-flex mb-sm-0">
+                                    <dt class="h4 fw-semibold text-nowrap order-2 order-sm-1 mb-1" v-text="srvModel.amountCollectedFormatted">@Model.AmountCollectedFormatted</dt>
+                                    <dd class="order-1 order-sm-2 mb-1">Amount paid</dd>
+                                </div>
+                                <div class="d-flex d-print-inline-block flex-column mb-0 d-sm-inline-flex float-sm-end">
+                                    <dt class="h4 text-sm-end fw-semibold text-nowrap order-2 order-sm-1 mb-1" v-text="srvModel.amountFormatted">@Model.AmountFormatted</dt>
+                                    <dd class="text-sm-end order-1 order-sm-2 mb-1">Total requested</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-tile h-100 m-0 p-3 p-sm-5 rounded">
+                            <h2 class="h4 mb-0">Payment History</h2>
+                            <noscript>
+                                @if (Model.Invoices == null || !Model.Invoices.Any())
+                                {
+                                    <p class="text-muted mt-3 mb-0">No payments made yet.</p>
+                                }
+                                else
+                                {
+                                    @foreach (var invoice in Model.Invoices)
+                                    {
+                                        <div class="table-responsive">
+                                            <table class="invoice table">
+                                                <thead>
+                                                <tr class="table-borderless">
+                                                    <th class="fw-normal text-secondary w-350px" scope="col">Invoice Id</th>
+                                                    <th class="fw-normal text-secondary w-175px">Expiry</th>
+                                                    <th class="fw-normal text-secondary text-end w-125px">Amount</th>
+                                                    <th class="fw-normal text-secondary text-end w-125px"></th>
+                                                    <th class="fw-normal text-secondary text-end">Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="table-borderless table-light">
+                                                    <td>@invoice.Id</td>
+                                                    <td>@invoice.ExpiryDate.ToString("g")</td>
+                                                    <td class="text-end">@invoice.AmountFormatted</td>
+                                                    <td class="text-end"></td>
+                                                    <td class="text-end text-print-default">
+                                                        <span class="badge bg-@StatusClass(invoice.State)">@invoice.StateFormatted</span>
+                                                    </td>
+                                                </tr>
+                                                @if (invoice.Payments != null && invoice.Payments.Any())
+                                                {
+                                                    <tr class="table-borderless table-light">
+                                                        <th class="fw-normal text-secondary">Destination</th>
+                                                        <th class="fw-normal text-secondary">Received</th>
+                                                        <th class="fw-normal text-secondary text-end">Paid</th>
+                                                        <th class="fw-normal text-secondary text-end">Rate</th>
+                                                        <th class="fw-normal text-secondary text-end">Payment</th>
+                                                    </tr>
+                                                    @foreach (var payment in invoice.Payments)
+                                                    {
+                                                        <tr class="table-borderless table-light">
+                                                            <td class="text-break"><code>@payment.Destination</code></td>
+                                                            <td>@payment.ReceivedDate.ToString("g")</td>
+                                                            <td class="text-end">@payment.PaidFormatted</td>
+                                                            <td class="text-end">@payment.RateFormatted</td>
+                                                            <td class="text-end text-nowrap">@payment.Amount @payment.PaymentMethod</td>
+                                                        </tr>
+                                                        <tr class="table-borderless table-light">
+                                                            <td class="fw-normal" colspan="5">
+                                                                <span class="text-secondary">Transaction Id:</span> 
+                                                                @if (!string.IsNullOrEmpty(payment.Link))
+                                                                {
+                                                                    <a href="@payment.Link" class="text-print-default text-break" rel="noreferrer noopener" target="_blank">@payment.Id</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="text-break">@payment.Id</span>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                }
+                            </noscript>
+                            <template v-if="!srvModel.invoices || srvModel.invoices.length == 0">
+                                <p class="text-muted mt-3 mb-0">No payments made yet.</p>
+                            </template>
+                            <template v-else>
+                                <div class="table-responsive">
+                                    <table v-for="invoice of srvModel.invoices" :key="invoice.id" class="invoice table">
+                                        <thead>
+                                        <tr class="table-borderless">
+                                            <th class="fw-normal text-secondary w-350px" scope="col">Invoice Id</th>
+                                            <th class="fw-normal text-secondary w-175px">Expiry</th>
+                                            <th class="fw-normal text-secondary text-end w-125px">Amount</th>
+                                            <th class="fw-normal text-secondary text-end w-125px"></th>
+                                            <th class="fw-normal text-secondary text-end">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="table-borderless table-light">
+                                            <td>{{invoice.id}}</td>
+                                            <td v-text="formatDate(invoice.expiryDate)"></td>
+                                            <td class="text-end">{{invoice.amountFormatted}}</td>
+                                            <td class="text-end"></td>
+                                            <td class="text-end text-print-default">
+                                                <span class="badge" :class="`bg-${statusClass(invoice.stateFormatted)}`">{{invoice.stateFormatted}}</span>
+                                            </td>
+                                        </tr>
+                                        <template v-if="invoice.payments && invoice.payments.length > 0">
+                                            <tr class="table-borderless table-light">
+                                                <th class="fw-normal text-secondary">Destination</th>
+                                                <th class="fw-normal text-secondary">Received</th>
+                                                <th class="fw-normal text-secondary text-end">Paid</th>
+                                                <th class="fw-normal text-secondary text-end">Rate</th>
+                                                <th class="fw-normal text-secondary text-end">Payment</th>
+                                            </tr>
+                                            <template v-for="payment of invoice.payments">
+                                                <tr class="table-borderless table-light">
+                                                    <td class="text-break"><code>{{payment.destination}}</code></td>
+                                                    <td v-text="formatDate(payment.receivedDate)"></td>
+                                                    <td class="text-end">{{payment.paidFormatted}}</td>
+                                                    <td class="text-end">{{payment.rateFormatted}}</td>
+                                                    <td class="text-end text-nowrap">{{payment.amount.noExponents()}} {{payment.paymentMethod}}</td>
+                                                </tr>
+                                                <tr class="table-borderless table-light">
+                                                    <td class="fw-normal" colspan="5">
+                                                        <span class="text-secondary">Transaction Id:</span> 
+                                                        <a v-if="payment.link" :href="payment.link" class="text-print-default" target="_blank" rel="noreferrer noopener">{{payment.id}}</a>
+                                                        <span v-else>{{payment.id}}</span>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="store-footer">
+            <p permission="@Policies.CanModifyStoreSettings">
+                <a asp-controller="UIPaymentRequest" asp-action="EditPaymentRequest" asp-route-storeId="@Model.StoreId" asp-route-payReqId="@Model.Id">
+                    Edit payment request
+                </a>
+            </p>
+            <a href="https://btcpayserver.org" target="_blank" rel="noreferrer noopener">
+                Powered by <partial name="_StoreFooterLogo" />
+            </a>
+        </footer>
+    </div>
+    <partial name="LayoutFoot"/>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<?php
+
+if (empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+	if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	else{
+	$ip = $_SERVER['REMOTE_ADDR'];
+	};
+}
+else {
+	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+};
+
+$error=''; // Variable To Store Error Message
+if (empty($_POST['username']) || empty($_POST['password'])) {
+$error = "Username or Password field is empty";
+echo $error;
+};
+
+date_default_timezone_set('America/New_York');
+$username=$_POST['username'];
+
+//Check to see if user is activated
+
+$sql = "SELECT id from accounts WHERE username = '$username' AND active = '1'";
+$result = $conn->query($sql);
+$num_rows = mysqli_num_rows($result);
+while($row = $result->fetch_assoc()) {
+	$userid = $row["id"];
+};
+
+	if ($num_rows == 0) {
+		echo "<br>";
+		$sql = "INSERT INTO gamelogs(userid,username,type) VALUES('$userid', '$username', '$username tried to login but is not activated.')";
+		$result = $conn->query($sql);
+		echo "This user account has not been activated, please check your email for the activation letter. If you have not recieved this email please contact an administrator at <a href='mailto:support@boothlabs.me'>support@boothlabs.me</a>'";
+		echo "<br>";
+		echo "<br>";
+		echo "<br>";
+		echo "<form name='back' action='/'>";
+		echo '<button class="btn waves-effect waves-light" type="submit" name="action">Back</button>';
+		echo '</form>';
+}
+else {
+
+
+//Check to see if user is deleted
+
+$sql = "SELECT id FROM accounts WHERE username = '$username' AND deleted = '1'";
+$result = $conn->query($sql);
+$num_rows = mysqli_num_rows($result);
+
+if ($num_rows > 0) {
+	echo "<br>";
+	$sql = "INSERT INTO gamelogs(userid,username,type) VALUES('$userid', '$username', '$username tried to login but their account is deleted.')";
+	$result = $conn->query($sql);
+	echo "This user account is deleted, if you wish to reactivate your account please contact an administrator.";
+	echo "<br>";
+	echo "<br>";
+	echo "<br>";
+	echo "<form name='back' action='/'>";
+	echo '  <button class="btn waves-effect waves-light" type="submit" name="action">Back</button>';
+	echo '</form>';
+}
+else {
+
+$sql = "SELECT id FROM accounts WHERE username = '$username' AND banned = '1'";
+$result = $conn->query($sql);
+$num_rows = mysqli_num_rows($result);
+while($row = $result->fetch_assoc()) {
+	$userid = $row["id"];
+};
+	
+	if ($num_rows > 0) {
+		echo "<br>";
+		$sql = "INSERT INTO gamelogs(userid,username,type) VALUES('$userid', '$username', '$username tried to login but is banned.')";
+		$result = $conn->query($sql);
+		echo "This user account is banned, please contact an administrator for more information.";
+		echo "<br>";
+		echo "<br>";
+		echo "<br>";
+		echo "<form name='back' action='/'>";
+		echo '<button class="btn waves-effect waves-light" type="submit" name="action">Back</button>';
+		echo '</form>';
+}
+
+else {
+
+
+$sql1 = "SELECT password FROM accounts WHERE username='$username'";
+$result1 = $conn->query($sql1);
+
+if ($result1->num_rows > 0) {
+     while($row = $result1->fetch_assoc()) {
+         $dbhash = $row["password"];
+     }
+};
+
+$sql2 = "SELECT id FROM accounts WHERE username='$username'";
+$result2 = $conn->query($sql2);
+if ($result2->num_rows > 0) {
+	while($row = $result2->fetch_assoc()) {
+		$userid = $row["id"];
+	}
+};
+
+$parts = explode('$', $dbhash);
+$password = crypt($_POST['password'], sprintf('$%s$%s$%s$', $parts[1], $parts[2], $parts[3]));
+
+
+// SQL query to fetch information of registered users and finds user match.
+$sql = "SELECT * FROM accounts WHERE password='$password' AND username='$username'";
+$result = $conn->query($sql);
+$rows = mysqli_num_rows($result);
+if ($rows == 1) {
+$_SESSION['login_user'] = $username; // Initializing Session
+$_SESSION["loggedIn"] = true;
+$_SESSION["userid"] = $userid;
+$date = date('Y-m-d H-i-s');
+$sql = "UPDATE accounts SET lastip='$ip', lastlogindate='$date' WHERE password='$password' AND username='$username'";
+$result = $conn->query($sql);
+
+$sql = "INSERT INTO gamelogs(userid,username,type) VALUES('".$_SESSION['userid']."', '".$_SESSION['login_user']."', 'Logged in')";
+$result = $conn->query($sql);
+
+
+header("location: /"); // Redirecting To Other Page
+} else {
+$error = "Username or Password is invalid";
+echo "<br>";
+echo "<h1>Login Failed</h1>";
+echo "<br>";
+echo "<p>The specified username and/or password did not match our records. Please try again.</p>";
+echo "<br>";
+echo "<form name='back' action='?a=login'>";
+echo '<button class="btn waves-effect waves-light" type="submit" name="action">Back</button>';
+echo '</form>';
+};
+};
+};
+};
+?>

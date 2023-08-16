@@ -1,0 +1,89 @@
+@using BTCPayServer.Abstractions.Models
+@model TokensViewModel
+@{
+    Layout = "../Shared/_NavLayout.cshtml";
+    ViewData.SetActivePage(StoreNavPages.Tokens, "Access Tokens", Context.GetStoreData().Id);
+}
+
+@if (Model.StoreNotConfigured)
+{
+    <div class="alert alert-warning alert-dismissible mb-5" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            <vc:icon symbol="close" />
+        </button>
+        Warning: No wallet has been linked to your BTCPay Store.<br/>
+        See <a href="https://docs.btcpayserver.org/WalletSetup/" target="_blank" class="alert-link" rel="noreferrer noopener">this link</a> for more information on how to connect your store and wallet.
+    </div>
+}
+
+<div class="row">
+    <div class="col-xxl-constrain col-xl-8">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+            <a id="CreateNewToken" asp-action="CreateToken" class="btn btn-primary" role="button" asp-route-storeId="@Context.GetRouteValue("storeId")">
+                <span class="fa fa-plus"></span>
+                Create Token
+            </a>
+        </div>
+
+        <p>Authorize a public key to access Bitpay compatible Invoice API.
+            <a href="https://support.bitpay.com/hc/en-us/articles/115003001183-How-do-I-pair-my-client-and-create-a-token-" target="_blank" rel="noreferrer noopener">
+                <span class="fa fa-question-circle-o text-secondary" title="More information..."></span>
+            </a>
+        </p>
+
+        @if (Model.Tokens.Any())
+        {
+            <table class="table table-hover table-responsive-md">
+                <thead>
+                <tr>
+                    <th>Label</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var token in Model.Tokens)
+                {
+                    <tr>
+                        <td>@token.Label</td>
+                        <td class="text-end">
+                            <a asp-action="ShowToken" asp-route-storeId="@Context.GetRouteValue("storeId")" asp-route-tokenId="@token.Id">See information</a> - 
+                            <a asp-action="RevokeToken" asp-route-storeId="@Context.GetRouteValue("storeId")" asp-route-tokenId="@token.Id" data-bs-toggle="modal" data-bs-target="#ConfirmModal" data-description="The access token with the label <strong>@token.Label</strong> will be revoked." data-confirm-input="REVOKE">Revoke</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-secondary mt-3">
+                No access tokens yet.
+            </p>
+        }
+
+        <h3 class="mt-5 mb-3">Legacy API Keys</h3>
+        <p>Alternatively, you can use the invoice API by including the following HTTP Header in your requests:</p>
+        <p><code>Authorization: Basic @Model.EncodedApiKey</code></p>
+
+        <form method="post" asp-action="GenerateAPIKey" asp-route-storeId="@Context.GetRouteValue("storeId")">
+            <div class="form-group">
+                <label asp-for="ApiKey" class="form-label"></label>
+                <div class="d-flex">
+                    <input asp-for="ApiKey" readonly class="form-control"/>
+                    @if (string.IsNullOrEmpty(Model.ApiKey))
+                    {
+                        <button class="btn btn-primary ms-3" type="submit">Generate</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger ms-3" type="submit" name="command" value="revoke">Revoke</button>
+                        <button class="btn btn-primary ms-3" type="submit">Regenerate</button>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_Confirm" model="@(new ConfirmModel("Revoke access token", "The access token will be revoked. Do you wish to continue?", "Revoke"))" />

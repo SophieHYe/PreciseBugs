@@ -1,0 +1,101 @@
+Thomas Bullinger
+    - Contributed patches for the --no-jumps option
+    - Wrote the makefwsnort.sh script to download the latest stable snort
+      rules.
+    - Bugfix for correct IP protocol number.
+    - Bugfix for missed --ipt-script option.
+    - Suggested the ability to specify multiple sid's with the --snort-sids
+      option.
+
+Paul O'Neil
+    - Discovered missed DMZ interface code bug.
+
+Ahmad Almulhem
+    - Suggested --ipt-tos and --ipt-mark options
+    - Suggested ability to manually specify interface networks instead of
+      automatically parsing the output of ifconfig.  This allows fwsnort to be
+      run on a system where no IP is assigned to an interface such as a linux
+      box that is acting as a bridge.
+
+Hank Leininger
+    - Suggested the combination of the QUEUE target and string matching as a
+      way to speed up inline Snort implementations.  This suggestion was made
+      at a talk I gave about Linux Firewalls at ShmooCon 2007, and the
+      --NFQUEUE and --QUEUE command line arguements were the result.
+
+Grant Ferley
+    - Submitted patch to exclude loopback interfaces from iptables allow rules
+      parsing.  This behavior can be reversed with the existing
+      --no-exclude-loopback command line argument.
+    - Submitted patch to IPTables::Parse to take into account iptables policy
+      output that contains "0" instead of "all" to represent any protocol.
+    - Suggested bugfix to allow negated networks to be specified within
+      iptables allow rules or within the fwsnort.conf file.
+
+Franck Joncourt
+    - Submitted patch to fix double dash format in fwsnort man page.
+    - Architected the process of packaging fwsnort (and the other Cipherdyne
+      projects) for the Debian Linux distribution.
+    - Submitted fwsnort documentation fixes for the ChangeLog and fwsnort man
+      page.
+    - Suggested creating the Snort rules directory if it doesn't already exist
+      when downloading the rules from Emerging Threats.
+    - Submitted patch for the MAX_STRING_LEN protection around iptables string
+      match arguments.
+    - Submitted patch for fwsnort to use the "! <option> <arg>" syntax instead
+      of the older "<option> ! <arg>" for the iptables command line.
+
+Justin B Rye
+    - Suggested wording updates for the fwsnort(8) man page in support of the
+      Debian package for fwsnort.
+
+D T
+    - Asked about whether fwsnort could be updated to apply to IPv6 traffic
+      on the fwsnort mailing list.
+
+Guillermo Gomez
+    - Fedora maintainer of fwsnort.
+    - Suggested a default logging location of /var/log/fwsnort/fwsnort.log
+      instead of /var/log/fwsnort.log.  The result was the addition of the
+      LOG_DIR and associated variables in the fwsnort.conf file.
+
+Andy Rowland
+    - Found a bug where fwsnort would attempt to use an invalid URL when
+      updating the Emerging Threats rule set via --update-rules.
+
+Yves Pagani
+    - Found a bug where fwnsort could build iptables --log-prefix strings that
+      are longer than the underlying iptables firewall would allow.
+
+Kim Hagen
+    - Submitted a patch for a bug in fwsnort-1.6 where the fwsnort policy in
+      iptables-save format could not be loaded whenever iptables-save put the
+      nat table output after the filter table output.  In this case, fwsnort
+      would fail with an error like the following (fixed in fwsnort-1.6.1):
+
+        Couldn't load target
+        `FWSNORT_FORWARD_ESTAB':/lib/xtables/libipt_FWSNORT_FORWARD_ESTAB.so:
+        cannot open shared object file: No such file or directory
+
+Peter Vrabec
+    - Suggested a new directory /var/lib/fwsnort/ for the fwsnort.sh script
+      and associated files (fwsnort.save, fwsnort_iptcmd.sh, etc.).
+
+Andrew Merenbach
+    - Contributed bug fix to properly honor --exclude-regex filtering option.
+
+Dwight Davis
+    - Contributed patches for several bugs including not handling
+      --exclude-regex properly, not ignoring the deleted.rules file, not
+      handling --strict mode opertions correctly, and more.  These issues and
+      the corresponding patch were originally reported here:
+        http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=693000
+
+Murray McAllister (Red Hat Security Team)
+    - Reported a bug fix for vulnerability CVE-2014-0039 in which an attacker-
+      controlled fwsnort.conf file could be read by fwsnort when not running as
+      root.  This was caused by fwsnort reading './fwsnort.conf' when not
+      running as root and when a path to the config file was not explicitly set
+      with -c on the command line.  This behavior has been changed to require
+      the user to specify a path to fwsnort.conf with -c when not running as
+      root.

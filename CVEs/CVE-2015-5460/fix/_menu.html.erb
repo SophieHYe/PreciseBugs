@@ -1,0 +1,13 @@
+<%= drop_down_for('Classify Event(s)', 'icons/actions.png', 'incident') do %>
+	
+	<% @classifications.each do |cls| %>
+		<% if cls.locked && cls.hotkey %>
+			<%= drop_down_item "#{sanitize cls.name}<span class='shortcut'>#{cls.shortcut}</span>", '#', nil, { :class => 'classification', :"data-classification-id" => cls.id.to_i } %>
+		<% else %>
+			<%= drop_down_item "#{sanitize cls.name}", '#', nil, { :class => 'classification', :"data-classification-id" => cls.id.to_i } %>
+		<% end %>
+	<% end %>
+	
+	<%= drop_down_item "Unclassified<span class='shortcut'>ctrl+shift+u</span>", '#', nil, { :class => 'classification', :"data-classification-id" => 0 } %>
+	
+<% end %>

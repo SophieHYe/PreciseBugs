@@ -1,0 +1,88 @@
+{
+  "name": "highcharts",
+  "version": "6.0.7",
+  "description": "JavaScript charting framework",
+  "main": "lib/highcharts",
+  "author": "Highsoft AS <support@highcharts.com> (http://www.highcharts.com/about)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/highcharts/highcharts.git"
+  },
+  "bugs": "https://github.com/highcharts/highcharts/issues",
+  "homepage": "http://www.highcharts.com",
+  "keywords": [
+    "charts",
+    "graphs",
+    "visualization",
+    "data",
+    "browserify",
+    "webpack"
+  ],
+  "files": [
+    "errors",
+    "gfx",
+    "js",
+    "lib"
+  ],
+  "scripts": {
+    "precommit": "lint-staged && gulp test",
+    "post-merge": "gulp styles && gulp scripts"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
+    "browserify": "^12.0.2",
+    "closurecompiler": "^1.6.1",
+    "colors": "~1.1.2",
+    "eslint": "3.12.2",
+    "eslint-plugin-highcharts": "file:tools/eslint-plugin-highcharts",
+    "eslint-plugin-security": "^1.4.0",
+    "fs-extra": "^2.1.2",
+    "gifencoder": "^1.1.0",
+    "google-closure-compiler-js": "^20160916.0.0",
+    "grunt": "^0.4.5",
+    "grunt-jslint": "^1.1.12",
+    "gulp": "^3.9.1",
+    "gulp-jsdoc3": "^1.0.1",
+    "gzip-size": "^3.0.0",
+    "highcharts-api-doc-gen": "github:highcharts/api-docs",
+    "highcharts-assembler": "github:highcharts/highcharts-assembler#v1.0.25",
+    "husky": "^0.14.3",
+    "js-yaml": "^3.10.0",
+    "karma": "^1.7.1",
+    "karma-browserstack-launcher": "^1.3.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-edge-launcher": "^0.4.2",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-generic-preprocessor": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-qunit": "^1.2.1",
+    "karma-safari-launcher": "^1.0.0",
+    "lint-staged": "^4.2.3",
+    "lolex": "^2.1.3",
+    "node-sass": "^4.5.3",
+    "pixelmatch": "^4.0.2",
+    "png-js": "^0.1.1",
+    "pngjs": "^3.3.0",
+    "qunitjs": "^2.4.0",
+    "request": "^2.81.0",
+    "requirejs": "^2.3.3",
+    "vinyl-ftp": "^0.4.5",
+    "webpack": "^1.15.0",
+    "xml2js": "^0.4.17",
+    "yargs": "^3.32.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "git add"
+    ]
+  },
+  "license": "SEE LICENSE IN <license.txt>",
+  "dependencies": {
+    "aws-sdk": "^2.94.0",
+    "babel-runtime": "^6.20.0",
+    "glob": "^7.1.2",
+    "safe-regex": "^1.1.0",
+    "taffydb": "^2.7.3"
+  }
+}

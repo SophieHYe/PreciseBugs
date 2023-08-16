@@ -1,0 +1,45 @@
+<script type="text/javascript">
+function checkDelete(){
+    return confirm('Are you sure?');
+}
+</script>
+
+<div id="admin">
+<div id="content">
+	<h1>Clan Roster</h1>
+	<br>
+	
+
+<?php
+	
+	$username = $_SESSION['login_user'];
+
+	$sqlGetClanID = "SELECT clan FROM accounts WHERE username = '$username'";
+	$resultGetCID = $conn->query($sqlGetClanID);
+	while($rowCID = $resultGetCID->fetch_assoc()) {
+		$clanid = $rowCID['clan'];
+	};
+
+$sql = "SELECT id, username FROM accounts WHERE clan = '$clanid'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+     echo "<div id=admintable><table><tr><th>Username</th><th>Role</th><th>Bank Balance</th><th>Action</th>";
+     // output data of each row
+     while($row = $result->fetch_assoc()) {
+    	 echo "<tr><td><a href=?a=profile&id=" . $row["id"]. ">" . $row["username"]. "</td><td>" . $row["email"]. "</td><td>" . $row["role"]. "</td><td>" . $row["lastip"]. "</td><td>" . $row["lastlogindate"]. "</td><td>" . $row["regdate"]. "";
+		 echo "<td><a href=?a=profile&id=" . $row["id"]. "><button type='submit' name='action'><i class='material-icons center'>edit</i></button></a>";
+		 echo "<input type='hidden' name='tempId' value='".$row["id"]."'/><form action='?m=deluser' method='POST'><button type='submit' name='action' action=''><i class='material-icons center'>delete</i></button></form>";
+		 echo "<input type='hidden' name='tempId' value='".$row["id"]."'/><form action='?m=banuser' method='POST'><button type='submit' name='action'><i class='material-icons center'>block</i></button></form></td>";
+     }
+     echo "</table>";
+} else {
+     echo "0 results";
+};
+
+
+$result->free();
+
+?>
+</div>
+</div>

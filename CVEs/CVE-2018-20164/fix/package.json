@@ -1,0 +1,36 @@
+{
+  "name": "uap-core",
+  "description": "The regex file necessary to build language ports of Browserscope's user agent parser.",
+  "version": "0.6.0",
+  "maintainers": [
+    {
+      "name": "Tobie Langel",
+      "email": "tobie.langel@gmail.com",
+      "web": "http://tobielangel.com"
+    },
+    {
+      "name": "Lindsey Simon",
+      "email": "lsimon@commoner.com",
+      "web": "http://www.idreamofuni.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/ua-parser/uap-core.git"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "https://raw.github.com/ua-parser/uap-core/master/LICENSE"
+    }
+  ],
+  "devDependencies": {
+    "mocha": "*",
+    "safe-regex": "^2.0.1",
+    "uap-ref-impl": "git+https://github.com/ua-parser/uap-ref-impl#master",
+    "yamlparser": ">=0.0.2"
+  },
+  "scripts": {
+    "test": "mocha --opts ./tests/mocha.opts ./tests"
+  }
+}

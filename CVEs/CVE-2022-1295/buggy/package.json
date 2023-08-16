@@ -1,0 +1,74 @@
+{
+  "name": "fullpage.js",
+  "version": "4.0.1",
+  "description": "Create beautiful fullscreen snap scrolling websites",
+  "main": "dist/fullpage.js",
+  "scripts": {
+    "build": "gulp getDistFiles && gulp css && rollup -c",
+    "extensions": "rollup --config rollup.ext.config.js && gulp css && gulp moveExtensions & wait",
+    "dev": "rollup -c --watch",
+    "test": "jest",
+    "devtest": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:alvarotrigo/fullPage.js.git"
+  },
+  "keywords": [
+    "jquery",
+    "javacript",
+    "scrolling",
+    "single_page",
+    "onepage",
+    "fullpage",
+    "fullpagejs",
+    "one_page",
+    "sliding",
+    "snap",
+    "scroll",
+    "swipe",
+    "mousewheel",
+    "wheel",
+    "mouse",
+    "sections",
+    "slides",
+    "slideshow"
+  ],
+  "files": [
+    "vendors",
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "authors": [
+    "Alvaro Trigo https://github.com/alvarotrigo"
+  ],
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/alvarotrigo/fullPage.js/issues"
+  },
+  "homepage": "https://github.com/alvarotrigo/fullPage.js",
+  "namespace": "fullpage_api",
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/stream": "^2.0.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-latest": "^6.24.1",
+    "gulp": "^4.0.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-terser": "^2.1.0",
+    "gulp-uglify": "^3.0.0",
+    "require-dir": "^1.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  }
+}

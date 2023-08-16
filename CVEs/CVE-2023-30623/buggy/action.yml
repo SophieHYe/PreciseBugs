@@ -1,0 +1,35 @@
+name: "Check WIP"
+description: "Checks for WIP patterns in Titles"
+branding:
+  icon: box
+  color: blue
+inputs:
+  title:
+    description: "Text to perform pattern match against"
+    required: true
+    default: "${{ github.event.pull_request.title }}"
+  regex:
+    description: "Regex pattern to match in title"
+    required: true
+    # starts with zero or more leading whitespace chars, WIP and zero or more colons
+    default: "^[[:space:]]*(WIP)+(:)*"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        set -ex
+
+        # TODO (@mgasch): make configurable
+        # case-insensitive
+        shopt -s nocasematch
+
+        if [[ '${{ inputs.title }}' =~ ${{ inputs.regex }} ]]; then
+          echo "::error::Title marked as work in progress"
+          exit 1
+        else
+          echo "::debug::Title not marked as work in progress"
+        fi
+
+        # unset nocasematch option
+        shopt -u nocasematch

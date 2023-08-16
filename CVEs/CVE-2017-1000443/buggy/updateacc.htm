@@ -1,0 +1,11 @@
+<?php
+$bio = $_POST['bio'];
+$_safebio = mysqli_real_escape_string($conn, $bio);
+
+$sql = "UPDATE accounts SET bio='$_safebio' WHERE username='$username'";
+
+$result = $conn->query($sql);
+
+header("location: /game/main/index.php?a=accountdetails");
+
+?>

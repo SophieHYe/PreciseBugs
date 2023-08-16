@@ -1,0 +1,77 @@
+2.1.1
+-----
+
+Security Bugfix
+~~~~~~~~~~~~~~~
+
+- Waitress now validates that chunked encoding extensions are valid, and don't
+  contain invalid characters that are not allowed. They are still skipped/not
+  processed, but if they contain invalid data we no longer continue in and
+  return a 400 Bad Request. This stops potential HTTP desync/HTTP request
+  smuggling. Thanks to Zhang Zeyu for reporting this issue. See
+  https://github.com/Pylons/waitress/security/advisories/GHSA-4f7p-27jc-3c36
+
+- Waitress now validates that the chunk length is only valid hex digits when
+  parsing chunked encoding, and values such as ``0x01`` and ``+01`` are no
+  longer supported. This stops potential HTTP desync/HTTP request smuggling.
+  Thanks to Zhang Zeyu for reporting this issue. See
+  https://github.com/Pylons/waitress/security/advisories/GHSA-4f7p-27jc-3c36
+
+- Waitress now validates that the Content-Length sent by a remote contains only
+  digits in accordance with RFC7230 and will return a 400 Bad Request when the
+  Content-Length header contains invalid data, such as ``+10`` which would
+  previously get parsed as ``10`` and accepted. This stops potential HTTP
+  desync/HTTP request smuggling Thanks to Zhang Zeyu for reporting this issue. See
+  https://github.com/Pylons/waitress/security/advisories/GHSA-4f7p-27jc-3c36
+
+2.1.0
+-----
+
+Python Version Support
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Python 3.6 is no longer supported by Waitress
+
+- Python 3.10 is fully supported by Waitress
+
+Bugfix
+~~~~~~
+
+- ``wsgi.file_wrapper`` now sets the ``seekable``, ``seek``, and ``tell``
+  attributes from the underlying file if the underlying file is seekable. This
+  allows WSGI middleware to implement things like range requests for example
+
+  See https://github.com/Pylons/waitress/issues/359 and
+  https://github.com/Pylons/waitress/pull/363
+
+- In Python 3 ``OSError`` is no longer subscriptable, this caused failures on
+  Windows attempting to loop to find an socket that would work for use in the
+  trigger.
+
+  See https://github.com/Pylons/waitress/pull/361
+
+- Fixed an issue whereby ``BytesIO`` objects were not properly closed, and
+  thereby would not get cleaned up until garbage collection would get around to
+  it.
+
+  This led to potential for random memory spikes/memory issues, see
+  https://github.com/Pylons/waitress/pull/358 and
+  https://github.com/Pylons/waitress/issues/357 .
+
+  With thanks to Florian Schulze for testing/vaidating this fix!
+
+Features
+~~~~~~~~
+
+- When the WSGI app starts sending data to the output buffer, we now attempt to
+  send data directly to the socket. This avoids needing to wake up the main
+  thread to start sending data. Allowing faster transmission of the first byte.
+  See https://github.com/Pylons/waitress/pull/364
+
+  With thanks to Michael Merickel for being a great rubber ducky!
+
+- Add REQUEST_URI to the WSGI environment.
+
+  REQUEST_URI is similar to ``request_uri`` in nginx. It is a string that
+  contains the request path before separating the query string and
+  decoding ``%``-escaped characters. 

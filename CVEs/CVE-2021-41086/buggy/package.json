@@ -1,0 +1,27 @@
+{
+    "name": "jsuites",
+    "title": "A collection of common JavaScript plugins & web components",
+    "description": "jSuites is a collection of lightweight common required javascript plugins and web components. It is composed of fully responsive vanilla plugins to help you bring the best user experience to your projects, independent of the platform.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jsuites/jsuites.git"
+    },
+    "author": {
+        "name": "jSuites <contact@jsuites.net>"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/jsuites/jsuites/blob/master/LICENSE"
+        }
+    ],
+    "keywords": [
+        "javascript plugins"
+    ],
+    "main": "dist/jsuites.js",
+    "version": "4.9.10",
+    "bugs": "https://github.com/jsuites/jsuites/issues",
+    "homepage": "https://github.com/jsuites/jsuites",
+    "docs": "https://jsuites.net",
+    "download": "https://github.com/jsuites/jsuites/archive/master.zip"
+}

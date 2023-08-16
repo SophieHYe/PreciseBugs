@@ -1,0 +1,127 @@
+<?php
+
+if ($REGISTRATION == 0) {
+	echo "Site is not accepting new users at this time. Please try again later.";
+}
+else {
+
+if (empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+	if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	else{
+	$ip = $_SERVER['REMOTE_ADDR'];
+	};
+}
+else {
+	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+};
+$salt = substr(str_replace('+','.',base64_encode(md5(mt_rand(), true))),0,16);
+$rounds = 10000;
+$encpass = crypt($_POST['password'], sprintf('$6$rounds=%d$%s$', $rounds, $salt));
+$reghash = md5( rand(0,1000) );
+
+require_once "recaptchalib.php";
+
+// your secret key
+$secret = "CHANGEME";
+ 
+// empty response
+$response = null;
+ 
+// check secret key
+$reCaptcha = new ReCaptcha($secret);
+
+$email = $_POST['email'];
+
+// Remove all illegal characters from email
+$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+// Validate e-mail
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+
+if ($_POST["password"] == $_POST["confpass"]) {
+
+// if submitted check response
+if ($_POST["g-recaptcha-response"]) {
+    $response = $reCaptcha->verifyResponse(
+        $_SERVER["REMOTE_ADDR"],
+        $_POST["g-recaptcha-response"]
+    );
+}
+
+if ($response != null && $response->success) {
+
+
+//if submit is not blanked i.e. it is clicked.
+if(isset($_REQUEST['submit'])!='')
+{
+if($_REQUEST['username']=='' || $_REQUEST['email']=='' || $_REQUEST['password']=='')
+{
+echo "please fill the empty field.";
+}
+else
+{
+$sql = "INSERT INTO accounts(username,email,password,regip,reghash) VALUES('".$_REQUEST['username']."', '".$_REQUEST['email']."', '$encpass', '$ip', '$reghash')";
+$result = $conn->query($sql);
+if($result)
+{
+
+$username = $_POST['username'];
+
+$to      = $email; // Send email to our user
+$subject = "Hacker City Signup | Verification"; // Give the email a subject 
+$message = "
+ 
+Thank you for registering an account at Hacker City.
+Your account has been created and the final step is to activate your account.
+
+We use activation emails as a way to prevent bots and trouble users from abusing the system and flooding the site with fake users.
+ 
+------------------------
+Username: $username
+Password: Not sent via email for security 
+------------------------
+ 
+Please click this link to activate your account:
+https://boothlabs.me/verify.php?email=$email&reghash=$reghash
+ 
+"; // Our message above including the link
+                     
+$headers = 'From:noreply@boothlabs.me' . "\r\n"; // Set from headers
+mail($to, $subject, $message, $headers); // Send our email
+
+$username = $_REQUEST['username'];
+
+$sql9 = "SELECT id FROM accounts WHERE username = '$username';";
+$result9 = $conn->query($sql9);
+while ($row9 = $result9->fetch_assoc()){
+$userid = $row9['id'];
+}
+
+$sql10 = "INSERT INTO `usersystems` (`userid`, `cpu`, `motherboard`, `ram`, `os`, `hddtype`, `hddhealth`, `size`, `spaceused`, `spacefree`, `logs`, `securitypack`, `firewall`, `sphealth`, `firewallhealth`, `connectedto`, `connectiontype`, `ipaddress`, `gatewayip`, `gatewaystatus`, `systemstatus`) VALUES ('$userid', '486', 'Simple Motherboard', '256MB', 'DOS', '10GB', '100', '10GB', '0', '10', 'Not Installed', 'Not Installed', 'Not Installed', '0', '0', 'n00bnet', 'Loopback', '127.0.0.1', '', 'Offline', 'online');";
+$result10 = $conn->query($sql10);
+
+echo "Account Created Successfully, Check your email for instructions on activating your account .";
+}
+else {
+echo "There is some problem creating your account, please contact an administrator to resolve the issue.";
+echo "<br>";
+echo $sql;
+};
+}
+}
+}
+else {
+	echo "You did not pass the robot validation.";
+};
+}
+else {
+	echo "Your passwords did not match, please try again,";
+};
+}
+else {
+	echo "Your email did not appear to be valid, please try again.";
+};
+};
+?>

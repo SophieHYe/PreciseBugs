@@ -1,0 +1,131 @@
+#
+# This file creates the deployment that runs the Kubernetes-Monitor
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snyk-monitor
+  namespace: snyk-monitor
+  labels:
+    app.kubernetes.io/name: snyk-monitor
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: snyk-monitor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: snyk-monitor
+    spec:
+      containers:
+      - image: snyk/kubernetes-monitor:IMAGE_TAG_OVERRIDE_WHEN_PUBLISHING
+        imagePullPolicy: Always
+        name: snyk-monitor
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: docker-config
+          readOnly: true
+          mountPath: "/srv/app/.docker"
+        - name: temporary-storage
+          mountPath: "/var/tmp"
+        - name: ssl-certs
+          mountPath: "/srv/app/certs"
+        - name: registries-conf
+          mountPath: "/srv/app/.config/containers"
+        - name: workload-policies
+          mountPath: "/tmp/policies"
+          readOnly: true
+        env:
+          - name: SNYK_INTEGRATION_ID
+            valueFrom:
+              secretKeyRef:
+                name: snyk-monitor
+                key: integrationId
+          - name: SNYK_WATCH_NAMESPACE
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: namespace
+                optional: true
+          - name: SNYK_DEPLOYMENT_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: SNYK_DEPLOYMENT_NAME
+            value: snyk-monitor
+          - name: SNYK_INTEGRATION_API
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: integrationApi
+                optional: true
+          - name: SNYK_CLUSTER_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: clusterName
+                optional: true
+          - name: SNYK_MONITOR_VERSION
+            value: IMAGE_TAG_OVERRIDE_WHEN_PUBLISHING
+          - name: HOME
+            value: /srv/app
+          - name: HTTP_PROXY
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: http_proxy
+                optional: true
+          - name: HTTPS_PROXY
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: https_proxy
+                optional: true
+          - name: NO_PROXY
+            valueFrom:
+              configMapKeyRef:
+                name: snyk-monitor
+                key: no_proxy
+                optional: true
+          - name: LOG_LEVEL
+            value: 'INFO'
+        resources:
+          requests:
+            cpu: '250m'
+            memory: '400Mi'
+          limits:
+            cpu: '1'
+            memory: '2Gi'
+        securityContext:
+          privileged: false
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+      - name: docker-config
+        secret:
+          secretName: snyk-monitor
+          items:
+            - key: dockercfg.json
+              path: config.json
+      - name: temporary-storage
+        emptyDir:
+          sizeLimit: 50Gi
+      - name: ssl-certs
+        configMap:
+          name: snyk-monitor-certs
+          optional: true
+      - name: registries-conf
+        configMap:
+          name: snyk-monitor-registries-conf
+          optional: true
+      - name: workload-policies
+        configMap:
+          name: snyk-monitor-workload-policies
+          optional: true
+      serviceAccountName: snyk-monitor

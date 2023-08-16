@@ -1,0 +1,106 @@
+<?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
+ */
+use Doctrine\ORM\EntityManagerInterface;
+use PrestaShop\Module\ProductComment\Entity\ProductComment;
+use PrestaShop\Module\ProductComment\Entity\ProductCommentReport;
+
+class ProductCommentsReportCommentModuleFrontController extends ModuleFrontController
+{
+    public function display()
+    {
+        header('Content-Type: application/json');
+
+        $customerId = (int) $this->context->cookie->id_customer;
+        if (!$customerId) {
+            $this->ajaxRender(
+                json_encode(
+                    [
+                        'success' => false,
+                        'error' => $this->trans('You need to be logged in to report a review.', [], 'Modules.Productcomments.Shop'),
+                    ]
+                )
+            );
+
+            return false;
+        }
+
+        $id_product_comment = (int) Tools::getValue('id_product_comment');
+
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $productCommentEntityRepository = $entityManager->getRepository(ProductComment::class);
+
+        $productComment = $productCommentEntityRepository->findOneById($id_product_comment);
+        if (!$productComment) {
+            $this->ajaxRender(
+                json_encode(
+                    [
+                        'success' => false,
+                        'error' => $this->trans('Cannot find the requested product review.', [], 'Modules.Productcomments.Shop'),
+                    ]
+                )
+            );
+
+            return false;
+        }
+
+        $productCommentAbuseRepository = $entityManager->getRepository(ProductCommentReport::class);
+        /** @var ProductCommentReport $productCommentAbuse */
+        $productCommentAbuse = $productCommentAbuseRepository->findOneBy([
+            'comment' => $id_product_comment,
+            'customerId' => $customerId,
+        ]);
+
+        if ($productCommentAbuse) {
+            $this->ajaxRender(
+                json_encode(
+                    [
+                        'success' => false,
+                        'error' => $this->trans('You already reported this review as abusive.', [], 'Modules.Productcomments.Shop'),
+                    ]
+                )
+            );
+
+            return false;
+        }
+
+        $productCommentAbuse = new ProductCommentReport(
+            $productComment,
+            $customerId
+        );
+        $entityManager->persist($productCommentAbuse);
+        $entityManager->flush();
+
+        $this->ajaxRender(
+            json_encode(
+                [
+                    'success' => true,
+                    'id_product_comment' => $id_product_comment,
+                ]
+            )
+        );
+    }
+}

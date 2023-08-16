@@ -1,0 +1,60 @@
+[% BLOCK recurse -%]
+[% INCLUDE print_line item=item %]
+  [% IF nodes.$item.children.defined -%]
+  <ul>
+  [% FOREACH kidtype IN nodes.$item.children.keys -%]
+    [%- FOREACH kid IN nodes.$item.children.$kidtype -%]
+      [%- IF kid -%]
+        [% INCLUDE recurse item=kid %]
+      [%- END -%]
+    [%- END -%]
+  [%- END -%]
+  </ul>
+  [% END -%]
+  </li>
+[%- END -%]
+[% BLOCK print_line -%]
+<li>
+[% IF nodes.$item.children.defined -%]
+<span><i class="icon-minus-sign text-info"></i>&nbsp;
+[%- ELSE -%]
+<span><i class="icon-leaf"></i>&nbsp;
+[%- END -%]
+ <a href="[% uri_for('/report/moduleinventory') | none %]?description=[% nodes.$item.module.description | uri %]">[% nodes.$item.module.description -%]</a>
+[%- IF nodes.$item.module.name -%]
+ <a href="[% uri_for('/report/moduleinventory') | none %]?name=[% nodes.$item.module.name | uri %]">([% nodes.$item.module.name %])</a>
+[%- END -%]
+[%- IF nodes.$item.module.fw_ver -%]
+ fw: [% nodes.$item.module.fw_ver %]
+[%- END -%]
+[%- IF nodes.$item.module.hw_ver -%]
+ hw: [% nodes.$item.module.hw_ver %]
+[%- END -%]
+[%- IF nodes.$item.module.sw_ver -%]
+ sw: [% nodes.$item.module.sw_ver %]
+[%- END -%]
+[%- IF nodes.$item.module.serial -%]
+ <a href="[% uri_for('/report/moduleinventory') | none %]?serial=[% nodes.$item.module.serial | uri %]">[serial: [% nodes.$item.module.serial %]]</a>
+[%- END -%]
+[%- IF nodes.$item.module.type -%]
+ / <a href="[% uri_for('/report/moduleinventory') | none %]?type=[% nodes.$item.module.type | uri %]">[% nodes.$item.module.type %]</a>
+[%- END -%]
+[%- IF nodes.$item.module.model -%]
+ / <a href="[% uri_for('/report/moduleinventory') | none %]?model=[% nodes.$item.module.model | uri %]">[% nodes.$item.module.model %]</a>
+[%- END -%]
+[%- IF nodes.$item.module.fru -%]
+ <b>[FRU]</b>
+[%- END -%]
+</span>
+[%- END -%]
+<div class="tree">
+<ul>
+[% FOREACH module IN nodes.root %]
+  [% INCLUDE recurse item=module %]
+[%- END -%]
+</ul>
+</div>
+
+<script type="text/javascript">
+[%+ INCLUDE 'js/bootstrap-tree.js' -%]
+</script>

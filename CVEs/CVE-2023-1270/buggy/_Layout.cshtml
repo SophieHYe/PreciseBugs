@@ -1,0 +1,112 @@
+@using BTCPayServer.Abstractions.Extensions
+@using BTCPayServer.Components.StoreSelector
+@using BTCPayServer.Components.MainNav
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _context;
+@inject BTCPayServer.Services.BTCPayServerEnvironment _env
+@inject SignInManager<ApplicationUser> _signInManager
+@inject UserManager<ApplicationUser> _userManager
+@inject LinkGenerator _linkGenerator
+@inject BTCPayServer.Services.PoliciesSettings PoliciesSettings
+
+@{
+    var notificationsReturnUrl = Context.Request.GetCurrentPathWithQueryString();
+    var notificationDisabled = PoliciesSettings.DisableInstantNotifications;
+    if (!notificationDisabled)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        notificationDisabled = user?.DisabledNotifications == "all";
+    }
+	var expectedScheme = _context.HttpContext.Request.Scheme;
+	var expectedHost = _context.HttpContext.Request.Host.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en"@(_env.IsDeveloping ? " data-devenv" : "")>
+<head>
+    <partial name="LayoutHead" />
+    @await RenderSectionAsync("PageHeadContent", false)
+</head>
+<body class="d-flex flex-column flex-lg-row min-vh-100">
+<header id="mainMenu" class="btcpay-header d-flex flex-column">
+    <div id="mainMenuHead">
+        <button id="mainMenuToggle" class="mainMenuButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span>Menu</span>
+        </button>
+        <vc:store-selector />
+        @if (_signInManager.IsSignedIn(User))
+        {
+            <vc:notifications appearance="Dropdown" return-url="@notificationsReturnUrl" />
+        }
+    </div>
+    <vc:main-nav />
+</header>
+<template id="badUrl">
+	<div class="alert alert-danger alert-dismissible m-3" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            <vc:icon symbol="close"/>
+        </button>
+        <span>
+            BTCPay is expecting you to access this website from <strong>@(expectedScheme)://@(expectedHost)/</strong>.
+            If you use a reverse proxy, please set the <strong>X-Forwarded-Proto</strong> header to <strong id="browserScheme">@(expectedScheme)</strong>
+            (<a href="https://docs.btcpayserver.org/FAQ/Deployment/#cause-3-btcpay-is-expecting-you-to-access-this-website-from" target="_blank" class="alert-link" rel="noreferrer noopener">More information</a>)
+        </span>
+    </div>
+</template>
+<main id="mainContent">
+    @if (!_env.IsSecure(_context.HttpContext))
+    {
+        <div id="insecureEnv" class="alert alert-danger alert-dismissible" style="position:absolute; top:75px;" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <vc:icon symbol="close"/>
+            </button>
+            <span>
+                Your access to BTCPay Server is over an unsecured network. If you are using the docker deployment method with NGINX and HTTPS is not available, you probably did not configure your DNS settings correctly. <br/>
+                We disabled the register and login link so you don't leak your credentials.
+            </span>
+        </div>
+    }
+    <section>
+        @RenderBody()
+    </section>
+    
+    <partial name="_Footer"/>
+    <partial name="LayoutFoot"/>
+
+    @await RenderSectionAsync("PageFootContent", false)
+    <partial name="LayoutPartials/SyncModal"/>
+
+    @if (!notificationDisabled)
+    {
+        <script>
+			var mainContent = document.getElementById("mainContent");
+			if (window.location.protocol != "@(expectedScheme):" || window.location.host != "@expectedHost")
+			{
+				var tmpl = document.getElementById("badUrl");
+				mainContent.prepend(tmpl.content.cloneNode(true));
+			}
+            if ('WebSocket' in window && window.WebSocket.CLOSING === 2) {
+                const { host, protocol } = window.location;
+                var wsUri = "@_linkGenerator.GetPathByAction("SubscribeUpdates", "UINotifications", pathBase: Context.Request.PathBase)";
+				wsUri = (protocol === "https:" ? "wss:" : "ws:") + "//" + host + wsUri;
+                const newDataEndpoint = "@_linkGenerator.GetPathByAction("GetNotificationDropdownUI", "UINotifications", pathBase: Context.Request.PathBase, values: new { returnUrl = notificationsReturnUrl })";
+                try {
+                    socket = new WebSocket(wsUri);
+                    socket.onmessage = e => {
+                        if (e.data === "ping") return;
+                        $.get(newDataEndpoint, data => {
+                            $("#Notifications").replaceWith($(data));
+                        });
+                    };
+                    socket.onerror = e => {
+                        console.error("Error while connecting to websocket for notifications (callback)", e);
+                    };
+                }
+                catch (e) {
+                    console.error("Error while connecting to websocket for notifications", e);
+                }
+            }
+        </script>
+    }
+</main>
+</body>
+</html>

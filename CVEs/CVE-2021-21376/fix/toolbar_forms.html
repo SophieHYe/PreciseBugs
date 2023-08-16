@@ -1,0 +1,57 @@
+{% load i18n %}
+{% load common_filters %}
+
+{% comment %}
+<!--
+  Copyright (C) 2011-2021 University of Dundee & Open Microscopy Environment.
+  All rights reserved.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+{% endcomment %}
+
+
+<script type="text/javascript">
+if (typeof OME === "undefined") { OME={}; }
+
+    OME.createShare = function() {
+        $("#create_share_form").dialog("open");
+        return false;
+    }
+
+    $(document).ready(function(){
+
+        $("#create_share_form").dialog({
+            title: "Shares not supported",
+            autoOpen: false,
+            resizable: true,
+            height: 250,
+            width:450,
+            modal: true,
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    });
+</script>
+
+
+<!-- hidden dialog -->
+<div id="create_share_form" style="display:none">
+    <p>Share functionality is no longer supported.</p>
+    <p>Please see <a target="_blank" href="https://www.openmicroscopy.org/omero/features/share/">Sharing your data in OMERO</a>
+        for alternative workflows.
+    </p>
+</div>

@@ -1,0 +1,300 @@
+APACHE 2.4 STATUS:                        -*- mode: text; coding: utf-8 -*-
+Last modified at [$Date$]
+
+The current version of this file can be found at:
+
+  * http://svn.apache.org/repos/asf/httpd/httpd/branches/2.4.x/STATUS
+
+Documentation status is maintained separately and can be found at:
+
+  * docs/STATUS in this source tree, or
+  * http://svn.apache.org/repos/asf/httpd/httpd/branches/2.4.x/docs/STATUS
+
+The current development branch of this software can be found at:
+
+  * http://svn.apache.org/repos/asf/httpd/httpd/trunk
+
+Consult the following STATUS files for information on related projects:
+
+  * http://svn.apache.org/repos/asf/apr/apr/trunk/STATUS
+  * http://svn.apache.org/repos/asf/apr/apr/branches/1.4.x/STATUS
+  * http://svn.apache.org/repos/asf/apr/apr-util/branches/1.4.x/STATUS
+  * http://svn.apache.org/repos/asf/apr/apr/branches/1.5.x/STATUS
+  * http://svn.apache.org/repos/asf/apr/apr-util/branches/1.5.x/STATUS
+
+Patches considered for backport are noted in their branches' STATUS:
+
+  * http://svn.apache.org/repos/asf/httpd/httpd/branches/2.0.x/STATUS
+  * http://svn.apache.org/repos/asf/httpd/httpd/branches/2.2.x/STATUS
+  * http://svn.apache.org/repos/asf/httpd/httpd/branches/2.4.x/STATUS
+
+
+
+Release history:
+    [NOTE that x.{odd}.z versions are strictly Alpha/Beta releases,
+          while x.{even}.z versions are Stable/GA releases.]
+
+    2.4.11  : In development.
+    2.4.10  : Tagged on July 15, 2014. Released July 21, 2014
+    2.4.9   : Tagged on March 13, 2014. Released on March 17, 2014
+    2.4.8   : Tagged on March 11, 2014. Not released.
+    2.4.7   : Tagged on November 19, 2013. Released on Nov 25, 2013
+    2.4.6   : Tagged on July 15, 2013. Released July, 22, 2013
+    2.4.5   : Tagged on July 11, 2013, not released.
+    2.4.4   : Tagged on February 18, 2013. Released Feb 25, 2013
+    2.4.3   : Tagged on August 17, 2012. Released Aug 18, 2012
+    2.4.2   : Tagged on April 5, 2012. Released Apr 17, 2012.
+    2.4.1   : Tagged on February 13, 2012. Released Feb 21, 2012.
+    2.4.0   : Tagged on January 16, 2012, not released.
+    2.3.16  : Tagged on December 15, 2011.
+    2.3.15  : Tagged on November 8, 2011. Released Nov. 15, 2011.
+    2.3.14  : Tagged on August 1, 2011. Released Aug. 9, 2011.
+    2.3.13  : Tagged on June 28, 2011, not released.
+    2.3.12  : Tagged on May 11, 2011. Released May 23, 2011.
+    2.3.11  : Released as Beta on March 7, 2011.
+    2.3.10  : Tagged on December 13, 2010. Released Dec 21, 2010.
+    2.3.9   : Tagged on November 23, 2010, not released.
+    2.3.8   : Tagged on August 24, 2010.
+    2.3.7   : Tagged on August 19, 2010, not released.
+    2.3.6   : Released on June 21, 2010.
+    2.3.5   : Released on January 26, 2010.
+    2.3.4   : Released on December 8, 2009.
+    2.3.3   : Tagged on November 11, 2009, not released.
+    2.3.2   : Tagged on March 23, 2009, not released.
+    2.3.1   : Tagged on January 2, 2009, not released.
+    2.3.0   : Tagged on December 6, 2008, not released.
+
+Contributors looking for a mission:
+
+  * Just do an egrep on "TODO" or "XXX" in the source.
+
+  * Review the bug database at: http://issues.apache.org/bugzilla/
+
+  * Review the "PatchAvailable" bugs in the bug database:
+
+    https://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&product=Apache+httpd-2&keywords=PatchAvailable
+
+    After testing, you can append a comment saying "Reviewed and tested".
+
+  * Open bugs in the bug database.
+
+  * See also the STATUS file in the docs/ directory, which lists documentation-specific TODO items.
+
+
+CURRENT RELEASE NOTES:
+
+  * Forward binary compatibility is expected of Apache 2.4.x releases, such
+    that no MMN major number changes will occur after 2.4.1.  Such changes can
+    only be made in the trunk.
+
+  * All commits to branches/2.4.x must be reflected in SVN trunk,
+    as well, if they apply.  Logical progression is commit to trunk
+    then merge into branches/2.4.x, as applicable.
+
+  * Current exceptions for RTC for this branch:
+    . mod_lua
+    . documentation
+    . non-Unix build
+    . non-Unix, single-platform code
+
+RELEASE SHOWSTOPPERS:
+
+
+
+PATCHES ACCEPTED TO BACKPORT FROM TRUNK:
+  [ start all new proposals below, under PATCHES PROPOSED. ]
+
+
+
+PATCHES PROPOSED TO BACKPORT FROM TRUNK:
+  [ New proposals should be added at the end of the list ]
+
+   * mod_proxy: Preserve original request headers even if they differ
+                from the ones to be forwarded to the backend. PR 45387.
+     trunk patch: http://svn.apache.org/r1588527
+     2.4.x patch: trunk works (modulo CHANGES)
+     +1: ylavic, rjung
+
+   * mod_proxy: Don't limit the size of the connectable Unix Domain Socket paths.
+                [Graham Dumpleton, Christophe Jaillet, Yann Ylavic]
+     trunk patch: http://svn.apache.org/r1598946
+                  http://svn.apache.org/r1602989
+     2.4.x patch: http://people.apache.org/~ylavic/httpd-2.4.x-ap_proxy_connect_uds.patch
+                  (modulo CHANGES/MMN)
+     +1: ylavic, jim
+
+   * mod_ssl, event: Ensure that the SSL close notify alert is flushed to the client.
+                     PR54998.
+     trunk patch: http://svn.apache.org/r1601184
+                  http://svn.apache.org/r1601274
+                  http://svn.apache.org/r1601185
+     2.4.x patch: http://people.apache.org/~ylavic/httpd-2.4.x-SSL-shutdown.patch
+                  (modulo CHANGES/MMN)
+     +1: ylavic, rjung
+
+   * mod_proxy: Shutdown (eg. SSL close notify) the backend connection before closing.
+     trunk patch: http://svn.apache.org/r1601291
+                  http://svn.apache.org/r1601630
+     2.4.x patch: http://people.apache.org/~ylavic/httpd-2.4.x-proxy-SSL-shutdown.patch
+                  (modulo CHANGES)
+     note: depends on ap_shutdown_conn() from r1601185 above.
+     +1: ylavic, rjung
+
+   * mpm_winnt service.c: Normalize all error and status messages, clean up
+     source formatting, and accept utf-8 service names/descriptions for i18n.
+     trunk patches: http://svn.apache.org/r1611165
+                    http://svn.apache.org/r1611169
+                    http://svn.apache.org/r1611244
+     2.4.x patches: trunk works
+     +1: wrowe, gsmith
+
+   * mod_systemd: New module, for integration with systemd on Linux.
+     trunk patch: http://svn.apache.org/r1393976
+                  http://svn.apache.org/r1393997
+                  http://svn.apache.org/r1484554
+                  http://svn.apache.org/r1528032
+                  http://svn.apache.org/r1528034
+                  http://svn.apache.org/r1614821
+                  http://svn.apache.org/r1618579
+                  http://svn.apache.org/r1618588
+     2.4.x patch: http://people.apache.org/~jkaluza/patches/mod_systemd/httpd-2.4.x-mod_systemd.patch
+     +1: jkaluza
+
+   * core: Add support for systemd socket activation.
+     trunk patch: http://svn.apache.org/r1511033
+                  http://svn.apache.org/r1608686
+                  http://svn.apache.org/r1608694
+                  http://svn.apache.org/r1608703
+                  http://svn.apache.org/r1608721
+                  http://svn.apache.org/r1608744
+     2.4.x patch: http://people.apache.org/~jkaluza/patches/mod_systemd/httpd-2.4.x-socket-activation.patch
+     +1: jkaluza
+
+   * mod_buffer: Forward flushed input data immediately and avoid (unlikely)
+                 access to freed memory.
+     trunk patch: http://svn.apache.org/r1632742
+                  http://svn.apache.org/r1634836 (CHANGES entry)
+     2.4.x patches: trunk works (modulo CHANGES).
+     +1: ylavic
+
+   * mod_cgi: Log CGI script stderr to ScriptLog, use APLOGNO for
+     log_scripterror errors.
+     trunk patch: http://svn.apache.org/r1626978
+     2.4.x patch: trunk works
+     +1 jkaluza
+     ylavic: shouldn't we also (still) log on ErrorLog, at least on 2.4.x?
+             The log_script_err() line may somewhere be expected in error_log.
+             The new AH* in script_log could also cause parsing issues, but I'm
+             fine with this personnaly.
+
+   * mod_proxy_fcgi: Ignore body data from backend for 304 responses. PR 57198.
+     trunk patch: http://svn.apache.org/r1640495
+     2.4.x patch: trunk works
+     +1 jkaluza, covener
+     ylavic: Shouldn't we handle more cases here to ignore the body?
+             Please see my comment on dev@ as a reply to commit e-mail.
+
+   * mod_proxy: Add ap_proxy_define_match_worker() and use it for ProxyPassMatch
+     and ProxyMatch section to distinguish between normal workers and workers
+     with regex substitutions in the name. Implement handling of such workers
+     in ap_proxy_get_worker(). Fixes the bug when regex workers were not
+     matched and used for request. PR 43513.
+     trunk patch: http://svn.apache.org/r1609680
+                  http://svn.apache.org/r1641381
+     2.4.x patch: trunk works
+     +1: jkaluza, ylavic
+
+   * mod_rewrite: use the context info API to alleviate the need to specify
+                  a RewriteBase in some situations
+     trunk patch: http://svn.apache.org/r1642484
+     2.4.x patch: trunk works
+     +1 covener
+
+OTHER PROPOSALS
+
+   * A list of further possible backports can be found at: 
+     http://people.apache.org/~rjung/patches/possible-backports-httpd-trunk-2_4.txt
+     If you want to propose one of those, please add them above.
+
+
+PATCHES/ISSUES THAT ARE BEING WORKED
+
+
+PATCHES/ISSUES THAT ARE STALLED
+
+  * core: Stop the HTTP_IN filter from attempting to write error buckets
+    to the output filters
+    trunk patch: https://svn.apache.org/viewvc?view=revision&revision=1482522
+                 https://svn.apache.org/viewvc?view=revision&revision=1482918
+    2.4.x patch: /* working on it */
+    +1:  jim
+
+  * mod_proxy: Ensure network errors detected by the proxy are returned as
+    504 Gateway Timout as opposed to 502 Bad Gateway
+    trunk patch: https://svn.apache.org/viewvc?view=revision&revision=1480058
+    2.4.x patch: trunk patch works modulo CHANGES
+    +1:
+    -1: rpluem: This change is still disputed. See
+        http://mail-archives.apache.org/mod_mbox/httpd-dev/201305.mbox/%3C1B16B9E3-87BA-4EEF-939C-7C7313B54714%40gbiv.com%3E
+
+  * cross-compile: allow to provide CC_FOR_BUILD so that gen_test_char will be
+    compiled by the build compiler instead of the host compiler.
+    Also set CC_FOR_BUILD to 'cc' when cross-compilation is detected.
+    Trunk patches: http://svn.apache.org/viewvc?view=revision&revision=1327907
+                   http://svn.apache.org/viewvc?view=revision&revision=1328390
+                   http://svn.apache.org/viewvc?view=revision&revision=1328714
+    2.4 patch: http://people.apache.org/~fuankg/diffs/httpd-2.4.x-cross_compile.diff
+    fuankg: on hold until we agree for a better and more simple solution ...
+
+   * mod_ssl: Add support for Next Protocol Negotiation.
+     Trunk patch:
+       http://svn.apache.org/viewvc?view=revision&revision=1332643
+     2.4.x patch:
+       Trunk patch works.
+     +1: ben
+     sf says: Needs r1345599, too.
+              And wrowe's comment about the 2.2 patch is also valid for 2.4:
+              http://svn.apache.org/viewvc?view=revision&revision=1354823
+
+   * Makefile.win: Added copying of .vbs / .wsf CGIs to Windows install target.
+                   Moved fixing of shebang to separate target so that it is
+                   no longer executed by default and all CGIs remain inactive.
+     trunk patch: http://svn.apache.org/viewvc?view=revision&revision=1387984
+                  http://svn.apache.org/viewvc?view=revision&revision=1421203
+                  http://svn.apache.org/viewvc?view=revision&revision=1421591
+     2.4.x patch: http://people.apache.org/~fuankg/diffs/httpd-2.4.x-Makefile.win.diff
+     +1 fuankg, gsmith
+     -.8: trawick
+          This commit is essentially deciding that an httpd install on
+          Windows now has printenv/testcgi written in 2 more languages.
+          To the extent that the usefulness is that it shows how to make scripts
+          of these types executable by httpd, I believe that the documentation
+          is the proper place to solve that.  To the extent that the usefullness
+          is to show how to implement a CGI in these particular languages, I believe
+          that the httpd distribution and documentation in general is not the
+          place for that.  Historically these types of scripts have caused problems
+          for downstream vendorsas well as newbies (and sometimes the intersection
+          of those two groups) who don't understand that these are information leaks
+          once they are enabled, and the subtlety of the way they are disabled ("Apache
+          messed up the first line; let me fix that") contributes to that.
+     fuankg notes: I've just added a big warning to all CGI scripts which should now
+          make absolutely clear that these CGIs are for testing purpose only - so those
+          who enable those scripts with inserting the right shebang should be 100% aware
+          of any risks (this should cover your last point).
+     jim: trawick, does the above address your concerns?
+     trawick: to some extent (somebody reading the script gets an idea)
+          Why isn't the configuration requirement documented instead
+          of described indirectly in a sample?
+          Why are these new samples added to the install without three
+          votes?  (I didn't veto it; put your name next to the two
+          existing ones and I'll be satisified that enough people
+          considered this addition as an appropriate solution for a
+          real httpd usability problem.)
+     wrowe: I'd agree with trawick, and suggest that these scripts can begin
+            their life somewhere in the manual/ tree.  This really seems like
+            the place where /usr/share/httpd/examples/ would be useful, but
+            there isn't an ordinary directory for that.  Since we want none
+            of the scripts to function 'out of the box', what about a new
+            cgi-examples/ dir alongside cgi-bin/? Otherwise manual/cgi/examples
+            might work?
+

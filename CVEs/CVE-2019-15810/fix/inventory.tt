@@ -1,0 +1,78 @@
+<div class="container">
+  [% IF platforms.size %]
+  <div class="row">
+    <div class="span6">
+      <h3 class="nd_inventory-table-head">By Platform</h3>
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Model</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          [% FOREACH platform IN platforms %]
+          [% NEXT UNLESS platform.vendor OR platform.model %]
+          <tr>
+            <th>
+              [% IF platform.vendor %]
+              <a class="nd_linkcell"
+                href="[% search_device | none %]&q=[% platform.vendor | uri %]&vendor=[% platform.vendor | uri %]">
+                  [% platform.vendor | html_entity %]</a>
+              [% ELSE %]unknown[% END %]
+            </th>
+            <th>
+              [% IF platform.model %]
+              <a class="nd_linkcell"
+                href="[% search_device | none %]&q=[% platform.model | uri %]&model=[% platform.model | uri %]">
+                  [% platform.model | html_entity %]</a>
+              [% ELSE %]unknown[% END %]
+            </th>
+            <th>[% platform.count | html_entity %]</th>
+          </tr>
+          [% END %]
+        </tbody>
+      </table>
+    </div>
+    <div class="span6">
+      <h3 class="nd_inventory-table-head">By Software Release</h3>
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>OS</th>
+            <th>Version</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          [% FOREACH release IN releases %]
+          [% NEXT UNLESS release.os OR release.os_ver %]
+          <tr>
+            <th>
+              [% IF release.os %]
+              <a class="nd_linkcell"
+                href="[% search_device | none %]&q=[% release.os | uri %]&os=[% release.os | uri %]">
+                  [% release.os | html_entity %]</a>
+              [% ELSE %]unknown[% END %]
+            </th>
+            <th>
+              [% IF release.os_ver %]
+              <a class="nd_linkcell"
+                href="[% search_device | none %]&q=[% release.os_ver | uri %]&os_ver=[% release.os_ver | uri %]">
+                  [% release.os_ver | html_entity %]</a>
+              [% ELSE %]unknown[% END %]
+            </th>
+            <th>[% release.count | html_entity %]</th>
+          </tr>
+          [% END %]
+        </tbody>
+      </table>
+    </div>
+  </div>
+  [% ELSE %]
+  <script type="text/javascript">
+    window.location = '[% uri_for("/") %]';
+  </script>
+  [% END %]
+</div>

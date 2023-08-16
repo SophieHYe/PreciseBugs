@@ -1,0 +1,54 @@
+{% load dictionary_tag %}
+<script>
+    /**
+     * ID of the last AJAX search request we sent.
+     */
+    searchId_u = 0;
+
+    $(document).ready(function() {
+        $("#{{ input_tag_id }}").select2({
+            placeholder: "Search for user",
+            minimumInputLength: 3,
+            multiple: {{ multiple }},
+            ajax: {
+                url: "{%  url 'ucamlookup_find_people' %}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        searchId_u: ++searchId_u
+                    };
+                },
+                results: function (data, page) {
+                    if (data.searchId_u != searchId_u)
+                        return;
+                    return {results: data.persons};
+                }
+            },
+            formatResult: function(person) {
+                return person.visibleName+" ("+person.crsid+") ";
+            },
+            formatSelection: function(person) {
+                return person.visibleName+" ("+person.crsid+") ";
+            },
+            id: function(person) {
+                return person.crsid;
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; }
+            // we do not want to escape markup since we are displaying html in results
+        });
+
+        $("#{{ input_tag_id }}").select2("data", [
+            {% for authorised_user in lookup_lists|get_item:user_list %}
+                {
+                    crsid: "{{ authorised_user.username }}",
+                    visibleName: "{{ authorised_user.last_name }}",
+                    {% if request.user.username == authorised_user.username %}
+                        locked: true
+                    {% endif %}
+                },
+            {% endfor %}
+        ]);
+    });
+</script>

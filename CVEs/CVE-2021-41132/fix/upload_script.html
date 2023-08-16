@@ -1,0 +1,233 @@
+{% extends "webgateway/core_html.html" %}
+{% load i18n %}
+
+{% comment %}
+<!--
+  Copyright (C) 2020 University of Dundee & Open Microscopy Environment.
+  All rights reserved.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+{% endcomment %}
+
+{% block title %}
+    Upload Script
+{% endblock %}
+
+
+{% block link %}
+
+    <style type="text/css">
+
+        body {
+            font-family: Arial;
+            background: #eee;
+            margin: 0px;
+            padding: 0px;
+        }
+        div.footer {
+            background: #ddd; 
+            position:fixed; 
+            bottom:0px; left:0px; right:0px;
+            padding: 7px;
+            border-top: 1px solid #aaa;
+            font-size: 80%;
+        }
+        h3 {
+            margin-top: 0px;
+            padding-bottom: 10px;
+            border-bottom: solid #aaa 1px;
+        }
+        input[type='text'] {
+            border: solid 1px rgba(0,0,0,.2);
+            border-top: solid 1px rgba(0,0,0,.3);
+            box-shadow: 0 1px 0 white, inset 0 1px 1px rgba(0,0,0,.1);
+            border-radius: 2px;
+            padding: 5px;
+        }
+        #spinner {
+            display: none;
+            margin: -2px 0;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block script %}
+    {{ block.super }}
+    {% include "webgateway/base/includes/script_src_jquery.html" %}
+    {% include "webgateway/base/includes/script_src_popup.html" %}
+    {% include "webgateway/base/includes/jquery-ui.html" %}
+    <script type="text/javascript" src="{% static "3rdparty/jquery.form-4.3.0.js" %}"></script>
+    <link rel="stylesheet" href="{% static "webclient/css/layout.css"|add:url_suffix %}" type="text/css" />
+    <link rel="stylesheet" href="{% static "webclient/css/dusty.css"|add:url_suffix %}" type="text/css" media="screen"/>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            // disable submit until file chosen;
+            $('#submit').attr('disabled', 'disabled')
+
+            $('#script_form').ajaxForm({
+                beforeSubmit: function() {
+                    $("#submit").prop("value", "Uploading...");
+                    $("form label").css("opacity", 0.5);
+                    $("#spinner").show();
+                    setTimeout(function(){
+                        // Don't disable before submit or data not included
+                        $("form input").prop("disabled", true);
+                        $("form select").prop("disabled", true);
+                    }, 100);
+                },
+                success: function(data) {
+                    // Force reload of scripts on webclient page
+                    window.opener.$("#scriptList").empty();
+                    $("#spinner").hide();
+                    $("#submit").prop("value", "Done");
+                    // Close this window on 'OK'
+                    OME.confirm_dialog(
+                        data.Message.replace('\n', '<br/>'), function(){
+                            self.close();
+                        }, "Upload Script",
+                        ["OK"], null, 200);
+                }
+            });
+            // Show any error
+            $(document).ajaxError(function(e, req, settings, exception) {
+                $("#spinner").hide();
+                alert(req.responseText);
+            });
+
+            // All existing scripts - to check if we're going to overwrite
+            // populated below...
+            var script_paths = [];
+            var chosen_file = undefined;
+
+            var checkForReplace = function() {
+                if (!chosen_file) {
+                    $('#targetInfo').hide();
+                    $('#submit').attr('disabled', 'disabled');
+                    return;
+                }
+                $('#targetInfo').show();
+                if (!chosen_file.endsWith(".py")) {
+                    $("#targetMessage").html("File: " + chosen_file.escapeHTML() + " not valid.<br/>File must be Python script (.py)");
+                    return;
+                }
+
+                $('#submit').prop('disabled', false);
+
+                var folder = $("#scriptFolder").val();
+                if (!folder.endsWith('/')){
+                    folder = folder + '/';
+                };
+                var script_path = folder + chosen_file;
+                $("#targetPath").text(script_path);
+
+                if (script_paths.indexOf(script_path) > -1) {
+                    $("#targetMessage").html("Replace script at:");
+                    $('#submit').attr('value', 'Replace script');
+                } else {
+                    $("#targetMessage").html("Upload script to:");
+                    $('#submit').attr('value', 'Upload script')
+                }
+            }
+
+            $("#script_folders").on('change', function(event){
+                $("#scriptFolder").val(event.target.value);
+                $(this).val('');
+                checkForReplace();
+            });
+
+            $("#scriptFolder").on('keyup', function(event){
+                checkForReplace();
+            });
+
+            $("#script_file").on('change', function(event){
+                var files = document.getElementById('script_file').files;
+                if (files.length > 0){
+                    chosen_file = files[0].name;
+                } else {
+                    chosen_file = undefined;
+                }
+                checkForReplace();
+            })
+
+            // Load existing scripts...
+            $.getJSON("{% url 'list_scripts' %}?full_path=true", function(data){
+                var script_folders = [];
+                
+                var get_folders = function(baseDir, script_data) {
+                    var html = "";
+                    for (var i=0; i<script_data.length; i++) {
+                        var li = script_data[i],   // dict of 'name' and 'ul' for menu items OR 'id' for scripts
+                            name = li.name;
+                        if (li.id) {
+                            // we have found a script - add directory to list
+                            if (script_folders.indexOf(baseDir) == -1) {
+                                script_folders.push(baseDir);
+                            }
+                            script_paths.push(baseDir + '/' + li.name);
+                        } else {
+                            get_folders(baseDir + '/' + li.name, li.ul);
+                        }
+                    }
+                    return html;
+                };
+
+                get_folders('', data);
+
+                var select_html = script_folders.map(function(f){
+                    return "<option value='" + f + "'>" + f + "</option>";
+                }).join("");
+                select_html = "<option value=''>Choose Folder</option>" + select_html;
+                $("#script_folders").html(select_html);
+            })
+        });
+    </script>
+{% endblock %}
+
+
+{% block body %}
+    <form id='script_form' method="post" action="{% url 'script_upload' %}">{% csrf_token %}
+        <div style="padding:10px; margin-bottom:40px">
+            <h3 id="scriptName">Upload Script</h3>
+
+            <p>
+                <label>Choose script to upload:</label>
+                <input id="script_file" name="script_file" type="file" />
+            </p>
+
+            <p>
+                <label>Upload into folder:</label><br>
+                <input type="text" placeholder="/top_menu/sub_menu" name="script_path" id="scriptFolder" style="width:350px"/>
+                <select id="script_folders" style="width:150px">
+                </select>
+            </p>
+
+            <p id="targetInfo" style="display:none">
+                <span id="targetMessage"></span>
+                <pre><code id="targetPath"></code></pre>
+            </p>
+        </div>
+        <div class="footer">
+            <div style="float:right">
+                <a href="#" tabIndex="3" onClick="self.close()">Close</a>
+                <input id="submit" tabIndex="2" type="submit" value="Upload Script" />
+                <img id="spinner" src ="{% static "webgateway/img/spinner.gif" %}"/>
+            </div>
+        </div>
+    </form>
+{% endblock %}

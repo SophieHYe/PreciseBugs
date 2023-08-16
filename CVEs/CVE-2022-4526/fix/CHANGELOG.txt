@@ -1,0 +1,401 @@
+Changelog
+=========
+
+3.16 (unreleased)
+-----------------
+
+- Split out zip upload functionality into a separate function (#222) (contributed by lausek).
+- Do not allow JS injection into the Photo caption field (#223) (bug detected by Domiee13).
+
+
+3.15.1 (2022-02-23)
+-------------------
+
+- Django 4.0 adds a no-op migration (#221) (reported by rhbvkleef).
+
+
+3.15 (2022-02-05)
+-----------------
+
+- Made compatible with Django 4.0 (#220) (contributed by Martijn Verkleij).
+- Updated French translation (#219) (contributed by Alexandre Iooss).
+
+3.14 (2021-10-03)
+-----------------
+
+- Updated the sample templates to use Bootstrap 5 (previously used Bootstrap 3).
+- Checked compatibility with Django 3.2.
+- Use isort to tidy the Python imports.
+
+3.13 (2020-09-03)
+-----------------
+
+- Checked compatibility with Django 3.1.
+- Apply crop/effect changes to existing images (#210).
+- Encoding objects before hashing error	(#205).
+
+3.12 (2020-07-30)
+-----------------
+
+- Drop alpha channel only on jpeg save (contributed by drazen)
+- Added zh_Hans translation	(contributed by Lessica)
+- improved Dutch translations (contributed by andreas.milants)
+
+3.11 (2019-12-13)
+-----------------
+
+- Added support for Django 3.
+- Dropped support for Python 2, python 3.4 and Django 2.1.
+
+
+3.10 (2019-08-29)
+-----------------
+
+- Compatibility with Django 2.2.
+
+
+3.9 (2019-04-21)
+----------------
+
+- Fixes when file doesn't exist in the file system but still is in S3.
+- Doc tweaks - and added a page on how to actually use Photologue!
+- Make setup compatible with latest version of pip.
+- Checked compatibility with Django 2.1 and Python 3.7.
+- Updated translations for Catalan and Basque.
+- Missed a Django migration (issue #194).
+- Test Tox; integrate with Travis and Coveralls.
+- Removed old code (old-style demo templates that have been deprecated since 2014).
+- Removed old code (old views that have been deprecated since 2014).
+- Removed all references to PIL (which hasn't been updated since 2009). I think that by now
+  there are no servers left anywhere in the world that still use it :-)
+
+3.8.1 (2017-12-03)
+------------------
+
+- Admin thumbnails were not displaying correctly.
+
+
+3.8 (2017-12-03)
+----------------
+
+- Added support for Django 2.0.
+- Dropped support for Django 1.8 and 1.10.
+- Did not really work with Django 1.11 - sortedm2m library was broken. Upgraded sortedm2m and it now works with 1.11.
+- New translation for Ukrainian; updated translation for Spanish.
+- Fixed template tag that was broken in Django 1.11.
+
+3.7 (2017-05-10)
+----------------
+
+- Now works with Django 1.11. Deprecated support for Django 1.9.
+- Fixed the management commands to work in the latest versions of Django.
+- Fixed an issue with some photo sizes not being created (see #170).
+- Updated translations for French and Basque (provided by matthieu.payet and urtzai).
+
+3.6 (2016-10-05)
+----------------
+
+- Now works with Django 1.10 (to be precise: Photologue worked, but the unit tests did not).
+- Updated urlpatterns in docs, tests and example project for Django 1.8+
+- Enhance Python 2.7 EXIF info.
+- Updated docs (contributed by lizwalsh).
+- Fixed command plcreatesize (contributed by Mikel Larreategi).
+- Fixed deprecated template settings (contributed by Justin Dugger).
+- Updated translations for German and Russian.
+
+3.5.1 (2016-01-13)
+------------------
+
+- Photologue 3.5 failed to install under Python 2.7. Looks like distutils does not like files
+  with non-ascii filenames (reported in #149).
+- Fix for issue #149 - bug with projects that extend ImageModel.
+
+
+3.5 (2016-01-09)
+----------------
+
+- Increased length of 'title' fields to 250 chars in order to store longer title.
+- Rotate image before resize, to comply with height/width constraints (see #145).
+- Added forgotten migration (#148).
+- Changing "Photo" image leaves extra files on server (#147).
+- Normalize filenames to ASCII so they work across all filesystems (#109).
+- Updated Hungarian translation.
+
+3.4.1 (2015-12-23)
+------------------
+
+- Django 1.9 requires latest version of django-sortedm2m.
+
+
+3.4 (2015-12-23)
+----------------
+
+Upgrade notes:
+- The EXIF property of an Image is now a method instead.
+
+- Dropped support for Django 1.7.
+- Fixed a few minor issues with the unit tests.
+- Adding a watermark was crashing (fix suggested by hambro).
+- Added/updated translations: Danish, Slovak (contributed by Rasmus Klett, saboter).
+- Fixed Django 1.9 Deprecation warnings (contributed by jlemaes).
+- Processing of EXIF data was broken (and very broken in Python 3) - updated library and bug fixes.
+
+
+3.3.2 (2015-07-20)
+------------------
+
+- Release Photologue as a universal wheel.
+
+
+3.3.1 (2015-07-20)
+------------------
+
+- Upload of 3.3 to Pypi had failed.
+
+3.3 (2015-07-20)
+----------------
+
+- In the initial data setup, the 'thumbnail' photosizes should not increment the
+  view count (issue #133).
+- Fix typo in admin text (issue reported by Transifex user ciastko).
+- Updated translations: Hungarian, Czech, Dutch.
+- Zip upload used gallery title instead of "Title" field for photos (#139).
+- Zip upload: an uploaded photo is not a duplicate of an existing photo simply because they share the same slug.
+- Updated django-sortedm2m version - this should help admin performance for galleries with lots of photos.
+
+3.2 (2015-05-11)
+----------------
+
+- Dropped support for Django 1.6.
+- Rotation of photos based upon EXIF data if available, so they get displayed correctly (#122).
+- Misc doc tweaks.
+- Only clear scale cache if image has changed.
+- Pagination is now hard-coded to 20 items per page - it's a convenience to have it available as
+  soon as the app is run, but having settings to tweak this value is not needed as it's so
+  easy to override in a Django project.
+- PHOTOLOGUE_GALLERY_PAGINATE_BY and PHOTOLOGUE_PHOTO_PAGINATE_BY were previously deprecated
+  and have now been removed.
+- Tagging has been removed from Photologue.
+- All references to 'title_slug' field have been removed.
+- Django can now natively chain custom manager filters - so the dependency on django-model-utils
+  is removed.
+- Updated German translation.
+- Improved setup file.
+
+3.1.1 (2014-11-13)
+------------------
+
+- The 'zip upload' functionality did not work (the required html templates
+  were not included into the released package).
+- Updated French translation.
+
+3.1 (2014-11-03)
+----------------
+
+- The 'zip upload' functionality has been moved to a custom admin page.
+- Refactor `add_accessor_methods` to be lazily applied (see #110).
+- Updated German translation.
+- Several improvements to the sample Bootstrap templates.
+- Support CACHEDIR.TAG spec issue #89
+- Fix issue #99 by adding 10 extra char to photo title(max gallery size up to 999999999 images)
+- Sitemap.xml was not aware of Sites (#104).
+- In python 3, gallery upload would crash if uploaded file was not a zip file (#106).
+
+3.0.2 (2014-09-23)
+------------------
+
+- Updated django-sortedm2m to an official release.
+- Updated Spanish translation.
+- Updated Bootstrap version used in example project.
+
+3.0.1 (2014-09-16)
+------------------
+
+- Missed out some templates from the released package.
+
+3.0 (2014-09-15)
+----------------
+
+Upgrade notes:
+
+WARNING: IF YOU'RE USING POSTGRESQL AS A DATABASE & DJANGO 1.7, THE LATEST RELEASE OF
+DJANGO-SORTEDM2M HAS A BUG. INSTEAD, YOU'LL HAVE TO MANUALLY INSTALL:
+
+pip install -e git://github.com/richardbarran/django-sortedm2m.git@9a609a1c6b790a40a016e4ceadedbb6dd6b92010#egg=sortedm2m
+
+
+
+THE FOLLOWING CHANGES BREAK BACKWARDS COMPATIBILITY!
+
+- Django 1.7 comes with a new migrations framework which replaces South -
+  if you continue to use Django 1.6, you'll need to add new settings. Please
+  refer in the docs to the installation instructions.
+  If you're upgrading to Django 1.7 - upgrade Photologue first, THEN upgrade
+  Django.
+- The Twitter-Bootstrap templates - previously in 'contrib' - become the default; the
+  previous templates are moved to 'contrib'.
+- The django-tagging library is no longer maintained by its author. As a consequence,
+  it has been disabled - see the docs for more information (page
+  https://django-photologue.readthedocs.org/en/latest/pages/customising/settings.html#photologue-enable-tags)
+- Support for Django 1.4 and 1.5 has been dropped (Photologue depends on django-sortedm2m,
+  which has dropped support for 1.4; and Django 1.5 is no longer supported).
+- PHOTOLOGUE_USE_CKEDITOR has been removed.
+- Many urls have been renamed; photologue urls now go into their own namespace. See the urls.py
+  file for all the changes.
+
+Other changes:
+
+- Support for Amazon S3 to store images (thank you Celia Oakley!).
+- List views have changed urls: instead of /page/<n>/, we now have a /?page=<n> pattern.
+  This is a more common style, and allows us to simplify template code e.g. paginators!
+- date_taken field not correctly handled during single photo upload (#80).
+- Removed deprecated PhotologueSitemap.
+- Gallery zip uploads would fail if the title contained unicode characters.
+- Gallery-uploads: Do not require title for uploading to existing gallery (#98).
+- The Photologue urls used to use names for months; this has been changed to using
+  numbers, which is better for non-English websites (#101).
+
+
+2.8.3 (2014-08-28)
+------------------
+
+- Updated Spanish translation.
+
+2.8.2 (2014-07-26)
+------------------
+
+- The latest release of django-sortedm2m is not compatible with older
+  versions of Django, so don't use it (issue #92).
+
+2.8.1 (2014-07-26)
+------------------
+
+- Fixed issue #94 (problem with i18n plural forms).
+- Updated Slovak translation.
+
+2.8 (2014-05-04)
+----------------
+
+Upgrade notes:
+
+1. Photologue now depends on django-sortedm2m and django-model-utils - please
+   refer to installation instructions. These dependencies should be added
+   automatically.
+
+2. Run South migrations.
+
+List of changes:
+
+- Photo and Gallery models now support Django's sites framework.
+- Photologue now uses django-sortedm2m to sort photos in a gallery.
+- Major rewrite of zip archive uploader: warn users of files that could not be
+  processed, get code to work with Python 3 (issue #71), add extra error
+  handling.
+- Renamed field title_slug to slug - this allows us to simplify views.py a
+  bit.
+- PHOTOLOGUE_USE_CKEDITOR, PHOTOLOGUE_GALLERY_PAGINATE_BY and
+  PHOTOLOGUE_PHOTO_PAGINATE_BY are deprecated.
+- Fixed pagination controls for photo list template.
+- Tightened naming rules for Photosize names.
+- Fixed a couple of unicode-related bugs.
+- Added to the documentation pages describing how to customise the admin and
+  the views.
+- Refactored slightly views.py.
+- Started work on chainable querysets.
+
+2.7 (2013-10-27)
+----------------
+
+Upgrade notes:
+
+1. All settings are now prefixed with ``PHOTOLOGUE_``. Please check that you are
+   not affected by this.
+
+List of changes:
+
+- Fixed issue #56, Gallery pagination is broken.
+- Photologue now works with Python 3.
+- Added a set of templates that work well with Twitter-Bootstrap 3, and used
+  them for the 'example_project'.
+- Fixed issue #64 (allow installation without installing Pillow).
+- Optional use of CKEditor.
+- Updated/new translations for Polish, Slovak and German.
+- Bugfix: allow viewing latest galleries/latest photos pages even if they
+  are empty.
+- Started using factory-boy - makes unit tests a bit easier to read.
+- Added settings to customise pagination count on list pages.
+- Documented all settings.
+- All settings are now prefixed with ``PHOTOLOGUE_``.
+
+2.6.1 (2013-05-19)
+------------------
+
+List of changes:
+
+- Fixed broken packaging in release 2.6.
+
+2.6 (2013-05-19)
+----------------
+
+Upgrade notes:
+
+1. Photologue now relies on Pillow instead of PIL. The easiest way to upgrade
+   is to remove PIL completely, then install the new version of Photologue.
+2. Photologue, in line with Django itself, has dropped support for Django 1.3.
+
+List of changes:
+
+- Switched from PIL to Pillow - hopefully this should make installation
+  easier.
+- Initial setup of data: removed plinit and replaced it with a South data
+  migration.
+- Added feature to allow extending the built-in templates (and documented
+  it!).
+- Allow editing of Photo added date (temp way of sorting photos).
+- Added an example project to help people wanting to contribute to the
+  project.
+- Fixed buggy Travis CI script.
+- fixed issue #52, transactions in migration
+- fixed issue #51, uniqueness collisions in migration
+- Accessing the root url (usually /photologue/ will now redirect you to the
+  gallery list view.
+- Photologue requires min. Django 1.4.
+- Tidied a data validator on PhotoSizes.
+
+2.5 (2012-12-13)
+----------------
+
+- added a sitemap.xml.
+- added some templatetags.
+- started using Sphinx for managing documentation.
+- started using Transifex for managing translations.
+- started using Travis CI.
+- added 12 new translations and improved some of the existing translations.
+- fixed issue #29 (quote URL of resized image properly).
+- misc improvements to clarity of unit tests.
+- added Django 1.4 timezone support.
+
+2.4 (2012-08-13)
+----------------
+
+Upgrade notes:
+
+1. Starting with this version, Photologue uses South to manage the database
+   schema. If you are upgrading an existing Photologue installation, please
+   follow the South instructions at:
+   http://south.readthedocs.org/en/latest/convertinganapp.html#converting-other-installations-and-servers
+
+2. Photologue has dropped support for Django 1.2.
+
+List of changes:
+
+- use South to manage schema changes.
+- updated installation instructions.
+- fixed issue #9 (In Django 1.3, FileField no longer deletes files).
+- switched from function-based generic views to class-based views.
+- fixed PendingDeprecationWarnings seen when running Django 1.3 - this will
+  make the move to Django 1.5 easier.
+- added unit tests.
+- fixed bug where GALLERY_SAMPLE_SIZE setting was not being used.
+- fixed issue #11 (GalleryUpload with len(title) > 50 causes a crash).
+- fixed issue #10 (Increase the size of the name field for photosize).

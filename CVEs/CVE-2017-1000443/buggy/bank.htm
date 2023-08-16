@@ -1,0 +1,97 @@
+<div id="login">
+
+<img style="height:150px; width:150px;"src="/images/bankimg.png">
+
+<h6>Keeping you in the green</h6>
+
+
+<?php
+
+if(!isset($_SESSION['bank_login'])){
+		
+$sql = "SELECT userid FROM economy WHERE userid = '$userid'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+     echo '<form name="login" method="POST" autocomplete="off" action="?a=bankin">';
+	 echo "<br>";
+	 echo 'Password:  <input type="password" name="password" value=""><br>';
+	 echo "<br>";
+ 	 echo "<button class='btn waves-effect waves-light' type='submit' name='submit'>Login<i class='material-icons center'></i></button>";
+	 echo "<br>";
+	 echo "<br>";
+	 echo "</form>";
+} else {
+     echo "<p>We don't appear to have your account on file. Why not register an account with us? Opening an account is totally free and requires no inital payment!</p>";
+	 echo '<form name="registration" method="POST" action="?a=bankin">';
+	 echo 'Password: <input type="password" name="password" value=""><br>';
+	 echo "<br>";
+	 echo "<br>";
+	 echo '<input style="width:70px;" type="submit" name="submit" value="Register">';
+	 echo "</form>";
+	 echo "<br>";
+	 
+};
+}
+if (isset($_SESSION['bank_login'])){
+
+	echo "<h2>";
+	echo $_SESSION['login_user'];
+	echo "'s Banking Account</h2>";
+	$sql = "SELECT cash FROM economy WHERE userid = '$userid'";
+	$result = $conn->query($sql);
+	while ($row = $result->fetch_assoc()){
+		$balance = $row['cash'];
+	};
+	
+	echo "<p>Total Balance: $"; printf("%.2f", $balance); echo "</p>";
+	echo '<form name="sendmoney" method="POST" action="?a=banksend">';
+	echo "Amount:"; echo '<input type="text" name="amount" value="" size="10">';
+	echo "<br>";
+	echo "To:"; echo '<input type="text" name="recvusername" value="">';
+	echo "<br>";
+	echo "Details:"; echo '<input type="text" name="details" value="">';
+	echo "<br>";
+	
+    echo "<input type='radio' value='hacker' id='hacker' name='type'>";
+    echo "<label for='hacker'>Hacker</label>";
+    echo "<div class='check'><div class='inside'></div></div>";
+
+    echo "<input type='radio' value='clan' id='clan' name='type'>";
+    echo "<label for='clan'>Clan</label>";   
+    echo "<div class='check'><div class='inside'></div></div>";
+
+    echo "<br>";
+
+	echo "<button class='btn waves-effect waves-light' type='submit' name='action'>Send Cash<i class='material-icons center'></i></button>";
+
+	echo "<br>";
+	echo "<br>";
+	echo "<h6>Previous Transactions (Last 50)</h6>";
+	
+
+	$sql = "SELECT timestamp,amount,details FROM bank_transactions WHERE userid = '$userid' ORDER BY timestamp DESC ";
+	$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+
+		$amount = $row['amount'];
+		$takebal = number_format($amount, 2, '.', '');
+     echo "<div id=admintable><table><tr><th>Timestamp</th><th>Amount</th><th>Details</th>";
+     // output data of each row
+     while($row = $result->fetch_assoc()) {
+
+         echo "<tr><td>" . $row["timestamp"]. "</td><td>$" . $row["amount"]. "</td><td>" . $row["details"]. "</td>";
+     }
+     echo "</table>";
+} else {
+     echo "No transactions found.";
+};
+
+
+}
+
+
+?>
+
+</div>
+</div>

@@ -1,0 +1,162 @@
+<div class="menu-wrap">
+    <nav class="menu">
+        <ul class="clearfix">
+        
+            <li>
+            	<a href="/"><?php echo $_SESSION['login_user'];?></a>
+            	<ul class="sub-menu">
+            		<li><a href="?a=accountdetails">Account Details</a></li>
+            		<li><a href="?a=statistics">Statistics</a></li>
+            		<li><a href="?a=system">System</a></li>
+            		<?php
+            		
+            		$username = $_SESSION['login_user'];
+            		
+            		$getid = "SELECT id FROM accounts WHERE username = '$username'";
+					$getResult = $conn->query($getid);
+					
+					while($getrow = $getResult->fetch_assoc()) {
+						$userid = $getrow['id'];
+					};
+            		
+            		$sql = "SELECT * FROM usersystems WHERE id = $userid";
+					$result = $conn->query($sql);
+					while ($row = $result->fetch_assoc()){
+						$logs = $row['logs'];
+					}
+					if(isset($logs)){
+					if($logs == 'Installed'){
+						echo "<li><a href='?a=syslogs'>System Logs</a></li>";
+					}
+					else{
+						echo "";
+					};
+					};
+            		
+            		?>
+            		
+            		<li><a href="?a=email">Mail</a></li>
+            		<li><a href="?a=storage">Storage</a></li>
+            		<li><a href="?a=cmd">CMD</a></li>
+            		<li><a href="?a=logout">Logout</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Hacking</a>
+				
+				<ul class="sub-menu">
+					<li><a href="?a=smalljobs">Small Jobs</a></li>
+					<li><a href="#">Hack A PC</a></li>
+					<li><a href="#">Hack A Server</a></li>
+					<li><a href="#">Hack the FBI Database</a></li>
+					<li><a href="?a=infections">Infections</a></li>
+					<li><a href="#">Contract Hacks</a></li>
+				</ul>
+			</li>	
+			
+            <li>
+            	<a href="#">World</a>
+            	<ul class="sub-menu">
+            		<li><a href="?a=leaderboard">Leaderboard</a></li>
+            		<li><a href="?a=bank">Bank</a></li>
+            		<li><a href="?a=cryptowallet">CryptoWallet</a></li>
+            		<li><a href="?a=internet">Internet</a></li>
+            		<li><a href="?a=publicftp">Public FTP</a></li>
+            		<li><a href="?a=support">Support Ticket(s)</a></li>
+            		<li><a href="?a=chat">Chat</a></li>
+            		<li><a href="?a=rules">Rules</a></li>
+            	</ul>
+            </li>
+            <li>
+            	<a href="#">Clan</a>
+            	<ul class="sub-menu">
+            		<?php
+	            		$username = $_SESSION['login_user'];
+    	        		$sql12 = "SELECT * FROM accounts WHERE username = '$username'";
+						$result12 = $conn->query($sql12);
+						while ($row = $result12->fetch_assoc()){
+							$clan = $row['clan'];
+						}
+						if($clan == ''){
+							echo "<li><a href='?a=createclan'>Create Clan</a></li>";
+						}
+						else{
+							$sqlClan = "SELECT * FROM clans WHERE id = '$clan'";
+							$sqlClanResult = $conn->query($sqlClan);
+							while ($row78 = $sqlClanResult->fetch_assoc()){
+								$clanname = $row78['clanname'];
+							};
+							echo "<li><a href='?a=clanpage'>$clanname</a></li>";
+							echo "<li><a href='?a=clanroster'>Clan Roster</a></li>";
+							echo "<li><a href='?a=clanbank'>Clan Bank</a></li>";
+						};
+					?>
+				</ul>
+			</li>
+            		
+            <li>
+            	<a href="#">Marketplace</a>
+            	<ul class="sub-menu">
+            		<li><a href="?a=softwareshop">Software Shop</a></li>
+            		<li><a href="?a=hardwareshop">Hardware Shop</a></li>
+            		<li><a href="?a=isp">Internet Provider</a></li>
+            		<li><a href="?a=h4h">Hacker for Hire</a></li>
+            		<li><a href="?a=cryptocurrency">Cryptocurrency</a></li>
+            	</ul>
+            </li>
+            <li>
+            	<a href="#">Law Enforcement</a>
+            	<ul class="sub-menu">
+            		<li><a href="?a=jail">Jail</a></li>
+            		<li><a href="?a=prison">Prison</a></li>
+            		<li><a href="?a=fbimostwanted">FBI Most Wanted</a></li>
+            	</ul>
+            </li>            
+            
+<?php
+
+
+	$username = $_SESSION['login_user'];
+	$sql = "SELECT role FROM accounts WHERE username='$username'";
+	$result = $conn->query($sql);
+	$row = mysqli_fetch_assoc($result);
+
+if ($row["role"] != 'user') {
+		echo '<li>';
+			echo '<a href="#">Admin</a>';
+			echo '<ul class="sub-menu">';
+			echo '<li><a href="?m=logs">System Logs</a></li>';
+			echo '<li><a href="?m=banklogs">Bank Logs</a></li>';
+			echo '<li><a href="?m=tickets">Tickets</a></li>';
+			echo '<li><a href="?m=usermanagement">Users</a></li>';
+		echo '</ul>';		
+}
+else { 
+echo '';
+}
+?>
+        </ul>
+    </nav>
+</div>
+
+<?php
+
+$sql = "SELECT id, username, role, lastseen FROM accounts WHERE lastseen BETWEEN timestamp(DATE_SUB(NOW(), INTERVAL 5 MINUTE)) AND timestamp(NOW()) AND role!='user'";
+$result = $conn->query($sql);
+
+
+if ($result->num_rows > 0) {
+	echo "<div id='online-staff' class='slide-in-box'>";
+     while($row = $result->fetch_assoc()) {
+		 echo "";
+    	 echo "<a href=?a=profile&id=" . $row["id"]. ">" . $row["username"]. "</a>";
+		 echo "&nbsp;&nbsp;";
+     }
+}
+echo "</div>";
+
+?>
+<br>
+
+
+

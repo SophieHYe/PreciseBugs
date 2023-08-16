@@ -1,0 +1,324 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.2" reference="Main.Tags" locale="">
+  <web>Main</web>
+  <name>Tags</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <parent>Main.WebHome</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title>$services.localization.render("xe.tag.tags")</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+##
+## Tag application.
+##
+## - See a Tag Cloud of all tags within the wiki.
+## - See all the pages tagged with the given tag.
+## - Rename a tag.
+## - Delete a tag.
+##
+$xwiki.ssx.use('Main.Tags')##
+##
+## Set application variables (action and tag) from URL parameters.
+##
+#set ($do = "$!{request.get('do')}")
+#set ($tag = "$!{request.get('tag')}")
+#set ($wikiEscapedTag = $services.rendering.escape($tag, 'xwiki/2.1'))
+#set ($urlEscapedTag = $escapetool.url($tag))
+#set ($htmlEscapedTag = $escapetool.xml($tag))
+##
+## Macro displayTagAppTitle. Display level1 title of this app.
+##
+#macro (displayTagAppTitle $urlEscapedTag $htmlEscapedTag $displayButtons)
+  (% class="xapp" %)
+  = (% class="highlight tag" %)${wikiEscapedTag}##
+      #if ($xwiki.hasAdminRights() &amp;&amp; $displayButtons) ##
+        [[$services.localization.render('xe.tag.rename.link')&gt;&gt;||queryString="do=prepareRename&amp;tag=${urlEscapedTag}" class="button rename" rel="nofollow"]] [[$services.localization.render('xe.tag.delete.link')&gt;&gt;||queryString="do=prepareDelete&amp;tag=${urlEscapedTag}" class="button delete" rel="nofollow"]]##
+      #end
+    (%%) =
+#end
+##
+## Switch between all possible actions:
+## viewTag, prepareRename, rename, prepareDelete, delete, default (Tag cloud)
+##
+#if ($do == 'viewTag')
+  ##
+  ## View tag
+  ##
+  #displayTagAppTitle($urlEscapedTag $htmlEscapedTag true)
+  #if ("$!{request.get('renamedTag')}" != '')
+    {{info}}$services.localization.render('xe.tag.rename.success', ["//${services.rendering.escape(${request.get('renamedTag')}, 'xwiki/2.1')}//"]){{/info}}
+
+  #end
+  #set ($list = $xwiki.tag.getDocumentsWithTag($tag))
+  {{container layoutStyle="columns"}}
+    (((
+      (% class="xapp" %)
+      === $services.localization.render('xe.tag.alldocs', ["//${wikiEscapedTag}//"]) ===
+
+      #if ($list.size()&gt; 0)
+        {{html}}#displayDocumentList($list false $blacklistedSpaces){{/html}}
+      #else
+        (% class='noitems' %)$services.localization.render('xe.tag.notags')
+      #end
+    )))
+    (((
+      (% class="xapp" %)
+      === $services.localization.render('xe.tag.activity', ["//${wikiEscapedTag}//"]) ===
+      {{notifications useUserPreferences="false" displayOwnEvents="true" tags="$wikiEscapedTag" displayRSSLink="true" /}}
+    )))
+  {{/container}}
+#elseif ($do == 'prepareRename')
+  ##
+  ## Prepare rename tag
+  ##
+  #displayTagAppTitle($urlEscapedTag $htmlEscapedTag false)
+{{html}}
+  &lt;form id="renameForm" action="$doc.getURL()" method="post"&gt;
+   &lt;div&gt;
+    &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" /&gt;
+    &lt;input name="do" type="hidden" value="renameTag" /&gt;
+    &lt;input name="tag" type="hidden" value="$htmlEscapedTag" /&gt;
+    $services.localization.render('xe.tag.rename.renameto', [$htmlEscapedTag]) &lt;input type="text" name="renameTo" /&gt; &lt;span class="buttonwrapper"&gt;&lt;input type="submit" value="$services.localization.render('xe.tag.rename')" class="button"/&gt;&lt;/span&gt;&lt;span class="buttonwrapper"&gt;&lt;a href="$doc.getURL('view', "do=viewTag&amp;tag=${urlEscapedTag}")" class="secondary button"&gt;$services.localization.render('cancel')&lt;/a&gt;&lt;/span&gt;
+   &lt;/div&gt;
+  &lt;/form&gt;
+{{/html}}
+#elseif ($do == 'renameTag')
+  ##
+  ## Rename tag
+  ##
+  #set ($renameTo = "$!{request.get('renameTo')}")
+  #set ($success = false)
+  #if ($renameTo != '')
+    #set ($success = $xwiki.tag.renameTag($tag, $renameTo))
+  #end
+  #if ($success == true || $success == 'OK')
+   #set ($urlEscapedRenameTo = $escapetool.url($renameTo))
+   $response.sendRedirect($doc.getURL('view', "do=viewTag&amp;tag=${urlEscapedRenameTo}&amp;renamedTag=${urlEscapedTag}"))
+  #else
+    {{error}}$services.localization.render('xe.tag.rename.failure', ["//${wikiEscapedTag}//", "//${services.rendering.escape($renameTo, 'xwiki/2.1')}//"]){{/error}}
+  #end
+#elseif ($do == 'prepareDelete')
+  ##
+  ## Prepare delete tag
+  ##
+  #displayTagAppTitle($urlEscapedTag $htmlEscapedTag false)
+{{html}}
+  &lt;form id="deleteForm" action="$doc.getURL()" method="post"&gt;
+   &lt;div&gt;
+    &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" /&gt;
+    &lt;input name="do" type="hidden" value="deleteTag" /&gt;
+    &lt;input name="tag" type="hidden" value="$htmlEscapedTag" /&gt;
+    &lt;span class="buttonwrapper"&gt;&lt;input type="submit" value="$services.localization.render('xe.tag.delete', [$htmlEscapedTag])" class="button"/&gt;&lt;/span&gt;&lt;span class="buttonwrapper"&gt;&lt;a href="$doc.getURL('view', "do=viewTag&amp;tag=${urlEscapedTag}")" class="secondary button"&gt;$services.localization.render('cancel')&lt;/a&gt;&lt;/span&gt;
+   &lt;/div&gt;
+  &lt;/form&gt;
+{{/html}}
+#elseif ($do == 'deleteTag')
+  ##
+  ## Delete tag
+  ##
+  #set ($success = $xwiki.tag.deleteTag($tag))
+  #if ($success == true || $success == 'OK')
+    $response.sendRedirect($doc.getURL('view', "deletedTag=${urlEscapedTag}"))
+  #else
+    {{error}}$services.localization.render('xe.tag.delete.failure', ["//${wikiEscapedTag}//"]){{/error}}
+  #end
+#else
+  ##
+  ## View all tags (Tag Cloud)
+  ##
+  #set ($title = 'All Tags')
+  #if ("$!{request.get('deletedTag')}" != '')
+    {{info}}$services.localization.render('xe.tag.delete.success', ["//${services.rendering.escape($request.get('deletedTag'), 'xwiki/2.1')}//"]){{/info}}
+
+  #end
+  {{tagcloud/}}
+#end
+#set ($displayDocExtra = false)
+{{/velocity}}</content>
+  <object>
+    <name>Main.Tags</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>842b2aaf-cc25-4c1d-b0de-c23318aa9cbe</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>6</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <disabled>0</disabled>
+        <name>code</name>
+        <number>3</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>1</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>5</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>4</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#template('colorThemeInit.vm')
+
+h1.xapp {
+  border-bottom: 0 none;
+  margin: 0;
+}
+
+h1.xapp + form {
+  margin: 1.5em 0 1em;
+}
+
+h1.xapp * {
+  vertical-align: middle;
+}
+
+h1.xapp .highlight {
+  background: url("$xwiki.getSkinFile('icons/silk/tag_blue.png')") no-repeat 5px 50% $theme.backgroundSecondaryColor;
+  border: solid 1px $theme.borderColor;
+  border-radius: 10px;
+  display: inline-block;
+  font-weight: bold;
+  padding: 2px 8px 2px 25px;
+  white-space: nowrap;
+}
+
+h1.xapp .button {
+  background: no-repeat 3px 50% $theme.pageContentBackgroundColor;
+  border: solid 1px $theme.borderColor;
+  border-radius: 7px;
+  color: $theme.linkColor;
+  display : inline-block;
+  font-size: 50%;
+  font-weight: normal;
+  line-height: 1.5em;
+  padding: 2px 5px 2px 20px;
+}
+
+h1.xapp .delete {
+  background-image: url("$xwiki.getSkinFile('icons/silk/cross.png')");
+}
+
+h1.xapp .rename {
+  background-image: url("$xwiki.getSkinFile('icons/silk/textfield_rename.png')");
+}
+
+h1.xapp .button:hover {
+  background-color: $theme.highlightColor;
+  text-decoration: none;
+}
+</code>
+    </property>
+    <property>
+      <name/>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

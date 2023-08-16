@@ -1,0 +1,48 @@
+<div class="right-sidebar" id="right-sidebar" role="navigation">
+    <div class="right-sidebar-items">
+        <div id="user-list">
+            <div id="userlist-header">
+                <h4 class='sidebar-title'
+                  id='userlist-title' data-tippy-content="{{t 'Search people' }} (w)">
+                    {{t 'USERS' }}
+                </h4>
+                <i id="user_filter_icon" class="fa fa-search"
+                  aria-hidden="true" aria-label="{{t 'Search people' }}"
+                  data-tippy-content="{{t 'Search people' }} (w)">
+                </i>
+            </div>
+            <div class="input-append notdisplayed" id="user_search_section">
+                <input class="user-list-filter home-page-input" type="text" autocomplete="off" placeholder="{{t 'Search people' }}" />
+                <button type="button" class="btn clear_search_button" id="clear_search_people_button">
+                    <i class="fa fa-remove" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div id="buddy_list_wrapper" class="scrolling_list" data-simplebar>
+                <ul id="user_presences" class="filters required-text" data-empty="{{t 'No matching users.' }}"></ul>
+                <div id="buddy_list_wrapper_padding"></div>
+            </div>
+        </div>
+        <div class="right-sidebar-shortcuts">
+            {{#if can_invite_others_to_realm}}
+            <a id="invite-user-link" href="#invite"><i class="fa fa-user-plus" aria-hidden="true"></i>{{t 'Invite more users' }}</a>
+            {{/if}}
+            <a id="sidebar-keyboard-shortcuts" data-overlay-trigger="keyboard-shortcuts" class="hidden-for-spectators">
+                <i class="fa fa-keyboard-o fa-2x tippy-zulip-tooltip" id="keyboard-icon" data-tippy-allowHTML="true" data-tippy-content="{{t 'Keyboard shortcuts' }} &lt;span class='hotkey-hint'&gt;(?)&lt;/span&gt;"></i>
+            </a>
+            <div class="only-visible-for-spectators">
+                <div class="realm-description">
+                    <div class="rendered_markdown">{{rendered_markdown realm_description }}</div>
+                    <hr />
+                    <a href="/register"  class="signup_button color_animated_button">
+                        <i class="fa fa-pencil-square-o"></i>
+                        <span>{{t 'Sign up' }}</span>
+                    </a>
+                    <a href="/login" class="login_button color_animated_button">
+                        <i class="fa fa-sign-in"></i>
+                        <span>{{t 'Log in' }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,216 @@
+[% USE date(format = '%Y-%m-%d %H:%M') %]
+[% USE Number.Format %]
+<table id="nsbi-data-table" class="table table-bordered table-hover" width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      <th>MAC</th>
+      <th>Match</th>
+      <th class="nd_center-cell">Device or Node</th>
+      [% IF params.stamps %]
+      <th>First Seen</th>
+      <th>Last Seen</th>
+      [% END %]
+    </tr>
+  </thead>
+  <tbody>
+    [% WHILE (row = macs.next) %]
+    [% IF row.nbname %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% row.net_mac.$mac_format_call | uri %]">
+          [% row.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% row.oui.abbrev | uri %]">
+        [% row.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>NetBIOS</td>
+      <td class="nd_linkcell nd_center-cell">\\<a href="[% uri_for('/report/netbios') | none %]?domain=[% row.domain | uri %]" title="Devices in this Domain">[% row.domain | html_entity %]</a>\<a href="[% search_node | none %]&q=[% row.nbname | uri %]">[% row.nbname | html_entity %]</a>
+        <br>[% row.nbuser || '[No User]' | html_entity %]@<a href="[% search_node | none %]&q=[% row.ip | uri %]">[% row.ip | html_entity %]</a>
+      </td>
+      [% IF params.stamps %]
+      <td>[% row.time_first_stamp | html_entity %]</td>
+      <td>[% row.time_last_stamp | html_entity %]</td>
+      [% END %]
+    </tr>
+    [% ELSE %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% row.net_mac.$mac_format_call | uri %]">
+          [% row.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% row.oui.abbrev | uri %]">
+        [% row.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>IP &rarr; MAC</td>
+      <td class="nd_center-cell">
+        <a href="[% search_node | none %]&q=[% row.ip | uri %]">[% row.ip | html_entity %]</a>
+        [% '&nbsp;<i class="icon-book text-warning"></i>&nbsp;' IF NOT row.active %]
+        [% ' (' _ row.dns.remove(settings.domain_suffix) _ ')' IF row.dns %]
+      </td>
+      [% IF params.stamps %]
+      <td>[% row.time_first_stamp | html_entity %]</td>
+      <td>[% row.time_last_stamp | html_entity %]</td>
+      [% END %]
+    </tr>
+    [% END %]
+    [% FOREACH nbt IN row.netbios %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% nbt.net_mac.$mac_format_call | uri %]">
+          [% nbt.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% nbt.oui.abbrev | uri %]">
+        [% nbt.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>NetBIOS</td>
+      <td class="nd_linkcell nd_center-cell">\\<a href="[% uri_for('/report/netbios') | none %]?domain=[% nbt.domain | uri %]" title="Devices in this Domain">[% nbt.domain | html_entity %]</a>\<a href="[% search_node | none %]&q=[% nbt.nbname | uri %]">[% nbt.nbname | html_entity %]</a>
+        <br>[% nbt.nbuser || '[No User]' | html_entity %]@<a href="[% search_node | none %]&q=[% nbt.ip | uri %]">[% nbt.ip | html_entity %]</a>
+      </td>
+      [% IF params.stamps %]
+      <td>[% date.format(nbt.time_first) | html_entity %]</td>
+      <td>[% date.format(nbt.time_last) | html_entity %]</td>
+      [% END %]
+    </tr>
+    [% END %]
+    [% FOREACH ni IN row.nodeips %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% ni.net_mac.$mac_format_call | uri %]">
+          [% ni.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% ni.oui.abbrev | uri %]">
+        [% ni.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>IP &rarr; MAC</td>
+      <td class="nd_center-cell">
+        <a href="[% search_node | none %]&q=[% ni.ip | uri %]">[% ni.ip | html_entity %]</a>
+        [% '&nbsp;<i class="icon-book text-warning"></i>&nbsp;' IF NOT ni.active %]
+        [% ' (' _ ni.dns.remove(settings.domain_suffix) _ ')' IF ni.dns %]
+      </td>
+      [% IF params.stamps %]
+      <td>[% date.format(ni.time_first) | html_entity %]</td>
+      <td>[% date.format(ni.time_last) | html_entity %]</td>
+      [% END %]
+    </tr>
+    [% END %]
+    [% FOREACH node IN row.node_sightings(archive_filter) %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% node.net_mac.$mac_format_call | uri %]">
+          [% node.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% node.oui.abbrev | uri %]">
+        [% node.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>Switch Port</td>
+      <td class="nd_center-cell">
+        <a class="nd_linkcell"
+          href="[% device_ports | none %]&q=[% node.switch | uri %]&f=[% node.port | uri %]&c_nodes=on&c_neighbors=on&prefer=port">
+          [% node.switch | html_entity %] - [% node.port | html_entity %]
+        [% '&nbsp;<i class="icon-book text-warning"></i>' IF NOT node.active %]</a>
+        [% IF node.device.dns AND node.device_port AND node.device_port.name %]
+          ([% node.device.dns | html_entity %] - [% node.device_port.name | html_entity %])
+        [% END %]
+            on vlan [% node.vlan | html_entity %]
+      </td>
+      [% IF params.stamps %]
+      <td>[% node.time_first_stamp | html_entity %]</td>
+      <td>[% node.time_last_stamp | html_entity %]</td>
+      [% END %]
+    </tr>
+      [% FOREACH wlan IN node.wireless %]
+      <tr>
+        <td>MAC: <a href="[% search_node | none %]&q=[% wlan.net_mac.$mac_format_call | uri %]">
+            [% wlan.net_mac.$mac_format_call | html_entity %]</a>
+        [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% wlan.oui.abbrev | uri %]">
+        [% wlan.oui.company | html_entity %]</a> )
+        [% END %]
+        </td>
+        <td>Wireless Info</td>
+        <td class="nd_center-cell">SSID: [% wlan.ssid | html_entity %]<br>
+          MaxRate: [% wlan.maxrate | html_entity %]Mbps TxRate: [% wlan.txrate | html_entity %]Mbps<br>
+          SigStr: [% wlan.sigstrength | html_entity %] SigQual: [% wlan.sigqual | html_entity %]<br>
+          Rx: [% wlan.rxpkt | format_number %] pkts, [% wlan.rxbyte | format_number %] bytes<br>
+          Tx: [% wlan.txpkt | format_number %] pkts, [% wlan.txbyte | format_number %] bytes<br>
+        </td>
+        [% IF params.stamps %]
+        <td> &nbsp; </td>
+        <td>[% date.format(wlan.time_last) | html_entity %]</td>
+        [% END %]
+      </tr>
+      [% END %]
+    [% END %]
+    [% FOREACH nodeip IN row.ip_aliases(archive_filter) %]
+    <tr>
+      <td>MAC: <a href="[% search_node | none %]&q=[% nodeip.net_mac.$mac_format_call | uri %]">
+          [% nodeip.net_mac.$mac_format_call | html_entity %]</a>
+      [% IF params.show_vendor %]
+        ( <a href="[% uri_for('/report/nodevendor') | none %]?vendor=[% nodeip.oui.abbrev | uri %]">
+        [% nodeip.oui.company | html_entity %]</a> )
+      [% END %]
+      </td>
+      <td>MAC &rarr; IP</td>
+      <td class="nd_center-cell">
+        <a href="[% search_node | none %]&q=[% nodeip.ip | uri %]">[% nodeip.ip | html_entity %]</a>
+        [% '&nbsp;<i class="icon-book text-warning"></i>&nbsp;' IF NOT nodeip.active %]
+        [% ' (' _ nodeip.dns.remove(settings.domain_suffix) _ ')' IF nodeip.dns %]
+      </td>
+      [% IF params.stamps %]
+      <td>[% nodeip.time_first_stamp | html_entity %]</td>
+      <td>[% nodeip.time_last_stamp | html_entity %]</td>
+      [% END %]
+    </tr>
+    [% END %]
+    [% END %]
+  </tbody>
+</table>
+
+<style>
+tr.group,
+tr.group:hover {
+    background-color: #ddd !important;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    var table = $('#nsbi-data-table').DataTable({
+        "columnDefs": [
+            { "visible": false, "targets": 0 }
+        ],
+        "order": [[ 0, 'asc' ]],
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+ 
+            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                    [% IF params.stamps %]
+                        '<tr class="group"><td colspan="4">'+group+'</td></tr>'                    
+                    [% ELSE %]
+                        '<tr class="group"><td colspan="2">'+group+'</td></tr>'                    
+                    [% END %]
+                    );
+
+                    last = group;
+                }
+            } );
+        },
+[% INCLUDE 'ajax/datatabledefaults.tt' -%]
+    } );
+ 
+    // Order by the grouping
+    $('#nsbi-data-table tbody').on( 'click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if ( currentOrder[0] === 0 && currentOrder[1] === 'asc' ) {
+            table.order( [ 0, 'desc' ] ).draw();
+        }
+        else {
+            table.order( [ 0, 'asc' ] ).draw();
+        }
+    } );
+} );
+</script>

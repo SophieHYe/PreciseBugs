@@ -1,0 +1,442 @@
+firejail (0.9.44.3) baseline; urgency=low
+  * development version
+  * security: disabled --allow-debuggers when running on kernel
+    versions prior to 4.8; a kernel bug in ptrace system call
+    allows a full bypass of seccomp filter; problem reported by Lizzie Dixon
+  * security: root exploit found by Sebastian Krahmer
+ -- netblue30 <netblue30@yahoo.com>  Wed, 4 Jan 2017 11:00:00 -0500
+
+firejail (0.9.44.2) baseline; urgency=low
+  * security: overwrite /etc/resolv.conf found by Martin Carpenter
+  * secuirty: TOCTOU exploit for --get and --put found by Daniel Hodson
+  * security: invalid environment exploit found by Martin Carpenter
+  * security: several security enhancements
+  * bugfix: crashing VLC by pressing Ctrl-O
+  * bugfix: use user configured icons in KDE
+  * bugfix: mkdir and mkfile are not applied to private directories
+  * bugfix: cannot open files on Deluge running under KDE
+  * bugfix: --private=dir where dir is the user home directory
+  * bugfix: cannot start Vivaldi browser
+  * bugfix: cannot start mupdf
+  * bugfix: ssh profile problems
+  * bugfix: --quiet
+  * bugfix: quiet in git profile
+  * bugfix: memory corruption
+ -- netblue30 <netblue30@yahoo.com>  Fri, 2 Dec 2016 08:00:00 -0500
+  
+firejail (0.9.44) baseline; urgency=low
+  * CVE-2016-7545 submitted by Aleksey Manevich
+  * modifs: removed man firejail-config
+  * modifs: --private-tmp whitelists /tmp/.X11-unix directory
+  * modifs: Nvidia drivers added to --private-dev
+  * modifs: /srv supported by --whitelist
+  * feature: allow user access to /sys/fs (--noblacklist=/sys/fs)
+  * feature: support starting/joining sandbox is a single command
+    (--join-or-start)
+  * feature: X11 detection support for --audit
+  * feature: assign a name to the interface connected to the bridge 
+    (--veth-name)
+  * feature: all user home directories are visible (--allusers)
+  * feature: add files to sandbox container (--put)
+  * feature: blocking x11 (--x11=block)
+  * feature: X11 security extension (--x11=xorg)
+  * feature: disable 3D hardware acceleration (--no3d)
+  * feature: x11 xpra, x11 xephyr, x11 block, allusers, no3d profile commands
+  * feature: move files in sandbox (--put)
+  * feature: accept wildcard patterns in user  name field of restricted
+    shell login feature
+  * new profiles: qpdfview, mupdf, Luminance HDR, Synfig Studio, Gimp, Inkscape
+  * new profiles: feh, ranger, zathura, 7z, keepass, keepassx,
+  * new profiles: claws-mail, mutt, git, emacs, vim, xpdf, VirtualBox, OpenShot
+  * new profiles: Flowblade, Eye of GNOME (eog), Evolution
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Fri, 21 Oct 2016 08:00:00 -0500
+
+firejail (0.9.42) baseline; urgency=low
+  * security: --whitelist deleted files, submitted by Vasya Novikov
+  * security: disable x32 ABI in seccomp, submitted by Jann Horn
+  * security: tighten --chroot, submitted by Jann Horn
+  * security: terminal sandbox escape, submitted by Stephan Sokolow
+  * security: several TOCTOU fixes submitted by Aleksey Manevich
+  * modifs: bringing back --private-home option
+  * modifs: deprecated --user option, please use "sudo -u username firejail"
+  * modifs: allow symlinks in home directory for --whitelist option
+  * modifs: Firejail prompt is enabled by env variable FIREJAIL_PROMPT="yes"
+  * modifs: recursive mkdir
+  * modifs: include /dev/snd in --private-dev
+  * modifs: seccomp filter update
+  * modifs: release archives moved to .xz format
+  * feature: AppImage support (--appimage)
+  * feature: AppArmor support (--apparmor)
+  * feature: Ubuntu snap support (/etc/firejail/snap.profile)
+  * feature: Sandbox auditing support (--audit)
+  * feature: remove environment variable (--rmenv)
+  * feature: noexec support (--noexec)
+  * feature: clean local overlay storage directory (--overlay-clean)
+  * feature: store and reuse overlay (--overlay-named)
+  * feature: allow debugging inside the sandbox with gdb and strace
+         (--allow-debuggers)
+  * feature: mkfile profile command
+  * feature: quiet profile command
+  * feature: x11 profile command
+  * feature: option to fix desktop files (firecfg --fix)
+  * compile time: Busybox support (--enable-busybox-workaround)
+  * compile time: disable overlayfs (--disable-overlayfs)
+  * compile time: disable whitlisting (--disable-whitelist)
+  * compile time: disable global config (--disable-globalcfg)
+  * run time: enable/disable overlayfs (overlayfs yes/no)
+  * run time: enable/disable  quiet as default (quiet-by-default yes/no)
+  * run time: user-defined network filter (netfilter-default)
+  * run time: enable/disable whitelisting (whitelist yes/no)
+  * run time: enable/disable remounting of /proc and /sys
+          (remount-proc-sys yes/no)
+  * run time: enable/disable chroot desktop features (chroot-desktop yes/no)
+  * profiles: Gitter, gThumb, mpv, Franz messenger, LibreOffice
+  * profiles: pix, audacity, xz, xzdec, gzip, cpio, less
+  * profiles: Atom Beta, Atom, jitsi, eom, uudeview
+  * profiles: tar (gtar), unzip, unrar, file, skypeforlinux,
+  * profiles: inox, Slack, gnome-chess. Gajim IM client, DOSBox
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Thu, 8 Sept 2016 08:00:00 -0500
+
+firejail (0.9.40) baseline; urgency=low
+  * added --nice option
+  * added --x11 option
+  * added --x11=xpra option
+  * added --x11=xephyr option
+  * added --cpu.print option
+  * added filetransfer options --ls and --get
+  * added --writable-etc and --writable-var options
+  * added --read-only option
+  * added mkdir, ipc-namespace, and nosound profile commands
+  * added net, ip, defaultgw, ip6, mac, mtu and iprange profile commands
+  * --version also prints compile options
+  * --output option also redirects stderr
+  * added compile-time option to restrict --net= to root only
+  * run time config support, man firejail-config
+  * added firecfg utility
+  * AppArmor fixes
+  * default seccomp filter update
+  * disable STUN/WebRTC in default netfilter configuration
+  * new profiles: lxterminal, Epiphany, cherrytree, Polari, Vivaldi, Atril
+  * new profiles: qutebrowser, SlimJet, Battle for Wesnoth, Hedgewars
+  * new profiles: qTox, OpenSSH client, OpenBox, Dillo, cmus, dnsmasq
+  * new profiles: PaleMoon, Icedove, abrowser, 0ad, netsurf, Warzone2100
+  * new profiles: okular, gwenview, Google-Play-Music-Desktop-Player
+  * new profiles: Aweather, Stellarium, gpredict, quiterss, cyberfox
+  * new profiles: generic Ubuntu snap application profile, xplayer
+  * new profiles: xreader, xviewer, mcabber, Psi+, Corebird, Konversation
+  * new profiles: Brave, Gitter
+  * generic.profile renamed default.profile
+  * build rpm packages using "make rpms"
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Sun, 29 May 2016 08:00:00 -0500
+
+firejail (0.9.38) baseline; urgency=low
+  * IPv6 support (--ip6 and --netfilter6)
+  * --join command enhancement (--join-network, --join-filesystem)
+  * added --user command
+  * added --disable-network and --disable-userns compile time flags
+  * Centos 6 support
+  * symlink invocation
+  * added KMail, Seamonkey, Telegram, Mathematica, uGet,
+  *   and mupen64plus profiles
+  * --chroot in user mode allowed only if seccomp support is available
+  *   in current Linux kernel
+  * deprecated --private-home feature
+  * the first protocol list installed takes precedence
+  * --tmpfs option allowed only running as root
+  * added --private-tmp option
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Tue, 2 Feb 2016 10:00:00 -0500
+
+firejail (0.9.36) baseline; urgency=low
+  * added  unbound, dnscrypt-proxy, BitlBee, HexChat, WeeChat,
+     parole and rtorrent profiles
+  * Google Chrome profile rework
+  * added google-chrome-stable profile
+  * added google-chrome-beta profile
+  * added google-chrome-unstable profile
+  * Opera profile rework
+  * added opera-beta profile
+  * added --noblacklist option
+  * added --profile-path option
+  * added --force option
+  * whitelist command enhancements
+  * prevent user name enumeration
+  * added /etc/firejail/nolocal.net network filter
+  * added /etc/firejail/webserver.net network filter
+  * blacklisting firejail configuration by default
+  * allow default gateway configuration for --interface option
+  * --debug enhancements: --debug-check-filenames, --debug-blacklists,
+    --debug-whitelists
+  * filesystem log
+  * libtrace enhancements, tracing opendir call
+  * added --tracelog option
+  * added "name" command to profile files
+  * added "hostname" command to profile files
+  * added automated feature testing framework
+  * Debian reproducible build
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Sun, 27 Dec 2015 09:00:00 -0500
+
+firejail (0.9.34) baseline; urgency=low
+  * added --ignore option
+  * added --protocol option
+  * support dual i386/amd64 seccomp filters
+  * added Google Chrome profile
+  * added Steam, Skype, Wine and Conkeror profiles
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Sat, 7 Nov 2015 08:00:00 -0500
+
+firejail (0.9.32) baseline; urgency=low
+  * added --interface option
+  * added --mtu option
+  * added --private-bin option
+  * added --nosound option
+  * added --hostname option
+  * added --quiet option
+  * added seccomp errno support
+  * added FBReader default profile
+  * added Spotify default profile
+  * lots of default security profile changes
+  * fixed a security problem on multi-user systems
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Wed, 21 Oct 2015 08:00:00 -0500
+
+
+firejail (0.9.30) baseline; urgency=low
+  * added a disable-history.inc profile as a result of Firefox PDF.js exploit;
+    disable-history.inc included in all default profiles
+  * Firefox PDF.js exploit (CVE-2015-4495) fixes
+  * added --private-etc option
+  * added --env option
+  * added --whitelist option
+  * support ${HOME} token in include directive in profile files
+  * --private.keep is transitioned to --private-home
+  * support ~ and blanks in blacklist option
+  * support "net none" command in profile files
+  * using /etc/firejail/generic.profile by default for user sessions
+  * using /etc/firejail/server.profile by default for root sessions
+  * added build --enable-fatal-warnings configure option
+  * added persistence to --overlay option
+  * added --overlay-tmpfs option
+  * make install-strip implemented, make install renamed
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Mon, 14 Sept 2015 08:00:00 -0500
+
+firejail (0.9.28) baseline; urgency=low
+  * network scanning, --scan option
+  * interface MAC address support, --mac option
+  * IP address range, --iprange option
+  * traffic shaping, --bandwidth option
+  * reworked printing of network status at startup
+  * man pages rework
+  * added firejail-login man page
+  * added GNU Icecat, FileZilla, Pidgin, XChat, Empathy, DeaDBeeF default
+    profiles
+  * added an /etc/firejail/disable-common.inc file to hold common directory
+    blacklists
+  * blacklist Opera and Chrome/Chromium config directories in profile files
+  * support noroot option for profile files
+  * enabled noroot in default profile files
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Sat, 1 Aug 2015 08:00:00 -0500
+
+firejail (0.9.26) baseline; urgency=low
+  * private dev directory
+  * private.keep option for whitelisting home files in a new private directory
+  * user namespaces support, noroot option
+  * added Deluge and qBittorent profiles
+  * bugfixes
+ -- netblue30 <netblue30@yahoo.com>  Thu, 30 Apr 2015 08:00:00 -0500
+
+
+firejail (0.9.24) baseline; urgency=low
+  * whitelist and blacklist seccomp filters
+  * doubledash option
+  * --shell=none support
+  * netfilter file support in profile files
+  * dns server support in profile files
+  * added --dns.print option
+  * added default profiles for Audacious, Clementine, Gnome-MPlayer, Rhythmbox and Totem.
+  * added --caps.drop=all in default profiles
+  * new syscalls in default seccomp filter: sysfs, sysctl, adjtimex, kcmp
+  *         clock_adjtime, lookup_dcookie, perf_event_open, fanotify_init
+  * Bugfix: using /proc/sys/kernel/pid_max for the max number of pids
+  * two build patches from Reiner Herman (tickets 11, 12)
+  * man page patch from Reiner Herman (ticket 13)
+  * output patch (ticket 15) from sshirokov
+  
+ -- netblue30 <netblue30@yahoo.com>  Sun, 5 Apr 2015 08:00:00 -0500
+
+firejail (0.9.22) baseline; urgency=low
+  * Replaced --noip option with --ip=none
+  * Container stdout logging and log rotation
+  * Added process_vm_readv, process_vm_writev and mknod to
+  *    default seccomp blacklist
+  * Added CAP_MKNOD to default caps blacklist
+  * Blacklist and whitelist custom Linux capabilities filters
+  * macvlan device driver support for --net option
+  * DNS server support, --dns option
+  * Netfilter support
+  * Monitor network statistics, --netstats option
+  * Added profile for Mozilla Thunderbird/Icedove
+  * - --overlay support for Linux kernels 3.18+
+  * Bugfix: preserve .Xauthority file in private mode (test with ssh -X)
+  * Bugfix: check uid/gid for cgroup
+
+ -- netblue30 <netblue30@yahoo.com>  Mon, 9 Mar 2015 09:00:00 -0500
+
+firejail (0.9.20) baseline; urgency=low
+  * utmp, btmp and wtmp enhancements
+  *    create empty /var/log/wtmp and /var/log/btmp files in sandbox
+  *    generate a new /var/run/utmp file in sandbox
+  * CPU affinity, --cpu option
+  * Linux control groups support, --cgroup option
+  * Opera web browser support
+  * VLC support
+  * Added "empty" attribute to seccomp command to remove the default
+  *    syscall list form seccomp blacklist
+  * Added --nogroups option to disable supplementary groups for regular
+  *   users. root user always runs without supplementary groups.
+  * firemon enhancements
+  *   display the command that started the sandbox
+  *   added --caps option to display capabilities for all sandboxes
+  *   added --cgroup option to display the control groups for all sandboxes
+  *   added --cpu option to display CPU affinity for all sandboxes
+  *   added --seccomp option to display seccomp setting for all sandboxes
+  * New compile time options: --disable-chroot, --disable-bind
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Mon, 02 Feb 2015 08:00:00 -0500
+
+firejail (0.9.18) baseline; urgency=low
+  * Support for tracing system, setuid, setgid, setfsuid, setfsgid syscalls
+  * Support for tracing setreuid, setregid, setresuid, setresguid syscalls
+  * Added profiles for transmission-gtk and transmission-qt
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Fri, 25 Dec 2014 10:00:00 -0500
+
+firejail (0.9.16) baseline; urgency=low
+  * Configurable private home directory
+  * Configurable default user shell
+  * Software configuration support for --docdir and DESTDIR
+  * Profile file support for include, caps, seccomp and private keywords
+  * Dropbox profile file
+  * Linux capabilities and seccomp filters enabled by default for Firefox,
+  Midori, Evince and Dropbox
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Tue, 4 Nov 2014 10:00:00 -0500
+
+firejail (0.9.14) baseline; urgency=low
+  * Linux capabilities and seccomp filters are automatically enabled in 
+    chroot mode (--chroot option) if the sandbox is started as regular user
+  * Added support for user defined seccomp blacklists
+  * Added syscall trace support
+  * Added --tmpfs option
+  * Added --balcklist option
+  * Added --read-only option
+  * Added --bind option
+  * Logging enhancements
+  * --overlay option was reactivated
+  * Added firemon support to print the ARP table for each sandbox
+  * Added firemon support to print the route table for each sandbox
+  * Added firemon support to print interface information for each sandbox
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Tue, 15 Oct 2014 10:00:00 -0500
+
+firejail (0.9.12.2) baseline; urgency=low
+  * Fix for pulseaudio problems
+  * --overlay option was temporarily disabled in this build
+
+ -- netblue30 <netblue30@yahoo.com>  Mon, 29 Sept 2014 07:00:00 -0500
+
+firejail (0.9.12.1) baseline; urgency=low
+  * Fix for pulseaudio problems
+  * --overlay option was temporarily disabled in this build
+
+ -- netblue30 <netblue30@yahoo.com>  Mon, 22 Sept 2014 09:00:00 -0500
+
+firejail (0.9.12) baseline; urgency=low
+  * Added capabilities support
+  * Added support for CentOS 7
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Mon, 15 Sept 2014 10:00:00 -0500
+
+firejail (0.9.10) baseline; urgency=low
+  * Disable /proc/kcore, /proc/kallsyms, /dev/port, /boot
+  * Fixed --top option CPU utilization calculation
+  * Implemented --tree option in firejail and firemon
+  * Implemented --join=name option
+  * Implemented --shutdown option
+  * Preserve the current working directory if possible
+  * Cppcheck and clang errors cleanup
+  * Added a Chromium web browser profile
+
+ -- netblue30 <netblue30@yahoo.com>  Thu, 28 Aug 2014 07:00:00 -0500
+
+firejail (0.9.8.1) baseline; urgency=low
+  * FIxed a number of bugs introduced in 0.9.8
+
+ -- netblue30 <netblue30@yahoo.com>  Fri, 25 Jul 2014 07:25:00 -0500
+  
+firejail (0.9.8) baseline; urgency=low
+  * Implemented nowrap mode for firejail --list command option
+  * Added --top option in both firejail and firemon
+  * seccomp filter support
+  * Added pid support for firemon
+  * bugfixes
+
+ -- netblue30 <netblue30@yahoo.com>  Tue, 24 Jul 2014 08:51:00 -0500
+  
+firejail (0.9.6) baseline; urgency=low
+
+  * Mounting tmpfs on top of /var/log, required by several server programs
+  * Server fixes for /var/lib and /var/cache
+  * Private mode fixes
+  * csh and zsh default shell support
+  * Chroot mode fixes
+  * Added support for lighttpd, isc-dhcp-server, apache2, nginx, snmpd,
+
+ -- netblue30 <netblue30@yahoo.com>  Sat, 7 Jun 2014 09:00:00 -0500
+
+firejail (0.9.4) baseline; urgency=low
+
+  * Fixed resolv.conf on Ubuntu systems using DHCP
+  * Fixed resolv.conf on Debian systems using resolvconf package
+  * Fixed /var/lock directory
+  * Fixed /var/tmp directory
+  * Fixed symbolic links in profile files
+  * Added profiles for evince, midori
+
+ -- netblue30 <netblue30@yahoo.com>  Sun, 4 May 2014 08:00:00 -0500
+
+firejail (0.9.2) baseline; urgency=low
+
+  * Checking IP address passed with --ip option using ARP; exit if the address
+   is already present
+  * Using a lock file during ARP address assignment in order to removed a race
+   condition.
+  * Several fixes to --private option; it also mounts a tmpfs filesystem on top
+   of /tmp
+  * Added user access check for profile file
+  * Added --defaultgw option
+  * Added support of --noip option; it is necessary for DHCP setups
+  * Added syslog support
+  * Added support for "tmpfs" and "read-only" profile commands
+  * Added an expect-based testing framework for the project
+  * Added bash completion support
+  * Added support for multiple networks
+  
+ -- netblue30 <netblue30@yahoo.com>  Fri, 25 Apr 2014 08:00:00 -0500
+
+firejail (0.9) baseline; urgency=low
+
+  * First beta version
+
+ -- netblue30 <netblue30@yahoo.com>  Sat, 12 Apr 2014 09:00:00 -0500

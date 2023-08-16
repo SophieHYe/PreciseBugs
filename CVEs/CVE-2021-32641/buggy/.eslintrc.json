@@ -1,0 +1,14 @@
+{
+  "extends": ["plugin:react/recommended", "prettier", "prettier/react"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "react/display-name": 0,
+    "react/prop-types": 1,
+    "react/no-find-dom-node": 1,
+    "react/no-string-refs": 1
+  }
+}

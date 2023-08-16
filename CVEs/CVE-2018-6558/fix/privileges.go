@@ -1,0 +1,152 @@
+/*
+ * privileges.go - Functions for managing users and privileges.
+ *
+ * Copyright 2017 Google Inc.
+ * Author: Joe Richey (joerichey@google.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+// Package security manages:
+//  - Cache clearing (cache.go)
+//  - Keyring Operations (keyring.go)
+//  - Privilege manipulation (privileges.go)
+//  - Maintaining the link between the root and user keyrings.
+package security
+
+// Use the libc versions of setreuid, setregid, and setgroups instead of the
+// "sys/unix" versions.  The "sys/unix" versions use the raw syscalls which
+// operate on the calling thread only, whereas the libc versions operate on the
+// whole process.  And we need to operate on the whole process, firstly for
+// pam_fscrypt to prevent the privileges of Go worker threads from diverging
+// from the PAM stack's "main" thread, violating libc's assumption and causing
+// an abort() later in the PAM stack; and secondly because Go code may migrate
+// between OS-level threads while it's running.
+//
+// See also: https://github.com/golang/go/issues/1435
+//
+// Also we need to wrap the libc functions in our own C functions rather than
+// calling them directly because in the glibc headers (but not necessarily in
+// the headers for other C libraries that may be used on Linux) they are
+// declared to take __uid_t and __gid_t arguments rather than uid_t and gid_t.
+// And while these are typedef'ed to the same underlying type, before Go 1.10,
+// cgo maps them to different Go types.
+
+/*
+#define _GNU_SOURCE    // for getresuid and setresuid
+#include <sys/types.h>
+#include <unistd.h>    // getting and setting uids and gids
+#include <grp.h>       // setgroups
+*/
+import "C"
+
+import (
+	"log"
+	"os/user"
+	"syscall"
+
+	"github.com/pkg/errors"
+
+	"github.com/google/fscrypt/util"
+)
+
+// Privileges encapulate the effective uid/gid and groups of a process.
+type Privileges struct {
+	euid   C.uid_t
+	egid   C.gid_t
+	groups []C.gid_t
+}
+
+// ProcessPrivileges returns the process's current effective privileges.
+func ProcessPrivileges() (*Privileges, error) {
+	ruid := C.getuid()
+	euid := C.geteuid()
+	rgid := C.getgid()
+	egid := C.getegid()
+
+	var groups []C.gid_t
+	n, err := C.getgroups(0, nil)
+	if n < 0 {
+		return nil, err
+	}
+	// If n == 0, the user isn't in any groups, so groups == nil is fine.
+	if n > 0 {
+		groups = make([]C.gid_t, n)
+		n, err = C.getgroups(n, &groups[0])
+		if n < 0 {
+			return nil, err
+		}
+		groups = groups[:n]
+	}
+	log.Printf("Current privs (real, effective): uid=(%d,%d) gid=(%d,%d) groups=%v",
+		ruid, euid, rgid, egid, groups)
+	return &Privileges{euid, egid, groups}, nil
+}
+
+// UserPrivileges returns the defualt privileges for the specified user.
+func UserPrivileges(user *user.User) (*Privileges, error) {
+	privs := &Privileges{
+		euid: C.uid_t(util.AtoiOrPanic(user.Uid)),
+		egid: C.gid_t(util.AtoiOrPanic(user.Gid)),
+	}
+	userGroups, err := user.GroupIds()
+	if err != nil {
+		return nil, util.SystemError(err.Error())
+	}
+	privs.groups = make([]C.gid_t, len(userGroups))
+	for i, group := range userGroups {
+		privs.groups[i] = C.gid_t(util.AtoiOrPanic(group))
+	}
+	return privs, nil
+}
+
+// SetProcessPrivileges sets the privileges of the current process to have those
+// specified by privs. The original privileges can be obtained by first saving
+// the output of ProcessPrivileges, calling SetProcessPrivileges with the
+// desired privs, then calling SetProcessPrivileges with the saved privs.
+func SetProcessPrivileges(privs *Privileges) error {
+	log.Printf("Setting euid=%d egid=%d groups=%v", privs.euid, privs.egid, privs.groups)
+
+	// If setting privs as root, we need to set the euid to 0 first, so that
+	// we will have the necessary permissions to make the other changes to
+	// the groups/egid/euid, regardless of our original euid.
+	C.seteuid(0)
+
+	// Seperately handle the case where the user is in no groups.
+	numGroups := C.size_t(len(privs.groups))
+	groupsPtr := (*C.gid_t)(nil)
+	if numGroups > 0 {
+		groupsPtr = &privs.groups[0]
+	}
+
+	if res, err := C.setgroups(numGroups, groupsPtr); res < 0 {
+		return errors.Wrapf(err.(syscall.Errno), "setting groups")
+	}
+	if res, err := C.setegid(privs.egid); res < 0 {
+		return errors.Wrapf(err.(syscall.Errno), "setting egid")
+	}
+	if res, err := C.seteuid(privs.euid); res < 0 {
+		return errors.Wrapf(err.(syscall.Errno), "setting euid")
+	}
+	ProcessPrivileges()
+	return nil
+}
+
+func setUids(ruid, euid int) error {
+	res, err := C.setreuid(C.uid_t(ruid), C.uid_t(euid))
+	log.Printf("setreuid(%d, %d) = %d (errno %v)", ruid, euid, res, err)
+	if res == 0 {
+		return nil
+	}
+	return errors.Wrapf(err.(syscall.Errno), "setting uids")
+}

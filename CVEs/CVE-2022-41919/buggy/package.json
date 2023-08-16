@@ -1,0 +1,202 @@
+{
+  "name": "fastify",
+    "version": "4.10.1",
+  "description": "Fast and low overhead web framework, for Node.js",
+  "main": "fastify.js",
+  "type": "commonjs",
+  "types": "fastify.d.ts",
+  "scripts": {
+    "bench": "branchcmp -r 2 -g -s \"npm run benchmark\"",
+    "benchmark": "npx concurrently -k -s first \"node ./examples/benchmark/simple.js\" \"npx autocannon -c 100 -d 30 -p 10 localhost:3000/\"",
+    "coverage": "npm run unit -- --cov --coverage-report=html",
+    "coverage:ci": "npm run unit -- --cov --coverage-report=html --no-browser --no-check-coverage -R terse",
+    "coverage:ci-check-coverage": "nyc check-coverage --branches 100 --functions 100 --lines 100 --statements 100",
+    "license-checker": "license-checker --production --onlyAllow=\"MIT;ISC;BSD-3-Clause;BSD-2-Clause\"",
+    "lint": "npm run lint:standard && npm run lint:typescript && npm run lint:markdown",
+    "lint:fix": "standard --fix",
+    "lint:markdown": "markdownlint-cli2",
+    "lint:standard": "standard | snazzy",
+    "lint:typescript": "eslint -c types/.eslintrc.json types/**/*.d.ts test/types/**/*.test-d.ts",
+    "prepublishOnly": "PREPUBLISH=true tap --no-check-coverage test/build/**.test.js",
+    "test": "npm run lint && npm run unit && npm run test:typescript",
+    "test:ci": "npm run unit -- -R terse --cov --coverage-report=lcovonly && npm run test:typescript",
+    "test:report": "npm run lint && npm run unit:report && npm run test:typescript",
+    "test:typescript": "tsc test/types/import.ts && tsd",
+    "test:watch": "npm run unit -- -w --no-coverage-report -R terse",
+    "unit": "tap",
+    "unit:junit": "tap-mocha-reporter xunit < out.tap > test/junit-testresults.xml",
+    "unit:report": "tap --cov --coverage-report=html --coverage-report=cobertura | tee out.tap"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastify/fastify.git"
+  },
+  "keywords": [
+    "web",
+    "framework",
+    "json",
+    "schema",
+    "open",
+    "api"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "contributors": [
+    {
+      "name": "Tomas Della Vedova",
+      "url": "http://delved.org",
+      "author": true
+    },
+    {
+      "name": "Tommaso Allevi",
+      "email": "tomallevi@gmail.com"
+    },
+    {
+      "name": "Ethan Arrowood",
+      "url": "https://github.com/Ethan-Arrowood",
+      "email": "ethan.arrowood@gmail.com"
+    },
+    {
+      "name": "Dustin Deus",
+      "url": "http://starptech.de",
+      "email": "deusdustin@gmail.com"
+    },
+    {
+      "name": "Ayoub El Khattabi",
+      "url": "https://github.com/AyoubElk",
+      "email": "elkhattabi.ayoub@gmail.com"
+    },
+    {
+      "name": "Rafael Gonzaga",
+      "email": "rafael.nunu@hotmail.com",
+      "url": "https://github.com/rafaelgss"
+    },
+    {
+      "name": "Trivikram Kamat",
+      "url": "http://trivikr.github.io",
+      "email": "trivikr.dev@gmail.com"
+    },
+    {
+      "name": "Luciano Mammino",
+      "url": "https://loige.co"
+    },
+    {
+      "name": "Cemre Mengu",
+      "email": "cemremengu@gmail.com"
+    },
+    {
+      "name": "Evan Shortiss",
+      "email": "evanshortiss@gmail.com"
+    },
+    {
+      "name": "Maksim Sinik",
+      "url": "https://maksim.dev"
+    },
+    {
+      "name": "Manuel Spigolon",
+      "email": "behemoth89@gmail.com"
+    },
+    {
+      "name": "James Sumners",
+      "url": "https://james.sumners.info"
+    },
+    {
+      "name": "Denis Fäcke",
+      "url": "https://github.com/SerayaEryn"
+    },
+    {
+      "name": "Igor Savin",
+      "email": "kibertoad@gmail.com",
+      "url": "https://github.com/kibertoad"
+    },
+    {
+      "name": "Vincent Le Goff",
+      "email": "vince.legoff@gmail.com",
+      "url": "https://github.com/zekth"
+    },
+    {
+      "name": "Luis Orbaiceta",
+      "email": "luisorbaiceta@gmail.com",
+      "url": "https://luisorbaiceta.com"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastify/fastify/issues"
+  },
+  "homepage": "https://www.fastify.io/",
+  "devDependencies": {
+    "@fastify/pre-commit": "^2.0.2",
+    "@sinclair/typebox": "^0.25.2",
+    "@sinonjs/fake-timers": "^10.0.0",
+    "@types/node": "^18.7.18",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "ajv": "^8.11.0",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^2.1.1",
+    "ajv-i18n": "^4.2.0",
+    "ajv-merge-patch": "^5.0.1",
+    "branch-comparer": "^1.1.0",
+    "eslint": "^8.23.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
+    "fast-json-body": "^1.1.0",
+    "fast-json-stringify": "^5.3.0",
+    "fastify-plugin": "^4.2.1",
+    "fluent-json-schema": "^4.0.0",
+    "form-data": "^4.0.0",
+    "h2url": "^0.2.0",
+    "http-errors": "^2.0.0",
+    "joi": "^17.6.0",
+    "json-schema-to-ts": "^2.5.5",
+    "JSONStream": "^1.3.5",
+    "license-checker": "^25.0.1",
+    "markdownlint-cli2": "^0.5.1",
+    "proxyquire": "^2.1.3",
+    "pump": "^3.0.0",
+    "self-cert": "^2.0.0",
+    "send": "^0.18.0",
+    "simple-get": "^4.0.1",
+    "snazzy": "^9.0.0",
+    "split2": "^4.1.0",
+    "standard": "^17.0.0",
+    "tap": "^16.3.0",
+    "tsd": "^0.24.1",
+    "typescript": "^4.8.3",
+    "undici": "^5.10.0",
+    "vary": "^1.1.2",
+    "yup": "^0.32.11"
+  },
+  "dependencies": {
+    "@fastify/ajv-compiler": "^3.3.1",
+    "@fastify/error": "^3.0.0",
+    "@fastify/fast-json-stringify-compiler": "^4.1.0",
+    "abstract-logging": "^2.0.1",
+    "avvio": "^8.2.0",
+    "find-my-way": "^7.3.0",
+    "light-my-request": "^5.6.1",
+    "pino": "^8.5.0",
+    "process-warning": "^2.0.0",
+    "proxy-addr": "^2.0.7",
+    "rfdc": "^1.3.0",
+    "secure-json-parse": "^2.5.0",
+    "semver": "^7.3.7",
+    "tiny-lru": "^10.0.0"
+  },
+  "standard": {
+    "ignore": [
+      "lib/configValidator.js",
+      "lib/error-serializer.js",
+      "fastify.d.ts",
+      "types/*",
+      "test/types/*",
+      "test/same-shape.test.js"
+    ]
+  },
+  "tsd": {
+    "directory": "test/types"
+  }
+}

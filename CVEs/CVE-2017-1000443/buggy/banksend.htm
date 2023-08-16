@@ -1,0 +1,104 @@
+<div id="content">
+
+<?php
+
+$SendUser=$userid;
+$SendUserName = $_SESSION['login_user'];
+$RecUser=$_POST['recvusername'];
+$type=$_POST['type'];
+
+if($type == 'hacker'){
+
+$details = "sent by $SendUserName reason: ";
+$details .= $_POST['details']; 
+$details2 = "sent to $RecUser reason: ";
+$details2 .= $_POST['details'];
+$amount = $_POST['amount'];
+$amountnegative = $amount * -1;
+
+//Check to see if RecUser has an account with the bank
+
+$sql = "SELECT id FROM accounts WHERE username = '$RecUser'";
+$result = $conn->query($sql);
+
+while($row = $result->fetch_assoc()){
+$recvuser = $row['id']; // User ID return
+}
+
+$sql = "SELECT id FROM economy WHERE userid = '$recvuser'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+
+
+$sql = "SELECT cash FROM economy WHERE userid = '$SendUser'";
+$result = $conn->query($sql);
+
+while($row = $result->fetch_assoc()){
+$oldBal = $row['cash'];
+}
+
+$newBalUs1 = $oldBal - $amount;
+
+if ($recvuser == $SendUser) {
+echo "<h1>Transaction Failed</h1>";
+echo "<br>";
+echo "You can't send money to yourself!"; 
+echo "<br>";
+echo "<br>";
+echo "<td><form action='?a=bank' method='POST'><input type='submit' name='submit-btn' value='Back to account summary' /></td></form>";
+} else {
+
+if ($newBalUs1 < 0)
+{
+   echo "<h1>Transaction Failed</h1>";
+   echo "<br>";
+   echo "You can't send more money than you actually have.";
+   echo "<br>";
+   echo "<br>";
+   echo "<td><form action='?a=bank' method='POST'><input type='submit' name='submit-btn' value='Back to account summary' /></td></form>";
+} else {
+
+$sql = "SELECT cash FROM economy WHERE userid = '$recvuser'";  //fetch the recieving users current bank balance
+$result = $conn->query($sql);
+
+while($row = $result->fetch_assoc()){
+$oldBalUs2 = $row['cash'];   // export the returned value to a variable
+}
+
+$newBalUs2 = $oldBalUs2 + $amount;
+
+$sql = "UPDATE economy SET cash='$newBalUs2' WHERE userid = '$recvuser'";
+$result = $conn->query($sql);
+
+$sql = "UPDATE economy SET cash='$newBalUs1' WHERE userid= '$SendUser'";
+$result = $conn->query($sql);
+
+$sql = "INSERT INTO bank_transactions(userid,recvid,details,amount) VALUES('$SendUser', '$recvuser', '$details2', '$amountnegative')";
+$result = $conn->query($sql);
+
+$sql = "INSERT INTO bank_transactions(userid,recvid,details,amount) VALUES('$recvuser', '$recvuser', '$details', '$amount')";
+$result = $conn->query($sql);
+
+   echo "Transaction Complete";
+   echo "<td><form action='?a=bank' method='POST'><input type='submit' name='submit-btn' value='Back to account summary' /></td></form>";
+
+}
+}
+} 
+else {
+	echo "<h1>Transaction Failed</h1>";
+	echo "<br>";
+	echo "<p>We are sorry. Our database failed to find the hacker "; echo $RecUser; echo " in our banking database.</p>";
+	echo "<p>Your previous transaction has been canceled.</p>";
+	echo "<td><form action='?a=bank' method='POST'><input type='submit' name='submit-btn' value='Back to account summary' /></td></form>";
+
+};
+}
+else{ //type is clan
+echo "Money Transfers to clan banks are unavailable at this time";
+};
+
+
+?>
+</div>

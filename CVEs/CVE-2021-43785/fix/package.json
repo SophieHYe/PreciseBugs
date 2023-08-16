@@ -1,0 +1,72 @@
+{
+  "name": "@joeattardi/emoji-button",
+  "version": "4.6.0",
+  "description": "Vanilla JavaScript emoji picker",
+  "keywords": [
+    "emoji",
+    "javascript"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "build:watch": "rollup -cw",
+    "start": "npm run build:watch",
+    "prepublishOnly": "cross-env NODE_ENV=production rollup -c",
+    "test": "jest src/**.test.ts",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint src/*.ts",
+    "prettify": "prettier src/*.ts --write"
+  },
+  "author": "Joe Attardi <jattardi@gmail.com> (https://joeattardi.codes)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joeattardi/emoji-button.git"
+  },
+  "homepage": "https://emoji-button.js.org",
+  "bugs": "https://github.com/joeattardi/emoji-button/issues",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@types/jest": "^25.2.3",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "babel-jest": "^26.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "rollup": "^2.22.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^3.1.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-regular-svg-icons": "^5.13.0",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@popperjs/core": "^2.4.0",
+    "@types/twemoji": "^12.1.1",
+    "escape-html": "^1.0.3",
+    "focus-trap": "^5.1.0",
+    "fuzzysort": "^1.1.4",
+    "tiny-emitter": "^2.1.0",
+    "tslib": "^2.0.0",
+    "twemoji": "^13.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

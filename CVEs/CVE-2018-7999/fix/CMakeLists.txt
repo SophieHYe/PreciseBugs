@@ -1,0 +1,63 @@
+project(vm-testing)
+include(Graphite)
+
+enable_testing()
+
+include_directories(${graphite2_core_SOURCE_DIR})
+
+set(S ${graphite2_core_SOURCE_DIR})
+
+# I build the vm code here since it needs to be built for both code threading
+# models rather than linking against the library from source.
+add_library(vm-test-common STATIC 
+    basic_test.cpp)
+target_link_libraries(vm-test-common graphite2 graphite2-segcache graphite2-base)
+add_definitions(-DGRAPHITE2_NTRACING)
+
+if  (${CMAKE_COMPILER_IS_GNUCXX})
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fomit-frame-pointer")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} -fomit-frame-pointer")
+endif  (${CMAKE_COMPILER_IS_GNUCXX})
+
+if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+    add_definitions(-D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -DUNICODE)
+    add_custom_target(${PROJECT_NAME}_copy_dll ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${graphite2_core_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_SHARED_LIBRARY_PREFIX}graphite2${CMAKE_SHARED_LIBRARY_SUFFIX} ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR})
+    add_dependencies(${PROJECT_NAME}_copy_dll graphite2 vm-test-common)
+endif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+
+add_executable(vm-test-call ${S}/call_machine.cpp)
+target_link_libraries(vm-test-call vm-test-common)
+
+if  (${CMAKE_COMPILER_IS_GNUCXX})
+	add_executable(vm-test-direct ${S}/direct_machine.cpp)
+	target_link_libraries(vm-test-direct vm-test-common)
+endif  (${CMAKE_COMPILER_IS_GNUCXX})
+
+if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+	add_definitions(-fno-rtti -fno-exceptions)
+	if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+		add_definitions(-DNDEBUG -fomit-frame-pointer)
+	endif ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+endif  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+
+add_test(vm-test-call-threading vm-test-call ${testing_SOURCE_DIR}/fonts/small.ttf 1)
+set_tests_properties(vm-test-call-threading PROPERTIES
+        PASS_REGULAR_EXPRESSION "simple program size:    14 bytes.*result of program: 42"
+        FAIL_REGULAR_EXPRESSION "program terminated early;stack not empty")
+if (GRAPHITE2_ASAN)
+    set_target_properties(vm-test-call PROPERTIES LINK_FLAGS "-fsanitize=address")
+    set_property(TEST vm-test-call-threading APPEND PROPERTY ENVIRONMENT "ASAN_SYMBOLIZER_PATH=${ASAN_SYMBOLIZER}")
+endif (GRAPHITE2_ASAN)
+
+if  (${CMAKE_COMPILER_IS_GNUCXX})
+	add_test(vm-test-direct-threading vm-test-direct ${testing_SOURCE_DIR}/fonts/small.ttf 1)
+	set_tests_properties(vm-test-direct-threading PROPERTIES
+			PASS_REGULAR_EXPRESSION "simple program size:    14 bytes.*result of program: 42"
+			FAIL_REGULAR_EXPRESSION "program terminated early;stack not empty")
+    if (GRAPHITE2_ASAN)
+        set_target_properties(vm-test-direct PROPERTIES LINK_FLAGS "-fsanitize=address")
+        set_property(TEST vm-test-direct-threading APPEND PROPERTY ENVIRONMENT "ASAN_SYMBOLIZER_PATH=${ASAN_SYMBOLIZER}")
+    endif (GRAPHITE2_ASAN)
+endif  (${CMAKE_COMPILER_IS_GNUCXX})
+

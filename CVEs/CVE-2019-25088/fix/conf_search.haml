@@ -1,0 +1,38 @@
+.row.tbl-header
+  .col-xs-12
+    %h4
+      %a{href: url_for('/nodes')} nodes
+      \/ Nodes that contain 
+      %span
+        &= "#{@to_research}"
+  
+.row
+  .pull-right
+    %form
+      %button.ColVis_Button{type: 'button', onclick: 'history.go();'}
+        %span.glyphicon.glyphicon-repeat Refresh
+  .table-responsive
+    %table.table.table-condensed.table-striped.table-hover#versionsTable
+      %thead
+        %tr
+          %th Name
+          %th Configuration
+
+      %tbody
+        - @nodes_match.each do |x|
+          %tr
+            %td #{x[:node]}
+            %td
+              %a{title: 'configuration',
+                 href: url_for("/node/fetch/#{x[:full_name]}")}
+                %span.glyphicon.glyphicon-cloud-download
+
+:javascript
+  $(function() {
+    $('#versionsTable').dataTable({
+      dom: 'C<"clear">lfrtip',
+      bAutoWidth: false,
+      "order": [[0, "desc"]]
+    });
+  });
+

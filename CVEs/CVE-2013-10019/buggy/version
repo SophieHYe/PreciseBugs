@@ -1,0 +1,317 @@
+OAICat version file. This file records major changes to the OAICat software.
+
+2013-04-18 1.5.61
+Enhancement:
+- change mechanism for locating the oaicat.properties configuration file.
+
+2011-04-22 1.5.60
+Bug Fix:
+- Add missing closure to 'if' condition when handling "global" attributes.
+
+2011-04-22 1.5.59
+Bug Fix:
+- Close java.sql.Statements after use in ExtendedJDBCOAICatalog.
+
+2011-03-31 1.5.58
+Bug Fix:
+- Deprecate old JDBC AbstractCatalog implementations in favor of ExtendedJDBCOAICatalog.
+Enhancement:
+- Cleaned up various build warnings.
+
+2009-03-26 1.5.57
+Bug Fix:
+- Fix persistentConnection bug in NewJDBCOAICatalog
+
+2008-10-27 1.5.56
+Bug Fix:
+- Change toolkit.xsd reference to the alcme.oclc.org domain since the VT version vanished
+
+2007-11-01 1.5.55
+Enhancement:
+- Make OAIHandler.getAttributes methods public
+
+2007-05-22 1.5.54
+Enhancement:
+- Switch license banners to Apache 2.0
+
+2007-01-25 1.5.53
+Enhancement:
+- Add support for java.sql.Date datestamps in the JDBC implementation.
+
+2007-01-25 1.5.52
+Enhancement:
+- add Getty implementation to support museums and archives.
+
+2006-12-20 1.5.51
+Enhancement:
+- add OAIHandler.missingVerbClassName parameter support
+
+2006-12-20 1.5.50
+Enhancement:
+- add OAIHandler.isServiceUnavailable so developers can decide how this gets
+done themselves.
+
+2006-11-06 1.5.49
+Enhancement:
+- add filterRequest() to OAIHandler to allow overriding classes to control
+which requests get through.
+
+2006-10-23 1.5.48
+Enhancement:
+- add a getDescriptions() method to the AbstractCatalog and Identify verb
+
+2006-09-06 1.5.47
+Bug Fix:
+- XML-encode attribute values
+- fixed a synchronization problem in XSLTCrosswalk
+
+2006-06-30 1.5.46
+Enhancement:
+- add support for multiple databases
+
+2006-06-22 1.5.45
+Cleanup:
+- Removed some issues that were cluttering my Eclipse "Problems" view.
+It was mainly things like "throws" that were declared but never used and
+private methods and variables that were never used. I'm fairly confident
+that their removal won't affect anyone's custom classes.
+
+2006-04-06 1.5.44
+Bug Fix:
+- Restore JDBCOAICatalog, JDBCLimitedOAICatalog, and ExtendedJDBCOAICatalog in favor of NewJDBCOAICatalog
+
+2006-04-04 1.5.43
+Bug Fix:
+- Add close statements to Statements and ResultSets in JDBCOAICatalog, JDBCLimitedOAICatalog, and ExtendedJDBCOAICatalog to plug a memory leak
+
+2006-02-06 1.5.42
+Enhancement:
+- Add support for repeatable fields to JDBC2oai_dc.java
+
+2005-12-08 1.5.41
+Bug Fix:
+- Add support for multiple metadataPrefixes that share the same schemaLocation
+
+2005-09-26 1.5.40
+Enhancement:
+- Allow configuration files to reside on the classpath as an alternative to
+hardcoding them relative to $TOMCAT_HOME
+
+2005-09-08 1.5.39
+Bug Fix:
+- Exit the loop in RecordHandler so no more than one metadata record gets created.
+
+2005-07-29 1.5.38
+Enhancement:
+- Added optional OAIHandler.extraXmlns parameter to oaicat.properties handler. This string will be inserted into the <oai:OAI-PMH> to allow extra xmlns declarations to be included in the response.
+
+2005-07-21 1.5.37
+Bug Fix:
+- Omit XML declaration from FileMap2oai_dc identity transformer
+
+2005-06-07 1.5.36
+Enhancement:
+- Added a feature contributed by Peter Guldbaek to support an alternative method of loading the Properties object.
+
+2005-03-25 1.5.35
+Enhancement:
+- Make the xsl stylesheet optional on FileMap2.oai_dc to make it easier to store oai_dc records instead of oai_etdms.
+
+2005-02-28 1.5.34
+Bug Fix:
+- Force identifier parameters to conform to URI syntax or else throw a badArgument error.
+
+2005-02-04 1.5.33
+Enhancement:
+- Add an optional String parameter to the Crosswalk constructor to tell it which metadataPrefix it is being configured for.
+
+2005-01-31 1.5.32
+Bug Fix:
+- Don't assume the objects in JDBCRecordFactory are strings.
+
+2004-10-11 1.5.31
+Bug Fix:
+- Fix BadArgumentException for missing metadataPrefix in ListRecords and ListIdentifiers
+- Change various RecordFactory implementations to use a public fromOAIIdentifier method rather than protected.
+
+2004-10-11 1.5.30
+Bug Fix:
+- Remove Java 1.4 String.split() dependency.
+
+2004-10-06 1.5.29
+Bug Fix:
+- Fix JDBC2oai_dc crosswalk to exclude empty fields from the result.
+
+2004-09-15 1.5.28
+Enhancement:
+- Add dateFormat property support for JDBCOAICatalog and JDBCLimitedOAICatalog
+
+2004-08-31 1.5.27
+Enhancement:
+- Add SRUOAICatalog support
+
+2004-06-10 1.5.26
+Enhancement:
+- Add support for dynamic crosswalks.
+
+2004-06-07 1.5.25
+Enhancement:
+- Add OAIHandler.urlEncodeSetSpec argument
+
+2004-05-21 1.5.24
+Enhancement:
+- Construct verbs using a HashMap rather than a ServletContext so they can be called in a more generic way.
+- Add a few set method to AbstractCatalog so implementations can be created directly rather than being forced to use the factory method.
+
+2004-05-10 1.5.23
+Bug Fix:
+- Changed ExtendedJDBCOAICatalog and JDBCOAICatalog to use '!' instead of ':' as the resumptionToken separator to accommodate long datestamps.
+Enhancement:
+- Make OAIHandler getWriter and OAIHandler.getResult public.
+
+2004-05-05 1.5.22
+Bug Fix:
+- Changed ExtendedJDBCRecordFactory.getLocalIdentifier to convert value to String rather than assume it is a string.
+
+2004-04-06 1.5.21
+Enhancement:
+- Add Copymets crosswalk.
+
+2004-03-15 1.5.20
+Bug Fix:
+- Fix incorrect setName in ListSets for NewFileSystemOAIHandler.
+
+2004-03-08 1.5.19
+Bug Fix:
+- Fix ListMetadataFormats(identifier) for XMLFileOAICatalog
+
+2004-02-18 1.5.18
+Bug Fix:
+- Add Opera to the list of User-Agents that have XSL stylesheets applied on the browser.
+
+2003-12-22 1.5.17
+Enhancement:
+- Add OAIHandler.xmlEncodeSetSpec property option
+
+2003-11-05 1.5.16
+Bug Fix:
+- Added synchronized to javax.xml.transform.Transformer invocations.
+
+2003-10-22 1.5.15
+Enhancement:
+- Added oaicatnewton.jar to the distribution.
+
+2003-10-14 1.5.14
+Enhancement:
+- Added "info:ofi/pro" to the list of namespaces that can be parsed by XMLFileOAICatalog.
+- Added XSLTproCrosswalk
+- Changed the Redirect extension verb to return the oai_dc record if no dc:identifier is found.
+
+2003-06-13 1.5.13
+Bug Fix:
+- Allow for missing User-Agent in HTTP header.
+
+2003-06-05 1.5.12
+Bug Fix:
+- XML Encode the <identifier> portion of the response.
+
+2003-06-03 1.5.11
+Bug Fix:
+- Fixed a few more bugs in JDBCOAICatalog where OAI-type Exceptions were
+  being caught and transformed into Error 500 failures.
+
+2003-05-14 1.5.10
+Bug Fix:
+- Fixed a bug in JDBCOAICatalog where invalid identifiers weren't being reported properly from GetRecord verbs.
+
+2003-05-05 1.5.10
+Enhancement:
+- Add call to ServerVerb.init for extension verbs to allow them to initialize themselves.
+- Add call to HttpServletRequest.setCharacterEncoding("UTF-8") to handle escaped characters in the URL.
+
+2003-04-29 1.5.9
+Bug Fix:
+- Moved extension verbs so they only work from baseURL + "/extension". This should satisfy those who worry about adding non-OAI verbs to the baseURL. Also changed the property from ServerVerbs.* to ExtensionVerbs.*
+- Fixed ListRecords and ListIdentifiers to convert blanks back to '+'. Hopefully, this won't cause people too much grief.
+
+2003-04-21 1.5.8
+Enhancements:
+- Added an optional Redirect verb to support POIs (http://www.ukoln.ac.uk/distributed-systems/poi/resolver-guidelines/.
+- Added JUnit tests to the Ant build scripts.
+- Added a little more documentation
+- Improved version control.
+- Fixed a bug where setting the HTTP Content-Encoding prevented the return of HTTP status codes.
+
+2003-04-17 1.5.7
+Bg fixes:
+- Removed URLEncoder.encode() calls in RecordFactory and ServerVerb because URLEncoding setSpecs isn't the right solution. I don't recall why I did this in the first place, and now I worry that it will break someone's existing installation because they are gone. If so, hopefully they will contact me and we can fix it propertly.
+Enhancements
+- Add an OAIHarvester.forceRender property to discourage the harvesting of proprietary data.
+- Add a RecordFactory.encodeSetSpec parameter (default=true) since it's not really supposed to encode colons. Eventually, this will need to be fixed properly to encode only those characters that actually require it.
+
+2003-03-28 1.5.6
+Enhancements
+- Allow for additional verbs to be configured in oaicat.properties.
+- Added an optional GetMetadata verb.
+
+2003-03-06 1.5.5
+Enhancements
+- Added an optional OAIHandler.renderForOldBrowsers property to recognize old "Mozilla" browsers and render the response into HTML if an OAIHandler.styleSheet property is present.
+
+2002-11-18 1.5.4
+Bug fixes:
+- Removed 'compress' compression option since there is some question about its correctness.
+- URLEncoded the request element's set value.
+- Fixed a bug in the JDBC implementation that caused resumptionTokens to always respond with initial results.
+Enhancements
+- Added a FileSystem implementation and made it the default instead of the silly useless DummyOAICatalog.
+- Moved the toolkit element to the bottom of the Identify response to make it less prominent.
+
+2002-11-01 1.5.3
+Bug fixes:
+- Made JDBC2oai_dc real.
+- Change setSpec handling to allow them to be collected from the database itself.
+- Use a HashMap to represent a record rather than depending on the cursor of an entire resultSet.
+- Changes too numerous to mention regarding JDBCOAICatalog. If you're using it, consider using JDBCLimitedOAICatalog instead. It should be more memory effecient.
+- Added a new class named NoRecordMatchException which is a more appropriate name than NoItemsMatchException. Both work, though.
+- Fixed a bug in the Identify response where the toolkit description wasn't passing validation.
+- Changed the default 'from' and 'until' dates to something more realistic.
+
+
+2002-10-22 1.5.2
+Bug Fixes:
+- Fixed a bug in the JDBC implementation that caused resumptionToken type
+  requests to return the initial set of records each time.
+- Made resumptionTokens in the JDBC implementation idempotent.
+- Changed the default 'from' date from 01/01/0000 to 01/01/0001 to
+  accommodate Oracle JDBC limitations.
+- Fixed a problem with ListMetadataFormats in the JDBC implementation where it didn't recognize oaiidentifiers that weren't in sets.
+
+2002-10-16 1.5.1
+Enhancements:
+- Added a JDBC implementation
+
+2002-10-04 1.5
+Enhancements:
+- Added toolkit description to the Identify response and version number tracking.
+
+2002-10-02 1.4
+Bug Fixes:
+- Added a check for bad arguments when they accompany resumptionTokens
+  to satisfy the OAI repository registration validator.
+
+2002-09-27 1.3
+Enhancements:
+- Added cusomization instructions to the Readme.txt file.
+- Improved javadocs.
+
+2002-09-25 1.2
+Bug Fixes:
+- Changed the way <description> elements are managed by the Identify verb.
+
+2002-09-20 1.1
+Bug Fixes:
+- Added checks for BadArgumentExceptions to satisfy Hussein's Repository
+  Explorer validation.
+
+Enhancements:

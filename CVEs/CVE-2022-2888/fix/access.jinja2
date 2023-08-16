@@ -1,0 +1,52 @@
+<form class="form-horizontal" onsubmit="return false;">
+    <fieldset>
+        <legend>{{ _('Password') }}</legend>
+        <p>
+            {{ _('If you do not wish to change your password, just leave the following fields empty.') }}
+        </p>
+        <div class="control-group" data-bind="css: {error: access_currentPasswordMismatch()}">
+            <label class="control-label" for="userSettings-access_currentPassword">{{ _('Current Password') }}</label>
+            <div class="controls">
+                <input type="password" class="input-block-level" id="userSettings-access_currentPassword" data-bind="value: access_currentPassword, valueUpdate: 'afterkeydown'" required>
+                <span class="help-inline" data-bind="visible: access_currentPasswordMismatch()">{{ _('Passwords do not match') }}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="userSettings-access_password">{{ _('New Password') }}</label>
+            <div class="controls">
+                <input type="password" class="input-block-level" id="userSettings-access_password" data-bind="value: access_password" required>
+            </div>
+        </div>
+        <div class="control-group" data-bind="css: {error: passwordMismatch()}">
+            <label class="control-label" for="userSettings-access_repeatedPassword">{{ _('Repeat Password') }}</label>
+            <div class="controls">
+                <input type="password" class="input-block-level" id="userSettings-access_repeatedPassword" data-bind="value: access_repeatedPassword, valueUpdate: 'afterkeydown'" required>
+                <span class="help-inline" data-bind="visible: passwordMismatch()">{{ _('Passwords do not match') }}</span>
+            </div>
+        </div>
+        <p>{% trans %}
+            Please note that you will be <strong>logged out immediately</strong> after changing your password and asked to login again.
+        {% endtrans %}</p>
+    </fieldset>
+    <fieldset>
+        <legend>{{ _('API Key') }}</legend>
+        <div class="control-group">
+            <label class="control-label" for="userSettings-access_apikey">{{ _('Current API Key') }}</label>
+            <div class="controls">
+                <div class="input-append input-block-level">
+                    <input type="text" readonly="readonly" id="userSettings-access_apikey" data-bind="value: access_apikey, attr: {placeholder: '{{ _('N/A')|esq }}'}">
+                    <a class="btn add-on" title="Copy API Key to clipboard" data-bind="click: copyApikey, css: {'disabled': !access_apikey()}"><i class="fas fa-copy"></i></a>
+                    <a class="btn add-on" title="Generate new API Key" data-bind="click: generateApikey"><i class="fas fa-sync"></i></a>
+                    <a class="btn btn-danger add-on" title="Delete API Key" data-bind="click: deleteApikey, css: {'disabled': !access_apikey()}"><i class="far fa-trash-alt"></i></a>
+                </div>
+                <span class="help-block">{{ _('Please note that changes to the API key are applied immediately, without having to "Confirm" first.') }}</span>
+            </div>
+        </div>
+        <div class="control-group" data-bind="visible: access_apikey">
+            <label class="control-label">{{ _('QR Code') }}</label>
+            <div class="controls">
+                <div data-bind="qrcode: {text: access_apikey, size: 150}"></div>
+            </div>
+        </div>
+    </fieldset>
+</form>

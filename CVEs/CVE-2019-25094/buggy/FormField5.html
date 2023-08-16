@@ -1,0 +1,18 @@
+<html data-namespace-typo3-fluid="true"
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+<f:if condition="{formField.validationTypesArray.1}">
+	<span class="required">*</span>
+</f:if>
+<br />
+<f:for each="{formField.choicesArray}" as="choiceValue" key="choiceKey" iteration="choiceIterator">
+	<f:form.radio
+		id="appointments-formfield-{formField.uid}-{choiceIterator.index}"
+		property="formFieldValues.i{formField.uid}.value"
+		value="{choiceKey}"
+		checked="{0:formFieldValue.value} == {0:choiceKey}"
+		class="formfield-id-{formField.uid} radio session"
+	/> <f:format.htmlentities>{choiceValue}</f:format.htmlentities>
+</f:for>
+
+</html>

@@ -1,0 +1,94 @@
+<div id="login">
+
+<img style="height:150px; width:150px;"src="/images/bankimg.png">
+
+<h6>Keeping you in the green</h6>
+
+
+<?php
+	$getUserClan = "SELECT clan FROM accounts WHERE id = '$userid'";
+	$resultUC = $conn->query($getUserClan);
+	while ($rowClan = $resultUC->fetch_assoc()){
+		$clanid = $rowClan['clan'];
+	};
+
+if(!isset($_SESSION['clanbank_login'])){
+
+	$sql = "SELECT clanid FROM claneconomy WHERE clanid = '$clanid'";
+	$result = $conn->query($sql);
+	if ($result->num_rows > 0) {
+    	echo '<form name="login" method="POST" autocomplete="off" action="?a=clanbankin">';
+		echo "<br>";
+		echo 'Password:  <input type="password" name="password" value=""><br>';
+		echo "<br>";
+		echo '<input style="width:70px;" type="submit" name="submit" value="Login">';
+		echo "<br>";
+		echo "<br>";
+		echo "</form>";
+	}
+	else {
+    	echo "<p>We don't appear to have your clan's account on file. Why not register a clan account with us? Opening an account is totally free and requires no inital payment!</p>";
+		echo '<form name="registration" method="POST" action="?a=clanbankin">';
+		echo 'Password: <input type="password" name="password" value=""><br>';
+		echo "<br>";
+		echo "<br>";
+		echo '<input style="width:70px;" type="submit" name="submit" value="Register">';
+		echo "</form>";
+		echo "<br>";
+	};
+}
+else {
+	echo "<h2>";
+
+$sqlGetName = "SELECT * FROM clans WHERE id = '$clanid'";
+$resultGetName = $conn->query($sqlGetName);
+	while ($rowGetName = $resultGetName->fetch_assoc()){
+		$clanname = $rowGetName['clanname'];
+	};
+
+	echo $clanname;
+	echo "'s Banking Account</h2>";
+	$sql = "SELECT cash FROM claneconomy WHERE clanid = '$clanid'";
+	$result = $conn->query($sql);
+	while ($row = $result->fetch_assoc()){
+		$balance = $row['cash'];
+	};
+	
+	echo "<p>Total Balance: $"; printf("%.2f", $balance); echo "</p>";
+	echo '<form name="sendmoney" method="POST" action="?a=clanbanksend">';
+	echo "Amount:"; echo '<input type="text" name="amount" value="" size="10">';
+	echo "<br>";
+	echo "To:"; echo '<input type="text" name="recvusername" value="">';
+	echo "<br>";
+	echo "Details:"; echo '<input type="text" name="details" value="">';
+	echo "<br>";
+    echo "<br>";
+
+	echo "<button class='btn waves-effect waves-light' type='submit' name='action'>Send Cash<i class='material-icons center'></i></button>";
+
+	echo "<br>";
+	echo "<br>";
+	echo "<h6>Previous Transactions (Last 50)</h6>";
+	
+
+	$sql = "SELECT timestamp,amount,details FROM clanbank_transactions WHERE clanid = '$clanid' ORDER BY timestamp DESC ";
+	$result = $conn->query($sql);
+
+	if ($result->num_rows > 0) {
+
+		$amount = $row['amount'];
+		$takebal = number_format($amount, 2, '.', '');
+    	echo "<div id=admintable><table><tr><th>Timestamp</th><th>Amount</th><th>Details</th>";
+    	// output data of each row
+     	while($row = $result->fetch_assoc()) {
+        	echo "<tr><td>" . $row["timestamp"]. "</td><td>$" . $row["amount"]. "</td><td>" . $row["details"]. "</td>";
+     	};
+		echo "</table>";
+	} 
+	else {
+    	echo "No transactions found.";
+	};
+};
+?>
+</div>
+</div>

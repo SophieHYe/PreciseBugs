@@ -1,0 +1,36 @@
+language: node_js
+node_js:
+  - 6
+  - node
+env:
+  - NODE_ENV=production
+sudo: false
+cache:
+  directories:
+    - node_modules
+install:
+  - npm --production=false install
+  - npm --production=false update
+  - npm --production=false prune
+jobs:
+  include:
+    - stage: test
+      script:
+      - npm run test
+    - stage: deploy
+      node_js: 6
+      script: npm run build
+      before_deploy:
+      - VPKG=$($(npm bin)/json -f package.json version)
+      - export VERSION=${VPKG}-prerelease.$(date +%Y%m%d%H%M%S)
+      - npm --no-git-tag-version version $VERSION
+      - git config --global user.email "$(git log --pretty=format:"%ae" -n1)"
+      - git config --global user.name "$(git log --pretty=format:"%an" -n1)"
+      deploy:
+        provider: npm
+        skip_cleanup: true
+        "on":
+          all_branches: true
+          condition: $RELEASE_BRANCHES =~ $TRAVIS_BRANCH
+        email: $NPM_EMAIL
+        api_key: $NPM_TOKEN

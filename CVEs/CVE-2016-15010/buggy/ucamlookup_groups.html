@@ -1,0 +1,51 @@
+{% load dictionary_tag %}
+<script>
+    /**
+     * ID of the last AJAX search request we sent.
+     */
+    searchId_g = 0;
+
+    $(document).ready(function() {
+        $("#{{ input_tag_id }}").select2({
+            placeholder: "Search for groups",
+            minimumInputLength: 3,
+            multiple: {{ multiple }},
+            ajax: {
+                url: "{%  url 'ucamlookup_find_groups' %}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        searchId_g: ++searchId_g
+                    };
+                },
+                results: function (data, page) {
+                    if (data.searchId_g != searchId_g)
+                        return;
+                    return {results: data.groups};
+                }
+            },
+            formatResult: function(group) {
+                return group.title;
+            },
+            formatSelection: function(group) {
+                return group.title;
+            },
+            id: function(group) {
+                return group.groupid;
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; }
+            // we do not want to escape markup since we are displaying html in results
+        });
+
+        $("#{{ input_tag_id }}").select2("data", [
+            {% for authorised_group in lookup_lists|get_item:group_list %}
+                {
+                    groupid: "{{ authorised_group.lookup_id }}",
+                    title: "{{ authorised_group.name }}"
+                },
+            {% endfor %}
+        ]);
+    });
+</script>

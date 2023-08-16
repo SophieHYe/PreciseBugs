@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://nordea.com/filebroker" xmlns="http://nordea.com/filebroker" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+
+  <xs:simpleType name="EncodingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="437" />
+      <xs:enumeration value="500" />
+      <xs:enumeration value="500V1" />
+      <xs:enumeration value="850" />
+      <xs:enumeration value="851" />
+      <xs:enumeration value="852" />
+      <xs:enumeration value="855" />
+      <xs:enumeration value="856" />
+      <xs:enumeration value="857" />
+      <xs:enumeration value="860" />
+      <xs:enumeration value="861" />
+      <xs:enumeration value="862" />
+      <xs:enumeration value="863" />
+      <xs:enumeration value="864" />
+      <xs:enumeration value="865" />
+      <xs:enumeration value="866" />
+      <xs:enumeration value="866NAV" />
+      <xs:enumeration value="869" />
+      <xs:enumeration value="874" />
+      <xs:enumeration value="904" />
+      <xs:enumeration value="1026" />
+      <xs:enumeration value="1046" />
+      <xs:enumeration value="1047" />
+      <xs:enumeration value="8859_1" />
+      <xs:enumeration value="8859_2" />
+      <xs:enumeration value="8859_3" />
+      <xs:enumeration value="8859_4" />
+      <xs:enumeration value="8859_5" />
+      <xs:enumeration value="8859_6" />
+      <xs:enumeration value="8859_7" />
+      <xs:enumeration value="8859_8" />
+      <xs:enumeration value="8859_9" />
+      <xs:enumeration value="10646-1:1993" />
+      <xs:enumeration value="10646-1:1993/UCS4/" />
+      <xs:enumeration value="ANSI_X3.4-1968" />
+      <xs:enumeration value="ANSI_X3.4-1986" />
+      <xs:enumeration value="ANSI_X3.4" />
+      <xs:enumeration value="ANSI_X3.110-1983" />
+      <xs:enumeration value="ANSI_X3.110" />
+      <xs:enumeration value="ARABIC" />
+      <xs:enumeration value="ARABIC7" />
+      <xs:enumeration value="ARMSCII-8" />
+      <xs:enumeration value="ASCII" />
+      <xs:enumeration value="ASMO-708" />
+      <xs:enumeration value="ASMO_449" />
+      <xs:enumeration value="BALTIC" />
+      <xs:enumeration value="BIG-5" />
+      <xs:enumeration value="BIG-FIVE" />
+      <xs:enumeration value="BIG5-HKSCS" />
+      <xs:enumeration value="BIG5" />
+      <xs:enumeration value="BIG5HKSCS" />
+      <xs:enumeration value="BIGFIVE" />
+      <xs:enumeration value="BRF" />
+      <xs:enumeration value="BS_4730" />
+      <xs:enumeration value="CA" />
+      <xs:enumeration value="CN-BIG5" />
+      <xs:enumeration value="CN-GB" />
+      <xs:enumeration value="CN" />
+      <xs:enumeration value="CP-AR" />
+      <xs:enumeration value="CP-GR" />
+      <xs:enumeration value="CP-HU" />
+      <xs:enumeration value="CP037" />
+      <xs:enumeration value="CP038" />
+      <xs:enumeration value="CP273" />
+      <xs:enumeration value="CP274" />
+      <xs:enumeration value="CP275" />
+      <xs:enumeration value="CP278" />
+      <xs:enumeration value="CP280" />
+      <xs:enumeration value="CP281" />
+      <xs:enumeration value="CP282" />
+      <xs:enumeration value="CP284" />
+      <xs:enumeration value="CP285" />
+      <xs:enumeration value="CP290" />
+      <xs:enumeration value="CP297" />
+      <xs:enumeration value="CP367" />
+      <xs:enumeration value="CP420" />
+      <xs:enumeration value="CP423" />
+      <xs:enumeration value="CP424" />
+      <xs:enumeration value="CP437" />
+      <xs:enumeration value="CP500" />
+      <xs:enumeration value="CP737" />
+      <xs:enumeration value="CP775" />
+      <xs:enumeration value="CP803" />
+      <xs:enumeration value="CP813" />
+      <xs:enumeration value="CP819" />
+      <xs:enumeration value="CP850" />
+      <xs:enumeration value="CP851" />
+      <xs:enumeration value="CP852" />
+      <xs:enumeration value="CP855" />
+      <xs:enumeration value="CP856" />
+      <xs:enumeration value="CP857" />
+      <xs:enumeration value="CP860" />
+      <xs:enumeration value="CP861" />
+      <xs:enumeration value="CP862" />
+      <xs:enumeration value="CP863" />
+      <xs:enumeration value="CP864" />
+      <xs:enumeration value="CP865" />
+      <xs:enumeration value="CP866" />
+      <xs:enumeration value="CP866NAV" />
+      <xs:enumeration value="CP868" />
+      <xs:enumeration value="CP869" />
+      <xs:enumeration value="CP870" />
+      <xs:enumeration value="CP871" />
+      <xs:enumeration value="CP874" />
+      <xs:enumeration value="CP875" />
+      <xs:enumeration value="CP880" />
+      <xs:enumeration value="CP891" />
+      <xs:enumeration value="CP901" />
+      <xs:enumeration value="CP902" />
+      <xs:enumeration value="CP903" />
+      <xs:enumeration value="CP904" />
+      <xs:enumeration value="CP905" />
+      <xs:enumeration value="CP912" />
+      <xs:enumeration value="CP915" />
+      <xs:enumeration value="CP916" />
+      <xs:enumeration value="CP918" />
+      <xs:enumeration value="CP920" />
+      <xs:enumeration value="CP921" />
+      <xs:enumeration value="CP922" />
+      <xs:enumeration value="CP930" />
+      <xs:enumeration value="CP932" />
+      <xs:enumeration value="CP933" />
+      <xs:enumeration value="CP935" />
+      <xs:enumeration value="CP936" />
+      <xs:enumeration value="CP937" />
+      <xs:enumeration value="CP939" />
+      <xs:enumeration value="CP949" />
+      <xs:enumeration value="CP950" />
+      <xs:enumeration value="CP1004" />
+      <xs:enumeration value="CP1008" />
+      <xs:enumeration value="CP1025" />
+      <xs:enumeration value="CP1026" />
+      <xs:enumeration value="CP1046" />
+      <xs:enumeration value="CP1047" />
+      <xs:enumeration value="CP1070" />
+      <xs:enumeration value="CP1079" />
+      <xs:enumeration value="CP1081" />
+      <xs:enumeration value="CP1084" />
+      <xs:enumeration value="CP1089" />
+      <xs:enumeration value="CP1097" />
+      <xs:enumeration value="CP1112" />
+      <xs:enumeration value="CP1122" />
+      <xs:enumeration value="CP1123" />
+      <xs:enumeration value="CP1124" />
+      <xs:enumeration value="CP1125" />
+      <xs:enumeration value="CP1129" />
+      <xs:enumeration value="CP1130" />
+      <xs:enumeration value="CP1132" />
+      <xs:enumeration value="CP1133" />
+      <xs:enumeration value="CP1137" />
+      <xs:enumeration value="CP1140" />
+      <xs:enumeration value="CP1141" />
+      <xs:enumeration value="CP1142" />
+      <xs:enumeration value="CP1143" />
+      <xs:enumeration value="CP1144" />
+      <xs:enumeration value="CP1145" />
+      <xs:enumeration value="CP1146" />
+      <xs:enumeration value="CP1147" />
+      <xs:enumeration value="CP1148" />
+      <xs:enumeration value="CP1149" />
+      <xs:enumeration value="CP1153" />
+      <xs:enumeration value="CP1154" />
+      <xs:enumeration value="CP1155" />
+      <xs:enumeration value="CP1156" />
+      <xs:enumeration value="CP1157" />
+      <xs:enumeration value="CP1158" />
+      <xs:enumeration value="CP1160" />
+      <xs:enumeration value="CP1161" />
+      <xs:enumeration value="CP1162" />
+      <xs:enumeration value="CP1163" />
+      <xs:enumeration value="CP1164" />
+      <xs:enumeration value="CP1166" />
+      <xs:enumeration value="CP1167" />
+      <xs:enumeration value="CP1250" />
+      <xs:enumeration value="CP1251" />
+      <xs:enumeration value="CP1252" />
+      <xs:enumeration value="CP1253" />
+      <xs:enumeration value="CP1254" />
+      <xs:enumeration value="CP1255" />
+      <xs:enumeration value="CP1256" />
+      <xs:enumeration value="CP1257" />
+      <xs:enumeration value="CP1258" />
+      <xs:enumeration value="CP1282" />
+      <xs:enumeration value="CP1361" />
+      <xs:enumeration value="CP1364" />
+      <xs:enumeration value="CP1371" />
+      <xs:enumeration value="CP1388" />
+      <xs:enumeration value="CP1390" />
+      <xs:enumeration value="CP1399" />
+      <xs:enumeration value="CP4517" />
+      <xs:enumeration value="CP4899" />
+      <xs:enumeration value="CP4909" />
+      <xs:enumeration value="CP4971" />
+      <xs:enumeration value="CP5347" />
+      <xs:enumeration value="CP9030" />
+      <xs:enumeration value="CP9066" />
+      <xs:enumeration value="CP9448" />
+      <xs:enumeration value="CP10007" />
+      <xs:enumeration value="CP12712" />
+      <xs:enumeration value="CP16804" />
+      <xs:enumeration value="CPIBM861" />
+      <xs:enumeration value="CSA7-1" />
+      <xs:enumeration value="CSA7-2" />
+      <xs:enumeration value="CSASCII" />
+      <xs:enumeration value="CSA_T500-1983" />
+      <xs:enumeration value="CSA_T500" />
+      <xs:enumeration value="CSA_Z243.4-1985-1" />
+      <xs:enumeration value="CSA_Z243.4-1985-2" />
+      <xs:enumeration value="CSA_Z243.419851" />
+      <xs:enumeration value="CSA_Z243.419852" />
+      <xs:enumeration value="CSDECMCS" />
+      <xs:enumeration value="CSEBCDICATDE" />
+      <xs:enumeration value="CSEBCDICATDEA" />
+      <xs:enumeration value="CSEBCDICCAFR" />
+      <xs:enumeration value="CSEBCDICDKNO" />
+      <xs:enumeration value="CSEBCDICDKNOA" />
+      <xs:enumeration value="CSEBCDICES" />
+      <xs:enumeration value="CSEBCDICESA" />
+      <xs:enumeration value="CSEBCDICESS" />
+      <xs:enumeration value="CSEBCDICFISE" />
+      <xs:enumeration value="CSEBCDICFISEA" />
+      <xs:enumeration value="CSEBCDICFR" />
+      <xs:enumeration value="CSEBCDICIT" />
+      <xs:enumeration value="CSEBCDICPT" />
+      <xs:enumeration value="CSEBCDICUK" />
+      <xs:enumeration value="CSEBCDICUS" />
+      <xs:enumeration value="CSEUCKR" />
+      <xs:enumeration value="CSEUCPKDFMTJAPANESE" />
+      <xs:enumeration value="CSGB2312" />
+      <xs:enumeration value="CSHPROMAN8" />
+      <xs:enumeration value="CSIBM037" />
+      <xs:enumeration value="CSIBM038" />
+      <xs:enumeration value="CSIBM273" />
+      <xs:enumeration value="CSIBM274" />
+      <xs:enumeration value="CSIBM275" />
+      <xs:enumeration value="CSIBM277" />
+      <xs:enumeration value="CSIBM278" />
+      <xs:enumeration value="CSIBM280" />
+      <xs:enumeration value="CSIBM281" />
+      <xs:enumeration value="CSIBM284" />
+      <xs:enumeration value="CSIBM285" />
+      <xs:enumeration value="CSIBM290" />
+      <xs:enumeration value="CSIBM297" />
+      <xs:enumeration value="CSIBM420" />
+      <xs:enumeration value="CSIBM423" />
+      <xs:enumeration value="CSIBM424" />
+      <xs:enumeration value="CSIBM500" />
+      <xs:enumeration value="CSIBM803" />
+      <xs:enumeration value="CSIBM851" />
+      <xs:enumeration value="CSIBM855" />
+      <xs:enumeration value="CSIBM856" />
+      <xs:enumeration value="CSIBM857" />
+      <xs:enumeration value="CSIBM860" />
+      <xs:enumeration value="CSIBM863" />
+      <xs:enumeration value="CSIBM864" />
+      <xs:enumeration value="CSIBM865" />
+      <xs:enumeration value="CSIBM866" />
+      <xs:enumeration value="CSIBM868" />
+      <xs:enumeration value="CSIBM869" />
+      <xs:enumeration value="CSIBM870" />
+      <xs:enumeration value="CSIBM871" />
+      <xs:enumeration value="CSIBM880" />
+      <xs:enumeration value="CSIBM891" />
+      <xs:enumeration value="CSIBM901" />
+      <xs:enumeration value="CSIBM902" />
+      <xs:enumeration value="CSIBM903" />
+      <xs:enumeration value="CSIBM904" />
+      <xs:enumeration value="CSIBM905" />
+      <xs:enumeration value="CSIBM918" />
+      <xs:enumeration value="CSIBM921" />
+      <xs:enumeration value="CSIBM922" />
+      <xs:enumeration value="CSIBM930" />
+      <xs:enumeration value="CSIBM932" />
+      <xs:enumeration value="CSIBM933" />
+      <xs:enumeration value="CSIBM935" />
+      <xs:enumeration value="CSIBM937" />
+      <xs:enumeration value="CSIBM939" />
+      <xs:enumeration value="CSIBM943" />
+      <xs:enumeration value="CSIBM1008" />
+      <xs:enumeration value="CSIBM1025" />
+      <xs:enumeration value="CSIBM1026" />
+      <xs:enumeration value="CSIBM1097" />
+      <xs:enumeration value="CSIBM1112" />
+      <xs:enumeration value="CSIBM1122" />
+      <xs:enumeration value="CSIBM1123" />
+      <xs:enumeration value="CSIBM1124" />
+      <xs:enumeration value="CSIBM1129" />
+      <xs:enumeration value="CSIBM1130" />
+      <xs:enumeration value="CSIBM1132" />
+      <xs:enumeration value="CSIBM1133" />
+      <xs:enumeration value="CSIBM1137" />
+      <xs:enumeration value="CSIBM1140" />
+      <xs:enumeration value="CSIBM1141" />
+      <xs:enumeration value="CSIBM1142" />
+      <xs:enumeration value="CSIBM1143" />
+      <xs:enumeration value="CSIBM1144" />
+      <xs:enumeration value="CSIBM1145" />
+      <xs:enumeration value="CSIBM1146" />
+      <xs:enumeration value="CSIBM1147" />
+      <xs:enumeration value="CSIBM1148" />
+      <xs:enumeration value="CSIBM1149" />
+      <xs:enumeration value="CSIBM1153" />
+      <xs:enumeration value="CSIBM1154" />
+      <xs:enumeration value="CSIBM1155" />
+      <xs:enumeration value="CSIBM1156" />
+      <xs:enumeration value="CSIBM1157" />
+      <xs:enumeration value="CSIBM1158" />
+      <xs:enumeration value="CSIBM1160" />
+      <xs:enumeration value="CSIBM1161" />
+      <xs:enumeration value="CSIBM1163" />
+      <xs:enumeration value="CSIBM1164" />
+      <xs:enumeration value="CSIBM1166" />
+      <xs:enumeration value="CSIBM1167" />
+      <xs:enumeration value="CSIBM1364" />
+      <xs:enumeration value="CSIBM1371" />
+      <xs:enumeration value="CSIBM1388" />
+      <xs:enumeration value="CSIBM1390" />
+      <xs:enumeration value="CSIBM1399" />
+      <xs:enumeration value="CSIBM4517" />
+      <xs:enumeration value="CSIBM4899" />
+      <xs:enumeration value="CSIBM4909" />
+      <xs:enumeration value="CSIBM4971" />
+      <xs:enumeration value="CSIBM5347" />
+      <xs:enumeration value="CSIBM9030" />
+      <xs:enumeration value="CSIBM9066" />
+      <xs:enumeration value="CSIBM9448" />
+      <xs:enumeration value="CSIBM12712" />
+      <xs:enumeration value="CSIBM16804" />
+      <xs:enumeration value="CSIBM11621162" />
+      <xs:enumeration value="CSISO4UNITEDKINGDOM" />
+      <xs:enumeration value="CSISO10SWEDISH" />
+      <xs:enumeration value="CSISO11SWEDISHFORNAMES" />
+      <xs:enumeration value="CSISO14JISC6220RO" />
+      <xs:enumeration value="CSISO15ITALIAN" />
+      <xs:enumeration value="CSISO16PORTUGESE" />
+      <xs:enumeration value="CSISO17SPANISH" />
+      <xs:enumeration value="CSISO18GREEK7OLD" />
+      <xs:enumeration value="CSISO19LATINGREEK" />
+      <xs:enumeration value="CSISO21GERMAN" />
+      <xs:enumeration value="CSISO25FRENCH" />
+      <xs:enumeration value="CSISO27LATINGREEK1" />
+      <xs:enumeration value="CSISO49INIS" />
+      <xs:enumeration value="CSISO50INIS8" />
+      <xs:enumeration value="CSISO51INISCYRILLIC" />
+      <xs:enumeration value="CSISO58GB1988" />
+      <xs:enumeration value="CSISO60DANISHNORWEGIAN" />
+      <xs:enumeration value="CSISO60NORWEGIAN1" />
+      <xs:enumeration value="CSISO61NORWEGIAN2" />
+      <xs:enumeration value="CSISO69FRENCH" />
+      <xs:enumeration value="CSISO84PORTUGUESE2" />
+      <xs:enumeration value="CSISO85SPANISH2" />
+      <xs:enumeration value="CSISO86HUNGARIAN" />
+      <xs:enumeration value="CSISO88GREEK7" />
+      <xs:enumeration value="CSISO89ASMO449" />
+      <xs:enumeration value="CSISO90" />
+      <xs:enumeration value="CSISO92JISC62991984B" />
+      <xs:enumeration value="CSISO99NAPLPS" />
+      <xs:enumeration value="CSISO103T618BIT" />
+      <xs:enumeration value="CSISO111ECMACYRILLIC" />
+      <xs:enumeration value="CSISO121CANADIAN1" />
+      <xs:enumeration value="CSISO122CANADIAN2" />
+      <xs:enumeration value="CSISO139CSN369103" />
+      <xs:enumeration value="CSISO141JUSIB1002" />
+      <xs:enumeration value="CSISO143IECP271" />
+      <xs:enumeration value="CSISO150" />
+      <xs:enumeration value="CSISO150GREEKCCITT" />
+      <xs:enumeration value="CSISO151CUBA" />
+      <xs:enumeration value="CSISO153GOST1976874" />
+      <xs:enumeration value="CSISO646DANISH" />
+      <xs:enumeration value="CSISO2022CN" />
+      <xs:enumeration value="CSISO2022JP" />
+      <xs:enumeration value="CSISO2022JP2" />
+      <xs:enumeration value="CSISO2022KR" />
+      <xs:enumeration value="CSISO2033" />
+      <xs:enumeration value="CSISO5427CYRILLIC" />
+      <xs:enumeration value="CSISO5427CYRILLIC1981" />
+      <xs:enumeration value="CSISO5428GREEK" />
+      <xs:enumeration value="CSISO10367BOX" />
+      <xs:enumeration value="CSISOLATIN1" />
+      <xs:enumeration value="CSISOLATIN2" />
+      <xs:enumeration value="CSISOLATIN3" />
+      <xs:enumeration value="CSISOLATIN4" />
+      <xs:enumeration value="CSISOLATIN5" />
+      <xs:enumeration value="CSISOLATIN6" />
+      <xs:enumeration value="CSISOLATINARABIC" />
+      <xs:enumeration value="CSISOLATINCYRILLIC" />
+      <xs:enumeration value="CSISOLATINGREEK" />
+      <xs:enumeration value="CSISOLATINHEBREW" />
+      <xs:enumeration value="CSKOI8R" />
+      <xs:enumeration value="CSKSC5636" />
+      <xs:enumeration value="CSMACINTOSH" />
+      <xs:enumeration value="CSNATSDANO" />
+      <xs:enumeration value="CSNATSSEFI" />
+      <xs:enumeration value="CSN_369103" />
+      <xs:enumeration value="CSPC8CODEPAGE437" />
+      <xs:enumeration value="CSPC775BALTIC" />
+      <xs:enumeration value="CSPC850MULTILINGUAL" />
+      <xs:enumeration value="CSPC862LATINHEBREW" />
+      <xs:enumeration value="CSPCP852" />
+      <xs:enumeration value="CSSHIFTJIS" />
+      <xs:enumeration value="CSUCS4" />
+      <xs:enumeration value="CSUNICODE" />
+      <xs:enumeration value="CSWINDOWS31J" />
+      <xs:enumeration value="CUBA" />
+      <xs:enumeration value="CWI-2" />
+      <xs:enumeration value="CWI" />
+      <xs:enumeration value="CYRILLIC" />
+      <xs:enumeration value="DE" />
+      <xs:enumeration value="DEC-MCS" />
+      <xs:enumeration value="DEC" />
+      <xs:enumeration value="DECMCS" />
+      <xs:enumeration value="DIN_66003" />
+      <xs:enumeration value="DK" />
+      <xs:enumeration value="DS2089" />
+      <xs:enumeration value="DS_2089" />
+      <xs:enumeration value="E13B" />
+      <xs:enumeration value="EBCDIC-AT-DE-A" />
+      <xs:enumeration value="EBCDIC-AT-DE" />
+      <xs:enumeration value="EBCDIC-BE" />
+      <xs:enumeration value="EBCDIC-BR" />
+      <xs:enumeration value="EBCDIC-CA-FR" />
+      <xs:enumeration value="EBCDIC-CP-AR1" />
+      <xs:enumeration value="EBCDIC-CP-AR2" />
+      <xs:enumeration value="EBCDIC-CP-BE" />
+      <xs:enumeration value="EBCDIC-CP-CA" />
+      <xs:enumeration value="EBCDIC-CP-CH" />
+      <xs:enumeration value="EBCDIC-CP-DK" />
+      <xs:enumeration value="EBCDIC-CP-ES" />
+      <xs:enumeration value="EBCDIC-CP-FI" />
+      <xs:enumeration value="EBCDIC-CP-FR" />
+      <xs:enumeration value="EBCDIC-CP-GB" />
+      <xs:enumeration value="EBCDIC-CP-GR" />
+      <xs:enumeration value="EBCDIC-CP-HE" />
+      <xs:enumeration value="EBCDIC-CP-IS" />
+      <xs:enumeration value="EBCDIC-CP-IT" />
+      <xs:enumeration value="EBCDIC-CP-NL" />
+      <xs:enumeration value="EBCDIC-CP-NO" />
+      <xs:enumeration value="EBCDIC-CP-ROECE" />
+      <xs:enumeration value="EBCDIC-CP-SE" />
+      <xs:enumeration value="EBCDIC-CP-TR" />
+      <xs:enumeration value="EBCDIC-CP-US" />
+      <xs:enumeration value="EBCDIC-CP-WT" />
+      <xs:enumeration value="EBCDIC-CP-YU" />
+      <xs:enumeration value="EBCDIC-CYRILLIC" />
+      <xs:enumeration value="EBCDIC-DK-NO-A" />
+      <xs:enumeration value="EBCDIC-DK-NO" />
+      <xs:enumeration value="EBCDIC-ES-A" />
+      <xs:enumeration value="EBCDIC-ES-S" />
+      <xs:enumeration value="EBCDIC-ES" />
+      <xs:enumeration value="EBCDIC-FI-SE-A" />
+      <xs:enumeration value="EBCDIC-FI-SE" />
+      <xs:enumeration value="EBCDIC-FR" />
+      <xs:enumeration value="EBCDIC-GREEK" />
+      <xs:enumeration value="EBCDIC-INT" />
+      <xs:enumeration value="EBCDIC-INT1" />
+      <xs:enumeration value="EBCDIC-IS-FRISS" />
+      <xs:enumeration value="EBCDIC-IT" />
+      <xs:enumeration value="EBCDIC-JP-E" />
+      <xs:enumeration value="EBCDIC-JP-KANA" />
+      <xs:enumeration value="EBCDIC-PT" />
+      <xs:enumeration value="EBCDIC-UK" />
+      <xs:enumeration value="EBCDIC-US" />
+      <xs:enumeration value="EBCDICATDE" />
+      <xs:enumeration value="EBCDICATDEA" />
+      <xs:enumeration value="EBCDICCAFR" />
+      <xs:enumeration value="EBCDICDKNO" />
+      <xs:enumeration value="EBCDICDKNOA" />
+      <xs:enumeration value="EBCDICES" />
+      <xs:enumeration value="EBCDICESA" />
+      <xs:enumeration value="EBCDICESS" />
+      <xs:enumeration value="EBCDICFISE" />
+      <xs:enumeration value="EBCDICFISEA" />
+      <xs:enumeration value="EBCDICFR" />
+      <xs:enumeration value="EBCDICISFRISS" />
+      <xs:enumeration value="EBCDICIT" />
+      <xs:enumeration value="EBCDICPT" />
+      <xs:enumeration value="EBCDICUK" />
+      <xs:enumeration value="EBCDICUS" />
+      <xs:enumeration value="ECMA-114" />
+      <xs:enumeration value="ECMA-118" />
+      <xs:enumeration value="ECMA-128" />
+      <xs:enumeration value="ECMA-CYRILLIC" />
+      <xs:enumeration value="ECMACYRILLIC" />
+      <xs:enumeration value="ELOT_928" />
+      <xs:enumeration value="ES" />
+      <xs:enumeration value="ES2" />
+      <xs:enumeration value="EUC-CN" />
+      <xs:enumeration value="EUC-JISX0213" />
+      <xs:enumeration value="EUC-JP-MS" />
+      <xs:enumeration value="EUC-JP" />
+      <xs:enumeration value="EUC-KR" />
+      <xs:enumeration value="EUC-TW" />
+      <xs:enumeration value="EUCCN" />
+      <xs:enumeration value="EUCJP-MS" />
+      <xs:enumeration value="EUCJP-OPEN" />
+      <xs:enumeration value="EUCJP-WIN" />
+      <xs:enumeration value="EUCJP" />
+      <xs:enumeration value="EUCKR" />
+      <xs:enumeration value="EUCTW" />
+      <xs:enumeration value="FI" />
+      <xs:enumeration value="FR" />
+      <xs:enumeration value="GB" />
+      <xs:enumeration value="GB2312" />
+      <xs:enumeration value="GB13000" />
+      <xs:enumeration value="GB18030" />
+      <xs:enumeration value="GBK" />
+      <xs:enumeration value="GB_1988-80" />
+      <xs:enumeration value="GB_198880" />
+      <xs:enumeration value="GEORGIAN-ACADEMY" />
+      <xs:enumeration value="GEORGIAN-PS" />
+      <xs:enumeration value="GOST_19768-74" />
+      <xs:enumeration value="GOST_19768" />
+      <xs:enumeration value="GOST_1976874" />
+      <xs:enumeration value="GREEK-CCITT" />
+      <xs:enumeration value="GREEK" />
+      <xs:enumeration value="GREEK7-OLD" />
+      <xs:enumeration value="GREEK7" />
+      <xs:enumeration value="GREEK7OLD" />
+      <xs:enumeration value="GREEK8" />
+      <xs:enumeration value="GREEKCCITT" />
+      <xs:enumeration value="HEBREW" />
+      <xs:enumeration value="HP-GREEK8" />
+      <xs:enumeration value="HP-ROMAN8" />
+      <xs:enumeration value="HP-ROMAN9" />
+      <xs:enumeration value="HP-THAI8" />
+      <xs:enumeration value="HP-TURKISH8" />
+      <xs:enumeration value="HPGREEK8" />
+      <xs:enumeration value="HPROMAN8" />
+      <xs:enumeration value="HPROMAN9" />
+      <xs:enumeration value="HPTHAI8" />
+      <xs:enumeration value="HPTURKISH8" />
+      <xs:enumeration value="HU" />
+      <xs:enumeration value="IBM-803" />
+      <xs:enumeration value="IBM-856" />
+      <xs:enumeration value="IBM-901" />
+      <xs:enumeration value="IBM-902" />
+      <xs:enumeration value="IBM-921" />
+      <xs:enumeration value="IBM-922" />
+      <xs:enumeration value="IBM-930" />
+      <xs:enumeration value="IBM-932" />
+      <xs:enumeration value="IBM-933" />
+      <xs:enumeration value="IBM-935" />
+      <xs:enumeration value="IBM-937" />
+      <xs:enumeration value="IBM-939" />
+      <xs:enumeration value="IBM-943" />
+      <xs:enumeration value="IBM-1008" />
+      <xs:enumeration value="IBM-1025" />
+      <xs:enumeration value="IBM-1046" />
+      <xs:enumeration value="IBM-1047" />
+      <xs:enumeration value="IBM-1097" />
+      <xs:enumeration value="IBM-1112" />
+      <xs:enumeration value="IBM-1122" />
+      <xs:enumeration value="IBM-1123" />
+      <xs:enumeration value="IBM-1124" />
+      <xs:enumeration value="IBM-1129" />
+      <xs:enumeration value="IBM-1130" />
+      <xs:enumeration value="IBM-1132" />
+      <xs:enumeration value="IBM-1133" />
+      <xs:enumeration value="IBM-1137" />
+      <xs:enumeration value="IBM-1140" />
+      <xs:enumeration value="IBM-1141" />
+      <xs:enumeration value="IBM-1142" />
+      <xs:enumeration value="IBM-1143" />
+      <xs:enumeration value="IBM-1144" />
+      <xs:enumeration value="IBM-1145" />
+      <xs:enumeration value="IBM-1146" />
+      <xs:enumeration value="IBM-1147" />
+      <xs:enumeration value="IBM-1148" />
+      <xs:enumeration value="IBM-1149" />
+      <xs:enumeration value="IBM-1153" />
+      <xs:enumeration value="IBM-1154" />
+      <xs:enumeration value="IBM-1155" />
+      <xs:enumeration value="IBM-1156" />
+      <xs:enumeration value="IBM-1157" />
+      <xs:enumeration value="IBM-1158" />
+      <xs:enumeration value="IBM-1160" />
+      <xs:enumeration value="IBM-1161" />
+      <xs:enumeration value="IBM-1162" />
+      <xs:enumeration value="IBM-1163" />
+      <xs:enumeration value="IBM-1164" />
+      <xs:enumeration value="IBM-1166" />
+      <xs:enumeration value="IBM-1167" />
+      <xs:enumeration value="IBM-1364" />
+      <xs:enumeration value="IBM-1371" />
+      <xs:enumeration value="IBM-1388" />
+      <xs:enumeration value="IBM-1390" />
+      <xs:enumeration value="IBM-1399" />
+      <xs:enumeration value="IBM-4517" />
+      <xs:enumeration value="IBM-4899" />
+      <xs:enumeration value="IBM-4909" />
+      <xs:enumeration value="IBM-4971" />
+      <xs:enumeration value="IBM-5347" />
+      <xs:enumeration value="IBM-9030" />
+      <xs:enumeration value="IBM-9066" />
+      <xs:enumeration value="IBM-9448" />
+      <xs:enumeration value="IBM-12712" />
+      <xs:enumeration value="IBM-16804" />
+      <xs:enumeration value="IBM037" />
+      <xs:enumeration value="IBM038" />
+      <xs:enumeration value="IBM256" />
+      <xs:enumeration value="IBM273" />
+      <xs:enumeration value="IBM274" />
+      <xs:enumeration value="IBM275" />
+      <xs:enumeration value="IBM277" />
+      <xs:enumeration value="IBM278" />
+      <xs:enumeration value="IBM280" />
+      <xs:enumeration value="IBM281" />
+      <xs:enumeration value="IBM284" />
+      <xs:enumeration value="IBM285" />
+      <xs:enumeration value="IBM290" />
+      <xs:enumeration value="IBM297" />
+      <xs:enumeration value="IBM367" />
+      <xs:enumeration value="IBM420" />
+      <xs:enumeration value="IBM423" />
+      <xs:enumeration value="IBM424" />
+      <xs:enumeration value="IBM437" />
+      <xs:enumeration value="IBM500" />
+      <xs:enumeration value="IBM775" />
+      <xs:enumeration value="IBM803" />
+      <xs:enumeration value="IBM813" />
+      <xs:enumeration value="IBM819" />
+      <xs:enumeration value="IBM848" />
+      <xs:enumeration value="IBM850" />
+      <xs:enumeration value="IBM851" />
+      <xs:enumeration value="IBM852" />
+      <xs:enumeration value="IBM855" />
+      <xs:enumeration value="IBM856" />
+      <xs:enumeration value="IBM857" />
+      <xs:enumeration value="IBM860" />
+      <xs:enumeration value="IBM861" />
+      <xs:enumeration value="IBM862" />
+      <xs:enumeration value="IBM863" />
+      <xs:enumeration value="IBM864" />
+      <xs:enumeration value="IBM865" />
+      <xs:enumeration value="IBM866" />
+      <xs:enumeration value="IBM866NAV" />
+      <xs:enumeration value="IBM868" />
+      <xs:enumeration value="IBM869" />
+      <xs:enumeration value="IBM870" />
+      <xs:enumeration value="IBM871" />
+      <xs:enumeration value="IBM874" />
+      <xs:enumeration value="IBM875" />
+      <xs:enumeration value="IBM880" />
+      <xs:enumeration value="IBM891" />
+      <xs:enumeration value="IBM901" />
+      <xs:enumeration value="IBM902" />
+      <xs:enumeration value="IBM903" />
+      <xs:enumeration value="IBM904" />
+      <xs:enumeration value="IBM905" />
+      <xs:enumeration value="IBM912" />
+      <xs:enumeration value="IBM915" />
+      <xs:enumeration value="IBM916" />
+      <xs:enumeration value="IBM918" />
+      <xs:enumeration value="IBM920" />
+      <xs:enumeration value="IBM921" />
+      <xs:enumeration value="IBM922" />
+      <xs:enumeration value="IBM930" />
+      <xs:enumeration value="IBM932" />
+      <xs:enumeration value="IBM933" />
+      <xs:enumeration value="IBM935" />
+      <xs:enumeration value="IBM937" />
+      <xs:enumeration value="IBM939" />
+      <xs:enumeration value="IBM943" />
+      <xs:enumeration value="IBM1004" />
+      <xs:enumeration value="IBM1008" />
+      <xs:enumeration value="IBM1025" />
+      <xs:enumeration value="IBM1026" />
+      <xs:enumeration value="IBM1046" />
+      <xs:enumeration value="IBM1047" />
+      <xs:enumeration value="IBM1089" />
+      <xs:enumeration value="IBM1097" />
+      <xs:enumeration value="IBM1112" />
+      <xs:enumeration value="IBM1122" />
+      <xs:enumeration value="IBM1123" />
+      <xs:enumeration value="IBM1124" />
+      <xs:enumeration value="IBM1129" />
+      <xs:enumeration value="IBM1130" />
+      <xs:enumeration value="IBM1132" />
+      <xs:enumeration value="IBM1133" />
+      <xs:enumeration value="IBM1137" />
+      <xs:enumeration value="IBM1140" />
+      <xs:enumeration value="IBM1141" />
+      <xs:enumeration value="IBM1142" />
+      <xs:enumeration value="IBM1143" />
+      <xs:enumeration value="IBM1144" />
+      <xs:enumeration value="IBM1145" />
+      <xs:enumeration value="IBM1146" />
+      <xs:enumeration value="IBM1147" />
+      <xs:enumeration value="IBM1148" />
+      <xs:enumeration value="IBM1149" />
+      <xs:enumeration value="IBM1153" />
+      <xs:enumeration value="IBM1154" />
+      <xs:enumeration value="IBM1155" />
+      <xs:enumeration value="IBM1156" />
+      <xs:enumeration value="IBM1157" />
+      <xs:enumeration value="IBM1158" />
+      <xs:enumeration value="IBM1160" />
+      <xs:enumeration value="IBM1161" />
+      <xs:enumeration value="IBM1162" />
+      <xs:enumeration value="IBM1163" />
+      <xs:enumeration value="IBM1164" />
+      <xs:enumeration value="IBM1166" />
+      <xs:enumeration value="IBM1167" />
+      <xs:enumeration value="IBM1364" />
+      <xs:enumeration value="IBM1371" />
+      <xs:enumeration value="IBM1388" />
+      <xs:enumeration value="IBM1390" />
+      <xs:enumeration value="IBM1399" />
+      <xs:enumeration value="IBM4517" />
+      <xs:enumeration value="IBM4899" />
+      <xs:enumeration value="IBM4909" />
+      <xs:enumeration value="IBM4971" />
+      <xs:enumeration value="IBM5347" />
+      <xs:enumeration value="IBM9030" />
+      <xs:enumeration value="IBM9066" />
+      <xs:enumeration value="IBM9448" />
+      <xs:enumeration value="IBM12712" />
+      <xs:enumeration value="IBM16804" />
+      <xs:enumeration value="IEC_P27-1" />
+      <xs:enumeration value="IEC_P271" />
+      <xs:enumeration value="INIS-8" />
+      <xs:enumeration value="INIS-CYRILLIC" />
+      <xs:enumeration value="INIS" />
+      <xs:enumeration value="INIS8" />
+      <xs:enumeration value="INISCYRILLIC" />
+      <xs:enumeration value="ISIRI-3342" />
+      <xs:enumeration value="ISIRI3342" />
+      <xs:enumeration value="ISO-2022-CN-EXT" />
+      <xs:enumeration value="ISO-2022-CN" />
+      <xs:enumeration value="ISO-2022-JP-2" />
+      <xs:enumeration value="ISO-2022-JP-3" />
+      <xs:enumeration value="ISO-2022-JP" />
+      <xs:enumeration value="ISO-2022-KR" />
+      <xs:enumeration value="ISO-8859-1" />
+      <xs:enumeration value="ISO-8859-2" />
+      <xs:enumeration value="ISO-8859-3" />
+      <xs:enumeration value="ISO-8859-4" />
+      <xs:enumeration value="ISO-8859-5" />
+      <xs:enumeration value="ISO-8859-6" />
+      <xs:enumeration value="ISO-8859-7" />
+      <xs:enumeration value="ISO-8859-8" />
+      <xs:enumeration value="ISO-8859-9" />
+      <xs:enumeration value="ISO-8859-9E" />
+      <xs:enumeration value="ISO-8859-10" />
+      <xs:enumeration value="ISO-8859-11" />
+      <xs:enumeration value="ISO-8859-13" />
+      <xs:enumeration value="ISO-8859-14" />
+      <xs:enumeration value="ISO-8859-15" />
+      <xs:enumeration value="ISO-8859-16" />
+      <xs:enumeration value="ISO-10646" />
+      <xs:enumeration value="ISO-10646/UCS2/" />
+      <xs:enumeration value="ISO-10646/UCS4/" />
+      <xs:enumeration value="ISO-10646/UTF-8/" />
+      <xs:enumeration value="ISO-10646/UTF8/" />
+      <xs:enumeration value="ISO-CELTIC" />
+      <xs:enumeration value="ISO-IR-4" />
+      <xs:enumeration value="ISO-IR-6" />
+      <xs:enumeration value="ISO-IR-8-1" />
+      <xs:enumeration value="ISO-IR-9-1" />
+      <xs:enumeration value="ISO-IR-10" />
+      <xs:enumeration value="ISO-IR-11" />
+      <xs:enumeration value="ISO-IR-14" />
+      <xs:enumeration value="ISO-IR-15" />
+      <xs:enumeration value="ISO-IR-16" />
+      <xs:enumeration value="ISO-IR-17" />
+      <xs:enumeration value="ISO-IR-18" />
+      <xs:enumeration value="ISO-IR-19" />
+      <xs:enumeration value="ISO-IR-21" />
+      <xs:enumeration value="ISO-IR-25" />
+      <xs:enumeration value="ISO-IR-27" />
+      <xs:enumeration value="ISO-IR-37" />
+      <xs:enumeration value="ISO-IR-49" />
+      <xs:enumeration value="ISO-IR-50" />
+      <xs:enumeration value="ISO-IR-51" />
+      <xs:enumeration value="ISO-IR-54" />
+      <xs:enumeration value="ISO-IR-55" />
+      <xs:enumeration value="ISO-IR-57" />
+      <xs:enumeration value="ISO-IR-60" />
+      <xs:enumeration value="ISO-IR-61" />
+      <xs:enumeration value="ISO-IR-69" />
+      <xs:enumeration value="ISO-IR-84" />
+      <xs:enumeration value="ISO-IR-85" />
+      <xs:enumeration value="ISO-IR-86" />
+      <xs:enumeration value="ISO-IR-88" />
+      <xs:enumeration value="ISO-IR-89" />
+      <xs:enumeration value="ISO-IR-90" />
+      <xs:enumeration value="ISO-IR-92" />
+      <xs:enumeration value="ISO-IR-98" />
+      <xs:enumeration value="ISO-IR-99" />
+      <xs:enumeration value="ISO-IR-100" />
+      <xs:enumeration value="ISO-IR-101" />
+      <xs:enumeration value="ISO-IR-103" />
+      <xs:enumeration value="ISO-IR-109" />
+      <xs:enumeration value="ISO-IR-110" />
+      <xs:enumeration value="ISO-IR-111" />
+      <xs:enumeration value="ISO-IR-121" />
+      <xs:enumeration value="ISO-IR-122" />
+      <xs:enumeration value="ISO-IR-126" />
+      <xs:enumeration value="ISO-IR-127" />
+      <xs:enumeration value="ISO-IR-138" />
+      <xs:enumeration value="ISO-IR-139" />
+      <xs:enumeration value="ISO-IR-141" />
+      <xs:enumeration value="ISO-IR-143" />
+      <xs:enumeration value="ISO-IR-144" />
+      <xs:enumeration value="ISO-IR-148" />
+      <xs:enumeration value="ISO-IR-150" />
+      <xs:enumeration value="ISO-IR-151" />
+      <xs:enumeration value="ISO-IR-153" />
+      <xs:enumeration value="ISO-IR-155" />
+      <xs:enumeration value="ISO-IR-156" />
+      <xs:enumeration value="ISO-IR-157" />
+      <xs:enumeration value="ISO-IR-166" />
+      <xs:enumeration value="ISO-IR-179" />
+      <xs:enumeration value="ISO-IR-193" />
+      <xs:enumeration value="ISO-IR-197" />
+      <xs:enumeration value="ISO-IR-199" />
+      <xs:enumeration value="ISO-IR-203" />
+      <xs:enumeration value="ISO-IR-209" />
+      <xs:enumeration value="ISO-IR-226" />
+      <xs:enumeration value="ISO/TR_11548-1/" />
+      <xs:enumeration value="ISO646-CA" />
+      <xs:enumeration value="ISO646-CA2" />
+      <xs:enumeration value="ISO646-CN" />
+      <xs:enumeration value="ISO646-CU" />
+      <xs:enumeration value="ISO646-DE" />
+      <xs:enumeration value="ISO646-DK" />
+      <xs:enumeration value="ISO646-ES" />
+      <xs:enumeration value="ISO646-ES2" />
+      <xs:enumeration value="ISO646-FI" />
+      <xs:enumeration value="ISO646-FR" />
+      <xs:enumeration value="ISO646-FR1" />
+      <xs:enumeration value="ISO646-GB" />
+      <xs:enumeration value="ISO646-HU" />
+      <xs:enumeration value="ISO646-IT" />
+      <xs:enumeration value="ISO646-JP-OCR-B" />
+      <xs:enumeration value="ISO646-JP" />
+      <xs:enumeration value="ISO646-KR" />
+      <xs:enumeration value="ISO646-NO" />
+      <xs:enumeration value="ISO646-NO2" />
+      <xs:enumeration value="ISO646-PT" />
+      <xs:enumeration value="ISO646-PT2" />
+      <xs:enumeration value="ISO646-SE" />
+      <xs:enumeration value="ISO646-SE2" />
+      <xs:enumeration value="ISO646-US" />
+      <xs:enumeration value="ISO646-YU" />
+      <xs:enumeration value="ISO2022CN" />
+      <xs:enumeration value="ISO2022CNEXT" />
+      <xs:enumeration value="ISO2022JP" />
+      <xs:enumeration value="ISO2022JP2" />
+      <xs:enumeration value="ISO2022KR" />
+      <xs:enumeration value="ISO6937" />
+      <xs:enumeration value="ISO8859-1" />
+      <xs:enumeration value="ISO8859-2" />
+      <xs:enumeration value="ISO8859-3" />
+      <xs:enumeration value="ISO8859-4" />
+      <xs:enumeration value="ISO8859-5" />
+      <xs:enumeration value="ISO8859-6" />
+      <xs:enumeration value="ISO8859-7" />
+      <xs:enumeration value="ISO8859-8" />
+      <xs:enumeration value="ISO8859-9" />
+      <xs:enumeration value="ISO8859-9E" />
+      <xs:enumeration value="ISO8859-10" />
+      <xs:enumeration value="ISO8859-11" />
+      <xs:enumeration value="ISO8859-13" />
+      <xs:enumeration value="ISO8859-14" />
+      <xs:enumeration value="ISO8859-15" />
+      <xs:enumeration value="ISO8859-16" />
+      <xs:enumeration value="ISO11548-1" />
+      <xs:enumeration value="ISO88591" />
+      <xs:enumeration value="ISO88592" />
+      <xs:enumeration value="ISO88593" />
+      <xs:enumeration value="ISO88594" />
+      <xs:enumeration value="ISO88595" />
+      <xs:enumeration value="ISO88596" />
+      <xs:enumeration value="ISO88597" />
+      <xs:enumeration value="ISO88598" />
+      <xs:enumeration value="ISO88599" />
+      <xs:enumeration value="ISO88599E" />
+      <xs:enumeration value="ISO885910" />
+      <xs:enumeration value="ISO885911" />
+      <xs:enumeration value="ISO885913" />
+      <xs:enumeration value="ISO885914" />
+      <xs:enumeration value="ISO885915" />
+      <xs:enumeration value="ISO885916" />
+      <xs:enumeration value="ISO_646.IRV:1991" />
+      <xs:enumeration value="ISO_2033-1983" />
+      <xs:enumeration value="ISO_2033" />
+      <xs:enumeration value="ISO_5427-EXT" />
+      <xs:enumeration value="ISO_5427" />
+      <xs:enumeration value="ISO_5427:1981" />
+      <xs:enumeration value="ISO_5427EXT" />
+      <xs:enumeration value="ISO_5428" />
+      <xs:enumeration value="ISO_5428:1980" />
+      <xs:enumeration value="ISO_6937-2" />
+      <xs:enumeration value="ISO_6937-2:1983" />
+      <xs:enumeration value="ISO_6937" />
+      <xs:enumeration value="ISO_6937:1992" />
+      <xs:enumeration value="ISO_8859-1" />
+      <xs:enumeration value="ISO_8859-1:1987" />
+      <xs:enumeration value="ISO_8859-2" />
+      <xs:enumeration value="ISO_8859-2:1987" />
+      <xs:enumeration value="ISO_8859-3" />
+      <xs:enumeration value="ISO_8859-3:1988" />
+      <xs:enumeration value="ISO_8859-4" />
+      <xs:enumeration value="ISO_8859-4:1988" />
+      <xs:enumeration value="ISO_8859-5" />
+      <xs:enumeration value="ISO_8859-5:1988" />
+      <xs:enumeration value="ISO_8859-6" />
+      <xs:enumeration value="ISO_8859-6:1987" />
+      <xs:enumeration value="ISO_8859-7" />
+      <xs:enumeration value="ISO_8859-7:1987" />
+      <xs:enumeration value="ISO_8859-7:2003" />
+      <xs:enumeration value="ISO_8859-8" />
+      <xs:enumeration value="ISO_8859-8:1988" />
+      <xs:enumeration value="ISO_8859-9" />
+      <xs:enumeration value="ISO_8859-9:1989" />
+      <xs:enumeration value="ISO_8859-9E" />
+      <xs:enumeration value="ISO_8859-10" />
+      <xs:enumeration value="ISO_8859-10:1992" />
+      <xs:enumeration value="ISO_8859-14" />
+      <xs:enumeration value="ISO_8859-14:1998" />
+      <xs:enumeration value="ISO_8859-15" />
+      <xs:enumeration value="ISO_8859-15:1998" />
+      <xs:enumeration value="ISO_8859-16" />
+      <xs:enumeration value="ISO_8859-16:2001" />
+      <xs:enumeration value="ISO_9036" />
+      <xs:enumeration value="ISO_10367-BOX" />
+      <xs:enumeration value="ISO_10367BOX" />
+      <xs:enumeration value="ISO_11548-1" />
+      <xs:enumeration value="ISO_69372" />
+      <xs:enumeration value="IT" />
+      <xs:enumeration value="JIS_C6220-1969-RO" />
+      <xs:enumeration value="JIS_C6229-1984-B" />
+      <xs:enumeration value="JIS_C62201969RO" />
+      <xs:enumeration value="JIS_C62291984B" />
+      <xs:enumeration value="JOHAB" />
+      <xs:enumeration value="JP-OCR-B" />
+      <xs:enumeration value="JP" />
+      <xs:enumeration value="JS" />
+      <xs:enumeration value="JUS_I.B1.002" />
+      <xs:enumeration value="KOI-7" />
+      <xs:enumeration value="KOI-8" />
+      <xs:enumeration value="KOI8-R" />
+      <xs:enumeration value="KOI8-RU" />
+      <xs:enumeration value="KOI8-T" />
+      <xs:enumeration value="KOI8-U" />
+      <xs:enumeration value="KOI8" />
+      <xs:enumeration value="KOI8R" />
+      <xs:enumeration value="KOI8U" />
+      <xs:enumeration value="KSC5636" />
+      <xs:enumeration value="L1" />
+      <xs:enumeration value="L2" />
+      <xs:enumeration value="L3" />
+      <xs:enumeration value="L4" />
+      <xs:enumeration value="L5" />
+      <xs:enumeration value="L6" />
+      <xs:enumeration value="L7" />
+      <xs:enumeration value="L8" />
+      <xs:enumeration value="L10" />
+      <xs:enumeration value="LATIN-9" />
+      <xs:enumeration value="LATIN-GREEK-1" />
+      <xs:enumeration value="LATIN-GREEK" />
+      <xs:enumeration value="LATIN1" />
+      <xs:enumeration value="LATIN2" />
+      <xs:enumeration value="LATIN3" />
+      <xs:enumeration value="LATIN4" />
+      <xs:enumeration value="LATIN5" />
+      <xs:enumeration value="LATIN6" />
+      <xs:enumeration value="LATIN7" />
+      <xs:enumeration value="LATIN8" />
+      <xs:enumeration value="LATIN9" />
+      <xs:enumeration value="LATIN10" />
+      <xs:enumeration value="LATINGREEK" />
+      <xs:enumeration value="LATINGREEK1" />
+      <xs:enumeration value="MAC-CENTRALEUROPE" />
+      <xs:enumeration value="MAC-CYRILLIC" />
+      <xs:enumeration value="MAC-IS" />
+      <xs:enumeration value="MAC-SAMI" />
+      <xs:enumeration value="MAC-UK" />
+      <xs:enumeration value="MAC" />
+      <xs:enumeration value="MACCYRILLIC" />
+      <xs:enumeration value="MACINTOSH" />
+      <xs:enumeration value="MACIS" />
+      <xs:enumeration value="MACUK" />
+      <xs:enumeration value="MACUKRAINIAN" />
+      <xs:enumeration value="MIK" />
+      <xs:enumeration value="MS-ANSI" />
+      <xs:enumeration value="MS-ARAB" />
+      <xs:enumeration value="MS-CYRL" />
+      <xs:enumeration value="MS-EE" />
+      <xs:enumeration value="MS-GREEK" />
+      <xs:enumeration value="MS-HEBR" />
+      <xs:enumeration value="MS-MAC-CYRILLIC" />
+      <xs:enumeration value="MS-TURK" />
+      <xs:enumeration value="MS932" />
+      <xs:enumeration value="MS936" />
+      <xs:enumeration value="MSCP949" />
+      <xs:enumeration value="MSCP1361" />
+      <xs:enumeration value="MSMACCYRILLIC" />
+      <xs:enumeration value="MSZ_7795.3" />
+      <xs:enumeration value="MS_KANJI" />
+      <xs:enumeration value="NAPLPS" />
+      <xs:enumeration value="NATS-DANO" />
+      <xs:enumeration value="NATS-SEFI" />
+      <xs:enumeration value="NATSDANO" />
+      <xs:enumeration value="NATSSEFI" />
+      <xs:enumeration value="NC_NC0010" />
+      <xs:enumeration value="NC_NC00-10" />
+      <xs:enumeration value="NC_NC00-10:81" />
+      <xs:enumeration value="NF_Z_62-010" />
+      <xs:enumeration value="NF_Z_62-010_(1973)" />
+      <xs:enumeration value="NF_Z_62-010_1973" />
+      <xs:enumeration value="NF_Z_62010" />
+      <xs:enumeration value="NF_Z_62010_1973" />
+      <xs:enumeration value="NO" />
+      <xs:enumeration value="NO2" />
+      <xs:enumeration value="NS_4551-1" />
+      <xs:enumeration value="NS_4551-2" />
+      <xs:enumeration value="NS_45511" />
+      <xs:enumeration value="NS_45512" />
+      <xs:enumeration value="OS2LATIN1" />
+      <xs:enumeration value="OSF00010001" />
+      <xs:enumeration value="OSF00010002" />
+      <xs:enumeration value="OSF00010003" />
+      <xs:enumeration value="OSF00010004" />
+      <xs:enumeration value="OSF00010005" />
+      <xs:enumeration value="OSF00010006" />
+      <xs:enumeration value="OSF00010007" />
+      <xs:enumeration value="OSF00010008" />
+      <xs:enumeration value="OSF00010009" />
+      <xs:enumeration value="OSF0001000A" />
+      <xs:enumeration value="OSF00010020" />
+      <xs:enumeration value="OSF00010100" />
+      <xs:enumeration value="OSF00010101" />
+      <xs:enumeration value="OSF00010102" />
+      <xs:enumeration value="OSF00010104" />
+      <xs:enumeration value="OSF00010105" />
+      <xs:enumeration value="OSF00010106" />
+      <xs:enumeration value="OSF00030010" />
+      <xs:enumeration value="OSF0004000A" />
+      <xs:enumeration value="OSF0005000A" />
+      <xs:enumeration value="OSF05010001" />
+      <xs:enumeration value="OSF100201A4" />
+      <xs:enumeration value="OSF100201A8" />
+      <xs:enumeration value="OSF100201B5" />
+      <xs:enumeration value="OSF100201F4" />
+      <xs:enumeration value="OSF100203B5" />
+      <xs:enumeration value="OSF1002011C" />
+      <xs:enumeration value="OSF1002011D" />
+      <xs:enumeration value="OSF1002035D" />
+      <xs:enumeration value="OSF1002035E" />
+      <xs:enumeration value="OSF1002035F" />
+      <xs:enumeration value="OSF1002036B" />
+      <xs:enumeration value="OSF1002037B" />
+      <xs:enumeration value="OSF10010001" />
+      <xs:enumeration value="OSF10010004" />
+      <xs:enumeration value="OSF10010006" />
+      <xs:enumeration value="OSF10020025" />
+      <xs:enumeration value="OSF10020111" />
+      <xs:enumeration value="OSF10020115" />
+      <xs:enumeration value="OSF10020116" />
+      <xs:enumeration value="OSF10020118" />
+      <xs:enumeration value="OSF10020122" />
+      <xs:enumeration value="OSF10020129" />
+      <xs:enumeration value="OSF10020352" />
+      <xs:enumeration value="OSF10020354" />
+      <xs:enumeration value="OSF10020357" />
+      <xs:enumeration value="OSF10020359" />
+      <xs:enumeration value="OSF10020360" />
+      <xs:enumeration value="OSF10020364" />
+      <xs:enumeration value="OSF10020365" />
+      <xs:enumeration value="OSF10020366" />
+      <xs:enumeration value="OSF10020367" />
+      <xs:enumeration value="OSF10020370" />
+      <xs:enumeration value="OSF10020387" />
+      <xs:enumeration value="OSF10020388" />
+      <xs:enumeration value="OSF10020396" />
+      <xs:enumeration value="OSF10020402" />
+      <xs:enumeration value="OSF10020417" />
+      <xs:enumeration value="PT" />
+      <xs:enumeration value="PT2" />
+      <xs:enumeration value="PT154" />
+      <xs:enumeration value="R8" />
+      <xs:enumeration value="R9" />
+      <xs:enumeration value="RK1048" />
+      <xs:enumeration value="ROMAN8" />
+      <xs:enumeration value="ROMAN9" />
+      <xs:enumeration value="RUSCII" />
+      <xs:enumeration value="SE" />
+      <xs:enumeration value="SE2" />
+      <xs:enumeration value="SEN_850200_B" />
+      <xs:enumeration value="SEN_850200_C" />
+      <xs:enumeration value="SHIFT-JIS" />
+      <xs:enumeration value="SHIFT_JIS" />
+      <xs:enumeration value="SHIFT_JISX0213" />
+      <xs:enumeration value="SJIS-OPEN" />
+      <xs:enumeration value="SJIS-WIN" />
+      <xs:enumeration value="SJIS" />
+      <xs:enumeration value="SS636127" />
+      <xs:enumeration value="STRK1048-2002" />
+      <xs:enumeration value="ST_SEV_358-88" />
+      <xs:enumeration value="T.61-8BIT" />
+      <xs:enumeration value="T.61" />
+      <xs:enumeration value="T.618BIT" />
+      <xs:enumeration value="TCVN-5712" />
+      <xs:enumeration value="TCVN" />
+      <xs:enumeration value="TCVN5712-1" />
+      <xs:enumeration value="TCVN5712-1:1993" />
+      <xs:enumeration value="THAI8" />
+      <xs:enumeration value="TIS-620" />
+      <xs:enumeration value="TIS620-0" />
+      <xs:enumeration value="TIS620.2529-1" />
+      <xs:enumeration value="TIS620.2533-0" />
+      <xs:enumeration value="TIS620" />
+      <xs:enumeration value="TS-5881" />
+      <xs:enumeration value="TSCII" />
+      <xs:enumeration value="TURKISH8" />
+      <xs:enumeration value="UCS-2" />
+      <xs:enumeration value="UCS-2BE" />
+      <xs:enumeration value="UCS-2LE" />
+      <xs:enumeration value="UCS-4" />
+      <xs:enumeration value="UCS-4BE" />
+      <xs:enumeration value="UCS-4LE" />
+      <xs:enumeration value="UCS2" />
+      <xs:enumeration value="UCS4" />
+      <xs:enumeration value="UHC" />
+      <xs:enumeration value="UJIS" />
+      <xs:enumeration value="UK" />
+      <xs:enumeration value="UNICODE" />
+      <xs:enumeration value="UNICODEBIG" />
+      <xs:enumeration value="UNICODELITTLE" />
+      <xs:enumeration value="US-ASCII" />
+      <xs:enumeration value="US" />
+      <xs:enumeration value="UTF-7" />
+      <xs:enumeration value="UTF-8" />
+      <xs:enumeration value="UTF-16" />
+      <xs:enumeration value="UTF-16BE" />
+      <xs:enumeration value="UTF-16LE" />
+      <xs:enumeration value="UTF-32" />
+      <xs:enumeration value="UTF-32BE" />
+      <xs:enumeration value="UTF-32LE" />
+      <xs:enumeration value="UTF7" />
+      <xs:enumeration value="UTF8" />
+      <xs:enumeration value="UTF16" />
+      <xs:enumeration value="UTF16BE" />
+      <xs:enumeration value="UTF16LE" />
+      <xs:enumeration value="UTF32" />
+      <xs:enumeration value="UTF32BE" />
+      <xs:enumeration value="UTF32LE" />
+      <xs:enumeration value="VISCII" />
+      <xs:enumeration value="WCHAR_T" />
+      <xs:enumeration value="WIN-SAMI-2" />
+      <xs:enumeration value="WINBALTRIM" />
+      <xs:enumeration value="WINDOWS-31J" />
+      <xs:enumeration value="WINDOWS-874" />
+      <xs:enumeration value="WINDOWS-936" />
+      <xs:enumeration value="WINDOWS-1250" />
+      <xs:enumeration value="WINDOWS-1251" />
+      <xs:enumeration value="WINDOWS-1252" />
+      <xs:enumeration value="WINDOWS-1253" />
+      <xs:enumeration value="WINDOWS-1254" />
+      <xs:enumeration value="WINDOWS-1255" />
+      <xs:enumeration value="WINDOWS-1256" />
+      <xs:enumeration value="WINDOWS-1257" />
+      <xs:enumeration value="WINDOWS-1258" />
+      <xs:enumeration value="WINSAMI2" />
+      <xs:enumeration value="WS2" />
+      <xs:enumeration value="YU" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ProtocolType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[Cc][Ii][Ff][Ss]" />
+      <xs:pattern value="[Ff][Tt][Pp]" />
+      <xs:pattern value="[Ss][Ff][Tt][Pp]" />
+      <!--<xs:enumeration value="cifs" />-->
+      <!--<xs:enumeration value="ftp" />-->
+      <!--<xs:enumeration value="sftp" />-->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CryptMethodType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[Pp][Gg][Pp]" />
+      <xs:pattern value="[Gg][Pp][Gg]" />
+      <xs:pattern value="[Bb][Ff]" />
+      <xs:pattern value="[Dd][Ee][Ss]-[Bb][Ll][Bb]" />
+      <xs:pattern value="[Dd][Ee][Ss][3]" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CompressionRange">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1" />
+      <xs:maxInclusive value="9" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="CollectionTransferRequestMessageType">
+    <xs:sequence>
+
+      <xs:element name="Source">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Protocol" type="ProtocolType" minOccurs="1" />
+            <xs:element name="Address" type="xs:string" minOccurs="1" />
+            <xs:element name="Port" type="xs:int" minOccurs="1" />
+            <xs:element name="Login" type="xs:string" minOccurs="1" />
+            <xs:element name="Password" type="xs:string" minOccurs="0" />
+            <xs:element name="Path" type="xs:string" minOccurs="1" />
+            <xs:element name="Files" minOccurs="1" maxOccurs="1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="File" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="PassiveMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="PreSite" type="xs:string" minOccurs="0" />
+            <xs:element name="PostSite" type="xs:string" minOccurs="0" />
+            <xs:element name="BinaryMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="TextMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="Target">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Protocol" type="ProtocolType" minOccurs="1" />
+            <xs:element name="Address" type="xs:string" minOccurs="1" />
+            <xs:element name="Port" type="xs:int" minOccurs="1" />
+            <xs:element name="Login" type="xs:string" minOccurs="1" />
+            <xs:element name="Password" type="xs:string" minOccurs="0" />
+            <xs:element name="Path" type="xs:string" minOccurs="1" />
+            <xs:element name="PassiveMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="PreSite" type="xs:string" minOccurs="0" />
+            <xs:element name="PostSite" type="xs:string" minOccurs="0" />
+            <xs:element name="BinaryMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="TextMode" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="Options">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Archive" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="AVScanning" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Compression" type="CompressionRange" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Decompression" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="RemoveSourceFile" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="MD5" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="FilenameSuffix" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="DirectUpload" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+
+            <xs:element name="Encryption" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Method" type="CryptMethodType" minOccurs="0" maxOccurs="1" />
+                  <xs:element name="KeyID" type="xs:string" minOccurs="0" maxOccurs="1" />
+                  <xs:element name="Recipient" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+
+            <xs:element name="Decryption" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Method" type="CryptMethodType" minOccurs="0" maxOccurs="1" />
+                  <xs:element name="KeyID" type="xs:string" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+
+            <!--<xs:element name="Decryption" type="xs:boolean" minOccurs="0" maxOccurs="1" />-->
+            <xs:element name="Signing" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="SignVerification" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+
+
+
+            <xs:element name="Encoding" minOccurs="0" maxOccurs="1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="From" type="EncodingType" minOccurs="1" maxOccurs="unbounded" />
+                  <xs:element name="To" type="EncodingType" minOccurs="1" maxOccurs="unbounded" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CollectionTransferResponseMessageType">
+    <xs:sequence>
+      <xs:element name="TransferID" type="xs:string" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CollectionStatusRequestMessageType">
+    <xs:sequence>
+      <xs:element name="TransferID" type="xs:string" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CollectionStatusResponseMessageType">
+    <xs:sequence>
+      <xs:element name="TransferID" type="xs:string" minOccurs="1" />
+      <xs:element name="TransferStatus" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Time" type="xs:dateTime"  minOccurs="1" maxOccurs="1" />
+            <xs:element name="StatusID" type="xs:integer"  minOccurs="1" maxOccurs="1" />
+            <xs:element name="StatusDescription" type="xs:string"  minOccurs="1" maxOccurs="1" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Files" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="File" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Name" type="xs:string"  minOccurs="1" maxOccurs="1" />
+                  <xs:element name="Time" type="xs:dateTime"  minOccurs="1" maxOccurs="1" />
+                  <xs:element name="StatusID" type="xs:integer"  minOccurs="1" maxOccurs="1" />
+                  <xs:element name="StatusType" type="xs:string"  minOccurs="1" maxOccurs="1" />
+                  <xs:element name="StatusDescription" type="xs:string" minOccurs="1" maxOccurs="1" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ListRequestMessageType">
+    <xs:sequence>
+      <xs:element name="Protocol" type="ProtocolType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Address" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Port" type="xs:int" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Login" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Password" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Path" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FileType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"  minOccurs="1" maxOccurs="1" />
+      <xs:element name="Size" type="xs:long"  minOccurs="1" maxOccurs="1" />
+      <xs:element name="ModificationTime" type="xs:dateTime"  minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ListResponseMessageType">
+    <xs:sequence>
+      <xs:element name="List" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="File" type="FileType" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ServiceStatusRequestMessageType"/>
+
+  <xs:complexType name="ServiceStatusResponseMessageType">
+    <xs:sequence>
+      <xs:element name="LastTransferTime" type="xs:dateTime"  minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LogRequestMessageType">
+    <xs:sequence>
+      <xs:element name="TransferID" type="xs:string" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LogResponseMessageType">
+    <xs:sequence>
+      <xs:element name="TransferID" type="xs:string" minOccurs="1" />
+      <xs:element name="TransferLog" type="xs:string"  minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="CollectionTransferRequest" type="CollectionTransferRequestMessageType"/>
+  <xs:element name="CollectionTransferResponse" type="CollectionTransferResponseMessageType"/>
+  <xs:element name="CollectionStatusRequest" type="CollectionStatusRequestMessageType"/>
+  <xs:element name="CollectionStatusResponse" type="CollectionStatusResponseMessageType"/>
+  <xs:element name="LogRequest" type="LogRequestMessageType"/>
+  <xs:element name="LogResponse" type="LogResponseMessageType"/>
+  <xs:element name="ListRequest" type="ListRequestMessageType"/>
+  <xs:element name="ListResponse" type="ListResponseMessageType"/>
+  <xs:element name="ServiceStatusRequest" type="ServiceStatusRequestMessageType"/>
+  <xs:element name="ServiceStatusResponse" type="ServiceStatusResponseMessageType"/>
+</xs:schema>

@@ -1,0 +1,59 @@
+[% IF NOT results.size %]
+<div class="span2 alert alert-info">The job queue is empty.</div>
+[% ELSE %]
+<table class="table table-bordered table-condensed table-hover nd_floatinghead">
+  <thead>
+    <tr>
+      <th class="nd_center-cell">Entered</th>
+      <th class="nd_center-cell">Action</th>
+      <th class="nd_center-cell">Status</th>
+      <th class="nd_center-cell">Device</th>
+      <th class="nd_center-cell">Port</th>
+      <th class="nd_center-cell">Param</th>
+      <th class="nd_center-cell">User</th>
+      <th class="nd_center-cell">Started</th>
+      <th class="nd_center-cell">Finished</th>
+      <th class="nd_center-cell">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% FOREACH row IN results %]
+    <tr
+      [% ' class="nd_jobqueueitem success"' IF row.status == 'done' %]
+      [% ' class="nd_jobqueueitem error"'   IF row.status == 'error' %]
+      [% ' class="nd_jobqueueitem info"'    IF row.status.search('^queued-') %]
+      data-content="<pre>[% row.log | html_entity %]</pre>"
+    >
+      <td class="nd_center-cell">[% row.entered_stamp | html_entity %]</td>
+      <td class="nd_center-cell">
+        [% FOREACH word IN row.action.split('_') %]
+        [% word.ucfirst | html_entity %]&nbsp;
+        [% END %]
+      </td>
+      [% IF row.status.search('^queued-') %]
+      <td class="nd_center-cell">Running on &quot;[% row.status.remove('^queued-') | html_entity %]&quot;</td>
+      [% ELSE %]
+      <td class="nd_center-cell">[% row.status.ucfirst | html_entity %]</td>
+      [% END %]
+      <td class="nd_center-cell">
+        [% IF row.action == 'discover' AND row.status == 'error' %]
+        <a href="[% uri_for('/') %]?device=[% row.device | uri %]">[% row.device | html_entity %]</a>
+        [% ELSE %]
+        <a href="[% uri_for('/device') %]?q=[% row.device | uri %]">[% row.target.dns || row.device | html_entity %]</a>
+        [% END %]
+      </td>
+      <td class="nd_center-cell">[% row.port | html_entity %]</td>
+      <td class="nd_center-cell">[% row.subaction | html_entity %]</td>
+      <td class="nd_center-cell">[% row.username | html_entity %]</td>
+      <td class="nd_center-cell">[% row.started_stamp | html_entity %]</td>
+      <td class="nd_center-cell">[% row.finished_stamp | html_entity %]</td>
+      <td class="nd_center-cell">
+        <input data-form="del" name="job" type="hidden" value="[% row.job | html_entity %]">
+        <button class="btn nd_adminbutton" name="del" type="submit"><i class="icon-trash text-error"></i></button>
+      </td>
+    </tr>
+    [% END %]
+  </tbody>
+</table>
+[% END %]
+

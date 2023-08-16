@@ -1,0 +1,257 @@
+# --
+# Kernel/Modules/CustomerPreferences.pm - provides agent preferences
+# Copyright (C) 2001-2013 OTRS AG, http://otrs.com/
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+package Kernel::Modules::CustomerPreferences;
+
+use strict;
+use warnings;
+
+sub new {
+    my ( $Type, %Param ) = @_;
+
+    # allocate new hash for object
+    my $Self = {%Param};
+    bless( $Self, $Type );
+
+    # check all needed objects
+    for (
+        qw(ParamObject DBObject QueueObject LayoutObject ConfigObject LogObject SessionObject UserObject)
+        )
+    {
+        if ( !$Self->{$_} ) {
+            $Self->{LayoutObject}->FatalError( Message => "Got no $_!" );
+        }
+    }
+
+    # get params
+    $Self->{Want} = $Self->{ParamObject}->GetParam( Param => 'Want' ) || '';
+
+    return $Self;
+}
+
+sub Run {
+    my ( $Self, %Param ) = @_;
+
+    # ------------------------------------------------------------ #
+    # update preferences
+    # ------------------------------------------------------------ #
+    if ( $Self->{Subaction} eq 'Update' ) {
+
+        # challenge token check for write action
+        $Self->{LayoutObject}->ChallengeTokenCheck();
+
+        # check group param
+        my $Group = $Self->{ParamObject}->GetParam( Param => 'Group' ) || '';
+        if ( !$Group ) {
+            return $Self->{LayoutObject}->ErrorScreen( Message => 'Param Group is required!' );
+        }
+
+        # check preferences setting
+        my %Preferences = %{ $Self->{ConfigObject}->Get('CustomerPreferencesGroups') };
+        if ( !$Preferences{$Group} ) {
+            return $Self->{LayoutObject}->ErrorScreen( Message => "No such config for $Group" );
+        }
+
+        # get user data
+        my %UserData = $Self->{UserObject}->CustomerUserDataGet( User => $Self->{UserLogin} );
+        my $Module = $Preferences{$Group}->{Module};
+        if ( !$Self->{MainObject}->Require($Module) ) {
+            return $Self->{LayoutObject}->FatalError();
+        }
+        my $Object = $Module->new(
+            %{$Self},
+            ConfigItem => $Preferences{$Group},
+            Debug      => $Self->{Debug},
+        );
+
+        # log loaded module
+        if ( $Self->{Debug} > 1 ) {
+            $Self->{LogObject}->Log(
+                Priority => 'debug',
+                Message  => "Module: $Module loaded!",
+            );
+        }
+        my @Params = $Object->Param( UserData => \%UserData );
+        my %GetParam;
+        for my $ParamItem (@Params) {
+            my @Array = $Self->{ParamObject}->GetArray(
+                Param => $ParamItem->{Name},
+                Raw => $ParamItem->{Raw} || 0,
+            );
+            $GetParam{ $ParamItem->{Name} } = \@Array;
+        }
+        my $Message  = '';
+        my $Priority = '';
+        if ( $Object->Run( GetParam => \%GetParam, UserData => \%UserData ) ) {
+            $Message = $Object->Message();
+        }
+        else {
+            $Priority = 'Error';
+            $Message  = $Object->Error();
+        }
+
+        # check redirect
+        my $RedirectURL = $Self->{ParamObject}->GetParam( Param => 'RedirectURL' );
+        if ($RedirectURL) {
+            return $Self->{LayoutObject}->Redirect(
+                OP => $RedirectURL,
+            );
+        }
+
+        # redirect
+        return $Self->{LayoutObject}->Redirect(
+            OP => "Action=CustomerPreferences;Priority=$Priority;Message=$Message",
+        );
+    }
+
+    # ------------------------------------------------------------ #
+    # show preferences
+    # ------------------------------------------------------------ #
+    else {
+        my $Output = $Self->{LayoutObject}->CustomerHeader( Title => 'Preferences' );
+        $Output .= $Self->{LayoutObject}->CustomerNavigationBar();
+
+        # get param
+        my $Message  = $Self->{ParamObject}->GetParam( Param => 'Message' )  || '';
+        my $Priority = $Self->{ParamObject}->GetParam( Param => 'Priority' ) || '';
+
+        # add notification
+        if ( $Message && $Priority eq 'Error' ) {
+            $Output .= $Self->{LayoutObject}->Notify(
+                Priority => $Priority,
+                Info     => $Message,
+            );
+        }
+        elsif ($Message) {
+            $Output .= $Self->{LayoutObject}->Notify( Info => $Message, );
+        }
+
+        # get user data
+        my %UserData = $Self->{UserObject}->CustomerUserDataGet( User => $Self->{UserLogin} );
+        $Output .= $Self->CustomerPreferencesForm( UserData => \%UserData );
+        $Output .= $Self->{LayoutObject}->CustomerFooter();
+        return $Output;
+    }
+}
+
+sub CustomerPreferencesForm {
+    my ( $Self, %Param ) = @_;
+
+    $Self->{LayoutObject}->Block(
+        Name => 'Body',
+        Data => \%Param,
+    );
+
+    my @Groups = @{ $Self->{ConfigObject}->Get('CustomerPreferencesView') };
+
+    COLUMN:
+    for my $Column (@Groups) {
+
+        next COLUMN if !$Column;
+
+        my %Data;
+        my %Preferences = %{ $Self->{ConfigObject}->Get('CustomerPreferencesGroups') };
+
+        GROUP:
+        for my $Group ( sort keys %Preferences ) {
+
+            next GROUP if !$Group;
+
+            my $PreferencesGroup = $Preferences{$Group};
+
+            next GROUP if !$PreferencesGroup;
+            next GROUP if ref $PreferencesGroup ne 'HASH';
+
+            $PreferencesGroup->{Column} ||= '';
+            $PreferencesGroup->{Prio}   ||= 9999;
+
+            next GROUP if $PreferencesGroup->{Column} ne $Column;
+
+            if ( $Data{ $PreferencesGroup->{Prio} } ) {
+
+                for ( 1 .. 151 ) {
+
+                    $PreferencesGroup->{Prio}++;
+
+                    if ( !$Data{ $PreferencesGroup->{Prio} } ) {
+                        $Data{ $PreferencesGroup->{Prio} } = $Group;
+                        last;
+                    }
+                }
+            }
+
+            $Data{ $PreferencesGroup->{Prio} } = $Group;
+        }
+
+        $Self->{LayoutObject}->Block(
+            Name => 'Head',
+            Data => { Header => $Column, },
+        );
+
+        # sort
+        for my $Key ( sort keys %Data ) {
+            $Data{ sprintf( "%07d", $Key ) } = $Data{$Key};
+            delete $Data{$Key};
+        }
+
+        # show each preferences setting
+        for my $Prio ( sort keys %Data ) {
+            my $Group = $Data{$Prio};
+            next if !$Self->{ConfigObject}->{CustomerPreferencesGroups}->{$Group};
+
+            my %Preference = %{ $Self->{ConfigObject}->{CustomerPreferencesGroups}->{$Group} };
+            next if !$Preference{Active};
+
+            # load module
+            my $Module = $Preference{Module} || 'Kernel::Output::HTML::CustomerPreferencesGeneric';
+            if ( !$Self->{MainObject}->Require($Module) ) {
+                return $Self->{LayoutObject}->FatalError();
+            }
+            my $Object = $Module->new(
+                %{$Self},
+                ConfigItem => $Preferences{$Group},
+                Debug      => $Self->{Debug},
+            );
+            my @Params = $Object->Param( UserData => $Param{UserData} );
+            next if !@Params;
+
+            # show item
+            $Self->{LayoutObject}->Block(
+                Name => 'Item',
+                Data => {
+                    Group => $Group,
+                    %Preference,
+                },
+            );
+            for my $ParamItem (@Params) {
+                if ( ref $ParamItem->{Data} eq 'HASH' || ref $Preference{Data} eq 'HASH' ) {
+                    $ParamItem->{Option} = $Self->{LayoutObject}->BuildSelection(
+                        %Preference, %{$ParamItem},
+                    );
+                }
+                $Self->{LayoutObject}->Block(
+                    Name => 'Block',
+                    Data => { %Preference, %{$ParamItem}, },
+                );
+                $Self->{LayoutObject}->Block(
+                    Name => $ParamItem->{Block} || $Preference{Block} || 'Option',
+                    Data => { %Preference, %{$ParamItem}, },
+                );
+            }
+        }
+    }
+
+    # create & return output
+    return $Self->{LayoutObject}->Output(
+        TemplateFile => 'CustomerPreferences',
+        Data         => \%Param
+    );
+}
+
+1;

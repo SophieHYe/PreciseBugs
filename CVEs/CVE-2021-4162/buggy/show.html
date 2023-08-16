@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form id="tag_tooltip" class="hidden">
+    <input list="tags" id="tag_tooltip_input" class="floating_input" required />
+    <datalist id="tags">
+      {% for tag in tag_list %}
+        <option value="#{{tag}}">
+      {% endfor %}
+    </datalist>
+  </form>
+
+  <form id="note_link_tooltip" class="hidden">
+    <input list="titles" id="title_tooltip_input" class="floating_input" required placeholder="Title of linked note" />
+    <datalist id="titles">
+      {% for dataobj_title, id in titles %}
+        <option value="[[{{ dataobj_title }}|{{id}}]]" data-id="{{ id }}">
+      {% endfor %}
+    </datalist>
+  </form
+
+  {% include "markdown-parser.html" %}
+  {% if not view_only %}
+    <link rel="stylesheet" href="/static/editor.css">
+    {% if config.THEME_CONF.get('use_theme_dark', False) %}
+      <link rel="stylesheet" href="/static/editor_dark.css">
+    {% endif %}
+    <link rel="stylesheet" href="/static/accessibility.css">
+    <script async src="/static/editor.js"></script>
+  {% endif %}
+  <link rel="stylesheet" href="/static/markdown.css">
+  {% if config.THEME_CONF.get('use_theme_dark', False) %}
+    <link rel="stylesheet" href="/static/markdown_dark.css">
+  {% endif %}
+  <div class="post-header">
+    <!-- Form for editing the frontmatter -->
+    {% if not view_only %}
+    <form id="post-title-form">
+      {{ post_title_form.hidden_tag() }}
+      {{ post_title_form.title() }}
+      {{ post_title_form.submit() }}
+    </form>
+    {% else %}
+      <h2 id="post-title">
+        {{ dataobj['title'] }}
+      </h2>
+    {% endif %}
+
+    <div class="embedded-tags post-tags">
+      {% for tag in embedded_tags %}
+        <span class="post-tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+    <div class="metadata-tags post-tags">
+      {% for tag in dataobj["tags"] %}
+	<span class="post-tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+    <span class="post-date">{{ dataobj['date'] }}</span>
+
+    {% if dataobj['type'] == 'bookmark' or dataobj['type'] == 'pocket_bookmark' %}
+      <a href="{{ dataobj['url'] }}" rel="noopener">
+        Link
+      </a>
+    {% endif %}
+    <br>
+    <!-- Edit / Delete buttons -->
+    {% if not view_only %}
+      <div class="d-flex" id="post-btns">
+          <button onclick="toggleEditor(this)" class="btn">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z"></path></svg>
+            <span>Edit</span>
+          </button>
+          <form action="/dataobj/delete/{{ dataobj['id'] }}" method="delete" onsubmit="return confirm('Delete this item permanently?')" novalidate>
+            {{ form.hidden_tag() }}
+            <button class="btn btn-delete">
+              <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path></svg>
+              <span>Delete</span>
+            </button>
+          </form>
+
+          <form action="/dataobj/move/{{ dataobj['id'] }}" method="post" novalidate id="post-move-form">
+            {{ move_form.hidden_tag() }}
+            <button class="btn">
+              Move to
+            </button>
+            {{ move_form.path(placeholder=move_form.path.name) }}
+          </form>
+          <label class="sr-only">
+            <input type="checkbox" id="sr-checkbox">
+            screenreader mode
+          </label>
+      </div>
+
+    {% endif %}
+  </div>
+
+
+  <div id="content-cont" class="markdown-body">
+    <div id="content"></div>
+      {% if not view_only %}
+        <textarea id="original-textarea" aria-label="Text editor"></textarea>
+      {% endif %}
+
+    {% if backlinks %}
+      <ul id="backlinks" style="padding: 0">
+        <h1>Backlinks</h3>
+        {% for backlink in backlinks %}
+          <li><a href="/dataobj/{{ backlink['id'] }}">{{ backlink["title"] }}:</a></li>
+          {% if "matches" in backlink %}
+            {% for link in backlink["matches"] %}
+              <div class="backlink-markdown">{{ link }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+  <br>
+  {% if not view_only %}
+    <button class="sr-only" type="button" id="sr-savebutton">Save</button>
+  {% endif %}
+  <script>
+    // escape text for template literal - double slashes for python rendering and js rendering
+    /* {% set content = dataobj["content"]
+                          | replace("\\", "\\\\")
+                          | replace("`", "\\`")
+                          | replace("${", "\\${")
+                          | safe
+       %} */
+    // Render the content with TOC
+    let contentDiv = document.getElementById("content");
+    function renderContent(content) {
+      return window.parser.customRender("${toc}\n\n" + content);
+    }
+    contentDiv.innerHTML = renderContent(`{{ content }}`);
+
+    {% if not view_only %}
+      // Also show the editing options
+      // The form for editing the front matter
+      let update_frontmatter_callback = function(e) {
+        let payload = {
+          method: "PUT",
+          body: JSON.stringify({
+            "title": post_title_form.title.value,
+          }),
+          headers: {
+            "content-type": "application/json"
+          }
+        };
+
+        response = fetch(`${SCRIPT_ROOT}/dataobjs/frontmatter/{{dataobj['id']}}`, payload);
+        post_title_form.submit.classList.add("post-title-form-sucess");
+        e.preventDefault();
+      }
+
+      let post_title_form = document.getElementById("post-title-form");
+      post_title_form.addEventListener("submit", update_frontmatter_callback, true);
+
+      // Render the editor and put the dataobj in it
+      let editorDiv, oldContent, editor, savedContent = `{{ content }}`;
+
+      // Show the form for embedding links
+      let searchHits = document.getElementById("searchHits");
+      let linkForm = document.getElementById("link-form");
+      function toggleLinkForm() {
+        {% if not search_enabled %} return {% endif %}
+        if (linkForm.style.display == "none") {
+          linkForm.style.display = "block";
+        } else {
+          linkForm.style.display = "none";
+          input.value = "";
+          searchHits.innerHTML = "";
+        }
+      }
+
+      window.addEventListener("load", function() {
+        // Set up the editor
+        editor = new EasyMDE({
+          autofocus: true,
+          uploadImage: true,
+          imageUploadEndpoint: "{{ SCRIPT_ROOT }}/api/images",
+          previewRender: function(content) {
+            return renderContent(content);
+          },
+          imagePathAbsolute: true,
+          imageAccept: "image/png, image/jpeg, image/gif",
+          imageMaxSize: "100000000",
+          toolbar: [
+            "bold",
+            "italic",
+            "link",
+            "upload-image",
+            "heading",
+            "code",
+            "strikethrough",
+            "quote",
+            "table",
+            {
+              name: "LaTeX",
+              className: "fa fa-math",
+              title: "Embed Maths",
+              action: (editor) => {
+                editor.codemirror.replaceSelection("$$\n$$")
+              }
+            },
+            "side-by-side",
+            "fullscreen",
+            {
+              name: "local-archive-btn",
+              className: "fa fa-bookmark",
+              title: "Archives and links to local copy of selected url",
+              action: async editor => {
+                let link = editor.codemirror.getSelection().trim(), url;
+                try {
+                  url = new URL(link);
+                } catch (_) {
+                  return false;
+                }
+                if (url.protocol !== "http:" && url.protocol !== "https:") {
+                  return false;
+                }
+                let req = await fetch(`${SCRIPT_ROOT}/bookmarks`, {
+                  method: "POST",
+                  body: JSON.stringify({
+                    "url": link
+                  }),
+                  headers: {
+                    "content-type": "application/json"
+                  }
+                })
+                if (req.ok) {
+                  let bookmark = await req.json();
+                  editor.codemirror.replaceSelection(`[${link}](/dataobj/${bookmark["bookmark_id"]})\n`);
+                }
+              }  // action
+            },  // archive-btn
+            {
+              name: "save",
+              title: "Save note contents",
+              className: "fa fa-save",
+              action: (editor) => {
+                fetch(`${SCRIPT_ROOT}/dataobjs/{{dataobj['id']}}`, {
+                  method: "PUT",
+                  body: JSON.stringify({
+                    "content": editor.value()
+                  }),
+                  headers: {
+                    "content-type": "application/json"
+                  }
+                })
+                statusBtn.classList.add("fa-check-circle");
+                statusBtn.classList.remove("fa-times");
+                savedContent = editor.value();
+                // update dataobj tags
+                let post_tags = document.querySelector(".embedded-tags");
+                let matches = [...savedContent.matchAll("(?:^|\\n| )#(?:[a-zA-Z0-9_-]+)\\w")];
+                let all_tags = []
+                for (i=0; i < matches.length; i++) {
+                  all_tags.push(matches[i][0].trim())
+                }
+                post_tags.innerHTML = ""
+                let uniq_tags = [...new Set(all_tags)];
+                for (i=0; i < uniq_tags.length; i++) {
+                  let new_tag = document.createElement("span")
+                  new_tag.classList.add("post-tag")
+                  new_tag.innerHTML = uniq_tags[i]
+                  post_tags.appendChild(new_tag)
+                }
+              }, // action
+            }, // save-button
+            {
+              name: "status",
+              className: "fa fa-check-circle status"
+            },
+            {
+              name: "doc",
+              className: "fa fa-question-circle",
+              action: "https://archivy.github.io/editing",
+              title: "Editing Guide"
+            }
+          ], // toolbar
+          shortcuts: {
+            "save": "Ctrl-S"
+          },
+        });  // EasyMDE
+
+        editor.value(`{{ content }}`)
+
+        let statusBtn = document.querySelector(".status .fa");
+        editor.codemirror.on("change", function() {
+          statusBtn.classList.remove("fa-check-circle");
+          statusBtn.classList.add("fa-times")
+        })
+        oldContent = document.getElementById("content"), editorDiv = document.querySelector(".EasyMDEContainer");
+        editorDiv.classList.add("hidden");
+        document.body.scrollIntoView(true);
+
+        /////////////////////////////////////////////////////////////////
+        //                      Tag and note link autocompletion       //
+        /////////////////////////////////////////////////////////////////
+        // The container, datalist input and CoreMirror instance. 
+        let tag_tooltip = document.querySelector("#tag_tooltip");
+        let note_link_tooltip = document.querySelector("#note_link_tooltip")
+        let tag_tooltip_input = document.querySelector("#tag_tooltip_input")
+        let title_tooltip_input = document.querySelector("#title_tooltip_input");
+        let cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
+
+        // Put `data` where the cursor is right now
+        function insertText(data) {
+          let doc = cm.getDoc();
+          let cursor = doc.getCursor(); // gets the line number in the cursor position
+          doc.replaceRange(data, cursor);
+        }
+
+        // Add a tag
+        //  1. Put the value of the datalist into the editor
+        //  2. Add to the index
+        function add_tag() {
+          let tag = tag_tooltip_input.value;
+          if (tag[0] != "#") {
+            tag = "#" + tag;
+          }
+          tagname = tag.slice(1);
+
+          // 1.
+          toggle_tag_tooltip();
+          insertText(tag + "#");
+
+          editor.codemirror.focus();
+
+          // 2.
+          let payload = {
+            method: "PUT",
+            body: JSON.stringify({
+              "dataobj_id": {{dataobj['id']}},
+              "tag": tagname
+            }),
+            headers: {
+              "content-type": "application/json"
+            }
+          };
+          response = fetch(`${SCRIPT_ROOT}/tags/add_to_index`, payload);
+        }
+
+
+        // When toggling the tooltips we want to position it right first.
+        // Otherwise, clear the input and hide it.
+        // initVal is just the value we wanna set the tooltip input to when we display it
+        function toggle_tooltip(tooltip, input, initVal = '') {
+          if (tooltip.classList.contains("hidden")) {
+            let cursor_coordinates = cm.cursorCoords()
+            tooltip.style.zIndex = 9999;
+            tooltip.style.position = "absolute";
+            tooltip.style.top = cursor_coordinates.top - cm.defaultTextHeight() + "px";
+            tooltip.style.left = cursor_coordinates.left - 10 + "px";
+            tooltip.classList.remove("hidden");
+            input.value = initVal;
+            input.focus();
+          } else {
+            tooltip.classList.add("hidden");
+            input.value = "";
+            document.activeElement.blur();
+          }
+        }
+        function toggle_tag_tooltip()
+        {
+          toggle_tooltip(tag_tooltip, tag_tooltip_input, "#")
+        }
+        function toggle_link_tooltip()
+        {
+          toggle_tooltip(note_link_tooltip, title_tooltip_input, '[[')
+        }
+
+        // Whenever the content of the editor changes:
+        //   Check what the last character is. Is it a `#`?
+        //   Then get rid of the `#` and put it into the tag tooltip and show that.
+        editor.codemirror.on("change", function(ed, change) {
+          let line = ed.doc.getCursor().line, // Cursor line
+          ch = ed.doc.getCursor().ch;
+          let currLine = ed.doc.getLine(line);
+          let currChar = currLine[ch - 1];
+          let is_tag_beginning = (currChar === "#" && (ch == 1 || currLine[ch-2] === ' ') && (ch == currLine.length || currLine[ch] === ' '));
+          // checks the user inputted "[[" on a line without other text adjacent to it.
+          let is_note_link_beginning = currChar === '[' && ch != 1 && currLine[ch-2] === '[' && (ch == 2 || currLine[ch-3] === ' ') && (ch == currLine.length || currLine[ch] === ' ');
+          if (is_tag_beginning) {
+            ed.doc.replaceRange("", {
+              line: line,
+              ch: ch - 1
+            }, {
+              line: line,
+              ch: ch
+            })
+            toggle_tag_tooltip();
+          }
+          else if (is_note_link_beginning)
+          {
+            ed.doc.replaceRange("", {
+              line: line,
+              ch: ch - 2
+            }, {
+              line: line,
+              ch: ch
+            })
+            toggle_link_tooltip();
+          }
+        });
+
+        // When the user hits enter, add the tag.
+        tag_tooltip.onsubmit = function(e) {
+          e.preventDefault()
+          add_tag();
+        };
+
+
+        note_link_tooltip.onsubmit = function(e) {
+          e.preventDefault();
+          let note_link = title_tooltip_input.value;
+          if (note_link === "") return;
+          let currOption = document.querySelector(`option[value="${note_link}"]`)
+          if (!currOption) { return; }
+          let id = currOption.getAttribute("data-id");
+          insertText(note_link);
+          toggle_link_tooltip();
+        }
+
+        // We watch for two cases:
+        //  1. The input is empty => hide the tooltip
+        //  2. The tooltip contains a whitespace. Just put the value into the editor and hide the tooltip.
+        tag_tooltip_input.oninput = function() {
+          tag_tooltip_input.focus();
+          if (tag_tooltip_input.value === "" || tag_tooltip_input.value.includes(" ")) {
+            insertText(tag_tooltip_input.value);
+            toggle_tag_tooltip();
+            editor.codemirror.focus();
+          }
+        }
+
+        title_tooltip_input.oninput = function()
+	{
+	  title_tooltip_input.focus();
+	  if (!title_tooltip_input.value.startsWith("[["))
+	  {
+	    toggle_link_tooltip();
+	    insertText(title_tooltip_input.value)
+	    editor.codemirror.focus();
+          }
+        }
+
+        /////////////////////////////////////////////////////////////////
+        //                      Screenreader stuff                     //
+        /////////////////////////////////////////////////////////////////
+        /* Screenreader mode checkbox */
+        function toggleScreenReaderMode(cbox, editor)
+        {
+          return function () {
+            if (cbox.checked) {
+              editor.toTextArea();
+              editor = null;
+            } else {
+              location.reload();
+            }
+          }
+        }
+
+        /* Add screenreader checkbox toggle */
+        let srCbox = document.getElementById("sr-checkbox");
+        srCbox.onchange = toggleScreenReaderMode(srCbox, editor);
+
+        /* Screenreader save button handler */
+        function screenReaderSave(btn) {
+          fetch(`${SCRIPT_ROOT}/dataobjs/{{dataobj['id']}}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              "content": document.getElementById("original-textarea").value
+            }),
+            headers: {
+              "content-type": "application/json"
+            }
+          });
+          let saveAlert = document.createElement("span");
+          saveAlert.setAttribute("role", "alert");
+          let saveAlertText = document.createTextNode("Note saved");
+          saveAlert.appendChild(saveAlertText);
+          document.body.appendChild(saveAlert);
+        }  // function screenReaderSave
+
+        /* Add screenreader save button handler */
+        let srSaveBtn = document.getElementById("sr-savebutton");
+        srSaveBtn.onclick = screenReaderSave;
+      })  // window.addEventListener("load")
+
+
+
+      function toggleEditor(btn) {
+        let btnText = btn.querySelector("span");
+        if (btnText.textContent == "Edit") {
+          btnText.textContent = "Hide Editor";
+        } else {
+          btnText.textContent = "Edit";
+          contentDiv.innerHTML = renderContent(savedContent);
+        }
+        oldContent.classList.toggle("hidden"), editorDiv.classList.toggle("hidden");
+      }
+
+      // render backlinks
+
+      document.querySelectorAll(".backlink-markdown").forEach((link) => {
+        link.innerHTML = window.parser.customRender(`> ${link.innerHTML}`);
+      })
+    {% endif %}
+  </script>
+{% endblock %}

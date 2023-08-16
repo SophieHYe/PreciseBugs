@@ -1,0 +1,42 @@
+{
+	"name": "@irrelon/path",
+	"version": "4.6.8",
+	"description": "A powerful JSON path processor. Allows you to drill into and manipulate JSON objects with a simple dot-delimited path format e.g. \"obj.name\".",
+	"main": "./src/Path.js",
+	"scripts": {
+		"test": "NODE_ENV=test mocha ./tests/**/**.test.js",
+		"testMon": "nodemon --watch src --watch tests --exec \"NODE_ENV=test BABEL_DISABLE_CACHE=1 mocha ./tests/**/**.test.js\"",
+		"build": "npm test && rimraf dist && babel ./src/*.js --out-dir dist",
+		"eslint": "eslint ./src/**.js ./tests/**.js ./dist/Path.js",
+		"eslint-fix": "eslint --fix ./src/**.js ./tests/**.js"
+	},
+	"keywords": [
+		"path",
+		"dot notation",
+		"json",
+		"node",
+		"browser"
+	],
+	"author": "Rob Evans - Irrelon Software Limited",
+	"license": "MIT",
+	"devDependencies": {
+		"@babel/cli": "^7.8.7",
+		"@babel/core": "^7.8.7",
+		"@babel/plugin-proposal-class-properties": "^7.8.7",
+		"@babel/plugin-proposal-object-rest-spread": "^7.8.7",
+		"@babel/plugin-transform-runtime": "^7.8.7",
+		"@babel/preset-env": "^7.8.7",
+		"@babel/preset-react": "^7.8.7",
+		"@babel/register": "^7.8.7",
+		"eslint-config-irrelon": "^1.0.2",
+		"mocha": "^6.2.2",
+		"mocha-expect": "^1.0.3",
+		"rimraf": "^2.7.1",
+		"nodemon": "^2.0.3"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/irrelon/irrelon-path.git"
+	},
+	"private": false
+}

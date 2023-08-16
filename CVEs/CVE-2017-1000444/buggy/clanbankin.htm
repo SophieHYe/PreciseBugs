@@ -1,0 +1,68 @@
+<div id="content">
+<?php
+
+$username = $_SESSION['login_user'];
+
+	$getUserClan = "SELECT clan FROM accounts WHERE id = '$userid'";
+	$resultUC = $conn->query($getUserClan);
+	while ($rowClan = $resultUC->fetch_assoc()){
+		$clanid = $rowClan['clan'];
+	};
+
+// Check if Clan account exists, if not allow the user to set the password now and log them in
+
+$sqlCheckEconomy = "SELECT * FROM claneconomy WHERE clanid = '$clanid'";
+$resultCheckEconomy = $conn->query($sqlCheckEconomy);
+if ($resultCheckEconomy->num_rows == 0) {
+
+$sql = "INSERT INTO claneconomy(clanid) VALUE('$clanid')";
+$result = $conn->query($sql);
+
+// Set Clan bank password
+
+$password = $_POST['password'];
+
+$sqlSetCBP = "UPDATE clans SET bankpassword = '$password' WHERE id = '$clanid'";
+$resultSetCBP = $conn->query($sqlSetCBP);
+
+header("location: ?a=bank"); // Redirecting To Other Page
+}
+else {
+
+$sql1 = "SELECT bankpassword FROM clans WHERE id='$clanid'";
+$result1 = $conn->query($sql1);
+
+if ($result1->num_rows > 0) {
+     while($row = $result1->fetch_assoc()) {
+         $clanpass = $row["bankpassword"];
+     };
+};
+
+$password = $_POST['password'];
+
+// SQL query to fetch information of registered users and finds user match.
+$sql = "SELECT * FROM clans WHERE bankpassword='$password' AND id='$clanid'";
+$result = $conn->query($sql);
+$rows = mysqli_num_rows($result);
+if ($rows == 1) {
+$_SESSION['clanbank_login']=1; // Just something to say the user password was correct
+
+$sql = "SELECT id FROM clans WHERE id = '$clanid'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+
+header("location: ?a=clanbank"); // Redirecting To Other Page
+}
+} else {
+$error = "Incorrect Password";
+echo "<br>";
+echo "<h1>Incorrect Password</h1>";
+echo "<br>";
+echo "<br>";
+echo "<form name='back' action='?a=clanbank'>";
+echo "<button class='btn waves-effect waves-light' type='submit' name='submit'>Back<i class='material-icons center'></i></button>";
+echo '</form>';
+};
+};
+?>
+</div>

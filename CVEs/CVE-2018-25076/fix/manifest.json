@@ -1,0 +1,382 @@
+{
+    "type": "extension",
+    "id": "com.fastspot.events",
+    "version": "1.2.1",
+    "revision": 6,
+    "compatibility": "4.2.4+",
+    "title": "Events",
+    "description": "A very fast (performance wise) events system that supports recurring events and a powerful class for pulling events into the front end of your site.",
+    "keywords": [
+        "events",
+        "recurring"
+    ],
+    "author": {
+        "name": "Tim Buckingham",
+        "url": "http://www.fastspot.com",
+        "email": "tim@fastspot.com"
+    },
+    "licenses": {
+        "LGPL v3": "http://opensource.org/licenses/LGPL-3.0"
+    },
+    "components": {
+        "module_groups": [],
+        "modules": [
+            {
+                "id": "3",
+                "group": null,
+                "name": "Events",
+                "route": "com.fastspot.events*events",
+                "class": "BTXEvents",
+                "icon": "events",
+                "gbp": {
+                    "name": "",
+                    "table": "",
+                    "other_table": ""
+                },
+                "position": "0",
+                "extension": "com.fastspot.events",
+                "actions": [
+                    {
+                        "id": "7",
+                        "module": "3",
+                        "name": "View Events",
+                        "route": "",
+                        "in_nav": "on",
+                        "form": null,
+                        "view": "4",
+                        "report": null,
+                        "class": "list",
+                        "level": "0",
+                        "position": "6"
+                    },
+                    {
+                        "id": "8",
+                        "module": "3",
+                        "name": "Search",
+                        "route": "search",
+                        "in_nav": "on",
+                        "form": null,
+                        "view": null,
+                        "report": null,
+                        "class": "search2",
+                        "level": "0",
+                        "position": "5"
+                    },
+                    {
+                        "id": "9",
+                        "module": "3",
+                        "name": "Calendar",
+                        "route": "calendar",
+                        "in_nav": "on",
+                        "form": null,
+                        "view": null,
+                        "report": null,
+                        "class": "calendar2",
+                        "level": "0",
+                        "position": "4"
+                    },
+                    {
+                        "id": "10",
+                        "module": "3",
+                        "name": "Add Event",
+                        "route": "add",
+                        "in_nav": "on",
+                        "form": "4",
+                        "view": null,
+                        "report": null,
+                        "class": "add",
+                        "level": "0",
+                        "position": "3"
+                    },
+                    {
+                        "id": "11",
+                        "module": "3",
+                        "name": "View Categories",
+                        "route": "categories",
+                        "in_nav": "on",
+                        "form": null,
+                        "view": "3",
+                        "report": null,
+                        "class": "category",
+                        "level": "0",
+                        "position": "2"
+                    },
+                    {
+                        "id": "12",
+                        "module": "3",
+                        "name": "Add Category",
+                        "route": "add-category",
+                        "in_nav": "on",
+                        "form": "3",
+                        "view": null,
+                        "report": null,
+                        "class": "add",
+                        "level": "0",
+                        "position": "1"
+                    },
+                    {
+                        "id": "13",
+                        "module": "3",
+                        "name": "Edit Event",
+                        "route": "edit",
+                        "in_nav": "",
+                        "form": "4",
+                        "view": null,
+                        "report": null,
+                        "class": "edit",
+                        "level": "0",
+                        "position": "0"
+                    },
+                    {
+                        "id": "14",
+                        "module": "3",
+                        "name": "Edit Category",
+                        "route": "edit-category",
+                        "in_nav": "",
+                        "form": "3",
+                        "view": null,
+                        "report": null,
+                        "class": "edit",
+                        "level": "0",
+                        "position": "0"
+                    }
+                ],
+                "views": [
+                    {
+                        "id": "3",
+                        "module": "3",
+                        "title": "Categories",
+                        "description": "",
+                        "type": "nested",
+                        "table": "btx_events_categories",
+                        "fields": {
+                            "name": {
+                                "width": "788",
+                                "title": "Name",
+                                "parser": "",
+                                "numeric": false
+                            }
+                        },
+                        "options": {
+                            "nesting_column": "parent",
+                            "filter": ""
+                        },
+                        "actions": {
+                            "edit": "on",
+                            "delete": "on"
+                        },
+                        "preview_url": "",
+                        "related_form": null
+                    },
+                    {
+                        "id": "4",
+                        "module": "3",
+                        "title": "Events",
+                        "description": "",
+                        "type": "searchable",
+                        "table": "btx_events_events",
+                        "fields": {
+                            "start_date": {
+                                "title": "Start Date",
+                                "parser": "",
+                                "width": "98",
+                                "numeric": false
+                            },
+                            "title": {
+                                "title": "Title",
+                                "parser": "",
+                                "width": "521",
+                                "numeric": false
+                            },
+                            "recurrence_type": {
+                                "title": "Recurring",
+                                "parser": "",
+                                "width": "89",
+                                "numeric": false
+                            }
+                        },
+                        "options": {
+                            "sort_column": "start_date",
+                            "sort_direction": "DESC",
+                            "per_page": "15",
+                            "filter": ""
+                        },
+                        "actions": {
+                            "feature": "on",
+                            "edit": "on",
+                            "delete": "on"
+                        },
+                        "preview_url": "",
+                        "related_form": null
+                    }
+                ],
+                "forms": [
+                    {
+                        "id": "3",
+                        "module": "3",
+                        "title": "Category",
+                        "table": "btx_events_categories",
+                        "fields": [
+                            {
+                                "column": "parent",
+                                "type": "list",
+                                "title": "Parent Category",
+                                "subtitle": "",
+                                "options": {
+                                    "list_type": "db",
+                                    "allow-empty": "Yes",
+                                    "pop-table": "btx_events_categories",
+                                    "pop-description": "name",
+                                    "pop-sort": "`name` ASC",
+                                    "column": "parent"
+                                }
+                            },
+                            {
+                                "column": "name",
+                                "type": "text",
+                                "title": "Name",
+                                "subtitle": "",
+                                "options": {
+                                    "column": "name"
+                                }
+                            },
+                            {
+                                "column": "route",
+                                "type": "route",
+                                "title": "Route",
+                                "subtitle": "",
+                                "options": {
+                                    "source": "name",
+                                    "column": "route"
+                                }
+                            }
+                        ],
+                        "default_position": "Bottom",
+                        "return_view": "3",
+                        "return_url": "",
+                        "tagging": "",
+                        "hooks": null
+                    },
+                    {
+                        "id": "4",
+                        "module": "3",
+                        "title": "Event",
+                        "table": "btx_events_events",
+                        "fields": [
+                            {
+                                "column": "title",
+                                "type": "text",
+                                "title": "Title",
+                                "subtitle": "",
+                                "options": {
+                                    "column": "title"
+                                }
+                            },
+                            {
+                                "column": "description",
+                                "type": "html",
+                                "title": "Description",
+                                "subtitle": "",
+                                "options": {
+                                    "column": "description"
+                                }
+                            },
+                            {
+                                "column": "image",
+                                "type": "upload",
+                                "title": "Image",
+                                "subtitle": "(crops to 600x400)",
+                                "options": {
+                                    "directory": "files/events/",
+                                    "image": "on",
+                                    "min_width": "600",
+                                    "min_height": "400",
+                                    "preview_prefix": "",
+                                    "crops": {
+                                        "1": {
+                                            "prefix": "",
+                                            "width": "600",
+                                            "height": "400",
+                                            "grayscale": ""
+                                        }
+                                    },
+                                    "column": "image"
+                                }
+                            },
+                            {
+                                "column": "__mtm-1__",
+                                "type": "many-to-many",
+                                "title": "Categories",
+                                "subtitle": "",
+                                "options": {
+                                    "mtm-connecting-table": "btx_events_event_categories",
+                                    "mtm-my-id": "event",
+                                    "mtm-other-id": "category",
+                                    "mtm-other-table": "btx_events_categories",
+                                    "mtm-other-descriptor": "name",
+                                    "mtm-sort": "`name` ASC",
+                                    "mtm-list-parser": "BTXEvents::parseMTM",
+                                    "column": "__mtm-1__"
+                                }
+                            },
+                            {
+                                "column": "all_day",
+                                "type": "com.fastspot.events*date-chooser",
+                                "title": "Date Chooser",
+                                "subtitle": "",
+                                "options": {
+                                    "function": "BTXEvents::drawFormDateTime",
+                                    "process_function": "BTXEvents::parseFormDateTime",
+                                    "column": "all_day"
+                                }
+                            },
+                            {
+                                "column": "route",
+                                "type": "route",
+                                "title": "Route",
+                                "subtitle": "",
+                                "options": {
+                                    "source": "title",
+                                    "column": "route"
+                                }
+                            }
+                        ],
+                        "default_position": "",
+                        "return_view": "4",
+                        "return_url": "",
+                        "tagging": "",
+                        "hooks": {
+                            "pre": "",
+                            "post": "",
+                            "publish": "BTXEvents::publishHook"
+                        }
+                    }
+                ],
+                "embed_forms": [],
+                "reports": []
+            }
+        ],
+        "templates": [],
+        "callouts": [],
+        "settings": [],
+        "feeds": [],
+        "field_types": [
+            {
+                "id": "com.fastspot.events*date-chooser",
+                "name": "Events \u2014 Date Chooser",
+                "use_cases": {
+                    "modules": "on"
+                },
+                "self_draw": "on",
+                "extension": "com.fastspot.events"
+            }
+        ],
+        "tables": {
+            "btx_events_categories": "CREATE TABLE `btx_events_categories` (   `id` int(11) NOT NULL AUTO_INCREMENT,   `parent` int(11) DEFAULT NULL,   `name` varchar(255) NOT NULL DEFAULT '',   `route` varchar(255) NOT NULL DEFAULT '',   `position` int(11) NOT NULL,   PRIMARY KEY (`id`),   KEY `parent` (`parent`),   KEY `route` (`route`),   KEY `position` (`position`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+            "btx_events_date_cache": "CREATE TABLE `btx_events_date_cache` (   `id` int(11) NOT NULL AUTO_INCREMENT,   `event` int(11) NOT NULL,   `start` datetime NOT NULL,   `end` datetime NOT NULL,   `date_cached` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,   `title_route` varchar(255) NOT NULL DEFAULT '',   `date_route` varchar(255) NOT NULL DEFAULT '',   PRIMARY KEY (`id`),   KEY `event` (`event`),   KEY `start` (`start`),   KEY `end` (`end`),   KEY `title_route` (`title_route`),   KEY `date_route` (`date_route`),   KEY `date_cached` (`date_cached`),    FOREIGN KEY (`event`) REFERENCES `btx_events_events` (`id`) ON DELETE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+            "btx_events_event_categories": "CREATE TABLE `btx_events_event_categories` (   `event` int(11) NOT NULL,   `category` int(11) NOT NULL,   KEY `event` (`event`),   KEY `category` (`category`),    FOREIGN KEY (`event`) REFERENCES `btx_events_events` (`id`) ON DELETE CASCADE,    FOREIGN KEY (`category`) REFERENCES `btx_events_categories` (`id`) ON DELETE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8",
+            "btx_events_events": "CREATE TABLE `btx_events_events` (   `id` int(11) NOT NULL AUTO_INCREMENT,   `title` varchar(255) NOT NULL DEFAULT '',   `description` mediumtext NOT NULL,   `image` varchar(255) NOT NULL,   `start_date` date DEFAULT NULL,   `end_date` date DEFAULT NULL,   `start_time` time DEFAULT NULL,   `end_time` time DEFAULT NULL,   `all_day` char(2) NOT NULL,   `recurrence_type` varchar(255) NOT NULL,   `recurrence_detail` varchar(255) NOT NULL,   `canceled_recurrences` text NOT NULL,   `recurring_end_date` date DEFAULT NULL,   `last_updated` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,   `featured` char(2) NOT NULL,   `route` varchar(255) DEFAULT NULL,   PRIMARY KEY (`id`),   KEY `start_date` (`start_date`),   KEY `end_date` (`end_date`),   KEY `recurring_end_date` (`recurring_end_date`),   KEY `recurrence_type` (`recurrence_type`),   KEY `featured` (`featured`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+        }
+    },
+    "sql_revisions": []
+}

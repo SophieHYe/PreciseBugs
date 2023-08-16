@@ -1,0 +1,36 @@
+{*<!--
+
++---------------------------------------------------------------------------+
+| Revive Adserver                                                           |
+| http://www.revive-adserver.com                                            |
+|                                                                           |
+| Copyright: See the COPYRIGHT.txt file.                                    |
+| License: GPLv2 or later, see the LICENSE.txt file.                        |
++---------------------------------------------------------------------------+
+
+-->*}
+
+<div class='dropDown {$cssClass}'>
+    <span><span>{$title}</span></span>
+
+    <div class='panel'>
+        <div>
+            <ul>
+    		{section name=linkLoop loop=$aLinks}
+        		<li>
+        			{if $aLinks[linkLoop].type == 'link'}
+            			{if $aLinks[linkLoop].icon}<img src='{$assetPath}/images/{$aLinks[linkLoop].icon}' align='absmiddle' alt=''>{/if}
+                        <a href='{$aLinks[linkLoop].url|escape}' {if $aLinks[linkLoop].iconClass}class='inlineIcon {$aLinks[linkLoop].iconClass}'{/if} {if $aLinks[linkLoop].accesskey}accesskey='{$aLinks[linkLoop].accesskey}'{/if} {$aLinks[linkLoop].extraAttr}>{$aLinks[linkLoop].title}</a>
+        			{elseif $aLinks[linkLoop].type == 'form'}
+            			{if $aLinks[linkLoop].icon}<img src='{$assetPath}/images/{$aLinks[linkLoop].icon}' align='absmiddle' alt=''>{/if}
+            			<label {if $aLinks[linkLoop].iconClass}class='inlineIcon {$aLinks[linkLoop].iconClass}'{/if}>{$aLinks[linkLoop].title}</label>
+               			{$aLinks[linkLoop].form}
+        			{/if}
+        		</li>
+    		{/section}
+            </ul>
+        </div>
+    </div>
+
+    <div class='mask'></div>
+</div>

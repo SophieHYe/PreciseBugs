@@ -1,0 +1,75 @@
+{
+  "name": "dustjs-linkedin",
+  "version": "2.7.2",
+  "author": {
+    "name": "Aleksander Williams",
+    "url": "http://akdubya.github.com/dustjs"
+  },
+  "homepage": "http://dustjs.com/",
+  "description": "Asynchronous templates for the browser and server (LinkedIn fork)",
+  "contributors": [
+    "Veena Basavaraj <vybs@users.noreply.github.com>",
+    "Tom Carchrae",
+    "Jimmy Chan <jchan@linkedin.com>",
+    "Steven Foote <sfoote@linkedin.com>",
+    "Prayrit Prash Jain <prjain@linkedin.com>",
+    "Seth Kinast <skinast@linkedin.com>",
+    "Jairo de Morais <jairodemorais@users.noreply.github.com>",
+    "Kate Odnous <kodnous@linkedin.com>",
+    "Richard Ragan <rragan@ebay.com>"
+  ],
+  "scripts": {
+    "test": "grunt travis"
+  },
+  "bin": {
+    "dustc": "./bin/dustc"
+  },
+  "main": "index.js",
+  "browser": "./lib/dust.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linkedin/dustjs.git"
+  },
+  "keywords": [
+    "templates",
+    "views",
+    "dust",
+    "dustjs",
+    "dust.js",
+    "linkedin"
+  ],
+  "dependencies": {
+    "chokidar": "~1.5.1",
+    "cli": "^1.0.1"
+  },
+  "devDependencies": {
+    "ayepromise": "~1.1.1",
+    "grunt": "~1.0.1",
+    "grunt-bump": "~0.8.0",
+    "grunt-cli": "~1.2.0",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-connect": "~1.0.2",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-jasmine": "~1.0.3",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-uglify": "~1.0.1",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-execute": "~0.2.2",
+    "grunt-github-changes": "~0.1.0",
+    "grunt-jasmine-nodejs": "~1.5.3",
+    "grunt-peg": "~2.0.0",
+    "grunt-saucelabs": "~8.6.1",
+    "grunt-shell": "~1.3.0",
+    "grunt-template-jasmine-istanbul": "~0.4.0",
+    "highland": "2.8.1",
+    "pegjs": "0.9.0",
+    "rhino-1_7r3-bin": "~1.0.1",
+    "rhino-1_7r5-bin": "~1.0.1",
+    "tmp": "~0.0.25"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.10"
+  }
+}

@@ -1,0 +1,34 @@
+{
+	"name": "MW-OAuth2Client",
+	"version": "0.3",
+	"author": [
+		"[http://dekeijzer.org Joost de Keijzer]",
+		"[https://www.mediawiki.org/wiki/User:Nischayn22 Nischay Nahata]",
+		"[https://star-made.org Schine GmbH]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:OAuth2_Client",
+	"descriptionmsg": "oauth2client-act-as-a-client-to-any-oauth2-server",
+	"license-name": "LGPL-3.0",
+	"type": "other",
+	"AutoloadClasses": {
+		"OAuth2ClientHooks": "OAuth2Client.php",
+		"SpecialOAuth2Client": "SpecialOAuth2Client.php"
+	},
+	"ExtensionMessagesFiles": {
+		"OAuth2ClientAlias": "OAuth2Client.alias.php"
+	},
+	"Hooks": {
+		"PersonalUrls": [
+			"OAuth2ClientHooks::onPersonalUrls"
+		]
+	},
+	"SpecialPages": {
+		"OAuth2Client": "SpecialOAuth2Client"
+	},
+	"MessagesDirs": {
+		"MyExtension": [
+			"i18n"
+		]
+	},
+	"manifest_version": 1
+}

@@ -1,0 +1,102 @@
+#!/bin/sh
+# Copyright (c) Contributors to the Apptainer project, established as
+#   Apptainer a Series of LF Projects LLC.
+#   For website terms of use, trademark policy, privacy policy and other
+#   project policies see https://lfprojects.org/policies
+
+set -e
+
+usage() {
+	cat <<-EOT
+	E: Invalid usage. Abort.
+
+	Usage:
+
+	    $0 {github_repository} {github_branch} [github_pr_url]
+
+	If a {github_pr_url} is provided, it's used to obtain additional
+	information like the target branch and the labels. Otherwise it
+	is assumed that the code is already merged and that only the
+	most recent commit should be examined.
+	EOT
+}
+
+# Give the possibility to force E2E run
+if ! test -z "${FORCE_E2E}" ; then
+    echo "FORCE_E2E set, forcing e2e tests."
+    exit 0
+fi
+
+# Skip e2e by default
+require_e2e=false
+
+GITHUB_REPOSITORY=$1
+GITHUB_BRANCH=$2
+GITHUB_PR_NUMBER=$3
+
+if test -z "${GITHUB_REPOSITORY}" ; then
+	usage "$0"
+	exit 2
+elif test -z "${GITHUB_BRANCH}" ; then
+	usage "$0"
+	exit 2
+fi
+
+if test -z "${GITHUB_PR_NUMBER}" ; then
+	echo "Running directly against branch ${GITHUB_BRANCH}"
+	TARGET_BRANCH="${GITHUB_BRANCH}"
+	BASE_COMMIT="HEAD~"
+	# Assume E2E is required for all runs against a branch; below we
+	# constrain this to specific branches.
+	require_e2e=true
+else
+	pull_info_file=$(mktemp)
+	trap "rm -f ${pull_info_file}" EXIT
+
+	curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${GITHUB_PR_NUMBER}" > "${pull_info_file}"
+
+	# Keep the matching lines instead of simply looking at the exit
+	# code for debugging purposes
+	E2E_LABELS=$(jq -r '.labels[].name' < "${pull_info_file}" | grep --line-regexp --fixed-strings ci:e2e || true)
+
+	if test -n "${E2E_LABELS}" ; then
+		echo "Honoring request to run E2E tests from pull request labels"
+		exit 0
+	fi
+
+	TARGET_BRANCH=$(jq -r .base.ref < "${pull_info_file}")
+	BASE_COMMIT="origin/${TARGET_BRANCH}"
+fi
+
+case "${TARGET_BRANCH}" in
+	master|main)
+		if git --no-pager diff --name-only HEAD "${BASE_COMMIT}" |
+			grep -q -E -f .ci/e2e_triggers
+		then
+			# There are changes in critical components, require e2e
+			require_e2e=true
+		fi
+		;;
+
+	release-*)
+		# Require E2E for all changes going into a release branch
+		require_e2e=true
+		;;
+
+	null)
+		# Failed to read api, could be private repo.  Run tests.
+		require_e2e=true
+		;;
+	*)
+		# The branch is not master or release, skip e2e
+		require_e2e=false
+		;;
+esac
+
+if ${require_e2e} ; then
+	echo "Critical changes detected."
+	exit 0
+else
+	echo "No critical changes detected."
+	exit 1
+fi

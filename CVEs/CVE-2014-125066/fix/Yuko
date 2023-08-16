@@ -1,0 +1,141 @@
+#!/usr/bin/env ruby
+# Oui le code est dégueux... Et alors ?!
+require 'irc-socket'
+require 'myanimelist'
+require 'htmlentities'
+require 'io/console'
+require 'link_thumbnailer'
+
+$:.unshift File.dirname(__FILE__)
+require 'lib/yuko'
+require 'lib/myanimelist-x'
+require 'lib/message'
+
+def init(_)
+  load 'config.rb'
+
+  Yuko.conf.prompt_mal_config unless Yuko.conf.mal_configured?
+
+  begin
+    Yuko.conf.check
+  rescue Yuko::ConfError => e
+    e.messages.each {|err| STDERR.puts "Errors: config.rb: #{err}"}
+    exit
+  end
+
+
+  MyAnimeList.configure do |config|
+    config.username = Yuko.conf.mal.username
+    config.password = Yuko.conf.mal.password
+  end
+
+  begin
+    MyAnimeList.verify_credentials
+  rescue RestClient::Unauthorized => e
+    puts 'Error: Incorrect login or password (mal)'
+    exit
+  end
+
+  LinkThumbnailer.configure do |config|
+    config.attributes = [:title]
+  end
+end
+
+def run!
+  irc = IRCSocket.new(Yuko.conf.irc.server, Yuko.conf.irc.port, Yuko.conf.irc.ssl)
+  irc.connect
+
+  if irc.connected?
+    irc.nick Yuko.conf.irc.nickname
+    irc.user 'Yuko', 0, '*', 'I am a bot.'
+
+    while line = irc.read
+      message = Message.new(line)
+      puts "Received: #{message.raw}"
+      process(irc, message)
+    end
+  end
+end
+
+def process(irc, message)
+  handle_end_of_motd(irc)      if message.is_end_of_motd?
+  handle_ping(irc, message)    if message.is_ping?
+  handle_privmsg(irc, message) if message.is_privmsg?
+end
+
+def handle_end_of_motd(irc)
+  irc.join Yuko.conf.irc.channel
+  irc.privmsg Yuko.conf.irc.channel, Yuko.conf.irc.greeting unless Yuko.conf.irc.greeting.nil?
+end
+
+def handle_ping(irc, message)
+  irc.pong message.params[0]
+end
+
+def handle_privmsg(irc, message)
+  request = message.trailing.match /^!(?<name>\S+)(\s+(?<params>.*))?$/
+  urls    = message.trailing.scan /https?:\/\/\S+/
+
+  handle_privmsg_request(irc, message, request) if request
+  handle_privmsg_urls(irc, message, urls)       if urls.any?
+end
+
+def handle_privmsg_request(irc, message, request)
+  request = Hash[request.names.map(&:to_sym).zip(request.captures)]
+  request[:name].downcase!
+
+  if (request[:name] == 'anime' || request[:name] == 'manga') && !request[:params].nil?
+    search_type = request[:name]
+    results     = MyAnimeList.send "search_#{search_type}".to_sym, request[:params]
+
+    if results.any?
+      irc.privmsg message.channel, "Résultats pour \"#{request[:params]}\""
+
+      results.sort! {|entry1, entry2| entry2['score'].to_f <=> entry1['score'].to_f }
+      results.take(5).each do |entry|
+        title = HTMLEntities.new.decode entry['title']
+        url   = "http://myanimelist.net/#{search_type}/#{entry['id']}"
+        irc.privmsg message.channel, "#{title} →\x032 #{url}"
+      end
+    else
+      search = HTMLEntities.new.decode request[:params]
+      irc.privmsg message.channel, "Aww~ la recherche pour \"#{search}\" n'a rien donné é_è"
+    end
+  end
+
+  if request[:name] == 'titof' || request[:name] == '(21)'
+    irc.privmsg message.channel, "http://nyu.moe/loliwaytolive.html"
+  end
+
+  if request[:name] == 'holo' || request[:name] == "shingekinoslg"
+    irc.privmsg message.channel, "https://www.listenonrepeat.com/?v=8PN7kNWV06w"
+  end
+
+  if request[:name] == 'paraze' || request[:name] == "moe"
+    irc.privmsg message.channel, "http://listenonrepeat.com/?v=wvvScxzxyLw"
+  end
+
+  if request[:name] == 'dudurenchon'
+    irc.privmsg message.channel, "http://image.noelshack.com/fichiers/2014/44/1414522583-dudurenchon.png"
+  end
+
+  if request[:name] == 'praisememore'
+    irc.privmsg message.channel, "https://i.imgur.com/f3WLqUw.jpg"
+  end
+
+  if request[:name] == 'internet'
+    irc.privmsg message.channel, "http://www.internetshouldbeillegal.com/"
+  end
+end
+
+def handle_privmsg_urls(irc, message, urls)
+  urls.take(3).each do |url|
+    begin
+      object = LinkThumbnailer.generate url
+      irc.privmsg message.channel, object.title[0...512] if object.title && object.title.size > 0
+    rescue StandardError
+    end
+  end
+end
+
+init Yuko and run! # yeah ruuuuuuuun!

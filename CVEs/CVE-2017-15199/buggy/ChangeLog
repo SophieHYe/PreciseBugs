@@ -1,0 +1,1085 @@
+Version 1.0.47 (unreleased)
+---------------------------
+
+New features:
+
+* Vietnamese translation
+
+Version 1.0.46 (August 13, 2017)
+--------------------------------
+
+Security Issues:
+
+* Fix two privilege escalation issues: a standard user could reset the password 
+of another user (including admin) by altering form data.
+(CVE-2017-12850 and CVE-2017-12851, discovered by "chbi").
+
+Improvements:
+
+* Add "Create another link" checkbox for internal link as in sub-task creation
+* Updated translations
+
+Bug fixes:
+
+* Fix parsing issue in phpToBytes() method
+
+Version 1.0.45 (June 23, 2017)
+------------------------------
+
+New features:
+
+* Automatic action to assign tasks to its creator
+* Add the possibility to create a comment when a task is sent by email
+* Add dropdown menu to autocomplete email field from project members
+* Add configurable list of predefined subjects when sending a task or a a comment by email
+* Add command line argument to filter overdue notification for a given project
+
+Improvements:
+
+* Improve SQL migrations when old default swimlanes have the same name as a normal swimlanes
+
+Bug fixes:
+
+* Add missing subtask permissions for project viewer role
+* Fix Javascript language mapping
+
+Version 1.0.44 (May 28, 2017)
+-----------------------------
+
+Improvements:
+
+* Use datetime field for due date
+* Update Docker image to Alpine Linux 3.6
+* Add the possibility to pass API token as environment variable for Docker container
+* Add wildcard search for task reference field
+* Improve automated action TaskAssignColorOnDueDate to update task only when necessary
+* Add task and project API formatters
+* Update translations
+
+Bug fixes:
+
+* Fix broken user mentions in comment form at the bottom of the task view page
+* Ensure project tags are removed when the project is removed
+* Avoid PHP notice when regenerating API token for a user
+* Fix wrong dropdown menu in group members list
+* Show only active users in auto-complete forms (project permissions)
+* Check owner existence before to create project
+
+Version 1.0.43 (April 30, 2017)
+-------------------------------
+
+Improvements:
+
+* Add "[DUPLICATE]" prefix to duplicated tasks title
+* Add sorting by position and start date in task list view
+* Update translations
+
+Bug fixes:
+
+* Add missing plugin parameter for search box (Gantt and calendar plugin)
+* Fix broken start date button
+
+Version 1.0.42 (April 8, 2017)
+------------------------------
+
+New features:
+
+* New restrictions for custom project roles
+
+Improvements:
+
+* Improved dashboard
+
+Breaking Changes:
+
+* Move calendar to external plugin: https://github.com/kanboard/plugin-calendar
+* Move Gantt charts to external plugin: https://github.com/kanboard/plugin-gantt
+* Move Gravatar to external plugin: https://github.com/kanboard/plugin-gravatar
+
+Bug fixes:
+
+* Fix typo in Sqlite schema
+
+Version 1.0.41 (March 19, 2017)
+-------------------------------
+
+New features:
+
+* Add Croatian language translation
+
+Improvements:
+
+* Simplify dashboard to use new tasks list view
+* Move notifications outside of dashboard
+* Render QR code for TwoFactor authentication without Google Chart API
+* Add toggle button to show/hide subtasks in task list view
+* Use same layout as task listing for task search
+* Display tags in task list view
+* Make user actions available from contextual menu
+* Change users and groups list layout
+* Project priority is always rendered now
+* Do not list private projects when adding a new user
+* Restore link for task title on board
+
+Breaking Changes:
+
+* Remove method getQrCodeUrl() from PostAuthenticationProviderInterface
+
+Version 1.0.40 (Feb 24 2017)
+----------------------------
+
+New features:
+
+* Send comments by email
+* Send tasks by email
+* Add Reply-To header to emails sent from Kanboard
+* Upload Sqlite database from user interface
+* Automatic action to change task color when due date is expired
+
+Improvements:
+
+* Make link to calendar view bookable
+* Reintroduce word search in board selector
+* Properly resize task list height on column toggle
+* Show total score across all swimlanes
+* Redesign task list view and project list view
+* Allow people to remove missing automatic actions (installed from a removed plugins)
+* Improve task view tables
+* Simplify automatic actions table
+* Show category description in tooltip
+* Show category creation form in modal dialog
+* Prevent people to remove swimlanes that contains tasks
+* Show task count in swimlane table
+* Use contextual menu instead of action column in users management
+
+Breaking changes:
+
+* The concept of "default swimlane" has been removed
+* Previous default swimlanes are migrated to an independent swimlanes
+* Columns "default_swimlane" and "show_default_swimlane" from "projects" table are not used anymore
+* Remove API method "getDefaultSwimlane()"
+* Add mandatory argument "project_id" to API method "updateSwimlane()"
+* Change interface for mail transports
+
+Bug fixes:
+
+* Upload files button stay disabled when there are other submit buttons on the same page
+* Hiding subtasks from hidden tasks in dashboard
+
+Security:
+
+* Fix XSS in LetterAvatarProvider (render broken image)
+
+Those issues are harmless if you use default Kanboard settings for CSP rules:
+
+* Avoid potential XSS in project overview when listing users
+* Avoid potential XSS in Gantt chart
+
+Version 1.0.39 (Feb 12, 2017)
+-----------------------------
+
+Improvements:
+
+* Add menu entry in task dropdown to add attachments
+* Improve error reporting when file upload is not configured properly
+* Open comments on board view with a modal dialog instead of tooltip
+* Improve card icons alignment on board
+* Adjust modal dialog width on mobile devices
+* Add priority column in list view
+* Change wording for project status (use "closed" instead of "inactive")
+* Prevent people to remove columns that contains tasks
+* Improve LDAP error reporting
+* Add configuration parameter to disable email configuration from user interface
+* Add email address field for projects
+* Improve forget password behavior (notify the user that an email has been sent or not)
+* Do not display current project in board selector
+* Do not set default task assignee for team projects
+* Comments are highlighted if hash (#comment-123) is present in URL
+* Documentation translated in Turkish
+
+Bug fixes:
+
+* Search with multiple expressions with double quotes was not working
+* Fix broken subtask restriction per user
+* Fix CFD chart (stack wrongly ordered)
+
+Version 1.0.38 (Jan 28, 2017)
+-----------------------------
+
+New features:
+
+* User invitations by email
+
+Improvements:
+
+* Simplify user creation form
+* Add modification date for comments
+* Add project creation links to project management pages
+* More API procedures are now available to project members and project viewers
+* Simplify date and time configuration to avoid potential validation issues
+* Show dashboard column visibility in columns page
+* Add new template hooks
+* Update translations (id_ID, de_DE, ru_RU, fr_FR, pt_PT)
+* Add command to execute individual job (mostly for debugging)
+
+Regressions:
+
+* Stay on the same page when a task is closed
+* Wrong URL in modal to move task to another project
+
+Bug fixes:
+
+* Fix broken link when clicking on user avatar for tasks on board
+* Fix wrong datetime formatting when task form shows validation errors
+* Empty arrays are serialized to a list instead of a dict (Json API)
+* Always unbind internal listeners when closing a modal dialog
+* Fix installation errors on MySQL 8.0.0 (unescaped reserved keyword)
+* Avoid PHP notice when column form validation failed
+* Fix wrong default value for add group member modal
+* Add missing filter (completed) for task search
+
+Version 1.0.37 (Jan 14, 2017)
+-----------------------------
+
+Improvements:
+
+* Improve keyboard shortcuts handling
+* Improve auto-complete dropdown elements sorting
+* Larger task form
+* Rewrite dialog and confirmation boxes (inline popups)
+* Remove TaskGanttCreationController
+* Add helpers to open modal boxes
+* Make icons clickable in menus
+* Open task imports in modal box
+* Open form to create customer filters in modal box
+* Open project activities in modal box
+* Display project analytics in modal box
+* Display project exports in modal box
+* Improve accordion component
+* Improve currencies page navigation
+* Improve link labels page navigation
+* Improve settings page layout
+* Offer the possibility to define version compatibility from plugins
+* Add task creation event to the automatic action to send task by email
+
+Bug fixes:
+
+* Closing screenshot dialog prevent input elements to get focus
+
+Version 1.0.36 (Dec 30, 2016)
+-----------------------------
+
+New features:
+
+* Add slideshow for images
+* Add API calls to manage tags
+* Offer the possibility to override internal formatter objects from plugins
+* Open PDF attachments in browser tab (preview)
+
+Improvements:
+
+* Add pagination details
+* Handle username with dots in user mentions
+* Rewrite UI component that change user/group roles
+* Replace Chosen jQuery plugin by custom UI component
+* Remove dependency on Mousetrap Javascript library
+* Disable PageSpeed module from .htaccess if present
+* Add currency of Chinese Yuan
+
+Bug fixes:
+
+* Fix compatibility issue with PHP 5.3 for array_combine function
+* Fix wrong controller name on project activity page when using filters
+* Uploaded avatar images are now visible in public board view
+
+Version 1.0.35 (Dec 4, 2016)
+----------------------------
+
+New features:
+
+* Add external tasks plugin interfaces
+* Add personal API access token for users
+* Rewrite of Markdown editor (remove CodeMirror)
+* Suggest menu for task ID and user mentions in Markdown editor
+* Add config parameter to disable automatic SQL migrations
+
+Improvements:
+
+* Add button to close inline popups
+* Simplify `.htaccess` to avoid potential issues with possible specific Apache configurations
+* Replace notifications Javascript code by CSS
+* Refactoring of user mentions job
+* Remove Nitrous installer
+* Update translations
+* Rewrite some components in Vanilla Javascript
+* Started Javascript code refactoring to avoid to much dependencies on jQuery
+* Remove dependency on VueJS and CoreMirror
+* Add P3P headers to avoid potential issues with IE
+
+Breaking changes:
+
+* Rename command line tool `./kanboard` to `./cli`
+
+Bug fixes:
+
+* Change column type for application settings value (field too small)
+* Fix link generation when user mention is followed by a punctuation mark
+* Make user mentions works again
+
+Version 1.0.34 (Oct 11, 2016)
+-----------------------------
+
+New features:
+
+* Custom project roles with configurable restrictions
+* Duplicate a task to multiple projects during creation
+* New automatic action:
+    - Close a task in a specific column when not moved during a given period
+
+Improvements:
+
+* Do not close the popover when clicking on the background
+* Add visual icon to show a dropdown action on task
+* Avoid 'blur' effect on popover
+* Accept more file types for external links
+* Restrict search to active projects
+* Improve task status filter
+* Add filter tag:none
+* Always apply merge hooks in task creation controller
+* Update task moved date only when the column or swimlane is changed
+* Add new subtask hooks
+* Add the actual use of TaskStartDateFilter
+* Update translations and documentation
+
+Bug fixes:
+
+* Send absolute links in email notifications
+* Restrict task complexity to a specific range to avoid integer overflow
+* Do not show closed tasks in task move position form
+* Avoid "Controller not found" in Settings > Links
+
+Version 1.0.33 (Sep 5, 2016)
+----------------------------
+
+New features:
+
+* Move a task without drag and drop (smartphones and tablets)
+* Add the possibility to unlock users from the user interface
+* New API calls for task metadata
+* New automatic actions:
+    - Define color by Swimlane
+    - Define priority by Swimlane
+
+Improvements:
+
+* Introduce Vue.js to manage user interface components
+* Add column "Reference" and "Creator Name" in CSV task export
+* Show both time spent and estimated on the board
+* Store board collapsed mode user preference in the database
+* Store comment sorting direction in the database
+* Avoid tags overlapping on the board
+* Show project name in notifications
+* Allow priority changes for inverted priority scales
+* Add the possibility to attach template hooks with local variables and callback
+* Add "reference" hooks
+* Show project name in task forms
+* Convert vanilla CSS to SASS
+* Make user interface more responsive for smartphones and tablets
+* Support version operators for plugin directory: >= and >
+* Update Spanish documentation
+
+Other changes:
+
+* Time spent (in hours) for subtasks are not rounded too the nearest quarter anymore
+
+Bug fixes:
+
+* Fix improper HTML escaping for textarea (potential XSS)
+* Do not show closed tasks on public boards
+* Fix undefined constant in config example file
+* Fix PHP notice when sending overdue notifications
+* Fix wrong project date format (shown as 01/01/1970)
+    - If the dates still not correct, modify and save the date
+
+Version 1.0.32 (July 31, 2016)
+------------------------------
+
+New features:
+
+* New automated actions:
+    - Close tasks without activity in a specific column
+    - Set due date automatically
+    - Move a task to another column when closed
+    - Move a task to another column when not moved during a given period
+* New filter "moved" for moved date of tasks
+* Added internal task links to activity stream
+* Added new event for removed comments
+* Added search filter for task priority
+* Added the possibility to hide tasks in dashboard for a specific column
+* Documentation translated in Russian
+
+Improvements:
+
+* Improve background worker and job handler
+* New template hooks
+* Removed individual column scrolling on board, columns use the height of all tasks
+* Improve project page titles
+* Remove sidebar titles when not necessary
+* Internal events management refactoring
+* Handle header X-Real-IP to get IP address
+* Display project name for task auto-complete fields
+* Make search attributes not case sensitive
+* Display TOTP issuer for 2FA
+* Make sure that the table schema_version use InnoDB for Mysql
+* Use the library PicoFeed to generate RSS/Atom feeds
+* Change all links to the new repository
+
+Bug fixes:
+
+* Allow users to see inactive projects
+* Fixed typo in template that prevent project permissions to be duplicated
+* Fixed search query with multiple assignees (nested OR conditions)
+* Fixed Markdown editor auto-grow on the task form (Safari)
+* Fixed compatibility issue with PHP 5.3 for OAuthUserProvider class
+
+Version 1.0.31 (Jul 3, 2016)
+----------------------------
+
+New features:
+
+* Added tags: global and specific by project
+* Added application and project roles validation for API procedure calls
+* Added new API call: "getProjectByIdentifier"
+* Added new API calls for external task links, project attachments and subtask time tracking
+
+Improvements:
+
+* Use PHP 7 for the Docker image
+* Preserve role for existing users when using ReverseProxy authentication
+* Handle priority for task and project duplication
+* Expose task reference field to the user interface
+* Improve ICal export
+* Added argument owner_id and identifier to project API calls
+* Rewrite integration tests to run with Docker containers
+* Use the same task form layout everywhere
+* Removed some tasks dropdown menus that are now available with task edit form
+* Make embedded documentation readable in multiple languages (if a translation is available)
+* Added acceptance tests (browser tests)
+
+Bug fixes:
+
+* Fixed broken CSV exports
+* Fixed identical background color for LetterAvatar on 32bits platforms (Hash greater than PHP_MAX_INT)
+* Fixed lexer issue with non word characters
+* Flush memory cache in worker to get latest config values
+* Fixed empty title for web notification with only one overdue task
+* Take default swimlane into consideration for SwimlaneModel::getFirstActiveSwimlane()
+* Fixed "due today" highlighting
+
+Breaking changes:
+
+* Docker volume paths are changed to /var/www/app/{data,plugins}
+
+Version 1.0.30 (Jun 8, 2016)
+----------------------------
+
+Improvements:
+
+* Show tasks that are due today in a different color
+
+Bug fixes:
+
+* Fixed wrong controller for search in dashboard
+* Fixed plural form in alert message
+* Fixed CSS cosmetic issue with popover and tooltips
+
+Version 1.0.29 (Jun 5, 2016)
+----------------------------
+
+New features:
+
+* Manage plugin from the user interface and from the command line
+* Added support for background workers
+* Added the possibility to convert a subtask to a task
+* Added menu entry to add tasks from all project views
+* Add tasks in bulk from the board
+* Add dropdown for projects
+* Added config parameter to allow self-signed certificates for the HTTP client
+
+Improvements:
+
+* Display local date format in date picker
+* Configure email settings with the user interface in addition to config file
+* Upgrade Docker image to Alpine Linux 3.4
+* Move task import to a separate section
+* Mark web notification as read when clicking on it
+* Support strtotime strings for date search
+* Reset failed login counter and unlock user when changing password
+* Task do not open anymore in a new window on the Gantt chart
+* Do not display task progress for tasks with no start/end date
+* Use Gulp and Bower to manage assets
+* Controller and Middleware refactoring
+* Replace jQuery mobile detection by the library isMobile
+
+Bug fixes:
+
+* Fixed user date format parsing for dates that can be valid in multiple formats
+* Do not sync user role if LDAP groups are not configured
+* Fixed issue with unicode handling for letter based avatars and user initials
+* Do not send notifications to disabled users
+* Fixed wrong redirect when removing a task from the task view page
+
+Breaking changes:
+
+* Webhook to create tasks have been removed, use the API instead
+* All controllers have been renamed, people who are not using URL rewriting will see different URLs
+* All models have been renamed, plugin maintainers will have to update their plugins
+
+Version 1.0.28 (May 8, 2016)
+----------------------------
+
+New features:
+
+* Added automated action to change task color based on the priority
+* Added support for LDAP Posix Groups (OpenLDAP with memberUid or groupOfNames)
+* Added support for LDAP user photo attribute (Avatar image)
+* Added support for language LDAP attribute
+* Added support for Mysql SSL connection
+* Search in activity stream
+* Search in comments
+* Search by task creator
+* Added command line utility to reset user password and to disable 2FA
+
+Improvements:
+
+* Improve Avatar upload form
+* User roles are now synced with LDAP at each login
+* Improve web page title on the task view
+* Unify task drop-down menu between different views
+* Improve LDAP user group membership synchronization
+* Category and user filters do not append anymore in search field
+* Added more template hooks
+* Added tasks search with the API
+* Added priority field to API procedures
+* Added API procedure "getMemberGroups"
+* Added parameters for overdue tasks notifications: group by projects and send only to managers
+* Allow people to install Kanboard outside of the DocumentRoot
+* Allow plugins to be loaded from another folder
+* Filter/Lexer/QueryBuilder refactoring
+
+Bug fixes:
+
+* Allow a project owner to manage his own public project
+* Fixed PHP warning when removing a user with no Avatar image
+* Fixed improper Markdown escaping for some tooltips
+* Closing all tasks by column, also update closed tasks
+* Fixed wrong task link generation within Markdown text
+* Fixed wrong URL on comment toggle link for sorting
+* Fixed form submission with Meta+Enter keyboard shortcut
+* Removed PHP notices in comment suppression view
+
+Version 1.0.27 (Mar 27, 2016)
+-----------------------------
+
+New features:
+
+* Added Markdown editor
+* Added user avatars with pluggable system
+    - Default is a letter based avatar
+    - Gravatar
+    - Avatar Image upload
+* Added Korean translation
+
+Improvements:
+
+* Added more logging for LDAP client
+* Improve schema migration process
+* Improve notification configuration form
+* Handle state in OAuth2 client
+* Allow to use the original template in overridden templates
+* Unification of the project header
+* Refactoring of Javascript code
+* Improve comments design
+* Improve task summary sections
+* Put back the action sidebar in task view
+* Added support for multiple placeholders for LDAP_USER_FILTER
+* Added local file link provider
+* Show configuration in settings page
+* Added "?" to display list of keyboard shortcuts
+* Added new keyboard shortcuts for task view
+* Always display project name and task title in task views
+* Improve automatic action creation
+* Move notifications to the bottom of the screen
+* Added the possibility to import automatic actions from another project
+* Added Ajax loading icon for submit buttons
+* Added support for HTTP header "X-Forwarded-Proto: https"
+
+Bug fixes:
+
+* Fix bad unique constraints in Mysql table user_has_notifications
+* Force integer type for aggregated metrics (Burndown chart concat values instead of summing)
+* Fixes cycle time calculation when the start date is defined in the future
+* Access allowed to any tasks from the shared public board by changing the URL parameters
+* Fix invalid user filter for API procedure createLdapUser()
+* Ambiguous column name with very old version of Sqlite
+
+Version 1.0.26 (Feb 28, 2016)
+-----------------------------
+
+Breaking changes:
+
+* API procedures:
+    - "moveColumnUp" and "moveColumnDown" are replaced by "changeColumnPosition"
+    - "moveSwimlaneUp" and "moveSwimlaneDown" are replaced by "changeSwimlanePosition"
+
+New features:
+
+* Add drag and drop to change subtasks, swimlanes and columns positions
+* Add file drag and drop and asynchronous upload
+* Enable/Disable users
+* Add setting option to disable private projects
+* Add new config option to disable logout
+
+Improvements:
+
+* Use inline popup to create new columns
+* Improve filter box design
+* Improve image thumbnails and files table
+* Add confirmation inline popup to remove custom filter
+* Increase client_max_body_size value for Nginx
+* Split Board model into multiple classes
+* Improve logging for the Docker image
+
+Bug fixes:
+
+* Fix PHP notices during creation of first project and in subtasks table
+* Fix filter dropdown not accessible when there are too many items
+* Fix regression: unable to change project in "task move/duplicate to another project"
+
+Version 1.0.25 (Feb 7, 2016)
+----------------------------
+
+Breaking changes:
+
+* Core functionalities moved to external plugins:
+    - Google Auth: https://github.com/kanboard/plugin-google-auth
+    - Github Auth: https://github.com/kanboard/plugin-github-auth
+    - Gitlab Auth: https://github.com/kanboard/plugin-gitlab-auth
+
+New features:
+
+* When creating a new project, have the possibility to select another project to duplicate
+* Add a "Me" button to assignee form element
+* Add external links for tasks with plugin api
+* Add project owner (Directly Responsible Individual)
+* Add configurable task priority
+* Add Greek translation
+* Add automatic actions to close tasks with no activity
+* Add automatic actions to send an email when there is no activity on a task
+* Regroup all daily background tasks in one command: "cronjob"
+* Add task dropdown menu on listing pages
+
+Improvements:
+
+* New Dockerfile based on Alpine Linux and Nginx/PHP-FPM
+* The date time format can be chosen in application settings
+* Export only open tasks in iCal feed
+* Remove time form on task summary page and move that to task edit form
+* Replace box shadow by a larger border width when a task is recently modified
+* Do not refresh the whole page when changing subtask status
+* Add dropdown menu with inline popup for all task actions
+* Change sidebar style
+* Change task summary layout
+* Use inline popup for subtasks, categories, swimlanes, actions and columns
+* Move homepage menus to the user dropdown
+* Have a new task assigned to the creator by default instead of "no assignee"
+* Show progress for task links in board tooltips
+* Simplify code to handle ajax popover and redirects
+* Simplify layout and templates generation
+* Move task form elements to Task helper
+
+Bug fixes:
+
+* Category label is broken on the board if there's a url in the description
+* Fix pagination on task time tracking page
+
+Version 1.0.24 (Jan 23, 2016)
+-----------------------------
+
+New features:
+
+* Forgot Password
+* Add drop-down menu on each board column title to close all tasks
+* Add Malay language
+* Add new API procedures for groups, roles, project permissions and to move/duplicate tasks to another project
+
+Improvements:
+
+* Avoid to send XHR request when a task has not moved after a drag and drop
+* Set maximum dropzone height when the individual column scrolling is disabled
+* Always show the search box in board selector
+* Replace logout link by a drop-down menu
+* Handle notification for group members attached to a project
+* Return the highest role for a project when a user is member of multiple groups
+* Show in user interface the saving state of the task
+* Add drop-down menu for subtasks, categories, swimlanes, columns, custom filters, task links and groups
+* Add new template hooks
+* Application settings are not cached anymore in the session
+* Do not check board status during task move
+* Move validators to a separate namespace
+* Improve and write unit tests for reports
+* Reduce the number of SQL queries for project daily column stats
+* Remove event subscriber to update date_moved field
+* Make sure that some event subscribers are not executed multiple times
+* Show rendering time of individual templates when debug mode is enabled
+* Make sure that no events are fired if nothing has been modified in the task
+* Make dashboard section title clickable
+* Add unit tests for LastLogin
+
+Bug fixes:
+
+* Automatic action listeners were using the same instance
+* Fix wrong link for category in task footer
+* Unable to set currency rate with Postgres database
+* Avoid automatic actions that change the color to fire subsequent events
+* Unable to unassign a task from the API
+* Revert back previous optimizations of TaskPosition (incompatibility with some environment)
+
+Version 1.0.23 (Jan 9, 2016)
+----------------------------
+
+Breaking changes:
+
+* Plugin API changes for Automatic Actions
+* Automatic Action to close a task doesn't have the column parameter anymore (use the action "Close a task in a specific column")
+* Action name stored in the database is now the absolute class name
+* Core functionalities moved to external plugins:
+    - Github Webhook: https://github.com/kanboard/plugin-github-webhook
+    - Gitlab Webhook: https://github.com/kanboard/plugin-gitlab-webhook
+    - Bitbucket Webhook: https://github.com/kanboard/plugin-bitbucket-webhook
+
+New features:
+
+* Added support of user mentions (@username)
+* Added report to compare working hours between open and closed tasks
+* Added the possibility to define custom routes from plugins
+* Added new method to remove metadata
+
+Improvements:
+
+* Improve Two-Factor activation and plugin API
+* Improving performance during task position change (SQL queries are 3 times faster than before)
+* Do not show window scrollbars when individual column scrolling is enabled
+* Automatic Actions code improvements and unit tests
+* Increase action name column length in actions table
+
+Bug fixes:
+
+* Fix compatibility issue with FreeBSD for session.hash_function parameter
+* Fix wrong constant name that causes a PHP error in project management section
+* Fix pagination in group members listing
+* Avoid PHP error when enabling LDAP group provider with PHP < 5.5
+
+Version 1.0.22 (Dec 13, 2015)
+-----------------------------
+
+Breaking changes:
+
+* LDAP configuration parameters changes (See documentation)
+* SQL table changes:
+    - "users" table: added new column "role" and removed columns "is_admin" and "is_project_admin"
+    - "project_has_users" table: replaced column "is_owner" with column "role"
+    - Sqlite does not support alter table, old columns still there but unused
+* API procedure changes:
+    - createUser
+    - createLdapUser
+    - updateUser
+    - updateTask
+* Event removed: "session.bootstrap", use "app.boostrap" instead
+
+New features:
+
+* Add pluggable authentication and authorization system (complete rewrite)
+* Add groups (teams/organization)
+* Add LDAP groups synchronization
+* Add project group permissions
+* Add new project role Viewer
+* Add generic LDAP client library
+* Add search query attribute for task link
+* Add the possibility to define API token in config file
+* Add capability to reopen Gitlab issues
+* Try to load config.php from /data if not available
+
+Version 1.0.21 (Nov 22, 2015)
+-----------------------------
+
+Breaking changes:
+
+* Projects with duplicate names are now allowed:
+    - For Postgres and Mysql the unique constraint is removed by database migration
+    - However Sqlite does not support alter table, only new databases will have the unique constraint removed
+
+New features:
+
+* New automatic action: Assign a category based on a link
+* Added Bosnian translation
+
+Improvements:
+
+* Dropdown menu entries are now clickable outside of the html link
+* Improve error handling of plugins
+* Use PHP7 function random_bytes() to generate tokens if available
+* CSV task export show the assignee name in addition to the assignee username
+* Add new hooks for plugins
+* Remove workaround for "INSERT ON DUPLICATE KEY UPDATE..."
+
+Internal code refactoring:
+
+* Rewrite of session management
+* Move some classes to a new namespace Kanboard\Core\Http
+
+Bug fixes:
+
+* Loading cs_CZ locale display the wrong language in datetime picker
+* Datepicker is closed unexpectedly on blur event
+* Fix bug in daily project summary CSV export
+* Fix PHP error when adding a new user with email notification enabled
+* Add missing template for activity stream to show event "file.create"
+* Fix wrong value for PLUGINS_DIR in config.default.php
+* Make CSV export compatible with PHP 5.3
+* Avoid Safari to append .html at the end of downloaded files
+
+Version 1.0.20 (Oct 24, 2015)
+-----------------------------
+
+Breaking changes:
+
+* Add namespace Kanboard (update your plugins)
+* Move Mailgun, Sendgrid, Postmark, Slack, Hipchat and Jabber to plugins
+* ReverseProxy authentication check for each request that the username match the user session
+
+New features:
+
+* Add CSV import for users and tasks
+* Add Task, User and Project metadata for plugin creators
+
+Improvements:
+
+* Allow to change comments sorting
+* Add the possibility to append or not custom filters
+* Make mail transports pluggable
+* Do not show scroll-bars when a column is collapsed on Windows systems
+* Regenerate thumbnails if missing
+
+Bug fixes:
+
+* People should not see any tasks during a search when they are not associated to a project
+* Avoid disabling the default swimlane during renaming when there is no other activated swimlane
+
+Version 1.0.19 (Oct 11, 2015)
+-----------------------------
+
+New features:
+
+* Added web notifications
+* Added LDAP group sync
+* Added swimlane description
+* New plugin system (alpha)
+* Added Bahasa Indonesia translation
+* Added API procedures: getMyOverdueTasks, getOverdueTasksByProject and GetMyProjects
+* Added user API access for procedure getProjectActivity()
+* Added config parameter to enable/disable Syslog
+* Added custom filters
+* Added http client proxy support
+
+Core functionalities moved to plugins:
+
+* Budget planning: https://github.com/kanboard/plugin-budget
+* SubtaskForecast: https://github.com/kanboard/plugin-subtask-forecast
+* Timetable: https://github.com/kanboard/plugin-timetable
+
+Improvements:
+
+* When duplicating a task redirect to the new task
+* Include more shortcut links into the view "My projects"
+* Duplicate a project with tasks will copy the new tasks in the same columns
+* Offer alternative method to create Mysql and Postgres databases (import sql dump)
+* Make sure there is always a trailing slash for application_url
+* Do not show the checkbox "Show default swimlane" when there is no active swimlanes
+* Append filters instead of replacing value for users and categories drop-downs
+* Do not show empty swimlanes in public view
+* Change swimlane layout to save space on the screen
+* Add the possibility to set/unset max column height (column scrolling)
+* Show "Open this task" in drop-down menu for closed tasks
+* Show assignee on card only when someone is assigned (hide nobody text)
+* Highlight selected item in drop-down menus
+* Gantt chart: change bar color according to task progress
+* Replace color drop-down by color picker in task forms
+* Creating another task stay in the popover (no full page refresh anymore)
+* Avoid scrollbar in Gantt chart for row title on Windows platform
+* Remove unnecessary margin for calendar header
+* Show localized documentation if available
+* Add event subtask.delete
+* Add abstract storage layer
+* Add abstract cache layer
+* Add Docker tag for stable version
+
+Others:
+
+* Data directory permission are not checked anymore
+* Data directory is not mandatory anymore for people that use a remote database and remote object storage
+
+Bug fixes:
+
+* Fix typo in template that prevents Gitlab OAuth link to be displayed
+* Fix Markdown preview links focus
+* Avoid drop-down menu to be truncated inside a column with scrolling
+* Deleting subtask doesn't update task time tracking
+* Fix Mysql error about gitlab_id when creating remote user
+* Fix subtask timer bug (event called recursively)
+* Fix Postgres issue "Cardinality violation" when there is multiple "is_milestone_of" links
+* Fix issue with due date greater than year 2038
+
+Version 1.0.18 (Aug 30, 2015)
+-----------------------------
+
+New features:
+
+* Include documentation in the application
+* Add Gitlab authentication
+* Add users and categories filters on the board
+* Add hide/show columns
+* Add Gantt chart for projects and tasks
+* Add new role "Project Administrator"
+* Add login brute force protection with captcha and account lockdown
+* Add new api procedures: getDefaultTaskColor(), getDefaultTaskColors() and getColorList()
+* Add user api access
+* Add config parameter to define session duration
+* Add config parameter to disable/enable RememberMe authentication
+* Add start/end date for projects
+* Add new automated action to change task color based on the task link
+* Add milestone marker in board task
+* Add search for task title when using an integer only input
+* Add Portuguese (European) translation
+* Add Norwegian translation
+
+Improvements:
+
+* Add handle to move tasks on touch devices
+* Improve file attachments tooltip on the board
+* Adjust automatically the height of the placeholder during drag and drop
+* Show all tasks when using no search criteria
+* Add column vertical scrolling
+* Set dynamically column height based on viewport size
+* Enable support for Github Enterprise when using Github Authentication
+* Update iCalendar library to display organizer name
+* Improve sidebar menus
+* Add no referrer policy in meta tags
+* Run automated unit tests with Sqlite/Mysql/Postgres on Travis-ci
+* Add Makefile and remove the "scripts" directory
+
+Bug fixes:
+
+* Wrong template name for subtasks tooltip due to previous refactoring
+* Fix broken url for closed tasks in project view
+* Fix permission issue when changing the url manually
+* Fix bug task estimate is reset when using subtask timer
+* Fix screenshot feature with Firefox 40
+* Fix bug when uploading files with Cyrilic characters
+
+Version 1.0.17 (Jul 27, 2015)
+-----------------------------
+
+New features:
+
+* Added url rewrite and new routes
+* Added new search engine with advanced syntax
+* Added global search section
+* Added search form on the dashboard
+* Added new dashboard layout
+* Added new layout for board/calendar/list views
+* Added filters helper for search forms
+* Added setting option to disable subtask timer
+* Added setting option to include or exclude closed tasks into CFD
+* Added setting option to define the default task color
+* Added new config option to disable automatic creation of LDAP accounts
+* Added loading icon on board view
+* Prompt user when moving or duplicate a task to another project
+* Added current values when moving/duplicate a task to another project and add a loading icon
+* Added memory consumption to debug log
+* Added form to create remote user
+* Added edit form for user authentication
+* Added config option to hide login form
+* Display OAuth2 urls on integration page
+* Added keyboard shortcuts to switch between board/calendar/list view
+* Added keyboard shortcut to focus on the search box
+* Added Slack channel override
+* Added new report: Lead and cycle time for projects
+* Added new report: Average time spent into each column
+* Added task analytics
+* Added icon to set the start date automatically
+* Added datetime picker for start date
+
+Improvements:
+
+* Updated documentation
+* Display user initials when tasks are in collapsed mode
+* Show title in tooltip for collapsed tasks
+* Improve alert box fadeout to avoid an empty space
+* Set focus on the drop-down for category popover
+* Make escape keyboard shortcut global
+* Check the box remember me by default
+* Store redirect login url in session instead of using url parameter
+* Update Gitlab webhook
+* Do not rewrite remember me cookie for each request
+* Set the assignee as organizer for ical events
+* Increase date range for ics export
+* Reduce spacing on cards
+* Move board collapse/expand mode to server side to avoid board flickering
+* Use ajax requests for board collapse/expand
+* Do not set anchor for the default swimlane on the link back to board
+* Replace timeserie axis to category axis for charts
+* Hide task age in compact mode
+* Improve quick-add subtasks form
+* Reduce the size of the filter box for smaller screen
+* Added icon to hide/show sidebar
+* Update GitLab logo
+* Improve Dockerfile
+
+Translations:
+
+* Added Czech translation
+* Updated Spanish translation
+* Updated German Translation
+
+Bug fixes:
+
+* Screenshot drop-down: unexpected scroll down on the board view and focus lost when clicking on the drop zone
+* No creator when duplicating a task
+* Avoid the creation of multiple subtask timer for the same task and user
+
+Code refactoring:
+
+* Split task controller into smaller classes
+* Remove method Category::getBoardCategories()
+* Rewrite movePosition() to improve performances
+* Refactoring of Github and Google authentication
+
+Breaking changes:
+
+* New OAuth url for Google and Github authentication
+
+API:
+
+* Add urls in api response for tasks and projects
+
+Other:
+
+* Added automated Docker build
+* Remove edit recurrence from the task menu on the board
+* Switch to MIT License instead of AGPLv3
+
+Version 1.0.0 to 1.0.16
+-----------------------
+
+* See commit history and website news

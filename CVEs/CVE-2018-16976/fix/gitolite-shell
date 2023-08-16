@@ -1,0 +1,269 @@
+#!/usr/bin/perl
+
+# gitolite shell, invoked from ~/.ssh/authorized_keys
+# ----------------------------------------------------------------------
+
+use FindBin;
+
+BEGIN { $ENV{GL_BINDIR} = $FindBin::RealBin; }
+BEGIN { $ENV{GL_LIBDIR} = "$ENV{GL_BINDIR}/lib"; }
+use lib $ENV{GL_LIBDIR};
+
+# set HOME
+BEGIN { $ENV{HOME} = $ENV{GITOLITE_HTTP_HOME} if $ENV{GITOLITE_HTTP_HOME}; }
+
+use Gitolite::Rc;
+use Gitolite::Common;
+use Gitolite::Conf::Load;
+
+use strict;
+use warnings;
+
+# the main() sub expects ssh-ish things; set them up...
+my $id = '';
+if ( exists $ENV{G3T_USER} ) {
+    $id = in_file();    # file:// masquerading as ssh:// for easy testing
+} elsif ( exists $ENV{SSH_CONNECTION} ) {
+    $id = in_ssh();
+} elsif ( exists $ENV{REQUEST_URI} ) {
+    $id = in_http();
+} else {
+    _die "who the *heck* are you?";
+}
+
+# sanity...
+my $soc = $ENV{SSH_ORIGINAL_COMMAND};
+$soc =~ s/[\n\r]+/<<newline>>/g;
+_die "I don't like newlines in the command: '$soc'\n" if $ENV{SSH_ORIGINAL_COMMAND} ne $soc;
+
+# allow gitolite-shell to be used as "$SHELL".  Experts only; no support, no docs
+if (@ARGV and $ARGV[0] eq '-c') {
+    shift;
+    $ARGV[0] =~ s/^$0 // or _die "unknown git/gitolite command: '$ARGV[0]'";
+}
+
+# the INPUT trigger massages @ARGV and $ENV{SSH_ORIGINAL_COMMAND} as needed
+trigger('INPUT');
+
+main($id);
+
+gl_log('END') if $$ == $ENV{GL_TID};
+
+exit 0;
+
+# ----------------------------------------------------------------------
+
+sub in_file {
+    gl_log( 'file', "ARGV=" . join( ",", @ARGV ), "SOC=$ENV{SSH_ORIGINAL_COMMAND}" );
+
+    if ( $ENV{SSH_ORIGINAL_COMMAND} =~ /git-\w+-pack/ ) {
+        print STDERR "TRACE: gsh(", join( ")(", @ARGV ), ")\n";
+        print STDERR "TRACE: gsh(SOC=$ENV{SSH_ORIGINAL_COMMAND})\n";
+    }
+    return 'file';
+}
+
+sub in_http {
+    http_setup_die_handler();
+
+    _die "GITOLITE_HTTP_HOME not set" unless $ENV{GITOLITE_HTTP_HOME};
+
+    _die "fallback to DAV not supported" if $ENV{REQUEST_METHOD} eq 'PROPFIND';
+
+    # fake out SSH_ORIGINAL_COMMAND and SSH_CONNECTION when called via http,
+    # so the rest of the code stays the same (except the exec at the end).
+    http_simulate_ssh_connection();
+    $ENV{SSH_ORIGINAL_COMMAND} ||= '';
+
+    $ENV{REMOTE_USER} ||= $rc{HTTP_ANON_USER};
+    @ARGV = ( $ENV{REMOTE_USER} );
+
+    my $ip;
+    ( $ip = $ENV{SSH_CONNECTION} || '(no-IP)' ) =~ s/ .*//;
+
+    gl_log( 'http', "ARGV=" . join( ",", @ARGV ), "SOC=" . ( $ENV{SSH_ORIGINAL_COMMAND} || '' ), "FROM=$ip" );
+
+    return 'http';
+}
+
+sub in_ssh {
+    my $ip;
+    ( $ip = $ENV{SSH_CONNECTION} || '(no-IP)' ) =~ s/ .*//;
+
+    gl_log( 'ssh', "ARGV=" . join( ",", @ARGV ), "SOC=" . ( $ENV{SSH_ORIGINAL_COMMAND} || '' ), "FROM=$ip" );
+
+    $ENV{SSH_ORIGINAL_COMMAND} ||= '';
+
+    return $ip;
+}
+
+# ----------------------------------------------------------------------
+
+# call this once you are sure arg-1 is the username and SSH_ORIGINAL_COMMAND
+# has been setup (even if it's not actually coming via ssh).
+sub main {
+    my $id = shift;
+
+    # set up the user
+    my $user = $ENV{GL_USER} = shift @ARGV;
+
+    # set up the repo and the attempted access
+    my ( $verb, $repo ) = parse_soc();    # returns only for git commands
+    Gitolite::Conf::Load::sanity($repo, $REPONAME_PATT);
+    $ENV{GL_REPO} = $repo;
+    my $aa = ( $verb =~ 'upload' ? 'R' : 'W' );
+
+    # catch rare race when moving repos into gitolite control
+    _die "$aa any $repo $user DENIED by fallthru" .
+            "\n(or you mis-spelled the reponame)"
+        unless update_hook_present($repo);
+    # this error message is exactly the same as that from elsewhere in the
+    # code, for the usual reasons (avoid leaking information)
+
+    # set up env vars from options set for this repo
+    env_options($repo);
+
+    # auto-create?
+    if ( repo_missing($repo) and access( $repo, $user, '^C', 'any' ) !~ /DENIED/ ) {
+        require Gitolite::Conf::Store;
+        Gitolite::Conf::Store->import;
+        new_wild_repo( $repo, $user, $aa );
+        gl_log( 'create', $repo, $user, $aa );
+    }
+
+    # a ref of 'any' signifies that this is a pre-git check, where we don't
+    # yet know the ref that will be eventually pushed (and even that won't
+    # apply if it's a read operation).  See the matching code in access() for
+    # more information.
+    unless ( $ENV{GL_BYPASS_ACCESS_CHECKS} ) {
+        my $ret = access( $repo, $user, $aa, 'any' );
+        trigger( 'ACCESS_1', $repo, $user, $aa, 'any', $ret );
+        _die $ret . "\n(or you mis-spelled the reponame)" if $ret =~ /DENIED/;
+
+        gl_log( "pre_git", $repo, $user, $aa, 'any', $ret );
+    }
+
+    trigger( 'PRE_GIT', $repo, $user, $aa, 'any', $verb );
+    if ( $ENV{REQUEST_URI} ) {
+        _system( "git", "http-backend" );
+    } else {
+        my $repodir = "'$rc{GL_REPO_BASE}/$repo.git'";
+        _system( "git", "shell", "-c", "$verb $repodir" );
+    }
+    trigger( 'POST_GIT', $repo, $user, $aa, 'any', $verb );
+}
+
+# ----------------------------------------------------------------------
+
+sub parse_soc {
+    my $soc = $ENV{SSH_ORIGINAL_COMMAND};
+    $soc ||= 'info';
+
+    my $git_commands = "git-upload-pack|git-receive-pack|git-upload-archive";
+    # simplify the regex; we'll handle all the reponame nuances later
+    if ( $soc =~ m(^($git_commands) '?/?(.*?)'?$) ) {
+        my ( $verb, $repo ) = ( $1, $2 );
+        trace( 2, "git command", $soc );
+
+        # clean up the repo name; first extract the trace level if supplied
+        # (and no, you can't have a trace level *and* a trailing slash).
+        $ENV{D} = $1 if $repo =~ s/\.git(\d)$//;
+        # and then the git-daemon-compatibility trailers
+        $repo =~ s(/$)();
+        $repo =~ s(\.git$)();
+
+        _die "invalid repo name: '$repo'" if $repo !~ $REPONAME_PATT;
+        return ( $verb, $repo );
+    }
+
+    # after this we should not return; caller expects us to handle it all here
+    # and exit out
+
+    my @words = split ' ', $soc;
+    if ( $rc{COMMANDS}{ $words[0] } ) {
+        if ( $rc{COMMANDS}{ $words[0] } ne 'ua' ) {
+            _die "suspicious characters loitering about '$soc'" if $soc !~ $REMOTE_COMMAND_PATT;
+            _die "no relative paths allowed anywhere!" if $soc =~ m(\.\./);
+        }
+        trace( 2, "gitolite command", $soc );
+        _system( "gitolite", @words );
+        exit 0;
+    }
+
+    _die "unknown git/gitolite command: '$soc'";
+}
+
+# ----------------------------------------------------------------------
+# helper functions for "in_http"
+
+sub http_setup_die_handler {
+
+    $SIG{__DIE__} = sub {
+        my $service = ( $ENV{SSH_ORIGINAL_COMMAND} =~ /git-receive-pack/ ? 'git-receive-pack' : 'git-upload-pack' );
+        my $message = shift; chomp($message);
+        print STDERR "$message\n";
+
+        http_print_headers($service);
+
+        # format the service response, then the message.  With initial
+        # help from Ilari and then a more detailed email from Shawn...
+        $service = "# service=$service\n"; $message = "ERR $message\n";
+        $service = sprintf( "%04X", length($service) + 4 ) . "$service";    # no CRLF on this one
+        $message = sprintf( "%04X", length($message) + 4 ) . "$message";
+
+        print $service;
+        print "0000";                                                       # flush-pkt, apparently
+        print $message;
+        print STDERR $service;
+        print STDERR $message;
+        exit 0;                                                             # if it's ok for die_webcgi in git.git/http-backend.c, it's ok for me ;-)
+      }
+}
+
+sub http_simulate_ssh_connection {
+    # these patterns indicate normal git usage; see "services[]" in
+    # http-backend.c for how I got that.  Also note that "info" is overloaded;
+    # git uses "info/refs...", while gitolite uses "info" or "info?...".  So
+    # there's a "/" after info in the list below
+    if ( $ENV{PATH_INFO} =~ m(^/(.*)/(HEAD$|info/refs$|objects/|git-(?:upload|receive)-pack$)) ) {
+        my $repo = $1;
+        my $verb = ( $ENV{REQUEST_URI} =~ /git-receive-pack/ ) ? 'git-receive-pack' : 'git-upload-pack';
+        $ENV{SSH_ORIGINAL_COMMAND} = "$verb '$repo'";
+    } else {
+        # this is one of our custom commands; could be anything really,
+        # because of the adc feature
+        my ($verb) = ( $ENV{PATH_INFO} =~ m(^/(\S+)) );
+        my $args = $ENV{QUERY_STRING};
+        $args =~ s/\+/ /g;
+        $args =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+        $ENV{SSH_ORIGINAL_COMMAND} = $verb;
+        $ENV{SSH_ORIGINAL_COMMAND} .= " $args" if $args;
+        http_print_headers();    # in preparation for the eventual output!
+
+        # we also need to pipe STDERR out via STDOUT, else the user doesn't see those messages!
+        open(STDERR, ">&STDOUT") or _die "Can't dup STDOUT: $!";
+    }
+    $ENV{SSH_CONNECTION} = "$ENV{REMOTE_ADDR} $ENV{REMOTE_PORT} $ENV{SERVER_ADDR} $ENV{SERVER_PORT}";
+}
+
+my $http_headers_printed = 0;
+
+sub http_print_headers {
+    my ( $service, $code, $text ) = @_;
+
+    return if $http_headers_printed++;
+    $code ||= 200;
+    $text ||= "OK - gitolite";
+
+    $|++;
+    print "Status: $code $text\r\n";
+    print "Expires: Fri, 01 Jan 1980 00:00:00 GMT\r\n";
+    print "Pragma: no-cache\r\n";
+    print "Cache-Control: no-cache, max-age=0, must-revalidate\r\n";
+    if ($service) {
+        print "Content-Type: application/x-$service-advertisement\r\n";
+    } else {
+        print "Content-Type: text/plain\r\n";
+    }
+    print "\r\n";
+}

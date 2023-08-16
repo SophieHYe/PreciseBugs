@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:onmsgi="http://xmlns.opennms.org/xsd/spring/onms-osgi"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+              http://xmlns.opennms.org/xsd/spring/onms-osgi http://xmlns.opennms.org/xsd/spring/onms-osgi.xsd">
+  
+  <!-- Only use BASIC auth for the RESTful APIs -->
+  <http pattern="/rest/**" realm="OpenNMS Realm" create-session="never">
+    <!-- OPTIONS pre-flight requests should always be accepted -->
+    <intercept-url pattern="/rest/**" method="OPTIONS" access="ROLE_ANONYMOUS,ROLE_REST,ROLE_ADMIN,ROLE_USER,ROLE_MOBILE"/>
+
+    <!-- Calls to health/overview are always accepted -->
+    <intercept-url pattern="/rest/health/probe" method="GET" access="ROLE_ANONYMOUS,ROLE_REST,ROLE_ADMIN,ROLE_USER,ROLE_MOBILE"/>
+
+    <!-- ack/unack/escalate/clear alarms -->
+    <intercept-url pattern="/rest/alarms/**" method="PUT" access="ROLE_MOBILE,ROLE_REST,ROLE_ADMIN" />
+
+    <!-- set/unset maintenance mode on services -->
+    <intercept-url pattern="/rest/nodes/**" method="PUT" access="ROLE_MOBILE,ROLE_REST,ROLE_ADMIN" />
+    <!-- set/unset maintenance mode on nodes -->
+    <intercept-url pattern="/rest/ifservices" method="PUT" access="ROLE_MOBILE,ROLE_REST,ROLE_ADMIN" />
+
+    <!-- Provisioning-related stuff is all allowed as long as you're in the provision, rest, or admin roles. -->
+    <intercept-url pattern="/rest/foreignSources/**" access="ROLE_PROVISION,ROLE_REST,ROLE_ADMIN"/>
+    <intercept-url pattern="/rest/requisitions/**" access="ROLE_PROVISION,ROLE_REST,ROLE_ADMIN"/>
+
+    <!-- Restrict access to SNMP configuration to ROLE_REST and ROLE_ADMIN only -->
+    <intercept-url pattern="/rest/snmpConfig/**" access="ROLE_REST,ROLE_ADMIN"/>
+
+    <!-- Allow users to POST to the Measurements API, which is read-only -->
+    <intercept-url pattern="/rest/measurements" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_USER"/>
+
+    <!-- Allow Minions to access the configuration endpoints -->
+    <intercept-url pattern="/rest/config/**" method="GET" access="ROLE_MINION,ROLE_REST,ROLE_ADMIN"/>
+    <!-- Allow Minions to access the server info -->
+    <intercept-url pattern="/rest/info" method="GET" access="ROLE_MINION,ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+
+    <!-- Allow certain actions for the REPORT_DESIGNER role -->
+    <intercept-url pattern="/rest/reports/scheduled/**" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_REPORT_DESIGNER"/>
+    <intercept-url pattern="/rest/reports/persisted/**" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_REPORT_DESIGNER"/>
+    <intercept-url pattern="/rest/reports/**" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_REPORT_DESIGNER,ROLE_USER"/>
+    <intercept-url pattern="/rest/reports/**" method="DELETE" access="ROLE_REST,ROLE_ADMIN,ROLE_REPORT_DESIGNER"/>
+    <intercept-url pattern="/rest/reports/**" method="PUT" access="ROLE_REST,ROLE_ADMIN,ROLE_REPORT_DESIGNER"/>
+
+    <!-- Allow certain actions for the ROLE_FLOW_MANAGER role -->
+    <intercept-url pattern="/rest/classifications/**" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_FLOW_MANAGER" />
+    <intercept-url pattern="/rest/classifications/**" method="DELETE" access="ROLE_REST,ROLE_ADMIN,ROLE_FLOW_MANAGER" />
+    <intercept-url pattern="/rest/classifications/**" method="PUT" access="ROLE_REST,ROLE_ADMIN,ROLE_FLOW_MANAGER" />
+
+    <!-- read-only calls should be allowed for any user -->
+    <intercept-url pattern="/rest/**" method="GET" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+    <intercept-url pattern="/rest/**" method="HEAD" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+
+    <!-- read-write calls should be allowed for the REST and ADMIN roles -->
+    <intercept-url pattern="/rest/**" method="DELETE" access="ROLE_REST,ROLE_ADMIN"/>
+    <intercept-url pattern="/rest/**" method="POST" access="ROLE_REST,ROLE_ADMIN"/>
+    <intercept-url pattern="/rest/**" method="PUT" access="ROLE_REST,ROLE_ADMIN"/>
+
+    <http-basic entry-point-ref="xRequestedWithAwareBasicAuthEntryPoint" />
+
+    <custom-filter position="PRE_AUTH_FILTER" ref="attributePreAuthFilter"/>
+    <custom-filter after="PRE_AUTH_FILTER" ref="headerPreAuthFilter"/>
+    <custom-filter position="LAST" ref="authFilterEnabler"/>
+  </http>
+
+  <http pattern="/nrt/**" realm="OpenNMS Realm">
+    <!-- OPTIONS pre-flight requests should always be accepted -->
+    <intercept-url pattern="/nrt/**" method="OPTIONS" access="ROLE_ANONYMOUS,ROLE_REST,ROLE_ADMIN,ROLE_USER,ROLE_MOBILE"/>
+
+    <!-- read-only calls should be allowed for any user -->
+    <intercept-url pattern="/nrt/**" method="GET" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+    <intercept-url pattern="/nrt/**" method="HEAD" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+
+    <http-basic />
+
+    <custom-filter position="PRE_AUTH_FILTER" ref="attributePreAuthFilter"/>
+    <custom-filter after="PRE_AUTH_FILTER" ref="headerPreAuthFilter"/>
+    <custom-filter position="LAST" ref="authFilterEnabler"/>
+  </http>
+
+  <!-- Only use BASIC auth for the RESTful API v2 -->
+  <http pattern="/api/v2/**" realm="OpenNMS Realm" create-session="never">
+
+    <!-- Allow users to POST to the Geolocation API, which is read-only -->
+    <intercept-url pattern="/api/v2/geolocation" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_USER"/>
+    <!-- Allow users to POST to the Graph API, which is read-only -->
+    <intercept-url pattern="/api/v2/graphs/**" method="POST" access="ROLE_REST,ROLE_ADMIN,ROLE_USER"/>
+
+    <!-- OPTIONS pre-flight requests should always be accepted -->
+    <intercept-url pattern="/api/v2/**" method="OPTIONS" access="ROLE_ANONYMOUS,ROLE_REST,ROLE_ADMIN,ROLE_USER,ROLE_MOBILE"/>
+
+    <!-- read-only calls should be allowed for any user -->
+    <intercept-url pattern="/api/v2/**" method="GET" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+    <intercept-url pattern="/api/v2/**" method="HEAD" access="ROLE_REST,ROLE_ADMIN,ROLE_MOBILE,ROLE_USER"/>
+
+    <!-- read-write calls should be allowed for the REST and ADMIN roles -->
+    <intercept-url pattern="/api/v2/**" method="DELETE" access="ROLE_REST,ROLE_ADMIN"/>
+    <intercept-url pattern="/api/v2/**" method="POST" access="ROLE_REST,ROLE_ADMIN"/>
+    <intercept-url pattern="/api/v2/**" method="PUT" access="ROLE_REST,ROLE_ADMIN"/>
+
+    <http-basic entry-point-ref="xRequestedWithAwareBasicAuthEntryPoint" />
+
+    <custom-filter position="PRE_AUTH_FILTER" ref="attributePreAuthFilter"/>
+    <custom-filter after="PRE_AUTH_FILTER" ref="headerPreAuthFilter"/>
+    <custom-filter position="LAST" ref="authFilterEnabler"/>
+  </http>
+
+  <!-- Only use BASIC auth for the RSS URL -->
+  <http pattern="/rss.jsp*" access-denied-page="/accessDenied.jsp" realm="OpenNMS Realm">
+    <intercept-url pattern="/rss.jsp*" access="ROLE_REST,ROLE_ADMIN,ROLE_USER"/>
+
+    <http-basic />
+
+    <custom-filter position="PRE_AUTH_FILTER" ref="attributePreAuthFilter"/>
+    <custom-filter after="PRE_AUTH_FILTER" ref="headerPreAuthFilter"/>
+    <custom-filter position="LAST" ref="authFilterEnabler"/>
+  </http>
+  
+  <!-- Allow anonymous access to the webstart portion of the app -->
+  <http pattern="/webstart/**" security="none"/>
+
+  <!-- Only one <http> section can match the implicit '/**' pattern -->
+  <http pattern="/**" use-expressions="true" access-denied-page="/accessDenied.jsp" realm="OpenNMS Realm" auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+    <intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/favicon.ico" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/apple-touch-icon.png" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/favicon-32x32.png" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/favicon-16x16.png" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/site.webmanifest" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/safari-pinned-tab.svg" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/logoff.jsp" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/login.jsp*" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/accessDenied.jsp*" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/css/**" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/svg/**" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/lib/**" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/images/**" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/assets/load-assets.jsp*" access="denyAll" /><!-- only used as include, shouldn't be accessible directly -->
+    <intercept-url pattern="/assets/**" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+
+    <intercept-url pattern="/admin/ng-requisitions/**" access="hasAnyRole('ROLE_PROVISION','ROLE_ADMIN')" />
+    <intercept-url pattern="/admin/classification/index.jsp" access="hasAnyRole('ROLE_FLOW_MANAGER','ROLE_ADMIN')" />
+    <intercept-url pattern="/rest/snmpConfig/**" access="hasAnyRole('ROLE_PROVISION','ROLE_ADMIN')" />
+    <intercept-url pattern="/admin/**" access="hasAnyRole('ROLE_ADMIN')" />
+    <intercept-url pattern="/**/mib-compiler" access="hasAnyRole('ROLE_ADMIN')" />
+    <intercept-url pattern="/**/admin-*" access="hasAnyRole('ROLE_ADMIN')" />
+    <intercept-url pattern="/rtc/post/**" access="hasAnyRole('ROLE_RTC')" />
+    <intercept-url pattern="/element/rescan.jsp" access="hasAnyRole('ROLE_ADMIN')" />
+    
+    <intercept-url pattern="/frontpage.htm" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/dashboard.jsp" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/VAADIN/**" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/gwt.js" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/surveillanceservice.gwt" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/graph/graph.png" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/dashboard/**" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    <intercept-url pattern="/coreweb/**" access="hasAnyRole('ROLE_USER','ROLE_DASHBOARD')" />
+    
+    <!-- DO NOT ALLOW ACCESS TO /osgi -->
+    <intercept-url pattern="/osgi/**" access="denyAll" />
+
+    <!-- Exclude jsp includes other than bootstrap, they shouldn't be accessible by themself -->
+    <intercept-url pattern="/includes/bootstrap.jsp" access="permitAll" />
+    <intercept-url pattern="/includes/*.jsp" access="denyAll" />
+
+    <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" />
+    
+    <!-- NrtCollection -->
+    <intercept-url pattern="/amq/*" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_USER','ROLE_DASHBOARD')" />
+
+    <!--Commented out for custom authentication filter<form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1" />-->
+    <http-basic entry-point-ref="xRequestedWithAwareBasicAuthEntryPoint" />
+    <logout logout-success-url="/" />
+
+      <!-- added for custom authentication filter -->
+    <custom-filter position="FORM_LOGIN_FILTER" ref="onmsUsernamePasswordAuthenticationFilter" />
+
+    <custom-filter position="PRE_AUTH_FILTER" ref="attributePreAuthFilter"/>
+    <custom-filter after="PRE_AUTH_FILTER" ref="headerPreAuthFilter"/>
+    <custom-filter position="LAST" ref="authFilterEnabler"/>
+  </http>
+  
+  <!--  This filter is used to setup the Hibernate query filtering to authorized nodes only -->
+  <beans:bean id="authFilterEnabler" class="org.opennms.web.springframework.security.AuthFilterEnabler">
+    <beans:property name="filterManager" ref="filterManager" />
+    <beans:property name="groupDao" ref="groupDao" />
+  </beans:bean>
+
+  <!-- Custom Authentication Filter -->
+  <beans:bean id="onmsUsernamePasswordAuthenticationFilter" class="org.opennms.web.springframework.security.OnmsUsernamePasswordAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="authenticationFailureHandler" ref="failureHandler"/>
+        <beans:property name="authenticationSuccessHandler" ref="successHandler"/>
+        <beans:property name="postOnly" value="false"/>
+  </beans:bean>
+
+    <beans:bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/index.jsp"/>
+    </beans:bean>
+    <beans:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/login.jsp?login_error=1"/>
+    </beans:bean>
+
+    <beans:bean id="loginUrlAuthenticationEntryPoint"
+                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/login.jsp" />
+    </beans:bean>
+    <!-- END CUSTOM AUthentication Filter -->
+
+  <!-- If a user is pre-authenticated, this will provide user details for the pre-authenticated user -->
+  <beans:bean id="preauthAuthProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+    <beans:property name="preAuthenticatedUserDetailsService">
+      <beans:bean id="userDetailsServiceWrapper" class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+        <beans:property name="userDetailsService" ref="openNMSUserDetailsService"/>
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <!-- use our custom authentication provider; to use RADIUS instead, change this to "radiusAuthenticationProvider" and uncomment below -->
+  <authentication-manager alias="authenticationManager">
+    <!-- If a user is pre-authenticated, make sure their user details are populated correctly. -->
+    <authentication-provider ref="preauthAuthProvider" />
+    <!-- Use our custom authentication provider -->
+    <authentication-provider ref="hybridAuthenticationProvider" />
+    <!-- To enable external (e.g. LDAP, RADIUS) authentication, uncomment the following.
+         You must also rename and customize exactly ONE of the example files in the
+         spring-security.d subdirectory. -->
+    <!-- <authentication-provider ref="externalAuthenticationProvider" /> -->
+  </authentication-manager>
+
+  <!-- ===================== USER DAO AUTHENTICATION ==================== -->
+  <beans:bean id="userDao" class="org.opennms.web.springframework.security.SpringSecurityUserDaoImpl">
+    <beans:property name="usersConfigurationFile" value="${opennms.home}/etc/users.xml" />
+    <beans:property name="userManager" ref="userManager" />
+  </beans:bean>
+  <onmsgi:service id="springSecurityUserDaoService" ref="userDao" interface="org.opennms.web.springframework.security.SpringSecurityUserDao" />
+
+  <!-- Supercedes the Karaf container's OSGi Configuration implementation to hard-code the "opennms" realm. -->
+  <beans:bean id="config"
+      class="org.opennms.web.springframework.security.OpenNMSConfiguration"
+      init-method="init"
+      destroy-method="close" />
+
+  <beans:bean id="loginModuleUserConfigInitializer" class="org.springframework.beans.factory.config.MethodInvokingBean">
+      <beans:property name="staticMethod">
+          <beans:value>org.opennms.web.springframework.security.OpenNMSLoginModule.setUserConfig</beans:value>
+      </beans:property>
+      <beans:property name="arguments">
+          <beans:list>
+              <beans:ref bean="userManager" />
+          </beans:list>
+      </beans:property>
+  </beans:bean>
+
+  <beans:bean id="loginModuleSpringSecurityUserDaoInitializer" class="org.springframework.beans.factory.config.MethodInvokingBean">
+      <beans:property name="staticMethod">
+          <beans:value>org.opennms.web.springframework.security.OpenNMSLoginModule.setSpringSecurityUserDao</beans:value>
+      </beans:property>
+      <beans:property name="arguments">
+          <beans:list>
+              <beans:ref bean="userDao" />
+          </beans:list>
+      </beans:property>
+  </beans:bean>
+
+  <beans:bean id="openNMSUserDetailsService" class="org.opennms.web.springframework.security.OpenNMSUserDetailsService">
+    <beans:property name="userDao" ref="userDao" />
+  </beans:bean>
+
+  <beans:bean id="hybridAuthenticationProvider" class="org.opennms.web.springframework.security.HybridOpenNMSUserAuthenticationProvider">
+    <beans:property name="userDao" ref="userDao" />
+    <beans:property name="userManager" ref="userManager" />
+  </beans:bean>
+
+  <!--  this is used to send events on login success and failure -->
+  <beans:bean class="org.opennms.web.springframework.security.SecurityAuthenticationEventOnmsEventBuilder">
+    <beans:property name="eventProxy" ref="eventProxy"/>
+  </beans:bean>
+
+  <beans:bean id="xRequestedWithAwareBasicAuthEntryPoint" class="org.opennms.web.springframework.security.XRequestedWithAwareBasicAuthEntryPoint">
+    <beans:property name="realmName" value="OpenNMS Realm" />
+  </beans:bean>
+
+</beans:beans>

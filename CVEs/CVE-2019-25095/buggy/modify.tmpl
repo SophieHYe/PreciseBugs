@@ -1,0 +1,71 @@
+## -*- coding: utf-8 -*-
+<%inherit file="navbar.tmpl"/>
+    <%block name="core">
+    <div class="row clearfix top-buffer bottom-buffer">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-12 column">
+            <div class="well well-sm">
+              <form method='POST' action='/modify' role="form" class="form-signin" id="form">
+              <fieldset>
+              <legend>Modify user's attributes:</legend>
+              ${form}
+              </fieldset>
+              <fieldset>
+              <legend>Enable/Disable user's roles:</legend>
+              ${roles}
+              </fieldset>
+              % if len(standalone_groups) != 0:
+              <fieldset>
+              <legend>Delete user's individual groups:</legend>
+              <table id="RecordTable" class="table table-hover table-condensed tablesorter">
+              <thead>
+              <tr>
+                  <th class="sorter-false">
+                      Backend
+                  </th>
+                  <th class="sorter-false">
+                      Group 
+                  </th>
+                  <th class="sorter-false">
+                      Enable/Disable
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              % for backend in standalone_groups:
+                  % for group in standalone_groups[backend]:
+                  <tr>
+                    <td>
+                    ${backends_display_names[backend]}
+                    </td>
+                    <td>
+                    ${group}
+                    </td>
+                    <td>
+                    <input data-on-color="success" data-off-color="danger" data-on-text="Enabled" 
+                           data-off-text="Disabled" data-handle-width="75" type="checkbox" 
+                           name="group.${backend}.${group}" data-size="mini" id="group.${backend}.${group}" checked>
+                    <script>$("[name='group.${backend}.${group}']").bootstrapSwitch();</script>
+                    </td>
+                  </tr>
+                  % endfor
+              % endfor
+              </tbody>
+              </table>
+              </fieldset>
+              % endif
+              <div class="form-group">
+                <div class="input-group">
+                  <button class="btn btn-default blue" type="submit">
+                  <span class="glyphicon glyphicon-cog"></span> Modify User</button>
+                </div>
+              </div>
+              </form>
+              <script type="text/javascript" src="/static/js/ppolicy.js"></script>
+            </div>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
+</%block>

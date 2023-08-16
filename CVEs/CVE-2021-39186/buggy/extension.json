@@ -1,0 +1,67 @@
+{
+	"name": "GlobalNewFiles",
+	"author": [
+		"John Lewis",
+		"Paladox",
+		"Southparkfan",
+		"Universal Omega"
+	],
+	"url": "//github.com/miraheze/GlobalNewFiles",
+	"descriptionmsg": "globalnewfiles-description",
+	"license-name": "GPL-3.0-or-later",
+	"type": "specialpage",
+	"requires": {
+		"MediaWiki": ">= 1.36.0",
+		"extensions": {
+			"CreateWiki": "*"
+		}
+	},
+	"MessagesDirs": {
+		"GlobalNewFiles": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"GlobalNewFilesAliases": "includes/GlobalNewFilesAliases.php"
+	},
+	"AvailableRights": [
+		"viewglobalprivatefiles"
+	],
+	"AutoloadClasses": {
+		"GlobalNewFilesHooks": "includes/GlobalNewFilesHooks.php",
+		"GlobalNewFilesPager": "includes/GlobalNewFilesPager.php",
+		"SpecialGlobalNewFiles": "includes/SpecialGlobalNewFiles.php",
+		"GlobalNewFilesInsertJob": "includes/jobs/GlobalNewFilesInsertJob.php",
+		"GlobalNewFilesDeleteJob": "includes/jobs/GlobalNewFilesDeleteJob.php",
+		"GlobalNewFilesMoveJob": "includes/jobs/GlobalNewFilesMoveJob.php"
+	},
+	"JobClasses": {
+		"GlobalNewFilesInsertJob": "GlobalNewFilesInsertJob",
+		"GlobalNewFilesDeleteJob": "GlobalNewFilesDeleteJob",
+		"GlobalNewFilesMoveJob": "GlobalNewFilesMoveJob"
+	},
+	"SpecialPages": {
+		"GlobalNewFiles": "SpecialGlobalNewFiles"
+	},
+	"Hooks": {
+		"CreateWikiTables": [
+			"GlobalNewFilesHooks::onCreateWikiTables"
+		],
+		"LoadExtensionSchemaUpdates": [
+			"GlobalNewFilesHooks::onLoadExtensionSchemaUpdates"
+		],
+		"FileDeleteComplete": [
+			"GlobalNewFilesHooks::onFileDeleteComplete"
+		],
+		"PageMoveComplete": [
+			"GlobalNewFilesHooks::onPageMoveComplete"
+		],
+		"UploadComplete": [
+			"GlobalNewFilesHooks::onUploadComplete"
+		]
+	},
+	"ConfigRegistry": {
+		"globalnewfiles": "GlobalVarConfig::newInstance"
+	},
+	"manifest_version": 2
+}

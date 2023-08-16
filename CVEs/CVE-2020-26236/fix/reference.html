@@ -1,0 +1,922 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="main.css" />
+    <script src="main.js"></script>
+    <script>
+    if (location.pathname === "/docs"){location.pathname = "/docs/"};
+    </script>
+    <title>API Reference - ScratchVerifier Documentation</title>
+</head>
+<body><div id="body">
+
+<h1 id="api-reference">API Reference</h1>
+<p>The ScratchVerifier API is a HTTP/REST API for all operations.</p>
+<p><b>API Base URL</b>: <a href="https://scratchverifier.ddns.net">https://scratchverifier.ddns.net</a></p>
+<h2 id="authorization">Authorization</h2>
+<p>Authorization is done using <a href="https://tools.ietf.org/html/rfc7617">Basic HTTP Authorization</a>, using your client ID as the username and token as the password.</p>
+<table><caption>Example Authorization Header</caption>
+<tr><td class="pre">Authorization: Basic MTAxMTQ3NjQ6NDY5MDI1YzYxM2RhNDMwYmEzMTE0NzIwY...==</td></tr>
+</table>
+<h2 id="api-endpoints">API Endpoints</h2>
+<p>The simplicity of this API is such that there are only three total endpoints for its ultimate purpose.</p>
+<h3 id="start/renew-verification-endpoint">Start/Renew Verification Endpoint</h3>
+<p>Request a new verification code for a user. Only one code per user per client - if this endpoint is used again before the <a href="#finish-verification-endpoint">Finish Verification</a> endpoint is used, this will generate a new code and reset the 30-minute expiry, returning the new code instead.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">PUT</span> <code>/verify/<span class="param">{username}</span></code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to verify</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#verification-object">Verification</a> object</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>401 Unauthorized</td><td>missing/invalid <a href="#authorization">authorization</a></td></tr>
+</table>
+<table><caption>Returns a <a href="#verification-object">Verification</a> object</caption>
+<tr><td class="pre">{
+  "code": "EJAAFcffGJeFDCGdJB...",
+  "username": "scratchusername"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="finish-verification-endpoint">Finish Verification Endpoint</h3>
+<p>Confirm verification for a user. Returns 204 No Content on successful verification, 403 Forbidden on failure.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">POST</span> <code>/verify/<span class="param">{username}</span></code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to verify</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>verification successful</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>401 Unauthorized</td><td>missing/invalid <a href="#authorization">authorization</a></td></tr>
+<tr><td>403 Forbidden</td><td>verification unsuccessful</td></tr>
+<tr><td>404 Not Found</td><td>username 404ed on Scratch API OR user is not currently being verified</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h3 id="invalidate-verification-endpoint">Invalidate Verification Endpoint</h3>
+<p>Cancel verifying a user.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">DELETE</span> <code>/verify/<span class="param">{username}</span></code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to give up on verifying</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>invalidation successful</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>401 Unauthorized</td><td>missing/invalid <a href="#authorization">authorization</a></td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h2 id="api-registration-endpoints">API Registration Endpoints</h2>
+<p>These endpoints are to do with registering a client with the API.</p>
+<h3 id="start-logging-in-endpoint">Start Logging In Endpoint</h3>
+<p>Begin the process of logging in to the registration API.</p>
+<div class="endpoint">
+<div class="method-path" onclick="showOrHide(this)"><span class="method">POST</span> <code>/users/<span class="param">{username}</span>/login</code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to log in with</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#verification-object">Verification</a> object</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>403 Forbidden</td><td>this username is banned from registering</td></tr>
+</table>
+<table><caption>Returns a <a href="#verification-object">Verification</a> object</caption>
+<tr><td class="pre">{
+  "code": "EJAAFcffGJeFDCGdJB...",
+  "username": "scratchusername"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="finish-logging-in-endpoint">Finish Logging In Endpoint</h3>
+<p>Finish the process of logging in. If successful, response contains a <code>session</code> cookie that must be set for all endpoints listed after this one to work. Returns an <a href="#admin-object">Admin</a> object on success.</p>
+<div class="endpoint">
+<div class="method-path" onclick="showOrHide(this)"><span class="method">POST</span> <code>/users/<span class="param">{username}</span>/finish-login</code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to log in with</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#admin-object">Admin</a> object</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>401 Unauthorized</td><td>login failed</td></tr>
+<tr><td>404 Not Found</td><td>username 404ed on Scratch API</td></tr>
+</table>
+<table><caption>Returns a <a href="#admin-object">Admin</a> object</caption>
+<tr><td class="pre">{
+  "admin": false
+}</td></tr>
+</table>
+</div></div>
+<h3 id="logout-all-sessions-endpoint">Logout All Sessions Endpoint</h3>
+<p>Immediately invalidate all sessions under this username.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">POST</span> <code>/users/<span class="param">{username}</span>/logout</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>The username to log out</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>successfully logged out</td></tr>
+<tr><td>400 Bad Request</td><td>username is invalid by Scratch rules</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>403 Forbidden</td><td>username does not match session</td></tr>
+<tr><td>404 Not Found</td><td>username 404ed on Scratch API</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h3 id="get-client-info-endpoint">Get Client Info Endpoint</h3>
+<p>Get your client ID, token, and username. Returns a <a href="#user-object">User</a> object on success.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/session</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#user-object">User</a> object</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>404 Not Found</td><td>this user is not registered with the API yet</td></tr>
+</table>
+<table><caption>Returns a <a href="#user-object">User</a> object</caption>
+<tr><td class="pre">{
+  "client_id": 10114764,
+  "token": "dd9410f80ba0...",
+  "username": "scratchusername"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="create-client-endpoint">Create Client Endpoint</h3>
+<p>If this user does not own a client yet, create and return one.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">PUT</span> <code>/session</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns new <a href="#user-object">User</a> object</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>409 Conflict</td><td>this user is already registered with the API</td></tr>
+</table>
+<table><caption>Returns a <a href="#user-object">User</a> object</caption>
+<tr><td class="pre">{
+  "client_id": 10114764,
+  "token": "dd9410f80ba0...",
+  "username": "scratchusername"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="reset-token-endpoint">Reset Token Endpoint</h3>
+<p>If you suspect that your token has been compromised, reset it through this endpoint.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">PATCH</span> <code>/session</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns updated <a href="#user-object">User</a> object</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns a <a href="#user-object">User</a> object</caption>
+<tr><td class="pre">{
+  "client_id": 10114764,
+  "token": "dd9410f80ba0...",
+  "username": "scratchusername"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="delete-client-endpoint">Delete Client Endpoint</h3>
+<p>Deregister from the API. Returns 204 No Content on success.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">DELETE</span> <code>/session</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>client was successfully deleted</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h3 id="logout-session-endpoint">Logout Session Endpoint</h3>
+<p>Invalidate this session ID.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">POST</span> <code>/session/logout</code> <a href="#finish-logging-in-endpoint"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>successfully logged out</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h2 id="api-usage-endpoints">API Usage Endpoints</h2>
+<p>These endpoints fetch API usage logs.</p>
+<h3 id="get-usage-logs-endpoint">Get Usage Logs Endpoint</h3>
+<p>Get logs of who has used this API to verify what user. These logs are accessible by anyone to head off abuse.</p>
+<div class="endpoint">
+<div class="method-path" onclick="showOrHide(this)"><span class="method">GET</span> <code>/usage</code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+</table>
+<table><caption>Query String Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>limit</td><td>integer</td><td>Return at most <code>limit</code> logs. <code>limit</code> cannot be greater than 500</td></tr>
+<tr><td>start</td><td>integer</td><td>Return logs that happened before (not including) the log with ID <code>start</code>. Usually used for getting the next page of logs. This does not have to be a valid ID (though it usually is)</td></tr>
+<tr><td>before</td><td>integer</td><td>Return logs that happened before (and including) the Unix epoch time <code>before</code></td></tr>
+<tr><td>end</td><td>integer</td><td>Return logs that happened after (not including) the log with ID <code>end</code></td></tr>
+<tr><td>after</td><td>integer</td><td>Return logs that happened after (and including) the Unix epoch time <code>after</code>. Usually used to limit returned logs by time</td></tr>
+<tr><td>client_id</td><td>integer</td><td>Only return logs with the client ID <code>client_id</code></td></tr>
+<tr><td>username</td><td>string</td><td>Only return logs with the username <code>username</code></td></tr>
+<tr><td>type</td><td>integer</td><td>Only return logs with the <a href="#log-types">log type</a> <code>type</code></td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns list of <a href="#log-object">Log</a> objects</td></tr>
+<tr><td>400 Bad Request</td><td><code>start</code> is after <code>end</code>, <code>before</code> is after <code>after</code>, <code>type</code> is invalid, or a query param was the wrong type</td></tr>
+<tr><td>403 Forbidden</td><td><code>limit</code> was greater than 500</td></tr>
+</table>
+<table><caption>Returns a list of <a href="#log-object">Log</a> objects</caption>
+<tr><td class="pre">{
+  "log_id": 123,
+  "client_id": 1234567890,
+  "username": "scratchusername",
+  "log_time": "1566974952",
+  "log_type": 1
+}</td></tr>
+</table>
+</div></div>
+<h3 id="get-usage-log-endpoint">Get Usage Log Endpoint</h3>
+<p>Fetch the information for a single log entry.</p>
+<div class="endpoint">
+<div class="method-path" onclick="showOrHide(this)"><span class="method">GET</span> <code>/usage/<span class="param">{log ID}</span></code> <a href="#authorization"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>log ID</td><td>integer</td><td>ID of log entry to fetch</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns single <a href="#log-object">Log</a> object</td></tr>
+<tr><td>404 Not Found</td><td>no log with such ID</td></tr>
+</table>
+<table><caption>Returns a <a href="#log-object">Log</a> object</caption>
+<tr><td class="pre">{
+  "log_id": 123,
+  "client_id": 1234567890,
+  "username": "scratchusername",
+  "log_time": "1566974952",
+  "log_type": 1
+}</td></tr>
+</table>
+</div></div>
+<h2 id="administrative-endpoints">Administrative Endpoints</h2>
+<p>The following endpoints can only be accessed by administrators.</p>
+<p>Administrators must be logged in with the <a href="#finish-logging-in-endpoint">Finish Logging In endpoint</a> to access these endpoints.</p>
+<h2 id="ratelimit-endpoints">Ratelimit Endpoints</h2>
+<p>These endpoints are to do with getting and setting ratelimits on the main API.</p>
+<h3 id="get-all-ratelimits-endpoint">Get All Ratelimits Endpoint</h3>
+<p>Fetch all currently active ratelimits.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/ratelimits</code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns list of <a href="#ratelimit-object">Ratelimit</a> objects</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns a list of <a href="#ratelimit-object">Ratelimit</a> objects</caption>
+<tr><td class="pre">{
+  "username": "scratchusername",
+  "ratelimit": 30
+}</td></tr>
+</table>
+</div></div>
+<h3 id="get-single-ratelimit-endpoint">Get Single Ratelimit Endpoint</h3>
+<p>Fetch ratelimits for a particular user.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/ratelimits/<span class="param">{username}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>Username to fetch ratelimits for</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#ratelimit-object">Ratelimit</a> object</td></tr>
+<tr><td>400 Bad Request</td><td>username invalid by Scratch standards</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>404 Not Found</td><td>no ratelimit set for that user</td></tr>
+</table>
+<table><caption>Returns a <a href="#partialratelimit-object">PartialRatelimit</a> object</caption>
+<tr><td class="pre">{
+  "ratelimit": 30
+}</td></tr>
+</table>
+</div></div>
+<h3 id="modify-ratelimits-endpoint">Modify Ratelimits Endpoint</h3>
+<p>Modify or set ratelimits for multiple users at once. Only users specified will modified; the rest will not be touched. Invalid entries are ignored.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">PATCH</span> <code>/admin/ratelimits</code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>success</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+<table><caption>Request body: a list of <a href="#ratelimit-object">Ratelimit</a> objects</caption>
+<tr><td class="pre">{
+  "username": "scratchusername",
+  "ratelimit": 30
+}</td></tr>
+</table>
+</div></div>
+<h3 id="modify-single-ratelimit-endpoint">Modify Single Ratelimit Endpoint</h3>
+<p>Modify or set ratelimits for a specific user. Nonexistent users can be set preemptively.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">POST</span> <code>/admin/ratelimits/<span class="param">{username}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>Username to set ratelimits for</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>success</td></tr>
+<tr><td>400 Bad Request</td><td>username invalid by Scratch standards</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+<table><caption>Request body: a <a href="#ratelimit-object">Ratelimit</a> object</caption>
+<tr><td class="pre">{
+  "ratelimit": 30
+}</td></tr>
+</table>
+</div></div>
+<h2 id="ban-endpoints">Ban Endpoints</h2>
+<p>These endpoints are to do with getting and setting bans on the registration API.</p>
+<h3 id="get-all-bans-endpoint">Get All Bans Endpoint</h3>
+<p>Fetch all currently active bans.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/bans</code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns list of <a href="#Ban-object">Ban</a> objects</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns a list of <a href="#ban-object">Ban</a> objects</caption>
+<tr><td class="pre">{
+  "username": "scratchusername",
+  "expiry": 1598537437
+}</td></tr>
+</table>
+</div></div>
+<h3 id="get-single-ban-endpoint">Get Single Ban Endpoint</h3>
+<p>Fetch the active ban for a specific user, if any.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/bans/<span class="param">{username}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>Username to fetch ban for</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#Ban-object">Ban</a> object</td></tr>
+<tr><td>400 Bad Request</td><td>username invalid by Scratch standards</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>404 Not Found</td><td>no ban currently in force for that user</td></tr>
+</table>
+<table><caption>Returns a <a href="#partialban-object">PartialBan</a> object</caption>
+<tr><td class="pre">{
+  "expiry": 1598537437
+}</td></tr>
+</table>
+</div></div>
+<h3 id="modify-bans-endpoint">Modify Bans Endpoint</h3>
+<p>Modify or put multiple bans into force. Invalid entries are ignored.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">PATCH</span> <code>/admin/bans</code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>success</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+<table><caption>Request body: a list of <a href="#ban-object">Ban</a> objects</caption>
+<tr><td class="pre">{
+  "username": "scratchusername",
+  "expiry": 1598537437
+}</td></tr>
+</table>
+</div></div>
+<h3 id="modify-single-ban-endpoint">Modify Single Ban Endpoint</h3>
+<p>Ban a user or modify their existing ban.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/bans/<span class="param">{username}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>Username to ban</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>success</td></tr>
+<tr><td>400 Bad Request</td><td>username invalid by Scratch standards</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+<table><caption>Request body: a <a href="#partialban-object">PartialBan</a> object</caption>
+<tr><td class="pre">{
+  "expiry": 1598537437
+}</td></tr>
+</table>
+</div></div>
+<h3 id="unban-endpoint">Unban Endpoint</h3>
+<p>Unban a user. This is idempotent; unbanning the same user multiple times will unban them once (unless they are banned again).</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">DELETE</span> <code>/admin/bans/<span class="param">{username}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>username</td><td>string</td><td>Username to unban</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>204 No Content</td><td>success</td></tr>
+<tr><td>400 Bad Request</td><td>username invalid by Scratch standards</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns nothing</caption>
+<tr><td class="pre"></td></tr>
+</table>
+</div></div>
+<h2 id="audit-log-endpoints">Audit Log Endpoints</h2>
+<p>Admins' actions are recorded. Fetch those logs with these endpoints.</p>
+<h3 id="get-audit-logs-endpoint">Get Audit Logs Endpoint</h3>
+<p>Get logs of who has used this API to perform what admin action. These logs are accessible only by administrators.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/logs</code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+</table>
+<table><caption>Query String Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>limit</td><td>integer</td><td>Return at most <code>limit</code> logs. This can be arbitrarily large, but defaults to 100 and cannot be unlimited.</td></tr>
+<tr><td>start</td><td>integer</td><td>Return logs that happened before (not including) the log with ID <code>start</code>. Usually used for getting the next page of logs. This does not have to be a valid ID (though it usually is)</td></tr>
+<tr><td>before</td><td>integer</td><td>Return logs that happened before (and including) the Unix epoch time <code>before</code></td></tr>
+<tr><td>end</td><td>integer</td><td>Return logs that happened after (not including) the log with ID <code>end</code></td></tr>
+<tr><td>after</td><td>integer</td><td>Return logs that happened after (and including) the Unix epoch time <code>after</code>. Usually used to limit returned logs by time</td></tr>
+<tr><td>username</td><td>string</td><td>Only return logs with the username <code>username</code></td></tr>
+<tr><td>type</td><td>integer</td><td>Only return logs with the <a href="#audit-log-types">audit log type</a> <code>type</code></td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns list of <a href="#auditlog-object">AuditLog</a> objects</td></tr>
+<tr><td>400 Bad Request</td><td><code>start</code> is after <code>end</code>, <code>before</code> is after <code>after</code>, <code>type</code> is invalid, or a query param was the wrong type</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+</table>
+<table><caption>Returns a list of <a href="#auditlog-object">AuditLog</a> objects</caption>
+<tr><td class="pre">{
+  "id": 123,
+  "username": "actionperformer",
+  "time": "1566974952",
+  "type": 1,
+  "data": "{\"username\": \"ScratchUsername\", \"expiry\": 1234567890}"
+}</td></tr>
+</table>
+</div></div>
+<h3 id="get-audit-log-endpoint">Get Audit Log Endpoint</h3>
+<p>Fetch the information for a single audit log entry.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/logs/<span class="param">{log ID}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>log ID</td><td>integer</td><td>ID of audit log entry to fetch</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns single <a href="#auditlog-object">Log</a> object</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>404 Not Found</td><td>no log with such ID</td></tr>
+</table>
+<table><caption>Returns a <a href="#auditlog-object">AuditLog</a> object</caption>
+<tr><td class="pre">{
+  "id": 123,
+  "username": "actionperformer",
+  "time": "1566974952",
+  "type": 1,
+  "data": "{\"username\": \"ScratchUsername\", \"expiry\": 1234567890}"
+}</td></tr>
+</table>
+</div></div>
+<h2 id="miscellaneous-admin-tools">Miscellaneous Admin Tools</h2>
+<p>Admins have a few other tools available as well.</p>
+<h3 id="get-client-info-endpoint">Get Client Info Endpoint</h3>
+<p>Fetch information about a certain client. The token is partially censored.</p>
+<div class="endpoint">
+<div class="method-path auth-needed" onclick="showOrHide(this)"><span class="method">GET</span> <code>/admin/client/<span class="param">{client ID}</span></code> <a href="#administrative-endpoints"><img src="https://image.flaticon.com/icons/png/512/61/61457.png" title="Authorization necessary" /></a></div>
+<div style="display: none">
+<table><caption>URL Params</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th>
+<tr><td>client ID</td><td>integer</td><td>ID of client whose info is to be fetched</td></tr>
+</table>
+<table><caption>HTTP statuses</caption>
+<tr><th>Status</th><th>Meaning</th>
+<tr><td>200 OK</td><td>returns <a href="#client-object">Client</a> object</td></tr>
+<tr><td>401 Unauthorized</td><td>invalid or no <code>session</code> in cookies</td></tr>
+<tr><td>404 Not Found</td><td>no client with that ID</td></tr>
+</table>
+<table><caption>Returns a <a href="#client-object">Client</a> object</caption>
+<tr><td class="pre">{
+  "client_id": 1234567890,
+  "token": "EaFfBJdC******...",
+  "username": "scratchusername",
+  "ratelimit": 30
+}</td></tr>
+</table>
+</div></div>
+<h2 id="objects">Objects</h2>
+<p>Various endpoints have defined return types or body structures. They are documented below.</p>
+<h3 id="verification-object">Verification Object</h3>
+<p>Holds data related to verifying a user on Scratch.</p>
+<table><caption>Verification Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>code</td><td>string</td><td>verification code to post</td></tr>
+<tr><td>username</td><td>string</td><td>username being verified</td></tr>
+</table>
+<h3 id="admin-object">Admin Object</h3>
+<p>Indicates whether the user who just <a href="#finish-logging-in-endpoint">finished logging in</a> is an admin on the site or not.</p>
+<table><caption>Admin Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>admin</td><td>boolean</td><td>whether the user is an admin</td></tr>
+</table>
+<h3 id="user-object">User Object</h3>
+<p>Holds data that a client needs to access the API.</p>
+<table><caption>User Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>client_id</td><td>integer</td><td>client ID</td></tr>
+<tr><td>token</td><td>string</td><td>API token for client</td></tr>
+<tr><td>username</td><td>string</td><td>username of client</td></tr>
+</table>
+<h3 id="log-object">Log Object</h3>
+<p>Holds log data for a verification.</p>
+<table><caption>Log Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>log_id</td><td>integer</td><td>log ID</td></tr>
+<tr><td>client_id</td><td>integer</td><td>client ID responsible for this log</td></tr>
+<tr><td>username</td><td>string</td><td>username being verified</td></tr>
+<tr><td>log_time</td><td>integer</td><td>Unix epoch time of log</td></tr>
+<tr><td>log_type</td><td>integer</td><td><a href="#log-types">log type</a></td></tr>
+</table>
+<h3 id="ratelimit-object">Ratelimit Object</h3>
+<p>Holds data about a user's ratelimit.</p>
+<table><caption>Ratelimit Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>username</td><td>string</td><td>username being ratelimited</td></tr>
+<tr><td>ratelimit</td><td>integer</td><td>how many requests they can make per minute</td></tr>
+</table>
+<h3 id="partialratelimit-object">PartialRatelimit Object</h3>
+<p>Holds data about a user's ratelimit, without their name</p>
+<table><caption>PartialRatelimit Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>ratelimit</td><td>integer</td><td>how many requests they can make per minute</td></tr>
+</table>
+<h3 id="ban-object">Ban Object</h3>
+<p>Holds data about a user's ban status.</p>
+<table><caption>Ban Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>username</td><td>string</td><td>username being banned</td></tr>
+<tr><td>expiry</td><td>integer?</td><td>Unix timestamp when their ban expires. <code>null</code> means a permanent ban.</td></tr>
+</table>
+<h3 id="partialban-object">PartialBan Object</h3>
+<p>Holds data about a user's ban status, without their name.</p>
+<table><caption>PartialBan Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>expiry</td><td>integer?</td><td>Unix epoch time when their ban expires. <code>null</code> means a permanent ban.</td></tr>
+</table>
+<h3 id="auditlog-object">AuditLog Object</h3>
+<p>Holds log data for an admin action.</p>
+<table><caption>AuditLog Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>id</td><td>integer</td><td>log ID</td></tr>
+<tr><td>username</td><td>string</td><td>username of action performer</td></tr>
+<tr><td>time</td><td>integer</td><td>Unix epoch time of log</td></tr>
+<tr><td>type</td><td>integer</td><td><a href="#audit-log-types">audit log type</a></td></tr>
+<tr><td>data</td><td>string</td><td>stringified JSON of action data</td></tr>
+</table>
+<h3 id="client-object">Client Object</h3>
+<p>Holds data about a client.</p>
+<table><caption>Client Structure</caption>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+
+<tr><td>client_id</td><td>integer</td><td>client ID</td></tr>
+<tr><td>token</td><td>string</td><td>partially censored token of client</td></tr>
+<tr><td>username</td><td>string</td><td>username of owner</td></tr>
+<tr><td>ratelimit</td><td>integer?</td><td>how many requests this client can make per minute. Can be <code>null</code> if this client has never been used yet.</td></tr>
+</table>
+<h2 id="log-types">Log Types</h2>
+<p>Logs can have four types:</p>
+<ul>
+<li><code>1</code>: verification started</li>
+<li><code>2</code>: verification succeeded</li>
+<li><code>3</code>: verification failed</li>
+<li><code>4</code>: verification invalidated</li>
+</ul>
+<h2 id="audit-log-types">Audit Log Types</h2>
+<p>Audit logs can have three types:</p>
+<ul>
+<li><code>1</code>: user banned or user ban modified</li>
+<li><code>2</code>: user ratelimit modified</li>
+<li><code>3</code>: user unbanned</li>
+</ul>
+</div><div id="contents"><h1>Navigation</h1>
+<div><a href="#api-reference">API&nbsp;Reference</a>
+<ul>
+<li>
+<div><a href="#authorization">Authorization</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#api-endpoints">API&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#start/renew-verification-endpoint">Start/Renew&nbsp;Verification&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#finish-verification-endpoint">Finish&nbsp;Verification&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#invalidate-verification-endpoint">Invalidate&nbsp;Verification&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#api-registration-endpoints">API&nbsp;Registration&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#start-logging-in-endpoint">Start&nbsp;Logging&nbsp;In&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#finish-logging-in-endpoint">Finish&nbsp;Logging&nbsp;In&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#logout-all-sessions-endpoint">Logout&nbsp;All&nbsp;Sessions&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#get-client-info-endpoint">Get&nbsp;Client&nbsp;Info&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#create-client-endpoint">Create&nbsp;Client&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#reset-token-endpoint">Reset&nbsp;Token&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#delete-client-endpoint">Delete&nbsp;Client&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#logout-session-endpoint">Logout&nbsp;Session&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#api-usage-endpoints">API&nbsp;Usage&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#get-usage-logs-endpoint">Get&nbsp;Usage&nbsp;Logs&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#get-usage-log-endpoint">Get&nbsp;Usage&nbsp;Log&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#administrative-endpoints">Administrative&nbsp;Endpoints</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#ratelimit-endpoints">Ratelimit&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#get-all-ratelimits-endpoint">Get&nbsp;All&nbsp;Ratelimits&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#get-single-ratelimit-endpoint">Get&nbsp;Single&nbsp;Ratelimit&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#modify-ratelimits-endpoint">Modify&nbsp;Ratelimits&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#modify-single-ratelimit-endpoint">Modify&nbsp;Single&nbsp;Ratelimit&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#ban-endpoints">Ban&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#get-all-bans-endpoint">Get&nbsp;All&nbsp;Bans&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#get-single-ban-endpoint">Get&nbsp;Single&nbsp;Ban&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#modify-bans-endpoint">Modify&nbsp;Bans&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#modify-single-ban-endpoint">Modify&nbsp;Single&nbsp;Ban&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#unban-endpoint">Unban&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#audit-log-endpoints">Audit&nbsp;Log&nbsp;Endpoints</a>
+<ul>
+<li>
+<div><a href="#get-audit-logs-endpoint">Get&nbsp;Audit&nbsp;Logs&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#get-audit-log-endpoint">Get&nbsp;Audit&nbsp;Log&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#miscellaneous-admin-tools">Miscellaneous&nbsp;Admin&nbsp;Tools</a>
+<ul>
+<li>
+<div><a href="#get-client-info-endpoint">Get&nbsp;Client&nbsp;Info&nbsp;Endpoint</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#objects">Objects</a>
+<ul>
+<li>
+<div><a href="#verification-object">Verification&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#admin-object">Admin&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#user-object">User&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#log-object">Log&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#ratelimit-object">Ratelimit&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#partialratelimit-object">PartialRatelimit&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#ban-object">Ban&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#partialban-object">PartialBan&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#auditlog-object">AuditLog&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#client-object">Client&nbsp;Object</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<div><a href="#log-types">Log&nbsp;Types</a>
+<ul>
+</ul>
+</li>
+<li>
+<div><a href="#audit-log-types">Audit&nbsp;Log&nbsp;Types</a>
+<ul>
+</ul>
+</li>
+</ul>
+<div><a href="index.html">Welcome&nbsp;to&nbsp;ScratchVerifier</a></div>
+<div><a href="usage.html">ScratchVerifier&nbsp;Usage</a></div>
+<div><a href="registration.html">ScratchVerifier&nbsp;Registration</a></div>
+</div></body>
+</html>

@@ -1,0 +1,256 @@
+CSP MySQL User Manager Changelog
+--------------------------------
+
+[+] Added feature
+[#] Improved/changed feature
+[-] Bug fixed
+
+
+3.2.0 [not yet released]
+[+] Enable/disable groups
+[+] Override and force database upgrade
+[+] Check for invalid characters in username and password
+[#] Changed update check url for new releases
+[#] Removed cmum dbversion from database
+
+
+3.1.1 [2015-04-12]
+[-] Fixed a critical bug in the internal start-/expiredate
+
+
+3.1.0 [2015-04-03]
+[+] Random genxmlkey function
+[+] Manager activity logging
+[+] Internal start-/expiredate handling
+[+] Send osd to all connected users
+[+] IP lookup on connected users (requires internet access)
+[+] Change sort order of expired/soon expired users on dashboard
+[+] Listing not started users on dashboard
+[#] Only log failed admin logins
+[#] Only log failed genxml requests
+[#] Fixed broken css on text logo
+[#] Changed pencil icon on dashboard buttons to text
+[#] Improved profile handling in genxml function
+[#] Improved start/expired user listing
+[#] Improved start-/expiredate handling
+[#] Improved quick enabled for not started and expired users
+[#] Improved install script
+[#] Changed MySQL engine to InnoDB for better performance
+[-] Fixed improper error page
+
+
+3.0.0 [2014-11-12]
+[+] New responsive design
+[+] Improved security
+[+] Reworked functions and routines 
+[+] Cmum installer
+[+] Boxtype and mac-address fields on users
+[+] Update checker
+[+] Admin login logging
+[+] User groups
+[+] Improved admin types with manager and group manager
+[+] Salted encrypted admin passwords
+[+] More csp info on dashboard
+[+] User start-/expire info on dashboard
+[+] Genxml logging
+[+] Auto creation of new profiles on user import
+[+] Download exported users to file
+[+] Timezone support
+[+] Profile cleanup on users when a profile is removed
+[+] Options for genxml generation
+
+
+2.3.1 [2012-11-03]
+[+] Function for genxml to require a key to generate the xml output
+[+] Added/addedby/changed/changedby added to the csv import/export function
+[+] Function to turn off/on php notices errors (debug mode)
+[+] Added 'js' folder to the robots.txt disallow list
+[+] Better support for special characters
+[+] Sorting after latest user first
+[+] Function to create random usernames
+[#] Charset error on the "you are not authorized" page
+[#] &-char could cause genxml to stop working
+[#] Removed unneeded mysql calls
+[#] Secured tools from url hack
+[-] Removed the '::' in the page title
+[-] Locked the 'csp value' textboxes under 'importing profiles from csp' tool
+[-] New style for buttons
+
+
+2.3 [2012-01-10]
+[+] Iphone/Android favicon
+[+] Ecm rate to default values
+[+] Optimize database tool
+[+] Database version check on login page
+[+] Administrator level to admins (administrator/manager)
+[+] Function to change admin username
+[+] Real name field for admins
+[+] Setting to turn off csp connection check
+[#] 'Add user and stay' didnt load the defaults values after a user were added if that function was turned on
+[#] Mixed layout fixes on some pages
+[-] Removed Accounts Expiration from home page
+[-] Changed 'addeby' and 'changedby' to use admin.id insted of admin.name
+
+
+2.2.1 [2011-10-27]
+[#] Session variable on logout page was not set correctly
+
+
+2.2 [2011-10-18]
+[+] Better mysql error control
+[+] Csp server connection check function
+[+] Csp server connection check on all pages that uses it
+[+] Csp server connection failed notice in header
+[+] Setting to change random password characters and length
+[+] Default user order setting
+[+] Service name fetching from csp server for active sessions
+[#] Unset variables on tools page
+[#] Mis-sized tables in csp user info on manager users page
+[#] Added user notification on manage users page didnt show
+[#] Minor code modifications
+[#] Error on listing online/active/idle users
+[#] Improved fetch from csp server function to minimize mysql server load
+
+
+2.1 [2011-07-17]
+[+] Delete user-button on edit user page
+[+] Logout confirmation prompt
+[+] New add-/edituser function
+[+] New confirmation style on login page
+[+] Idle icon for idle users on manage users page
+[+] Fetch data about each user from csp server, click on the username on manage users page to show
+[+] Custom csp values included in csp xml user export tool
+[+] Ecm-rate field to users (requires csp usermanager that supports this, like the AdvXmlUserManager)
+[+] Start-date and expire-date  fields to users (requires csp usermanager that supports this, like the AdvXmlUserManager)
+[+] Acive-/idle users listing option on manage users page
+[+] Expired users are listed with a yellow dot on the manage users page
+[+] Expired users are shown on the home page
+[+] Setting to change what will be shown in the extra column on manage users page (default: password)
+[#] Page layout on some pages
+[#] Default listing on manage users page wasnt always by username
+[#] Search on manage users page now includes all relevant user fields
+[#] Username can no longer be changed to null (nothing)
+[#] Various layout bugs
+[#] PHP notice error on manage users page on some apache configurations
+[#] Better online/offline/idle check on users from csp server
+[-] Moved favicon.ico to www root to avoid apache errors
+[-] Merged some files together and removed unused files
+[-] '10 Latest Failed Login Attempts' only shows if there has been any failed login attempts and logging is enabled
+[-] Removed one column add-/edit user page
+[-] Switched places on displayname and the extra column on manage users page
+
+
+2.0.6 [2011-02-15]
+[+] Custom csp values on userinfo page
+[+] Custom csp values as default value
+[+] Password must be given 2 times and match when changing then password for a admin
+[+] SQL server checks in upgrade script
+[+] Custom csp values to csv user import and export
+[#] Typo in configcheck
+[#] Csp xml user import got broken in version 2.0.5
+[#] Username and password must be included when importing users, else import will skip that user
+[#] Export users to csv output
+[#] Some tools didnt get selected when choosing them under tools
+[#] Improved update csp users tool
+[#] Improved send osd message page layout
+
+
+2.0.5 [2011-02-12]
+[+] Back button on user info page
+[+] Setting to show/hide send osd message link
+[+] Replace function for invalid chars on add-/import users
+[+] Custom csp values field for users, makes it possible to output custom values into the genxml output for special/homemade versions of csp
+[+] Upgrade script for database upgrades
+[#] Profile '*' is auto removed from import list
+[-] Send osd link is hidden by default
+[-] Default is now 2 columns add user page
+
+
+2.0.4 [2011-01-01]
+[+] Tool to export user database to csp xml config code
+[+] Tool to export user database to csv format
+[+] Function to change username for users
+[+] Function to create a random password for a new user
+[+] Function to send osd messages to users
+[+] Tool to import profiles from csp server
+[#] Layout bug with status messages on the 2 columns add user page
+[#] Some typos on the profile pages
+
+
+2.0.3 [2010-12-26]
+[#] 'Clear fields'-button didnt show on 2 columns add user page
+
+
+2.0.2 [2010-12-26]
+[+] 'Clear fields'-button on add user page that clears all fields
+[#] Kick user function didnt work with HTTPS
+[#] Status was not showed correct when use defaults was used on add user page
+[-] Default listing to username on manage user page
+
+
+2.0.1 [2010-12-03]
+[#] genxml.php did only output 1 profile even if user had more
+[#] PHP Undefined offset error when importing users from csv
+[#] When importing users profiles were stuck through the hole import process
+[#] Users with no profile(s) was added with bad data when importing from csv
+
+
+2.0 [2010-12-02]
+[+] Settings page for various settings
+[+] Default values on add user page, can be set on settings page
+[+] Session timeout function, will kill a idle admin connection if it has been idle longer then given time, timeout can be changed on settings page (default: 600 seconds)
+[+] Comment field added to users
+[+] Tool to import users from csv
+[+] Profile manager for managing profiles
+[+] New tool page with various tools
+[+] Setting to hide all text from login page
+[+] Function to log all failed login attempts
+[+] Setting to show/hide help icons from the add user page
+[+] Tool to delete all disabled users
+[+] Tool to enable/disable all users
+[+] Setting to give the c.m.u.m server a custom name
+[+] Information page to show all the info about a user
+[+] Setting to fetch various data from given csp server
+[+] Tool to fetch/install new user files to csp
+[+] Function to show if a user is online on the csp server
+[+] Tool to import users from csp xml config
+[+] Tool to empty the entire user database
+[+] Function to kick a online user from the csp server
+[+] Quick enable/disable users by clicking on their status icon
+[+] Setting to change layout on add-/edit user pages to 1 or 2 columns
+[+] More info on the home page
+[+] Email-address field to userdatabase
+[+] New profile handling system
+[+] Warning message if config.php is not setup correctly or not found
+[+] Group field to userdatabase
+[+] Created and last changed logging added to users
+[+] Admin accounts can now be set as enabled or disabled
+[+] Charset is now configurable from config.php (default: utf-8)
+[+] Different color for odd and even lines on user-/admin-/profile listing
+[+] List after online users on manage users page
+[+] Update-users command is sent to csp server on logout if 'fetch data from csp server' is active
+[+] Charset setting to genxml.php (default: utf-8)
+[+] Border around all input buttons
+[+] MySQL connection check, will show a error if it's not possible to connect to the MySQL server
+[#] Add-/edituser handling
+[#] Various layout bugs
+[#] Minor layout improvements for internet explorer
+[#] The 'maxconnections=0' bug
+[#] Auto remove of empty spaces in beginning and end of textfiled 'quicked' and 'search' on the manage users page
+[#] Cancel-button didnt work on edit profile page
+[#] Modified the code to prevent PHP Notice errors
+[#] List option "Disabled users" now also lists users with NULL as enabled value
+[#] Max connection field only accepts numbers
+[-] Most of the mysql code
+[-] Some mysql field types to speed it up a bit and to save some storage
+[-] Replaced "Profile(s)" with "Password" on manage users page
+[-] Moved the mysql server info into genxml.php so it can be placed anywhere on a server
+[-] Changed "mySQL" into "MySQL" in the name to follow the officiall name of the database
+
+
+1.0.1 [2010-08-24]
+[#] WSOD (white screen of death) bug
+
+
+1.0 [2010-08-06]
+[+] First stable release

@@ -1,0 +1,31 @@
+{% from 'include/input_macros.html' import input, checkbox %}
+<tr>
+	<td class="padding20">
+		{{lang.words.name|title()}}
+		<span class="need-field">*</span>
+	</td>
+	<td>
+		{{ input('new-username') }}
+			{% if ldap_enable == 1 %}
+				<a href="#" title="{{lang.phrases.search_id_ad}}" id="search_ldap_user">{{lang.phrases.search_in_ad}}</a>
+			{% endif %}
+	</td>
+</tr>
+<tr>
+	<td class="padding20">
+		{{lang.words.password|title()}}
+		<span class="need-field">*</span>
+	</td>
+	<td>{{ input('new-password', type='password') }}</td>
+</tr>
+<tr>
+	<td class="padding20">{{lang.words.active|title()}}</td>
+	<td>{{ checkbox('activeuser', checked='checked') }}</td>
+</tr>
+<tr>
+	<td class="padding20">
+		{{lang.words.email|title()}}
+		<span class="need-field">*</span>
+	</td>
+	<td>{{ input('new-email', type='email') }}</td>
+</tr>

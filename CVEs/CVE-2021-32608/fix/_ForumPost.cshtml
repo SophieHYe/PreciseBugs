@@ -1,0 +1,139 @@
+@using SmartStore.Web.Models.Boards;
+@using SmartStore.Core.Html;
+
+@model ForumPostModel
+@Html.Raw("<a name=\"{0}\"></a>".FormatInvariant(Model.Id))
+
+<div class="block block-bordered forum-post card" id="post@(Model.Id)" data-id="@Model.Id">
+    <div class="block-title card-header">
+        @if (Model.CustomerId > 0)
+        {
+            if (Model.AllowViewingProfiles && !Model.IsCustomerGuest)
+            {
+                @Html.RouteLink(Model.CustomerName, "CustomerProfile", new { id = Model.CustomerId }, new { @class = "username" })
+            }
+            else
+            {
+                <span class="username">@Model.CustomerName</span>
+            }
+        }
+
+        <div class="d-flex align-items-center">
+            @if (Model.IsCurrentCustomerAllowedToEditPost)
+            {
+                <i class="far fa-edit"></i>
+                @Html.ActionLink(T("Forum.EditPost").Text, "PostEdit", new { id = Model.Id }, new { @class = "edit-post-link-button" })
+            }
+
+            @if (Model.IsCurrentCustomerAllowedToDeletePost)
+            {
+                <i class="fa fa-times"></i>
+                @Html.ActionLink(T("Forum.DeletePost").Text, "PostDelete", new { id = Model.Id }, new { onClick = "return confirm(" + T("Common.AreYouSure").JsText + ");", @class = "delete-post-link-button" })
+            }
+            @{
+                var postLinkRoutValues = Model.CurrentTopicPage == 1
+                    ? (object)(new { id = Model.ForumTopicId, slug = Model.ForumTopicSeName })
+                    : (object)(new { id = Model.ForumTopicId, slug = Model.ForumTopicSeName, page = Model.CurrentTopicPage });
+            }
+            <a class="post-link" title="@T("Forum.PostLinkTitle")" href="@(Url.RouteUrl("TopicSlug", postLinkRoutValues))#@(Model.Id)">
+                #@(Model.Id)
+            </a>
+        </div>
+    </div>
+
+    <div class="block-body card-body row@(Model.Published ? "" : " disabled")">
+        <div class="post-info col-2 d-none d-sm-block">
+            <div class="user-info mt-3 text-center">
+                <div class="avatar">
+                    @{ Html.RenderPartial("Customer.Avatar", Model.Avatar); }
+                </div>
+                <div class="user-stats mt-2">
+                    @if (Model.IsCustomerForumModerator)
+                    {
+                        <div class="status">
+                            <span class="pr-1">@T("Forum.Status"):</span>
+                            <span class="stat-value">@T("Forum.Moderator")</span>
+                        </div>
+                    }
+                    @if (Model.ShowCustomersPostCount)
+                    {
+                        <div class="totalposts">
+                            <span class="pr-1">@T("Forum.TotalPosts"):</span>
+                            <span class="stat-value">@Model.ForumPostCount.ToString("N0")</span>
+                        </div>
+                    }
+                    @if (Model.ShowCustomersJoinDate && !Model.IsCustomerGuest)
+                    {
+                        <div class="joined">
+                            <span class="pr-1">@T("Forum.Joined"):</span>
+                            <span class="stat-value">@Model.CustomerJoinDate.ToNativeString("d")</span>
+                        </div>
+                    }
+                    @if (Model.ShowCustomersLocation && !Model.IsCustomerGuest && Model.CustomerLocation.HasValue())
+                    {
+                        <div class="location">
+                            <span class="pr-1">@T("Forum.Location"):</span>
+                            <span class="stat-value">@Model.CustomerLocation</span>
+                        </div>
+                    }
+                    @if (Model.AllowPrivateMessages && !Model.IsCustomerGuest)
+                    {
+                        <a class="btn btn btn-outline-info btn-flat button-pm mt-2" rel="nofollow" href="@Url.Action("Send", "PrivateMessages", new { id = Model.CustomerId })">
+                            <i class="fa fa-user"></i>
+                            <span>@T("Forum.PrivateMessages.PM")</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="post-content col col-sm-10">
+            <div class="post-stats text-muted mb-1">
+                <span class="posttime">
+                    <span class="pr-1">@T("Forum.Posted"):</span>
+                    <span class="stat-value">@Model.PostCreatedOnStr</span>
+                </span>
+                <span class="votes@(Model.VoteCount > 0 ? "" : " hide")" title="@T("Common.Liked")">
+                    <span class="pl-1 pr-1">&middot;</span>
+                    <span><i class="fa fa-thumbs-up"></i></span>
+                    <span class="vote-count stat-value">@Model.VoteCount.ToString("N0")</span>
+                </span>
+            </div>
+            <div class="post-body">
+                <div class="posttext" dir="auto">
+                    @Html.Raw(HtmlUtils.SanitizeHtml(Model.FormattedText))
+                </div>
+                @Html.Hidden("Id", Model.Id)
+            </div>
+
+            @if (Model.SignaturesEnabled && Model.FormattedSignature.HasValue())
+            {
+                <div class="signature text-muted" dir="auto">
+                    @Html.Raw(Model.FormattedSignature)
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="text-right">
+        <div class="functions">
+            <a href="#" class="btn btn-link btn-sm font-weight-600">
+                @T("Forum.Top")
+            </a>
+            <a class="btn btn-outline-info btn-flat btn-sm" href="@Url.Action("PostCreate", new { id = Model.ForumTopicId, quote = Model.Id })">
+                <i class="fa fa-quote-left"></i>
+                <span>@T("Forum.QuotePost")</span>
+            </a>
+            @if (Model.AllowVoting)
+            {
+                <button type="button" class="btn btn-outline-success btn-flat btn-sm post-vote-button post-vote-up@(Model.Vote ? " hide" : "")" value="true">
+                    <i class="fa fa-thumbs-up"></i>
+                    <span>@T("Common.LikeIt")</span>
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-flat btn-sm post-vote-button post-vote-down@(Model.Vote ? "" : " hide")" value="false">
+                    <i class="fa fa-thumbs-down"></i>
+                    <span>@T("Common.DoNotLikeIt")</span>
+                </button>
+            }
+        </div>
+    </div>
+</div>

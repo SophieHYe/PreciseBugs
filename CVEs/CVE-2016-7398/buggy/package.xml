@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
+ xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="
+  http://pear.php.net/dtd/tasks-1.0
+  http://pear.php.net/dtd/tasks-1.0.xsd
+  http://pear.php.net/dtd/package-2.0
+  http://pear.php.net/dtd/package-2.0.xsd">
+ <name>pecl_http</name>
+ <channel>pecl.php.net</channel>
+ <summary>Extended HTTP Support</summary>
+ <description><![CDATA[
+This HTTP extension aims to provide a convenient and powerful
+set of functionality for one of PHPs major applications.
+
+It eases handling of HTTP urls, headers and messages, provides
+means for negotiation of a client's preferred content type,
+language and charset, as well as a convenient way to send any
+arbitrary data with caching and resuming capabilities.
+
+It provides powerful request functionality with support for
+parallel requests.
+
+Documentation:
+https://mdref.m6w6.name/http
+]]></description>
+ <lead>
+  <name>Michael Wallner</name>
+  <user>mike</user>
+  <email>mike@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2016-09-07</date>
+ <version>
+  <release>2.6.0beta2</release>
+  <api>2.6.0</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://copyfree.org/content/standard/licenses/2bsd/license.txt">BSD-2-Clause</license>
+ <notes><![CDATA[
++ Added http\Client\Curl\User interface for userland event loops
++ Added http\Url::IGNORE_ERRORS, http\Url::SILENT_ERRORS and http\Url::STDFLAGS
++ Added http\Client::setDebug(callable $debug)
++ Added http\Client\Curl\FEATURES constants and namespace
++ Added http\Client\Curl\VERSIONS constants and namespace
++ Added share_cookies and share_ssl (libcurl >= 7.23.0) options to http\Client::configure()
++ http\Client uses curl_share handles to properly share cookies and SSL/TLS sessions between requests
++ Improved configure checks for default CA bundles
++ Improved negotiation precision
+* Fixed regression introduced by http\Params::PARSE_RFC5987: negotiation using the params parser would receive param keys without the trailing asterisk, stripped by http\Params::PARSE_RFC5987.
+* Fix gh-issue #50: http\Client::dequeue() within http\Client::setDebug() causes segfault (Mike, Maik Wagner)
+* Fix gh-issue #47: http\Url: Null pointer deref in sanitize_value() (Mike, @rc0r)
+* Fix gh-issue #45: HTTP/2 response message parsing broken with libcurl >= 7.49.1 (Mike)
+* Fix gh-issue #43: Joining query with empty original variable in query (Mike, Sander Backus)
+* Fix gh-issue #42: fatal error when using punycode in URLs (Mike, Sebastian Thielen)
+* Fix gh-issue #41: Use curl_version_info_data.features when initializing options (Mike)
+* Fix gh-issue #40: determinde the SSL backend used by curl at runtime (Mike, @rcanavan)
+* Fix gh-issue #39: Notice: http\Client::enqueue(): Could not set option proxy_service_name (Mike, @rcanavan)
+* Fix gh-issue #38: Persistent curl handles: error code not properly reset (Mike, @afflerbach)
+* Fix gh-issue #36: Unexpected cookies sent if persistent_handle_id is used (Mike, @rcanavan, @afflerbach)
+* Fix gh-issue #34: allow setting multiple headers with the same name (Mike, @rcanavan)
+* Fix gh-issue #33: allow setting prodyhost request option to NULL (Mike, @rcanavan)
+* Fix gh-issue #31: add/improve configure checks for default CA bundle/path (Mike, @rcanavan) 
+
+Changes from beta1:
+* Fixed PHP-5.3 compatibility
+* Fixed recursive calls to the event loop dispatcher
+]]></notes>
+ <contents>
+  <dir name="/">
+   <file role="doc" name="AUTHORS"/>
+   <file role="doc" name="BUGS"/>
+   <file role="doc" name="CONTRIBUTING.md"/>
+   <file role="doc" name="CREDITS"/>
+   <file role="doc" name="LICENSE"/>
+   <file role="doc" name="README.md"/>
+   <file role="doc" name="THANKS"/>
+   <file role="doc" name="TODO"/>
+   <file role="src" name="config.m4"/>
+   <file role="src" name="config9.m4"/>
+   <file role="src" name="config.w32"/>
+   <file role="src" name="Makefile.frag"/>
+   <file role="src" name="php_http.h"/>
+   <dir name="src">
+    <file role="src" name="php_http_api.h"/>
+    <file role="src" name="php_http_buffer.c"/>
+    <file role="src" name="php_http_buffer.h"/>
+    <file role="src" name="php_http.c"/>
+    <file role="src" name="php_http_client.c"/>
+    <file role="src" name="php_http_client.h"/>
+    <file role="src" name="php_http_client_curl.c"/>
+    <file role="src" name="php_http_client_curl.h"/>
+    <file role="src" name="php_http_client_curl_event.c"/>
+    <file role="src" name="php_http_client_curl_event.h"/>
+    <file role="src" name="php_http_client_curl_user.c"/>
+    <file role="src" name="php_http_client_curl_user.h"/>
+    <file role="src" name="php_http_client_request.c"/>
+    <file role="src" name="php_http_client_request.h"/>
+    <file role="src" name="php_http_client_response.c"/>
+    <file role="src" name="php_http_client_response.h"/>
+    <file role="src" name="php_http_cookie.c"/>
+    <file role="src" name="php_http_cookie.h"/>
+    <file role="src" name="php_http_curl.c"/>
+    <file role="src" name="php_http_curl.h"/>
+    <file role="src" name="php_http_encoding.c"/>
+    <file role="src" name="php_http_encoding.h"/>
+    <file role="src" name="php_http_env.c"/>
+    <file role="src" name="php_http_env.h"/>
+    <file role="src" name="php_http_env_request.c"/>
+    <file role="src" name="php_http_env_request.h"/>
+    <file role="src" name="php_http_env_response.c"/>
+    <file role="src" name="php_http_env_response.h"/>
+    <file role="src" name="php_http_etag.c"/>
+    <file role="src" name="php_http_etag.h"/>
+    <file role="src" name="php_http_exception.c"/>
+    <file role="src" name="php_http_exception.h"/>
+    <file role="src" name="php_http_filter.c"/>
+    <file role="src" name="php_http_filter.h"/>
+    <file role="src" name="php_http_header_parser.c"/>
+    <file role="src" name="php_http_header_parser.h"/>
+    <file role="src" name="php_http_header.c"/>
+    <file role="src" name="php_http_header.h"/>
+    <file role="src" name="php_http_info.c"/>
+    <file role="src" name="php_http_info.h"/>
+    <file role="src" name="php_http_message_body.c"/>
+    <file role="src" name="php_http_message_body.h"/>
+    <file role="src" name="php_http_message.c"/>
+    <file role="src" name="php_http_message.h"/>
+    <file role="src" name="php_http_message_parser.c"/>
+    <file role="src" name="php_http_message_parser.h"/>
+    <file role="src" name="php_http_misc.c"/>
+    <file role="src" name="php_http_misc.h"/>
+    <file role="src" name="php_http_negotiate.c"/>
+    <file role="src" name="php_http_negotiate.h"/>
+    <file role="src" name="php_http_object.c"/>
+    <file role="src" name="php_http_object.h"/>
+    <file role="src" name="php_http_options.c"/>
+    <file role="src" name="php_http_options.h"/>
+    <file role="src" name="php_http_params.c"/>
+    <file role="src" name="php_http_params.h"/>
+    <file role="src" name="php_http_querystring.c"/>
+    <file role="src" name="php_http_querystring.h"/>
+    <file role="src" name="php_http_response_codes.h"/>
+    <file role="src" name="php_http_url.c"/>
+    <file role="src" name="php_http_url.h"/>
+    <file role="src" name="php_http_utf8.h"/>
+    <file role="src" name="php_http_version.c"/>
+    <file role="src" name="php_http_version.h"/>
+   </dir>
+   <dir name="tests">
+    <file role="test" name="skipif.inc"/>
+     <dir name="data">
+      <file role="test" name="bug71719.bin"/>
+      <file role="test" name="message_r_content_range.txt"/>
+      <file role="test" name="message_r_multipart_put.txt"/>
+      <file role="test" name="message_rr_empty.txt"/>
+      <file role="test" name="message_rr_empty_chunked.txt"/>
+      <file role="test" name="message_rr_empty_gzip.txt"/>
+      <file role="test" name="message_rr_helloworld_chunked.txt"/>
+      <file role="test" name="urls.txt"/>
+     </dir>
+     <dir name="helper">
+      <file role="test" name="cookie.inc"/>
+      <file role="test" name="dump.inc"/>
+      <file role="test" name="http2.crt"/>
+      <file role="test" name="http2.key"/>
+      <file role="test" name="pipeline.inc"/>
+      <file role="test" name="proxy.inc"/>
+      <file role="test" name="server.inc"/>
+      <file role="test" name="upload.inc"/>
+      <dir name="html">
+       <file role="test" name="index.html"/>
+      </dir>
+     </dir>
+     <file role="test" name="bug61444.phpt"/>
+     <file role="test" name="bug66388.phpt"/>
+     <file role="test" name="bug66891.phpt"/>
+     <file role="test" name="bug67932.phpt"/>
+     <file role="test" name="bug69000.phpt"/>
+     <file role="test" name="bug69076.phpt"/>
+     <file role="test" name="bug69313.phpt"/>
+     <file role="test" name="bug69357.phpt"/>
+     <file role="test" name="bug71719.phpt"/>
+     <file role="test" name="client001.phpt"/>
+     <file role="test" name="client002.phpt"/>
+     <file role="test" name="client003.phpt"/>
+     <file role="test" name="client004.phpt"/>
+     <file role="test" name="client005.phpt"/>
+     <file role="test" name="client006.phpt"/>
+     <file role="test" name="client007.phpt"/>
+     <file role="test" name="client008.phpt"/>
+     <file role="test" name="client009.phpt"/>
+     <file role="test" name="client010.phpt"/>
+     <file role="test" name="client011.phpt"/>
+     <file role="test" name="client012.phpt"/>
+     <file role="test" name="client013.phpt"/>
+     <file role="test" name="client014.phpt"/>
+     <file role="test" name="client015.phpt"/>
+     <file role="test" name="client016.phpt"/>
+     <file role="test" name="client017.phpt"/>
+     <file role="test" name="client018.phpt"/>
+     <file role="test" name="client019.phpt"/>
+     <file role="test" name="client020.phpt"/>
+     <file role="test" name="client021.phpt"/>
+     <file role="test" name="client022.phpt"/>
+     <file role="test" name="client023.phpt"/>
+     <file role="test" name="client024.phpt"/>
+     <file role="test" name="client025.phpt"/>
+     <file role="test" name="client026.phpt"/>
+     <file role="test" name="client027.phpt"/>
+     <file role="test" name="client028.phpt"/>
+     <file role="test" name="client029.phpt"/>
+     <file role="test" name="clientrequest001.phpt"/>
+     <file role="test" name="clientrequest002.phpt"/>
+     <file role="test" name="clientrequest003.phpt"/>
+     <file role="test" name="clientrequest004.phpt"/>
+     <file role="test" name="clientresponse001.phpt"/>
+     <file role="test" name="clientresponse002.phpt"/>
+     <file role="test" name="clientresponse003.phpt"/>
+     <file role="test" name="cookie001.phpt"/>
+     <file role="test" name="cookie002.phpt"/>
+     <file role="test" name="cookie003.phpt"/>
+     <file role="test" name="cookie004.phpt"/>
+     <file role="test" name="cookie005.phpt"/>
+     <file role="test" name="cookie006.phpt"/>
+     <file role="test" name="cookie007.phpt"/>
+     <file role="test" name="cookie008.phpt"/>
+     <file role="test" name="cookie009.phpt"/>
+     <file role="test" name="cookie010.phpt"/>
+     <file role="test" name="cookie011.phpt"/>
+     <file role="test" name="cookie012.phpt"/>
+     <file role="test" name="encstream001.phpt"/>
+     <file role="test" name="encstream002.phpt"/>
+     <file role="test" name="encstream003.phpt"/>
+     <file role="test" name="encstream004.phpt"/>
+     <file role="test" name="encstream005.phpt"/>
+     <file role="test" name="encstream006.phpt"/>
+     <file role="test" name="encstream007.phpt"/>
+     <file role="test" name="encstream008.phpt"/>
+     <file role="test" name="encstream009.phpt"/>
+     <file role="test" name="envrequestbody001.phpt"/>
+     <file role="test" name="envrequestcookie001.phpt"/>
+     <file role="test" name="envrequestfiles001.phpt"/>
+     <file role="test" name="envrequestfiles002.phpt"/>
+     <file role="test" name="envrequestform.phpt"/>
+     <file role="test" name="envrequestheader001.phpt"/>
+     <file role="test" name="envrequestquery.phpt"/>
+     <file role="test" name="envresponse001.phpt"/>
+     <file role="test" name="envresponse002.phpt"/>
+     <file role="test" name="envresponse003.phpt"/>
+     <file role="test" name="envresponse004.phpt"/>
+     <file role="test" name="envresponse005.phpt"/>
+     <file role="test" name="envresponse006.phpt"/>
+     <file role="test" name="envresponse007.phpt"/>
+     <file role="test" name="envresponse008.phpt"/>
+     <file role="test" name="envresponse009.phpt"/>
+     <file role="test" name="envresponse010.phpt"/>
+     <file role="test" name="envresponse011.phpt"/>
+     <file role="test" name="envresponse012.phpt"/>
+     <file role="test" name="envresponse013.phpt"/>
+     <file role="test" name="envresponse014.phpt"/>
+     <file role="test" name="envresponse015.phpt"/>
+     <file role="test" name="envresponse016.phpt"/>
+     <file role="test" name="envresponse017.phpt"/>
+     <file role="test" name="envresponse018.phpt"/>
+     <file role="test" name="envresponsebody001.phpt"/>
+     <file role="test" name="envresponsebody002.phpt"/>
+     <file role="test" name="envresponsecodes.phpt"/>
+     <file role="test" name="envresponsecookie001.phpt"/>
+     <file role="test" name="envresponseheader001.phpt"/>
+     <file role="test" name="envresponseranges001.phpt"/>
+     <file role="test" name="etag001.phpt"/>
+     <file role="test" name="filterchunked.phpt"/>
+     <file role="test" name="filterzlib.phpt"/>
+     <file role="test" name="gh-issue6.phpt"/>
+     <file role="test" name="gh-issue7.phpt"/>
+     <file role="test" name="gh-issue12.phpt"/>
+     <file role="test" name="gh-issue42.phpt"/>
+     <file role="test" name="gh-issue47.phpt"/>
+     <file role="test" name="gh-issue48.phpt"/>
+     <file role="test" name="gh-issue50.phpt"/>
+     <file role="test" name="header001.phpt"/>
+     <file role="test" name="header002.phpt"/>
+     <file role="test" name="header003.phpt"/>
+     <file role="test" name="header004.phpt"/>
+     <file role="test" name="header005.phpt"/>
+     <file role="test" name="header006.phpt"/>
+     <file role="test" name="header007.phpt"/>
+     <file role="test" name="header008.phpt"/>
+     <file role="test" name="header009.phpt"/>
+     <file role="test" name="headerparser001.phpt"/>
+     <file role="test" name="headerparser002.phpt"/>
+     <file role="test" name="headerparser003.phpt"/>
+     <file role="test" name="info001.phpt"/>
+     <file role="test" name="info002.phpt"/>
+     <file role="test" name="message001.phpt"/>
+     <file role="test" name="message002.phpt"/>
+     <file role="test" name="message003.phpt"/>
+     <file role="test" name="message004.phpt"/>
+     <file role="test" name="message005.phpt"/>
+     <file role="test" name="message006.phpt"/>
+     <file role="test" name="message007.phpt"/>
+     <file role="test" name="message008.phpt"/>
+     <file role="test" name="message009.phpt"/>
+     <file role="test" name="message010.phpt"/>
+     <file role="test" name="message011.phpt"/>
+     <file role="test" name="message012.phpt"/>
+     <file role="test" name="message013.phpt"/>
+     <file role="test" name="message014.phpt"/>
+     <file role="test" name="message015.phpt"/>
+     <file role="test" name="message016.phpt"/>
+     <file role="test" name="messagebody001.phpt"/>
+     <file role="test" name="messagebody002.phpt"/>
+     <file role="test" name="messagebody003.phpt"/>
+     <file role="test" name="messagebody004.phpt"/>
+     <file role="test" name="messagebody005.phpt"/>
+     <file role="test" name="messagebody006.phpt"/>
+     <file role="test" name="messagebody007.phpt"/>
+     <file role="test" name="messagebody008.phpt"/>
+     <file role="test" name="messagebody009.phpt"/>
+     <file role="test" name="messagebody010.phpt"/>
+     <file role="test" name="messageparser001.phpt"/>
+     <file role="test" name="messageparser002.phpt"/>
+     <file role="test" name="negotiate001.phpt"/>
+     <file role="test" name="params001.phpt"/>
+     <file role="test" name="params002.phpt"/>
+     <file role="test" name="params003.phpt"/>
+     <file role="test" name="params004.phpt"/>
+     <file role="test" name="params005.phpt"/>
+     <file role="test" name="params006.phpt"/>
+     <file role="test" name="params007.phpt"/>
+     <file role="test" name="params008.phpt"/>
+     <file role="test" name="params009.phpt"/>
+     <file role="test" name="params010.phpt"/>
+     <file role="test" name="params011.phpt"/>
+     <file role="test" name="params012.phpt"/>
+     <file role="test" name="params013.phpt"/>
+     <file role="test" name="params014.phpt"/>
+     <file role="test" name="params015.phpt"/>
+     <file role="test" name="params016.phpt"/>
+     <file role="test" name="params017.phpt"/>
+     <file role="test" name="phpinfo.phpt"/>
+     <file role="test" name="propertyproxy001.phpt"/>
+     <file role="test" name="querystring001.phpt"/>
+     <file role="test" name="querystring002.phpt"/>
+     <file role="test" name="querystring003.phpt"/>
+     <file role="test" name="serialize001.phpt"/>
+     <file role="test" name="url001.phpt"/>
+     <file role="test" name="url002.phpt"/>
+     <file role="test" name="url003.phpt"/>
+     <file role="test" name="url004.phpt"/>
+     <file role="test" name="url005.phpt"/>
+     <file role="test" name="urlparser001.phpt"/>
+     <file role="test" name="urlparser002.phpt"/>
+     <file role="test" name="urlparser003.phpt"/>
+     <file role="test" name="urlparser004.phpt"/>
+     <file role="test" name="urlparser005.phpt"/>
+     <file role="test" name="urlparser006.phpt"/>
+     <file role="test" name="urlparser007.phpt"/>
+     <file role="test" name="urlparser008.phpt"/>
+     <file role="test" name="urlparser009.phpt"/>
+     <file role="test" name="urlparser010.phpt"/>
+     <file role="test" name="urlparser011.phpt"/>
+     <file role="test" name="version001.phpt"/>
+   </dir>
+   <dir name="scripts">
+    <file role="src" name="bench_select_vs_event.php"/>
+    <file role="src" name="check_package-xml.php"/>
+    <file role="src" name="gen_curlinfo.php"/>
+    <file role="src" name="gen_stubs.php"/>
+    <file role="src" name="gen_travis_yml.php"/>
+    <file role="src" name="gen_utf8.php"/>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.3.0</min>
+    <max>7.0.0</max>
+    <exclude>7.0.0</exclude>
+   </php>
+   <pearinstaller>
+    <min>1.4.1</min>
+   </pearinstaller>
+   <package>
+    <name>raphf</name>
+    <channel>pecl.php.net</channel>
+    <min>1.1.0</min>
+    <max>2.0.0dev</max>
+    <exclude>2.0.0dev</exclude>
+    <providesextension>raphf</providesextension>
+   </package>
+   <package>
+    <name>propro</name>
+    <channel>pecl.php.net</channel>
+    <min>1.0.0</min>
+    <max>2.0.0dev</max>
+    <exclude>2.0.0dev</exclude>
+    <providesextension>propro</providesextension>
+   </package>
+  </required>
+  <optional>
+   <extension><name>hash</name></extension>
+   <extension><name>iconv</name></extension>
+  </optional>
+ </dependencies>
+ <providesextension>http</providesextension>
+ <extsrcrelease>
+  <configureoption
+   name="with-http-zlib-dir"
+   prompt="where to find zlib"
+   default="/usr" />
+  <configureoption
+   name="with-http-libcurl-dir"
+   prompt="where to find libcurl"
+   default="/usr" />
+  <configureoption
+   name="with-http-libevent-dir"
+   prompt="where to find libevent"
+   default="/usr" />
+  <configureoption
+   name="with-http-libidn-dir"
+   prompt="where to find libidn"
+   default="/usr" />
+  </extsrcrelease>
+ <changelog />
+</package>

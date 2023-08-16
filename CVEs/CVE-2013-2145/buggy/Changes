@@ -1,0 +1,409 @@
+[Changes for 0.70 - Thu Nov 29 01:45:54 CST 2012]
+
+* Don't check gpg version if gpg does not exist.
+
+  This avoids unnecessary warnings during installation
+  when gpg executable is not installed.
+
+  Contributed by: Kenichi Ishigaki
+
+[Changes for 0.69 - Fri Nov  2 23:04:19 CST 2012]
+
+* Support for gpg under these alternate names:
+
+    gpg gpg2 gnupg gnupg2
+
+  Contributed by: Michael Schwern
+
+[Changes for 0.68 - Fri, 13 May 2011 11:51:50 +0200]
+
+* Fix breakage introduced by 0.67 (Andreas König).
+
+[Changes for 0.67 - Sun, 17 Apr 2011 16:29:23 +0200]
+
+* Better handling of \r (Andreas König, Zefram) (Closes RT#46339).
+
+[Changes for 0.66 - Fri,  6 Sep 2010 22:51:37 +0200]
+
+* Fix incompatibility with EU::Manifest 1.54 to 1.57
+  (Paul Howarth) (Closes RT#61124).
+
+[Changes for 0.65 - Fri,  3 Sep 2010 21:38:02 +0200]
+
+* Skip MYMETA (Alexandr Ciornii)
+
+[Changes for 0.64 - Sun,  9 May 2010 00:50:11 +0200]
+
+* Avoid creating gnupg configuration files for the user invoking Makefile.PL
+  (Closes RT#41978).
+* Correctly detect the version of gnupg on cygwin and add tests for it
+  (Paul Fenwick) (Closes RT#39258).
+
+[Changes for 0.63 - Sun, 28 Mar 2010 04:46:27 +0100]
+
+* Fix diagnostic message from Makefile.PL when the user dosn't have gnupg or
+  Crypt::OpenPGP (miyagawa).
+
+[Changes for 0.62 - Tue, 23 Mar 2010 22:17:39 +0100]
+
+* Change the default keyserver from the outdated pgp.mit.edu to
+  pool.sks-keyservers.net.
+
+[Changes for 0.61 - 2009年11月19日 周四 00時56分41秒 CST]
+
+* Added "=encoding utf8" to POD to fix author name display.
+  No functional changes.
+
+[Changes for 0.60 - 2009年11月16日 周一 22時48分54秒 CST]
+
+* LICENSING CHANGE: This compilation and all individual files in it
+  are now under the nullary CC0 1.0 Universal terms:
+
+  To the extent possible under law, 唐鳳 has waived all copyright and
+  related or neighboring rights to Module-Signature.
+
+* Updated Module::Install to 0.91, prompted by Florian Ragwitz.
+
+[Changes for 0.55 - 2006-07-29]
+
+* ANDK submitted a patch to fix versioning problem when
+  the user elects to install Crypt::OpenPGP.
+
+* Major refactoring of the Makefile.PL to ease the installation process.
+
+[Changes for 0.54 - 2006-05-12]
+
+* Fixed a long-standing bug where differing end-of-line conventions
+  could cause bogus comparisons in signature checks.
+
+* Fixed another long-standing bug where CRLF text files were hashed
+  into different digests under Unix and Dosish platforms.  Now it's
+  consistently hashed as if it's been normalized to LF.
+
+* Optional dependencies are no longer installed-by-default.
+
+[Changes for 0.53 - 2006-01-31]
+
+* The explicit call to "readline(D)" didn't compile on earlier perls which
+  demanded either "readline(*D)" or "<D>" -- I elected the latter form.
+  Reported by: Matthew Persic
+
+* Update my author key to reflect revoked past uids.
+
+[Changes for 0.52 - 2006-01-19]
+
+* POD and source code cleanup; no functional changes.
+
+* Updated my author key to reflect my new name and identity.
+
+* Upgrade to the latest Module::Install to fix Cygwin
+  installation problems.
+  Reported by: Lyle Ziegelmiller
+
+[Changes for 0.51 - 2006-01-02]
+
+* Even more flexible CRLF handling for SIGNATURE files,
+  Contributed by: Andreas Koenig.
+
+[Changes for 0.50 - 2005-08-21]
+
+* Add support for to SHA-256, requested by Mark Shelor in light
+  of the recent SHA1 attacks.  SHA1 is still the default, but
+  you can now override this by settings MODULE_SIGNATURE_CIPHER
+  environment variable to SHA256.
+
+[Changes for 0.45 - 2005-08-09]
+
+* Andreas Koenig ported out that "Import GPG keys?" was asked
+  far too many times during autoinstall.
+
+[Changes for 0.44 - 2004-12-16]
+
+* Add "pmfiles.dat" to legacy manifest_skip routine to accomodate
+  early Win32 hacks.  Reported by Steve Hay via Michael Schwern.
+
+[Changes for 0.43 - 2004-12-16]
+
+* Updated t/0-signature.t to be more friendly with Test::More;
+  contributed by Michael Schwern.
+
+* Add $Timeout (default 3 seconds) to control the timeout for
+  probing connections to the key server.
+
+* Take account of the .ts files produced by newer MakeMakers
+  in the suggested MANIFEST.SKIP list.
+
+[Changes for 0.42 - 2004-11-20]
+
+* Move under SVK version control management; ditch keyword tags.
+
+* Michael Schwern pointed out that during development, the
+  "signature.t" file would keep failing. 
+
+* Documented how to generate SIGNATURE files as part of "make dist",
+  for Module::Install, ExtUtils::MakeMaker and Module::Build users .
+
+[Changes for 0.41 - 2004-07-04]
+
+* Mark Shelor points out that support for Digest::SHA was broken.
+
+[Changes for 0.40 - 2004-07-01]
+
+* Dave Rolsky points out that GPG version detection always
+  returns '1'. (bug #6810)
+
+[Changes for 0.39 - 2004-06-17]
+
+* Supports Digest::SHA (now preferred) and Digest::SHA1::PurePerl,
+  in addition to the original Digest::SHA1 backend.
+
+* We now asks before importing the default keys,
+  also suggested by Tels.
+
+* Unknown cipher is made fatal, thanks to suggestion by Tels.
+
+* Apply Dave Rolsky's patch to verify that author's pubkey
+  is available on a keyserver. may need more work.
+
+[Changes for 0.38 - 2004-01-01]
+
+* Update to the newest Module::Install.
+
+* Not using inc/SCRIPT/ anymore.
+
+* Add "#defaults" and "^blibdirs$" to recommended MANIFEST.SKIP
+  to pacify newer ExtUtil::MakeMaker.
+
+* Starting to think about how to make "disttest" + "dist"
+  not signing twice.
+
+[Changes for 0.37 - 2003-11-06]
+
+* Move bin/cpansign to script/cpansign.
+
+* Make cpansign exit upon failure.
+
+[Changes for 0.36 - 2003-10-28]
+
+* Use sign(1) to autosign ourselves.
+
+* Soren A pointed out that hkp:// didn't work with GnuPG.
+
+[Changes for 0.25 - 2003-08-28]
+
+* Now ships with my pubkey and PAUSE's.
+
+* Interactive Makefile.PL, suggested by Jarkko.
+
+[Changes for 0.34 - 2003-08-18]
+
+* Don't ask user to install Crypt::OpenPGP if she does not have a
+  C compiler anyway.
+
+* ExtUtils::Manifest 1.38 does not support good enough skips even
+  for Makefile.PL, sigh.
+
+[Changes for 0.33 - 2003-08-12]
+
+* William Wentworth-Sheilds points out that META.yml is dynamic,
+  which makes SIGNATURE incorrect for people without either "diff"
+  or "gpg".  Fixed.
+
+[Changes for 0.32 - 2003-08-11]
+
+* Take Schwern's patch to only set _maniskip for legacy EU::Manifest.
+
+* Remove ::TieOut since we are not using it anymore.
+
+* Reduce noise for untrusted signatures to two lines.
+
+[Changes for 0.31 - 2003-08-10]
+
+* Scott R. Godin pointed out 0.30 had bad signature.  whoops.
+
+[Changes for 0.30 - 2003-08-10]
+
+* Add JHI to authors.
+
+* Patch from Michael Schwern: only let GnuPG display anything
+  if we're handling suspicious keys, not when you have added
+  the signer into the trustdb.
+
+* New global config variable, $Verbose.
+
+* MODULE_SIGNATURE_VERBOSE, MODULE_SIGNATURE_KEYSERVER and
+  MODULE_SIGNATURE_KEYSERVERPORT env variables are now respected.
+
+* Only supply _default_skip if our ExtUtils::MakeMaker is too old.
+
+[Changes for 0.29 - 2003-08-08]
+
+* Now fails gracefully all the time, including when incapable of
+  connecting to the keyserver.
+
+* Also, SHA1 sum is still checked even if the user does not have
+  GnuPg/Crypt::OpenPGP.
+
+* Hence, Crypt::OpenPGP is no longer a mandatory prerequisite even
+  for users without gnupg.
+
+* "0E0" is now made into a constant, CANNOT_VERIFY.
+
+* Do not die() when we absolutely can't verify.
+
+* BZAJAC pointed out that we should add .svn to _default_skip.
+
+[Changes for 0.28 - 2003-07-29]
+
+* Remove Digest.pm dependency.
+
+* Don't test for "diff -version" anymore -- not all diffs
+  have -version, thanks again to Alan Burlison.
+
+[Changes for 0.27 - 2003-07-28]
+
+* More punctuation cleanups in POD.
+
+* Michael Schwern pointed out that successful tests shouldn't be noisy.
+
+[Changes for 0.26 - 2003-07-17]
+
+* New internal function, _verify(), that takes $sigfile as its first
+  argument, eliminating the "local $Module::Signautre::SIGNATURE" approach.
+
+* sign() now also takes a skip=> parameter (defaults to true)
+  about whether to respect MANIFEST.SKIP.  This needs to be
+  set to 0 to sign blib/ archives.
+
+* Officially supporting signing and verification of PAR files, using PAR::Dist.
+
+* Let's ignore warnings when performing on exe files
+
+[Changes for 0.24 - 2003-07-08]
+
+* Preliminary PAR support.
+
+[Changes for 0.23 - 2003-07-07]
+
+* Ken Williams noted that M::B now works on 5.005.
+
+[Changes for 0.22 - 2003-05-15]
+
+* Move Signature.pm to lib/Module/Signature.pm.
+
+* Switch to the Module::Install framework.
+
+* Updates TODO to reflect correspondence with andk.
+
+* Matt Southall mentioned that, if somebody has never run gpg before,
+  we need to initialize it once before running test.
+
+* Warn about potential 'Makefile' exploit as pointed out by Tels.
+  Document pending.
+
+* Bugfix for incorrect 'MALFORMED' response to signatures made from 
+  older versions of GnuPG, as reported by Tels.
+
+[Changes for 0.18 - 2002-11-04]
+
+* Binary files handling on win32 was broken. (Jos Boumans)
+
+[Changes for 0.17 - 2002-10-30]
+
+* Resolve bug report by Iain Truskett: cpansign -s should not complain
+  manifest mismatch if SIGNATURE is lacking.
+
+* Also, bail out gracefully when signing fails, instead of crippling the
+  old SIGNATURE.
+
+* MANIFEST.SKIP doc lifted from Test::Signature.
+
+* Minor POD fixups.
+
+[Changes for 0.16 - 2002-10-28]
+
+* Adds AUTHORS file.
+
+* Added connectivity probing for testing.
+
+* Print a helpful success message after signing.
+
+* Don't cripple old SIGNATURE file.
+
+* Suggestion from Tels: skip the ambiguous 'optional'
+  probing for Crypt::OpenPGP if gnupg is there.
+
+[Changes for 0.15 - 2002-10-17]
+
+* Fixed compatibility with old MakeMaker versions, thanks to chromatic.
+
+* Fixed "no /dev/tty" bug during smoke testing,
+  as reported by the excellent CPAN Smokers.
+
+[Changes for 0.12 - 2002-10-12]
+
+* Supports automatic key retrieval, implemented in Crypt::OpenPGP.
+
+[Changes for 1.02 - 2002-10-12]
+
+* Fixed the default cipher from MD5 back to SHA1.
+
+[Changes for 0.10 - 2002-10-12]
+
+* Fixed a problem that prevents earlier versions of GnuPG from fetching
+  public keys via --keyserver-option=auto-key-retrieve.
+
+[Changes for 0.09 - 2002-10-12]
+
+* Documented the package variables so they become part of APIs.
+
+* Alternative (non-SHA1) ciphers in SIGNATUREs are now recognized.
+
+* Added a new return value, CIPHER_UNKNOWN.
+
+* Mention Test::Signature.
+
+* Ditch Test::More from the sample script.
+
+* Label tests.
+
+[Changes for 0.09 - 2002-10-11]
+
+* We're no longer alpha status; reflect in README.
+
+* Incoporated a suggestion from Tels: undefining the $KeyServer
+  package variable should disable automatic key-fetching.
+
+* Include the tests from Iain.
+
+* Tels: disable KeyServer fetching if it's undef'ed.
+
+[Changes for 0.07 - 2002-10-11]
+
+* Fixed our own signatures.
+
+[Changes for 0.06 - 2002-10-10]
+
+* Use many-arg system() instead of the one-arg form to prevent security breach.
+
+* Iain Truskett: fixed export bug so SIGNATURE_OK is properly exported.
+
+* Introduced global $KeyServer variable, default at 'pgp.mit.edu'.
+
+* Suggestion from Aurthur Bergman: cpansign without arg should DWIM.
+
+* Set a default keyserver for cpansign -v.
+
+* Use by-name params for functions. sign(override => $bool).
+
+[Changes for 0.05 - 2002-08-14]
+
+* Typo correction and safety checking.
+
+[Changes for 0.04 - 2002-08-14]
+
+* Added boilerplate text before SIGNATURE to explain what's it about.
+
+* Crypt::OpenPGP signature didn't work.
+
+* Add keyword expansion tags.

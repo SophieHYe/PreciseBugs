@@ -1,0 +1,26 @@
+## -*- coding: utf-8 -*-
+<%inherit file="navbar.tmpl"/>
+<%block name="core">
+    <div class="row clearfix top-buffer bottom-buffer">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-12 column">
+            <div class="well well-sm">
+              <form method='POST' action='/selfmodify' autocomplete="off" role="form" class="form-signin" id="form">
+              <legend>Modify your attributes:</legend>
+              ${form}
+              </fieldset>
+              <div class="form-group">
+                <div class="input-group">
+                    <button type="submit" class="btn btn-default blue">
+                    <span class="glyphicon glyphicon-cog"></span> Modify</button>
+                </div>
+              </div>
+              </form>
+              <script type="text/javascript" src="/static/js/ppolicy.js"></script>
+            </div>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
+</%block>

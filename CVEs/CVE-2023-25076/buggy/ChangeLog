@@ -1,0 +1,52 @@
+2018-12-05  Dustin Lundquist <dustin@null-ptr.net>
+	0.6.0 Release
+
+	* PROXY v1 protocol support
+	* SO_REUSEPORT support on Linux 3.9 and later
+	* Listener ipv6_only directive to accept only IPv6 connections
+	* TCP keepalive
+
+2017-04-26  Dustin Lundquist <dustin@null-ptr.net>
+	0.5.0 Release
+
+	* Transparent proxy support
+	* Use accept4() on Linix
+	* Run as group specified in config
+
+2015-04-07  Dustin Lundquist <dustin@null-ptr.net>
+	0.4.0 release
+
+	* Improve DNS resolver:
+	  Support for AAAA records
+	  Configuration options
+	* Global access log
+	* Man page for sniproxy.conf
+	* Reject IP literals as hostnames for wildcard backends
+
+2014-09-26  Dustin Lundquist <dustin@null-ptr.net>
+	0.3.6 release
+
+	* Improve logging:
+	  Fix negative connection duration in access log
+	  Include log rotate script
+	  Reopen log files on SIGHUP
+	  Share file handle to same log file between listeners
+	  Avoid unnecessary reconnection to syslog socket
+	  Cache timestamp string for current second
+	* Man page
+	* Packaging improvements:
+	  passes lintian and rpm-lint
+
+2014-08-13	Dustin Lundquist <dustin@null-ptr.net>
+	0.3.5 release
+
+	* Configuration reloading on SIGHUP
+	* SSL 2.0 connection handling: do not treat as an error, use fallback
+	address if configured.
+	* Fix buffer_coalesce error
+	* Spawn privileged child to bind sockets to privileged ports on reload
+	* Add -V flag to return sniproxy version
+	* Use libev for timestamps to improve portability
+	* Include several for BSD compatibility
+	* Large file support (for log files)
+

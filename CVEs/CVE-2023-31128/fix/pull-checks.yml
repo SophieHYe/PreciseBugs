@@ -1,0 +1,165 @@
+
+name: Additional tests for pull requests
+
+on:
+    pull_request:
+
+jobs:
+    
+    changelog:
+        name: Check if the changelog was updated
+        runs-on: ubuntu-latest
+        
+        steps:
+            -   name: Checkout the app
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 2
+            
+            -   name: Get the diff
+                id: diff
+                run: |
+                    git diff HEAD~1 -- CHANGELOG.md
+                    lines=$(git diff HEAD~1 -- CHANGELOG.md | wc -l)
+                    echo "lines=$lines" >> $GITHUB_OUTPUT
+            
+            -   name: Get all changed file names
+                id: file-names
+                run: |
+                    lines="$(git diff HEAD~1 --name-only)"
+                    echo "Changed files:"
+                    echo "$lines"
+                    totalcnt="$(echo "$lines" | wc -l)"
+                    echo "totalcount=$totalcnt" >> $GITHUB_OUTPUT
+                    #
+                    cnt="$(echo "$lines" | grep -v '^package-lock.json$' | grep -v '^\.github/workflows/' | wc -l)"
+                    echo "num=$cnt" >> $GITHUB_OUTPUT
+                    #
+                    echo "That are $totalcnt changed files. After reducing the number there are $cnt files left."
+
+            -   name: Error/warn if the number of diff lines is zero
+                run: |
+                    if [ ${{ steps.file-names.outputs.num }} -gt 0 ]; then
+                    echo "::error file=CHANGELOG.md::There was no change in the changelog detected. Please fill in a valid entry into that file."
+                    exit 1
+                    else
+                    echo "::warning file=CHANGELOG.md::There was no change in the changelog detected. There are in total ${{ steps.file-names.outputs.totalcount }} changed files."
+                    fi
+                if: ${{ steps.diff.outputs.lines == 0 }}
+    
+    todo-checker:
+        name: Check for added todo messages
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Git version output
+                run: git version
+            -   name: Manual checkout of the app (base repo)
+                run: |
+                    REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+                    BRANCH="${GITHUB_REF/#refs\/heads\//}"
+
+                    git clone --filter=tree:0 "$REPO" .
+            -   name: Manual checkout of the app (PR head)
+                env:
+                    URL: ${{ github.event.pull_request.head.repo.html_url }}
+                    HEAD_REF: ${{ github.head_ref }}
+                run: |
+                    git remote add head "$URL"
+                    git fetch head --filter=tree:0
+                    
+                    git checkout -b head-branch head/$HEAD_REF
+            -   name: Status of current git workspace
+                run: |
+                    git branch
+                    git status
+            -   name: Check for open TODO annotations in source code
+                uses: ./.github/actions/check-todo
+
+    appinfo:
+        name: Check for matching app info file
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout of the app
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 1
+                
+            -   name: Install dependencies
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install jq
+                    pip install yq
+
+            -   name: Perform the test
+                env:
+                    MAIN_FILE: appinfo/info.xml
+                    DIST_FILE: .github/actions/deploy/appinfo/info.xml.dist
+                run: |
+                    echo "Normalize the actual appinfo file"    
+                    xq -x 'del(.info.version)' "$MAIN_FILE" > /tmp/main-info.xml
+                    xq -x 'del(.info.version)' "$DIST_FILE" > /tmp/dist-info.xml
+
+                    echo '::group::Debug output'
+                    tail -n 100 /tmp/main-info.xml /tmp/dist-info.xml
+                    echo '::endgroup::'
+
+                    if ! diff -q /tmp/main-info.xml /tmp/dist-info.xml > /dev/null; then
+                    echo '::error::The app info file differs from the dist file. Please check manually!'
+                    exit 1
+                    fi
+
+            -   name: Download schema
+                run: wget https://raw.githubusercontent.com/nextcloud/appstore/master/nextcloudappstore/api/v1/release/info.xsd
+
+            -   name: Lint info.xml
+                uses: ChristophWurst/xmllint-action@v1
+                with:
+                    xml-file: ./appinfo/info.xml
+                    xml-schema-file: ./info.xsd
+    
+    package-lint:
+        name: Make sure the package.json is well-formatted
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout of the app
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 1
+            -   name: Get the date
+                id: date
+                run: echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+            -   name: Cache NPM cache
+                uses: actions/cache@v3.3.1
+                with:
+                    path: |
+                        ~/.npm
+                        node_modules
+                    key: ${{ runner.os }}-node-${{ steps.date.outputs.date }}-${{ hashFiles('package-lock.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-node-${{ steps.date.outputs.date }}-
+                        ${{ runner.os }}-node-
+
+            -   name: Install NPM modules
+                run: npm ci
+
+            -   name: Perform the test
+                run: |
+                    npm run package-lint
+
+                    if [ $(git diff --name-only package.json | wc -l) -gt 0 ]; then
+                    echo '::error file=package.json::The package.json file is not validly formatted.'
+                    echo '::notice::It is suggested to run `npm run package-lint` and commit locally.'
+                    exit 1
+                    fi
+
+    fixup-check:
+        name: Block fixup and squash commits
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Run check
+                uses: xt0rted/block-autosquash-commits-action@v2
+                with:
+                    repo-token: ${{ secrets.GITHUB_TOKEN }}

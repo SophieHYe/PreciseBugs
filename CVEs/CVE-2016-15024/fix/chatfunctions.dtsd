@@ -1,0 +1,103 @@
+#!/bin/bash
+# Shadow .01 Based off of DTSD
+# Location of all the functions related to the chat system
+
+MYSQLDTSD_CHATLOG_SENDER="VARCHAR(25)"
+MYSQLDTSD_CHATLOG_CHATSTRING=TEXT
+MYSQLDTSD_CHATLOG_RECIEVER="VARCHAR(25)"
+MYSQLDTSD_CHATLOG_LOGDATE=TIMESTAMP
+
+LOGSEARCH_chat_log="[CHANNELROUTER] RECEIVED MESSAGE ON Server(0): [CHAT]"
+LOGSEARCH_chat_commands="[CHANNELROUTER] RECEIVED MESSAGE ON Server(0): [CHAT]"
+
+chat_log() {
+    MYCHATSTRING="${@:1}"
+	MYCHATSTRING=${MYCHATSTRING#*]}
+# Below example of Chat string received
+# [CHANNELROUTER] RECEIVED MESSAGE ON Server(0): [CHAT][sender=Doomsider][receiverType=CHANNEL][receiver=all][message=hey]
+# String manipulation with parameter expansion is used here to cut at the first = which reveals the sender 
+# followed by the rest of MYCHATSTRING	
+	CUTSTRING=${MYCHATSTRING#*=}
+# Remove everything after first ] to get just the name of the sender
+	SENDERNAME=${CUTSTRING%%]*}
+# Removes at the second =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get receivertype
+	RECEIVERTYPE=${CUTSTRING%%]*}
+# Removes at the third =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get receiver
+	RECEIVERNAME=${CUTSTRING%%]*}
+# Removes at the fourth =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get message
+	MESSAGESTRING=${CUTSTRING%%]*}
+	#echo "This was sent to chat log $@"
+	#echo "This was the message $MESSAGESTRING"
+	#echo "This was sender $SENDERNAME"
+	#echo "This was receiver $RECEIVERNAME"
+	#echo "This was receivertype $RECEIVERTYPE"
+# [CHAT is error value for SENDERNAME
+	mysql --defaults-extra-file=$CONFIGDTSD_INSTALLPATH/core/shadow.cnf -e "INSERT INTO CHATLOG (SENDER, CHATSTRING, RECIEVER) VALUES (\"$SENDERNAME\",\"$MESSAGESTRING\",\"$RECEIVERNAME\");"
+}
+chat_commands() {
+    MYCHATSTRING="${@:1}"
+	MYCHATSTRING=${MYCHATSTRING#*]}
+# String manipulation with parameter expansion is used here to cut at the first = which reveals the sender 
+# followed by the rest of MYCHATSTRING	
+	CUTSTRING=${MYCHATSTRING#*=}
+# Remove everything after first ] to get just the name of the sender
+	SENDERNAME=${CUTSTRING%%]*}
+# Removes at the second =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get receivertype
+	RECEIVERTYPE=${CUTSTRING%%]*}
+# Removes at the third =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get receiver
+	RECEIVERNAME=${CUTSTRING%%]*}
+# Removes at the fourth =
+	CUTSTRING=${CUTSTRING#*=}
+# Remove everything after ] to get message
+	MESSAGESTRING=${CUTSTRING%%]*}
+# Get the first letter of message string to test if it is a !
+	MESSAGEFIRSTLETTER=${MESSAGESTRING:0:1}
+# Add the playername into the database if it does not exist
+	lib_myinsert PLAYERDB NAME $SENDERNAME
+	lib_myupdate PLAYERDB ONLINE y NAME $SENDERNAME
+	if [ "$MESSAGEFIRSTLETTER" == "!" ]
+	then
+		echo "chat command triggered"
+		CHATCOMMANDS=( $(compgen -A function | grep chatcommand_) )
+		MESSAGECUT=${MESSAGESTRING#*!}
+		echo "Message Cut $MESSAGECUT"
+# Feed the message string into an array so we can work with it as commands		
+		COMMANDARRAY=($MESSAGECUT)
+		USERCOMMAND=${COMMANDARRAY[0]}
+		USERCOMMAND=${USERCOMMAND^^}
+		USERCOMMAND="chatcommand_$USERCOMMAND"
+		USERPARAMETERS=${COMMANDARRAY[@]:1}
+		echo "User is $SENDERNAME"
+		echo "Command is $USERCOMMAND"
+		echo ${#USERCOMMAND}
+		echo "Parameters are $USERPARAMETERS"
+		#echo "List of chat commands ${CHATCOMMANDS[@]}"
+		if lib_arraycontains CHATCOMMANDS $USERCOMMAND
+		then 
+			echo "Chat command found"
+		    USERCOMMAND=${USERCOMMAND#*_}
+			if check_player_rank_allowed $USERCOMMAND $SENDERNAME
+            then
+				USERCOMMAND="chatcommand_$USERCOMMAND"
+				$USERCOMMAND "$SENDERNAME" $USERPARAMETERS
+            else
+				echo "Command not authorized"
+				lib_screensend $CONFIGDTSD_MAINSCREEN /pm $SENDERNAME "You do not have permission to use that command!"
+			fi
+        
+		else
+			echo "No matching chat command"
+			lib_screensend $CONFIGDTSD_MAINSCREEN /pm $SENDERNAME "Unknown command. Please use !HELP for a list of the commands you can use"
+		fi
+	fi	
+}
